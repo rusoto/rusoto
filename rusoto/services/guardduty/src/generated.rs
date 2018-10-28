@@ -46,10 +46,12 @@ pub struct AcceptInvitationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
 /// <p>The IAM access key details (IAM user information) of a user that engaged in the activity that prompted GuardDuty to generate a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AccessKeyDetails {
     /// <p>Access key ID of the user.</p>
     #[serde(rename = "AccessKeyId")]
@@ -82,6 +84,7 @@ pub struct AccountDetail {
 
 /// <p>Information about the activity described in a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Action {
     /// <p>GuardDuty Finding activity type.</p>
     #[serde(rename = "ActionType")]
@@ -118,10 +121,12 @@ pub struct ArchiveFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
 /// <p>Information about the AWS<em>API</em>CALL action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AwsApiCallAction {
     /// <p>AWS API name.</p>
     #[serde(rename = "Api")]
@@ -147,6 +152,7 @@ pub struct AwsApiCallAction {
 
 /// <p>City information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct City {
     /// <p>City name of the remote IP address.</p>
     #[serde(rename = "CityName")]
@@ -185,6 +191,7 @@ pub struct Condition {
 
 /// <p>Country information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Country {
     /// <p>Country code of the remote IP address.</p>
     #[serde(rename = "CountryCode")]
@@ -206,6 +213,7 @@ pub struct CreateDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDetectorResponse {
     /// <p>The unique ID of the created detector.</p>
     #[serde(rename = "DetectorId")]
@@ -246,6 +254,7 @@ pub struct CreateFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateFilterResponse {
     /// <p>The name of the successfully created filter.</p>
     #[serde(rename = "Name")]
@@ -278,6 +287,7 @@ pub struct CreateIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateIPSetResponse {
     #[serde(rename = "IpSetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -297,6 +307,7 @@ pub struct CreateMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -317,6 +328,7 @@ pub struct CreateSampleFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSampleFindingsResponse {}
 
 /// <p>CreateThreatIntelSet request body.</p>
@@ -344,6 +356,7 @@ pub struct CreateThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateThreatIntelSetResponse {
     #[serde(rename = "ThreatIntelSetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -360,6 +373,7 @@ pub struct DeclineInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeclineInvitationsResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -375,6 +389,7 @@ pub struct DeleteDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -388,6 +403,7 @@ pub struct DeleteFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteFilterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -401,6 +417,7 @@ pub struct DeleteIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteIPSetResponse {}
 
 /// <p>DeleteInvitations request body.</p>
@@ -413,6 +430,7 @@ pub struct DeleteInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteInvitationsResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -433,6 +451,7 @@ pub struct DeleteMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -451,6 +470,7 @@ pub struct DeleteThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteThreatIntelSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -461,6 +481,7 @@ pub struct DisassociateFromMasterAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
 /// <p>DisassociateMembers request body.</p>
@@ -476,6 +497,7 @@ pub struct DisassociateMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -485,6 +507,7 @@ pub struct DisassociateMembersResponse {
 
 /// <p>Information about the DNS_REQUEST action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DnsRequestAction {
     /// <p>Domain information for the DNS request.</p>
     #[serde(rename = "Domain")]
@@ -494,6 +517,7 @@ pub struct DnsRequestAction {
 
 /// <p>Domain information for the AWS API call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainDetails {}
 
 /// <p>Error response object.</p>
@@ -507,6 +531,7 @@ pub struct ErrorResponse {
 
 /// <p>Representation of a abnormal or suspicious activity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Finding {
     /// <p>AWS account ID where the activity occurred that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "AccountId")]
@@ -571,6 +596,7 @@ pub struct FindingCriteria {
 
 /// <p>Finding statistics object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FindingStatistics {
     /// <p>Represents a map of severity to count statistic for a set of findings</p>
     #[serde(rename = "CountBySeverity")]
@@ -580,6 +606,7 @@ pub struct FindingStatistics {
 
 /// <p>Location information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GeoLocation {
     /// <p>Latitude information of remote IP address.</p>
     #[serde(rename = "Lat")]
@@ -599,6 +626,7 @@ pub struct GetDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDetectorResponse {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -625,6 +653,7 @@ pub struct GetFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFilterResponse {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
@@ -665,6 +694,7 @@ pub struct GetFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFindingsResponse {
     #[serde(rename = "Findings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -688,6 +718,7 @@ pub struct GetFindingsStatisticsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFindingsStatisticsResponse {
     /// <p>Finding statistics object.</p>
     #[serde(rename = "FindingStatistics")]
@@ -706,6 +737,7 @@ pub struct GetIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
@@ -729,6 +761,7 @@ pub struct GetIPSetResponse {
 pub struct GetInvitationsCountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInvitationsCountResponse {
     /// <p>The number of received invitations.</p>
     #[serde(rename = "InvitationsCount")]
@@ -744,6 +777,7 @@ pub struct GetMasterAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMasterAccountResponse {
     #[serde(rename = "Master")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -763,6 +797,7 @@ pub struct GetMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMembersResponse {
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -784,6 +819,7 @@ pub struct GetThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
@@ -805,6 +841,7 @@ pub struct GetThreatIntelSetResponse {
 
 /// <p>The profile information of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct IamInstanceProfile {
     /// <p>AWS EC2 instance profile ARN.</p>
     #[serde(rename = "Arn")]
@@ -818,6 +855,7 @@ pub struct IamInstanceProfile {
 
 /// <p>The information about the EC2 instance associated with the activity that prompted GuardDuty to generate a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceDetails {
     /// <p>The availability zone of the EC2 instance.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -870,6 +908,7 @@ pub struct InstanceDetails {
 
 /// <p>Invitation from an AWS account to become the current account&#39;s master.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Invitation {
     /// <p>Inviter account ID</p>
     #[serde(rename = "AccountId")]
@@ -910,6 +949,7 @@ pub struct InviteMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InviteMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -930,6 +970,7 @@ pub struct ListDetectorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDetectorsResponse {
     #[serde(rename = "DetectorIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -955,6 +996,7 @@ pub struct ListFiltersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListFiltersResponse {
     #[serde(rename = "FilterNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -989,6 +1031,7 @@ pub struct ListFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListFindingsResponse {
     #[serde(rename = "FindingIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1014,6 +1057,7 @@ pub struct ListIPSetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListIPSetsResponse {
     #[serde(rename = "IpSetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1036,6 +1080,7 @@ pub struct ListInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInvitationsResponse {
     #[serde(rename = "Invitations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1065,6 +1110,7 @@ pub struct ListMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListMembersResponse {
     #[serde(rename = "Members")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1090,6 +1136,7 @@ pub struct ListThreatIntelSetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1101,6 +1148,7 @@ pub struct ListThreatIntelSetsResponse {
 
 /// <p>Local port information of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LocalPortDetails {
     /// <p>Port number of the local connection.</p>
     #[serde(rename = "Port")]
@@ -1114,6 +1162,7 @@ pub struct LocalPortDetails {
 
 /// <p>Contains details about the master account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Master {
     /// <p>Master account ID</p>
     #[serde(rename = "AccountId")]
@@ -1135,6 +1184,7 @@ pub struct Master {
 
 /// <p>Contains details about the member account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Member {
     #[serde(rename = "AccountId")]
     pub account_id: String,
@@ -1159,6 +1209,7 @@ pub struct Member {
 
 /// <p>Information about the NETWORK_CONNECTION action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkConnectionAction {
     /// <p>Network connection blocked information.</p>
     #[serde(rename = "Blocked")]
@@ -1188,6 +1239,7 @@ pub struct NetworkConnectionAction {
 
 /// <p>The network interface information of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>A list of EC2 instance IPv6 address information.</p>
     #[serde(rename = "Ipv6Addresses")]
@@ -1233,6 +1285,7 @@ pub struct NetworkInterface {
 
 /// <p>ISP Organization information of the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Organization {
     /// <p>Autonomous system number of the internet provider of the remote IP address.</p>
     #[serde(rename = "Asn")]
@@ -1254,6 +1307,7 @@ pub struct Organization {
 
 /// <p>Information about the PORT_PROBE action described in this finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PortProbeAction {
     /// <p>Port probe blocked information.</p>
     #[serde(rename = "Blocked")]
@@ -1267,6 +1321,7 @@ pub struct PortProbeAction {
 
 /// <p>Details about the port probe finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PortProbeDetail {
     /// <p>Local port information of the connection.</p>
     #[serde(rename = "LocalPortDetails")]
@@ -1280,6 +1335,7 @@ pub struct PortProbeDetail {
 
 /// <p>Other private IP address information of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PrivateIpAddressDetails {
     /// <p>Private DNS name of the EC2 instance.</p>
     #[serde(rename = "PrivateDnsName")]
@@ -1293,6 +1349,7 @@ pub struct PrivateIpAddressDetails {
 
 /// <p>The product code of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProductCode {
     /// <p>Product code information.</p>
     #[serde(rename = "Code")]
@@ -1306,6 +1363,7 @@ pub struct ProductCode {
 
 /// <p>Remote IP information of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoteIpDetails {
     /// <p>City information of the remote IP address.</p>
     #[serde(rename = "City")]
@@ -1331,6 +1389,7 @@ pub struct RemoteIpDetails {
 
 /// <p>Remote port information of the connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemotePortDetails {
     /// <p>Port number of the remote connection.</p>
     #[serde(rename = "Port")]
@@ -1344,6 +1403,7 @@ pub struct RemotePortDetails {
 
 /// <p>The AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Resource {
     #[serde(rename = "AccessKeyDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1359,6 +1419,7 @@ pub struct Resource {
 
 /// <p>Security groups associated with the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>EC2 instance&#39;s security group ID.</p>
     #[serde(rename = "GroupId")]
@@ -1372,6 +1433,7 @@ pub struct SecurityGroup {
 
 /// <p>Additional information assigned to the generated finding by GuardDuty.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Service {
     /// <p>Information about the activity described in a finding.</p>
     #[serde(rename = "Action")]
@@ -1437,6 +1499,7 @@ pub struct StartMonitoringMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartMonitoringMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -1457,6 +1520,7 @@ pub struct StopMonitoringMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopMonitoringMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -1466,6 +1530,7 @@ pub struct StopMonitoringMembersResponse {
 
 /// <p>A tag of the EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Tag {
     /// <p>EC2 instance tag key.</p>
     #[serde(rename = "Key")]
@@ -1490,10 +1555,12 @@ pub struct UnarchiveFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
 /// <p>An object containing the unprocessed account and a result string explaining why it was unprocessed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UnprocessedAccount {
     /// <p>AWS Account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1516,6 +1583,7 @@ pub struct UpdateDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDetectorResponse {}
 
 /// <p>UpdateFilterRequest request body.</p>
@@ -1546,6 +1614,7 @@ pub struct UpdateFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateFilterResponse {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Name")]
@@ -1574,6 +1643,7 @@ pub struct UpdateFindingsFeedbackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateFindingsFeedbackResponse {}
 
 /// <p>UpdateIPSet request body.</p>
@@ -1600,6 +1670,7 @@ pub struct UpdateIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateIPSetResponse {}
 
 /// <p>UpdateThreatIntelSet request body.</p>
@@ -1626,6 +1697,7 @@ pub struct UpdateThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateThreatIntelSetResponse {}
 
 /// Errors returned by AcceptInvitation

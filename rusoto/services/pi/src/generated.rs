@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A timestamp, and a single numerical value, which together represent a measurement at a particular point in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DataPoint {
     /// <p>The time, in epoch format, associated with a particular <code>Value</code>.</p>
     #[serde(rename = "Timestamp")]
@@ -82,6 +83,7 @@ pub struct DescribeDimensionKeysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDimensionKeysResponse {
     /// <p>The end time for the returned dimension keys, after alignment to a granular boundary (as specified by <code>PeriodInSeconds</code>). <code>AlignedEndTime</code> will be greater than or equal to the value of the user-specified <code>Endtime</code>.</p>
     #[serde(rename = "AlignedEndTime")]
@@ -123,6 +125,7 @@ pub struct DimensionGroup {
 
 /// <p>An array of descriptions and aggregated values for each dimension within a dimension group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DimensionKeyDescription {
     /// <p>A map of name-value pairs for the dimensions in the group.</p>
     #[serde(rename = "Dimensions")]
@@ -170,6 +173,7 @@ pub struct GetResourceMetricsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetResourceMetricsResponse {
     /// <p>The end time for the returned metrics, after alignment to a granular boundary (as specified by <code>PeriodInSeconds</code>). <code>AlignedEndTime</code> will be greater than or equal to the value of the user-specified <code>Endtime</code>.</p>
     #[serde(rename = "AlignedEndTime")]
@@ -195,6 +199,7 @@ pub struct GetResourceMetricsResponse {
 
 /// <p>A time-ordered series of data points, correpsonding to a dimension of a Performance Insights metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MetricKeyDataPoints {
     /// <p>An array of timestamp-value pairs, representing measurements over a period of time.</p>
     #[serde(rename = "DataPoints")]
@@ -224,6 +229,7 @@ pub struct MetricQuery {
 
 /// <p>If <code>PartitionBy</code> was specified in a <code>DescribeDimensionKeys</code> request, the dimensions are returned in an array. Each element in the array specifies one dimension. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResponsePartitionKey {
     /// <p>A dimension map that contains the dimension(s) for this partition.</p>
     #[serde(rename = "Dimensions")]
@@ -232,6 +238,7 @@ pub struct ResponsePartitionKey {
 
 /// <p>An object describing a Performance Insights metric and one or more dimensions for that metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResponseResourceMetricKey {
     /// <p>The valid dimensions for the metric.</p>
     #[serde(rename = "Dimensions")]

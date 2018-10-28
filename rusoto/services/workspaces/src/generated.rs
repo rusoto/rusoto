@@ -39,6 +39,7 @@ pub struct AssociateIpGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateIpGroupsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -52,10 +53,12 @@ pub struct AuthorizeIpRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthorizeIpRulesResult {}
 
 /// <p>Information about the compute type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComputeType {
     /// <p>The compute type.</p>
     #[serde(rename = "Name")]
@@ -79,6 +82,7 @@ pub struct CreateIpGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateIpGroupResult {
     /// <p>The ID of the group.</p>
     #[serde(rename = "GroupId")]
@@ -97,6 +101,7 @@ pub struct CreateTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -107,6 +112,7 @@ pub struct CreateWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be created.</p>
     #[serde(rename = "FailedRequests")]
@@ -120,6 +126,7 @@ pub struct CreateWorkspacesResult {
 
 /// <p>Information about defaults used to create a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DefaultWorkspaceCreationProperties {
     /// <p>The identifier of any security groups to apply to WorkSpaces when they are created.</p>
     #[serde(rename = "CustomSecurityGroupId")]
@@ -151,6 +158,7 @@ pub struct DeleteIpGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteIpGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -164,6 +172,7 @@ pub struct DeleteTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -183,6 +192,7 @@ pub struct DescribeIpGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeIpGroupsResult {
     /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
     #[serde(rename = "NextToken")]
@@ -202,6 +212,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTagsResult {
     /// <p>The tags.</p>
     #[serde(rename = "TagList")]
@@ -226,6 +237,7 @@ pub struct DescribeWorkspaceBundlesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkspaceBundlesResult {
     /// <p>Information about the bundles.</p>
     #[serde(rename = "Bundles")]
@@ -250,6 +262,7 @@ pub struct DescribeWorkspaceDirectoriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkspaceDirectoriesResult {
     /// <p>Information about the directories.</p>
     #[serde(rename = "Directories")]
@@ -274,6 +287,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkspacesConnectionStatusResult {
     /// <p>The token to use to retrieve the next set of results, or null if there are no more results available.</p>
     #[serde(rename = "NextToken")]
@@ -314,6 +328,7 @@ pub struct DescribeWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkspacesResult {
     /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
     #[serde(rename = "NextToken")]
@@ -336,10 +351,12 @@ pub struct DisassociateIpGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateIpGroupsResult {}
 
 /// <p>Information about a WorkSpace that could not be created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailedCreateWorkspaceRequest {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -357,6 +374,7 @@ pub struct FailedCreateWorkspaceRequest {
 
 /// <p>Information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailedWorkspaceChangeRequest {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -387,6 +405,7 @@ pub struct IpRuleItem {
 
 /// <p>Information about a WorkSpace modification.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModificationState {
     /// <p>The resource.</p>
     #[serde(rename = "Resource")]
@@ -409,6 +428,7 @@ pub struct ModifyWorkspacePropertiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyWorkspacePropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -422,6 +442,7 @@ pub struct ModifyWorkspaceStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyWorkspaceStateResult {}
 
 /// <p>Information used to reboot a WorkSpace.</p>
@@ -440,6 +461,7 @@ pub struct RebootWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RebootWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be rebooted.</p>
     #[serde(rename = "FailedRequests")]
@@ -463,6 +485,7 @@ pub struct RebuildWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RebuildWorkspacesResult {
     /// <p>Information about the WorkSpace if it could not be rebuilt.</p>
     #[serde(rename = "FailedRequests")]
@@ -481,10 +504,12 @@ pub struct RevokeIpRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RevokeIpRulesResult {}
 
 /// <p>Information about the root volume for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RootStorage {
     /// <p>The size of the root volume.</p>
     #[serde(rename = "Capacity")]
@@ -509,6 +534,7 @@ pub struct StartWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be started.</p>
     #[serde(rename = "FailedRequests")]
@@ -533,6 +559,7 @@ pub struct StopWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be stopped.</p>
     #[serde(rename = "FailedRequests")]
@@ -568,6 +595,7 @@ pub struct TerminateWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TerminateWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be terminated.</p>
     #[serde(rename = "FailedRequests")]
@@ -586,10 +614,12 @@ pub struct UpdateRulesOfIpGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRulesOfIpGroupResult {}
 
 /// <p>Information about the user storage for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserStorage {
     /// <p>The size of the user storage.</p>
     #[serde(rename = "Capacity")]
@@ -599,6 +629,7 @@ pub struct UserStorage {
 
 /// <p>Information about a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Workspace {
     /// <p>The identifier of the bundle used to create the WorkSpace.</p>
     #[serde(rename = "BundleId")]
@@ -664,6 +695,7 @@ pub struct Workspace {
 
 /// <p>Information about a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkspaceBundle {
     /// <p>The bundle identifier.</p>
     #[serde(rename = "BundleId")]
@@ -697,6 +729,7 @@ pub struct WorkspaceBundle {
 
 /// <p>Describes the connection status of a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkspaceConnectionStatus {
     /// <p>The connection state of the WorkSpace. The connection state is unknown if the WorkSpace is stopped.</p>
     #[serde(rename = "ConnectionState")]
@@ -718,6 +751,7 @@ pub struct WorkspaceConnectionStatus {
 
 /// <p>Information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkspaceDirectory {
     /// <p>The directory alias.</p>
     #[serde(rename = "Alias")]
@@ -834,6 +868,7 @@ pub struct WorkspaceRequest {
 
 /// <p>Information about an IP access control group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkspacesIpGroup {
     /// <p>The description of the group.</p>
     #[serde(rename = "groupDesc")]

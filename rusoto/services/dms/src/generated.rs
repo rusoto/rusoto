@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AccountQuota {
     /// <p>The name of the AWS DMS quota for this AWS account.</p>
     #[serde(rename = "AccountQuotaName")]
@@ -58,10 +59,12 @@ pub struct AddTagsToResourceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
     #[serde(rename = "Name")]
@@ -71,6 +74,7 @@ pub struct AvailabilityZone {
 
 /// <p>The SSL certificate that can be used to encrypt connections between the endpoints and the replication instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
     #[serde(rename = "CertificateArn")]
@@ -120,6 +124,7 @@ pub struct Certificate {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -227,6 +232,7 @@ pub struct CreateEndpointMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEndpointResponse {
     /// <p>The endpoint that was created.</p>
     #[serde(rename = "Endpoint")]
@@ -267,6 +273,7 @@ pub struct CreateEventSubscriptionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEventSubscriptionResponse {
     /// <p>The event subscription that was created.</p>
     #[serde(rename = "EventSubscription")]
@@ -331,6 +338,7 @@ pub struct CreateReplicationInstanceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationInstanceResponse {
     /// <p>The replication instance that was created.</p>
     #[serde(rename = "ReplicationInstance")]
@@ -358,6 +366,7 @@ pub struct CreateReplicationSubnetGroupMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationSubnetGroupResponse {
     /// <p>The replication subnet group that was created.</p>
     #[serde(rename = "ReplicationSubnetGroup")]
@@ -410,6 +419,7 @@ pub struct CreateReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationTaskResponse {
     /// <p>The replication task that was created.</p>
     #[serde(rename = "ReplicationTask")]
@@ -425,6 +435,7 @@ pub struct DeleteCertificateMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteCertificateResponse {
     /// <p>The Secure Sockets Layer (SSL) certificate.</p>
     #[serde(rename = "Certificate")]
@@ -442,6 +453,7 @@ pub struct DeleteEndpointMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEndpointResponse {
     /// <p>The endpoint that was deleted.</p>
     #[serde(rename = "Endpoint")]
@@ -459,6 +471,7 @@ pub struct DeleteEventSubscriptionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEventSubscriptionResponse {
     /// <p>The event subscription that was deleted.</p>
     #[serde(rename = "EventSubscription")]
@@ -476,6 +489,7 @@ pub struct DeleteReplicationInstanceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationInstanceResponse {
     /// <p>The replication instance that was deleted.</p>
     #[serde(rename = "ReplicationInstance")]
@@ -493,6 +507,7 @@ pub struct DeleteReplicationSubnetGroupMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationSubnetGroupResponse {}
 
 /// <p><p/></p>
@@ -505,6 +520,7 @@ pub struct DeleteReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationTaskResponse {
     /// <p>The deleted replication task.</p>
     #[serde(rename = "ReplicationTask")]
@@ -518,6 +534,7 @@ pub struct DescribeAccountAttributesMessage {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAccountAttributesResponse {
     /// <p>Account quota information.</p>
     #[serde(rename = "AccountQuotas")]
@@ -542,6 +559,7 @@ pub struct DescribeCertificatesMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCertificatesResponse {
     /// <p>The Secure Sockets Layer (SSL) certificates associated with the replication instance.</p>
     #[serde(rename = "Certificates")]
@@ -572,6 +590,7 @@ pub struct DescribeConnectionsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConnectionsResponse {
     /// <p>A description of the connections.</p>
     #[serde(rename = "Connections")]
@@ -602,6 +621,7 @@ pub struct DescribeEndpointTypesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointTypesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -632,6 +652,7 @@ pub struct DescribeEndpointsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointsResponse {
     /// <p>Endpoint description.</p>
     #[serde(rename = "Endpoints")]
@@ -658,6 +679,7 @@ pub struct DescribeEventCategoriesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventCategoriesResponse {
     /// <p>A list of event categories.</p>
     #[serde(rename = "EventCategoryGroupList")]
@@ -688,6 +710,7 @@ pub struct DescribeEventSubscriptionsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventSubscriptionsResponse {
     /// <p>A list of event subscriptions.</p>
     #[serde(rename = "EventSubscriptionsList")]
@@ -742,6 +765,7 @@ pub struct DescribeEventsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventsResponse {
     /// <p>The events described.</p>
     #[serde(rename = "Events")]
@@ -768,6 +792,7 @@ pub struct DescribeOrderableReplicationInstancesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeOrderableReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -789,6 +814,7 @@ pub struct DescribeRefreshSchemasStatusMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRefreshSchemasStatusResponse {
     /// <p>The status of the schema.</p>
     #[serde(rename = "RefreshSchemasStatus")]
@@ -812,6 +838,7 @@ pub struct DescribeReplicationInstanceTaskLogsMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationInstanceTaskLogsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     #[serde(rename = "Marker")]
@@ -846,6 +873,7 @@ pub struct DescribeReplicationInstancesMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -876,6 +904,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationSubnetGroupsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -906,6 +935,7 @@ pub struct DescribeReplicationTaskAssessmentResultsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationTaskAssessmentResultsResponse {
     /// <p>- The Amazon S3 bucket where the task assessment report is located. </p>
     #[serde(rename = "BucketName")]
@@ -940,6 +970,7 @@ pub struct DescribeReplicationTasksMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReplicationTasksResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -969,6 +1000,7 @@ pub struct DescribeSchemasMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSchemasResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1002,6 +1034,7 @@ pub struct DescribeTableStatisticsMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTableStatisticsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
@@ -1040,6 +1073,7 @@ pub struct DynamoDbSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Endpoint {
     /// <p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>
     #[serde(rename = "CertificateArn")]
@@ -1129,6 +1163,7 @@ pub struct Endpoint {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Event {
     /// <p>The date of the event.</p>
     #[serde(rename = "Date")]
@@ -1154,6 +1189,7 @@ pub struct Event {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventCategoryGroup {
     /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>
     #[serde(rename = "EventCategories")]
@@ -1167,6 +1203,7 @@ pub struct EventCategoryGroup {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The AWS DMS event notification subscription Id.</p>
     #[serde(rename = "CustSubscriptionId")]
@@ -1241,6 +1278,7 @@ pub struct ImportCertificateMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportCertificateResponse {
     /// <p>The certificate to be uploaded.</p>
     #[serde(rename = "Certificate")]
@@ -1258,6 +1296,7 @@ pub struct ListTagsForResourceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tags for the resource.</p>
     #[serde(rename = "TagList")]
@@ -1343,6 +1382,7 @@ pub struct ModifyEndpointMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyEndpointResponse {
     /// <p>The modified endpoint.</p>
     #[serde(rename = "Endpoint")]
@@ -1376,6 +1416,7 @@ pub struct ModifyEventSubscriptionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyEventSubscriptionResponse {
     /// <p>The modified event subscription.</p>
     #[serde(rename = "EventSubscription")]
@@ -1433,6 +1474,7 @@ pub struct ModifyReplicationInstanceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyReplicationInstanceResponse {
     /// <p>The modified replication instance.</p>
     #[serde(rename = "ReplicationInstance")]
@@ -1457,6 +1499,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyReplicationSubnetGroupResponse {
     /// <p>The modified replication subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroup")]
@@ -1502,6 +1545,7 @@ pub struct ModifyReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyReplicationTaskResponse {
     /// <p>The replication task that was modified.</p>
     #[serde(rename = "ReplicationTask")]
@@ -1564,6 +1608,7 @@ pub struct MongoDbSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OrderableReplicationInstance {
     /// <p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>
     #[serde(rename = "DefaultAllocatedStorage")]
@@ -1607,6 +1652,7 @@ pub struct RebootReplicationInstanceMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RebootReplicationInstanceResponse {
     /// <p>The replication instance that is being rebooted. </p>
     #[serde(rename = "ReplicationInstance")]
@@ -1627,6 +1673,7 @@ pub struct RefreshSchemasMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RefreshSchemasResponse {
     /// <p>The status of the refreshed schema.</p>
     #[serde(rename = "RefreshSchemasStatus")]
@@ -1636,6 +1683,7 @@ pub struct RefreshSchemasResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RefreshSchemasStatus {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -1674,6 +1722,7 @@ pub struct ReloadTablesMessage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReloadTablesResponse {
     /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
     #[serde(rename = "ReplicationTaskArn")]
@@ -1694,10 +1743,12 @@ pub struct RemoveTagsFromResourceMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationInstance {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
@@ -1783,6 +1834,7 @@ pub struct ReplicationInstance {
 
 /// <p>Contains metadata for a replication instance task log.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationInstanceTaskLog {
     /// <p>The size, in bytes, of the replication task log.</p>
     #[serde(rename = "ReplicationInstanceTaskLogSize")]
@@ -1800,6 +1852,7 @@ pub struct ReplicationInstanceTaskLog {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationPendingModifiedValues {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
@@ -1821,6 +1874,7 @@ pub struct ReplicationPendingModifiedValues {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationSubnetGroup {
     /// <p>The description of the replication subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
@@ -1846,6 +1900,7 @@ pub struct ReplicationSubnetGroup {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTask {
     /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
@@ -1919,6 +1974,7 @@ pub struct ReplicationTask {
 
 /// <p> The task assessment report in JSON format. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTaskAssessmentResult {
     /// <p> The task assessment results in JSON format. </p>
     #[serde(rename = "AssessmentResults")]
@@ -1952,6 +2008,7 @@ pub struct ReplicationTaskAssessmentResult {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationTaskStats {
     /// <p>The elapsed time of the task, in milliseconds.</p>
     #[serde(rename = "ElapsedTimeMillis")]
@@ -2022,6 +2079,7 @@ pub struct StartReplicationTaskAssessmentMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartReplicationTaskAssessmentResponse {
     /// <p> The assessed replication task. </p>
     #[serde(rename = "ReplicationTask")]
@@ -2054,6 +2112,7 @@ pub struct StartReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartReplicationTaskResponse {
     /// <p>The replication task started.</p>
     #[serde(rename = "ReplicationTask")]
@@ -2071,6 +2130,7 @@ pub struct StopReplicationTaskMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopReplicationTaskResponse {
     /// <p>The replication task stopped.</p>
     #[serde(rename = "ReplicationTask")]
@@ -2080,6 +2140,7 @@ pub struct StopReplicationTaskResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Subnet {
     /// <p>The Availability Zone of the subnet.</p>
     #[serde(rename = "SubnetAvailabilityZone")]
@@ -2097,6 +2158,7 @@ pub struct Subnet {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SupportedEndpointType {
     /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
@@ -2118,6 +2180,7 @@ pub struct SupportedEndpointType {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TableStatistics {
     /// <p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>
     #[serde(rename = "Ddls")]
@@ -2224,6 +2287,7 @@ pub struct TestConnectionMessage {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TestConnectionResponse {
     /// <p>The connection tested.</p>
     #[serde(rename = "Connection")]
@@ -2233,6 +2297,7 @@ pub struct TestConnectionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>
     #[serde(rename = "Status")]

@@ -140,6 +140,7 @@ pub struct CreateBudgetRequest {
 
 /// <p> Response of CreateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
@@ -161,6 +162,7 @@ pub struct CreateNotificationRequest {
 
 /// <p> Response of CreateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
@@ -182,6 +184,7 @@ pub struct CreateSubscriberRequest {
 
 /// <p> Response of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSubscriberResponse {}
 
 /// <p> Request of DeleteBudget </p>
@@ -197,6 +200,7 @@ pub struct DeleteBudgetRequest {
 
 /// <p> Response of DeleteBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
@@ -215,6 +219,7 @@ pub struct DeleteNotificationRequest {
 
 /// <p> Response of DeleteNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
@@ -236,6 +241,7 @@ pub struct DeleteSubscriberRequest {
 
 /// <p> Response of DeleteSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSubscriberResponse {}
 
 /// <p> Request of DescribeBudget </p>
@@ -251,6 +257,7 @@ pub struct DescribeBudgetRequest {
 
 /// <p> Response of DescribeBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBudgetResponse {
     /// <p>The description of the budget.</p>
     #[serde(rename = "Budget")]
@@ -276,6 +283,7 @@ pub struct DescribeBudgetsRequest {
 
 /// <p> Response of DescribeBudgets </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBudgetsResponse {
     /// <p>A list of budgets.</p>
     #[serde(rename = "Budgets")]
@@ -308,6 +316,7 @@ pub struct DescribeNotificationsForBudgetRequest {
 
 /// <p> Response of GetNotificationsForBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNotificationsForBudgetResponse {
     /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
@@ -343,6 +352,7 @@ pub struct DescribeSubscribersForNotificationRequest {
 
 /// <p> Response of DescribeSubscribersForNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSubscribersForNotificationResponse {
     /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
@@ -431,6 +441,7 @@ pub struct UpdateBudgetRequest {
 
 /// <p> Response of UpdateBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
@@ -452,6 +463,7 @@ pub struct UpdateNotificationRequest {
 
 /// <p> Response of UpdateNotification </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
@@ -476,6 +488,7 @@ pub struct UpdateSubscriberRequest {
 
 /// <p> Response of UpdateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSubscriberResponse {}
 
 /// Errors returned by CreateBudget

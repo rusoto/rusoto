@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Describes an agent version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AgentVersion {
     /// <p>The configuration manager.</p>
     #[serde(rename = "ConfigurationManager")]
@@ -43,6 +44,7 @@ pub struct AgentVersion {
 
 /// <p>A description of the app.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct App {
     /// <p>The app ID.</p>
     #[serde(rename = "AppId")]
@@ -302,6 +304,7 @@ pub struct CloneStackRequest {
 
 /// <p>Contains the response to a <code>CloneStack</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CloneStackResult {
     /// <p>The cloned stack ID.</p>
     #[serde(rename = "StackId")]
@@ -373,6 +376,7 @@ pub struct CloudWatchLogsLogStream {
 
 /// <p>Describes a command.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Command {
     /// <p>Date and time when the command was acknowledged.</p>
     #[serde(rename = "AcknowledgedAt")]
@@ -467,6 +471,7 @@ pub struct CreateAppRequest {
 
 /// <p>Contains the response to a <code>CreateApp</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAppResult {
     /// <p>The app ID.</p>
     #[serde(rename = "AppId")]
@@ -506,6 +511,7 @@ pub struct CreateDeploymentRequest {
 
 /// <p>Contains the response to a <code>CreateDeployment</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeploymentResult {
     /// <p>The deployment ID, which can be used with other requests to identify the deployment.</p>
     #[serde(rename = "DeploymentId")]
@@ -588,6 +594,7 @@ pub struct CreateInstanceRequest {
 
 /// <p>Contains the response to a <code>CreateInstance</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateInstanceResult {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
@@ -669,6 +676,7 @@ pub struct CreateLayerRequest {
 
 /// <p>Contains the response to a <code>CreateLayer</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateLayerResult {
     /// <p>The layer ID.</p>
     #[serde(rename = "LayerId")]
@@ -753,6 +761,7 @@ pub struct CreateStackRequest {
 
 /// <p>Contains the response to a <code>CreateStack</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateStackResult {
     /// <p>The stack ID, which is an opaque string that you use to identify the stack when performing actions such as <code>DescribeStacks</code>.</p>
     #[serde(rename = "StackId")]
@@ -781,6 +790,7 @@ pub struct CreateUserProfileRequest {
 
 /// <p>Contains the response to a <code>CreateUserProfile</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserProfileResult {
     /// <p>The user's IAM ARN.</p>
     #[serde(rename = "IamUserArn")]
@@ -850,6 +860,7 @@ pub struct DeleteUserProfileRequest {
 
 /// <p>Describes a deployment of a stack or app.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Deployment {
     /// <p>The app ID.</p>
     #[serde(rename = "AppId")]
@@ -961,6 +972,7 @@ pub struct DescribeAgentVersionsRequest {
 
 /// <p>Contains the response to a <code>DescribeAgentVersions</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAgentVersionsResult {
     /// <p>The agent versions for the specified stack or configuration manager. Note that this value is the complete version number, not the abbreviated number used by the console.</p>
     #[serde(rename = "AgentVersions")]
@@ -982,6 +994,7 @@ pub struct DescribeAppsRequest {
 
 /// <p>Contains the response to a <code>DescribeApps</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAppsResult {
     /// <p>An array of <code>App</code> objects that describe the specified apps. </p>
     #[serde(rename = "Apps")]
@@ -1007,6 +1020,7 @@ pub struct DescribeCommandsRequest {
 
 /// <p>Contains the response to a <code>DescribeCommands</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCommandsResult {
     /// <p>An array of <code>Command</code> objects that describe each of the specified commands.</p>
     #[serde(rename = "Commands")]
@@ -1032,6 +1046,7 @@ pub struct DescribeDeploymentsRequest {
 
 /// <p>Contains the response to a <code>DescribeDeployments</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDeploymentsResult {
     /// <p>An array of <code>Deployment</code> objects that describe the deployments.</p>
     #[serde(rename = "Deployments")]
@@ -1061,6 +1076,7 @@ pub struct DescribeEcsClustersRequest {
 
 /// <p>Contains the response to a <code>DescribeEcsClusters</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEcsClustersResult {
     /// <p>A list of <code>EcsCluster</code> objects containing the cluster descriptions.</p>
     #[serde(rename = "EcsClusters")]
@@ -1090,6 +1106,7 @@ pub struct DescribeElasticIpsRequest {
 
 /// <p>Contains the response to a <code>DescribeElasticIps</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeElasticIpsResult {
     /// <p>An <code>ElasticIps</code> object that describes the specified Elastic IP addresses.</p>
     #[serde(rename = "ElasticIps")]
@@ -1111,6 +1128,7 @@ pub struct DescribeElasticLoadBalancersRequest {
 
 /// <p>Contains the response to a <code>DescribeElasticLoadBalancers</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeElasticLoadBalancersResult {
     /// <p>A list of <code>ElasticLoadBalancer</code> objects that describe the specified Elastic Load Balancing instances.</p>
     #[serde(rename = "ElasticLoadBalancers")]
@@ -1136,6 +1154,7 @@ pub struct DescribeInstancesRequest {
 
 /// <p>Contains the response to a <code>DescribeInstances</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInstancesResult {
     /// <p>An array of <code>Instance</code> objects that describe the instances.</p>
     #[serde(rename = "Instances")]
@@ -1157,6 +1176,7 @@ pub struct DescribeLayersRequest {
 
 /// <p>Contains the response to a <code>DescribeLayers</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeLayersResult {
     /// <p>An array of <code>Layer</code> objects that describe the layers.</p>
     #[serde(rename = "Layers")]
@@ -1173,6 +1193,7 @@ pub struct DescribeLoadBasedAutoScalingRequest {
 
 /// <p>Contains the response to a <code>DescribeLoadBasedAutoScaling</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeLoadBasedAutoScalingResult {
     /// <p>An array of <code>LoadBasedAutoScalingConfiguration</code> objects that describe each layer's configuration.</p>
     #[serde(rename = "LoadBasedAutoScalingConfigurations")]
@@ -1182,6 +1203,7 @@ pub struct DescribeLoadBasedAutoScalingResult {
 
 /// <p>Contains the response to a <code>DescribeMyUserProfile</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMyUserProfileResult {
     /// <p>A <code>UserProfile</code> object that describes the user's SSH information.</p>
     #[serde(rename = "UserProfile")]
@@ -1191,6 +1213,7 @@ pub struct DescribeMyUserProfileResult {
 
 /// <p>The response to a <code>DescribeOperatingSystems</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeOperatingSystemsResponse {
     /// <p>Contains information in response to a <code>DescribeOperatingSystems</code> request.</p>
     #[serde(rename = "OperatingSystems")]
@@ -1212,6 +1235,7 @@ pub struct DescribePermissionsRequest {
 
 /// <p>Contains the response to a <code>DescribePermissions</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePermissionsResult {
     /// <p><p>An array of <code>Permission</code> objects that describe the stack permissions.</p> <ul> <li> <p>If the request object contains only a stack ID, the array contains a <code>Permission</code> object with permissions for each of the stack IAM ARNs.</p> </li> <li> <p>If the request object contains only an IAM ARN, the array contains a <code>Permission</code> object with permissions for each of the user&#39;s stack IDs.</p> </li> <li> <p>If the request contains a stack ID and an IAM ARN, the array contains a single <code>Permission</code> object with permissions for the specified stack and IAM ARN.</p> </li> </ul></p>
     #[serde(rename = "Permissions")]
@@ -1237,6 +1261,7 @@ pub struct DescribeRaidArraysRequest {
 
 /// <p>Contains the response to a <code>DescribeRaidArrays</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRaidArraysResult {
     /// <p>A <code>RaidArrays</code> object that describes the specified RAID arrays.</p>
     #[serde(rename = "RaidArrays")]
@@ -1257,6 +1282,7 @@ pub struct DescribeRdsDbInstancesRequest {
 
 /// <p>Contains the response to a <code>DescribeRdsDbInstances</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRdsDbInstancesResult {
     /// <p>An a array of <code>RdsDbInstance</code> objects that describe the instances.</p>
     #[serde(rename = "RdsDbInstances")]
@@ -1282,6 +1308,7 @@ pub struct DescribeServiceErrorsRequest {
 
 /// <p>Contains the response to a <code>DescribeServiceErrors</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeServiceErrorsResult {
     /// <p>An array of <code>ServiceError</code> objects that describe the specified service errors.</p>
     #[serde(rename = "ServiceErrors")]
@@ -1298,6 +1325,7 @@ pub struct DescribeStackProvisioningParametersRequest {
 
 /// <p>Contains the response to a <code>DescribeStackProvisioningParameters</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStackProvisioningParametersResult {
     /// <p>The AWS OpsWorks Stacks agent installer's URL.</p>
     #[serde(rename = "AgentInstallerUrl")]
@@ -1318,6 +1346,7 @@ pub struct DescribeStackSummaryRequest {
 
 /// <p>Contains the response to a <code>DescribeStackSummary</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStackSummaryResult {
     /// <p>A <code>StackSummary</code> object that contains the results.</p>
     #[serde(rename = "StackSummary")]
@@ -1335,6 +1364,7 @@ pub struct DescribeStacksRequest {
 
 /// <p>Contains the response to a <code>DescribeStacks</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStacksResult {
     /// <p>An array of <code>Stack</code> objects that describe the stacks.</p>
     #[serde(rename = "Stacks")]
@@ -1351,6 +1381,7 @@ pub struct DescribeTimeBasedAutoScalingRequest {
 
 /// <p>Contains the response to a <code>DescribeTimeBasedAutoScaling</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTimeBasedAutoScalingResult {
     /// <p>An array of <code>TimeBasedAutoScalingConfiguration</code> objects that describe the configuration for the specified instances.</p>
     #[serde(rename = "TimeBasedAutoScalingConfigurations")]
@@ -1368,6 +1399,7 @@ pub struct DescribeUserProfilesRequest {
 
 /// <p>Contains the response to a <code>DescribeUserProfiles</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserProfilesResult {
     /// <p>A <code>Users</code> object that describes the specified users.</p>
     #[serde(rename = "UserProfiles")]
@@ -1397,6 +1429,7 @@ pub struct DescribeVolumesRequest {
 
 /// <p>Contains the response to a <code>DescribeVolumes</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeVolumesResult {
     /// <p>An array of volume IDs.</p>
     #[serde(rename = "Volumes")]
@@ -1448,6 +1481,7 @@ pub struct EbsBlockDevice {
 
 /// <p>Describes a registered Amazon ECS cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EcsCluster {
     /// <p>The cluster's ARN.</p>
     #[serde(rename = "EcsClusterArn")]
@@ -1469,6 +1503,7 @@ pub struct EcsCluster {
 
 /// <p>Describes an Elastic IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ElasticIp {
     /// <p>The domain.</p>
     #[serde(rename = "Domain")]
@@ -1494,6 +1529,7 @@ pub struct ElasticIp {
 
 /// <p>Describes an Elastic Load Balancing instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ElasticLoadBalancer {
     /// <p>A list of Availability Zones.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -1557,6 +1593,7 @@ pub struct GetHostnameSuggestionRequest {
 
 /// <p>Contains the response to a <code>GetHostnameSuggestion</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetHostnameSuggestionResult {
     /// <p>The generated host name.</p>
     #[serde(rename = "Hostname")]
@@ -1581,6 +1618,7 @@ pub struct GrantAccessRequest {
 
 /// <p>Contains the response to a <code>GrantAccess</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GrantAccessResult {
     /// <p>A <code>TemporaryCredential</code> object that contains the data needed to log in to the instance by RDP clients, such as the Microsoft Remote Desktop Connection.</p>
     #[serde(rename = "TemporaryCredential")]
@@ -1590,6 +1628,7 @@ pub struct GrantAccessResult {
 
 /// <p>Describes an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Instance {
     /// <p>The agent version. This parameter is set to <code>INHERIT</code> if the instance inherits the default stack setting or to a a version number for a fixed agent version.</p>
     #[serde(rename = "AgentVersion")]
@@ -1772,6 +1811,7 @@ pub struct InstanceIdentity {
 
 /// <p>Describes how many instances a stack has for each status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstancesCount {
     /// <p>The number of instances in the Assigning state.</p>
     #[serde(rename = "Assigning")]
@@ -1857,6 +1897,7 @@ pub struct InstancesCount {
 
 /// <p>Describes a layer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Layer {
     /// <p>The Amazon Resource Number (ARN) of a layer.</p>
     #[serde(rename = "Arn")]
@@ -1977,6 +2018,7 @@ pub struct ListTagsRequest {
 
 /// <p>Contains the response to a <code>ListTags</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsResult {
     /// <p>If a paginated request does not return all of the remaining results, this parameter is set to a token that you can assign to the request object's <code>NextToken</code> parameter to get the next set of results. If the previous paginated request returned all of the remaining results, this parameter is set to <code>null</code>. </p>
     #[serde(rename = "NextToken")]
@@ -1990,6 +2032,7 @@ pub struct ListTagsResult {
 
 /// <p>Describes a layer's load-based auto scaling configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LoadBasedAutoScalingConfiguration {
     /// <p>An <code>AutoScalingThresholds</code> object that describes the downscaling configuration, which defines how and when AWS OpsWorks Stacks reduces the number of instances.</p>
     #[serde(rename = "DownScaling")]
@@ -2011,6 +2054,7 @@ pub struct LoadBasedAutoScalingConfiguration {
 
 /// <p>Describes supported operating systems in AWS OpsWorks Stacks.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OperatingSystem {
     /// <p>Supported configuration manager name and versions for an AWS OpsWorks Stacks operating system.</p>
     #[serde(rename = "ConfigurationManagers")]
@@ -2044,6 +2088,7 @@ pub struct OperatingSystem {
 
 /// <p>A block that contains information about the configuration manager (Chef) and the versions of the configuration manager that are supported for an operating system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OperatingSystemConfigurationManager {
     /// <p>The name of the configuration manager, which is Chef.</p>
     #[serde(rename = "Name")]
@@ -2057,6 +2102,7 @@ pub struct OperatingSystemConfigurationManager {
 
 /// <p>Describes stack or user permissions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Permission {
     /// <p>Whether the user can use SSH.</p>
     #[serde(rename = "AllowSsh")]
@@ -2082,6 +2128,7 @@ pub struct Permission {
 
 /// <p>Describes an instance's RAID array.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RaidArray {
     /// <p>The array's Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -2139,6 +2186,7 @@ pub struct RaidArray {
 
 /// <p>Describes an Amazon RDS instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RdsDbInstance {
     /// <p>The instance's address.</p>
     #[serde(rename = "Address")]
@@ -2222,6 +2270,7 @@ pub struct RegisterEcsClusterRequest {
 
 /// <p>Contains the response to a <code>RegisterEcsCluster</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterEcsClusterResult {
     /// <p>The cluster's ARN.</p>
     #[serde(rename = "EcsClusterArn")]
@@ -2241,6 +2290,7 @@ pub struct RegisterElasticIpRequest {
 
 /// <p>Contains the response to a <code>RegisterElasticIp</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterElasticIpResult {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
@@ -2281,6 +2331,7 @@ pub struct RegisterInstanceRequest {
 
 /// <p>Contains the response to a <code>RegisterInstanceResult</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterInstanceResult {
     /// <p>The registered instance's AWS OpsWorks Stacks ID.</p>
     #[serde(rename = "InstanceId")]
@@ -2317,6 +2368,7 @@ pub struct RegisterVolumeRequest {
 
 /// <p>Contains the response to a <code>RegisterVolume</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterVolumeResult {
     /// <p>The volume ID.</p>
     #[serde(rename = "VolumeId")]
@@ -2326,6 +2378,7 @@ pub struct RegisterVolumeResult {
 
 /// <p>A registered instance's reported operating system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReportedOs {
     /// <p>The operating system family.</p>
     #[serde(rename = "Family")]
@@ -2343,6 +2396,7 @@ pub struct ReportedOs {
 
 /// <p>Describes a user's SSH information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SelfUserProfile {
     /// <p>The user's IAM ARN.</p>
     #[serde(rename = "IamUserArn")]
@@ -2364,6 +2418,7 @@ pub struct SelfUserProfile {
 
 /// <p>Describes an AWS OpsWorks Stacks service error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceError {
     /// <p>When the error occurred.</p>
     #[serde(rename = "CreatedAt")]
@@ -2502,6 +2557,7 @@ pub struct SslConfiguration {
 
 /// <p>Describes a stack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Stack {
     /// <p>The agent version. This parameter is set to <code>LATEST</code> for auto-update. or a version number for a fixed agent version.</p>
     #[serde(rename = "AgentVersion")]
@@ -2607,6 +2663,7 @@ pub struct StackConfigurationManager {
 
 /// <p>Summarizes the number of layers, instances, and apps in a stack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StackSummary {
     /// <p>The number of apps.</p>
     #[serde(rename = "AppsCount")]
@@ -2678,6 +2735,7 @@ pub struct TagResourceRequest {
 
 /// <p>Contains the data needed by RDP clients such as the Microsoft Remote Desktop Connection to log in to the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TemporaryCredential {
     /// <p>The instance's AWS OpsWorks Stacks ID.</p>
     #[serde(rename = "InstanceId")]
@@ -2699,6 +2757,7 @@ pub struct TemporaryCredential {
 
 /// <p>Describes an instance's time-based auto scaling configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TimeBasedAutoScalingConfiguration {
     /// <p>A <code>WeeklyAutoScalingSchedule</code> object with the instance schedule.</p>
     #[serde(rename = "AutoScalingSchedule")]
@@ -3047,6 +3106,7 @@ pub struct UpdateVolumeRequest {
 
 /// <p>Describes a user's SSH information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserProfile {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Managing User Permissions</a>.</p>
     #[serde(rename = "AllowSelfManagement")]
@@ -3072,6 +3132,7 @@ pub struct UserProfile {
 
 /// <p>Describes an instance's Amazon EBS volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Volume {
     /// <p>The volume Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a>.</p>
     #[serde(rename = "AvailabilityZone")]

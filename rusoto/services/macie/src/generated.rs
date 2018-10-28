@@ -47,6 +47,7 @@ pub struct AssociateS3ResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateS3ResourcesResult {
     /// <p>S3 resources that couldn't be associated with Amazon Macie. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
@@ -97,6 +98,7 @@ pub struct DisassociateS3ResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateS3ResourcesResult {
     /// <p>S3 resources that couldn't be removed from being monitored and classified by Amazon Macie. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
@@ -106,6 +108,7 @@ pub struct DisassociateS3ResourcesResult {
 
 /// <p>Includes details about the failed S3 resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailedS3Resource {
     /// <p>The status code of a failed item.</p>
     #[serde(rename = "errorCode")]
@@ -134,6 +137,7 @@ pub struct ListMemberAccountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListMemberAccountsResult {
     /// <p>A list of the Amazon Macie member accounts returned by the action. The current master account is also included in this list. </p>
     #[serde(rename = "memberAccounts")]
@@ -162,6 +166,7 @@ pub struct ListS3ResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListS3ResourcesResult {
     /// <p>When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the nextToken parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null. </p>
     #[serde(rename = "nextToken")]
@@ -175,6 +180,7 @@ pub struct ListS3ResourcesResult {
 
 /// <p>Contains information about the Amazon Macie member account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MemberAccount {
     /// <p>The AWS account ID of the Amazon Macie member account.</p>
     #[serde(rename = "accountId")]
@@ -236,6 +242,7 @@ pub struct UpdateS3ResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateS3ResourcesResult {
     /// <p>The S3 resources whose classification types can't be updated. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]

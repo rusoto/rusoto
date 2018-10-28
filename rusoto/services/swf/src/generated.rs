@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Unit of work sent to an activity worker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTask {
     /// <p>The unique ID of the task.</p>
     #[serde(rename = "activityId")]
@@ -54,6 +55,7 @@ pub struct ActivityTask {
 
 /// <p>Provides the details of the <code>ActivityTaskCancelRequested</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskCancelRequestedEventAttributes {
     /// <p>The unique ID of the task.</p>
     #[serde(rename = "activityId")]
@@ -65,6 +67,7 @@ pub struct ActivityTaskCancelRequestedEventAttributes {
 
 /// <p>Provides the details of the <code>ActivityTaskCanceled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskCanceledEventAttributes {
     /// <p>Details of the cancellation.</p>
     #[serde(rename = "details")]
@@ -84,6 +87,7 @@ pub struct ActivityTaskCanceledEventAttributes {
 
 /// <p>Provides the details of the <code>ActivityTaskCompleted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskCompletedEventAttributes {
     /// <p>The results of the activity task.</p>
     #[serde(rename = "result")]
@@ -99,6 +103,7 @@ pub struct ActivityTaskCompletedEventAttributes {
 
 /// <p>Provides the details of the <code>ActivityTaskFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskFailedEventAttributes {
     /// <p>The details of the failure.</p>
     #[serde(rename = "details")]
@@ -118,6 +123,7 @@ pub struct ActivityTaskFailedEventAttributes {
 
 /// <p>Provides the details of the <code>ActivityTaskScheduled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskScheduledEventAttributes {
     /// <p>The unique ID of the activity task.</p>
     #[serde(rename = "activityId")]
@@ -163,6 +169,7 @@ pub struct ActivityTaskScheduledEventAttributes {
 
 /// <p>Provides the details of the <code>ActivityTaskStarted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskStartedEventAttributes {
     /// <p>Identity of the worker that was assigned this task. This aids diagnostics when problems arise. The form of this identity is user defined.</p>
     #[serde(rename = "identity")]
@@ -175,6 +182,7 @@ pub struct ActivityTaskStartedEventAttributes {
 
 /// <p>Status information about an activity task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskStatus {
     /// <p>Set to <code>true</code> if cancellation of the task is requested.</p>
     #[serde(rename = "cancelRequested")]
@@ -183,6 +191,7 @@ pub struct ActivityTaskStatus {
 
 /// <p>Provides the details of the <code>ActivityTaskTimedOut</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTaskTimedOutEventAttributes {
     /// <p>Contains the content of the <code>details</code> parameter for the last call made by the activity to <code>RecordActivityTaskHeartbeat</code>.</p>
     #[serde(rename = "details")]
@@ -212,6 +221,7 @@ pub struct ActivityType {
 
 /// <p>Configuration settings registered with the activity type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTypeConfiguration {
     /// <p> The default maximum time, in seconds, before which a worker processing a task must report progress by calling <a>RecordActivityTaskHeartbeat</a>.</p> <p>You can specify this value only when <i>registering</i> an activity type. The registered default value can be overridden when you schedule a task through the <code>ScheduleActivityTask</code> <a>Decision</a>. If the activity worker subsequently attempts to record a heartbeat or returns a result, the activity worker receives an <code>UnknownResource</code> fault. In this case, Amazon SWF no longer considers the activity task to be valid; the activity worker should clean up the activity task.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "defaultTaskHeartbeatTimeout")]
@@ -241,6 +251,7 @@ pub struct ActivityTypeConfiguration {
 
 /// <p>Detailed information about an activity type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTypeDetail {
     /// <p>The configuration settings registered with the activity type.</p>
     #[serde(rename = "configuration")]
@@ -252,6 +263,7 @@ pub struct ActivityTypeDetail {
 
 /// <p>Detailed information about an activity type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTypeInfo {
     /// <p>The <a>ActivityType</a> type structure representing the activity type.</p>
     #[serde(rename = "activityType")]
@@ -274,6 +286,7 @@ pub struct ActivityTypeInfo {
 
 /// <p>Contains a paginated list of activity type information structures.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTypeInfos {
     /// <p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>
     #[serde(rename = "nextPageToken")]
@@ -294,6 +307,7 @@ pub struct CancelTimerDecisionAttributes {
 
 /// <p>Provides the details of the <code>CancelTimerFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelTimerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -317,6 +331,7 @@ pub struct CancelWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>CancelWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -328,6 +343,7 @@ pub struct CancelWorkflowExecutionFailedEventAttributes {
 
 /// <p>Provide details of the <code>ChildWorkflowExecutionCanceled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChildWorkflowExecutionCanceledEventAttributes {
     /// <p>Details of the cancellation (if provided).</p>
     #[serde(rename = "details")]
@@ -349,6 +365,7 @@ pub struct ChildWorkflowExecutionCanceledEventAttributes {
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionCompleted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChildWorkflowExecutionCompletedEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -370,6 +387,7 @@ pub struct ChildWorkflowExecutionCompletedEventAttributes {
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChildWorkflowExecutionFailedEventAttributes {
     /// <p>The details of the failure (if provided).</p>
     #[serde(rename = "details")]
@@ -395,6 +413,7 @@ pub struct ChildWorkflowExecutionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionStarted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChildWorkflowExecutionStartedEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -409,6 +428,7 @@ pub struct ChildWorkflowExecutionStartedEventAttributes {
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionTerminated</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChildWorkflowExecutionTerminatedEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -426,6 +446,7 @@ pub struct ChildWorkflowExecutionTerminatedEventAttributes {
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionTimedOut</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChildWorkflowExecutionTimedOutEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -463,6 +484,7 @@ pub struct CompleteWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>CompleteWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CompleteWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -515,6 +537,7 @@ pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>ContinueAsNewWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContinueAsNewWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -668,6 +691,7 @@ pub struct Decision {
 
 /// <p>A structure that represents a decision task. Decision tasks are sent to deciders in order for them to make decisions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DecisionTask {
     /// <p>A paginated list of history events of the workflow execution. The decider uses this during the processing of the decision task.</p>
     #[serde(rename = "events")]
@@ -696,6 +720,7 @@ pub struct DecisionTask {
 
 /// <p>Provides the details of the <code>DecisionTaskCompleted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DecisionTaskCompletedEventAttributes {
     /// <p>User defined context for the workflow execution.</p>
     #[serde(rename = "executionContext")]
@@ -711,6 +736,7 @@ pub struct DecisionTaskCompletedEventAttributes {
 
 /// <p>Provides details about the <code>DecisionTaskScheduled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DecisionTaskScheduledEventAttributes {
     /// <p>The maximum duration for this decision task. The task is considered timed out if it doesn't completed within this duration.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "startToCloseTimeout")]
@@ -727,6 +753,7 @@ pub struct DecisionTaskScheduledEventAttributes {
 
 /// <p>Provides the details of the <code>DecisionTaskStarted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DecisionTaskStartedEventAttributes {
     /// <p>Identity of the decider making the request. This enables diagnostic tracing when problems arise. The form of this identity is user defined.</p>
     #[serde(rename = "identity")]
@@ -739,6 +766,7 @@ pub struct DecisionTaskStartedEventAttributes {
 
 /// <p>Provides the details of the <code>DecisionTaskTimedOut</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DecisionTaskTimedOutEventAttributes {
     /// <p>The ID of the <code>DecisionTaskScheduled</code> event that was recorded when this decision task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "scheduledEventId")]
@@ -817,6 +845,7 @@ pub struct DescribeWorkflowTypeInput {
 
 /// <p>Contains the configuration settings of a domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainConfiguration {
     /// <p>The retention period for workflow executions in this domain.</p>
     #[serde(rename = "workflowExecutionRetentionPeriodInDays")]
@@ -825,6 +854,7 @@ pub struct DomainConfiguration {
 
 /// <p>Contains details of a domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainDetail {
     /// <p>The domain configuration. Currently, this includes only the domain's retention period.</p>
     #[serde(rename = "configuration")]
@@ -836,6 +866,7 @@ pub struct DomainDetail {
 
 /// <p>Contains general information about a domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainInfo {
     /// <p>The description of the domain provided through <a>RegisterDomain</a>.</p>
     #[serde(rename = "description")]
@@ -851,6 +882,7 @@ pub struct DomainInfo {
 
 /// <p>Contains a paginated collection of DomainInfo structures.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainInfos {
     /// <p>A list of DomainInfo structures.</p>
     #[serde(rename = "domainInfos")]
@@ -875,6 +907,7 @@ pub struct ExecutionTimeFilter {
 
 /// <p>Provides the details of the <code>ExternalWorkflowExecutionCancelRequested</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExternalWorkflowExecutionCancelRequestedEventAttributes {
     /// <p>The ID of the <code>RequestCancelExternalWorkflowExecutionInitiated</code> event corresponding to the <code>RequestCancelExternalWorkflowExecution</code> decision to cancel this external workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -886,6 +919,7 @@ pub struct ExternalWorkflowExecutionCancelRequestedEventAttributes {
 
 /// <p>Provides the details of the <code>ExternalWorkflowExecutionSignaled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExternalWorkflowExecutionSignaledEventAttributes {
     /// <p>The ID of the <code>SignalExternalWorkflowExecutionInitiated</code> event corresponding to the <code>SignalExternalWorkflowExecution</code> decision to request this signal. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -910,6 +944,7 @@ pub struct FailWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>FailWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -943,6 +978,7 @@ pub struct GetWorkflowExecutionHistoryInput {
 
 /// <p>Paginated representation of a workflow history for a workflow execution. This is the up to date, complete and authoritative record of the events related to all tasks and events in the life of the workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct History {
     /// <p>The list of history events.</p>
     #[serde(rename = "events")]
@@ -955,6 +991,7 @@ pub struct History {
 
 /// <p><p>Event within a workflow execution. A history event can be one of these types:</p> <ul> <li> <p> <code>ActivityTaskCancelRequested</code> – A <code>RequestCancelActivityTask</code> decision was received by the system.</p> </li> <li> <p> <code>ActivityTaskCanceled</code> – The activity task was successfully canceled.</p> </li> <li> <p> <code>ActivityTaskCompleted</code> – An activity worker successfully completed an activity task by calling <a>RespondActivityTaskCompleted</a>.</p> </li> <li> <p> <code>ActivityTaskFailed</code> – An activity worker failed an activity task by calling <a>RespondActivityTaskFailed</a>.</p> </li> <li> <p> <code>ActivityTaskScheduled</code> – An activity task was scheduled for execution.</p> </li> <li> <p> <code>ActivityTaskStarted</code> – The scheduled activity task was dispatched to a worker.</p> </li> <li> <p> <code>ActivityTaskTimedOut</code> – The activity task timed out.</p> </li> <li> <p> <code>CancelTimerFailed</code> – Failed to process CancelTimer decision. This happens when the decision isn&#39;t configured properly, for example no timer exists with the specified timer Id.</p> </li> <li> <p> <code>CancelWorkflowExecutionFailed</code> – A request to cancel a workflow execution failed.</p> </li> <li> <p> <code>ChildWorkflowExecutionCanceled</code> – A child workflow execution, started by this workflow execution, was canceled and closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionCompleted</code> – A child workflow execution, started by this workflow execution, completed successfully and was closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionFailed</code> – A child workflow execution, started by this workflow execution, failed to complete successfully and was closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionStarted</code> – A child workflow execution was successfully started.</p> </li> <li> <p> <code>ChildWorkflowExecutionTerminated</code> – A child workflow execution, started by this workflow execution, was terminated.</p> </li> <li> <p> <code>ChildWorkflowExecutionTimedOut</code> – A child workflow execution, started by this workflow execution, timed out and was closed.</p> </li> <li> <p> <code>CompleteWorkflowExecutionFailed</code> – The workflow execution failed to complete.</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecutionFailed</code> – The workflow execution failed to complete after being continued as a new workflow execution.</p> </li> <li> <p> <code>DecisionTaskCompleted</code> – The decider successfully completed a decision task by calling <a>RespondDecisionTaskCompleted</a>.</p> </li> <li> <p> <code>DecisionTaskScheduled</code> – A decision task was scheduled for the workflow execution.</p> </li> <li> <p> <code>DecisionTaskStarted</code> – The decision task was dispatched to a decider.</p> </li> <li> <p> <code>DecisionTaskTimedOut</code> – The decision task timed out.</p> </li> <li> <p> <code>ExternalWorkflowExecutionCancelRequested</code> – Request to cancel an external workflow execution was successfully delivered to the target execution.</p> </li> <li> <p> <code>ExternalWorkflowExecutionSignaled</code> – A signal, requested by this workflow execution, was successfully delivered to the target external workflow execution.</p> </li> <li> <p> <code>FailWorkflowExecutionFailed</code> – A request to mark a workflow execution as failed, itself failed.</p> </li> <li> <p> <code>MarkerRecorded</code> – A marker was recorded in the workflow history as the result of a <code>RecordMarker</code> decision.</p> </li> <li> <p> <code>RecordMarkerFailed</code> – A <code>RecordMarker</code> decision was returned as failed.</p> </li> <li> <p> <code>RequestCancelActivityTaskFailed</code> – Failed to process RequestCancelActivityTask decision. This happens when the decision isn&#39;t configured properly.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionFailed</code> – Request to cancel an external workflow execution failed.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionInitiated</code> – A request was made to request the cancellation of an external workflow execution.</p> </li> <li> <p> <code>ScheduleActivityTaskFailed</code> – Failed to process ScheduleActivityTask decision. This happens when the decision isn&#39;t configured properly, for example the activity type specified isn&#39;t registered.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionFailed</code> – The request to signal an external workflow execution failed.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionInitiated</code> – A request to signal an external workflow was made.</p> </li> <li> <p> <code>StartActivityTaskFailed</code> – A scheduled activity task failed to start.</p> </li> <li> <p> <code>StartChildWorkflowExecutionFailed</code> – Failed to process StartChildWorkflowExecution decision. This happens when the decision isn&#39;t configured properly, for example the workflow type specified isn&#39;t registered.</p> </li> <li> <p> <code>StartChildWorkflowExecutionInitiated</code> – A request was made to start a child workflow execution.</p> </li> <li> <p> <code>StartTimerFailed</code> – Failed to process StartTimer decision. This happens when the decision isn&#39;t configured properly, for example a timer already exists with the specified timer Id.</p> </li> <li> <p> <code>TimerCanceled</code> – A timer, previously started for this workflow execution, was successfully canceled.</p> </li> <li> <p> <code>TimerFired</code> – A timer, previously started for this workflow execution, fired.</p> </li> <li> <p> <code>TimerStarted</code> – A timer was started for the workflow execution due to a <code>StartTimer</code> decision.</p> </li> <li> <p> <code>WorkflowExecutionCancelRequested</code> – A request to cancel this workflow execution was made.</p> </li> <li> <p> <code>WorkflowExecutionCanceled</code> – The workflow execution was successfully canceled and closed.</p> </li> <li> <p> <code>WorkflowExecutionCompleted</code> – The workflow execution was closed due to successful completion.</p> </li> <li> <p> <code>WorkflowExecutionContinuedAsNew</code> – The workflow execution was closed and a new execution of the same type was created with the same workflowId.</p> </li> <li> <p> <code>WorkflowExecutionFailed</code> – The workflow execution closed due to a failure.</p> </li> <li> <p> <code>WorkflowExecutionSignaled</code> – An external signal was received for the workflow execution.</p> </li> <li> <p> <code>WorkflowExecutionStarted</code> – The workflow execution was started.</p> </li> <li> <p> <code>WorkflowExecutionTerminated</code> – The workflow execution was terminated.</p> </li> <li> <p> <code>WorkflowExecutionTimedOut</code> – The workflow execution was closed because a time out was exceeded.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HistoryEvent {
     /// <p>If the event is of type <code>ActivityTaskcancelRequested</code> then this member is set and provides detailed information about the event. It isn't set for other event types.</p>
     #[serde(rename = "activityTaskCancelRequestedEventAttributes")]
@@ -1216,6 +1253,7 @@ pub struct HistoryEvent {
 
 /// <p>Provides the details of the <code>LambdaFunctionCompleted</code> event. It isn't set for other event types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionCompletedEventAttributes {
     /// <p>The results of the Lambda task.</p>
     #[serde(rename = "result")]
@@ -1231,6 +1269,7 @@ pub struct LambdaFunctionCompletedEventAttributes {
 
 /// <p>Provides the details of the <code>LambdaFunctionFailed</code> event. It isn't set for other event types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionFailedEventAttributes {
     /// <p>The details of the failure.</p>
     #[serde(rename = "details")]
@@ -1250,6 +1289,7 @@ pub struct LambdaFunctionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>LambdaFunctionScheduled</code> event. It isn't set for other event types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionScheduledEventAttributes {
     /// <p>Data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the Lambda task.</p>
     #[serde(rename = "control")]
@@ -1276,6 +1316,7 @@ pub struct LambdaFunctionScheduledEventAttributes {
 
 /// <p>Provides the details of the <code>LambdaFunctionStarted</code> event. It isn't set for other event types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionStartedEventAttributes {
     /// <p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this activity task was scheduled. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p>
     #[serde(rename = "scheduledEventId")]
@@ -1284,6 +1325,7 @@ pub struct LambdaFunctionStartedEventAttributes {
 
 /// <p>Provides details of the <code>LambdaFunctionTimedOut</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionTimedOutEventAttributes {
     /// <p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this activity task was scheduled. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p>
     #[serde(rename = "scheduledEventId")]
@@ -1447,6 +1489,7 @@ pub struct ListWorkflowTypesInput {
 
 /// <p>Provides the details of the <code>MarkerRecorded</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MarkerRecordedEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>RecordMarker</code> decision that requested this marker. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -1462,6 +1505,7 @@ pub struct MarkerRecordedEventAttributes {
 
 /// <p>Contains the count of tasks in a task list.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PendingTaskCount {
     /// <p>The number of tasks in the task list.</p>
     #[serde(rename = "count")]
@@ -1537,6 +1581,7 @@ pub struct RecordMarkerDecisionAttributes {
 
 /// <p>Provides the details of the <code>RecordMarkerFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RecordMarkerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1655,6 +1700,7 @@ pub struct RequestCancelActivityTaskDecisionAttributes {
 
 /// <p>Provides the details of the <code>RequestCancelActivityTaskFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RequestCancelActivityTaskFailedEventAttributes {
     /// <p>The activityId provided in the <code>RequestCancelActivityTask</code> decision that failed.</p>
     #[serde(rename = "activityId")]
@@ -1685,6 +1731,7 @@ pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1710,6 +1757,7 @@ pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecutionInitiated</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RequestCancelExternalWorkflowExecutionInitiatedEventAttributes {
     /// <p>Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -1796,6 +1844,7 @@ pub struct RespondDecisionTaskCompletedInput {
 
 /// <p>Specifies the <code>runId</code> of a workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Run {
     /// <p>The <code>runId</code> of a workflow execution. This ID is generated by the service and can be used to uniquely identify the workflow execution within a domain.</p>
     #[serde(rename = "runId")]
@@ -1848,6 +1897,7 @@ pub struct ScheduleActivityTaskDecisionAttributes {
 
 /// <p>Provides the details of the <code>ScheduleActivityTaskFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScheduleActivityTaskFailedEventAttributes {
     /// <p>The activityId provided in the <code>ScheduleActivityTask</code> decision that failed.</p>
     #[serde(rename = "activityId")]
@@ -1888,6 +1938,7 @@ pub struct ScheduleLambdaFunctionDecisionAttributes {
 
 /// <p>Provides the details of the <code>ScheduleLambdaFunctionFailed</code> event. It isn't set for other event types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScheduleLambdaFunctionFailedEventAttributes {
     /// <p><p>The cause of the failure. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1928,6 +1979,7 @@ pub struct SignalExternalWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1953,6 +2005,7 @@ pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecutionInitiated</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SignalExternalWorkflowExecutionInitiatedEventAttributes {
     /// <p>Data attached to the event that can be used by the decider in subsequent decision tasks.</p>
     #[serde(rename = "control")]
@@ -2047,6 +2100,7 @@ pub struct StartChildWorkflowExecutionDecisionAttributes {
 
 /// <p>Provides the details of the <code>StartChildWorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartChildWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>When <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision fails because it lacks sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html"> Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -2071,6 +2125,7 @@ pub struct StartChildWorkflowExecutionFailedEventAttributes {
 
 /// <p>Provides the details of the <code>StartChildWorkflowExecutionInitiated</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
     /// <p><p>The policy to use for the child workflow executions if this execution gets terminated by explicitly calling the <a>TerminateWorkflowExecution</a> action or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2119,6 +2174,7 @@ pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
 
 /// <p>Provides the details of the <code>StartLambdaFunctionFailed</code> event. It isn't set for other event types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartLambdaFunctionFailedEventAttributes {
     /// <p><p>The cause of the failure. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because the IAM role attached to the execution lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/lambda-task.html">Lambda Tasks</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -2151,6 +2207,7 @@ pub struct StartTimerDecisionAttributes {
 
 /// <p>Provides the details of the <code>StartTimerFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartTimerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -2252,6 +2309,7 @@ pub struct TerminateWorkflowExecutionInput {
 
 /// <p> Provides the details of the <code>TimerCanceled</code> event. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TimerCanceledEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelTimer</code> decision to cancel this timer. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2266,6 +2324,7 @@ pub struct TimerCanceledEventAttributes {
 
 /// <p>Provides the details of the <code>TimerFired</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TimerFiredEventAttributes {
     /// <p>The ID of the <code>TimerStarted</code> event that was recorded when this timer was started. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "startedEventId")]
@@ -2277,6 +2336,7 @@ pub struct TimerFiredEventAttributes {
 
 /// <p>Provides the details of the <code>TimerStarted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TimerStartedEventAttributes {
     /// <p>Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -2306,6 +2366,7 @@ pub struct WorkflowExecution {
 
 /// <p>Provides the details of the <code>WorkflowExecutionCancelRequested</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionCancelRequestedEventAttributes {
     /// <p>If set, indicates that the request to cancel the workflow execution was automatically generated, and specifies the cause. This happens if the parent workflow execution times out or is terminated, and the child policy is set to cancel child executions.</p>
     #[serde(rename = "cause")]
@@ -2323,6 +2384,7 @@ pub struct WorkflowExecutionCancelRequestedEventAttributes {
 
 /// <p>Provides the details of the <code>WorkflowExecutionCanceled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionCanceledEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelWorkflowExecution</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2335,6 +2397,7 @@ pub struct WorkflowExecutionCanceledEventAttributes {
 
 /// <p>Provides the details of the <code>WorkflowExecutionCompleted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionCompletedEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CompleteWorkflowExecution</code> decision to complete this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2347,6 +2410,7 @@ pub struct WorkflowExecutionCompletedEventAttributes {
 
 /// <p>The configuration settings for a workflow execution including timeout values, tasklist etc. These configuration settings are determined from the defaults specified when registering the workflow type and those specified when starting the workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionConfiguration {
     /// <p><p>The policy to use for the child workflow executions if this workflow execution is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2372,6 +2436,7 @@ pub struct WorkflowExecutionConfiguration {
 
 /// <p>Provides the details of the <code>WorkflowExecutionContinuedAsNew</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionContinuedAsNewEventAttributes {
     /// <p><p>The policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2416,6 +2481,7 @@ pub struct WorkflowExecutionContinuedAsNewEventAttributes {
 
 /// <p>Contains the count of workflow executions returned from <a>CountOpenWorkflowExecutions</a> or <a>CountClosedWorkflowExecutions</a> </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionCount {
     /// <p>The number of workflow executions.</p>
     #[serde(rename = "count")]
@@ -2428,6 +2494,7 @@ pub struct WorkflowExecutionCount {
 
 /// <p>Contains details about a workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionDetail {
     /// <p>The configuration settings for this workflow execution including timeout values, tasklist etc.</p>
     #[serde(rename = "executionConfiguration")]
@@ -2450,6 +2517,7 @@ pub struct WorkflowExecutionDetail {
 
 /// <p>Provides the details of the <code>WorkflowExecutionFailed</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionFailedEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>FailWorkflowExecution</code> decision to fail this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2474,6 +2542,7 @@ pub struct WorkflowExecutionFilter {
 
 /// <p>Contains information about a workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionInfo {
     /// <p>Set to true if a cancellation is requested for this workflow execution.</p>
     #[serde(rename = "cancelRequested")]
@@ -2511,6 +2580,7 @@ pub struct WorkflowExecutionInfo {
 
 /// <p>Contains a paginated list of information about workflow executions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionInfos {
     /// <p>The list of workflow information structures.</p>
     #[serde(rename = "executionInfos")]
@@ -2523,6 +2593,7 @@ pub struct WorkflowExecutionInfos {
 
 /// <p>Contains the counts of open tasks, child workflow executions and timers for a workflow execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionOpenCounts {
     /// <p>The count of activity tasks whose status is <code>OPEN</code>.</p>
     #[serde(rename = "openActivityTasks")]
@@ -2544,6 +2615,7 @@ pub struct WorkflowExecutionOpenCounts {
 
 /// <p>Provides the details of the <code>WorkflowExecutionSignaled</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionSignaledEventAttributes {
     /// <p>The ID of the <code>SignalExternalWorkflowExecutionInitiated</code> event corresponding to the <code>SignalExternalWorkflow</code> decision to signal this workflow execution.The source event with this ID can be found in the history of the source workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event. This field is set only if the signal was initiated by another workflow execution.</p>
     #[serde(rename = "externalInitiatedEventId")]
@@ -2564,6 +2636,7 @@ pub struct WorkflowExecutionSignaledEventAttributes {
 
 /// <p>Provides details of <code>WorkflowExecutionStarted</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionStartedEventAttributes {
     /// <p><p>The policy to use for the child workflow executions if this workflow execution is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2614,6 +2687,7 @@ pub struct WorkflowExecutionStartedEventAttributes {
 
 /// <p>Provides the details of the <code>WorkflowExecutionTerminated</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionTerminatedEventAttributes {
     /// <p>If set, indicates that the workflow execution was automatically terminated, and specifies the cause. This happens if the parent workflow execution times out or is terminated and the child policy is set to terminate child executions.</p>
     #[serde(rename = "cause")]
@@ -2634,6 +2708,7 @@ pub struct WorkflowExecutionTerminatedEventAttributes {
 
 /// <p>Provides the details of the <code>WorkflowExecutionTimedOut</code> event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowExecutionTimedOutEventAttributes {
     /// <p><p>The policy used for the child workflow executions of this workflow execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2656,6 +2731,7 @@ pub struct WorkflowType {
 
 /// <p>The configuration settings of a workflow type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowTypeConfiguration {
     /// <p><p> The default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "defaultChildPolicy")]
@@ -2685,6 +2761,7 @@ pub struct WorkflowTypeConfiguration {
 
 /// <p>Contains details about a workflow type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowTypeDetail {
     /// <p>Configuration settings of the workflow type registered through <a>RegisterWorkflowType</a> </p>
     #[serde(rename = "configuration")]
@@ -2708,6 +2785,7 @@ pub struct WorkflowTypeFilter {
 
 /// <p>Contains information about a workflow type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowTypeInfo {
     /// <p>The date when this type was registered.</p>
     #[serde(rename = "creationDate")]
@@ -2730,6 +2808,7 @@ pub struct WorkflowTypeInfo {
 
 /// <p>Contains a paginated list of information structures about workflow types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct WorkflowTypeInfos {
     /// <p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>
     #[serde(rename = "nextPageToken")]

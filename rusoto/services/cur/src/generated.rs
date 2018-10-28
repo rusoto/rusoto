@@ -38,6 +38,7 @@ pub struct DeleteReportDefinitionRequest {
 
 /// <p>Response of DeleteReportDefinition</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename = "ResponseMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -57,6 +58,7 @@ pub struct DescribeReportDefinitionsRequest {
 
 /// <p>Response of DescribeReportDefinitions</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -75,6 +77,7 @@ pub struct PutReportDefinitionRequest {
 
 /// <p>Response of PutReportDefinition</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutReportDefinitionResponse {}
 
 /// <p>The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.</p>

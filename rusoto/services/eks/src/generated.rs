@@ -31,6 +31,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing the <code>certificate-authority-data</code> for your cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Certificate {
     /// <p>The base64 encoded certificate data required to communicate with your cluster. Add this to the <code>certificate-authority-data</code> section of the <code>kubeconfig</code> file for your cluster.</p>
     #[serde(rename = "data")]
@@ -40,6 +41,7 @@ pub struct Certificate {
 
 /// <p>An object representing an Amazon EKS cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Cluster {
     /// <p>The Amazon Resource Name (ARN) of the cluster.</p>
     #[serde(rename = "arn")]
@@ -105,6 +107,7 @@ pub struct CreateClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateClusterResponse {
     /// <p>The full description of your new cluster.</p>
     #[serde(rename = "cluster")]
@@ -120,6 +123,7 @@ pub struct DeleteClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteClusterResponse {
     /// <p>The full description of the cluster to delete.</p>
     #[serde(rename = "cluster")]
@@ -135,6 +139,7 @@ pub struct DescribeClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeClusterResponse {
     /// <p>The full description of your specified cluster.</p>
     #[serde(rename = "cluster")]
@@ -155,6 +160,7 @@ pub struct ListClustersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListClustersResponse {
     /// <p>A list of all of the clusters for your account in the specified region.</p>
     #[serde(rename = "clusters")]
@@ -180,6 +186,7 @@ pub struct VpcConfigRequest {
 
 /// <p>An object representing an Amazon EKS cluster VPC configuration response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VpcConfigResponse {
     /// <p>The security groups associated with the cross-account elastic network interfaces that are used to allow communication between your worker nodes and the Kubernetes control plane.</p>
     #[serde(rename = "securityGroupIds")]

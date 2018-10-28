@@ -135,6 +135,7 @@ pub struct DescribeFileSystemsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeFileSystemsResponse {
     /// <p>Array of file system descriptions.</p>
     #[serde(rename = "FileSystems")]
@@ -159,6 +160,7 @@ pub struct DescribeMountTargetSecurityGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMountTargetSecurityGroupsResponse {
     /// <p>Array of security groups.</p>
     #[serde(rename = "SecurityGroups")]
@@ -188,6 +190,7 @@ pub struct DescribeMountTargetsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMountTargetsResponse {
     /// <p>If the request included the <code>Marker</code>, the response returns that value in this field.</p>
     #[serde(rename = "Marker")]
@@ -221,6 +224,7 @@ pub struct DescribeTagsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTagsResponse {
     /// <p>If the request included a <code>Marker</code>, the response returns that value in this field.</p>
     #[serde(rename = "Marker")]
@@ -237,6 +241,7 @@ pub struct DescribeTagsResponse {
 
 /// <p>Description of the file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FileSystemDescription {
     /// <p>Time that the file system was created, in seconds (since 1970-01-01T00:00:00Z).</p>
     #[serde(rename = "CreationTime")]
@@ -286,6 +291,7 @@ pub struct FileSystemDescription {
 
 /// <p>Latest known metered size (in bytes) of data stored in the file system, in its <code>Value</code> field, and the time at which that size was determined in its <code>Timestamp</code> field. Note that the value does not represent the size of a consistent snapshot of the file system, but it is eventually consistent when there are no writes to the file system. That is, the value will represent the actual size only if the file system is not modified for a period longer than a couple of hours. Otherwise, the value is not necessarily the exact size the file system was at any instant in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FileSystemSize {
     /// <p>Time at which the size of data, returned in the <code>Value</code> field, was determined. The value is the integer number of seconds since 1970-01-01T00:00:00Z.</p>
     #[serde(rename = "Timestamp")]
@@ -310,6 +316,7 @@ pub struct ModifyMountTargetSecurityGroupsRequest {
 
 /// <p>Provides a description of a mount target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MountTargetDescription {
     /// <p>ID of the file system for which the mount target is intended.</p>
     #[serde(rename = "FileSystemId")]

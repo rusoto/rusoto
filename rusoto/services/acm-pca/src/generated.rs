@@ -91,6 +91,7 @@ pub struct ASN1Subject {
 
 /// <p>Contains information about your private certificate authority (CA). Your private CA can issue and revoke X.509 digital certificates. Digital certificates verify that the entity named in the certificate <b>Subject</b> field owns or controls the public key contained in the <b>Subject Public Key Info</b> field. Call the <a>CreateCertificateAuthority</a> operation to create your private CA. You must then call the <a>GetCertificateAuthorityCertificate</a> operation to retrieve a private CA certificate signing request (CSR). Take the CSR to your on-premises CA and sign it with the root CA certificate or a subordinate certificate. Call the <a>ImportCertificateAuthorityCertificate</a> operation to import the signed certificate into AWS Certificate Manager (ACM). </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CertificateAuthority {
     /// <p>Amazon Resource Name (ARN) for your private certificate authority (CA). The format is <code> <i>12345678-1234-1234-1234-123456789012</i> </code>.</p>
     #[serde(rename = "Arn")]
@@ -170,6 +171,7 @@ pub struct CreateCertificateAuthorityAuditReportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCertificateAuthorityAuditReportResponse {
     /// <p>An alphanumeric string that contains a report identifier.</p>
     #[serde(rename = "AuditReportId")]
@@ -200,6 +202,7 @@ pub struct CreateCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCertificateAuthorityResponse {
     /// <p>If successful, the Amazon Resource Name (ARN) of the certificate authority (CA). This is of the form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>. </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -249,6 +252,7 @@ pub struct DescribeCertificateAuthorityAuditReportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCertificateAuthorityAuditReportResponse {
     /// <p>Specifies whether report creation is in progress, has succeeded, or has failed.</p>
     #[serde(rename = "AuditReportStatus")]
@@ -276,6 +280,7 @@ pub struct DescribeCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeCertificateAuthorityResponse {
     /// <p>A <a>CertificateAuthority</a> structure that contains information about your private CA.</p>
     #[serde(rename = "CertificateAuthority")]
@@ -291,6 +296,7 @@ pub struct GetCertificateAuthorityCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCertificateAuthorityCertificateResponse {
     /// <p>Base64-encoded certificate authority (CA) certificate.</p>
     #[serde(rename = "Certificate")]
@@ -310,6 +316,7 @@ pub struct GetCertificateAuthorityCsrRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCertificateAuthorityCsrResponse {
     /// <p>The base64 PEM-encoded certificate signing request (CSR) for your private CA certificate.</p>
     #[serde(rename = "Csr")]
@@ -328,6 +335,7 @@ pub struct GetCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCertificateResponse {
     /// <p>The base64 PEM-encoded certificate specified by the <code>CertificateArn</code> parameter.</p>
     #[serde(rename = "Certificate")]
@@ -388,6 +396,7 @@ pub struct IssueCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct IssueCertificateResponse {
     /// <p>The Amazon Resource Name (ARN) of the issued certificate and the certificate serial number. This is of the form:</p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i>/certificate/<i>286535153982981100925020015808220737245</i> </code> </p>
     #[serde(rename = "CertificateArn")]
@@ -408,6 +417,7 @@ pub struct ListCertificateAuthoritiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCertificateAuthoritiesResponse {
     /// <p>Summary information about each certificate authority you have created.</p>
     #[serde(rename = "CertificateAuthorities")]
@@ -435,6 +445,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>When the list is truncated, this value is present and should be used for the <b>NextToken</b> parameter in a subsequent pagination request. </p>
     #[serde(rename = "NextToken")]

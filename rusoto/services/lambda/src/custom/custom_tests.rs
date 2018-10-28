@@ -1,10 +1,26 @@
 extern crate rusoto_mock;
 
-use ::{Lambda, LambdaClient, InvocationRequest};
+use ::{GetPolicyRequest, GetPolicyResponse, Lambda, LambdaClient, InvocationRequest};
 
 use rusoto_core::Region;
 use rusoto_core::signature::{SignedRequest,SignedRequestPayload};
 use self::rusoto_mock::*;
+
+#[test]
+fn serialize_get_policy_response() {
+    let policy = GetPolicyResponse {
+        policy: Some("policy".into()),
+        ..GetPolicyResponse::default()
+    };
+    let mock = MockRequestDispatcher::with_status(200)
+        .with_json_body(policy.clone());
+    let client = LambdaClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    let result = client.get_policy(GetPolicyRequest {
+        function_name: "test-func".into(),
+        ..GetPolicyRequest::default()
+    }).sync().unwrap();
+    assert_eq!(result, policy);
+}
 
 /// Ensures that rest-json codegen handles the response body,
 /// headers, and status code properly

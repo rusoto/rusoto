@@ -39,6 +39,7 @@ pub struct AddInstanceFleetInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddInstanceFleetOutput {
     /// <p>The unique identifier of the cluster.</p>
     #[serde(rename = "ClusterId")]
@@ -63,6 +64,7 @@ pub struct AddInstanceGroupsInput {
 
 /// <p>Output from an AddInstanceGroups call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddInstanceGroupsOutput {
     /// <p>Instance group IDs of the newly created instance groups.</p>
     #[serde(rename = "InstanceGroupIds")]
@@ -87,6 +89,7 @@ pub struct AddJobFlowStepsInput {
 
 /// <p> The output for the <a>AddJobFlowSteps</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddJobFlowStepsOutput {
     /// <p>The identifiers of the list of steps added to the job flow.</p>
     #[serde(rename = "StepIds")]
@@ -107,6 +110,7 @@ pub struct AddTagsInput {
 
 /// <p>This output indicates the result of adding tags to a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsOutput {}
 
 /// <p><p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href="http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-mapr.html">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>&quot;mapr-m3&quot; - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>&quot;mapr-m5&quot; - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>&quot;mapr&quot; with the user arguments specifying &quot;--edition,m3&quot; or &quot;--edition,m5&quot; - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.x and later, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note></p>
@@ -143,6 +147,7 @@ pub struct AutoScalingPolicy {
 
 /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See <a>PutAutoScalingPolicy</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutoScalingPolicyDescription {
     /// <p>The upper and lower EC2 instance limits for an automatic scaling policy. Automatic scaling activity will not cause an instance group to grow above or below these limits.</p>
     #[serde(rename = "Constraints")]
@@ -160,6 +165,7 @@ pub struct AutoScalingPolicyDescription {
 
 /// <p>The reason for an <a>AutoScalingPolicyStatus</a> change.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutoScalingPolicyStateChangeReason {
     /// <p>The code indicating the reason for the change in status.<code>USER_REQUEST</code> indicates that the scaling policy status was changed by a user. <code>PROVISION_FAILURE</code> indicates that the status change was because the policy failed to provision. <code>CLEANUP_FAILURE</code> indicates an error.</p>
     #[serde(rename = "Code")]
@@ -173,6 +179,7 @@ pub struct AutoScalingPolicyStateChangeReason {
 
 /// <p>The status of an automatic scaling policy. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutoScalingPolicyStatus {
     /// <p>Indicates the status of the automatic scaling policy.</p>
     #[serde(rename = "State")]
@@ -197,6 +204,7 @@ pub struct BootstrapActionConfig {
 
 /// <p>Reports the configuration of a bootstrap action in a cluster (job flow).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BootstrapActionDetail {
     /// <p>A description of the bootstrap action.</p>
     #[serde(rename = "BootstrapActionConfig")]
@@ -206,6 +214,7 @@ pub struct BootstrapActionDetail {
 
 /// <p>Specification of the status of a CancelSteps request. Available only in Amazon EMR version 4.8.0 and later, excluding version 5.0.0.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelStepsInfo {
     /// <p>The reason for the failure if the CancelSteps request fails.</p>
     #[serde(rename = "Reason")]
@@ -236,6 +245,7 @@ pub struct CancelStepsInput {
 
 /// <p> The output for the <a>CancelSteps</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelStepsOutput {
     /// <p>A list of <a>CancelStepsInfo</a>, which shows the status of specified cancel requests for each <code>StepID</code> specified.</p>
     #[serde(rename = "CancelStepsInfoList")]
@@ -282,6 +292,7 @@ pub struct CloudWatchAlarmDefinition {
 
 /// <p>The detailed description of the cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Cluster {
     /// <p>The applications installed on this cluster.</p>
     #[serde(rename = "Applications")]
@@ -387,6 +398,7 @@ pub struct Cluster {
 
 /// <p>The reason that the cluster changed to its current state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ClusterStateChangeReason {
     /// <p>The programmatic code for the state change reason.</p>
     #[serde(rename = "Code")]
@@ -400,6 +412,7 @@ pub struct ClusterStateChangeReason {
 
 /// <p>The detailed status of the cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ClusterStatus {
     /// <p>The current state of the cluster.</p>
     #[serde(rename = "State")]
@@ -417,6 +430,7 @@ pub struct ClusterStatus {
 
 /// <p>The summary description of the cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ClusterSummary {
     /// <p>The unique identifier for the cluster.</p>
     #[serde(rename = "Id")]
@@ -438,6 +452,7 @@ pub struct ClusterSummary {
 
 /// <p>Represents the timeline of the cluster's lifecycle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ClusterTimeline {
     /// <p>The creation date and time of the cluster.</p>
     #[serde(rename = "CreationDateTime")]
@@ -455,6 +470,7 @@ pub struct ClusterTimeline {
 
 /// <p>An entity describing an executable that runs on a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Command {
     /// <p>Arguments for Amazon EMR to pass to the command for execution.</p>
     #[serde(rename = "Args")]
@@ -498,6 +514,7 @@ pub struct CreateSecurityConfigurationInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSecurityConfigurationOutput {
     /// <p>The date and time the security configuration was created.</p>
     #[serde(rename = "CreationDateTime")]
@@ -515,6 +532,7 @@ pub struct DeleteSecurityConfigurationInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSecurityConfigurationOutput {}
 
 /// <p>This input determines which cluster to describe.</p>
@@ -527,6 +545,7 @@ pub struct DescribeClusterInput {
 
 /// <p>This output contains the description of the cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeClusterOutput {
     /// <p>This output contains the details for the requested cluster.</p>
     #[serde(rename = "Cluster")]
@@ -557,6 +576,7 @@ pub struct DescribeJobFlowsInput {
 
 /// <p> The output for the <a>DescribeJobFlows</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeJobFlowsOutput {
     /// <p>A list of job flows matching the parameters supplied.</p>
     #[serde(rename = "JobFlows")]
@@ -572,6 +592,7 @@ pub struct DescribeSecurityConfigurationInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSecurityConfigurationOutput {
     /// <p>The date and time the security configuration was created</p>
     #[serde(rename = "CreationDateTime")]
@@ -600,6 +621,7 @@ pub struct DescribeStepInput {
 
 /// <p>This output contains the description of the cluster step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStepOutput {
     /// <p>The step details for the requested step identifier.</p>
     #[serde(rename = "Step")]
@@ -609,6 +631,7 @@ pub struct DescribeStepOutput {
 
 /// <p>Configuration of requested EBS block device associated with the instance group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EbsBlockDevice {
     /// <p>The device name that is exposed to the instance, such as /dev/sdh.</p>
     #[serde(rename = "Device")]
@@ -647,6 +670,7 @@ pub struct EbsConfiguration {
 
 /// <p>EBS block device that's attached to an EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EbsVolume {
     /// <p>The device name that is exposed to the instance, such as /dev/sdh.</p>
     #[serde(rename = "Device")]
@@ -660,6 +684,7 @@ pub struct EbsVolume {
 
 /// <p>Provides information about the EC2 instances in a cluster grouped by category. For example, key name, subnet ID, IAM instance profile, and so on.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Ec2InstanceAttributes {
     /// <p>A list of additional Amazon EC2 security group IDs for the master node.</p>
     #[serde(rename = "AdditionalMasterSecurityGroups")]
@@ -709,6 +734,7 @@ pub struct Ec2InstanceAttributes {
 
 /// <p>The details of the step failure. The service attempts to detect the root cause for many common failures.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailureDetails {
     /// <p>The path to the log file where the step failure root cause was originally recorded.</p>
     #[serde(rename = "LogFile")]
@@ -746,6 +772,7 @@ pub struct HadoopJarStepConfig {
 
 /// <p>A cluster step consisting of a JAR file whose main function will be executed. The main function submits a job for Hadoop to execute and waits for the job to finish or fail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HadoopStepConfig {
     /// <p>The list of command line arguments to pass to the JAR file's main function for execution.</p>
     #[serde(rename = "Args")]
@@ -767,6 +794,7 @@ pub struct HadoopStepConfig {
 
 /// <p>Represents an EC2 instance provisioned as part of cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Instance {
     /// <p>The list of EBS volumes that are attached to this instance.</p>
     #[serde(rename = "EbsVolumes")]
@@ -820,6 +848,7 @@ pub struct Instance {
 
 /// <p><p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceFleet {
     /// <p>The unique identifier of the instance fleet.</p>
     #[serde(rename = "Id")]
@@ -917,6 +946,7 @@ pub struct InstanceFleetProvisioningSpecifications {
 
 /// <p><p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceFleetStateChangeReason {
     /// <p>A code corresponding to the reason the state change occurred.</p>
     #[serde(rename = "Code")]
@@ -930,6 +960,7 @@ pub struct InstanceFleetStateChangeReason {
 
 /// <p><p>The status of the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceFleetStatus {
     /// <p><p>A code representing the instance fleet status.</p> <ul> <li> <p> <code>PROVISIONING</code>—The instance fleet is provisioning EC2 resources and is not yet ready to run jobs.</p> </li> <li> <p> <code>BOOTSTRAPPING</code>—EC2 instances and other resources have been provisioned and the bootstrap actions specified for the instances are underway.</p> </li> <li> <p> <code>RUNNING</code>—EC2 instances and other resources are running. They are either executing jobs or waiting to execute jobs.</p> </li> <li> <p> <code>RESIZING</code>—A resize operation is underway. EC2 instances are either being added or removed.</p> </li> <li> <p> <code>SUSPENDED</code>—A resize operation could not complete. Existing EC2 instances are running, but instances can&#39;t be added or removed.</p> </li> <li> <p> <code>TERMINATING</code>—The instance fleet is terminating EC2 instances.</p> </li> <li> <p> <code>TERMINATED</code>—The instance fleet is no longer active, and all EC2 instances have been terminated.</p> </li> </ul></p>
     #[serde(rename = "State")]
@@ -947,6 +978,7 @@ pub struct InstanceFleetStatus {
 
 /// <p><p>Provides historical timestamps for the instance fleet, including the time of creation, the time it became ready to run jobs, and the time of termination.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceFleetTimeline {
     /// <p>The time and date the instance fleet was created.</p>
     #[serde(rename = "CreationDateTime")]
@@ -964,6 +996,7 @@ pub struct InstanceFleetTimeline {
 
 /// <p>This entity represents an instance group, which is a group of instances that have common purpose. For example, CORE instance group is used for HDFS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceGroup {
     /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See PutAutoScalingPolicy.</p>
     #[serde(rename = "AutoScalingPolicy")]
@@ -1063,6 +1096,7 @@ pub struct InstanceGroupConfig {
 
 /// <p>Detailed information about an instance group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceGroupDetail {
     /// <p>The maximum Spot price your are willing to pay for EC2 instances.</p> <p>An optional, nullable field that applies if the <code>MarketType</code> for the instance group is specified as <code>SPOT</code>. Specified in USD. If the value is NULL and <code>SPOT</code> is specified, the maximum Spot price is set equal to the On-Demand price.</p>
     #[serde(rename = "BidPrice")]
@@ -1137,6 +1171,7 @@ pub struct InstanceGroupModifyConfig {
 
 /// <p>The status change reason details for the instance group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceGroupStateChangeReason {
     /// <p>The programmable code for the state change reason.</p>
     #[serde(rename = "Code")]
@@ -1150,6 +1185,7 @@ pub struct InstanceGroupStateChangeReason {
 
 /// <p>The details of the instance group status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceGroupStatus {
     /// <p>The current state of the instance group.</p>
     #[serde(rename = "State")]
@@ -1167,6 +1203,7 @@ pub struct InstanceGroupStatus {
 
 /// <p>The timeline of the instance group lifecycle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceGroupTimeline {
     /// <p>The creation date and time of the instance group.</p>
     #[serde(rename = "CreationDateTime")]
@@ -1201,6 +1238,7 @@ pub struct InstanceResizePolicy {
 
 /// <p>The details of the status change reason for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceStateChangeReason {
     /// <p>The programmable code for the state change reason.</p>
     #[serde(rename = "Code")]
@@ -1214,6 +1252,7 @@ pub struct InstanceStateChangeReason {
 
 /// <p>The instance status details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceStatus {
     /// <p>The current state of the instance.</p>
     #[serde(rename = "State")]
@@ -1231,6 +1270,7 @@ pub struct InstanceStatus {
 
 /// <p>The timeline of the instance lifecycle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceTimeline {
     /// <p>The creation date and time of the instance.</p>
     #[serde(rename = "CreationDateTime")]
@@ -1276,6 +1316,7 @@ pub struct InstanceTypeConfig {
 
 /// <p><p>The configuration specification for each instance type in an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceTypeSpecification {
     /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD.</p>
     #[serde(rename = "BidPrice")]
@@ -1309,6 +1350,7 @@ pub struct InstanceTypeSpecification {
 
 /// <p>A description of a cluster (job flow).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobFlowDetail {
     /// <p>Applies only to Amazon EMR AMI versions 3.x and 2.x. For Amazon EMR releases 4.0 and later, <code>ReleaseLabel</code> is used. To specify a custom AMI, use <code>CustomAmiID</code>.</p>
     #[serde(rename = "AmiVersion")]
@@ -1366,6 +1408,7 @@ pub struct JobFlowDetail {
 
 /// <p>Describes the status of the cluster (job flow).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobFlowExecutionStatusDetail {
     /// <p>The creation date and time of the job flow.</p>
     #[serde(rename = "CreationDateTime")]
@@ -1466,6 +1509,7 @@ pub struct JobFlowInstancesConfig {
 
 /// <p>Specify the type of Amazon EC2 instances that the cluster (job flow) runs on.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobFlowInstancesDetail {
     /// <p>The name of an Amazon EC2 key pair that can be used to ssh to the master node.</p>
     #[serde(rename = "Ec2KeyName")]
@@ -1568,6 +1612,7 @@ pub struct ListBootstrapActionsInput {
 
 /// <p>This output contains the bootstrap actions detail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListBootstrapActionsOutput {
     /// <p>The bootstrap actions associated with the cluster.</p>
     #[serde(rename = "BootstrapActions")]
@@ -1602,6 +1647,7 @@ pub struct ListClustersInput {
 
 /// <p>This contains a ClusterSummaryList with the cluster details; for example, the cluster IDs, names, and status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListClustersOutput {
     /// <p>The list of clusters for the account based on the given filters.</p>
     #[serde(rename = "Clusters")]
@@ -1625,6 +1671,7 @@ pub struct ListInstanceFleetsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInstanceFleetsOutput {
     /// <p>The list of instance fleets for the cluster and given filters.</p>
     #[serde(rename = "InstanceFleets")]
@@ -1650,6 +1697,7 @@ pub struct ListInstanceGroupsInput {
 
 /// <p>This input determines which instance groups to retrieve.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInstanceGroupsOutput {
     /// <p>The list of instance groups for the cluster and given filters.</p>
     #[serde(rename = "InstanceGroups")]
@@ -1695,6 +1743,7 @@ pub struct ListInstancesInput {
 
 /// <p>This output contains the list of instances.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInstancesOutput {
     /// <p>The list of instances for the cluster and given filters.</p>
     #[serde(rename = "Instances")]
@@ -1715,6 +1764,7 @@ pub struct ListSecurityConfigurationsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSecurityConfigurationsOutput {
     /// <p>A pagination token that indicates the next set of results to retrieve. Include the marker in the next ListSecurityConfiguration call to retrieve the next page of results, if required.</p>
     #[serde(rename = "Marker")]
@@ -1748,6 +1798,7 @@ pub struct ListStepsInput {
 
 /// <p>This output contains the list of steps returned in reverse order. This means that the last step is the first element in the list.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListStepsOutput {
     /// <p>The pagination token that indicates the next set of results to retrieve.</p>
     #[serde(rename = "Marker")]
@@ -1822,6 +1873,7 @@ pub struct PutAutoScalingPolicyInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutAutoScalingPolicyOutput {
     /// <p>The automatic scaling policy definition.</p>
     #[serde(rename = "AutoScalingPolicy")]
@@ -1848,6 +1900,7 @@ pub struct RemoveAutoScalingPolicyInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveAutoScalingPolicyOutput {}
 
 /// <p>This input identifies a cluster and a list of tags to remove.</p>
@@ -1863,6 +1916,7 @@ pub struct RemoveTagsInput {
 
 /// <p>This output indicates the result of removing tags from a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 /// <p> Input to the <a>RunJobFlow</a> operation. </p>
@@ -1962,6 +2016,7 @@ pub struct RunJobFlowInput {
 
 /// <p> The result of the <a>RunJobFlow</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RunJobFlowOutput {
     /// <p>An unique identifier for the job flow.</p>
     #[serde(rename = "JobFlowId")]
@@ -2032,6 +2087,7 @@ pub struct ScriptBootstrapActionConfig {
 
 /// <p>The creation date and time, and name, of a security configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecurityConfigurationSummary {
     /// <p>The date and time the security configuration was created.</p>
     #[serde(rename = "CreationDateTime")]
@@ -2111,6 +2167,7 @@ pub struct SpotProvisioningSpecification {
 
 /// <p>This represents a step in a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Step {
     /// <p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>
     #[serde(rename = "ActionOnFailure")]
@@ -2151,6 +2208,7 @@ pub struct StepConfig {
 
 /// <p>Combines the execution state and configuration of a step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepDetail {
     /// <p>The description of the step status.</p>
     #[serde(rename = "ExecutionStatusDetail")]
@@ -2162,6 +2220,7 @@ pub struct StepDetail {
 
 /// <p>The execution state of a step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepExecutionStatusDetail {
     /// <p>The creation date and time of the step.</p>
     #[serde(rename = "CreationDateTime")]
@@ -2185,6 +2244,7 @@ pub struct StepExecutionStatusDetail {
 
 /// <p>The details of the step state change reason.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepStateChangeReason {
     /// <p>The programmable code for the state change reason. Note: Currently, the service provides no code for the state change.</p>
     #[serde(rename = "Code")]
@@ -2198,6 +2258,7 @@ pub struct StepStateChangeReason {
 
 /// <p>The execution status details of the cluster step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepStatus {
     /// <p>The details for the step failure including reason, message, and log file path where the root cause was identified.</p>
     #[serde(rename = "FailureDetails")]
@@ -2219,6 +2280,7 @@ pub struct StepStatus {
 
 /// <p>The summary of the cluster step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepSummary {
     /// <p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>
     #[serde(rename = "ActionOnFailure")]
@@ -2244,6 +2306,7 @@ pub struct StepSummary {
 
 /// <p>The timeline of the cluster step lifecycle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepTimeline {
     /// <p>The date and time when the cluster step was created.</p>
     #[serde(rename = "CreationDateTime")]

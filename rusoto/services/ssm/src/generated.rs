@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Activation {
     /// <p>The ID created by Systems Manager when you submitted the activation.</p>
     #[serde(rename = "ActivationId")]
@@ -83,10 +84,12 @@ pub struct AddTagsToResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsToResourceResult {}
 
 /// <p>Describes an association of a Systems Manager document and an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Association {
     /// <p>The ID created by the system when you create an association. An association is a binding between a document and a set of targets with a schedule.</p>
     #[serde(rename = "AssociationId")]
@@ -132,6 +135,7 @@ pub struct Association {
 
 /// <p>Describes the parameters for a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociationDescription {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -201,6 +205,7 @@ pub struct AssociationDescription {
 
 /// <p>Includes information about the specified association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociationExecution {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -252,6 +257,7 @@ pub struct AssociationExecutionFilter {
 
 /// <p>Includes information about the specified association execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociationExecutionTarget {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -315,6 +321,7 @@ pub struct AssociationFilter {
 
 /// <p>Information about the association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociationOverview {
     /// <p>Returns the number of targets for the association status. For example, if you created an association with two instances, and one of them was successful, this would return the count of instances by status.</p>
     #[serde(rename = "AssociationStatusAggregatedCount")]
@@ -350,6 +357,7 @@ pub struct AssociationStatus {
 
 /// <p>Information about the association version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociationVersionInfo {
     /// <p>The ID created by the system when the association was created.</p>
     #[serde(rename = "AssociationId")]
@@ -395,6 +403,7 @@ pub struct AssociationVersionInfo {
 
 /// <p>Detailed information about the current state of an individual Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutomationExecution {
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -499,6 +508,7 @@ pub struct AutomationExecutionFilter {
 
 /// <p>Details about a specific Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutomationExecutionMetadata {
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -596,6 +606,7 @@ pub struct CancelCommandRequest {
 
 /// <p>Whether or not the command was successfully canceled. There is no guarantee that a request can be canceled.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelCommandResult {}
 
 /// <p>Configuration options for sending command output to CloudWatch Logs.</p>
@@ -613,6 +624,7 @@ pub struct CloudWatchOutputConfig {
 
 /// <p>Describes a command request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Command {
     /// <p>CloudWatch Logs information where you want Systems Manager to send the command output.</p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -721,6 +733,7 @@ pub struct CommandFilter {
 
 /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. A command invocation returns status and detail information about a command you executed. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CommandInvocation {
     /// <p>CloudWatch Logs information where you want Systems Manager to send the command output.</p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -789,6 +802,7 @@ pub struct CommandInvocation {
 
 /// <p>Describes plugin details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CommandPlugin {
     /// <p>The name of the plugin. Must be one of the following: aws:updateAgent, aws:domainjoin, aws:applications, aws:runPowerShellScript, aws:psmodule, aws:cloudWatch, aws:runShellScript, or aws:updateSSMAgent. </p>
     #[serde(rename = "Name")]
@@ -858,6 +872,7 @@ pub struct ComplianceExecutionSummary {
 
 /// <p>Information about the compliance as defined by the resource type. For example, for a patch resource type, <code>Items</code> includes information about the PatchSeverity, Classification, etc.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceItem {
     /// <p>The compliance type. For example, Association (for a State Manager association), Patch, or Custom:<code>string</code> are all valid compliance types.</p>
     #[serde(rename = "ComplianceType")]
@@ -939,6 +954,7 @@ pub struct ComplianceStringFilter {
 
 /// <p>A summary of compliance information by compliance type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceSummaryItem {
     /// <p>The type of compliance item. For example, the compliance type can be Association, Patch, or Custom:string.</p>
     #[serde(rename = "ComplianceType")]
@@ -956,6 +972,7 @@ pub struct ComplianceSummaryItem {
 
 /// <p>A summary of resources that are compliant. The summary is organized according to the resource count for each compliance type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CompliantSummary {
     /// <p>The total number of resources that are compliant.</p>
     #[serde(rename = "CompliantCount")]
@@ -991,6 +1008,7 @@ pub struct CreateActivationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateActivationResult {
     /// <p>The code the system generates when it processes the activation. The activation code functions like a password to validate the activation ID. </p>
     #[serde(rename = "ActivationCode")]
@@ -1046,6 +1064,7 @@ pub struct CreateAssociationBatchRequestEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAssociationBatchResult {
     /// <p>Information about the associations that failed.</p>
     #[serde(rename = "Failed")]
@@ -1093,6 +1112,7 @@ pub struct CreateAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAssociationResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -1123,6 +1143,7 @@ pub struct CreateDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDocumentResult {
     /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "DocumentDescription")]
@@ -1158,6 +1179,7 @@ pub struct CreateMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateMaintenanceWindowResult {
     /// <p>The ID of the created Maintenance Window.</p>
     #[serde(rename = "WindowId")]
@@ -1213,6 +1235,7 @@ pub struct CreatePatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePatchBaselineResult {
     /// <p>The ID of the created patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -1231,6 +1254,7 @@ pub struct CreateResourceDataSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateResourceDataSyncResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1241,6 +1265,7 @@ pub struct DeleteActivationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteActivationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1260,6 +1285,7 @@ pub struct DeleteAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteAssociationResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1270,6 +1296,7 @@ pub struct DeleteDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDocumentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1292,6 +1319,7 @@ pub struct DeleteInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteInventoryResult {
     /// <p>Every <code>DeleteInventory</code> action is assigned a unique ID. This option returns a unique ID. You can use this ID to query the status of a delete operation. This option is useful for ensuring that a delete operation has completed before you begin other actions. </p>
     #[serde(rename = "DeletionId")]
@@ -1315,6 +1343,7 @@ pub struct DeleteMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteMaintenanceWindowResult {
     /// <p>The ID of the deleted Maintenance Window.</p>
     #[serde(rename = "WindowId")]
@@ -1330,6 +1359,7 @@ pub struct DeleteParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteParameterResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1340,6 +1370,7 @@ pub struct DeleteParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteParametersResult {
     /// <p>The names of the deleted parameters.</p>
     #[serde(rename = "DeletedParameters")]
@@ -1359,6 +1390,7 @@ pub struct DeletePatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeletePatchBaselineResult {
     /// <p>The ID of the deleted patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -1374,6 +1406,7 @@ pub struct DeleteResourceDataSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteResourceDataSyncResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1384,6 +1417,7 @@ pub struct DeregisterManagedInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterManagedInstanceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1397,6 +1431,7 @@ pub struct DeregisterPatchBaselineForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline the patch group was deregistered from.</p>
     #[serde(rename = "BaselineId")]
@@ -1423,6 +1458,7 @@ pub struct DeregisterTargetFromMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterTargetFromMaintenanceWindowResult {
     /// <p>The ID of the Maintenance Window the target was removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1445,6 +1481,7 @@ pub struct DeregisterTaskFromMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterTaskFromMaintenanceWindowResult {
     /// <p>The ID of the Maintenance Window the task was removed from.</p>
     #[serde(rename = "WindowId")]
@@ -1486,6 +1523,7 @@ pub struct DescribeActivationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeActivationsResult {
     /// <p>A list of activations for your AWS account.</p>
     #[serde(rename = "ActivationList")]
@@ -1520,6 +1558,7 @@ pub struct DescribeAssociationExecutionTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAssociationExecutionTargetsResult {
     /// <p>Information about the execution.</p>
     #[serde(rename = "AssociationExecutionTargets")]
@@ -1551,6 +1590,7 @@ pub struct DescribeAssociationExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAssociationExecutionsResult {
     /// <p>A list of the executions for the specified association ID.</p>
     #[serde(rename = "AssociationExecutions")]
@@ -1583,6 +1623,7 @@ pub struct DescribeAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAssociationResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -1607,6 +1648,7 @@ pub struct DescribeAutomationExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAutomationExecutionsResult {
     /// <p>The list of details about each automation execution which has occurred which matches the filter specification, if any.</p>
     #[serde(rename = "AutomationExecutionMetadataList")]
@@ -1642,6 +1684,7 @@ pub struct DescribeAutomationStepExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAutomationStepExecutionsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1670,6 +1713,7 @@ pub struct DescribeAvailablePatchesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAvailablePatchesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1692,6 +1736,7 @@ pub struct DescribeDocumentPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDocumentPermissionResponse {
     /// <p>The account IDs that have permission to use this document. The ID can be either an AWS account or <i>All</i>.</p>
     #[serde(rename = "AccountIds")]
@@ -1711,6 +1756,7 @@ pub struct DescribeDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDocumentResult {
     /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "Document")]
@@ -1734,6 +1780,7 @@ pub struct DescribeEffectiveInstanceAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEffectiveInstanceAssociationsResult {
     /// <p>The associations for the requested instance.</p>
     #[serde(rename = "Associations")]
@@ -1761,6 +1808,7 @@ pub struct DescribeEffectivePatchesForPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEffectivePatchesForPatchBaselineResult {
     /// <p>An array of patches and patch status.</p>
     #[serde(rename = "EffectivePatches")]
@@ -1788,6 +1836,7 @@ pub struct DescribeInstanceAssociationsStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInstanceAssociationsStatusResult {
     /// <p>Status information about the association.</p>
     #[serde(rename = "InstanceAssociationStatusInfos")]
@@ -1820,6 +1869,7 @@ pub struct DescribeInstanceInformationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInstanceInformationResult {
     /// <p>The instance information list.</p>
     #[serde(rename = "InstanceInformationList")]
@@ -1851,6 +1901,7 @@ pub struct DescribeInstancePatchStatesForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInstancePatchStatesForPatchGroupResult {
     /// <p>The high-level patch state for the requested instances. </p>
     #[serde(rename = "InstancePatchStates")]
@@ -1878,6 +1929,7 @@ pub struct DescribeInstancePatchStatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInstancePatchStatesResult {
     /// <p>The high-level patch state for the requested instances.</p>
     #[serde(rename = "InstancePatchStates")]
@@ -1909,6 +1961,7 @@ pub struct DescribeInstancePatchesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInstancePatchesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -1937,6 +1990,7 @@ pub struct DescribeInventoryDeletionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInventoryDeletionsResult {
     /// <p>A list of status items for deleted inventory.</p>
     #[serde(rename = "InventoryDeletions")]
@@ -1971,6 +2025,7 @@ pub struct DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionTaskInvocationsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2003,6 +2058,7 @@ pub struct DescribeMaintenanceWindowExecutionTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionTasksResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2034,6 +2090,7 @@ pub struct DescribeMaintenanceWindowExecutionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceWindowExecutionsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2065,6 +2122,7 @@ pub struct DescribeMaintenanceWindowTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceWindowTargetsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2096,6 +2154,7 @@ pub struct DescribeMaintenanceWindowTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceWindowTasksResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2124,6 +2183,7 @@ pub struct DescribeMaintenanceWindowsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMaintenanceWindowsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2156,6 +2216,7 @@ pub struct DescribeParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeParametersResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2184,6 +2245,7 @@ pub struct DescribePatchBaselinesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePatchBaselinesResult {
     /// <p>An array of PatchBaselineIdentity elements.</p>
     #[serde(rename = "BaselineIdentities")]
@@ -2203,6 +2265,7 @@ pub struct DescribePatchGroupStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePatchGroupStateResult {
     /// <p>The number of instances in the patch group.</p>
     #[serde(rename = "Instances")]
@@ -2247,6 +2310,7 @@ pub struct DescribePatchGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePatchGroupsResult {
     /// <p>Each entry in the array contains:</p> <p>PatchGroup: string (between 1 and 256 characters, Regex: ^([\p{L}\p{Z}\p{N}_.:/=+\-@]*)$)</p> <p>PatchBaselineIdentity: A PatchBaselineIdentity element. </p>
     #[serde(rename = "Mappings")]
@@ -2260,6 +2324,7 @@ pub struct DescribePatchGroupsResult {
 
 /// <p>A default version of a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DocumentDefaultVersionDescription {
     /// <p>The default version of the document.</p>
     #[serde(rename = "DefaultVersion")]
@@ -2273,6 +2338,7 @@ pub struct DocumentDefaultVersionDescription {
 
 /// <p>Describes a Systems Manager document. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DocumentDescription {
     /// <p>The date when the document was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -2361,6 +2427,7 @@ pub struct DocumentFilter {
 
 /// <p>Describes the name of a Systems Manager document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DocumentIdentifier {
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
@@ -2415,6 +2482,7 @@ pub struct DocumentKeyValuesFilter {
 
 /// <p>Parameters specified in a System Manager document that execute on the server when the command is run. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DocumentParameter {
     /// <p>If specified, the default values for the parameters. Parameters without a default value are required. Parameters with a default value are optional.</p>
     #[serde(rename = "DefaultValue")]
@@ -2436,6 +2504,7 @@ pub struct DocumentParameter {
 
 /// <p>Version information about the document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DocumentVersionInfo {
     /// <p>The date the document was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -2461,6 +2530,7 @@ pub struct DocumentVersionInfo {
 
 /// <p>The EffectivePatch structure defines metadata about a patch along with the approval state of the patch in a particular patch baseline. The approval state includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EffectivePatch {
     /// <p>Provides metadata for a patch, including information such as the KB ID, severity, classification and a URL for where more information can be obtained about the patch.</p>
     #[serde(rename = "Patch")]
@@ -2474,6 +2544,7 @@ pub struct EffectivePatch {
 
 /// <p>Describes a failed association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailedCreateAssociation {
     /// <p>The association.</p>
     #[serde(rename = "Entry")]
@@ -2491,6 +2562,7 @@ pub struct FailedCreateAssociation {
 
 /// <p>Information about an Automation failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FailureDetails {
     /// <p>Detailed information about the Automation step failure.</p>
     #[serde(rename = "Details")]
@@ -2514,6 +2586,7 @@ pub struct GetAutomationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAutomationExecutionResult {
     /// <p>Detailed information about the current state of an automation execution.</p>
     #[serde(rename = "AutomationExecution")]
@@ -2536,6 +2609,7 @@ pub struct GetCommandInvocationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCommandInvocationResult {
     /// <p>CloudWatch Logs information where Systems Manager sent the command output.</p>
     #[serde(rename = "CloudWatchOutputConfig")]
@@ -2616,6 +2690,7 @@ pub struct GetDefaultPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDefaultPatchBaselineResult {
     /// <p>The ID of the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -2638,6 +2713,7 @@ pub struct GetDeployablePatchSnapshotForInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeployablePatchSnapshotForInstanceResult {
     /// <p>The ID of the instance.</p>
     #[serde(rename = "InstanceId")]
@@ -2673,6 +2749,7 @@ pub struct GetDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDocumentResult {
     /// <p>The contents of the Systems Manager document.</p>
     #[serde(rename = "Content")]
@@ -2721,6 +2798,7 @@ pub struct GetInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInventoryResult {
     /// <p>Collection of inventory entities such as a collection of instance inventory. </p>
     #[serde(rename = "Entities")]
@@ -2757,6 +2835,7 @@ pub struct GetInventorySchemaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInventorySchemaResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -2776,6 +2855,7 @@ pub struct GetMaintenanceWindowExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionResult {
     /// <p>The time the Maintenance Window finished executing.</p>
     #[serde(rename = "EndTime")]
@@ -2817,6 +2897,7 @@ pub struct GetMaintenanceWindowExecutionTaskInvocationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionTaskInvocationResult {
     /// <p>The time that the task finished executing on the target.</p>
     #[serde(rename = "EndTime")]
@@ -2879,6 +2960,7 @@ pub struct GetMaintenanceWindowExecutionTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowExecutionTaskResult {
     /// <p>The time the task execution completed.</p>
     #[serde(rename = "EndTime")]
@@ -2944,6 +3026,7 @@ pub struct GetMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowResult {
     /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -2998,6 +3081,7 @@ pub struct GetMaintenanceWindowTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMaintenanceWindowTaskResult {
     /// <p>The retrieved task description.</p>
     #[serde(rename = "Description")]
@@ -3078,6 +3162,7 @@ pub struct GetParameterHistoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetParameterHistoryResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     #[serde(rename = "NextToken")]
@@ -3101,6 +3186,7 @@ pub struct GetParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetParameterResult {
     /// <p>Information about a parameter.</p>
     #[serde(rename = "Parameter")]
@@ -3136,6 +3222,7 @@ pub struct GetParametersByPathRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetParametersByPathResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -3159,6 +3246,7 @@ pub struct GetParametersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetParametersResult {
     /// <p>A list of parameters that are not formatted correctly or do not run when executed.</p>
     #[serde(rename = "InvalidParameters")]
@@ -3182,6 +3270,7 @@ pub struct GetPatchBaselineForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline that should be used for the patch group.</p>
     #[serde(rename = "BaselineId")]
@@ -3205,6 +3294,7 @@ pub struct GetPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPatchBaselineResult {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]
@@ -3266,6 +3356,7 @@ pub struct GetPatchBaselineResult {
 
 /// <p>Status information about the aggregated associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceAggregatedAssociationOverview {
     /// <p>Detailed status information about the aggregated associations.</p>
     #[serde(rename = "DetailedStatus")]
@@ -3280,6 +3371,7 @@ pub struct InstanceAggregatedAssociationOverview {
 
 /// <p>One or more association documents on the instance. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceAssociation {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -3310,6 +3402,7 @@ pub struct InstanceAssociationOutputLocation {
 
 /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceAssociationOutputUrl {
     /// <p>The URL of Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "S3OutputUrl")]
@@ -3319,6 +3412,7 @@ pub struct InstanceAssociationOutputUrl {
 
 /// <p>Status information about the instance association.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceAssociationStatusInfo {
     /// <p>The association ID.</p>
     #[serde(rename = "AssociationId")]
@@ -3372,6 +3466,7 @@ pub struct InstanceAssociationStatusInfo {
 
 /// <p>Describes a filter for a specific list of instances. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceInformation {
     /// <p>The activation ID created by Systems Manager when the server or VM was registered.</p>
     #[serde(rename = "ActivationId")]
@@ -3475,6 +3570,7 @@ pub struct InstanceInformationStringFilter {
 
 /// <p>Defines the high-level patch compliance state for a managed instance, providing information about the number of installed, missing, not applicable, and failed patches along with metadata about the operation when this information was gathered for the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstancePatchState {
     /// <p>The ID of the patch baseline used to patch the instance.</p>
     #[serde(rename = "BaselineId")]
@@ -3553,6 +3649,7 @@ pub struct InventoryAggregator {
 
 /// <p>Status information returned by the <code>DeleteInventory</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryDeletionStatusItem {
     /// <p>The deletion ID returned by the <code>DeleteInventory</code> action.</p>
     #[serde(rename = "DeletionId")]
@@ -3586,6 +3683,7 @@ pub struct InventoryDeletionStatusItem {
 
 /// <p>Information about the delete operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryDeletionSummary {
     /// <p>Remaining number of items to delete.</p>
     #[serde(rename = "RemainingCount")]
@@ -3603,6 +3701,7 @@ pub struct InventoryDeletionSummary {
 
 /// <p>Either a count, remaining count, or a version number in a delete inventory summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryDeletionSummaryItem {
     /// <p>A count of the number of deleted items.</p>
     #[serde(rename = "Count")]
@@ -3661,6 +3760,7 @@ pub struct InventoryItem {
 
 /// <p>Attributes are the entries within the inventory item content. It contains name and value.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryItemAttribute {
     /// <p>The data type of the inventory item attribute. </p>
     #[serde(rename = "DataType")]
@@ -3672,6 +3772,7 @@ pub struct InventoryItemAttribute {
 
 /// <p>The inventory item schema definition. Users can use this to compose inventory query filters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryItemSchema {
     /// <p>The schema attributes for inventory. This contains data type and attribute name.</p>
     #[serde(rename = "Attributes")]
@@ -3691,6 +3792,7 @@ pub struct InventoryItemSchema {
 
 /// <p>Inventory query results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryResultEntity {
     /// <p>The data section in the inventory result entity JSON.</p>
     #[serde(rename = "Data")]
@@ -3704,6 +3806,7 @@ pub struct InventoryResultEntity {
 
 /// <p>The inventory result item.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryResultItem {
     /// <p>The time inventory item data was captured.</p>
     #[serde(rename = "CaptureTime")]
@@ -3736,6 +3839,7 @@ pub struct LabelParameterVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LabelParameterVersionResult {
     #[serde(rename = "InvalidLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3758,6 +3862,7 @@ pub struct ListAssociationVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAssociationVersionsResult {
     /// <p>Information about all versions of the association for the specified association ID.</p>
     #[serde(rename = "AssociationVersions")]
@@ -3786,6 +3891,7 @@ pub struct ListAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAssociationsResult {
     /// <p>The associations.</p>
     #[serde(rename = "Associations")]
@@ -3826,6 +3932,7 @@ pub struct ListCommandInvocationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCommandInvocationsResult {
     /// <p>(Optional) A list of all invocations. </p>
     #[serde(rename = "CommandInvocations")]
@@ -3862,6 +3969,7 @@ pub struct ListCommandsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCommandsResult {
     /// <p>(Optional) The list of commands requested by the user. </p>
     #[serde(rename = "Commands")]
@@ -3898,6 +4006,7 @@ pub struct ListComplianceItemsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListComplianceItemsResult {
     /// <p>A list of compliance information for the specified resource ID. </p>
     #[serde(rename = "ComplianceItems")]
@@ -3926,6 +4035,7 @@ pub struct ListComplianceSummariesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListComplianceSummariesResult {
     /// <p>A list of compliant and non-compliant summary counts based on compliance types. For example, this call returns State Manager associations, patches, or custom compliance types according to the filter criteria that you specified.</p>
     #[serde(rename = "ComplianceSummaryItems")]
@@ -3953,6 +4063,7 @@ pub struct ListDocumentVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDocumentVersionsResult {
     /// <p>The document versions.</p>
     #[serde(rename = "DocumentVersions")]
@@ -3985,6 +4096,7 @@ pub struct ListDocumentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDocumentsResult {
     /// <p>The names of the Systems Manager documents.</p>
     #[serde(rename = "DocumentIdentifiers")]
@@ -4019,6 +4131,7 @@ pub struct ListInventoryEntriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInventoryEntriesResult {
     /// <p>The time that inventory information was collected for the instance(s).</p>
     #[serde(rename = "CaptureTime")]
@@ -4063,6 +4176,7 @@ pub struct ListResourceComplianceSummariesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListResourceComplianceSummariesResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -4087,6 +4201,7 @@ pub struct ListResourceDataSyncRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListResourceDataSyncResult {
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -4109,6 +4224,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p>A list of tags.</p>
     #[serde(rename = "TagList")]
@@ -4146,6 +4262,7 @@ pub struct MaintenanceWindowAutomationParameters {
 
 /// <p>Describes the information about an execution of a Maintenance Window. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowExecution {
     /// <p>The time the execution finished.</p>
     #[serde(rename = "EndTime")]
@@ -4175,6 +4292,7 @@ pub struct MaintenanceWindowExecution {
 
 /// <p>Information about a task execution performed as part of a Maintenance Window execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowExecutionTaskIdentity {
     /// <p>The time the task execution finished.</p>
     #[serde(rename = "EndTime")]
@@ -4212,6 +4330,7 @@ pub struct MaintenanceWindowExecutionTaskIdentity {
 
 /// <p>Describes the information about a task invocation for a particular target as part of a task execution performed as part of a Maintenance Window execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     /// <p>The time the invocation finished.</p>
     #[serde(rename = "EndTime")]
@@ -4278,6 +4397,7 @@ pub struct MaintenanceWindowFilter {
 
 /// <p>Information about the Maintenance Window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowIdentity {
     /// <p>The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.</p>
     #[serde(rename = "Cutoff")]
@@ -4382,6 +4502,7 @@ pub struct MaintenanceWindowStepFunctionsParameters {
 
 /// <p>The target registered with the Maintenance Window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowTarget {
     /// <p>A description of the target.</p>
     #[serde(rename = "Description")]
@@ -4415,6 +4536,7 @@ pub struct MaintenanceWindowTarget {
 
 /// <p>Information about a task defined for a Maintenance Window.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MaintenanceWindowTask {
     /// <p>A description of the task.</p>
     #[serde(rename = "Description")]
@@ -4520,10 +4642,12 @@ pub struct ModifyDocumentPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModifyDocumentPermissionResponse {}
 
 /// <p>A summary of resources that are not compliant. The summary is organized according to resource type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NonCompliantSummary {
     /// <p>The total number of compliance items that are not compliant.</p>
     #[serde(rename = "NonCompliantCount")]
@@ -4554,6 +4678,7 @@ pub struct NotificationConfig {
 
 /// <p>Information about the source where the association execution details are stored.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OutputSource {
     /// <p>The ID of the output source, for example the URL of an Amazon S3 bucket.</p>
     #[serde(rename = "OutputSourceId")]
@@ -4567,6 +4692,7 @@ pub struct OutputSource {
 
 /// <p>An Amazon EC2 Systems Manager parameter in Parameter Store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Parameter {
     /// <p>The Amazon Resource Name (ARN) of the parameter.</p>
     #[serde(rename = "ARN")]
@@ -4604,6 +4730,7 @@ pub struct Parameter {
 
 /// <p>Information about parameter usage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ParameterHistory {
     /// <p>Parameter names can include the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
     #[serde(rename = "AllowedPattern")]
@@ -4649,6 +4776,7 @@ pub struct ParameterHistory {
 
 /// <p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ParameterMetadata {
     /// <p>A parameter name can include only the following letters and symbols.</p> <p>a-zA-Z0-9_.-</p>
     #[serde(rename = "AllowedPattern")]
@@ -4713,6 +4841,7 @@ pub struct ParametersFilter {
 
 /// <p>Represents metadata about a patch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Patch {
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
@@ -4770,6 +4899,7 @@ pub struct Patch {
 
 /// <p>Defines the basic information about a patch baseline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PatchBaselineIdentity {
     /// <p>The description of the patch baseline.</p>
     #[serde(rename = "BaselineDescription")]
@@ -4795,6 +4925,7 @@ pub struct PatchBaselineIdentity {
 
 /// <p>Information about the state of a patch on a particular instance as it relates to the patch baseline used to patch the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PatchComplianceData {
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
@@ -4837,6 +4968,7 @@ pub struct PatchFilterGroup {
 
 /// <p>The mapping between a patch group and the patch baseline the patch group is registered with.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PatchGroupPatchBaselineMapping {
     /// <p>The patch baseline the patch group is registered with.</p>
     #[serde(rename = "BaselineIdentity")]
@@ -4904,6 +5036,7 @@ pub struct PatchSource {
 
 /// <p>Information about the approval status of a patch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PatchStatus {
     /// <p>The date the patch was approved (or will be approved if the status is PENDING_APPROVAL).</p>
     #[serde(rename = "ApprovalDate")]
@@ -4943,6 +5076,7 @@ pub struct PutComplianceItemsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutComplianceItemsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4956,6 +5090,7 @@ pub struct PutInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutInventoryResult {
     /// <p>Information about the request.</p>
     #[serde(rename = "Message")]
@@ -4993,6 +5128,7 @@ pub struct PutParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutParameterResult {
     /// <p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>
     #[serde(rename = "Version")]
@@ -5008,6 +5144,7 @@ pub struct RegisterDefaultPatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterDefaultPatchBaselineResult {
     /// <p>The ID of the default patch baseline.</p>
     #[serde(rename = "BaselineId")]
@@ -5026,6 +5163,7 @@ pub struct RegisterPatchBaselineForPatchGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterPatchBaselineForPatchGroupResult {
     /// <p>The ID of the patch baseline the patch group was registered with.</p>
     #[serde(rename = "BaselineId")]
@@ -5067,6 +5205,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterTargetWithMaintenanceWindowResult {
     /// <p>The ID of the target definition in this Maintenance Window.</p>
     #[serde(rename = "WindowTargetId")]
@@ -5129,6 +5268,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterTaskWithMaintenanceWindowResult {
     /// <p>The id of the task in the Maintenance Window.</p>
     #[serde(rename = "WindowTaskId")]
@@ -5150,10 +5290,12 @@ pub struct RemoveTagsFromResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
 /// <p>Information about targets that resolved during the Automation execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResolvedTargets {
     /// <p>A list of parameter values sent to targets that resolved during the Automation execution.</p>
     #[serde(rename = "ParameterValues")]
@@ -5167,6 +5309,7 @@ pub struct ResolvedTargets {
 
 /// <p>Compliance summary information for a specific resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceComplianceSummaryItem {
     /// <p>The compliance type.</p>
     #[serde(rename = "ComplianceType")]
@@ -5204,6 +5347,7 @@ pub struct ResourceComplianceSummaryItem {
 
 /// <p>Information about a Resource Data Sync configuration, including its current status and last successful sync.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceDataSyncItem {
     /// <p>The status reported by the last sync.</p>
     #[serde(rename = "LastStatus")]
@@ -5284,6 +5428,7 @@ pub struct S3OutputLocation {
 
 /// <p>A URL for the Amazon S3 bucket where you want to store the results of this request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct S3OutputUrl {
     /// <p>A URL for an Amazon S3 bucket where you want to store the results of this request.</p>
     #[serde(rename = "OutputUrl")]
@@ -5306,6 +5451,7 @@ pub struct SendAutomationSignalRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SendAutomationSignalResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5380,6 +5526,7 @@ pub struct SendCommandRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SendCommandResult {
     /// <p>The request as it was received by Systems Manager. Also provides the command ID which can be used future references to this request.</p>
     #[serde(rename = "Command")]
@@ -5389,6 +5536,7 @@ pub struct SendCommandResult {
 
 /// <p>The number of managed instances found for each patch severity level defined in the request filter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SeveritySummary {
     /// <p>The total number of resources or compliance items that have a severity level of critical. Critical severity is determined by the organization that published the compliance items.</p>
     #[serde(rename = "CriticalCount")]
@@ -5424,6 +5572,7 @@ pub struct StartAssociationsOnceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartAssociationsOnceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5466,6 +5615,7 @@ pub struct StartAutomationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartAutomationExecutionResult {
     /// <p>The unique ID of a newly scheduled automation execution.</p>
     #[serde(rename = "AutomationExecutionId")]
@@ -5475,6 +5625,7 @@ pub struct StartAutomationExecutionResult {
 
 /// <p>Detailed information about an the execution state of an Automation step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StepExecution {
     /// <p>The action this step performs. The action determines the behavior of the step.</p>
     #[serde(rename = "Action")]
@@ -5581,6 +5732,7 @@ pub struct StopAutomationExecutionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopAutomationExecutionResult {}
 
 /// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines.</p>
@@ -5647,6 +5799,7 @@ pub struct UpdateAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAssociationResult {
     /// <p>The description of the association that was updated.</p>
     #[serde(rename = "AssociationDescription")]
@@ -5668,6 +5821,7 @@ pub struct UpdateAssociationStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAssociationStatusResult {
     /// <p>Information about the association.</p>
     #[serde(rename = "AssociationDescription")]
@@ -5686,6 +5840,7 @@ pub struct UpdateDocumentDefaultVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDocumentDefaultVersionResult {
     /// <p>The description of a custom document that you want to set as the default version.</p>
     #[serde(rename = "Description")]
@@ -5716,6 +5871,7 @@ pub struct UpdateDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDocumentResult {
     /// <p>A description of the document that was updated.</p>
     #[serde(rename = "DocumentDescription")]
@@ -5763,6 +5919,7 @@ pub struct UpdateMaintenanceWindowRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateMaintenanceWindowResult {
     /// <p>Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.</p>
     #[serde(rename = "AllowUnassociatedTargets")]
@@ -5829,6 +5986,7 @@ pub struct UpdateMaintenanceWindowTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateMaintenanceWindowTargetResult {
     /// <p>The updated description.</p>
     #[serde(rename = "Description")]
@@ -5916,6 +6074,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateMaintenanceWindowTaskResult {
     /// <p>The updated task description.</p>
     #[serde(rename = "Description")]
@@ -5983,6 +6142,7 @@ pub struct UpdateManagedInstanceRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateManagedInstanceRoleResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6033,6 +6193,7 @@ pub struct UpdatePatchBaselineRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdatePatchBaselineResult {
     /// <p>A set of rules used to include patches in the baseline.</p>
     #[serde(rename = "ApprovalRules")]

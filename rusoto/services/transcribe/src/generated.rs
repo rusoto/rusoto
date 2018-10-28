@@ -42,6 +42,7 @@ pub struct CreateVocabularyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateVocabularyResponse {
     /// <p>If the <code>VocabularyState</code> field is <code>FAILED</code>, this field contains information about why the job failed.</p>
     #[serde(rename = "FailureReason")]
@@ -80,6 +81,7 @@ pub struct GetTranscriptionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTranscriptionJobResponse {
     /// <p>An object that contains the results of the transcription job.</p>
     #[serde(rename = "TranscriptionJob")]
@@ -95,6 +97,7 @@ pub struct GetVocabularyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetVocabularyResponse {
     /// <p>The S3 location where the vocabulary is stored. Use this URI to get the contents of the vocabulary. The URI is available for a limited time.</p>
     #[serde(rename = "DownloadUri")]
@@ -143,6 +146,7 @@ pub struct ListTranscriptionJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTranscriptionJobsResponse {
     /// <p>The <code>ListTranscriptionJobs</code> operation returns a page of jobs at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListTranscriptionJobs</code> operation to return in the next page of jobs.</p>
     #[serde(rename = "NextToken")]
@@ -179,6 +183,7 @@ pub struct ListVocabulariesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVocabulariesResponse {
     /// <p>The <code>ListVocabularies</code> operation returns a page of vocabularies at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListVocabularies</code> operation to return in the next page of jobs.</p>
     #[serde(rename = "NextToken")]
@@ -253,6 +258,7 @@ pub struct StartTranscriptionJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartTranscriptionJobResponse {
     /// <p>An object containing details of the asynchronous transcription job.</p>
     #[serde(rename = "TranscriptionJob")]
@@ -262,6 +268,7 @@ pub struct StartTranscriptionJobResponse {
 
 /// <p>Identifies the location of a transcription.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Transcript {
     /// <p>The location where the transcription is stored.</p> <p>Use this URI to access the transcription. If you specified an S3 bucket in the <code>OutputBucketName</code> field when you created the job, this is the URI of that bucket. If you chose to store the transcription in Amazon Transcribe, this is a shareable URL that provides secure access to that location.</p>
     #[serde(rename = "TranscriptFileUri")]
@@ -271,6 +278,7 @@ pub struct Transcript {
 
 /// <p>Describes an asynchronous transcription job that was created with the <code>StartTranscriptionJob</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TranscriptionJob {
     /// <p>A timestamp that shows when the job was completed.</p>
     #[serde(rename = "CompletionTime")]
@@ -320,6 +328,7 @@ pub struct TranscriptionJob {
 
 /// <p>Provides a summary of information about a transcription job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TranscriptionJobSummary {
     /// <p>A timestamp that shows when the job was completed.</p>
     #[serde(rename = "CompletionTime")]
@@ -365,6 +374,7 @@ pub struct UpdateVocabularyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateVocabularyResponse {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
@@ -386,6 +396,7 @@ pub struct UpdateVocabularyResponse {
 
 /// <p>Provides information about a custom vocabulary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VocabularyInfo {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]

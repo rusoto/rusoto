@@ -39,6 +39,7 @@ pub struct AddTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsOutput {
     /// <p>A list of tags associated with the Amazon SageMaker resource.</p>
     #[serde(rename = "Tags")]
@@ -144,6 +145,7 @@ pub struct CreateEndpointConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEndpointConfigOutput {
     /// <p>The Amazon Resource Name (ARN) of the endpoint configuration. </p>
     #[serde(rename = "EndpointConfigArn")]
@@ -165,6 +167,7 @@ pub struct CreateEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEndpointOutput {
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -189,6 +192,7 @@ pub struct CreateHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateHyperParameterTuningJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the tuning job.</p>
     #[serde(rename = "HyperParameterTuningJobArn")]
@@ -217,6 +221,7 @@ pub struct CreateModelInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateModelOutput {
     /// <p>The ARN of the model created in Amazon SageMaker.</p>
     #[serde(rename = "ModelArn")]
@@ -276,6 +281,7 @@ pub struct CreateNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNotebookInstanceLifecycleConfigOutput {
     /// <p>The Amazon Resource Name (ARN) of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigArn")]
@@ -284,6 +290,7 @@ pub struct CreateNotebookInstanceLifecycleConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNotebookInstanceOutput {
     /// <p>The Amazon Resource Name (ARN) of the notebook instance. </p>
     #[serde(rename = "NotebookInstanceArn")]
@@ -303,6 +310,7 @@ pub struct CreatePresignedNotebookInstanceUrlInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePresignedNotebookInstanceUrlOutput {
     /// <p>A JSON object that contains the URL string. </p>
     #[serde(rename = "AuthorizedUrl")]
@@ -348,6 +356,7 @@ pub struct CreateTrainingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTrainingJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the training job.</p>
     #[serde(rename = "TrainingJobArn")]
@@ -394,6 +403,7 @@ pub struct CreateTransformJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTransformJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the transform job.</p>
     #[serde(rename = "TransformJobArn")]
@@ -454,10 +464,12 @@ pub struct DeleteTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTagsOutput {}
 
 /// <p>Gets the Amazon EC2 Container Registry path of the docker image of the model that is hosted in this <a>ProductionVariant</a>.</p> <p>If you used the <code>registry/repository[:tag]</code> form to to specify the image path of the primary container when you created the model hosted in this <code>ProductionVariant</code>, the path resolves to a path of the form <code>registry/repository[@digest]</code>. A digest is a hash value that identifies a specific version of an image. For information about Amazon ECR paths, see <a href="http://docs.aws.amazon.com//AmazonECR/latest/userguide/docker-pull-ecr-image.html">Pulling an Image</a> in the <i>Amazon ECR User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeployedImage {
     /// <p>The date and time when the image path for the model resolved to the <code>ResolvedImage</code> </p>
     #[serde(rename = "ResolutionTime")]
@@ -481,6 +493,7 @@ pub struct DescribeEndpointConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointConfigOutput {
     /// <p>A timestamp that shows when the endpoint configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -508,6 +521,7 @@ pub struct DescribeEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEndpointOutput {
     /// <p>A timestamp that shows when the endpoint was created.</p>
     #[serde(rename = "CreationTime")]
@@ -545,6 +559,7 @@ pub struct DescribeHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeHyperParameterTuningJobResponse {
     /// <p>A <a>TrainingJobSummary</a> object that describes the training job that completed with the best current <a>HyperParameterTuningJobObjective</a>.</p>
     #[serde(rename = "BestTrainingJob")]
@@ -596,6 +611,7 @@ pub struct DescribeModelInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeModelOutput {
     /// <p>A timestamp that shows when the model was created.</p>
     #[serde(rename = "CreationTime")]
@@ -633,6 +649,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNotebookInstanceLifecycleConfigOutput {
     /// <p>A timestamp that tells when the lifecycle configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -661,6 +678,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNotebookInstanceOutput {
     /// <p>A timestamp. Use this parameter to return the time when the notebook instance was created</p>
     #[serde(rename = "CreationTime")]
@@ -732,6 +750,7 @@ pub struct DescribeTrainingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTrainingJobResponse {
     /// <p>Information about the algorithm used for training, and algorithm metadata. </p>
     #[serde(rename = "AlgorithmSpecification")]
@@ -813,6 +832,7 @@ pub struct DescribeTransformJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTransformJobResponse {
     /// <p>SingleRecord means only one record was used per a batch. <code>MultiRecord</code> means batches contained as many records that could possibly fit within the <code>MaxPayloadInMB</code> limit.</p>
     #[serde(rename = "BatchStrategy")]
@@ -887,6 +907,7 @@ pub struct DesiredWeightAndCapacity {
 
 /// <p>Provides summary information for an endpoint configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EndpointConfigSummary {
     /// <p>A timestamp that shows when the endpoint configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -901,6 +922,7 @@ pub struct EndpointConfigSummary {
 
 /// <p>Provides summary information for an endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EndpointSummary {
     /// <p>A timestamp that shows when the endpoint was created.</p>
     #[serde(rename = "CreationTime")]
@@ -921,6 +943,7 @@ pub struct EndpointSummary {
 
 /// <p>Shows the final value for the objective metric for a training job that was launched by a hyperparameter tuning job. You define the objective metric in the <code>HyperParameterTuningJobObjective</code> parameter of <a>HyperParameterTuningJobConfig</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FinalHyperParameterTuningJobObjectiveMetric {
     /// <p>The name of the objective metric.</p>
     #[serde(rename = "MetricName")]
@@ -982,6 +1005,7 @@ pub struct HyperParameterTrainingJobDefinition {
 
 /// <p>Specifies summary information about a training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HyperParameterTrainingJobSummary {
     /// <p>The date and time that the training job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1051,6 +1075,7 @@ pub struct HyperParameterTuningJobObjective {
 
 /// <p>Provides summary information about a hyperparameter tuning job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HyperParameterTuningJobSummary {
     /// <p>The date and time that the tuning job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1134,6 +1159,7 @@ pub struct ListEndpointConfigsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListEndpointConfigsOutput {
     /// <p>An array of endpoint configurations.</p>
     #[serde(rename = "EndpointConfigs")]
@@ -1189,6 +1215,7 @@ pub struct ListEndpointsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListEndpointsOutput {
     /// <p> An array or endpoint objects. </p>
     #[serde(rename = "Endpoints")]
@@ -1244,6 +1271,7 @@ pub struct ListHyperParameterTuningJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListHyperParameterTuningJobsResponse {
     /// <p>A list of <a>HyperParameterTuningJobSummary</a> objects that describe the tuning jobs that the <code>ListHyperParameterTuningJobs</code> request returned.</p>
     #[serde(rename = "HyperParameterTuningJobSummaries")]
@@ -1287,6 +1315,7 @@ pub struct ListModelsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListModelsOutput {
     /// <p>An array of <code>ModelSummary</code> objects, each of which lists a model.</p>
     #[serde(rename = "Models")]
@@ -1338,6 +1367,7 @@ pub struct ListNotebookInstanceLifecycleConfigsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListNotebookInstanceLifecycleConfigsOutput {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To get the next set of lifecycle configurations, use it in the next request. </p>
     #[serde(rename = "NextToken")]
@@ -1398,6 +1428,7 @@ pub struct ListNotebookInstancesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListNotebookInstancesOutput {
     /// <p>If the response to the previous <code>ListNotebookInstances</code> request was truncated, Amazon SageMaker returns this token. To retrieve the next set of notebook instances, use the token in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -1425,6 +1456,7 @@ pub struct ListTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsOutput {
     /// <p> If response is truncated, Amazon SageMaker includes a token in the response. You can use this token in your subsequent request to fetch next set of tokens. </p>
     #[serde(rename = "NextToken")]
@@ -1464,6 +1496,7 @@ pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTrainingJobsForHyperParameterTuningJobResponse {
     /// <p>If the result of this <code>ListTrainingJobsForHyperParameterTuningJob</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of training jobs, use the token in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -1519,6 +1552,7 @@ pub struct ListTrainingJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTrainingJobsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of training jobs, use it in the subsequent request.</p>
     #[serde(rename = "NextToken")]
@@ -1574,6 +1608,7 @@ pub struct ListTransformJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTransformJobsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of transform jobs, use it in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -1597,6 +1632,7 @@ pub struct MetricDefinition {
 
 /// <p>Provides information about the location that is configured for storing model artifacts. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModelArtifacts {
     /// <p>The path of the S3 object that contains the model artifacts. For example, <code>s3://bucket-name/keynameprefix/model.tar.gz</code>.</p>
     #[serde(rename = "S3ModelArtifacts")]
@@ -1605,6 +1641,7 @@ pub struct ModelArtifacts {
 
 /// <p>Provides summary information about a model.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ModelSummary {
     /// <p>A timestamp that indicates when the model was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1619,6 +1656,7 @@ pub struct ModelSummary {
 
 /// <p>Provides a summary of a notebook instance lifecycle configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotebookInstanceLifecycleConfigSummary {
     /// <p>A timestamp that tells when the lifecycle configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1647,6 +1685,7 @@ pub struct NotebookInstanceLifecycleHook {
 
 /// <p>Provides summary information for an Amazon SageMaker notebook instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotebookInstanceSummary {
     /// <p>A timestamp that shows when the notebook instance was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1682,6 +1721,7 @@ pub struct NotebookInstanceSummary {
 
 /// <p>Specifies the number of training jobs that this hyperparameter tuning job launched, categorized by the status of their objective metric. The objective metric status shows whether the final objective metric for the training job has been evaluated by the tuning job and used in the hyperparameter tuning process.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ObjectiveStatusCounters {
     /// <p>The number of training jobs whose final objective metric was not evaluated and used in the hyperparameter tuning process. This typically occurs when the training job failed or did not emit an objective metric.</p>
     #[serde(rename = "Failed")]
@@ -1749,6 +1789,7 @@ pub struct ProductionVariant {
 
 /// <p>Describes weight and capacities for a production variant associated with an endpoint. If you sent a request to the <code>UpdateEndpointWeightsAndCapacities</code> API and the endpoint status is <code>Updating</code>, you get different desired and current values. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProductionVariantSummary {
     /// <p>The number of instances associated with the variant.</p>
     #[serde(rename = "CurrentInstanceCount")]
@@ -1821,6 +1862,7 @@ pub struct S3DataSource {
 
 /// <p>Specifies a secondary status the job has transitioned into. It includes a start timestamp and later an end timestamp. The end timestamp is added either after the job transitions to a different secondary status or after the job has ended.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecondaryStatusTransition {
     /// <p>A timestamp that shows when the secondary status has ended and the job has transitioned into another secondary status. The <code>EndTime</code> timestamp is also set after the training job has ended.</p>
     #[serde(rename = "EndTime")]
@@ -1895,6 +1937,7 @@ pub struct Tag {
 
 /// <p>The numbers of training jobs launched by a hyperparameter tuning job, categorized by status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TrainingJobStatusCounters {
     /// <p>The number of completed training jobs launched by a hyperparameter tuning job.</p>
     #[serde(rename = "Completed")]
@@ -1920,6 +1963,7 @@ pub struct TrainingJobStatusCounters {
 
 /// <p>Provides summary information about a training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TrainingJobSummary {
     /// <p>A timestamp that shows when the training job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1973,6 +2017,7 @@ pub struct TransformInput {
 
 /// <p>Provides a summary information for a transform job. Multiple TransformJobSummary objects are returned as a list after calling <a>ListTransformJobs</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TransformJobSummary {
     /// <p>A timestamp that shows when the transform Job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -2053,6 +2098,7 @@ pub struct UpdateEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateEndpointOutput {
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -2070,6 +2116,7 @@ pub struct UpdateEndpointWeightsAndCapacitiesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateEndpointWeightsAndCapacitiesOutput {
     /// <p>The Amazon Resource Name (ARN) of the updated endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -2107,9 +2154,11 @@ pub struct UpdateNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNotebookInstanceOutput {}
 
 /// <p>Specifies a VPC that your training jobs and hosted models have access to. Control access to and from your training and model containers by configuring the VPC. For more information, see <a>host-vpc</a> and <a>train-vpc</a>.</p>

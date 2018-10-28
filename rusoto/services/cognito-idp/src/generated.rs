@@ -81,6 +81,7 @@ pub struct AddCustomAttributesRequest {
 
 /// <p>Represents the response from the server for the request to add custom attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddCustomAttributesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -109,6 +110,7 @@ pub struct AdminConfirmSignUpRequest {
 
 /// <p>Represents the response from the server for the request to confirm registration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminConfirmSignUpResponse {}
 
 /// <p>The configuration for creating a new user profile.</p>
@@ -165,6 +167,7 @@ pub struct AdminCreateUserRequest {
 
 /// <p>Represents the response from the server to the request to create the user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminCreateUserResponse {
     /// <p>The newly created user.</p>
     #[serde(rename = "User")]
@@ -188,6 +191,7 @@ pub struct AdminDeleteUserAttributesRequest {
 
 /// <p>Represents the response received from the server for a request to delete user attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminDeleteUserAttributesResponse {}
 
 /// <p>Represents the request to delete a user as an administrator.</p>
@@ -212,6 +216,7 @@ pub struct AdminDisableProviderForUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminDisableProviderForUserResponse {}
 
 /// <p>Represents the request to disable any user as an administrator.</p>
@@ -227,6 +232,7 @@ pub struct AdminDisableUserRequest {
 
 /// <p>Represents the response received from the server to disable the user as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminDisableUserResponse {}
 
 /// <p>Represents the request that enables the user as an administrator.</p>
@@ -242,6 +248,7 @@ pub struct AdminEnableUserRequest {
 
 /// <p>Represents the response from the server for the request to enable a user as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminEnableUserResponse {}
 
 /// <p>Sends the forgot device request, as an administrator.</p>
@@ -274,6 +281,7 @@ pub struct AdminGetDeviceRequest {
 
 /// <p>Gets the device response, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminGetDeviceResponse {
     /// <p>The device.</p>
     #[serde(rename = "Device")]
@@ -293,6 +301,7 @@ pub struct AdminGetUserRequest {
 
 /// <p>Represents the response from the server from the request to get the specified user as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminGetUserResponse {
     /// <p>Indicates that the status is enabled.</p>
     #[serde(rename = "Enabled")]
@@ -363,6 +372,7 @@ pub struct AdminInitiateAuthRequest {
 
 /// <p>Initiates the authentication response, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminInitiateAuthResponse {
     /// <p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>
     #[serde(rename = "AuthenticationResult")]
@@ -396,6 +406,7 @@ pub struct AdminLinkProviderForUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminLinkProviderForUserResponse {}
 
 /// <p>Represents the request to list devices, as an administrator.</p>
@@ -419,6 +430,7 @@ pub struct AdminListDevicesRequest {
 
 /// <p>Lists the device's response, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminListDevicesResponse {
     /// <p>The devices in the list of devices response.</p>
     #[serde(rename = "Devices")]
@@ -449,6 +461,7 @@ pub struct AdminListGroupsForUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminListGroupsForUserResponse {
     /// <p>The groups that the user belongs to.</p>
     #[serde(rename = "Groups")]
@@ -479,6 +492,7 @@ pub struct AdminListUserAuthEventsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminListUserAuthEventsResponse {
     /// <p>The response object. It includes the <code>EventID</code>, <code>EventType</code>, <code>CreationDate</code>, <code>EventRisk</code>, and <code>EventResponse</code>.</p>
     #[serde(rename = "AuthEvents")]
@@ -516,6 +530,7 @@ pub struct AdminResetUserPasswordRequest {
 
 /// <p>Represents the response from the server to reset a user password as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminResetUserPasswordResponse {}
 
 /// <p>The request to respond to the authentication challenge, as an administrator.</p>
@@ -550,6 +565,7 @@ pub struct AdminRespondToAuthChallengeRequest {
 
 /// <p>Responds to the authentication challenge, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminRespondToAuthChallengeResponse {
     /// <p>The result returned by the server in response to the authentication request.</p>
     #[serde(rename = "AuthenticationResult")]
@@ -588,6 +604,7 @@ pub struct AdminSetUserMFAPreferenceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminSetUserMFAPreferenceResponse {}
 
 /// <p>Represents the request to set user settings as an administrator.</p>
@@ -606,6 +623,7 @@ pub struct AdminSetUserSettingsRequest {
 
 /// <p>Represents the response from the server to set user settings as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminSetUserSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -625,6 +643,7 @@ pub struct AdminUpdateAuthEventFeedbackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminUpdateAuthEventFeedbackResponse {}
 
 /// <p>The request to update the device status, as an administrator.</p>
@@ -647,6 +666,7 @@ pub struct AdminUpdateDeviceStatusRequest {
 
 /// <p>The status response from the request to update the device, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminUpdateDeviceStatusResponse {}
 
 /// <p>Represents the request to update the user's attributes as an administrator.</p>
@@ -665,6 +685,7 @@ pub struct AdminUpdateUserAttributesRequest {
 
 /// <p>Represents the response from the server for the request to update user attributes as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminUpdateUserAttributesResponse {}
 
 /// <p>The request to sign out of all devices, as an administrator.</p>
@@ -680,6 +701,7 @@ pub struct AdminUserGlobalSignOutRequest {
 
 /// <p>The global sign-out response, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AdminUserGlobalSignOutResponse {}
 
 /// <p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p>
@@ -722,6 +744,7 @@ pub struct AssociateSoftwareTokenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateSoftwareTokenResponse {
     /// <p>A unique generated shared secret code that is used in the TOTP algorithm to generate a one time code.</p>
     #[serde(rename = "SecretCode")]
@@ -747,6 +770,7 @@ pub struct AttributeType {
 
 /// <p>The authentication event type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthEventType {
     /// <p>The challenge responses.</p>
     #[serde(rename = "ChallengeResponses")]
@@ -784,6 +808,7 @@ pub struct AuthEventType {
 
 /// <p>The authentication result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AuthenticationResultType {
     /// <p>The access token.</p>
     #[serde(rename = "AccessToken")]
@@ -813,6 +838,7 @@ pub struct AuthenticationResultType {
 
 /// <p>The challenge response type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChallengeResponseType {
     /// <p>The challenge name</p>
     #[serde(rename = "ChallengeName")]
@@ -840,10 +866,12 @@ pub struct ChangePasswordRequest {
 
 /// <p>The response from the server to the change password request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ChangePasswordResponse {}
 
 /// <p>The code delivery details being returned from the server.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CodeDeliveryDetailsType {
     /// <p>The attribute name.</p>
     #[serde(rename = "AttributeName")]
@@ -900,6 +928,7 @@ pub struct ConfirmDeviceRequest {
 
 /// <p>Confirms the device response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmDeviceResponse {
     /// <p>Indicates whether the user confirmation is necessary to confirm the device response.</p>
     #[serde(rename = "UserConfirmationNecessary")]
@@ -938,6 +967,7 @@ pub struct ConfirmForgotPasswordRequest {
 
 /// <p>The response from the server that results from a user's request to retrieve a forgotten password.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmForgotPasswordResponse {}
 
 /// <p>Represents the request to confirm registration of a user.</p>
@@ -972,6 +1002,7 @@ pub struct ConfirmSignUpRequest {
 
 /// <p>Represents the response from the server for the registration confirmation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmSignUpResponse {}
 
 /// <p>Contextual user data type used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
@@ -1018,6 +1049,7 @@ pub struct CreateGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The group object for the group.</p>
     #[serde(rename = "Group")]
@@ -1050,6 +1082,7 @@ pub struct CreateIdentityProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateIdentityProviderResponse {
     /// <p>The newly created identity provider object.</p>
     #[serde(rename = "IdentityProvider")]
@@ -1074,6 +1107,7 @@ pub struct CreateResourceServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateResourceServerResponse {
     /// <p>The newly created resource server.</p>
     #[serde(rename = "ResourceServer")]
@@ -1096,6 +1130,7 @@ pub struct CreateUserImportJobRequest {
 
 /// <p>Represents the response from the server to the request to create the user import job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
     #[serde(rename = "UserImportJob")]
@@ -1168,6 +1203,7 @@ pub struct CreateUserPoolClientRequest {
 
 /// <p>Represents the response from the server to create a user pool client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserPoolClientResponse {
     /// <p>The user pool client that was just created.</p>
     #[serde(rename = "UserPoolClient")]
@@ -1186,6 +1222,7 @@ pub struct CreateUserPoolDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserPoolDomainResponse {}
 
 /// <p>Represents the request to create a user pool.</p>
@@ -1270,6 +1307,7 @@ pub struct CreateUserPoolRequest {
 
 /// <p>Represents the response from the server for the request to create a user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserPoolResponse {
     /// <p>A container for the user pool details.</p>
     #[serde(rename = "UserPool")]
@@ -1320,6 +1358,7 @@ pub struct DeleteUserAttributesRequest {
 
 /// <p>Represents the response from the server to delete user attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserAttributesResponse {}
 
 /// <p>Represents the request to delete a user pool client.</p>
@@ -1344,6 +1383,7 @@ pub struct DeleteUserPoolDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserPoolDomainResponse {}
 
 /// <p>Represents the request to delete a user pool.</p>
@@ -1373,6 +1413,7 @@ pub struct DescribeIdentityProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeIdentityProviderResponse {
     /// <p>The identity provider that was deleted.</p>
     #[serde(rename = "IdentityProvider")]
@@ -1390,6 +1431,7 @@ pub struct DescribeResourceServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeResourceServerResponse {
     /// <p>The resource server.</p>
     #[serde(rename = "ResourceServer")]
@@ -1408,6 +1450,7 @@ pub struct DescribeRiskConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRiskConfigurationResponse {
     /// <p>The risk configuration.</p>
     #[serde(rename = "RiskConfiguration")]
@@ -1427,6 +1470,7 @@ pub struct DescribeUserImportJobRequest {
 
 /// <p>Represents the response from the server to the request to describe the user import job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
     #[serde(rename = "UserImportJob")]
@@ -1447,6 +1491,7 @@ pub struct DescribeUserPoolClientRequest {
 
 /// <p>Represents the response from the server from a request to describe the user pool client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserPoolClientResponse {
     /// <p>The user pool client from a server response to describe the user pool client.</p>
     #[serde(rename = "UserPoolClient")]
@@ -1462,6 +1507,7 @@ pub struct DescribeUserPoolDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserPoolDomainResponse {
     /// <p>A domain description object containing information about the domain.</p>
     #[serde(rename = "DomainDescription")]
@@ -1479,6 +1525,7 @@ pub struct DescribeUserPoolRequest {
 
 /// <p>Represents the response to describe the user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserPoolResponse {
     /// <p>The container of metadata returned by the server to describe the pool.</p>
     #[serde(rename = "UserPool")]
@@ -1514,6 +1561,7 @@ pub struct DeviceSecretVerifierConfigType {
 
 /// <p>The device type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceType {
     /// <p>The device attributes.</p>
     #[serde(rename = "DeviceAttributes")]
@@ -1539,6 +1587,7 @@ pub struct DeviceType {
 
 /// <p>A container for information about a domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainDescriptionType {
     /// <p>The AWS account ID for the user pool owner.</p>
     #[serde(rename = "AWSAccountId")]
@@ -1585,6 +1634,7 @@ pub struct EmailConfigurationType {
 
 /// <p>Specifies the user context data captured at the time of an event request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventContextDataType {
     /// <p>The user's city.</p>
     #[serde(rename = "City")]
@@ -1610,6 +1660,7 @@ pub struct EventContextDataType {
 
 /// <p>Specifies the event feedback type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventFeedbackType {
     /// <p>The event feedback date.</p>
     #[serde(rename = "FeedbackDate")]
@@ -1625,6 +1676,7 @@ pub struct EventFeedbackType {
 
 /// <p>The event risk type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventRiskType {
     /// <p>The risk decision.</p>
     #[serde(rename = "RiskDecision")]
@@ -1673,6 +1725,7 @@ pub struct ForgotPasswordRequest {
 
 /// <p>Respresents the response from the server regarding the request to reset a password.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ForgotPasswordResponse {
     /// <p>The code delivery details returned by the server in response to the request to reset a password.</p>
     #[serde(rename = "CodeDeliveryDetails")]
@@ -1690,6 +1743,7 @@ pub struct GetCSVHeaderRequest {
 
 /// <p>Represents the response from the server to the request to get the header information for the .csv file for the user import job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCSVHeaderResponse {
     /// <p>The header information for the .csv file for the user import job.</p>
     #[serde(rename = "CSVHeader")]
@@ -1715,6 +1769,7 @@ pub struct GetDeviceRequest {
 
 /// <p>Gets the device response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeviceResponse {
     /// <p>The device.</p>
     #[serde(rename = "Device")]
@@ -1732,6 +1787,7 @@ pub struct GetGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGroupResponse {
     /// <p>The group object for the group.</p>
     #[serde(rename = "Group")]
@@ -1750,6 +1806,7 @@ pub struct GetIdentityProviderByIdentifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetIdentityProviderByIdentifierResponse {
     /// <p>The identity provider object.</p>
     #[serde(rename = "IdentityProvider")]
@@ -1766,6 +1823,7 @@ pub struct GetSigningCertificateRequest {
 
 /// <p>Response from Cognito for a signing certificate request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSigningCertificateResponse {
     /// <p>The signing certificate.</p>
     #[serde(rename = "Certificate")]
@@ -1785,6 +1843,7 @@ pub struct GetUICustomizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUICustomizationResponse {
     /// <p>The UI customization information.</p>
     #[serde(rename = "UICustomization")]
@@ -1804,6 +1863,7 @@ pub struct GetUserAttributeVerificationCodeRequest {
 
 /// <p>The verification code response returned by the server response to get the user attribute verification code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUserAttributeVerificationCodeResponse {
     /// <p>The code delivery details returned by the server in response to the request to get the user attribute verification code.</p>
     #[serde(rename = "CodeDeliveryDetails")]
@@ -1819,6 +1879,7 @@ pub struct GetUserPoolMfaConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUserPoolMfaConfigResponse {
     /// <p>The multi-factor (MFA) configuration.</p>
     #[serde(rename = "MfaConfiguration")]
@@ -1844,6 +1905,7 @@ pub struct GetUserRequest {
 
 /// <p>Represents the response from the server from the request to get information about the user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUserResponse {
     /// <p>Specifies the options for MFA (e.g., email or phone number).</p>
     #[serde(rename = "MFAOptions")]
@@ -1875,10 +1937,12 @@ pub struct GlobalSignOutRequest {
 
 /// <p>The response to the request to sign out all devices.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GlobalSignOutResponse {}
 
 /// <p>The group type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GroupType {
     /// <p>The date the group was created.</p>
     #[serde(rename = "CreationDate")]
@@ -1925,6 +1989,7 @@ pub struct HttpHeader {
 
 /// <p>A container for information about an identity provider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct IdentityProviderType {
     /// <p>A mapping of identity provider attributes to standard and custom user pool attributes.</p>
     #[serde(rename = "AttributeMapping")]
@@ -1989,6 +2054,7 @@ pub struct InitiateAuthRequest {
 
 /// <p>Initiates the authentication response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InitiateAuthResponse {
     /// <p>The result of the authentication response. This is only returned if the caller does not need to pass another challenge. If the caller does need to pass another challenge before it gets tokens, <code>ChallengeName</code>, <code>ChallengeParameters</code>, and <code>Session</code> are returned.</p>
     #[serde(rename = "AuthenticationResult")]
@@ -2071,6 +2137,7 @@ pub struct ListDevicesRequest {
 
 /// <p>Represents the response to list devices.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDevicesResponse {
     /// <p>The devices returned in the list devices response.</p>
     #[serde(rename = "Devices")]
@@ -2098,6 +2165,7 @@ pub struct ListGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>The group objects for the groups.</p>
     #[serde(rename = "Groups")]
@@ -2125,6 +2193,7 @@ pub struct ListIdentityProvidersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListIdentityProvidersResponse {
     /// <p>A pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -2151,6 +2220,7 @@ pub struct ListResourceServersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListResourceServersResponse {
     /// <p>A pagination token.</p>
     #[serde(rename = "NextToken")]
@@ -2178,6 +2248,7 @@ pub struct ListUserImportJobsRequest {
 
 /// <p>Represents the response from the server to the request to list the user import jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUserImportJobsResponse {
     /// <p>An identifier that can be used to return the next set of user import jobs in the list.</p>
     #[serde(rename = "PaginationToken")]
@@ -2207,6 +2278,7 @@ pub struct ListUserPoolClientsRequest {
 
 /// <p>Represents the response from the server that lists user pool clients.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUserPoolClientsResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "NextToken")]
@@ -2232,6 +2304,7 @@ pub struct ListUserPoolsRequest {
 
 /// <p>Represents the response to list user pools.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUserPoolsResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "NextToken")]
@@ -2262,6 +2335,7 @@ pub struct ListUsersInGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUsersInGroupResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "NextToken")]
@@ -2299,6 +2373,7 @@ pub struct ListUsersRequest {
 
 /// <p>The response from the request to list users.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "PaginationToken")]
@@ -2342,6 +2417,7 @@ pub struct MessageTemplateType {
 
 /// <p>The new device metadata type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NewDeviceMetadataType {
     /// <p>The device group key.</p>
     #[serde(rename = "DeviceGroupKey")]
@@ -2437,6 +2513,7 @@ pub struct PasswordPolicyType {
 
 /// <p>A container for identity provider details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProviderDescription {
     /// <p>The date the provider was added to the user pool.</p>
     #[serde(rename = "CreationDate")]
@@ -2498,6 +2575,7 @@ pub struct ResendConfirmationCodeRequest {
 
 /// <p>The response from the server when the Amazon Cognito Your User Pools service makes the request to resend a confirmation code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResendConfirmationCodeResponse {
     /// <p>The code delivery details returned by the server in response to the request to resend the confirmation code.</p>
     #[serde(rename = "CodeDeliveryDetails")]
@@ -2518,6 +2596,7 @@ pub struct ResourceServerScopeType {
 
 /// <p>A container for information about a resource server for a user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceServerType {
     /// <p>The identifier for the resource server.</p>
     #[serde(rename = "Identifier")]
@@ -2566,6 +2645,7 @@ pub struct RespondToAuthChallengeRequest {
 
 /// <p>The response to respond to the authentication challenge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RespondToAuthChallengeResponse {
     /// <p>The result returned by the server in response to the request to respond to the authentication challenge.</p>
     #[serde(rename = "AuthenticationResult")]
@@ -2587,6 +2667,7 @@ pub struct RespondToAuthChallengeResponse {
 
 /// <p>The risk configuration type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RiskConfigurationType {
     /// <p>The account takeover risk configuration object including the <code>NotifyConfiguration</code> object and <code>Actions</code> to take in the case of an account takeover.</p>
     #[serde(rename = "AccountTakeoverRiskConfiguration")]
@@ -2699,6 +2780,7 @@ pub struct SetRiskConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetRiskConfigurationResponse {
     /// <p>The risk configuration.</p>
     #[serde(rename = "RiskConfiguration")]
@@ -2729,6 +2811,7 @@ pub struct SetUICustomizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetUICustomizationResponse {
     /// <p>The UI customization information.</p>
     #[serde(rename = "UICustomization")]
@@ -2751,6 +2834,7 @@ pub struct SetUserMFAPreferenceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetUserMFAPreferenceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2773,6 +2857,7 @@ pub struct SetUserPoolMfaConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetUserPoolMfaConfigResponse {
     /// <p>The MFA configuration.</p>
     #[serde(rename = "MfaConfiguration")]
@@ -2801,6 +2886,7 @@ pub struct SetUserSettingsRequest {
 
 /// <p>The response from the server for a set user settings request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SetUserSettingsResponse {}
 
 /// <p>Represents the request to register a user.</p>
@@ -2839,6 +2925,7 @@ pub struct SignUpRequest {
 
 /// <p>The response from the server for a registration request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SignUpResponse {
     /// <p>The code delivery details returned by the server response to the user registration request.</p>
     #[serde(rename = "CodeDeliveryDetails")]
@@ -2912,6 +2999,7 @@ pub struct StartUserImportJobRequest {
 
 /// <p>Represents the response from the server to the request to start the user import job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
     #[serde(rename = "UserImportJob")]
@@ -2932,6 +3020,7 @@ pub struct StopUserImportJobRequest {
 
 /// <p>Represents the response from the server to the request to stop the user import job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopUserImportJobResponse {
     /// <p>The job object that represents the user import job.</p>
     #[serde(rename = "UserImportJob")]
@@ -2954,6 +3043,7 @@ pub struct StringAttributeConstraintsType {
 
 /// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UICustomizationType {
     /// <p>The CSS values in the UI customization.</p>
     #[serde(rename = "CSS")]
@@ -3005,6 +3095,7 @@ pub struct UpdateAuthEventFeedbackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAuthEventFeedbackResponse {}
 
 /// <p>Represents the request to update the device status.</p>
@@ -3024,6 +3115,7 @@ pub struct UpdateDeviceStatusRequest {
 
 /// <p>The response to the request to update the device status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDeviceStatusResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3049,6 +3141,7 @@ pub struct UpdateGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGroupResponse {
     /// <p>The group object for the group.</p>
     #[serde(rename = "Group")]
@@ -3079,6 +3172,7 @@ pub struct UpdateIdentityProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateIdentityProviderResponse {
     /// <p>The identity provider object.</p>
     #[serde(rename = "IdentityProvider")]
@@ -3103,6 +3197,7 @@ pub struct UpdateResourceServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateResourceServerResponse {
     /// <p>The resource server.</p>
     #[serde(rename = "ResourceServer")]
@@ -3122,6 +3217,7 @@ pub struct UpdateUserAttributesRequest {
 
 /// <p>Represents the response from the server for the request to update user attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateUserAttributesResponse {
     /// <p>The code delivery details list from the server for the request to update user attributes.</p>
     #[serde(rename = "CodeDeliveryDetailsList")]
@@ -3194,6 +3290,7 @@ pub struct UpdateUserPoolClientRequest {
 
 /// <p>Represents the response from the server to the request to update the user pool client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateUserPoolClientResponse {
     /// <p>The user pool client value from the response from the server when an update user pool client request is made.</p>
     #[serde(rename = "UserPoolClient")]
@@ -3271,6 +3368,7 @@ pub struct UpdateUserPoolRequest {
 
 /// <p>Represents the response from the server when you make a request to update the user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateUserPoolResponse {}
 
 /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
@@ -3284,6 +3382,7 @@ pub struct UserContextDataType {
 
 /// <p>The user import job type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserImportJobType {
     /// <p>The role ARN for the Amazon CloudWatch Logging role for the user import job. For more information, see "Creating the CloudWatch Logs IAM Role" in the Amazon Cognito Developer Guide.</p>
     #[serde(rename = "CloudWatchLogsRoleArn")]
@@ -3349,6 +3448,7 @@ pub struct UserPoolAddOnsType {
 
 /// <p>The description of the user pool client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserPoolClientDescription {
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
@@ -3366,6 +3466,7 @@ pub struct UserPoolClientDescription {
 
 /// <p>Contains information about a user pool client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserPoolClientType {
     /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
     #[serde(rename = "AllowedOAuthFlows")]
@@ -3443,6 +3544,7 @@ pub struct UserPoolClientType {
 
 /// <p>A user pool description.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserPoolDescriptionType {
     /// <p>The date the user pool description was created.</p>
     #[serde(rename = "CreationDate")]
@@ -3481,6 +3583,7 @@ pub struct UserPoolPolicyType {
 
 /// <p>A container for information about the user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserPoolType {
     /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
     #[serde(rename = "AdminCreateUserConfig")]
@@ -3598,6 +3701,7 @@ pub struct UserPoolType {
 
 /// <p>The user type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserType {
     /// <p>A container with information about the user type attributes.</p>
     #[serde(rename = "Attributes")]
@@ -3678,6 +3782,7 @@ pub struct VerifySoftwareTokenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VerifySoftwareTokenResponse {
     /// <p>The session which should be passed both ways in challenge-response calls to the service.</p>
     #[serde(rename = "Session")]
@@ -3705,6 +3810,7 @@ pub struct VerifyUserAttributeRequest {
 
 /// <p>A container representing the response from the server from the request to verify user attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VerifyUserAttributeResponse {}
 
 /// Errors returned by AddCustomAttributes

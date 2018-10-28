@@ -67,6 +67,7 @@ pub struct BatchCreatePartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchCreatePartitionResponse {
     /// <p>Errors encountered when trying to create the requested partitions.</p>
     #[serde(rename = "Errors")]
@@ -86,6 +87,7 @@ pub struct BatchDeleteConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeleteConnectionResponse {
     /// <p>A map of the names of connections that were not successfully deleted to error details.</p>
     #[serde(rename = "Errors")]
@@ -115,6 +117,7 @@ pub struct BatchDeletePartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeletePartitionResponse {
     /// <p>Errors encountered when trying to delete the requested partitions.</p>
     #[serde(rename = "Errors")]
@@ -137,6 +140,7 @@ pub struct BatchDeleteTableRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeleteTableResponse {
     /// <p>A list of errors encountered in attempting to delete the specified tables.</p>
     #[serde(rename = "Errors")]
@@ -162,6 +166,7 @@ pub struct BatchDeleteTableVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchDeleteTableVersionResponse {
     /// <p>A list of errors encountered while trying to delete the specified table versions.</p>
     #[serde(rename = "Errors")]
@@ -187,6 +192,7 @@ pub struct BatchGetPartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetPartitionResponse {
     /// <p>A list of the requested partitions.</p>
     #[serde(rename = "Partitions")]
@@ -200,6 +206,7 @@ pub struct BatchGetPartitionResponse {
 
 /// <p>Records an error that occurred when attempting to stop a specified job run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchStopJobRunError {
     /// <p>Specifies details about the error that was encountered.</p>
     #[serde(rename = "ErrorDetail")]
@@ -226,6 +233,7 @@ pub struct BatchStopJobRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchStopJobRunResponse {
     /// <p>A list of the errors that were encountered in tryng to stop JobRuns, including the JobRunId for which each error was encountered and details about the error.</p>
     #[serde(rename = "Errors")]
@@ -239,6 +247,7 @@ pub struct BatchStopJobRunResponse {
 
 /// <p>Records a successful request to stop a specified JobRun.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchStopJobRunSuccessfulSubmission {
     /// <p>The name of the job definition used in the job run that was stopped.</p>
     #[serde(rename = "JobName")]
@@ -263,6 +272,7 @@ pub struct CatalogEntry {
 
 /// <p>A structure containing migration status information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CatalogImportStatus {
     /// <p>True if the migration has completed, or False otherwise.</p>
     #[serde(rename = "ImportCompleted")]
@@ -280,6 +290,7 @@ pub struct CatalogImportStatus {
 
 /// <p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue supplies, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, or a <code>JSON</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Classifier {
     /// <p>A <code>GrokClassifier</code> object.</p>
     #[serde(rename = "GrokClassifier")]
@@ -378,6 +389,7 @@ pub struct Condition {
 
 /// <p>Defines a connection to a data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
     /// <p>A list of key-value pairs used as parameters for this connection.</p>
     #[serde(rename = "ConnectionProperties")]
@@ -454,6 +466,7 @@ pub struct ConnectionsList {
 
 /// <p>Specifies a crawler program that examines a data source and uses classifiers to try to determine its schema. If successful, the crawler records metadata concerning the data source in the AWS Glue Data Catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Crawler {
     /// <p>A list of custom classifiers associated with the crawler.</p>
     #[serde(rename = "Classifiers")]
@@ -523,6 +536,7 @@ pub struct Crawler {
 
 /// <p>Metrics for a specified crawler.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CrawlerMetrics {
     /// <p>The name of the crawler.</p>
     #[serde(rename = "CrawlerName")]
@@ -592,6 +606,7 @@ pub struct CreateClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -606,6 +621,7 @@ pub struct CreateConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -649,6 +665,7 @@ pub struct CreateCrawlerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -663,6 +680,7 @@ pub struct CreateDatabaseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -704,6 +722,7 @@ pub struct CreateDevEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDevEndpointResponse {
     /// <p>The AWS availability zone where this DevEndpoint is located.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -831,6 +850,7 @@ pub struct CreateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>The unique name that was provided for this job definition.</p>
     #[serde(rename = "Name")]
@@ -867,6 +887,7 @@ pub struct CreatePartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -886,6 +907,7 @@ pub struct CreateScriptRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateScriptResponse {
     /// <p>The Python script generated from the DAG.</p>
     #[serde(rename = "PythonScript")]
@@ -912,6 +934,7 @@ pub struct CreateTableRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -944,6 +967,7 @@ pub struct CreateTriggerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTriggerResponse {
     /// <p>The name of the trigger.</p>
     #[serde(rename = "Name")]
@@ -966,6 +990,7 @@ pub struct CreateUserDefinedFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserDefinedFunctionResponse {}
 
 /// <p>Specifies an XML classifier for <code>CreateClassifier</code> to create.</p>
@@ -985,6 +1010,7 @@ pub struct CreateXMLClassifierRequest {
 
 /// <p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Database {
     /// <p>The time at which the metadata database was created in the catalog.</p>
     #[serde(rename = "CreateTime")]
@@ -1035,6 +1061,7 @@ pub struct DeleteClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1049,6 +1076,7 @@ pub struct DeleteConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1059,6 +1087,7 @@ pub struct DeleteCrawlerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1073,6 +1102,7 @@ pub struct DeleteDatabaseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1083,6 +1113,7 @@ pub struct DeleteDevEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDevEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1093,6 +1124,7 @@ pub struct DeleteJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteJobResponse {
     /// <p>The name of the job definition that was deleted.</p>
     #[serde(rename = "JobName")]
@@ -1118,6 +1150,7 @@ pub struct DeletePartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeletePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1135,6 +1168,7 @@ pub struct DeleteTableRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1155,6 +1189,7 @@ pub struct DeleteTableVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTableVersionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1165,6 +1200,7 @@ pub struct DeleteTriggerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTriggerResponse {
     /// <p>The name of the trigger that was deleted.</p>
     #[serde(rename = "Name")]
@@ -1187,10 +1223,12 @@ pub struct DeleteUserDefinedFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserDefinedFunctionResponse {}
 
 /// <p>A development endpoint where a developer can remotely debug ETL scripts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DevEndpoint {
     /// <p>The AWS availability zone where this DevEndpoint is located.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -1298,6 +1336,7 @@ pub struct DynamoDBTarget {
 
 /// <p>Contains details about an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>The code associated with this error.</p>
     #[serde(rename = "ErrorCode")]
@@ -1327,6 +1366,7 @@ pub struct GetCatalogImportStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCatalogImportStatusResponse {
     /// <p>The status of the specified catalog migration.</p>
     #[serde(rename = "ImportStatus")]
@@ -1342,6 +1382,7 @@ pub struct GetClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetClassifierResponse {
     /// <p>The requested classifier.</p>
     #[serde(rename = "Classifier")]
@@ -1362,6 +1403,7 @@ pub struct GetClassifiersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetClassifiersResponse {
     /// <p>The requested list of classifier objects.</p>
     #[serde(rename = "Classifiers")]
@@ -1385,6 +1427,7 @@ pub struct GetConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetConnectionResponse {
     /// <p>The requested connection definition.</p>
     #[serde(rename = "Connection")]
@@ -1426,6 +1469,7 @@ pub struct GetConnectionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetConnectionsResponse {
     /// <p>A list of requested connection definitions.</p>
     #[serde(rename = "ConnectionList")]
@@ -1454,6 +1498,7 @@ pub struct GetCrawlerMetricsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCrawlerMetricsResponse {
     /// <p>A list of metrics for the specified crawler.</p>
     #[serde(rename = "CrawlerMetricsList")]
@@ -1473,6 +1518,7 @@ pub struct GetCrawlerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCrawlerResponse {
     /// <p>The metadata for the specified crawler.</p>
     #[serde(rename = "Crawler")]
@@ -1493,6 +1539,7 @@ pub struct GetCrawlersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCrawlersResponse {
     /// <p>A list of crawler metadata.</p>
     #[serde(rename = "Crawlers")]
@@ -1516,6 +1563,7 @@ pub struct GetDatabaseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDatabaseResponse {
     /// <p>The definition of the specified database in the catalog.</p>
     #[serde(rename = "Database")]
@@ -1540,6 +1588,7 @@ pub struct GetDatabasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDatabasesResponse {
     /// <p>A list of <code>Database</code> objects from the specified catalog.</p>
     #[serde(rename = "DatabaseList")]
@@ -1559,6 +1608,7 @@ pub struct GetDataflowGraphRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDataflowGraphResponse {
     /// <p>A list of the edges in the resulting DAG.</p>
     #[serde(rename = "DagEdges")]
@@ -1578,6 +1628,7 @@ pub struct GetDevEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDevEndpointResponse {
     /// <p>A DevEndpoint definition.</p>
     #[serde(rename = "DevEndpoint")]
@@ -1598,6 +1649,7 @@ pub struct GetDevEndpointsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDevEndpointsResponse {
     /// <p>A list of DevEndpoint definitions.</p>
     #[serde(rename = "DevEndpoints")]
@@ -1617,6 +1669,7 @@ pub struct GetJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetJobResponse {
     /// <p>The requested job definition.</p>
     #[serde(rename = "Job")]
@@ -1639,6 +1692,7 @@ pub struct GetJobRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetJobRunResponse {
     /// <p>The requested job-run metadata.</p>
     #[serde(rename = "JobRun")]
@@ -1662,6 +1716,7 @@ pub struct GetJobRunsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetJobRunsResponse {
     /// <p>A list of job-run metatdata objects.</p>
     #[serde(rename = "JobRuns")]
@@ -1686,6 +1741,7 @@ pub struct GetJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetJobsResponse {
     /// <p>A list of job definitions.</p>
     #[serde(rename = "Jobs")]
@@ -1713,6 +1769,7 @@ pub struct GetMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetMappingResponse {
     /// <p>A list of mappings to the specified targets.</p>
     #[serde(rename = "Mapping")]
@@ -1737,6 +1794,7 @@ pub struct GetPartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPartitionResponse {
     /// <p>The requested information, in the form of a <code>Partition</code> object.</p>
     #[serde(rename = "Partition")]
@@ -1775,6 +1833,7 @@ pub struct GetPartitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPartitionsResponse {
     /// <p>A continuation token, if the returned list of partitions does not does not include the last one.</p>
     #[serde(rename = "NextToken")]
@@ -1809,6 +1868,7 @@ pub struct GetPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPlanResponse {
     /// <p>A Python script to perform the mapping.</p>
     #[serde(rename = "PythonScript")]
@@ -1835,6 +1895,7 @@ pub struct GetTableRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTableResponse {
     /// <p>The <code>Table</code> object that defines the specified table.</p>
     #[serde(rename = "Table")]
@@ -1861,6 +1922,7 @@ pub struct GetTableVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTableVersionResponse {
     /// <p>The requested table version.</p>
     #[serde(rename = "TableVersion")]
@@ -1891,6 +1953,7 @@ pub struct GetTableVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTableVersionsResponse {
     /// <p>A continuation token, if the list of available versions does not include the last one.</p>
     #[serde(rename = "NextToken")]
@@ -1926,6 +1989,7 @@ pub struct GetTablesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTablesResponse {
     /// <p>A continuation token, present if the current list segment is not the last.</p>
     #[serde(rename = "NextToken")]
@@ -1945,6 +2009,7 @@ pub struct GetTriggerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTriggerResponse {
     /// <p>The requested trigger definition.</p>
     #[serde(rename = "Trigger")]
@@ -1969,6 +2034,7 @@ pub struct GetTriggersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTriggersResponse {
     /// <p>A continuation token, if not all the requested triggers have yet been returned.</p>
     #[serde(rename = "NextToken")]
@@ -1995,6 +2061,7 @@ pub struct GetUserDefinedFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUserDefinedFunctionResponse {
     /// <p>The requested function definition.</p>
     #[serde(rename = "UserDefinedFunction")]
@@ -2025,6 +2092,7 @@ pub struct GetUserDefinedFunctionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUserDefinedFunctionsResponse {
     /// <p>A continuation token, if the list of functions returned does not include the last requested function.</p>
     #[serde(rename = "NextToken")]
@@ -2038,6 +2106,7 @@ pub struct GetUserDefinedFunctionsResponse {
 
 /// <p>A classifier that uses <code>grok</code> patterns.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GrokClassifier {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, and so on.</p>
     #[serde(rename = "Classification")]
@@ -2075,6 +2144,7 @@ pub struct ImportCatalogToGlueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportCatalogToGlueResponse {}
 
 /// <p>Specifies a JDBC data store to crawl.</p>
@@ -2096,6 +2166,7 @@ pub struct JdbcTarget {
 
 /// <p>Specifies a job definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Job {
     /// <p>The number of AWS Glue data processing units (DPUs) allocated to runs of this job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
@@ -2157,6 +2228,7 @@ pub struct Job {
 
 /// <p>Defines a point which a job can resume processing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobBookmarkEntry {
     /// <p>The attempt ID number.</p>
     #[serde(rename = "Attempt")]
@@ -2195,6 +2267,7 @@ pub struct JobCommand {
 
 /// <p>Contains information about a job run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JobRun {
     /// <p>The number of AWS Glue data processing units (DPUs) allocated to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
@@ -2313,6 +2386,7 @@ pub struct JobUpdate {
 
 /// <p>A classifier for <code>JSON</code> content.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct JsonClassifier {
     /// <p>The time this classifier was registered.</p>
     #[serde(rename = "CreationTime")]
@@ -2336,6 +2410,7 @@ pub struct JsonClassifier {
 
 /// <p>Status and error information about the most recent crawl.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LastCrawlInfo {
     /// <p>If an error occurred, the error information about the last crawl.</p>
     #[serde(rename = "ErrorMessage")]
@@ -2431,6 +2506,7 @@ pub struct Order {
 
 /// <p>Represents a slice of table data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Partition {
     /// <p>The time at which the partition was created.</p>
     #[serde(rename = "CreationTime")]
@@ -2468,6 +2544,7 @@ pub struct Partition {
 
 /// <p>Contains information about a partition error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PartitionError {
     /// <p>Details about the partition error.</p>
     #[serde(rename = "ErrorDetail")]
@@ -2531,6 +2608,7 @@ pub struct PhysicalConnectionRequirements {
 
 /// <p>A job run that was used in the predicate of a conditional trigger that triggered this job run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Predecessor {
     /// <p>The name of the job definition used by the predecessor job run.</p>
     #[serde(rename = "JobName")]
@@ -2563,6 +2641,7 @@ pub struct ResetJobBookmarkRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResetJobBookmarkResponse {
     /// <p>The reset bookmark entry.</p>
     #[serde(rename = "JobBookmarkEntry")]
@@ -2598,6 +2677,7 @@ pub struct S3Target {
 
 /// <p>A scheduling object using a <code>cron</code> statement to schedule an event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Schedule {
     /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "ScheduleExpression")]
@@ -2675,6 +2755,7 @@ pub struct StartCrawlerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2685,6 +2766,7 @@ pub struct StartCrawlerScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2715,6 +2797,7 @@ pub struct StartJobRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartJobRunResponse {
     /// <p>The ID assigned to this job run.</p>
     #[serde(rename = "JobRunId")]
@@ -2730,6 +2813,7 @@ pub struct StartTriggerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartTriggerResponse {
     /// <p>The name of the trigger that was started.</p>
     #[serde(rename = "Name")]
@@ -2745,6 +2829,7 @@ pub struct StopCrawlerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2755,6 +2840,7 @@ pub struct StopCrawlerScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2765,6 +2851,7 @@ pub struct StopTriggerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopTriggerResponse {
     /// <p>The name of the trigger that was stopped.</p>
     #[serde(rename = "Name")]
@@ -2827,6 +2914,7 @@ pub struct StorageDescriptor {
 
 /// <p>Represents a collection of related data organized in columns and rows.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Table {
     /// <p>Time when the table definition was created in the Data Catalog.</p>
     #[serde(rename = "CreateTime")]
@@ -2895,6 +2983,7 @@ pub struct Table {
 
 /// <p>An error record for table operations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TableError {
     /// <p>Detail about the error.</p>
     #[serde(rename = "ErrorDetail")]
@@ -2960,6 +3049,7 @@ pub struct TableInput {
 
 /// <p>Specifies a version of a table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TableVersion {
     /// <p>The table in question</p>
     #[serde(rename = "Table")]
@@ -2973,6 +3063,7 @@ pub struct TableVersion {
 
 /// <p>An error record for table-version operations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TableVersionError {
     /// <p>Detail about the error.</p>
     #[serde(rename = "ErrorDetail")]
@@ -2990,6 +3081,7 @@ pub struct TableVersionError {
 
 /// <p>Information about a specific trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Trigger {
     /// <p>The actions initiated by this trigger.</p>
     #[serde(rename = "Actions")]
@@ -3067,6 +3159,7 @@ pub struct UpdateClassifierRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3084,6 +3177,7 @@ pub struct UpdateConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3130,6 +3224,7 @@ pub struct UpdateCrawlerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3144,6 +3239,7 @@ pub struct UpdateCrawlerScheduleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3161,6 +3257,7 @@ pub struct UpdateDatabaseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3191,6 +3288,7 @@ pub struct UpdateDevEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDevEndpointResponse {}
 
 /// <p>Specifies a grok classifier to update when passed to <code>UpdateClassifier</code>.</p>
@@ -3224,6 +3322,7 @@ pub struct UpdateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateJobResponse {
     /// <p>Returns the name of the updated job definition.</p>
     #[serde(rename = "JobName")]
@@ -3264,6 +3363,7 @@ pub struct UpdatePartitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdatePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3285,6 +3385,7 @@ pub struct UpdateTableRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateTableResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3298,6 +3399,7 @@ pub struct UpdateTriggerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateTriggerResponse {
     /// <p>The resulting trigger definition.</p>
     #[serde(rename = "Trigger")]
@@ -3323,6 +3425,7 @@ pub struct UpdateUserDefinedFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateUserDefinedFunctionResponse {}
 
 /// <p>Specifies an XML classifier to be updated.</p>
@@ -3343,6 +3446,7 @@ pub struct UpdateXMLClassifierRequest {
 
 /// <p>Represents the equivalent of a Hive user-defined function (<code>UDF</code>) definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserDefinedFunction {
     /// <p>The Java class that contains the function code.</p>
     #[serde(rename = "ClassName")]
@@ -3397,6 +3501,7 @@ pub struct UserDefinedFunctionInput {
 
 /// <p>A classifier for <code>XML</code> content.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct XMLClassifier {
     /// <p>An identifier of the data format that the classifier matches.</p>
     #[serde(rename = "Classification")]

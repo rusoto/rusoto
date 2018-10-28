@@ -31,6 +31,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Provides limits of code size and concurrency associated with the current account and region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AccountLimit {
     /// <p>Size, in bytes, of code/dependencies that you can zip into a deployment package (uncompressed zip/jar size) for uploading. The default limit is 250 MB.</p>
     #[serde(rename = "CodeSizeUnzipped")]
@@ -56,6 +57,7 @@ pub struct AccountLimit {
 
 /// <p>Provides code size usage and function count associated with the current account and region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AccountUsage {
     /// <p>The number of your account's existing functions per region.</p>
     #[serde(rename = "FunctionCount")]
@@ -106,6 +108,7 @@ pub struct AddPermissionRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddPermissionResponse {
     /// <p>The permission statement you specified in the request. The response returns the same as a string using a backslash ("\") as an escape character in the JSON.</p>
     #[serde(rename = "Statement")]
@@ -115,6 +118,7 @@ pub struct AddPermissionResponse {
 
 /// <p>Provides configuration information about a Lambda function version alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AliasConfiguration {
     /// <p>Lambda function ARN that is qualified using the alias name as the suffix. For example, if you create an alias called <code>BETA</code> that points to a helloworld function version, the ARN is <code>arn:aws:lambda:aws-regions:acct-id:function:helloworld:BETA</code>.</p>
     #[serde(rename = "AliasArn")]
@@ -152,6 +156,7 @@ pub struct AliasRoutingConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Concurrency {
     /// <p>The number of concurrent executions reserved for this function. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "ReservedConcurrentExecutions")]
@@ -322,6 +327,7 @@ pub struct Environment {
 
 /// <p>The parent object that contains error information associated with your configuration settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnvironmentError {
     /// <p>The error code returned by the environment error object.</p>
     #[serde(rename = "ErrorCode")]
@@ -335,6 +341,7 @@ pub struct EnvironmentError {
 
 /// <p>The parent object returned that contains your environment's configuration settings or any error information associated with your configuration settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnvironmentResponse {
     #[serde(rename = "Error")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -347,6 +354,7 @@ pub struct EnvironmentResponse {
 
 /// <p>Describes mapping between an Amazon Kinesis or DynamoDB stream or an Amazon SQS queue and a Lambda function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventSourceMappingConfiguration {
     /// <p>The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records.</p>
     #[serde(rename = "BatchSize")]
@@ -409,6 +417,7 @@ pub struct FunctionCode {
 
 /// <p>The object for the Lambda function location.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FunctionCodeLocation {
     /// <p>The presigned URL you can use to download the function's .zip file that you previously uploaded. The URL is valid for up to 10 minutes.</p>
     #[serde(rename = "Location")]
@@ -422,6 +431,7 @@ pub struct FunctionCodeLocation {
 
 /// <p>A complex type that describes function metadata.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FunctionConfiguration {
     /// <p>It is the SHA256 hash of your function deployment package.</p>
     #[serde(rename = "CodeSha256")]
@@ -505,6 +515,7 @@ pub struct FunctionConfiguration {
 pub struct GetAccountSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAccountSettingsResponse {
     #[serde(rename = "AccountLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -558,6 +569,7 @@ pub struct GetFunctionRequest {
 
 /// <p>This response contains the object for the Lambda function location (see <a>FunctionCodeLocation</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFunctionResponse {
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -589,6 +601,7 @@ pub struct GetPolicyRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>The resource policy associated with the specified function. The response returns the same as a string using a backslash ("\") as an escape character in the JSON.</p>
     #[serde(rename = "Policy")]
@@ -665,6 +678,7 @@ pub struct InvokeAsyncRequest {
 
 /// <p>Upon success, it returns empty response. Otherwise, throws an exception.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InvokeAsyncResponse {
     /// <p>It will be 202 upon success.</p>
     #[serde(rename = "Status")]
@@ -692,6 +706,7 @@ pub struct ListAliasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAliasesResponse {
     /// <p>A list of aliases.</p>
     #[serde(rename = "Aliases")]
@@ -726,6 +741,7 @@ pub struct ListEventSourceMappingsRequest {
 
 /// <p>Contains a list of event sources (see <a>EventSourceMappingConfiguration</a>)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListEventSourceMappingsResponse {
     /// <p>An array of <code>EventSourceMappingConfiguration</code> objects.</p>
     #[serde(rename = "EventSourceMappings")]
@@ -760,6 +776,7 @@ pub struct ListFunctionsRequest {
 
 /// <p>Contains a list of AWS Lambda function configurations (see <a>FunctionConfiguration</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListFunctionsResponse {
     /// <p>A list of Lambda functions.</p>
     #[serde(rename = "Functions")]
@@ -779,6 +796,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>The list of tags assigned to the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Tags")]
@@ -804,6 +822,7 @@ pub struct ListVersionsByFunctionRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVersionsByFunctionResponse {
     /// <p>A string, present if there are more function versions.</p>
     #[serde(rename = "NextMarker")]
@@ -885,6 +904,7 @@ pub struct TracingConfig {
 
 /// <p>Parent object of the tracing information associated with your Lambda function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TracingConfigResponse {
     /// <p>The tracing mode associated with your Lambda function.</p>
     #[serde(rename = "Mode")]
@@ -1058,6 +1078,7 @@ pub struct VpcConfig {
 
 /// <p>VPC configuration associated with your Lambda function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VpcConfigResponse {
     /// <p>A list of security group IDs associated with the Lambda function.</p>
     #[serde(rename = "SecurityGroupIds")]

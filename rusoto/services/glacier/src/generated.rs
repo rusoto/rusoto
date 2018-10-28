@@ -71,6 +71,7 @@ pub struct AddTagsToVaultInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p> <p>For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-archive-post.html">Upload Archive</a>. For conceptual information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ArchiveCreationOutput {
     /// <p>The ID of the archive. This value is also included as part of the location.</p>
     #[serde(rename = "archiveId")]
@@ -189,6 +190,7 @@ pub struct CreateVaultInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateVaultOutput {
     /// <p>The URI of the vault that was created.</p>
     #[serde(rename = "location")]
@@ -292,6 +294,7 @@ pub struct DescribeVaultInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeVaultOutput {
     /// <p>The Universal Coordinated Time (UTC) date when the vault was created. This value should be a string in the ISO 8601 date format, for example <code>2012-03-20T17:03:43.221Z</code>.</p>
     #[serde(rename = "CreationDate")]
@@ -346,6 +349,7 @@ pub struct GetDataRetrievalPolicyInput {
 
 /// <p>Contains the Amazon Glacier response to the <code>GetDataRetrievalPolicy</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDataRetrievalPolicyOutput {
     /// <p>Contains the returned data retrieval policy in JSON format.</p>
     #[serde(rename = "Policy")]
@@ -403,6 +407,7 @@ pub struct GetVaultAccessPolicyInput {
 
 /// <p>Output for GetVaultAccessPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetVaultAccessPolicyOutput {
     /// <p>Contains the returned vault access policy as a JSON string.</p>
     #[serde(rename = "policy")]
@@ -423,6 +428,7 @@ pub struct GetVaultLockInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetVaultLockOutput {
     /// <p>The UTC date and time at which the vault lock was put into the <code>InProgress</code> state.</p>
     #[serde(rename = "CreationDate")]
@@ -455,6 +461,7 @@ pub struct GetVaultNotificationsInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetVaultNotificationsOutput {
     /// <p>Returns the notification configuration set on the vault.</p>
     #[serde(rename = "vaultNotificationConfig")]
@@ -464,6 +471,7 @@ pub struct GetVaultNotificationsOutput {
 
 /// <p>Contains the description of an Amazon Glacier job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GlacierJobDescription {
     /// <p>The job type. This value is either <code>ArchiveRetrieval</code>, <code>InventoryRetrieval</code>, or <code>Select</code>. </p>
     #[serde(rename = "Action")]
@@ -605,6 +613,7 @@ pub struct InitiateJobInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InitiateJobOutput {
     /// <p>The ID of the job.</p>
     #[serde(rename = "jobId")]
@@ -641,6 +650,7 @@ pub struct InitiateMultipartUploadInput {
 
 /// <p>The Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InitiateMultipartUploadOutput {
     /// <p>The relative URI path of the multipart upload ID Amazon Glacier created.</p>
     #[serde(rename = "location")]
@@ -669,6 +679,7 @@ pub struct InitiateVaultLockInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InitiateVaultLockOutput {
     /// <p>The lock ID, which is used to complete the vault locking process.</p>
     #[serde(rename = "lockId")]
@@ -687,6 +698,7 @@ pub struct InputSerialization {
 
 /// <p>Describes the options for a range inventory retrieval job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InventoryRetrievalJobDescription {
     /// <p>The end of the date range in UTC for vault inventory retrieval that includes archives created before this date. This value should be a string in the ISO 8601 date format, for example <code>2013-03-20T17:03:43Z</code>.</p>
     #[serde(rename = "EndDate")]
@@ -805,6 +817,7 @@ pub struct ListJobsInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListJobsOutput {
     /// <p>A list of job objects. Each job object contains metadata describing the job.</p>
     #[serde(rename = "JobList")]
@@ -837,6 +850,7 @@ pub struct ListMultipartUploadsInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListMultipartUploadsOutput {
     /// <p>An opaque string that represents where to continue pagination of the results. You use the marker in a new List Multipart Uploads request to obtain more uploads in the list. If there are no more uploads, this value is <code>null</code>.</p>
     #[serde(rename = "Marker")]
@@ -872,6 +886,7 @@ pub struct ListPartsInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPartsOutput {
     /// <p>The description of the archive that was specified in the Initiate Multipart Upload request.</p>
     #[serde(rename = "ArchiveDescription")]
@@ -911,6 +926,7 @@ pub struct ListProvisionedCapacityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProvisionedCapacityOutput {
     /// <p>The response body contains the following JSON fields.</p>
     #[serde(rename = "ProvisionedCapacityList")]
@@ -931,6 +947,7 @@ pub struct ListTagsForVaultInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForVaultOutput {
     /// <p>The tags attached to the vault. Each tag is composed of a key and a value.</p>
     #[serde(rename = "Tags")]
@@ -956,6 +973,7 @@ pub struct ListVaultsInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVaultsOutput {
     /// <p>The vault ARN at which to continue pagination of the results. You use the marker in another List Vaults request to obtain more vaults in the list.</p>
     #[serde(rename = "Marker")]
@@ -987,6 +1005,7 @@ pub struct OutputSerialization {
 
 /// <p>A list of the part sizes of the multipart upload.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PartListElement {
     /// <p>The byte range of a part, inclusive of the upper value of the range.</p>
     #[serde(rename = "RangeInBytes")]
@@ -1000,6 +1019,7 @@ pub struct PartListElement {
 
 /// <p>The definition for a provisioned capacity unit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionedCapacityDescription {
     /// <p>The ID that identifies the provisioned capacity unit.</p>
     #[serde(rename = "CapacityId")]
@@ -1023,6 +1043,7 @@ pub struct PurchaseProvisionedCapacityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PurchaseProvisionedCapacityOutput {
     /// <p>The ID that identifies the provisioned capacity unit.</p>
     #[serde(rename = "capacityId")]
@@ -1174,6 +1195,7 @@ pub struct UploadArchiveInput {
 
 /// <p>A list of in-progress multipart uploads for a vault.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UploadListElement {
     /// <p>The description of the archive that was specified in the Initiate Multipart Upload request.</p>
     #[serde(rename = "ArchiveDescription")]
@@ -1229,6 +1251,7 @@ pub struct UploadMultipartPartInput {
 
 /// <p>Contains the Amazon Glacier response to your request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UploadMultipartPartOutput {
     /// <p>The SHA256 tree hash that Amazon Glacier computed for the uploaded part.</p>
     #[serde(rename = "checksum")]

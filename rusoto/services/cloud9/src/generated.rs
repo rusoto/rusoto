@@ -59,6 +59,7 @@ pub struct CreateEnvironmentEC2Request {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEnvironmentEC2Result {
     /// <p>The ID of the environment that was created.</p>
     #[serde(rename = "environmentId")]
@@ -80,6 +81,7 @@ pub struct CreateEnvironmentMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateEnvironmentMembershipResult {
     /// <p>Information about the environment member that was added.</p>
     #[serde(rename = "membership")]
@@ -98,6 +100,7 @@ pub struct DeleteEnvironmentMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEnvironmentMembershipResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -108,6 +111,7 @@ pub struct DeleteEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEnvironmentResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -135,6 +139,7 @@ pub struct DescribeEnvironmentMembershipsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEnvironmentMembershipsResult {
     /// <p>Information about the environment members for the environment.</p>
     #[serde(rename = "memberships")]
@@ -154,6 +159,7 @@ pub struct DescribeEnvironmentStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEnvironmentStatusResult {
     /// <p>Any informational message about the status of the environment.</p>
     #[serde(rename = "message")]
@@ -173,6 +179,7 @@ pub struct DescribeEnvironmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEnvironmentsResult {
     /// <p>Information about the environments that are returned.</p>
     #[serde(rename = "environments")]
@@ -182,6 +189,7 @@ pub struct DescribeEnvironmentsResult {
 
 /// <p>Information about an AWS Cloud9 development environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Environment {
     /// <p>The Amazon Resource Name (ARN) of the environment.</p>
     #[serde(rename = "arn")]
@@ -211,6 +219,7 @@ pub struct Environment {
 
 /// <p>Information about an environment member for an AWS Cloud9 development environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnvironmentMember {
     /// <p>The ID of the environment for the environment member.</p>
     #[serde(rename = "environmentId")]
@@ -247,6 +256,7 @@ pub struct ListEnvironmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListEnvironmentsResult {
     /// <p>The list of environment identifiers.</p>
     #[serde(rename = "environmentIds")]
@@ -272,6 +282,7 @@ pub struct UpdateEnvironmentMembershipRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateEnvironmentMembershipResult {
     /// <p>Information about the environment member whose settings were changed.</p>
     #[serde(rename = "membership")]
@@ -295,6 +306,7 @@ pub struct UpdateEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateEnvironmentResult {}
 
 /// Errors returned by CreateEnvironmentEC2

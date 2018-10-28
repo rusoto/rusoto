@@ -36,6 +36,8 @@ extern crate chrono;
 extern crate futures;
 extern crate http;
 extern crate rusoto_core;
+extern crate serde;
+extern crate serde_json;
 
 use std::collections::HashMap;
 use std::fs::File;
@@ -49,6 +51,7 @@ use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCreden
 use rusoto_core::request::{Headers, HttpResponse};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::{DispatchSignedRequest, HttpDispatchError};
+use serde::Serialize;
 
 /// Provides a set of credentials that always resolve
 /// successfully
@@ -91,6 +94,14 @@ impl MockRequestDispatcher {
     /// returned from AWS
     pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
         self.body = body.as_bytes().to_vec();
+        self
+    }
+
+    /// Mocks the json serialized response body what would be
+    /// returned from AWS
+    pub fn with_json_body<B>(mut self, body: B) -> MockRequestDispatcher
+        where B: Serialize {
+        self.body = serde_json::to_vec(&body).expect("failed to deserialize into json");
         self
     }
 

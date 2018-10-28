@@ -42,6 +42,7 @@ pub struct TranslateTextRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TranslateTextResponse {
     /// <p>The language code for the language of the input text. </p>
     #[serde(rename = "SourceLanguageCode")]

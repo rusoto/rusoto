@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Object representing a Connector</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Connector {
     #[serde(rename = "associatedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,6 +84,7 @@ pub struct CreateReplicationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateReplicationJobResponse {
     #[serde(rename = "replicationJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,12 +98,14 @@ pub struct DeleteReplicationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReplicationJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteServerCatalogRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteServerCatalogResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -111,6 +115,7 @@ pub struct DisassociateConnectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateConnectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -124,6 +129,7 @@ pub struct GetConnectorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetConnectorsResponse {
     #[serde(rename = "connectorList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -147,6 +153,7 @@ pub struct GetReplicationJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetReplicationJobsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,6 +176,7 @@ pub struct GetReplicationRunsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetReplicationRunsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -192,6 +200,7 @@ pub struct GetServersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetServersResponse {
     #[serde(rename = "lastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,10 +220,12 @@ pub struct GetServersResponse {
 pub struct ImportServerCatalogRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportServerCatalogResponse {}
 
 /// <p>Object representing a Replication Job</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationJob {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -262,6 +273,7 @@ pub struct ReplicationJob {
 
 /// <p>Object representing a Replication Run</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicationRun {
     #[serde(rename = "amiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -291,6 +303,7 @@ pub struct ReplicationRun {
 
 /// <p>Object representing a server</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Server {
     #[serde(rename = "replicationJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -319,6 +332,7 @@ pub struct StartOnDemandReplicationRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartOnDemandReplicationRunResponse {
     #[serde(rename = "replicationRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -347,10 +361,12 @@ pub struct UpdateReplicationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateReplicationJobResponse {}
 
 /// <p>Object representing a VM server</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VmServer {
     #[serde(rename = "vmManagerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -371,6 +387,7 @@ pub struct VmServer {
 
 /// <p>Object representing a server&#39;s location</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VmServerAddress {
     #[serde(rename = "vmId")]
     #[serde(skip_serializing_if = "Option::is_none")]
