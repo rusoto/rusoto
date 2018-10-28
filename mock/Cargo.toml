@@ -6,13 +6,16 @@ authors = [
     "Nikita Pekin <contact@nikitapek.in>"
 ]
 description = "AWS SDK for Rust - Request Mocking Helpers"
-documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
-keywords = ["AWS", "Amazon"]
+documentation = "http://rusoto.github.io/rusoto/rusoto_mock/index.html"
+keywords = ["AWS", "Amazon", "mock", "testing"]
 license = "MIT"
 name = "rusoto_mock"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.28.0"
 homepage = "https://www.rusoto.org/"
+categories = [
+  "development-tools::testing"
+]
 
 [dependencies]
 chrono = "0.4.0"

@@ -62,7 +62,7 @@ Consult the rustdoc documentation for full details by running `cargo doc` or vis
 
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
-```rust
+```rust,no_run
 extern crate rusoto_core;
 extern crate rusoto_dynamodb;
 
@@ -70,7 +70,7 @@ use rusoto_core::Region;
 use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 
 fn main() {
-    let client = DynamoDbClient::simple(Region::UsEast1);
+    let client = DynamoDbClient::new(Region::UsEast1);
     let list_tables_input: ListTablesInput = Default::default();
 
     match client.list_tables(list_tables_input).sync() {

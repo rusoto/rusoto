@@ -151,6 +151,7 @@ pub trait GenerateErrorTypes {
     fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String;
 }
 
+pub struct RestJsonErrorTypes;
 pub struct JsonErrorTypes;
 pub struct XmlErrorTypes;
 
@@ -289,5 +290,42 @@ impl JsonErrorTypes {
         type_matchers.push(format!("\"ValidationException\" => return {error_type}::Validation(error_message.to_string())", error_type = error_type));
         type_matchers.push(format!("_ => {{}}"));
         type_matchers.join(",\n")
+    }
+}
+
+
+impl GenerateErrorTypes for RestJsonErrorTypes {
+    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
+        format!("
+                impl {type_name} {{
+                    // see boto RestJSONParser impl for parsing errors
+                    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+                    pub fn from_response(res: BufferedHttpResponse) -> {type_name} {{
+                        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {{
+                            let error_type = match res.headers.get(\"x-amzn-errortype\") {{
+                                Some(raw_error_type) => {{
+                                    raw_error_type.split(':').next().unwrap_or_else(|| \"Unknown\")
+                                }},
+                                _ => json.get(\"code\").or_else(|| json.get(\"Code\")).and_then(|c| c.as_str()).unwrap_or_else(|| \"Unknown\")
+                            }};
+
+                            // message can come in either \"message\" or \"Message\"
+                            // see boto BaseJSONParser impl for parsing message
+                            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+                            let error_message = json.get(\"message\").or_else(|| json.get(\"Message\")).and_then(|m| m.as_str()).unwrap_or(\"\");
+
+                            match error_type {{
+                                {type_matchers}
+                            }}
+                        }}
+                        return {type_name}::Unknown(res);
+                    }}
+                }}",
+                type_name = error_type_name(service, operation_name),
+                type_matchers = JsonErrorTypes.generate_error_type_matchers(operation_name, operation, service))
+    }
+
+    fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String {
+        JsonErrorTypes.generate_error_from_type_impl(operation_name, service)
     }
 }

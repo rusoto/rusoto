@@ -8,6 +8,7 @@ use std;
 use std::error::Error;
 use std::str::FromStr;
 use std::fmt::{self, Display, Error as FmtError, Formatter};
+use credential::ProfileProvider;
 use serde::{de, Serialize, Serializer, Deserialize, Deserializer};
 use serde::ser::SerializeTuple;
 
@@ -16,7 +17,9 @@ use serde::ser::SerializeTuple;
 /// # Default
 ///
 /// `Region` implements the `Default` trait. Calling `Region::default()` will attempt to read the
-/// `AWS_DEFAULT_REGION` environment variable. If it is not set or malformed, it will fall back to `Region::UsEast1`.
+/// `AWS_DEFAULT_REGION` or `AWS_REGION` environment variable. If it is malformed, it will fall back to `Region::UsEast1`.
+/// If it is not present it will fallback on the value associated with the current profile in `~/.aws/config` or the file
+/// specified by the `AWS_CONFIG_FILE` environment variable. If that is malformed of absent it will fall back on `Region::UsEast1`
 ///
 /// # AWS-compatible services
 ///
@@ -244,10 +247,15 @@ impl Display for ParseRegionError {
 
 impl Default for Region {
     fn default() -> Region {
-        match std::env::var("AWS_DEFAULT_REGION") {
+        match std::env::var("AWS_DEFAULT_REGION").or_else(|_| std::env::var("AWS_REGION")) {
             Ok(ref v) =>
                 Region::from_str(v).unwrap_or(Region::UsEast1),
-            Err(_) => Region::UsEast1,
+            Err(_) => {
+                match ProfileProvider::region() {
+                    Ok(Some(region)) => Region::from_str(&region).unwrap_or(Region::UsEast1),
+                    _ => Region::UsEast1,
+                }
+            }
         }
     }
 }
