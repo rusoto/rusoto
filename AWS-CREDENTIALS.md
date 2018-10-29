@@ -56,6 +56,25 @@ fn main() {
 }
 ```
 
+### Important note about using the StsAssumeRoleSessionCredentialsProvider in the recommended way
+**Be careful** that the current behavior of `rusoto_sts::StsAssumeRoleSessionCredentialsProvider` needs to be used with `rusoto_credential::AutoRefreshingProvider` as a wrapper to get advantage of using the already cached token of AssumeRole as it lives by default for 1 hour.
+Current implementation is not using the cached token returned by the AssumeRole by default so it will be refreshed with every call to AWS resource.
+
+This will affect the performance as well as the billing of AWS.
+
+- https://rusoto.github.io/rusoto/rusoto_credential/index.html
+- https://crates.io/crates/rusoto_credential
+```
+let provider = StsAssumeRoleSessionCredentialsProvider::new(
+        sts,
+        "arn:aws:iam::something:role/something".to_owned(),
+        "default".to_owned(),
+        None, None, None, None
+    );
+
+let auto_refreshing_provider = rusoto_credential::AutoRefreshingProvider::new(provider);
+```
+
 #### Credential refreshing
 
 Credentials obtained from environment variables and credential files expire ten minutes after being acquired and are refreshed on subsequent calls to `credentials()` (a method from the `ProvideAwsCredentials` trait).
