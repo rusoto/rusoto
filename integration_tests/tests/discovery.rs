@@ -5,8 +5,11 @@ extern crate rusoto_discovery;
 extern crate env_logger;
 extern crate log;
 
-use rusoto_discovery::{Discovery, DiscoveryClient, DescribeTagsRequest, ListConfigurationsRequest};
+use rusoto_discovery::{Discovery, DiscoveryClient, DescribeTagsRequest, ListConfigurationsRequest,
+    DescribeTagsError, ListConfigurationsError};
 use rusoto_core::Region;
+
+use std::str;
 
 // These tests require the calling AWS account to be whitelisted.
 // See http://docs.aws.amazon.com/application-discovery/latest/userguide/console_walkthrough.html
@@ -22,8 +25,13 @@ fn should_describe_tags() {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => {
             println!("Got expected error of {}", e);
-            assert!(format!("{}", e).contains("is not whitelisted to access"));
-        },
+            match e {
+                DescribeTagsError::Unknown(ref e) => {
+                    assert!(str::from_utf8(&e.body).unwrap().contains("is not whitelisted to access"));
+                },
+                _ => panic!("Error from Discovery service should be typed.")
+            }
+        }
     }
 }
 
@@ -39,6 +47,13 @@ fn should_list_configurations() {
 
     match client.list_configurations(request).sync() {
         Ok(response) => println!("Response: {:?}", response),
-        Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
+        Err(e) => {
+            match e {
+                ListConfigurationsError::Unknown(ref e) => {
+                    assert!(str::from_utf8(&e.body).unwrap().contains("is not whitelisted to access"));
+                },
+                _ => panic!("Error from Discovery service should be typed.")
+            }
+        }
     }
 }

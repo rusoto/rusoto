@@ -7,7 +7,6 @@ use rusoto_ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest
 use rusoto_ec2::{CreateTagsRequest, Tag};
 use rusoto_core::Region;
 
-use std::error::Error;
 use std::str;
 
 #[test]
