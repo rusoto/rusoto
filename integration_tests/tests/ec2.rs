@@ -3,11 +3,11 @@
 extern crate rusoto_core;
 extern crate rusoto_ec2;
 
-use rusoto_ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest};
+use rusoto_ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest, DescribeInstancesError};
 use rusoto_ec2::{CreateTagsRequest, Tag};
 use rusoto_core::Region;
 
-use std::error::Error;
+use std::str;
 
 #[test]
 fn main() {
@@ -20,7 +20,14 @@ fn main() {
             panic!("DescribeInstances should fail");
         }
         Err(error) => {
-            assert!(error.description().contains("<Message>The instance IDs 'i-00000000, i-00000001' do not exist</Message>"), "Missing error message");
+            match error {
+                DescribeInstancesError::Unknown(ref e) => {
+                    assert!(str::from_utf8(&e.body).unwrap().contains("<Message>The instance IDs 'i-00000000, i-00000001' do not exist</Message>"), "Missing error message");
+                },
+                _ => {
+                    panic!("Should have a typed error from EC2");
+                },
+            }            
         }
     }
 

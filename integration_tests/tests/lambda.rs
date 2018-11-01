@@ -28,10 +28,10 @@ fn should_function_not_found() {
         let result = client.invoke(request).sync();
 
         assert!(result.is_err());
-        if let Err(InvokeError::Unknown(resp)) = result {
-            assert_eq!(resp.status, 404);
-        }else{
-            assert!(false, format!("expect Err(InvokeError::Unknown(_), found {:?}", result));
+        if let Err(InvokeError::ResourceNotFound(resp)) = result {
+            assert!(resp.contains("Function not found:"));
+        } else {
+            assert!(false, format!("expect Err(InvokeError::ResourceNotFound(_), found {:?}", result));
         }
     }
     {
@@ -44,10 +44,10 @@ fn should_function_not_found() {
         let result = client.invoke(request).sync();
 
         assert!(result.is_err());
-        if let Err(InvokeError::Unknown(resp)) = result {
-            assert_eq!(resp.status, 404);
-        }else{
-            assert!(false, format!("expect Err(InvokeError::Unknown(_), found {:?}", result));
+        if let Err(InvokeError::ResourceNotFound(resp)) = result {
+            assert!(resp.contains("Function not found:"));
+        } else {
+            assert!(false, format!("expect Err(InvokeError::ResourceNotFound(_), found {:?}", result));
         }
     }
 }
