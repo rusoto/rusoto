@@ -10,6 +10,7 @@ extern crate reqwest;
 
 use std::collections::HashMap;
 use std::env;
+use std::str;
 use std::fs::File;
 use std::io::Read;
 use time::get_time;
@@ -24,7 +25,7 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody};
+                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody, DeleteBucketError};
 
 type TestClient = S3Client;
 
@@ -240,8 +241,17 @@ fn test_create_bucket(client: &TestClient, bucket: &str) {
 fn test_delete_bucket(client: &TestClient, bucket: &str) {
     let delete_bucket_req = DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-    let result = client.delete_bucket(delete_bucket_req).sync().expect("Couldn't delete bucket");
+    let result = client.delete_bucket(delete_bucket_req).sync();
     println!("{:#?}", result);
+    match result {
+        Err(e) => {
+            match e {
+                DeleteBucketError::Unknown(ref e) => panic!("Couldn't delete bucket because: {}", str::from_utf8(&e.body).unwrap()),
+                _ => panic!("Error from S3 different than expected"),
+            }
+        },
+        Ok(_) => (),
+    }
 }
 
 fn test_put_object_with_filename(client: &TestClient,
@@ -520,12 +530,12 @@ fn test_get_object_with_presigned_url(region: &Region, credentials: &AwsCredenti
     };
     let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("get object presigned url: {:#?}", presigned_url);
-    let mut res = reqwest::get(&presigned_url).unwrap();
+    let mut res = reqwest::get(&presigned_url).expect("Couldn't get object via presigned url");
     assert_eq!(res.status(), reqwest::StatusCode::Ok);
     let size = res.headers().get::<reqwest::header::ContentLength>().map(|ct_len| **ct_len).unwrap_or(0);
     assert!(size > 0);
     let mut buf: Vec<u8> = vec![];
-    res.copy_to(&mut buf).unwrap();
+    res.copy_to(&mut buf).expect("Copying failed");
     assert!(buf.len() > 0);
 }
 
@@ -541,7 +551,7 @@ fn test_get_object_with_expired_presigned_url(region: &Region, credentials: &Aws
     let presigned_url = req.get_presigned_url(region, credentials, &opt);
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
-    let res = reqwest::get(&presigned_url).unwrap();
+    let res = reqwest::get(&presigned_url).expect("Presigned url failure");
     assert_eq!(res.status(), reqwest::StatusCode::Forbidden);
 }
 
@@ -556,7 +566,7 @@ fn test_put_object_with_presigned_url(region: &Region, credentials: &AwsCredenti
     let mut map = HashMap::new();
     map.insert("test", "data");
     let client = reqwest::Client::new();
-    let res = client.put(&presigned_url).json(&map).send().unwrap();
+    let res = client.put(&presigned_url).json(&map).send().expect("Put obj with presigned url failed");
     assert_eq!(res.status(), reqwest::StatusCode::Ok);
 }
 
@@ -569,6 +579,6 @@ fn test_delete_object_with_presigned_url(region: &Region, credentials: &AwsCrede
     let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("delete object presigned url: {:#?}", presigned_url);
     let client = reqwest::Client::new();
-    let res = client.delete(&presigned_url).send().unwrap();
+    let res = client.delete(&presigned_url).send().expect("Delete of presigned url obj failed");
     assert_eq!(res.status(), reqwest::StatusCode::NoContent);
 }
