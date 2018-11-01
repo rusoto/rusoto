@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [0.35.0] - 2018-10-11
+## [0.35.0] - 2018-10-31
 
 - Add Cost Explorer
 - Add Performance Insights support
