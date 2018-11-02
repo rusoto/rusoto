@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
@@ -65,6 +65,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The Amazon Resource Name (ARN) of the user account created.</p>
     #[serde(rename = "UserArn")]
@@ -78,6 +79,7 @@ pub struct CreateUserResponse {
 
 /// <p>The credentials to use for federation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Credentials {
     /// <p>An access token generated for a federated user to access Amazon Connect</p>
     #[serde(rename = "AccessToken")]
@@ -118,6 +120,7 @@ pub struct DescribeUserHierarchyGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserHierarchyGroupResponse {
     /// <p>Returns a <code>HierarchyGroup</code> object.</p>
     #[serde(rename = "HierarchyGroup")]
@@ -133,6 +136,7 @@ pub struct DescribeUserHierarchyStructureRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserHierarchyStructureResponse {
     /// <p>A <code>HierarchyStructure</code> object.</p>
     #[serde(rename = "HierarchyStructure")]
@@ -151,6 +155,7 @@ pub struct DescribeUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>A <code>User</code> object that contains information about the user account and configuration settings.</p>
     #[serde(rename = "User")]
@@ -166,6 +171,7 @@ pub struct GetFederationTokenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFederationTokenResponse {
     /// <p>The credentials to use for federation.</p>
     #[serde(rename = "Credentials")]
@@ -175,6 +181,7 @@ pub struct GetFederationTokenResponse {
 
 /// <p>A <code>HierarchyGroup</code> object that contains information about a hierarchy group in your Amazon Connect instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HierarchyGroup {
     /// <p>The Amazon Resource Name (ARN) for the hierarchy group.</p>
     #[serde(rename = "Arn")]
@@ -200,6 +207,7 @@ pub struct HierarchyGroup {
 
 /// <p>A <code>HierarchyGroupSummary</code> object that contains information about the hierarchy group, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HierarchyGroupSummary {
     /// <p>The ARN for the hierarchy group.</p>
     #[serde(rename = "Arn")]
@@ -217,6 +225,7 @@ pub struct HierarchyGroupSummary {
 
 /// <p>A <code>HierarchyLevel</code> object that contains information about the levels in a hierarchy group, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HierarchyLevel {
     /// <p>The ARN for the hierarchy group level.</p>
     #[serde(rename = "Arn")]
@@ -234,6 +243,7 @@ pub struct HierarchyLevel {
 
 /// <p>A <code>HierarchyPath</code> object that contains information about the levels of the hierarchy group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HierarchyPath {
     /// <p>A <code>HierarchyGroupSummary</code> object that contains information about the level of the hierarchy group, including ARN, Id, and Name.</p>
     #[serde(rename = "LevelFive")]
@@ -259,6 +269,7 @@ pub struct HierarchyPath {
 
 /// <p>A <code>HierarchyStructure</code> object that contains information about the hierarchy group structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HierarchyStructure {
     /// <p>A <code>HierarchyLevel</code> object that contains information about the hierarchy group level.</p>
     #[serde(rename = "LevelFive")]
@@ -298,6 +309,7 @@ pub struct ListRoutingProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRoutingProfilesResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -325,6 +337,7 @@ pub struct ListSecurityProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSecurityProfilesResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -352,6 +365,7 @@ pub struct ListUserHierarchyGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUserHierarchyGroupsResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -379,6 +393,7 @@ pub struct ListUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -392,6 +407,7 @@ pub struct ListUsersResponse {
 
 /// <p>A <code>RoutingProfileSummary</code> object that contains information about a routing profile, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RoutingProfileSummary {
     /// <p>The ARN of the routing profile.</p>
     #[serde(rename = "Arn")]
@@ -409,6 +425,7 @@ pub struct RoutingProfileSummary {
 
 /// <p>A <code>SecurityProfileSummary</code> object that contains information about a security profile, including ARN, Id, Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SecurityProfileSummary {
     /// <p>The ARN of the security profile.</p>
     #[serde(rename = "Arn")]
@@ -454,6 +471,7 @@ pub struct StartOutboundVoiceContactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartOutboundVoiceContactResponse {
     /// <p>The unique identifier of this contact within your Amazon Connect instance.</p>
     #[serde(rename = "ContactId")]
@@ -472,6 +490,7 @@ pub struct StopContactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopContactResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -542,6 +561,7 @@ pub struct UpdateUserSecurityProfilesRequest {
 
 /// <p>A <code>User</code> object that contains information about a user account in your Amazon Connect instance, including configuration settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct User {
     /// <p>The ARN of the user account.</p>
     #[serde(rename = "Arn")]
@@ -620,6 +640,7 @@ pub struct UserPhoneConfig {
 
 /// <p>A <code>UserSummary</code> object that contains Information about a user, including ARN, Id, and user name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UserSummary {
     /// <p>The ARN for the user account.</p>
     #[serde(rename = "Arn")]
@@ -658,57 +679,73 @@ pub enum CreateUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_body(body: &str) -> CreateUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        CreateUserError::DuplicateResource(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateUserError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateUserError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateUserError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateUserError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateUserError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        CreateUserError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => CreateUserError::Validation(error_message.to_string()),
-                    _ => CreateUserError::Unknown(String::from(body)),
+            match error_type {
+                "DuplicateResourceException" => {
+                    return CreateUserError::DuplicateResource(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreateUserError::InternalService(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateUserError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateUserError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateUserError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateUserError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return CreateUserError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateUserError::Unknown(String::from(body)),
         }
+        return CreateUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateUserError {
     fn from(err: serde_json::error::Error) -> CreateUserError {
-        CreateUserError::Unknown(err.description().to_string())
+        CreateUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateUserError {
@@ -744,7 +781,8 @@ impl Error for CreateUserError {
             CreateUserError::Validation(ref cause) => cause,
             CreateUserError::Credentials(ref err) => err.description(),
             CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::Unknown(ref cause) => cause,
+            CreateUserError::ParseError(ref cause) => cause,
+            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -767,51 +805,67 @@ pub enum DeleteUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_body(body: &str) -> DeleteUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteUserError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteUserError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteUserError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteUserError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeleteUserError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteUserError::Validation(error_message.to_string()),
-                    _ => DeleteUserError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return DeleteUserError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteUserError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DeleteUserError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteUserError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return DeleteUserError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteUserError::Unknown(String::from(body)),
         }
+        return DeleteUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteUserError {
     fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::Unknown(err.description().to_string())
+        DeleteUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserError {
@@ -845,7 +899,8 @@ impl Error for DeleteUserError {
             DeleteUserError::Validation(ref cause) => cause,
             DeleteUserError::Credentials(ref err) => err.description(),
             DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::Unknown(ref cause) => cause,
+            DeleteUserError::ParseError(ref cause) => cause,
+            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -868,53 +923,67 @@ pub enum DescribeUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserError {
-    pub fn from_body(body: &str) -> DescribeUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeUserError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeUserError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeUserError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeUserError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DescribeUserError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeUserError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeUserError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return DescribeUserError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeUserError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DescribeUserError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeUserError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return DescribeUserError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeUserError::Unknown(String::from(body)),
         }
+        return DescribeUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeUserError {
     fn from(err: serde_json::error::Error) -> DescribeUserError {
-        DescribeUserError::Unknown(err.description().to_string())
+        DescribeUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeUserError {
@@ -948,7 +1017,8 @@ impl Error for DescribeUserError {
             DescribeUserError::Validation(ref cause) => cause,
             DescribeUserError::Credentials(ref err) => err.description(),
             DescribeUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUserError::Unknown(ref cause) => cause,
+            DescribeUserError::ParseError(ref cause) => cause,
+            DescribeUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -971,57 +1041,75 @@ pub enum DescribeUserHierarchyGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserHierarchyGroupError {
-    pub fn from_body(body: &str) -> DescribeUserHierarchyGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserHierarchyGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => DescribeUserHierarchyGroupError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        DescribeUserHierarchyGroupError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeUserHierarchyGroupError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeUserHierarchyGroupError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        DescribeUserHierarchyGroupError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeUserHierarchyGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeUserHierarchyGroupError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return DescribeUserHierarchyGroupError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return DescribeUserHierarchyGroupError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return DescribeUserHierarchyGroupError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeUserHierarchyGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DescribeUserHierarchyGroupError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeUserHierarchyGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeUserHierarchyGroupError::Unknown(String::from(body)),
         }
+        return DescribeUserHierarchyGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeUserHierarchyGroupError {
     fn from(err: serde_json::error::Error) -> DescribeUserHierarchyGroupError {
-        DescribeUserHierarchyGroupError::Unknown(err.description().to_string())
+        DescribeUserHierarchyGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeUserHierarchyGroupError {
@@ -1057,7 +1145,8 @@ impl Error for DescribeUserHierarchyGroupError {
             DescribeUserHierarchyGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeUserHierarchyGroupError::Unknown(ref cause) => cause,
+            DescribeUserHierarchyGroupError::ParseError(ref cause) => cause,
+            DescribeUserHierarchyGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1080,61 +1169,79 @@ pub enum DescribeUserHierarchyStructureError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserHierarchyStructureError {
-    pub fn from_body(body: &str) -> DescribeUserHierarchyStructureError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserHierarchyStructureError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeUserHierarchyStructureError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeUserHierarchyStructureError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeUserHierarchyStructureError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeUserHierarchyStructureError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        DescribeUserHierarchyStructureError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeUserHierarchyStructureError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeUserHierarchyStructureError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return DescribeUserHierarchyStructureError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return DescribeUserHierarchyStructureError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return DescribeUserHierarchyStructureError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeUserHierarchyStructureError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DescribeUserHierarchyStructureError::Throttling(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeUserHierarchyStructureError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeUserHierarchyStructureError::Unknown(String::from(body)),
         }
+        return DescribeUserHierarchyStructureError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeUserHierarchyStructureError {
     fn from(err: serde_json::error::Error) -> DescribeUserHierarchyStructureError {
-        DescribeUserHierarchyStructureError::Unknown(err.description().to_string())
+        DescribeUserHierarchyStructureError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeUserHierarchyStructureError {
@@ -1170,7 +1277,8 @@ impl Error for DescribeUserHierarchyStructureError {
             DescribeUserHierarchyStructureError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeUserHierarchyStructureError::Unknown(ref cause) => cause,
+            DescribeUserHierarchyStructureError::ParseError(ref cause) => cause,
+            DescribeUserHierarchyStructureError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1195,56 +1303,70 @@ pub enum GetFederationTokenError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetFederationTokenError {
-    pub fn from_body(body: &str) -> GetFederationTokenError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetFederationTokenError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        GetFederationTokenError::DuplicateResource(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetFederationTokenError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetFederationTokenError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetFederationTokenError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetFederationTokenError::ResourceNotFound(String::from(error_message))
-                    }
-                    "UserNotFoundException" => {
-                        GetFederationTokenError::UserNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetFederationTokenError::Validation(error_message.to_string())
-                    }
-                    _ => GetFederationTokenError::Unknown(String::from(body)),
+            match error_type {
+                "DuplicateResourceException" => {
+                    return GetFederationTokenError::DuplicateResource(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return GetFederationTokenError::InternalService(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return GetFederationTokenError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return GetFederationTokenError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetFederationTokenError::ResourceNotFound(String::from(error_message))
+                }
+                "UserNotFoundException" => {
+                    return GetFederationTokenError::UserNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetFederationTokenError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetFederationTokenError::Unknown(String::from(body)),
         }
+        return GetFederationTokenError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetFederationTokenError {
     fn from(err: serde_json::error::Error) -> GetFederationTokenError {
-        GetFederationTokenError::Unknown(err.description().to_string())
+        GetFederationTokenError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetFederationTokenError {
@@ -1281,7 +1403,8 @@ impl Error for GetFederationTokenError {
             GetFederationTokenError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetFederationTokenError::Unknown(ref cause) => cause,
+            GetFederationTokenError::ParseError(ref cause) => cause,
+            GetFederationTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1304,53 +1427,67 @@ pub enum ListRoutingProfilesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListRoutingProfilesError {
-    pub fn from_body(body: &str) -> ListRoutingProfilesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListRoutingProfilesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListRoutingProfilesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListRoutingProfilesError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListRoutingProfilesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListRoutingProfilesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ListRoutingProfilesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListRoutingProfilesError::Validation(error_message.to_string())
-                    }
-                    _ => ListRoutingProfilesError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return ListRoutingProfilesError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListRoutingProfilesError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListRoutingProfilesError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListRoutingProfilesError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return ListRoutingProfilesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListRoutingProfilesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListRoutingProfilesError::Unknown(String::from(body)),
         }
+        return ListRoutingProfilesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListRoutingProfilesError {
     fn from(err: serde_json::error::Error) -> ListRoutingProfilesError {
-        ListRoutingProfilesError::Unknown(err.description().to_string())
+        ListRoutingProfilesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListRoutingProfilesError {
@@ -1386,7 +1523,8 @@ impl Error for ListRoutingProfilesError {
             ListRoutingProfilesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListRoutingProfilesError::Unknown(ref cause) => cause,
+            ListRoutingProfilesError::ParseError(ref cause) => cause,
+            ListRoutingProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1409,53 +1547,67 @@ pub enum ListSecurityProfilesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSecurityProfilesError {
-    pub fn from_body(body: &str) -> ListSecurityProfilesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListSecurityProfilesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListSecurityProfilesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListSecurityProfilesError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListSecurityProfilesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListSecurityProfilesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ListSecurityProfilesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListSecurityProfilesError::Validation(error_message.to_string())
-                    }
-                    _ => ListSecurityProfilesError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return ListSecurityProfilesError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListSecurityProfilesError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListSecurityProfilesError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListSecurityProfilesError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return ListSecurityProfilesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListSecurityProfilesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListSecurityProfilesError::Unknown(String::from(body)),
         }
+        return ListSecurityProfilesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSecurityProfilesError {
     fn from(err: serde_json::error::Error) -> ListSecurityProfilesError {
-        ListSecurityProfilesError::Unknown(err.description().to_string())
+        ListSecurityProfilesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSecurityProfilesError {
@@ -1491,7 +1643,8 @@ impl Error for ListSecurityProfilesError {
             ListSecurityProfilesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSecurityProfilesError::Unknown(ref cause) => cause,
+            ListSecurityProfilesError::ParseError(ref cause) => cause,
+            ListSecurityProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1514,53 +1667,73 @@ pub enum ListUserHierarchyGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserHierarchyGroupsError {
-    pub fn from_body(body: &str) -> ListUserHierarchyGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListUserHierarchyGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListUserHierarchyGroupsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListUserHierarchyGroupsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListUserHierarchyGroupsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListUserHierarchyGroupsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ListUserHierarchyGroupsError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListUserHierarchyGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => ListUserHierarchyGroupsError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return ListUserHierarchyGroupsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return ListUserHierarchyGroupsError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return ListUserHierarchyGroupsError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListUserHierarchyGroupsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return ListUserHierarchyGroupsError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListUserHierarchyGroupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListUserHierarchyGroupsError::Unknown(String::from(body)),
         }
+        return ListUserHierarchyGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListUserHierarchyGroupsError {
     fn from(err: serde_json::error::Error) -> ListUserHierarchyGroupsError {
-        ListUserHierarchyGroupsError::Unknown(err.description().to_string())
+        ListUserHierarchyGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListUserHierarchyGroupsError {
@@ -1596,7 +1769,8 @@ impl Error for ListUserHierarchyGroupsError {
             ListUserHierarchyGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListUserHierarchyGroupsError::Unknown(ref cause) => cause,
+            ListUserHierarchyGroupsError::ParseError(ref cause) => cause,
+            ListUserHierarchyGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1619,51 +1793,67 @@ pub enum ListUsersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersError {
-    pub fn from_body(body: &str) -> ListUsersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListUsersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListUsersError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListUsersError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListUsersError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListUsersError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ListUsersError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => ListUsersError::Validation(error_message.to_string()),
-                    _ => ListUsersError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return ListUsersError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListUsersError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListUsersError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListUsersError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return ListUsersError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListUsersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListUsersError::Unknown(String::from(body)),
         }
+        return ListUsersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListUsersError {
     fn from(err: serde_json::error::Error) -> ListUsersError {
-        ListUsersError::Unknown(err.description().to_string())
+        ListUsersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListUsersError {
@@ -1697,7 +1887,8 @@ impl Error for ListUsersError {
             ListUsersError::Validation(ref cause) => cause,
             ListUsersError::Credentials(ref err) => err.description(),
             ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersError::Unknown(ref cause) => cause,
+            ListUsersError::ParseError(ref cause) => cause,
+            ListUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1724,67 +1915,87 @@ pub enum StartOutboundVoiceContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartOutboundVoiceContactError {
-    pub fn from_body(body: &str) -> StartOutboundVoiceContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> StartOutboundVoiceContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "DestinationNotAllowedException" => {
-                        StartOutboundVoiceContactError::DestinationNotAllowed(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServiceException" => {
-                        StartOutboundVoiceContactError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartOutboundVoiceContactError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        StartOutboundVoiceContactError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartOutboundVoiceContactError::LimitExceeded(String::from(error_message))
-                    }
-                    "OutboundContactNotPermittedException" => {
-                        StartOutboundVoiceContactError::OutboundContactNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        StartOutboundVoiceContactError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StartOutboundVoiceContactError::Validation(error_message.to_string())
-                    }
-                    _ => StartOutboundVoiceContactError::Unknown(String::from(body)),
+            match error_type {
+                "DestinationNotAllowedException" => {
+                    return StartOutboundVoiceContactError::DestinationNotAllowed(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServiceException" => {
+                    return StartOutboundVoiceContactError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StartOutboundVoiceContactError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return StartOutboundVoiceContactError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return StartOutboundVoiceContactError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "OutboundContactNotPermittedException" => {
+                    return StartOutboundVoiceContactError::OutboundContactNotPermitted(
+                        String::from(error_message),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return StartOutboundVoiceContactError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartOutboundVoiceContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartOutboundVoiceContactError::Unknown(String::from(body)),
         }
+        return StartOutboundVoiceContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartOutboundVoiceContactError {
     fn from(err: serde_json::error::Error) -> StartOutboundVoiceContactError {
-        StartOutboundVoiceContactError::Unknown(err.description().to_string())
+        StartOutboundVoiceContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartOutboundVoiceContactError {
@@ -1822,7 +2033,8 @@ impl Error for StartOutboundVoiceContactError {
             StartOutboundVoiceContactError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartOutboundVoiceContactError::Unknown(ref cause) => cause,
+            StartOutboundVoiceContactError::ParseError(ref cause) => cause,
+            StartOutboundVoiceContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1845,53 +2057,67 @@ pub enum StopContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopContactError {
-    pub fn from_body(body: &str) -> StopContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> StopContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "ContactNotFoundException" => {
-                        StopContactError::ContactNotFound(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        StopContactError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StopContactError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopContactError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        StopContactError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopContactError::Validation(error_message.to_string())
-                    }
-                    _ => StopContactError::Unknown(String::from(body)),
+            match error_type {
+                "ContactNotFoundException" => {
+                    return StopContactError::ContactNotFound(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return StopContactError::InternalService(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return StopContactError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return StopContactError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return StopContactError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopContactError::Unknown(String::from(body)),
         }
+        return StopContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopContactError {
     fn from(err: serde_json::error::Error) -> StopContactError {
-        StopContactError::Unknown(err.description().to_string())
+        StopContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopContactError {
@@ -1925,7 +2151,8 @@ impl Error for StopContactError {
             StopContactError::Validation(ref cause) => cause,
             StopContactError::Credentials(ref err) => err.description(),
             StopContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopContactError::Unknown(ref cause) => cause,
+            StopContactError::ParseError(ref cause) => cause,
+            StopContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1948,53 +2175,67 @@ pub enum UpdateUserHierarchyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserHierarchyError {
-    pub fn from_body(body: &str) -> UpdateUserHierarchyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserHierarchyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateUserHierarchyError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateUserHierarchyError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateUserHierarchyError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateUserHierarchyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        UpdateUserHierarchyError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateUserHierarchyError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateUserHierarchyError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return UpdateUserHierarchyError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UpdateUserHierarchyError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return UpdateUserHierarchyError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateUserHierarchyError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return UpdateUserHierarchyError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateUserHierarchyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserHierarchyError::Unknown(String::from(body)),
         }
+        return UpdateUserHierarchyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserHierarchyError {
     fn from(err: serde_json::error::Error) -> UpdateUserHierarchyError {
-        UpdateUserHierarchyError::Unknown(err.description().to_string())
+        UpdateUserHierarchyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserHierarchyError {
@@ -2030,7 +2271,8 @@ impl Error for UpdateUserHierarchyError {
             UpdateUserHierarchyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateUserHierarchyError::Unknown(ref cause) => cause,
+            UpdateUserHierarchyError::ParseError(ref cause) => cause,
+            UpdateUserHierarchyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2053,53 +2295,71 @@ pub enum UpdateUserIdentityInfoError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserIdentityInfoError {
-    pub fn from_body(body: &str) -> UpdateUserIdentityInfoError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserIdentityInfoError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateUserIdentityInfoError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateUserIdentityInfoError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateUserIdentityInfoError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateUserIdentityInfoError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        UpdateUserIdentityInfoError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateUserIdentityInfoError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateUserIdentityInfoError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return UpdateUserIdentityInfoError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UpdateUserIdentityInfoError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateUserIdentityInfoError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateUserIdentityInfoError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return UpdateUserIdentityInfoError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateUserIdentityInfoError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserIdentityInfoError::Unknown(String::from(body)),
         }
+        return UpdateUserIdentityInfoError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserIdentityInfoError {
     fn from(err: serde_json::error::Error) -> UpdateUserIdentityInfoError {
-        UpdateUserIdentityInfoError::Unknown(err.description().to_string())
+        UpdateUserIdentityInfoError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserIdentityInfoError {
@@ -2135,7 +2395,8 @@ impl Error for UpdateUserIdentityInfoError {
             UpdateUserIdentityInfoError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateUserIdentityInfoError::Unknown(ref cause) => cause,
+            UpdateUserIdentityInfoError::ParseError(ref cause) => cause,
+            UpdateUserIdentityInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2158,53 +2419,67 @@ pub enum UpdateUserPhoneConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserPhoneConfigError {
-    pub fn from_body(body: &str) -> UpdateUserPhoneConfigError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserPhoneConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateUserPhoneConfigError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateUserPhoneConfigError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateUserPhoneConfigError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateUserPhoneConfigError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        UpdateUserPhoneConfigError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateUserPhoneConfigError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateUserPhoneConfigError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return UpdateUserPhoneConfigError::InternalService(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UpdateUserPhoneConfigError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return UpdateUserPhoneConfigError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateUserPhoneConfigError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return UpdateUserPhoneConfigError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateUserPhoneConfigError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserPhoneConfigError::Unknown(String::from(body)),
         }
+        return UpdateUserPhoneConfigError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserPhoneConfigError {
     fn from(err: serde_json::error::Error) -> UpdateUserPhoneConfigError {
-        UpdateUserPhoneConfigError::Unknown(err.description().to_string())
+        UpdateUserPhoneConfigError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserPhoneConfigError {
@@ -2240,7 +2515,8 @@ impl Error for UpdateUserPhoneConfigError {
             UpdateUserPhoneConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateUserPhoneConfigError::Unknown(ref cause) => cause,
+            UpdateUserPhoneConfigError::ParseError(ref cause) => cause,
+            UpdateUserPhoneConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2263,53 +2539,75 @@ pub enum UpdateUserRoutingProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserRoutingProfileError {
-    pub fn from_body(body: &str) -> UpdateUserRoutingProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserRoutingProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateUserRoutingProfileError::InternalService(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateUserRoutingProfileError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateUserRoutingProfileError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateUserRoutingProfileError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        UpdateUserRoutingProfileError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateUserRoutingProfileError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateUserRoutingProfileError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return UpdateUserRoutingProfileError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return UpdateUserRoutingProfileError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateUserRoutingProfileError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateUserRoutingProfileError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return UpdateUserRoutingProfileError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateUserRoutingProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserRoutingProfileError::Unknown(String::from(body)),
         }
+        return UpdateUserRoutingProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserRoutingProfileError {
     fn from(err: serde_json::error::Error) -> UpdateUserRoutingProfileError {
-        UpdateUserRoutingProfileError::Unknown(err.description().to_string())
+        UpdateUserRoutingProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserRoutingProfileError {
@@ -2345,7 +2643,8 @@ impl Error for UpdateUserRoutingProfileError {
             UpdateUserRoutingProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateUserRoutingProfileError::Unknown(ref cause) => cause,
+            UpdateUserRoutingProfileError::ParseError(ref cause) => cause,
+            UpdateUserRoutingProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2368,57 +2667,75 @@ pub enum UpdateUserSecurityProfilesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserSecurityProfilesError {
-    pub fn from_body(body: &str) -> UpdateUserSecurityProfilesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserSecurityProfilesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "InternalServiceException" => UpdateUserSecurityProfilesError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        UpdateUserSecurityProfilesError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateUserSecurityProfilesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateUserSecurityProfilesError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        UpdateUserSecurityProfilesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateUserSecurityProfilesError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateUserSecurityProfilesError::Unknown(String::from(body)),
+            match error_type {
+                "InternalServiceException" => {
+                    return UpdateUserSecurityProfilesError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return UpdateUserSecurityProfilesError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateUserSecurityProfilesError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateUserSecurityProfilesError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return UpdateUserSecurityProfilesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateUserSecurityProfilesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserSecurityProfilesError::Unknown(String::from(body)),
         }
+        return UpdateUserSecurityProfilesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserSecurityProfilesError {
     fn from(err: serde_json::error::Error) -> UpdateUserSecurityProfilesError {
-        UpdateUserSecurityProfilesError::Unknown(err.description().to_string())
+        UpdateUserSecurityProfilesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserSecurityProfilesError {
@@ -2454,7 +2771,8 @@ impl Error for UpdateUserSecurityProfilesError {
             UpdateUserSecurityProfilesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateUserSecurityProfilesError::Unknown(ref cause) => cause,
+            UpdateUserSecurityProfilesError::ParseError(ref cause) => cause,
+            UpdateUserSecurityProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2624,11 +2942,12 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateUserError::from_response(response))),
+                )
             }
         })
     }
@@ -2652,11 +2971,12 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUserError::from_response(response))),
+                )
             }
         })
     }
@@ -2691,11 +3011,12 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeUserError::from_response(response))),
+                )
             }
         })
     }
@@ -2733,9 +3054,7 @@ impl Connect for ConnectClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserHierarchyGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeUserHierarchyGroupError::from_response(response))
                 }))
             }
         })
@@ -2774,9 +3093,7 @@ impl Connect for ConnectClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserHierarchyStructureError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeUserHierarchyStructureError::from_response(response))
                 }))
             }
         })
@@ -2812,11 +3129,12 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFederationTokenError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFederationTokenError::from_response(response))),
+                )
             }
         })
     }
@@ -2860,11 +3178,11 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListRoutingProfilesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListRoutingProfilesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2908,11 +3226,11 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSecurityProfilesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListSecurityProfilesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2957,9 +3275,7 @@ impl Connect for ConnectClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUserHierarchyGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListUserHierarchyGroupsError::from_response(response))
                 }))
             }
         })
@@ -3003,11 +3319,12 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUsersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListUsersError::from_response(response))),
+                )
             }
         })
     }
@@ -3043,9 +3360,7 @@ impl Connect for ConnectClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartOutboundVoiceContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartOutboundVoiceContactError::from_response(response))
                 }))
             }
         })
@@ -3080,11 +3395,12 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopContactError::from_response(response))),
+                )
             }
         })
     }
@@ -3114,11 +3430,11 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserHierarchyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateUserHierarchyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3148,11 +3464,11 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserIdentityInfoError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateUserIdentityInfoError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3182,11 +3498,11 @@ impl Connect for ConnectClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserPhoneConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateUserPhoneConfigError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3217,9 +3533,7 @@ impl Connect for ConnectClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserRoutingProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateUserRoutingProfileError::from_response(response))
                 }))
             }
         })
@@ -3251,9 +3565,7 @@ impl Connect for ConnectClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserSecurityProfilesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateUserSecurityProfilesError::from_response(response))
                 }))
             }
         })

@@ -192,8 +192,8 @@
     "baseTypeName": "ConfigService"
   },
   "connect": {
-    "version": "0.34.0",
-    "coreVersion": "0.34.0",
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
     "protocolVersion": "2017-08-08",
     "baseTypeName": "Connect"
   },
