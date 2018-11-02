@@ -23,7 +23,7 @@ To use `rusoto_support` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_support = "0.34.0"
+rusoto_support = "0.35.0"
 ```
 
 ## Contributing

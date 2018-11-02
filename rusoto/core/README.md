@@ -44,9 +44,9 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto_core = "0.34.0"
-rusoto_sqs = "0.34.0"
-rusoto_s3 = "0.34.0"
+rusoto_core = "0.35.0"
+rusoto_sqs = "0.35.0"
+rusoto_s3 = "0.35.0"
 ```
 
 ## Migration notes
@@ -99,9 +99,9 @@ If you do not want to use OpenSSL, you can replace it with rustls by editing you
 
 ``` toml
 [dependencies]
-rusoto_core = { version="0.34.0", default_features=false, features=["rustls"] }
-rusoto_sqs = { version="0.34.0", default_features=false, features=["rustls"] }
-rusoto_s3 = { version="0.34.0", default_features=false, features=["rustls"] }
+rusoto_core = { version="0.35.0", default_features=false, features=["rustls"] }
+rusoto_sqs = { version="0.35.0", default_features=false, features=["rustls"] }
+rusoto_s3 = { version="0.35.0", default_features=false, features=["rustls"] }
 ```
 
 ### Credentials

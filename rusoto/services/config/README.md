@@ -23,7 +23,7 @@ To use `rusoto_config` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_config = "0.34.0"
+rusoto_config = "0.35.0"
 ```
 
 ## Contributing

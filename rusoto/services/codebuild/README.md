@@ -23,7 +23,7 @@ To use `rusoto_codebuild` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_codebuild = "0.34.0"
+rusoto_codebuild = "0.35.0"
 ```
 
 ## Contributing

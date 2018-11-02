@@ -23,7 +23,7 @@ To use `rusoto_acm_pca` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_acm_pca = "0.34.0"
+rusoto_acm_pca = "0.35.0"
 ```
 
 ## Contributing

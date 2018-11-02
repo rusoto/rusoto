@@ -23,7 +23,7 @@ To use `rusoto_glacier` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_glacier = "0.34.0"
+rusoto_glacier = "0.35.0"
 ```
 
 ## Contributing

@@ -23,7 +23,7 @@ To use `rusoto_serverlessrepo` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_serverlessrepo = "0.34.0"
+rusoto_serverlessrepo = "0.35.0"
 ```
 
 ## Contributing

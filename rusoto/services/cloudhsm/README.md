@@ -23,7 +23,7 @@ To use `rusoto_cloudhsm` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_cloudhsm = "0.34.0"
+rusoto_cloudhsm = "0.35.0"
 ```
 
 ## Contributing

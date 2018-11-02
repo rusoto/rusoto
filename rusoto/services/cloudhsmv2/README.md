@@ -23,7 +23,7 @@ To use `rusoto_cloudhsmv2` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_cloudhsmv2 = "0.34.0"
+rusoto_cloudhsmv2 = "0.35.0"
 ```
 
 ## Contributing

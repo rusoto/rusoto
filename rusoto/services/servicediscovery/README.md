@@ -23,7 +23,7 @@ To use `rusoto_servicediscovery` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_servicediscovery = "0.34.0"
+rusoto_servicediscovery = "0.35.0"
 ```
 
 ## Contributing

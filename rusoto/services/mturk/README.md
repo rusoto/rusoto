@@ -23,7 +23,7 @@ To use `rusoto_mturk` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_mturk = "0.34.0"
+rusoto_mturk = "0.35.0"
 ```
 
 ## Contributing
