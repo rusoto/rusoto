@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,6 +50,7 @@ pub struct DeletePlaybackConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeletePlaybackConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -63,6 +64,7 @@ pub struct GetPlaybackConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetPlaybackConfigurationResponse {
     /// <p>The URL for the ad decision server (ADS). This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing, you can provide a static VAST URL. The maximum length is 25000 characters.</p>
     #[serde(rename = "AdDecisionServerUrl")]
@@ -100,6 +102,7 @@ pub struct GetPlaybackConfigurationResponse {
 
 /// <p>The configuration for HLS content. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HlsConfiguration {
     /// <p>The URL that is used to initiate a playback session for devices that support Apple HLS. The session uses server-side reporting.</p>
     #[serde(rename = "ManifestEndpointPrefix")]
@@ -120,6 +123,7 @@ pub struct ListPlaybackConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListPlaybackConfigurationsResponse {
     /// <p>Array of playback configurations. This may be all of the available configurations or a subset, depending on the settings you provide and on the total number of configurations stored. </p>
     #[serde(rename = "Items")]
@@ -133,6 +137,7 @@ pub struct ListPlaybackConfigurationsResponse {
 
 /// <p>The AWSMediaTailor configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PlaybackConfiguration {
     /// <p>The URL for the ad decision server (ADS). This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing, you can provide a static VAST URL. The maximum length is 25000 characters.</p>
     #[serde(rename = "AdDecisionServerUrl")]
@@ -181,6 +186,7 @@ pub struct PutPlaybackConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutPlaybackConfigurationResponse {
     /// <p>The URL for the ad decision server (ADS). This includes the specification of static parameters and placeholders for dynamic parameters. AWS Elemental MediaTailor substitutes player-specific and session-specific parameters as needed when calling the ADS. Alternately, for testing, you can provide a static VAST URL. The maximum length is 25000 characters.</p>
     #[serde(rename = "AdDecisionServerUrl")]
@@ -225,38 +231,52 @@ pub enum DeletePlaybackConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePlaybackConfigurationError {
-    pub fn from_body(body: &str) -> DeletePlaybackConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePlaybackConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DeletePlaybackConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePlaybackConfigurationError::Unknown(String::from(body)),
+            match error_type {
+                "ValidationException" => {
+                    return DeletePlaybackConfigurationError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => DeletePlaybackConfigurationError::Unknown(String::from(body)),
         }
+        return DeletePlaybackConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePlaybackConfigurationError {
     fn from(err: serde_json::error::Error) -> DeletePlaybackConfigurationError {
-        DeletePlaybackConfigurationError::Unknown(err.description().to_string())
+        DeletePlaybackConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePlaybackConfigurationError {
@@ -287,7 +307,8 @@ impl Error for DeletePlaybackConfigurationError {
             DeletePlaybackConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeletePlaybackConfigurationError::Unknown(ref cause) => cause,
+            DeletePlaybackConfigurationError::ParseError(ref cause) => cause,
+            DeletePlaybackConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -300,38 +321,52 @@ pub enum GetPlaybackConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPlaybackConfigurationError {
-    pub fn from_body(body: &str) -> GetPlaybackConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetPlaybackConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "ValidationException" => {
-                        GetPlaybackConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => GetPlaybackConfigurationError::Unknown(String::from(body)),
+            match error_type {
+                "ValidationException" => {
+                    return GetPlaybackConfigurationError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => GetPlaybackConfigurationError::Unknown(String::from(body)),
         }
+        return GetPlaybackConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetPlaybackConfigurationError {
     fn from(err: serde_json::error::Error) -> GetPlaybackConfigurationError {
-        GetPlaybackConfigurationError::Unknown(err.description().to_string())
+        GetPlaybackConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetPlaybackConfigurationError {
@@ -362,7 +397,8 @@ impl Error for GetPlaybackConfigurationError {
             GetPlaybackConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetPlaybackConfigurationError::Unknown(ref cause) => cause,
+            GetPlaybackConfigurationError::ParseError(ref cause) => cause,
+            GetPlaybackConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -375,38 +411,52 @@ pub enum ListPlaybackConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPlaybackConfigurationsError {
-    pub fn from_body(body: &str) -> ListPlaybackConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListPlaybackConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListPlaybackConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => ListPlaybackConfigurationsError::Unknown(String::from(body)),
+            match error_type {
+                "ValidationException" => {
+                    return ListPlaybackConfigurationsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListPlaybackConfigurationsError::Unknown(String::from(body)),
         }
+        return ListPlaybackConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPlaybackConfigurationsError {
     fn from(err: serde_json::error::Error) -> ListPlaybackConfigurationsError {
-        ListPlaybackConfigurationsError::Unknown(err.description().to_string())
+        ListPlaybackConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPlaybackConfigurationsError {
@@ -437,7 +487,8 @@ impl Error for ListPlaybackConfigurationsError {
             ListPlaybackConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPlaybackConfigurationsError::Unknown(ref cause) => cause,
+            ListPlaybackConfigurationsError::ParseError(ref cause) => cause,
+            ListPlaybackConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -450,38 +501,52 @@ pub enum PutPlaybackConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutPlaybackConfigurationError {
-    pub fn from_body(body: &str) -> PutPlaybackConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> PutPlaybackConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-                match *error_type {
-                    "ValidationException" => {
-                        PutPlaybackConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => PutPlaybackConfigurationError::Unknown(String::from(body)),
+            match error_type {
+                "ValidationException" => {
+                    return PutPlaybackConfigurationError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => PutPlaybackConfigurationError::Unknown(String::from(body)),
         }
+        return PutPlaybackConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutPlaybackConfigurationError {
     fn from(err: serde_json::error::Error) -> PutPlaybackConfigurationError {
-        PutPlaybackConfigurationError::Unknown(err.description().to_string())
+        PutPlaybackConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutPlaybackConfigurationError {
@@ -512,7 +577,8 @@ impl Error for PutPlaybackConfigurationError {
             PutPlaybackConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutPlaybackConfigurationError::Unknown(ref cause) => cause,
+            PutPlaybackConfigurationError::ParseError(ref cause) => cause,
+            PutPlaybackConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -609,9 +675,7 @@ impl MediaTailor for MediaTailorClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePlaybackConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeletePlaybackConfigurationError::from_response(response))
                 }))
             }
         })
@@ -647,9 +711,7 @@ impl MediaTailor for MediaTailorClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPlaybackConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetPlaybackConfigurationError::from_response(response))
                 }))
             }
         })
@@ -695,9 +757,7 @@ impl MediaTailor for MediaTailorClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPlaybackConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListPlaybackConfigurationsError::from_response(response))
                 }))
             }
         })
@@ -735,9 +795,7 @@ impl MediaTailor for MediaTailorClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutPlaybackConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutPlaybackConfigurationError::from_response(response))
                 }))
             }
         })

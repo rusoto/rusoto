@@ -2,13 +2,13 @@
 
 ## [Unreleased]
 - Add Connect service
+- Add MediaTailor support
 
 ## [0.35.0] - 2018-10-31
 
 - Add Cost Explorer
 - Add Performance Insights support
 - Add ServiceDiscovery support
-- Add MediaTailor support
 - Add Sentiment support
 - Add Sagemaker support
 - Add Transcribe service
