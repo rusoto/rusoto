@@ -151,6 +151,10 @@ path = "../rusoto/services/comprehend"
 optional = true
 path = "../rusoto/services/config"
 
+[dependencies.rusoto_connect]
+optional = true
+path = "../rusoto/services/connect"
+
 [dependencies.rusoto_cur]
 optional = true
 path = "../rusoto/services/cur"
@@ -545,7 +549,8 @@ all = [
 		"cognito-idp",
 		"cognito-sync",
 		"comprehend",
-	   	"config",
+		"config",
+		"connect",
 		"cur",
 	   	"datapipeline",
 		"dax",
@@ -667,6 +672,7 @@ cognito-idp = ["rusoto_cognito_idp"]
 cognito-sync = ["rusoto_cognito_sync"]
 comprehend = ["rusoto_comprehend"]
 config = ["rusoto_config"]
+connect = ["rusoto_connect"]
 cur = ["rusoto_cur"]
 datapipeline = ["rusoto_datapipeline"]
 dax = ["rusoto_dax"]

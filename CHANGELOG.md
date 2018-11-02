@@ -1,6 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
+- Add Connect service
 
 ## [0.35.0] - 2018-10-31
 
