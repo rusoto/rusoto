@@ -36,6 +36,7 @@ script:
         ( cd integration_tests && \
           cargo check --tests --features "all" )
       fi
+  - (cd mock && cargo build)
   - |
       if [ "$JOB" = "unit_tests_rustls_A" ]; then
         echo "Running Rusoto tests (rustls phase A)" \
