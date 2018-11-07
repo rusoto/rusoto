@@ -80,7 +80,14 @@ impl ActiveTrustedSignersDeserializer {
                         obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
                     }
                     "Items" => {
-                        obj.items = Some(try!(SignerListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => {
+                                Some(existing.append(try!(SignerListDeserializer::deserialize(
+                                    "Items", stack
+                                ))))
+                            }
+                            None => Some(try!(SignerListDeserializer::deserialize("Items", stack))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -192,7 +199,14 @@ impl AliasesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(AliasListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => {
+                                Some(existing.append(try!(AliasListDeserializer::deserialize(
+                                    "Items", stack
+                                ))))
+                            }
+                            None => Some(try!(AliasListDeserializer::deserialize("Items", stack))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -276,7 +290,14 @@ impl AllowedMethodsDeserializer {
                         )));
                     }
                     "Items" => {
-                        obj.items = try!(MethodsListDeserializer::deserialize("Items", stack));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                MethodsListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => {
+                                Some(try!(MethodsListDeserializer::deserialize("Items", stack)))
+                            }
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -730,9 +751,14 @@ impl CacheBehaviorsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(CacheBehaviorListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheBehaviorListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(CacheBehaviorListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -809,7 +835,14 @@ impl CachedMethodsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = try!(MethodsListDeserializer::deserialize("Items", stack));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                MethodsListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => {
+                                Some(try!(MethodsListDeserializer::deserialize("Items", stack)))
+                            }
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -1033,33 +1066,36 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            try!(BooleanDeserializer::deserialize("IsTruncated", stack));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated =
+                                try!(BooleanDeserializer::deserialize("IsTruncated", stack));
+                        }
+                        "Items" => {
+                            obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(CloudFrontOriginAccessIdentitySummaryListDeserializer::deserialize("Items", stack)))),
+                            None => Some(try!(CloudFrontOriginAccessIdentitySummaryListDeserializer::deserialize("Items", stack))),
+                        };
+                        }
+                        "Marker" => {
+                            obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
+                        }
+                        "MaxItems" => {
+                            obj.max_items =
+                                try!(IntegerDeserializer::deserialize("MaxItems", stack));
+                        }
+                        "NextMarker" => {
+                            obj.next_marker =
+                                Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
+                        }
+                        "Quantity" => {
+                            obj.quantity =
+                                try!(IntegerDeserializer::deserialize("Quantity", stack));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "Items" => {
-                        obj.items = Some(try!(
-                            CloudFrontOriginAccessIdentitySummaryListDeserializer::deserialize(
-                                "Items", stack
-                            )
-                        ));
-                    }
-                    "Marker" => {
-                        obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
-                    }
-                    "MaxItems" => {
-                        obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems", stack));
-                    }
-                    "NextMarker" => {
-                        obj.next_marker =
-                            Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
-                    }
-                    "Quantity" => {
-                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1267,9 +1303,14 @@ impl CookieNamesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(CookieNameListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                CookieNameListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(CookieNameListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -1969,9 +2010,14 @@ impl CustomErrorResponsesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(CustomErrorResponseListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                CustomErrorResponseListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(CustomErrorResponseListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -2048,9 +2094,14 @@ impl CustomHeadersDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(OriginCustomHeadersListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                OriginCustomHeadersListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(OriginCustomHeadersListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -2890,9 +2941,14 @@ impl DistributionListDeserializer {
                             try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
                     "Items" => {
-                        obj.items = Some(try!(DistributionSummaryListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                DistributionSummaryListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(DistributionSummaryListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
@@ -3281,8 +3337,14 @@ impl GeoRestrictionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items =
-                            Some(try!(LocationListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                LocationListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => {
+                                Some(try!(LocationListDeserializer::deserialize("Items", stack)))
+                            }
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -3880,7 +3942,14 @@ impl HeadersDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(HeaderListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => {
+                                Some(existing.append(try!(HeaderListDeserializer::deserialize(
+                                    "Items", stack
+                                ))))
+                            }
+                            None => Some(try!(HeaderListDeserializer::deserialize("Items", stack))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -4180,9 +4249,14 @@ impl InvalidationListDeserializer {
                             try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
                     "Items" => {
-                        obj.items = Some(try!(InvalidationSummaryListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                InvalidationSummaryListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(InvalidationSummaryListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
@@ -4417,8 +4491,14 @@ impl KeyPairIdsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items =
-                            Some(try!(KeyPairIdListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                KeyPairIdListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => {
+                                Some(try!(KeyPairIdListDeserializer::deserialize("Items", stack)))
+                            }
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -4625,9 +4705,18 @@ impl LambdaFunctionAssociationsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(
-                            LambdaFunctionAssociationListDeserializer::deserialize("Items", stack)
-                        ));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                LambdaFunctionAssociationListDeserializer::deserialize(
+                                    "Items", stack
+                                )
+                            ))),
+                            None => Some(try!(
+                                LambdaFunctionAssociationListDeserializer::deserialize(
+                                    "Items", stack
+                                )
+                            )),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -5752,7 +5841,14 @@ impl OriginSslProtocolsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = try!(SslProtocolsListDeserializer::deserialize("Items", stack));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                SslProtocolsListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(SslProtocolsListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -5827,7 +5923,14 @@ impl OriginsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(OriginListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => {
+                                Some(existing.append(try!(OriginListDeserializer::deserialize(
+                                    "Items", stack
+                                ))))
+                            }
+                            None => Some(try!(OriginListDeserializer::deserialize("Items", stack))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -5965,7 +6068,14 @@ impl PathsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(PathListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => {
+                                Some(existing.append(try!(PathListDeserializer::deserialize(
+                                    "Items", stack
+                                ))))
+                            }
+                            None => Some(try!(PathListDeserializer::deserialize("Items", stack))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -6076,9 +6186,14 @@ impl QueryStringCacheKeysDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(QueryStringCacheKeysListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                QueryStringCacheKeysListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(QueryStringCacheKeysListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
@@ -6961,11 +7076,18 @@ impl StreamingDistributionListDeserializer {
                             try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
                     "Items" => {
-                        obj.items = Some(try!(
-                            StreamingDistributionSummaryListDeserializer::deserialize(
-                                "Items", stack
-                            )
-                        ));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                StreamingDistributionSummaryListDeserializer::deserialize(
+                                    "Items", stack
+                                )
+                            ))),
+                            None => Some(try!(
+                                StreamingDistributionSummaryListDeserializer::deserialize(
+                                    "Items", stack
+                                )
+                            )),
+                        };
                     }
                     "Marker" => {
                         obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
@@ -7564,7 +7686,13 @@ impl TagsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Items" => {
-                        obj.items = Some(try!(TagListDeserializer::deserialize("Items", stack)));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(
+                                existing
+                                    .append(try!(TagListDeserializer::deserialize("Items", stack))),
+                            ),
+                            None => Some(try!(TagListDeserializer::deserialize("Items", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -7651,9 +7779,14 @@ impl TrustedSignersDeserializer {
                         obj.enabled = try!(BooleanDeserializer::deserialize("Enabled", stack));
                     }
                     "Items" => {
-                        obj.items = Some(try!(AwsAccountNumberListDeserializer::deserialize(
-                            "Items", stack
-                        )));
+                        obj.items = match obj.items {
+                            Some(existing) => Some(existing.append(try!(
+                                AwsAccountNumberListDeserializer::deserialize("Items", stack)
+                            ))),
+                            None => Some(try!(AwsAccountNumberListDeserializer::deserialize(
+                                "Items", stack
+                            ))),
+                        };
                     }
                     "Quantity" => {
                         obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));

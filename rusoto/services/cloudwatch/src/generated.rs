@@ -888,9 +888,18 @@ impl DescribeAlarmHistoryOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AlarmHistoryItems" => {
-                        obj.alarm_history_items = Some(try!(
-                            AlarmHistoryItemsDeserializer::deserialize("AlarmHistoryItems", stack)
-                        ));
+                        obj.alarm_history_items = match obj.alarm_history_items {
+                            Some(existing) => Some(existing.append(try!(
+                                AlarmHistoryItemsDeserializer::deserialize(
+                                    "AlarmHistoryItems",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(AlarmHistoryItemsDeserializer::deserialize(
+                                "AlarmHistoryItems",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -990,10 +999,15 @@ impl DescribeAlarmsForMetricOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MetricAlarms" => {
-                        obj.metric_alarms = Some(try!(MetricAlarmsDeserializer::deserialize(
-                            "MetricAlarms",
-                            stack
-                        )));
+                        obj.metric_alarms = match obj.metric_alarms {
+                            Some(existing) => Some(existing.append(try!(
+                                MetricAlarmsDeserializer::deserialize("MetricAlarms", stack)
+                            ))),
+                            None => Some(try!(MetricAlarmsDeserializer::deserialize(
+                                "MetricAlarms",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1093,10 +1107,15 @@ impl DescribeAlarmsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MetricAlarms" => {
-                        obj.metric_alarms = Some(try!(MetricAlarmsDeserializer::deserialize(
-                            "MetricAlarms",
-                            stack
-                        )));
+                        obj.metric_alarms = match obj.metric_alarms {
+                            Some(existing) => Some(existing.append(try!(
+                                MetricAlarmsDeserializer::deserialize("MetricAlarms", stack)
+                            ))),
+                            None => Some(try!(MetricAlarmsDeserializer::deserialize(
+                                "MetricAlarms",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1562,9 +1581,18 @@ impl GetMetricDataOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MetricDataResults" => {
-                        obj.metric_data_results = Some(try!(
-                            MetricDataResultsDeserializer::deserialize("MetricDataResults", stack)
-                        ));
+                        obj.metric_data_results = match obj.metric_data_results {
+                            Some(existing) => Some(existing.append(try!(
+                                MetricDataResultsDeserializer::deserialize(
+                                    "MetricDataResults",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(MetricDataResultsDeserializer::deserialize(
+                                "MetricDataResults",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1678,10 +1706,15 @@ impl GetMetricStatisticsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Datapoints" => {
-                        obj.datapoints = Some(try!(DatapointsDeserializer::deserialize(
-                            "Datapoints",
-                            stack
-                        )));
+                        obj.datapoints = match obj.datapoints {
+                            Some(existing) => Some(existing.append(try!(
+                                DatapointsDeserializer::deserialize("Datapoints", stack)
+                            ))),
+                            None => Some(try!(DatapointsDeserializer::deserialize(
+                                "Datapoints",
+                                stack
+                            ))),
+                        };
                     }
                     "Label" => {
                         obj.label =
@@ -1817,9 +1850,18 @@ impl ListDashboardsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DashboardEntries" => {
-                        obj.dashboard_entries = Some(try!(
-                            DashboardEntriesDeserializer::deserialize("DashboardEntries", stack)
-                        ));
+                        obj.dashboard_entries = match obj.dashboard_entries {
+                            Some(existing) => Some(existing.append(try!(
+                                DashboardEntriesDeserializer::deserialize(
+                                    "DashboardEntries",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(DashboardEntriesDeserializer::deserialize(
+                                "DashboardEntries",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1910,8 +1952,14 @@ impl ListMetricsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Metrics" => {
-                        obj.metrics =
-                            Some(try!(MetricsDeserializer::deserialize("Metrics", stack)));
+                        obj.metrics = match obj.metrics {
+                            Some(existing) => {
+                                Some(existing.append(try!(MetricsDeserializer::deserialize(
+                                    "Metrics", stack
+                                ))))
+                            }
+                            None => Some(try!(MetricsDeserializer::deserialize("Metrics", stack))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -2062,10 +2110,15 @@ impl MetricDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Dimensions" => {
-                        obj.dimensions = Some(try!(DimensionsDeserializer::deserialize(
-                            "Dimensions",
-                            stack
-                        )));
+                        obj.dimensions = match obj.dimensions {
+                            Some(existing) => Some(existing.append(try!(
+                                DimensionsDeserializer::deserialize("Dimensions", stack)
+                            ))),
+                            None => Some(try!(DimensionsDeserializer::deserialize(
+                                "Dimensions",
+                                stack
+                            ))),
+                        };
                     }
                     "MetricName" => {
                         obj.metric_name = Some(try!(MetricNameDeserializer::deserialize(
@@ -2201,10 +2254,15 @@ impl MetricAlarmDeserializer {
                         )));
                     }
                     "AlarmActions" => {
-                        obj.alarm_actions = Some(try!(ResourceListDeserializer::deserialize(
-                            "AlarmActions",
-                            stack
-                        )));
+                        obj.alarm_actions = match obj.alarm_actions {
+                            Some(existing) => Some(existing.append(try!(
+                                ResourceListDeserializer::deserialize("AlarmActions", stack)
+                            ))),
+                            None => Some(try!(ResourceListDeserializer::deserialize(
+                                "AlarmActions",
+                                stack
+                            ))),
+                        };
                     }
                     "AlarmArn" => {
                         obj.alarm_arn =
@@ -2239,10 +2297,15 @@ impl MetricAlarmDeserializer {
                         ));
                     }
                     "Dimensions" => {
-                        obj.dimensions = Some(try!(DimensionsDeserializer::deserialize(
-                            "Dimensions",
-                            stack
-                        )));
+                        obj.dimensions = match obj.dimensions {
+                            Some(existing) => Some(existing.append(try!(
+                                DimensionsDeserializer::deserialize("Dimensions", stack)
+                            ))),
+                            None => Some(try!(DimensionsDeserializer::deserialize(
+                                "Dimensions",
+                                stack
+                            ))),
+                        };
                     }
                     "EvaluateLowSampleCountPercentile" => {
                         obj.evaluate_low_sample_count_percentile = Some(try!(
@@ -2263,9 +2326,18 @@ impl MetricAlarmDeserializer {
                         ));
                     }
                     "InsufficientDataActions" => {
-                        obj.insufficient_data_actions = Some(try!(
-                            ResourceListDeserializer::deserialize("InsufficientDataActions", stack)
-                        ));
+                        obj.insufficient_data_actions = match obj.insufficient_data_actions {
+                            Some(existing) => {
+                                Some(existing.append(try!(ResourceListDeserializer::deserialize(
+                                    "InsufficientDataActions",
+                                    stack
+                                ))))
+                            }
+                            None => Some(try!(ResourceListDeserializer::deserialize(
+                                "InsufficientDataActions",
+                                stack
+                            ))),
+                        };
                     }
                     "MetricName" => {
                         obj.metric_name = Some(try!(MetricNameDeserializer::deserialize(
@@ -2278,10 +2350,15 @@ impl MetricAlarmDeserializer {
                             Some(try!(NamespaceDeserializer::deserialize("Namespace", stack)));
                     }
                     "OKActions" => {
-                        obj.ok_actions = Some(try!(ResourceListDeserializer::deserialize(
-                            "OKActions",
-                            stack
-                        )));
+                        obj.ok_actions = match obj.ok_actions {
+                            Some(existing) => Some(existing.append(try!(
+                                ResourceListDeserializer::deserialize("OKActions", stack)
+                            ))),
+                            None => Some(try!(ResourceListDeserializer::deserialize(
+                                "OKActions",
+                                stack
+                            ))),
+                        };
                     }
                     "Period" => {
                         obj.period = Some(try!(PeriodDeserializer::deserialize("Period", stack)));
@@ -2495,9 +2572,16 @@ impl MetricDataResultDeserializer {
                             Some(try!(MetricLabelDeserializer::deserialize("Label", stack)));
                     }
                     "Messages" => {
-                        obj.messages = Some(try!(
-                            MetricDataResultMessagesDeserializer::deserialize("Messages", stack)
-                        ));
+                        obj.messages = match obj.messages {
+                            Some(existing) => Some(existing.append(try!(
+                                MetricDataResultMessagesDeserializer::deserialize(
+                                    "Messages", stack
+                                )
+                            ))),
+                            None => Some(try!(MetricDataResultMessagesDeserializer::deserialize(
+                                "Messages", stack
+                            ))),
+                        };
                     }
                     "StatusCode" => {
                         obj.status_code = Some(try!(StatusCodeDeserializer::deserialize(
@@ -2506,15 +2590,25 @@ impl MetricDataResultDeserializer {
                         )));
                     }
                     "Timestamps" => {
-                        obj.timestamps = Some(try!(TimestampsDeserializer::deserialize(
-                            "Timestamps",
-                            stack
-                        )));
+                        obj.timestamps = match obj.timestamps {
+                            Some(existing) => Some(existing.append(try!(
+                                TimestampsDeserializer::deserialize("Timestamps", stack)
+                            ))),
+                            None => Some(try!(TimestampsDeserializer::deserialize(
+                                "Timestamps",
+                                stack
+                            ))),
+                        };
                     }
                     "Values" => {
-                        obj.values = Some(try!(DatapointValuesDeserializer::deserialize(
-                            "Values", stack
-                        )));
+                        obj.values = match obj.values {
+                            Some(existing) => Some(existing.append(try!(
+                                DatapointValuesDeserializer::deserialize("Values", stack)
+                            ))),
+                            None => Some(try!(DatapointValuesDeserializer::deserialize(
+                                "Values", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2885,11 +2979,21 @@ impl PutDashboardOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DashboardValidationMessages" => {
-                        obj.dashboard_validation_messages =
-                            Some(try!(DashboardValidationMessagesDeserializer::deserialize(
-                                "DashboardValidationMessages",
-                                stack
-                            )));
+                        obj.dashboard_validation_messages = match obj.dashboard_validation_messages
+                        {
+                            Some(existing) => Some(existing.append(try!(
+                                DashboardValidationMessagesDeserializer::deserialize(
+                                    "DashboardValidationMessages",
+                                    stack
+                                )
+                            ))),
+                            None => {
+                                Some(try!(DashboardValidationMessagesDeserializer::deserialize(
+                                    "DashboardValidationMessages",
+                                    stack
+                                )))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },

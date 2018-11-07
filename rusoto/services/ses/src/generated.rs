@@ -679,11 +679,20 @@ impl CloudWatchDestinationDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DimensionConfigurations" => {
-                        obj.dimension_configurations =
-                            try!(CloudWatchDimensionConfigurationsDeserializer::deserialize(
-                                "DimensionConfigurations",
-                                stack
-                            ));
+                        obj.dimension_configurations = match obj.dimension_configurations {
+                            Some(existing) => Some(existing.append(try!(
+                                CloudWatchDimensionConfigurationsDeserializer::deserialize(
+                                    "DimensionConfigurations",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(
+                                CloudWatchDimensionConfigurationsDeserializer::deserialize(
+                                    "DimensionConfigurations",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2057,9 +2066,14 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
                         )));
                     }
                     "Rules" => {
-                        obj.rules = Some(try!(ReceiptRulesListDeserializer::deserialize(
-                            "Rules", stack
-                        )));
+                        obj.rules = match obj.rules {
+                            Some(existing) => Some(existing.append(try!(
+                                ReceiptRulesListDeserializer::deserialize("Rules", stack)
+                            ))),
+                            None => Some(try!(ReceiptRulesListDeserializer::deserialize(
+                                "Rules", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2148,9 +2162,18 @@ impl DescribeConfigurationSetResponseDeserializer {
                         ));
                     }
                     "EventDestinations" => {
-                        obj.event_destinations = Some(try!(
-                            EventDestinationsDeserializer::deserialize("EventDestinations", stack)
-                        ));
+                        obj.event_destinations = match obj.event_destinations {
+                            Some(existing) => Some(existing.append(try!(
+                                EventDestinationsDeserializer::deserialize(
+                                    "EventDestinations",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(EventDestinationsDeserializer::deserialize(
+                                "EventDestinations",
+                                stack
+                            ))),
+                        };
                     }
                     "ReputationOptions" => {
                         obj.reputation_options = Some(try!(
@@ -2302,9 +2325,14 @@ impl DescribeReceiptRuleSetResponseDeserializer {
                         )));
                     }
                     "Rules" => {
-                        obj.rules = Some(try!(ReceiptRulesListDeserializer::deserialize(
-                            "Rules", stack
-                        )));
+                        obj.rules = match obj.rules {
+                            Some(existing) => Some(existing.append(try!(
+                                ReceiptRulesListDeserializer::deserialize("Rules", stack)
+                            ))),
+                            None => Some(try!(ReceiptRulesListDeserializer::deserialize(
+                                "Rules", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2503,10 +2531,15 @@ impl EventDestinationDeserializer {
                             )));
                     }
                     "MatchingEventTypes" => {
-                        obj.matching_event_types = try!(EventTypesDeserializer::deserialize(
-                            "MatchingEventTypes",
-                            stack
-                        ));
+                        obj.matching_event_types = match obj.matching_event_types {
+                            Some(existing) => Some(existing.append(try!(
+                                EventTypesDeserializer::deserialize("MatchingEventTypes", stack)
+                            ))),
+                            None => Some(try!(EventTypesDeserializer::deserialize(
+                                "MatchingEventTypes",
+                                stack
+                            ))),
+                        };
                     }
                     "Name" => {
                         obj.name =
@@ -3388,9 +3421,15 @@ impl GetSendStatisticsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "SendDataPoints" => {
-                        obj.send_data_points = Some(try!(
-                            SendDataPointListDeserializer::deserialize("SendDataPoints", stack)
-                        ));
+                        obj.send_data_points = match obj.send_data_points {
+                            Some(existing) => Some(existing.append(try!(
+                                SendDataPointListDeserializer::deserialize("SendDataPoints", stack)
+                            ))),
+                            None => Some(try!(SendDataPointListDeserializer::deserialize(
+                                "SendDataPoints",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3564,9 +3603,15 @@ impl IdentityDkimAttributesDeserializer {
                             try!(EnabledDeserializer::deserialize("DkimEnabled", stack));
                     }
                     "DkimTokens" => {
-                        obj.dkim_tokens = Some(try!(
-                            VerificationTokenListDeserializer::deserialize("DkimTokens", stack)
-                        ));
+                        obj.dkim_tokens = match obj.dkim_tokens {
+                            Some(existing) => Some(existing.append(try!(
+                                VerificationTokenListDeserializer::deserialize("DkimTokens", stack)
+                            ))),
+                            None => Some(try!(VerificationTokenListDeserializer::deserialize(
+                                "DkimTokens",
+                                stack
+                            ))),
+                        };
                     }
                     "DkimVerificationStatus" => {
                         obj.dkim_verification_status =
@@ -4111,9 +4156,18 @@ impl ListConfigurationSetsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ConfigurationSets" => {
-                        obj.configuration_sets = Some(try!(
-                            ConfigurationSetsDeserializer::deserialize("ConfigurationSets", stack)
-                        ));
+                        obj.configuration_sets = match obj.configuration_sets {
+                            Some(existing) => Some(existing.append(try!(
+                                ConfigurationSetsDeserializer::deserialize(
+                                    "ConfigurationSets",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(ConfigurationSetsDeserializer::deserialize(
+                                "ConfigurationSets",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -4199,12 +4253,21 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CustomVerificationEmailTemplates" => {
-                        obj.custom_verification_email_templates = Some(try!(
-                            CustomVerificationEmailTemplatesDeserializer::deserialize(
-                                "CustomVerificationEmailTemplates",
-                                stack
-                            )
-                        ));
+                        obj.custom_verification_email_templates =
+                            match obj.custom_verification_email_templates {
+                                Some(existing) => Some(existing.append(try!(
+                                    CustomVerificationEmailTemplatesDeserializer::deserialize(
+                                        "CustomVerificationEmailTemplates",
+                                        stack
+                                    )
+                                ))),
+                                None => Some(try!(
+                                    CustomVerificationEmailTemplatesDeserializer::deserialize(
+                                        "CustomVerificationEmailTemplates",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -4291,8 +4354,15 @@ impl ListIdentitiesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Identities" => {
-                        obj.identities =
-                            try!(IdentityListDeserializer::deserialize("Identities", stack));
+                        obj.identities = match obj.identities {
+                            Some(existing) => Some(existing.append(try!(
+                                IdentityListDeserializer::deserialize("Identities", stack)
+                            ))),
+                            None => Some(try!(IdentityListDeserializer::deserialize(
+                                "Identities",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -4362,10 +4432,15 @@ impl ListIdentityPoliciesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyNames" => {
-                        obj.policy_names = try!(PolicyNameListDeserializer::deserialize(
-                            "PolicyNames",
-                            stack
-                        ));
+                        obj.policy_names = match obj.policy_names {
+                            Some(existing) => Some(existing.append(try!(
+                                PolicyNameListDeserializer::deserialize("PolicyNames", stack)
+                            ))),
+                            None => Some(try!(PolicyNameListDeserializer::deserialize(
+                                "PolicyNames",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4426,9 +4501,14 @@ impl ListReceiptFiltersResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Filters" => {
-                        obj.filters = Some(try!(ReceiptFilterListDeserializer::deserialize(
-                            "Filters", stack
-                        )));
+                        obj.filters = match obj.filters {
+                            Some(existing) => Some(existing.append(try!(
+                                ReceiptFilterListDeserializer::deserialize("Filters", stack)
+                            ))),
+                            None => Some(try!(ReceiptFilterListDeserializer::deserialize(
+                                "Filters", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4502,9 +4582,14 @@ impl ListReceiptRuleSetsResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "RuleSets" => {
-                        obj.rule_sets = Some(try!(ReceiptRuleSetsListsDeserializer::deserialize(
-                            "RuleSets", stack
-                        )));
+                        obj.rule_sets = match obj.rule_sets {
+                            Some(existing) => Some(existing.append(try!(
+                                ReceiptRuleSetsListsDeserializer::deserialize("RuleSets", stack)
+                            ))),
+                            None => Some(try!(ReceiptRuleSetsListsDeserializer::deserialize(
+                                "RuleSets", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4584,11 +4669,18 @@ impl ListTemplatesResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "TemplatesMetadata" => {
-                        obj.templates_metadata =
-                            Some(try!(TemplateMetadataListDeserializer::deserialize(
+                        obj.templates_metadata = match obj.templates_metadata {
+                            Some(existing) => Some(existing.append(try!(
+                                TemplateMetadataListDeserializer::deserialize(
+                                    "TemplatesMetadata",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(TemplateMetadataListDeserializer::deserialize(
                                 "TemplatesMetadata",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4634,9 +4726,18 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "VerifiedEmailAddresses" => {
-                        obj.verified_email_addresses = Some(try!(
-                            AddressListDeserializer::deserialize("VerifiedEmailAddresses", stack)
-                        ));
+                        obj.verified_email_addresses = match obj.verified_email_addresses {
+                            Some(existing) => {
+                                Some(existing.append(try!(AddressListDeserializer::deserialize(
+                                    "VerifiedEmailAddresses",
+                                    stack
+                                ))))
+                            }
+                            None => Some(try!(AddressListDeserializer::deserialize(
+                                "VerifiedEmailAddresses",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -5508,9 +5609,14 @@ impl ReceiptRuleDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Actions" => {
-                        obj.actions = Some(try!(ReceiptActionsListDeserializer::deserialize(
-                            "Actions", stack
-                        )));
+                        obj.actions = match obj.actions {
+                            Some(existing) => Some(existing.append(try!(
+                                ReceiptActionsListDeserializer::deserialize("Actions", stack)
+                            ))),
+                            None => Some(try!(ReceiptActionsListDeserializer::deserialize(
+                                "Actions", stack
+                            ))),
+                        };
                     }
                     "Enabled" => {
                         obj.enabled =
@@ -5520,10 +5626,15 @@ impl ReceiptRuleDeserializer {
                         obj.name = try!(ReceiptRuleNameDeserializer::deserialize("Name", stack));
                     }
                     "Recipients" => {
-                        obj.recipients = Some(try!(RecipientsListDeserializer::deserialize(
-                            "Recipients",
-                            stack
-                        )));
+                        obj.recipients = match obj.recipients {
+                            Some(existing) => Some(existing.append(try!(
+                                RecipientsListDeserializer::deserialize("Recipients", stack)
+                            ))),
+                            None => Some(try!(RecipientsListDeserializer::deserialize(
+                                "Recipients",
+                                stack
+                            ))),
+                        };
                     }
                     "ScanEnabled" => {
                         obj.scan_enabled =
@@ -6492,9 +6603,18 @@ impl SendBulkTemplatedEmailResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Status" => {
-                        obj.status = try!(BulkEmailDestinationStatusListDeserializer::deserialize(
-                            "Status", stack
-                        ));
+                        obj.status = match obj.status {
+                            Some(existing) => Some(existing.append(try!(
+                                BulkEmailDestinationStatusListDeserializer::deserialize(
+                                    "Status", stack
+                                )
+                            ))),
+                            None => Some(try!(
+                                BulkEmailDestinationStatusListDeserializer::deserialize(
+                                    "Status", stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -8422,10 +8542,15 @@ impl VerifyDomainDkimResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DkimTokens" => {
-                        obj.dkim_tokens = try!(VerificationTokenListDeserializer::deserialize(
-                            "DkimTokens",
-                            stack
-                        ));
+                        obj.dkim_tokens = match obj.dkim_tokens {
+                            Some(existing) => Some(existing.append(try!(
+                                VerificationTokenListDeserializer::deserialize("DkimTokens", stack)
+                            ))),
+                            None => Some(try!(VerificationTokenListDeserializer::deserialize(
+                                "DkimTokens",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },

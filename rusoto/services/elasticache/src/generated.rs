@@ -95,9 +95,18 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ScaleUpModifications" => {
-                        obj.scale_up_modifications = Some(try!(
-                            NodeTypeListDeserializer::deserialize("ScaleUpModifications", stack)
-                        ));
+                        obj.scale_up_modifications = match obj.scale_up_modifications {
+                            Some(existing) => {
+                                Some(existing.append(try!(NodeTypeListDeserializer::deserialize(
+                                    "ScaleUpModifications",
+                                    stack
+                                ))))
+                            }
+                            None => Some(try!(NodeTypeListDeserializer::deserialize(
+                                "ScaleUpModifications",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -456,10 +465,15 @@ impl CacheClusterDeserializer {
                         )));
                     }
                     "CacheNodes" => {
-                        obj.cache_nodes = Some(try!(CacheNodeListDeserializer::deserialize(
-                            "CacheNodes",
-                            stack
-                        )));
+                        obj.cache_nodes = match obj.cache_nodes {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheNodeListDeserializer::deserialize("CacheNodes", stack)
+                            ))),
+                            None => Some(try!(CacheNodeListDeserializer::deserialize(
+                                "CacheNodes",
+                                stack
+                            ))),
+                        };
                     }
                     "CacheParameterGroup" => {
                         obj.cache_parameter_group =
@@ -469,12 +483,20 @@ impl CacheClusterDeserializer {
                             )));
                     }
                     "CacheSecurityGroups" => {
-                        obj.cache_security_groups = Some(try!(
-                            CacheSecurityGroupMembershipListDeserializer::deserialize(
-                                "CacheSecurityGroups",
-                                stack
-                            )
-                        ));
+                        obj.cache_security_groups = match obj.cache_security_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheSecurityGroupMembershipListDeserializer::deserialize(
+                                    "CacheSecurityGroups",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(
+                                CacheSecurityGroupMembershipListDeserializer::deserialize(
+                                    "CacheSecurityGroups",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     "CacheSubnetGroupName" => {
                         obj.cache_subnet_group_name = Some(try!(StringDeserializer::deserialize(
@@ -539,11 +561,20 @@ impl CacheClusterDeserializer {
                         )));
                     }
                     "SecurityGroups" => {
-                        obj.security_groups =
-                            Some(try!(SecurityGroupMembershipListDeserializer::deserialize(
-                                "SecurityGroups",
-                                stack
-                            )));
+                        obj.security_groups = match obj.security_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                SecurityGroupMembershipListDeserializer::deserialize(
+                                    "SecurityGroups",
+                                    stack
+                                )
+                            ))),
+                            None => {
+                                Some(try!(SecurityGroupMembershipListDeserializer::deserialize(
+                                    "SecurityGroups",
+                                    stack
+                                )))
+                            }
+                        };
                     }
                     "SnapshotRetentionLimit" => {
                         obj.snapshot_retention_limit =
@@ -654,10 +685,15 @@ impl CacheClusterMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheClusters" => {
-                        obj.cache_clusters = Some(try!(CacheClusterListDeserializer::deserialize(
-                            "CacheClusters",
-                            stack
-                        )));
+                        obj.cache_clusters = match obj.cache_clusters {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheClusterListDeserializer::deserialize("CacheClusters", stack)
+                            ))),
+                            None => Some(try!(CacheClusterListDeserializer::deserialize(
+                                "CacheClusters",
+                                stack
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -827,11 +863,18 @@ impl CacheEngineVersionMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheEngineVersions" => {
-                        obj.cache_engine_versions =
-                            Some(try!(CacheEngineVersionListDeserializer::deserialize(
+                        obj.cache_engine_versions = match obj.cache_engine_versions {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheEngineVersionListDeserializer::deserialize(
+                                    "CacheEngineVersions",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(CacheEngineVersionListDeserializer::deserialize(
                                 "CacheEngineVersions",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -1086,12 +1129,21 @@ impl CacheNodeTypeSpecificParameterDeserializer {
                         )));
                     }
                     "CacheNodeTypeSpecificValues" => {
-                        obj.cache_node_type_specific_values = Some(try!(
-                            CacheNodeTypeSpecificValueListDeserializer::deserialize(
-                                "CacheNodeTypeSpecificValues",
-                                stack
-                            )
-                        ));
+                        obj.cache_node_type_specific_values =
+                            match obj.cache_node_type_specific_values {
+                                Some(existing) => Some(existing.append(try!(
+                                    CacheNodeTypeSpecificValueListDeserializer::deserialize(
+                                        "CacheNodeTypeSpecificValues",
+                                        stack
+                                    )
+                                ))),
+                                None => Some(try!(
+                                    CacheNodeTypeSpecificValueListDeserializer::deserialize(
+                                        "CacheNodeTypeSpecificValues",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     "ChangeType" => {
                         obj.change_type = Some(try!(ChangeTypeDeserializer::deserialize(
@@ -1379,21 +1431,35 @@ impl CacheParameterGroupDetailsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheNodeTypeSpecificParameters" => {
-                        obj.cache_node_type_specific_parameters = Some(try!(
-                            CacheNodeTypeSpecificParametersListDeserializer::deserialize(
-                                "CacheNodeTypeSpecificParameters",
-                                stack
-                            )
-                        ));
+                        obj.cache_node_type_specific_parameters =
+                            match obj.cache_node_type_specific_parameters {
+                                Some(existing) => Some(existing.append(try!(
+                                    CacheNodeTypeSpecificParametersListDeserializer::deserialize(
+                                        "CacheNodeTypeSpecificParameters",
+                                        stack
+                                    )
+                                ))),
+                                None => Some(try!(
+                                    CacheNodeTypeSpecificParametersListDeserializer::deserialize(
+                                        "CacheNodeTypeSpecificParameters",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(ParametersListDeserializer::deserialize(
-                            "Parameters",
-                            stack
-                        )));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                ParametersListDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(ParametersListDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1534,11 +1600,18 @@ impl CacheParameterGroupStatusDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheNodeIdsToReboot" => {
-                        obj.cache_node_ids_to_reboot =
-                            Some(try!(CacheNodeIdsListDeserializer::deserialize(
+                        obj.cache_node_ids_to_reboot = match obj.cache_node_ids_to_reboot {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheNodeIdsListDeserializer::deserialize(
+                                    "CacheNodeIdsToReboot",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(CacheNodeIdsListDeserializer::deserialize(
                                 "CacheNodeIdsToReboot",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "CacheParameterGroupName" => {
                         obj.cache_parameter_group_name = Some(try!(
@@ -1597,11 +1670,18 @@ impl CacheParameterGroupsMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheParameterGroups" => {
-                        obj.cache_parameter_groups =
-                            Some(try!(CacheParameterGroupListDeserializer::deserialize(
+                        obj.cache_parameter_groups = match obj.cache_parameter_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheParameterGroupListDeserializer::deserialize(
+                                    "CacheParameterGroups",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(CacheParameterGroupListDeserializer::deserialize(
                                 "CacheParameterGroups",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -1665,11 +1745,18 @@ impl CacheSecurityGroupDeserializer {
                             Some(try!(StringDeserializer::deserialize("Description", stack)));
                     }
                     "EC2SecurityGroups" => {
-                        obj.ec2_security_groups =
-                            Some(try!(EC2SecurityGroupListDeserializer::deserialize(
+                        obj.ec2_security_groups = match obj.ec2_security_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                EC2SecurityGroupListDeserializer::deserialize(
+                                    "EC2SecurityGroups",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(EC2SecurityGroupListDeserializer::deserialize(
                                 "EC2SecurityGroups",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "OwnerId" => {
                         obj.owner_id =
@@ -1817,11 +1904,18 @@ impl CacheSecurityGroupMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheSecurityGroups" => {
-                        obj.cache_security_groups =
-                            Some(try!(CacheSecurityGroupsDeserializer::deserialize(
+                        obj.cache_security_groups = match obj.cache_security_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheSecurityGroupsDeserializer::deserialize(
+                                    "CacheSecurityGroups",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(CacheSecurityGroupsDeserializer::deserialize(
                                 "CacheSecurityGroups",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -1942,8 +2036,14 @@ impl CacheSubnetGroupDeserializer {
                         )));
                     }
                     "Subnets" => {
-                        obj.subnets =
-                            Some(try!(SubnetListDeserializer::deserialize("Subnets", stack)));
+                        obj.subnets = match obj.subnets {
+                            Some(existing) => Some(existing.append(try!(
+                                SubnetListDeserializer::deserialize("Subnets", stack)
+                            ))),
+                            None => {
+                                Some(try!(SubnetListDeserializer::deserialize("Subnets", stack)))
+                            }
+                        };
                     }
                     "VpcId" => {
                         obj.vpc_id = Some(try!(StringDeserializer::deserialize("VpcId", stack)));
@@ -1994,9 +2094,18 @@ impl CacheSubnetGroupMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheSubnetGroups" => {
-                        obj.cache_subnet_groups = Some(try!(
-                            CacheSubnetGroupsDeserializer::deserialize("CacheSubnetGroups", stack)
-                        ));
+                        obj.cache_subnet_groups = match obj.cache_subnet_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheSubnetGroupsDeserializer::deserialize(
+                                    "CacheSubnetGroups",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(CacheSubnetGroupsDeserializer::deserialize(
+                                "CacheSubnetGroups",
+                                stack
+                            ))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -3881,10 +3990,15 @@ impl DescribeSnapshotsListMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "Snapshots" => {
-                        obj.snapshots = Some(try!(SnapshotListDeserializer::deserialize(
-                            "Snapshots",
-                            stack
-                        )));
+                        obj.snapshots = match obj.snapshots {
+                            Some(existing) => Some(existing.append(try!(
+                                SnapshotListDeserializer::deserialize("Snapshots", stack)
+                            ))),
+                            None => Some(try!(SnapshotListDeserializer::deserialize(
+                                "Snapshots",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4163,12 +4277,21 @@ impl EngineDefaultsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheNodeTypeSpecificParameters" => {
-                        obj.cache_node_type_specific_parameters = Some(try!(
-                            CacheNodeTypeSpecificParametersListDeserializer::deserialize(
-                                "CacheNodeTypeSpecificParameters",
-                                stack
-                            )
-                        ));
+                        obj.cache_node_type_specific_parameters =
+                            match obj.cache_node_type_specific_parameters {
+                                Some(existing) => Some(existing.append(try!(
+                                    CacheNodeTypeSpecificParametersListDeserializer::deserialize(
+                                        "CacheNodeTypeSpecificParameters",
+                                        stack
+                                    )
+                                ))),
+                                None => Some(try!(
+                                    CacheNodeTypeSpecificParametersListDeserializer::deserialize(
+                                        "CacheNodeTypeSpecificParameters",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     "CacheParameterGroupFamily" => {
                         obj.cache_parameter_group_family = Some(try!(
@@ -4179,10 +4302,15 @@ impl EngineDefaultsDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(ParametersListDeserializer::deserialize(
-                            "Parameters",
-                            stack
-                        )));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                ParametersListDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(ParametersListDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4337,8 +4465,14 @@ impl EventsMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Events" => {
-                        obj.events =
-                            Some(try!(EventListDeserializer::deserialize("Events", stack)));
+                        obj.events = match obj.events {
+                            Some(existing) => {
+                                Some(existing.append(try!(EventListDeserializer::deserialize(
+                                    "Events", stack
+                                ))))
+                            }
+                            None => Some(try!(EventListDeserializer::deserialize("Events", stack))),
+                        };
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -5087,9 +5221,18 @@ impl NodeGroupDeserializer {
                             Some(try!(StringDeserializer::deserialize("NodeGroupId", stack)));
                     }
                     "NodeGroupMembers" => {
-                        obj.node_group_members = Some(try!(
-                            NodeGroupMemberListDeserializer::deserialize("NodeGroupMembers", stack)
-                        ));
+                        obj.node_group_members = match obj.node_group_members {
+                            Some(existing) => Some(existing.append(try!(
+                                NodeGroupMemberListDeserializer::deserialize(
+                                    "NodeGroupMembers",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(NodeGroupMemberListDeserializer::deserialize(
+                                "NodeGroupMembers",
+                                stack
+                            ))),
+                        };
                     }
                     "PrimaryEndpoint" => {
                         obj.primary_endpoint = Some(try!(EndpointDeserializer::deserialize(
@@ -5158,11 +5301,18 @@ impl NodeGroupConfigurationDeserializer {
                         ));
                     }
                     "ReplicaAvailabilityZones" => {
-                        obj.replica_availability_zones =
-                            Some(try!(AvailabilityZonesListDeserializer::deserialize(
+                        obj.replica_availability_zones = match obj.replica_availability_zones {
+                            Some(existing) => Some(existing.append(try!(
+                                AvailabilityZonesListDeserializer::deserialize(
+                                    "ReplicaAvailabilityZones",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(AvailabilityZonesListDeserializer::deserialize(
                                 "ReplicaAvailabilityZones",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "ReplicaCount" => {
                         obj.replica_count = Some(try!(IntegerOptionalDeserializer::deserialize(
@@ -5865,11 +6015,18 @@ impl PendingModifiedValuesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheNodeIdsToRemove" => {
-                        obj.cache_node_ids_to_remove =
-                            Some(try!(CacheNodeIdsListDeserializer::deserialize(
+                        obj.cache_node_ids_to_remove = match obj.cache_node_ids_to_remove {
+                            Some(existing) => Some(existing.append(try!(
+                                CacheNodeIdsListDeserializer::deserialize(
+                                    "CacheNodeIdsToRemove",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(CacheNodeIdsListDeserializer::deserialize(
                                 "CacheNodeIdsToRemove",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "CacheNodeType" => {
                         obj.cache_node_type = Some(try!(StringDeserializer::deserialize(
@@ -6299,15 +6456,26 @@ impl ReplicationGroupDeserializer {
                                 Some(try!(StringDeserializer::deserialize("Description", stack)));
                         }
                         "MemberClusters" => {
-                            obj.member_clusters = Some(try!(
-                                ClusterIdListDeserializer::deserialize("MemberClusters", stack)
-                            ));
+                            obj.member_clusters = match obj.member_clusters {
+                                Some(existing) => Some(existing.append(try!(
+                                    ClusterIdListDeserializer::deserialize("MemberClusters", stack)
+                                ))),
+                                None => Some(try!(ClusterIdListDeserializer::deserialize(
+                                    "MemberClusters",
+                                    stack
+                                ))),
+                            };
                         }
                         "NodeGroups" => {
-                            obj.node_groups = Some(try!(NodeGroupListDeserializer::deserialize(
-                                "NodeGroups",
-                                stack
-                            )));
+                            obj.node_groups = match obj.node_groups {
+                                Some(existing) => Some(existing.append(try!(
+                                    NodeGroupListDeserializer::deserialize("NodeGroups", stack)
+                                ))),
+                                None => Some(try!(NodeGroupListDeserializer::deserialize(
+                                    "NodeGroups",
+                                    stack
+                                ))),
+                            };
                         }
                         "PendingModifiedValues" => {
                             obj.pending_modified_values = Some(try!(
@@ -6445,11 +6613,18 @@ impl ReplicationGroupMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "ReplicationGroups" => {
-                        obj.replication_groups =
-                            Some(try!(ReplicationGroupListDeserializer::deserialize(
+                        obj.replication_groups = match obj.replication_groups {
+                            Some(existing) => Some(existing.append(try!(
+                                ReplicationGroupListDeserializer::deserialize(
+                                    "ReplicationGroups",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(ReplicationGroupListDeserializer::deserialize(
                                 "ReplicationGroups",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -6614,9 +6789,18 @@ impl ReservedCacheNodeDeserializer {
                         )));
                     }
                     "RecurringCharges" => {
-                        obj.recurring_charges = Some(try!(
-                            RecurringChargeListDeserializer::deserialize("RecurringCharges", stack)
-                        ));
+                        obj.recurring_charges = match obj.recurring_charges {
+                            Some(existing) => Some(existing.append(try!(
+                                RecurringChargeListDeserializer::deserialize(
+                                    "RecurringCharges",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(RecurringChargeListDeserializer::deserialize(
+                                "RecurringCharges",
+                                stack
+                            ))),
+                        };
                     }
                     "ReservedCacheNodeId" => {
                         obj.reserved_cache_node_id = Some(try!(StringDeserializer::deserialize(
@@ -6732,11 +6916,18 @@ impl ReservedCacheNodeMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "ReservedCacheNodes" => {
-                        obj.reserved_cache_nodes =
-                            Some(try!(ReservedCacheNodeListDeserializer::deserialize(
+                        obj.reserved_cache_nodes = match obj.reserved_cache_nodes {
+                            Some(existing) => Some(existing.append(try!(
+                                ReservedCacheNodeListDeserializer::deserialize(
+                                    "ReservedCacheNodes",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(ReservedCacheNodeListDeserializer::deserialize(
                                 "ReservedCacheNodes",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -6820,9 +7011,18 @@ impl ReservedCacheNodesOfferingDeserializer {
                         )));
                     }
                     "RecurringCharges" => {
-                        obj.recurring_charges = Some(try!(
-                            RecurringChargeListDeserializer::deserialize("RecurringCharges", stack)
-                        ));
+                        obj.recurring_charges = match obj.recurring_charges {
+                            Some(existing) => Some(existing.append(try!(
+                                RecurringChargeListDeserializer::deserialize(
+                                    "RecurringCharges",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(RecurringChargeListDeserializer::deserialize(
+                                "RecurringCharges",
+                                stack
+                            ))),
+                        };
                     }
                     "ReservedCacheNodesOfferingId" => {
                         obj.reserved_cache_nodes_offering_id = Some(try!(
@@ -6925,12 +7125,21 @@ impl ReservedCacheNodesOfferingMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "ReservedCacheNodesOfferings" => {
-                        obj.reserved_cache_nodes_offerings = Some(try!(
-                            ReservedCacheNodesOfferingListDeserializer::deserialize(
-                                "ReservedCacheNodesOfferings",
-                                stack
-                            )
-                        ));
+                        obj.reserved_cache_nodes_offerings =
+                            match obj.reserved_cache_nodes_offerings {
+                                Some(existing) => Some(existing.append(try!(
+                                    ReservedCacheNodesOfferingListDeserializer::deserialize(
+                                        "ReservedCacheNodesOfferings",
+                                        stack
+                                    )
+                                ))),
+                                None => Some(try!(
+                                    ReservedCacheNodesOfferingListDeserializer::deserialize(
+                                        "ReservedCacheNodesOfferings",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     _ => skip_tree(stack),
                 },
@@ -7437,10 +7646,15 @@ impl SnapshotDeserializer {
                         )));
                     }
                     "NodeSnapshots" => {
-                        obj.node_snapshots = Some(try!(NodeSnapshotListDeserializer::deserialize(
-                            "NodeSnapshots",
-                            stack
-                        )));
+                        obj.node_snapshots = match obj.node_snapshots {
+                            Some(existing) => Some(existing.append(try!(
+                                NodeSnapshotListDeserializer::deserialize("NodeSnapshots", stack)
+                            ))),
+                            None => Some(try!(NodeSnapshotListDeserializer::deserialize(
+                                "NodeSnapshots",
+                                stack
+                            ))),
+                        };
                     }
                     "NumCacheNodes" => {
                         obj.num_cache_nodes = Some(try!(IntegerOptionalDeserializer::deserialize(
@@ -7886,8 +8100,14 @@ impl TagListMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TagList" => {
-                        obj.tag_list =
-                            Some(try!(TagListDeserializer::deserialize("TagList", stack)));
+                        obj.tag_list = match obj.tag_list {
+                            Some(existing) => {
+                                Some(existing.append(try!(TagListDeserializer::deserialize(
+                                    "TagList", stack
+                                ))))
+                            }
+                            None => Some(try!(TagListDeserializer::deserialize("TagList", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },

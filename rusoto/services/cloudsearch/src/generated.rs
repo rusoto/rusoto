@@ -555,10 +555,15 @@ impl BuildSuggestersResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "FieldNames" => {
-                        obj.field_names = Some(try!(FieldNameListDeserializer::deserialize(
-                            "FieldNames",
-                            stack
-                        )));
+                        obj.field_names = match obj.field_names {
+                            Some(existing) => Some(existing.append(try!(
+                                FieldNameListDeserializer::deserialize("FieldNames", stack)
+                            ))),
+                            None => Some(try!(FieldNameListDeserializer::deserialize(
+                                "FieldNames",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1608,11 +1613,18 @@ impl DescribeAnalysisSchemesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AnalysisSchemes" => {
-                        obj.analysis_schemes =
-                            try!(AnalysisSchemeStatusListDeserializer::deserialize(
+                        obj.analysis_schemes = match obj.analysis_schemes {
+                            Some(existing) => Some(existing.append(try!(
+                                AnalysisSchemeStatusListDeserializer::deserialize(
+                                    "AnalysisSchemes",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(AnalysisSchemeStatusListDeserializer::deserialize(
                                 "AnalysisSchemes",
                                 stack
-                            ));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1761,10 +1773,18 @@ impl DescribeDomainsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DomainStatusList" => {
-                        obj.domain_status_list = try!(DomainStatusListDeserializer::deserialize(
-                            "DomainStatusList",
-                            stack
-                        ));
+                        obj.domain_status_list = match obj.domain_status_list {
+                            Some(existing) => Some(existing.append(try!(
+                                DomainStatusListDeserializer::deserialize(
+                                    "DomainStatusList",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(DomainStatusListDeserializer::deserialize(
+                                "DomainStatusList",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1847,10 +1867,15 @@ impl DescribeExpressionsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Expressions" => {
-                        obj.expressions = try!(ExpressionStatusListDeserializer::deserialize(
-                            "Expressions",
-                            stack
-                        ));
+                        obj.expressions = match obj.expressions {
+                            Some(existing) => Some(existing.append(try!(
+                                ExpressionStatusListDeserializer::deserialize("Expressions", stack)
+                            ))),
+                            None => Some(try!(ExpressionStatusListDeserializer::deserialize(
+                                "Expressions",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1933,10 +1958,15 @@ impl DescribeIndexFieldsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "IndexFields" => {
-                        obj.index_fields = try!(IndexFieldStatusListDeserializer::deserialize(
-                            "IndexFields",
-                            stack
-                        ));
+                        obj.index_fields = match obj.index_fields {
+                            Some(existing) => Some(existing.append(try!(
+                                IndexFieldStatusListDeserializer::deserialize("IndexFields", stack)
+                            ))),
+                            None => Some(try!(IndexFieldStatusListDeserializer::deserialize(
+                                "IndexFields",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2164,10 +2194,15 @@ impl DescribeSuggestersResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Suggesters" => {
-                        obj.suggesters = try!(SuggesterStatusListDeserializer::deserialize(
-                            "Suggesters",
-                            stack
-                        ));
+                        obj.suggesters = match obj.suggesters {
+                            Some(existing) => Some(existing.append(try!(
+                                SuggesterStatusListDeserializer::deserialize("Suggesters", stack)
+                            ))),
+                            None => Some(try!(SuggesterStatusListDeserializer::deserialize(
+                                "Suggesters",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3093,10 +3128,15 @@ impl IndexDocumentsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "FieldNames" => {
-                        obj.field_names = Some(try!(FieldNameListDeserializer::deserialize(
-                            "FieldNames",
-                            stack
-                        )));
+                        obj.field_names = match obj.field_names {
+                            Some(existing) => Some(existing.append(try!(
+                                FieldNameListDeserializer::deserialize("FieldNames", stack)
+                            ))),
+                            None => Some(try!(FieldNameListDeserializer::deserialize(
+                                "FieldNames",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },

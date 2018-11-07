@@ -1723,10 +1723,15 @@ impl DescribeAccountLimitsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccountLimits" => {
-                        obj.account_limits = Some(try!(AccountLimitListDeserializer::deserialize(
-                            "AccountLimits",
-                            stack
-                        )));
+                        obj.account_limits = match obj.account_limits {
+                            Some(existing) => Some(existing.append(try!(
+                                AccountLimitListDeserializer::deserialize("AccountLimits", stack)
+                            ))),
+                            None => Some(try!(AccountLimitListDeserializer::deserialize(
+                                "AccountLimits",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1839,10 +1844,15 @@ impl DescribeChangeSetOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
-                        obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
-                            "Capabilities",
-                            stack
-                        )));
+                        obj.capabilities = match obj.capabilities {
+                            Some(existing) => Some(existing.append(try!(
+                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
+                            ))),
+                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                                "Capabilities",
+                                stack
+                            ))),
+                        };
                     }
                     "ChangeSetId" => {
                         obj.change_set_id = Some(try!(ChangeSetIdDeserializer::deserialize(
@@ -1857,8 +1867,14 @@ impl DescribeChangeSetOutputDeserializer {
                         )));
                     }
                     "Changes" => {
-                        obj.changes =
-                            Some(try!(ChangesDeserializer::deserialize("Changes", stack)));
+                        obj.changes = match obj.changes {
+                            Some(existing) => {
+                                Some(existing.append(try!(ChangesDeserializer::deserialize(
+                                    "Changes", stack
+                                ))))
+                            }
+                            None => Some(try!(ChangesDeserializer::deserialize("Changes", stack))),
+                        };
                     }
                     "CreationTime" => {
                         obj.creation_time = Some(try!(CreationTimeDeserializer::deserialize(
@@ -1882,15 +1898,29 @@ impl DescribeChangeSetOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "NotificationARNs" => {
-                        obj.notification_ar_ns = Some(try!(
-                            NotificationARNsDeserializer::deserialize("NotificationARNs", stack)
-                        ));
+                        obj.notification_ar_ns = match obj.notification_ar_ns {
+                            Some(existing) => Some(existing.append(try!(
+                                NotificationARNsDeserializer::deserialize(
+                                    "NotificationARNs",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(NotificationARNsDeserializer::deserialize(
+                                "NotificationARNs",
+                                stack
+                            ))),
+                        };
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(ParametersDeserializer::deserialize(
-                            "Parameters",
-                            stack
-                        )));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                ParametersDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(ParametersDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     "RollbackConfiguration" => {
                         obj.rollback_configuration =
@@ -1918,7 +1948,12 @@ impl DescribeChangeSetOutputDeserializer {
                         ));
                     }
                     "Tags" => {
-                        obj.tags = Some(try!(TagsDeserializer::deserialize("Tags", stack)));
+                        obj.tags = match obj.tags {
+                            Some(existing) => Some(
+                                existing.append(try!(TagsDeserializer::deserialize("Tags", stack))),
+                            ),
+                            None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1997,10 +2032,15 @@ impl DescribeStackEventsOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "StackEvents" => {
-                        obj.stack_events = Some(try!(StackEventsDeserializer::deserialize(
-                            "StackEvents",
-                            stack
-                        )));
+                        obj.stack_events = match obj.stack_events {
+                            Some(existing) => Some(existing.append(try!(
+                                StackEventsDeserializer::deserialize("StackEvents", stack)
+                            ))),
+                            None => Some(try!(StackEventsDeserializer::deserialize(
+                                "StackEvents",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2236,10 +2276,15 @@ impl DescribeStackResourcesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackResources" => {
-                        obj.stack_resources = Some(try!(StackResourcesDeserializer::deserialize(
-                            "StackResources",
-                            stack
-                        )));
+                        obj.stack_resources = match obj.stack_resources {
+                            Some(existing) => Some(existing.append(try!(
+                                StackResourcesDeserializer::deserialize("StackResources", stack)
+                            ))),
+                            None => Some(try!(StackResourcesDeserializer::deserialize(
+                                "StackResources",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2458,7 +2503,13 @@ impl DescribeStacksOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Stacks" => {
-                        obj.stacks = Some(try!(StacksDeserializer::deserialize("Stacks", stack)));
+                        obj.stacks = match obj.stacks {
+                            Some(existing) => Some(
+                                existing
+                                    .append(try!(StacksDeserializer::deserialize("Stacks", stack))),
+                            ),
+                            None => Some(try!(StacksDeserializer::deserialize("Stacks", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2995,10 +3046,15 @@ impl GetTemplateOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StagesAvailable" => {
-                        obj.stages_available = Some(try!(StageListDeserializer::deserialize(
-                            "StagesAvailable",
-                            stack
-                        )));
+                        obj.stages_available = match obj.stages_available {
+                            Some(existing) => Some(existing.append(try!(
+                                StageListDeserializer::deserialize("StagesAvailable", stack)
+                            ))),
+                            None => Some(try!(StageListDeserializer::deserialize(
+                                "StagesAvailable",
+                                stack
+                            ))),
+                        };
                     }
                     "TemplateBody" => {
                         obj.template_body = Some(try!(TemplateBodyDeserializer::deserialize(
@@ -3101,10 +3157,15 @@ impl GetTemplateSummaryOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
-                        obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
-                            "Capabilities",
-                            stack
-                        )));
+                        obj.capabilities = match obj.capabilities {
+                            Some(existing) => Some(existing.append(try!(
+                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
+                            ))),
+                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                                "Capabilities",
+                                stack
+                            ))),
+                        };
                     }
                     "CapabilitiesReason" => {
                         obj.capabilities_reason =
@@ -3114,9 +3175,18 @@ impl GetTemplateSummaryOutputDeserializer {
                             )));
                     }
                     "DeclaredTransforms" => {
-                        obj.declared_transforms = Some(try!(
-                            TransformsListDeserializer::deserialize("DeclaredTransforms", stack)
-                        ));
+                        obj.declared_transforms = match obj.declared_transforms {
+                            Some(existing) => Some(existing.append(try!(
+                                TransformsListDeserializer::deserialize(
+                                    "DeclaredTransforms",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(TransformsListDeserializer::deserialize(
+                                "DeclaredTransforms",
+                                stack
+                            ))),
+                        };
                     }
                     "Description" => {
                         obj.description = Some(try!(DescriptionDeserializer::deserialize(
@@ -3129,15 +3199,26 @@ impl GetTemplateSummaryOutputDeserializer {
                             Some(try!(MetadataDeserializer::deserialize("Metadata", stack)));
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(
-                            ParameterDeclarationsDeserializer::deserialize("Parameters", stack)
-                        ));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                ParameterDeclarationsDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(ParameterDeclarationsDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     "ResourceTypes" => {
-                        obj.resource_types = Some(try!(ResourceTypesDeserializer::deserialize(
-                            "ResourceTypes",
-                            stack
-                        )));
+                        obj.resource_types = match obj.resource_types {
+                            Some(existing) => Some(existing.append(try!(
+                                ResourceTypesDeserializer::deserialize("ResourceTypes", stack)
+                            ))),
+                            None => Some(try!(ResourceTypesDeserializer::deserialize(
+                                "ResourceTypes",
+                                stack
+                            ))),
+                        };
                     }
                     "Version" => {
                         obj.version =
@@ -3300,10 +3381,15 @@ impl ListChangeSetsOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Summaries" => {
-                        obj.summaries = Some(try!(ChangeSetSummariesDeserializer::deserialize(
-                            "Summaries",
-                            stack
-                        )));
+                        obj.summaries = match obj.summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                ChangeSetSummariesDeserializer::deserialize("Summaries", stack)
+                            ))),
+                            None => Some(try!(ChangeSetSummariesDeserializer::deserialize(
+                                "Summaries",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3371,8 +3457,14 @@ impl ListExportsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Exports" => {
-                        obj.exports =
-                            Some(try!(ExportsDeserializer::deserialize("Exports", stack)));
+                        obj.exports = match obj.exports {
+                            Some(existing) => {
+                                Some(existing.append(try!(ExportsDeserializer::deserialize(
+                                    "Exports", stack
+                                ))))
+                            }
+                            None => Some(try!(ExportsDeserializer::deserialize("Exports", stack))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -3447,8 +3539,14 @@ impl ListImportsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Imports" => {
-                        obj.imports =
-                            Some(try!(ImportsDeserializer::deserialize("Imports", stack)));
+                        obj.imports = match obj.imports {
+                            Some(existing) => {
+                                Some(existing.append(try!(ImportsDeserializer::deserialize(
+                                    "Imports", stack
+                                ))))
+                            }
+                            None => Some(try!(ImportsDeserializer::deserialize("Imports", stack))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -3554,9 +3652,15 @@ impl ListStackInstancesOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Summaries" => {
-                        obj.summaries = Some(try!(
-                            StackInstanceSummariesDeserializer::deserialize("Summaries", stack)
-                        ));
+                        obj.summaries = match obj.summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                StackInstanceSummariesDeserializer::deserialize("Summaries", stack)
+                            ))),
+                            None => Some(try!(StackInstanceSummariesDeserializer::deserialize(
+                                "Summaries",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3633,11 +3737,18 @@ impl ListStackResourcesOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "StackResourceSummaries" => {
-                        obj.stack_resource_summaries =
-                            Some(try!(StackResourceSummariesDeserializer::deserialize(
+                        obj.stack_resource_summaries = match obj.stack_resource_summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                StackResourceSummariesDeserializer::deserialize(
+                                    "StackResourceSummaries",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(StackResourceSummariesDeserializer::deserialize(
                                 "StackResourceSummaries",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3726,12 +3837,20 @@ impl ListStackSetOperationResultsOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Summaries" => {
-                        obj.summaries = Some(try!(
-                            StackSetOperationResultSummariesDeserializer::deserialize(
-                                "Summaries",
-                                stack
-                            )
-                        ));
+                        obj.summaries = match obj.summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                StackSetOperationResultSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(
+                                StackSetOperationResultSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3817,9 +3936,20 @@ impl ListStackSetOperationsOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Summaries" => {
-                        obj.summaries = Some(try!(
-                            StackSetOperationSummariesDeserializer::deserialize("Summaries", stack)
-                        ));
+                        obj.summaries = match obj.summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                StackSetOperationSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack
+                                )
+                            ))),
+                            None => {
+                                Some(try!(StackSetOperationSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack
+                                )))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3904,10 +4034,15 @@ impl ListStackSetsOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Summaries" => {
-                        obj.summaries = Some(try!(StackSetSummariesDeserializer::deserialize(
-                            "Summaries",
-                            stack
-                        )));
+                        obj.summaries = match obj.summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                StackSetSummariesDeserializer::deserialize("Summaries", stack)
+                            ))),
+                            None => Some(try!(StackSetSummariesDeserializer::deserialize(
+                                "Summaries",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3990,10 +4125,15 @@ impl ListStacksOutputDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "StackSummaries" => {
-                        obj.stack_summaries = Some(try!(StackSummariesDeserializer::deserialize(
-                            "StackSummaries",
-                            stack
-                        )));
+                        obj.stack_summaries = match obj.stack_summaries {
+                            Some(existing) => Some(existing.append(try!(
+                                StackSummariesDeserializer::deserialize("StackSummaries", stack)
+                            ))),
+                            None => Some(try!(StackSummariesDeserializer::deserialize(
+                                "StackSummaries",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4444,10 +4584,15 @@ impl ParameterConstraintsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllowedValues" => {
-                        obj.allowed_values = Some(try!(AllowedValuesDeserializer::deserialize(
-                            "AllowedValues",
-                            stack
-                        )));
+                        obj.allowed_values = match obj.allowed_values {
+                            Some(existing) => Some(existing.append(try!(
+                                AllowedValuesDeserializer::deserialize("AllowedValues", stack)
+                            ))),
+                            None => Some(try!(AllowedValuesDeserializer::deserialize(
+                                "AllowedValues",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4882,9 +5027,14 @@ impl ResourceChangeDeserializer {
                             Some(try!(ChangeActionDeserializer::deserialize("Action", stack)));
                     }
                     "Details" => {
-                        obj.details = Some(try!(ResourceChangeDetailsDeserializer::deserialize(
-                            "Details", stack
-                        )));
+                        obj.details = match obj.details {
+                            Some(existing) => Some(existing.append(try!(
+                                ResourceChangeDetailsDeserializer::deserialize("Details", stack)
+                            ))),
+                            None => Some(try!(ResourceChangeDetailsDeserializer::deserialize(
+                                "Details", stack
+                            ))),
+                        };
                     }
                     "LogicalResourceId" => {
                         obj.logical_resource_id = Some(try!(
@@ -4911,7 +5061,13 @@ impl ResourceChangeDeserializer {
                         )));
                     }
                     "Scope" => {
-                        obj.scope = Some(try!(ScopeDeserializer::deserialize("Scope", stack)));
+                        obj.scope = match obj.scope {
+                            Some(existing) => Some(
+                                existing
+                                    .append(try!(ScopeDeserializer::deserialize("Scope", stack))),
+                            ),
+                            None => Some(try!(ScopeDeserializer::deserialize("Scope", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -5301,9 +5457,18 @@ impl RollbackConfigurationDeserializer {
                             )));
                     }
                     "RollbackTriggers" => {
-                        obj.rollback_triggers = Some(try!(
-                            RollbackTriggersDeserializer::deserialize("RollbackTriggers", stack)
-                        ));
+                        obj.rollback_triggers = match obj.rollback_triggers {
+                            Some(existing) => Some(existing.append(try!(
+                                RollbackTriggersDeserializer::deserialize(
+                                    "RollbackTriggers",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(RollbackTriggersDeserializer::deserialize(
+                                "RollbackTriggers",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -5639,10 +5804,15 @@ impl StackDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
-                        obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
-                            "Capabilities",
-                            stack
-                        )));
+                        obj.capabilities = match obj.capabilities {
+                            Some(existing) => Some(existing.append(try!(
+                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
+                            ))),
+                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                                "Capabilities",
+                                stack
+                            ))),
+                        };
                     }
                     "ChangeSetId" => {
                         obj.change_set_id = Some(try!(ChangeSetIdDeserializer::deserialize(
@@ -5684,19 +5854,39 @@ impl StackDeserializer {
                         ));
                     }
                     "NotificationARNs" => {
-                        obj.notification_ar_ns = Some(try!(
-                            NotificationARNsDeserializer::deserialize("NotificationARNs", stack)
-                        ));
+                        obj.notification_ar_ns = match obj.notification_ar_ns {
+                            Some(existing) => Some(existing.append(try!(
+                                NotificationARNsDeserializer::deserialize(
+                                    "NotificationARNs",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(NotificationARNsDeserializer::deserialize(
+                                "NotificationARNs",
+                                stack
+                            ))),
+                        };
                     }
                     "Outputs" => {
-                        obj.outputs =
-                            Some(try!(OutputsDeserializer::deserialize("Outputs", stack)));
+                        obj.outputs = match obj.outputs {
+                            Some(existing) => {
+                                Some(existing.append(try!(OutputsDeserializer::deserialize(
+                                    "Outputs", stack
+                                ))))
+                            }
+                            None => Some(try!(OutputsDeserializer::deserialize("Outputs", stack))),
+                        };
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(ParametersDeserializer::deserialize(
-                            "Parameters",
-                            stack
-                        )));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                ParametersDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(ParametersDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     "ParentId" => {
                         obj.parent_id =
@@ -5734,7 +5924,12 @@ impl StackDeserializer {
                         ));
                     }
                     "Tags" => {
-                        obj.tags = Some(try!(TagsDeserializer::deserialize("Tags", stack)));
+                        obj.tags = match obj.tags {
+                            Some(existing) => Some(
+                                existing.append(try!(TagsDeserializer::deserialize("Tags", stack))),
+                            ),
+                            None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
+                        };
                     }
                     "TimeoutInMinutes" => {
                         obj.timeout_in_minutes = Some(try!(
@@ -5977,10 +6172,15 @@ impl StackInstanceDeserializer {
                             Some(try!(AccountDeserializer::deserialize("Account", stack)));
                     }
                     "ParameterOverrides" => {
-                        obj.parameter_overrides = Some(try!(ParametersDeserializer::deserialize(
-                            "ParameterOverrides",
-                            stack
-                        )));
+                        obj.parameter_overrides = match obj.parameter_overrides {
+                            Some(existing) => Some(existing.append(try!(
+                                ParametersDeserializer::deserialize("ParameterOverrides", stack)
+                            ))),
+                            None => Some(try!(ParametersDeserializer::deserialize(
+                                "ParameterOverrides",
+                                stack
+                            ))),
+                        };
                     }
                     "Region" => {
                         obj.region = Some(try!(RegionDeserializer::deserialize("Region", stack)));
@@ -6632,10 +6832,15 @@ impl StackSetDeserializer {
                         )));
                     }
                     "Capabilities" => {
-                        obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
-                            "Capabilities",
-                            stack
-                        )));
+                        obj.capabilities = match obj.capabilities {
+                            Some(existing) => Some(existing.append(try!(
+                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
+                            ))),
+                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                                "Capabilities",
+                                stack
+                            ))),
+                        };
                     }
                     "Description" => {
                         obj.description = Some(try!(DescriptionDeserializer::deserialize(
@@ -6649,10 +6854,15 @@ impl StackSetDeserializer {
                         ));
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(ParametersDeserializer::deserialize(
-                            "Parameters",
-                            stack
-                        )));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                ParametersDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(ParametersDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     "StackSetARN" => {
                         obj.stack_set_arn = Some(try!(StackSetARNDeserializer::deserialize(
@@ -6678,7 +6888,12 @@ impl StackSetDeserializer {
                         )));
                     }
                     "Tags" => {
-                        obj.tags = Some(try!(TagsDeserializer::deserialize("Tags", stack)));
+                        obj.tags = match obj.tags {
+                            Some(existing) => Some(
+                                existing.append(try!(TagsDeserializer::deserialize("Tags", stack))),
+                            ),
+                            None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
+                        };
                     }
                     "TemplateBody" => {
                         obj.template_body = Some(try!(TemplateBodyDeserializer::deserialize(
@@ -6940,10 +7155,15 @@ impl StackSetOperationPreferencesDeserializer {
                             )));
                     }
                     "RegionOrder" => {
-                        obj.region_order = Some(try!(RegionListDeserializer::deserialize(
-                            "RegionOrder",
-                            stack
-                        )));
+                        obj.region_order = match obj.region_order {
+                            Some(existing) => Some(existing.append(try!(
+                                RegionListDeserializer::deserialize("RegionOrder", stack)
+                            ))),
+                            None => Some(try!(RegionListDeserializer::deserialize(
+                                "RegionOrder",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -8706,10 +8926,15 @@ impl ValidateTemplateOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
-                        obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
-                            "Capabilities",
-                            stack
-                        )));
+                        obj.capabilities = match obj.capabilities {
+                            Some(existing) => Some(existing.append(try!(
+                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
+                            ))),
+                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                                "Capabilities",
+                                stack
+                            ))),
+                        };
                     }
                     "CapabilitiesReason" => {
                         obj.capabilities_reason =
@@ -8719,9 +8944,18 @@ impl ValidateTemplateOutputDeserializer {
                             )));
                     }
                     "DeclaredTransforms" => {
-                        obj.declared_transforms = Some(try!(
-                            TransformsListDeserializer::deserialize("DeclaredTransforms", stack)
-                        ));
+                        obj.declared_transforms = match obj.declared_transforms {
+                            Some(existing) => Some(existing.append(try!(
+                                TransformsListDeserializer::deserialize(
+                                    "DeclaredTransforms",
+                                    stack
+                                )
+                            ))),
+                            None => Some(try!(TransformsListDeserializer::deserialize(
+                                "DeclaredTransforms",
+                                stack
+                            ))),
+                        };
                     }
                     "Description" => {
                         obj.description = Some(try!(DescriptionDeserializer::deserialize(
@@ -8730,10 +8964,15 @@ impl ValidateTemplateOutputDeserializer {
                         )));
                     }
                     "Parameters" => {
-                        obj.parameters = Some(try!(TemplateParametersDeserializer::deserialize(
-                            "Parameters",
-                            stack
-                        )));
+                        obj.parameters = match obj.parameters {
+                            Some(existing) => Some(existing.append(try!(
+                                TemplateParametersDeserializer::deserialize("Parameters", stack)
+                            ))),
+                            None => Some(try!(TemplateParametersDeserializer::deserialize(
+                                "Parameters",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },

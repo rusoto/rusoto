@@ -187,7 +187,8 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> S
                                                                                            service,
                                                                                            member_name,
                                                                                            member,
-                                                                                           &member_name.to_string())))
+                                                                                           &member_name.to_string(),
+                                                                                           false)))
                 })
                 .collect::<Vec<String>>()
                 .join("\n");
@@ -427,16 +428,34 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
                 }
             }
 
-            let parse_expression =
-                generate_struct_field_parse_expression(shape, service, member_name, member, location_name);
-            Some(format!(
-            "\"{location_name}\" => {{
-                obj.{field_name} = {parse_expression};
-            }}",
-            field_name = generate_field_name(member_name),
-            parse_expression = parse_expression,
-            location_name = location_name,
-        ))
+            // Some calls don't return sequential ordering of types, so we need to accumulate
+            // results instead of overwriting the existing list:
+            if member_shape.shape_type == ShapeType::List {
+                let parse_expression =
+                    generate_struct_field_parse_expression(shape, service, member_name, member, location_name, true);
+                Some(format!(
+                    "\"{location_name}\" => {{
+                        obj.{field_name} = match obj.{field_name} {{
+                            Some(existing) => Some(existing.append({parse_expression})),
+                            None => Some({parse_expression}),
+                        }};
+                    }}",
+                    field_name = generate_field_name(member_name),
+                    parse_expression = parse_expression,
+                    location_name = location_name,
+                ))
+            } else {
+                let parse_expression =
+                    generate_struct_field_parse_expression(shape, service, member_name, member, location_name, false);
+                Some(format!(
+                    "\"{location_name}\" => {{
+                        obj.{field_name} = {parse_expression};
+                    }}",
+                    field_name = generate_field_name(member_name),
+                    parse_expression = parse_expression,
+                    location_name = location_name,
+                ))
+            }
 
         })
         .collect::<Vec<String>>()
@@ -447,7 +466,8 @@ fn generate_struct_field_parse_expression(shape: &Shape,
                                           service: &Service,
                                           member_name: &str,
                                           member: &Member,
-                                          location_name: &str)
+                                          location_name: &str,
+                                          ignore_some: bool)
                                           -> String {
     let expression = format!(
         "try!({name}Deserializer::deserialize(\"{location_name}\", stack))",
@@ -458,6 +478,10 @@ fn generate_struct_field_parse_expression(shape: &Shape,
     if shape.required(member_name) {
         expression
     } else {
-        format!("Some({})", expression)
+        if ignore_some {
+            expression
+        } else {
+            format!("Some({})", expression)
+        }
     }
 }
