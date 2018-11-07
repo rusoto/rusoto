@@ -295,7 +295,7 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
         .as_ref()
         .unwrap()
         .iter()
-        .any(|(_, member)| member.location.is_some());
+        .any(|(_, member)| member.location.is_some()) || output_shape.payload.is_some();
 
     match output_shape.payload {
         None => json_body_parser(shape_name, mutable_result),
