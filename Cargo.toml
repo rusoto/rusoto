@@ -9,6 +9,7 @@ members = [
     "rusoto/services/apigateway",
     "rusoto/services/application-autoscaling",
     "rusoto/services/appstream",
+    "rusoto/services/appsync",
     "rusoto/services/athena",
     "rusoto/services/autoscaling",
     "rusoto/services/autoscaling-plans",

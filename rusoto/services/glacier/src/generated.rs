@@ -5945,7 +5945,7 @@ impl Glacier for GlacierClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
+                    let mut result =
                         serde_json::from_slice::<GetVaultAccessPolicyOutput>(&body).unwrap();
 
                     result
@@ -6027,7 +6027,7 @@ impl Glacier for GlacierClient {
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
+                    let mut result =
                         serde_json::from_slice::<GetVaultNotificationsOutput>(&body).unwrap();
 
                     result

@@ -47,6 +47,10 @@ path = "../rusoto/services/application-autoscaling"
 optional = true
 path = "../rusoto/services/appstream"
 
+[dependencies.rusoto_appsync]
+optional = true
+path = "../rusoto/services/appsync"
+
 [dependencies.rusoto_athena]
 optional = true
 path = "../rusoto/services/athena"
@@ -525,9 +529,10 @@ all = [
 		"acm",
 		"acm-pca",
 		"alexaforbusiness",
-        "apigateway",
+		"apigateway",
 		"application-autoscaling",
 		"appstream",
+		"appsync",
 		"athena",
 		"autoscaling",
 		"autoscaling-plans",
@@ -651,6 +656,7 @@ alexaforbusiness = ["rusoto_alexaforbusiness"]
 apigateway = ["rusoto_apigateway"]
 application-autoscaling = ["rusoto_application_autoscaling"]
 appstream = ["rusoto_appstream"]
+appsync = ["rusoto_appsync"]
 athena = ["rusoto_athena"]
 autoscaling = ["rusoto_autoscaling"]
 autoscaling-plans = ["rusoto_autoscaling_plans"]
