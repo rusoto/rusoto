@@ -431,19 +431,40 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
             // Some calls don't return sequential ordering of types, so we need to accumulate
             // results instead of overwriting the existing list:
             if member_shape.shape_type == ShapeType::List {
+                // We also need to know if this field is optional or not, right here.
                 let parse_expression =
-                    generate_struct_field_parse_expression(shape, service, member_name, member, location_name, true);
-                Some(format!(
-                    "\"{location_name}\" => {{
-                        obj.{field_name} = match obj.{field_name} {{
-                            Some(existing) => Some(existing.append({parse_expression})),
-                            None => Some({parse_expression}),
-                        }};
-                    }}",
-                    field_name = generate_field_name(member_name),
-                    parse_expression = parse_expression,
-                    location_name = location_name,
-                ))
+                        generate_struct_field_parse_expression(shape, service, member_name, member, location_name, true);
+                if shape.required(member_name) {
+                    Some(format!(
+                        "\"{location_name}\" => {{
+                            if obj.{field_name}.len() > 0 {{
+                                // append
+                                obj.{field_name}.extend({parse_expression});
+                            }} else {{
+                                // grab what we can
+                                obj.{field_name} = {parse_expression};
+                            }}
+                        }}",
+                        field_name = generate_field_name(member_name),
+                        parse_expression = parse_expression,
+                        location_name = location_name,
+                    ))
+                } else {
+                    Some(format!(
+                        "\"{location_name}\" => {{
+                            obj.{field_name} = match obj.{field_name} {{
+                                Some(ref mut existing) => {{
+                                    existing.extend({parse_expression});
+                                    Some(existing.to_vec())
+                                }}
+                                None => Some({parse_expression}),
+                            }};
+                        }}",
+                        field_name = generate_field_name(member_name),
+                        parse_expression = parse_expression,
+                        location_name = location_name,
+                    ))
+                }
             } else {
                 let parse_expression =
                     generate_struct_field_parse_expression(shape, service, member_name, member, location_name, false);
