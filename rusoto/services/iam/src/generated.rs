@@ -2716,9 +2716,13 @@ impl DeletionTaskFailureReasonTypeDeserializer {
                     }
                     "RoleUsageList" => {
                         obj.role_usage_list = match obj.role_usage_list {
-                            Some(existing) => Some(existing.append(try!(
-                                RoleUsageListTypeDeserializer::deserialize("RoleUsageList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RoleUsageListTypeDeserializer::deserialize(
+                                    "RoleUsageList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(RoleUsageListTypeDeserializer::deserialize(
                                 "RoleUsageList",
                                 stack
@@ -2989,12 +2993,13 @@ impl EvaluationResultDeserializer {
                     }
                     "MatchedStatements" => {
                         obj.matched_statements = match obj.matched_statements {
-                            Some(existing) => Some(existing.append(try!(
-                                StatementListTypeDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StatementListTypeDeserializer::deserialize(
                                     "MatchedStatements",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StatementListTypeDeserializer::deserialize(
                                 "MatchedStatements",
                                 stack
@@ -3003,12 +3008,15 @@ impl EvaluationResultDeserializer {
                     }
                     "MissingContextValues" => {
                         obj.missing_context_values = match obj.missing_context_values {
-                            Some(existing) => Some(existing.append(try!(
-                                ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                    "MissingContextValues",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                        "MissingContextValues",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 ContextKeyNamesResultListTypeDeserializer::deserialize(
                                     "MissingContextValues",
@@ -3026,12 +3034,15 @@ impl EvaluationResultDeserializer {
                     }
                     "ResourceSpecificResults" => {
                         obj.resource_specific_results = match obj.resource_specific_results {
-                            Some(existing) => Some(existing.append(try!(
-                                ResourceSpecificResultListTypeDeserializer::deserialize(
-                                    "ResourceSpecificResults",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ResourceSpecificResultListTypeDeserializer::deserialize(
+                                        "ResourceSpecificResults",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 ResourceSpecificResultListTypeDeserializer::deserialize(
                                     "ResourceSpecificResults",
@@ -3320,12 +3331,15 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "GroupDetailList" => {
                         obj.group_detail_list = match obj.group_detail_list {
-                            Some(existing) => Some(existing.append(try!(
-                                GroupDetailListTypeDeserializer::deserialize(
-                                    "GroupDetailList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    GroupDetailListTypeDeserializer::deserialize(
+                                        "GroupDetailList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(GroupDetailListTypeDeserializer::deserialize(
                                 "GroupDetailList",
                                 stack
@@ -3344,11 +3358,14 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
                     }
                     "Policies" => {
                         obj.policies = match obj.policies {
-                            Some(existing) => Some(existing.append(try!(
-                                ManagedPolicyDetailListTypeDeserializer::deserialize(
-                                    "Policies", stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ManagedPolicyDetailListTypeDeserializer::deserialize(
+                                        "Policies", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(ManagedPolicyDetailListTypeDeserializer::deserialize(
                                     "Policies", stack
@@ -3358,12 +3375,13 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
                     }
                     "RoleDetailList" => {
                         obj.role_detail_list = match obj.role_detail_list {
-                            Some(existing) => Some(existing.append(try!(
-                                RoleDetailListTypeDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RoleDetailListTypeDeserializer::deserialize(
                                     "RoleDetailList",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(RoleDetailListTypeDeserializer::deserialize(
                                 "RoleDetailList",
                                 stack
@@ -3372,12 +3390,13 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
                     }
                     "UserDetailList" => {
                         obj.user_detail_list = match obj.user_detail_list {
-                            Some(existing) => Some(existing.append(try!(
-                                UserDetailListTypeDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(UserDetailListTypeDeserializer::deserialize(
                                     "UserDetailList",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(UserDetailListTypeDeserializer::deserialize(
                                 "UserDetailList",
                                 stack
@@ -3550,12 +3569,15 @@ impl GetContextKeysForPolicyResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ContextKeyNames" => {
                         obj.context_key_names = match obj.context_key_names {
-                            Some(existing) => Some(existing.append(try!(
-                                ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                    "ContextKeyNames",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                        "ContextKeyNames",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 ContextKeyNamesResultListTypeDeserializer::deserialize(
                                     "ContextKeyNames",
@@ -3837,14 +3859,8 @@ impl GetGroupResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Users" => {
-                        obj.users = match obj.users {
-                            Some(existing) => Some(existing.append(try!(
-                                UserListTypeDeserializer::deserialize("Users", stack)
-                            ))),
-                            None => {
-                                Some(try!(UserListTypeDeserializer::deserialize("Users", stack)))
-                            }
-                        };
+                        obj.users
+                            .extend(try!(UserListTypeDeserializer::deserialize("Users", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4056,9 +4072,13 @@ impl GetOpenIDConnectProviderResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ClientIDList" => {
                         obj.client_id_list = match obj.client_id_list {
-                            Some(existing) => Some(existing.append(try!(
-                                ClientIDListTypeDeserializer::deserialize("ClientIDList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ClientIDListTypeDeserializer::deserialize(
+                                    "ClientIDList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ClientIDListTypeDeserializer::deserialize(
                                 "ClientIDList",
                                 stack
@@ -4071,12 +4091,13 @@ impl GetOpenIDConnectProviderResponseDeserializer {
                     }
                     "ThumbprintList" => {
                         obj.thumbprint_list = match obj.thumbprint_list {
-                            Some(existing) => Some(existing.append(try!(
-                                ThumbprintListTypeDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ThumbprintListTypeDeserializer::deserialize(
                                     "ThumbprintList",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ThumbprintListTypeDeserializer::deserialize(
                                 "ThumbprintList",
                                 stack
@@ -4958,12 +4979,15 @@ impl GroupDetailDeserializer {
                     }
                     "AttachedManagedPolicies" => {
                         obj.attached_managed_policies = match obj.attached_managed_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedManagedPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedManagedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedManagedPolicies",
                                 stack
@@ -4986,12 +5010,15 @@ impl GroupDetailDeserializer {
                     }
                     "GroupPolicyList" => {
                         obj.group_policy_list = match obj.group_policy_list {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyDetailListTypeDeserializer::deserialize(
-                                    "GroupPolicyList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDetailListTypeDeserializer::deserialize(
+                                        "GroupPolicyList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyDetailListTypeDeserializer::deserialize(
                                 "GroupPolicyList",
                                 stack
@@ -5226,14 +5253,8 @@ impl InstanceProfileDeserializer {
                         obj.path = try!(PathTypeDeserializer::deserialize("Path", stack));
                     }
                     "Roles" => {
-                        obj.roles = match obj.roles {
-                            Some(existing) => Some(existing.append(try!(
-                                RoleListTypeDeserializer::deserialize("Roles", stack)
-                            ))),
-                            None => {
-                                Some(try!(RoleListTypeDeserializer::deserialize("Roles", stack)))
-                            }
-                        };
+                        obj.roles
+                            .extend(try!(RoleListTypeDeserializer::deserialize("Roles", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -5387,18 +5408,12 @@ impl ListAccessKeysResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccessKeyMetadata" => {
-                        obj.access_key_metadata = match obj.access_key_metadata {
-                            Some(existing) => Some(existing.append(try!(
-                                AccessKeyMetadataListTypeDeserializer::deserialize(
-                                    "AccessKeyMetadata",
-                                    stack
-                                )
-                            ))),
-                            None => Some(try!(AccessKeyMetadataListTypeDeserializer::deserialize(
+                        obj.access_key_metadata.extend(try!(
+                            AccessKeyMetadataListTypeDeserializer::deserialize(
                                 "AccessKeyMetadata",
                                 stack
-                            ))),
-                        };
+                            )
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -5487,18 +5502,9 @@ impl ListAccountAliasesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccountAliases" => {
-                        obj.account_aliases = match obj.account_aliases {
-                            Some(existing) => Some(existing.append(try!(
-                                AccountAliasListTypeDeserializer::deserialize(
-                                    "AccountAliases",
-                                    stack
-                                )
-                            ))),
-                            None => Some(try!(AccountAliasListTypeDeserializer::deserialize(
-                                "AccountAliases",
-                                stack
-                            ))),
-                        };
+                        obj.account_aliases.extend(try!(
+                            AccountAliasListTypeDeserializer::deserialize("AccountAliases", stack)
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -5596,12 +5602,15 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttachedPolicies" => {
                         obj.attached_policies = match obj.attached_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack
@@ -5704,12 +5713,15 @@ impl ListAttachedRolePoliciesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttachedPolicies" => {
                         obj.attached_policies = match obj.attached_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack
@@ -5812,12 +5824,15 @@ impl ListAttachedUserPoliciesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttachedPolicies" => {
                         obj.attached_policies = match obj.attached_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack
@@ -5944,9 +5959,15 @@ impl ListEntitiesForPolicyResponseDeserializer {
                     }
                     "PolicyGroups" => {
                         obj.policy_groups = match obj.policy_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyGroupListTypeDeserializer::deserialize("PolicyGroups", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyGroupListTypeDeserializer::deserialize(
+                                        "PolicyGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyGroupListTypeDeserializer::deserialize(
                                 "PolicyGroups",
                                 stack
@@ -5955,9 +5976,13 @@ impl ListEntitiesForPolicyResponseDeserializer {
                     }
                     "PolicyRoles" => {
                         obj.policy_roles = match obj.policy_roles {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyRoleListTypeDeserializer::deserialize("PolicyRoles", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyRoleListTypeDeserializer::deserialize(
+                                    "PolicyRoles",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyRoleListTypeDeserializer::deserialize(
                                 "PolicyRoles",
                                 stack
@@ -5966,9 +5991,13 @@ impl ListEntitiesForPolicyResponseDeserializer {
                     }
                     "PolicyUsers" => {
                         obj.policy_users = match obj.policy_users {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyUserListTypeDeserializer::deserialize("PolicyUsers", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyUserListTypeDeserializer::deserialize(
+                                    "PolicyUsers",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyUserListTypeDeserializer::deserialize(
                                 "PolicyUsers",
                                 stack
@@ -6053,30 +6082,26 @@ impl ListGroupPoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
-                    }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyNames" => {
-                        obj.policy_names = match obj.policy_names {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
-                            ))),
-                            None => Some(try!(PolicyNameListTypeDeserializer::deserialize(
-                                "PolicyNames",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
                                 stack
-                            ))),
-                        };
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyNames" => {
+                            obj.policy_names.extend(try!(
+                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6155,14 +6180,10 @@ impl ListGroupsForUserResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Groups" => {
-                        obj.groups = match obj.groups {
-                            Some(existing) => Some(existing.append(try!(
-                                GroupListTypeDeserializer::deserialize("Groups", stack)
-                            ))),
-                            None => Some(try!(GroupListTypeDeserializer::deserialize(
+                        obj.groups
+                            .extend(try!(GroupListTypeDeserializer::deserialize(
                                 "Groups", stack
-                            ))),
-                        };
+                            )));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6256,14 +6277,10 @@ impl ListGroupsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Groups" => {
-                        obj.groups = match obj.groups {
-                            Some(existing) => Some(existing.append(try!(
-                                GroupListTypeDeserializer::deserialize("Groups", stack)
-                            ))),
-                            None => Some(try!(GroupListTypeDeserializer::deserialize(
+                        obj.groups
+                            .extend(try!(GroupListTypeDeserializer::deserialize(
                                 "Groups", stack
-                            ))),
-                        };
+                            )));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6355,18 +6372,12 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "InstanceProfiles" => {
-                        obj.instance_profiles = match obj.instance_profiles {
-                            Some(existing) => Some(existing.append(try!(
-                                InstanceProfileListTypeDeserializer::deserialize(
-                                    "InstanceProfiles",
-                                    stack
-                                )
-                            ))),
-                            None => Some(try!(InstanceProfileListTypeDeserializer::deserialize(
+                        obj.instance_profiles.extend(try!(
+                            InstanceProfileListTypeDeserializer::deserialize(
                                 "InstanceProfiles",
                                 stack
-                            ))),
-                        };
+                            )
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6460,18 +6471,12 @@ impl ListInstanceProfilesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "InstanceProfiles" => {
-                        obj.instance_profiles = match obj.instance_profiles {
-                            Some(existing) => Some(existing.append(try!(
-                                InstanceProfileListTypeDeserializer::deserialize(
-                                    "InstanceProfiles",
-                                    stack
-                                )
-                            ))),
-                            None => Some(try!(InstanceProfileListTypeDeserializer::deserialize(
+                        obj.instance_profiles.extend(try!(
+                            InstanceProfileListTypeDeserializer::deserialize(
                                 "InstanceProfiles",
                                 stack
-                            ))),
-                        };
+                            )
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6563,30 +6568,26 @@ impl ListMFADevicesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
-                    }
-                    "MFADevices" => {
-                        obj.mfa_devices = match obj.mfa_devices {
-                            Some(existing) => Some(existing.append(try!(
-                                MfaDeviceListTypeDeserializer::deserialize("MFADevices", stack)
-                            ))),
-                            None => Some(try!(MfaDeviceListTypeDeserializer::deserialize(
-                                "MFADevices",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
                                 stack
-                            ))),
-                        };
+                            )));
+                        }
+                        "MFADevices" => {
+                            obj.mfa_devices.extend(try!(
+                                MfaDeviceListTypeDeserializer::deserialize("MFADevices", stack)
+                            ));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6645,12 +6646,15 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
                     "OpenIDConnectProviderList" => {
                         obj.open_id_connect_provider_list = match obj.open_id_connect_provider_list
                         {
-                            Some(existing) => Some(existing.append(try!(
-                                OpenIDConnectProviderListTypeDeserializer::deserialize(
-                                    "OpenIDConnectProviderList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    OpenIDConnectProviderListTypeDeserializer::deserialize(
+                                        "OpenIDConnectProviderList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 OpenIDConnectProviderListTypeDeserializer::deserialize(
                                     "OpenIDConnectProviderList",
@@ -6770,9 +6774,12 @@ impl ListPoliciesResponseDeserializer {
                     }
                     "Policies" => {
                         obj.policies = match obj.policies {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyListTypeDeserializer::deserialize("Policies", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyListTypeDeserializer::deserialize(
+                                    "Policies", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyListTypeDeserializer::deserialize(
                                 "Policies", stack
                             ))),
@@ -6869,11 +6876,14 @@ impl ListPolicyVersionsResponseDeserializer {
                     }
                     "Versions" => {
                         obj.versions = match obj.versions {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                    "Versions", stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDocumentVersionListTypeDeserializer::deserialize(
+                                        "Versions", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 PolicyDocumentVersionListTypeDeserializer::deserialize(
                                     "Versions", stack
@@ -6959,30 +6969,26 @@ impl ListRolePoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
-                    }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyNames" => {
-                        obj.policy_names = match obj.policy_names {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
-                            ))),
-                            None => Some(try!(PolicyNameListTypeDeserializer::deserialize(
-                                "PolicyNames",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
                                 stack
-                            ))),
-                        };
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyNames" => {
+                            obj.policy_names.extend(try!(
+                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7073,14 +7079,8 @@ impl ListRolesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Roles" => {
-                        obj.roles = match obj.roles {
-                            Some(existing) => Some(existing.append(try!(
-                                RoleListTypeDeserializer::deserialize("Roles", stack)
-                            ))),
-                            None => {
-                                Some(try!(RoleListTypeDeserializer::deserialize("Roles", stack)))
-                            }
-                        };
+                        obj.roles
+                            .extend(try!(RoleListTypeDeserializer::deserialize("Roles", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7141,12 +7141,15 @@ impl ListSAMLProvidersResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "SAMLProviderList" => {
                         obj.saml_provider_list = match obj.saml_provider_list {
-                            Some(existing) => Some(existing.append(try!(
-                                SAMLProviderListTypeDeserializer::deserialize(
-                                    "SAMLProviderList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    SAMLProviderListTypeDeserializer::deserialize(
+                                        "SAMLProviderList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SAMLProviderListTypeDeserializer::deserialize(
                                 "SAMLProviderList",
                                 stack
@@ -7246,12 +7249,15 @@ impl ListSSHPublicKeysResponseDeserializer {
                     }
                     "SSHPublicKeys" => {
                         obj.ssh_public_keys = match obj.ssh_public_keys {
-                            Some(existing) => Some(existing.append(try!(
-                                SSHPublicKeyListTypeDeserializer::deserialize(
-                                    "SSHPublicKeys",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    SSHPublicKeyListTypeDeserializer::deserialize(
+                                        "SSHPublicKeys",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SSHPublicKeyListTypeDeserializer::deserialize(
                                 "SSHPublicKeys",
                                 stack
@@ -7350,21 +7356,12 @@ impl ListServerCertificatesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "ServerCertificateMetadataList" => {
-                        obj.server_certificate_metadata_list =
-                            match obj.server_certificate_metadata_list {
-                                Some(existing) => Some(existing.append(try!(
-                                    ServerCertificateMetadataListTypeDeserializer::deserialize(
-                                        "ServerCertificateMetadataList",
-                                        stack
-                                    )
-                                ))),
-                                None => Some(try!(
-                                    ServerCertificateMetadataListTypeDeserializer::deserialize(
-                                        "ServerCertificateMetadataList",
-                                        stack
-                                    )
-                                )),
-                            };
+                        obj.server_certificate_metadata_list.extend(try!(
+                            ServerCertificateMetadataListTypeDeserializer::deserialize(
+                                "ServerCertificateMetadataList",
+                                stack
+                            )
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7436,12 +7433,15 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ServiceSpecificCredentials" => {
                         obj.service_specific_credentials = match obj.service_specific_credentials {
-                            Some(existing) => Some(existing.append(try!(
-                                ServiceSpecificCredentialsListTypeDeserializer::deserialize(
-                                    "ServiceSpecificCredentials",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ServiceSpecificCredentialsListTypeDeserializer::deserialize(
+                                        "ServiceSpecificCredentials",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 ServiceSpecificCredentialsListTypeDeserializer::deserialize(
                                     "ServiceSpecificCredentials",
@@ -7532,15 +7532,9 @@ impl ListSigningCertificatesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Certificates" => {
-                        obj.certificates = match obj.certificates {
-                            Some(existing) => Some(existing.append(try!(
-                                CertificateListTypeDeserializer::deserialize("Certificates", stack)
-                            ))),
-                            None => Some(try!(CertificateListTypeDeserializer::deserialize(
-                                "Certificates",
-                                stack
-                            ))),
-                        };
+                        obj.certificates.extend(try!(
+                            CertificateListTypeDeserializer::deserialize("Certificates", stack)
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -7630,30 +7624,26 @@ impl ListUserPoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
-                    }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyNames" => {
-                        obj.policy_names = match obj.policy_names {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
-                            ))),
-                            None => Some(try!(PolicyNameListTypeDeserializer::deserialize(
-                                "PolicyNames",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
                                 stack
-                            ))),
-                        };
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyNames" => {
+                            obj.policy_names.extend(try!(
+                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7744,14 +7734,8 @@ impl ListUsersResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Users" => {
-                        obj.users = match obj.users {
-                            Some(existing) => Some(existing.append(try!(
-                                UserListTypeDeserializer::deserialize("Users", stack)
-                            ))),
-                            None => {
-                                Some(try!(UserListTypeDeserializer::deserialize("Users", stack)))
-                            }
-                        };
+                        obj.users
+                            .extend(try!(UserListTypeDeserializer::deserialize("Users", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7845,18 +7829,12 @@ impl ListVirtualMFADevicesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "VirtualMFADevices" => {
-                        obj.virtual_mfa_devices = match obj.virtual_mfa_devices {
-                            Some(existing) => Some(existing.append(try!(
-                                VirtualMFADeviceListTypeDeserializer::deserialize(
-                                    "VirtualMFADevices",
-                                    stack
-                                )
-                            ))),
-                            None => Some(try!(VirtualMFADeviceListTypeDeserializer::deserialize(
+                        obj.virtual_mfa_devices.extend(try!(
+                            VirtualMFADeviceListTypeDeserializer::deserialize(
                                 "VirtualMFADevices",
                                 stack
-                            ))),
-                        };
+                            )
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -8094,12 +8072,15 @@ impl ManagedPolicyDetailDeserializer {
                     }
                     "PolicyVersionList" => {
                         obj.policy_version_list = match obj.policy_version_list {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                    "PolicyVersionList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDocumentVersionListTypeDeserializer::deserialize(
+                                        "PolicyVersionList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 PolicyDocumentVersionListTypeDeserializer::deserialize(
                                     "PolicyVersionList",
@@ -9915,12 +9896,13 @@ impl ResourceSpecificResultDeserializer {
                     }
                     "MatchedStatements" => {
                         obj.matched_statements = match obj.matched_statements {
-                            Some(existing) => Some(existing.append(try!(
-                                StatementListTypeDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StatementListTypeDeserializer::deserialize(
                                     "MatchedStatements",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StatementListTypeDeserializer::deserialize(
                                 "MatchedStatements",
                                 stack
@@ -9929,12 +9911,15 @@ impl ResourceSpecificResultDeserializer {
                     }
                     "MissingContextValues" => {
                         obj.missing_context_values = match obj.missing_context_values {
-                            Some(existing) => Some(existing.append(try!(
-                                ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                    "MissingContextValues",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                        "MissingContextValues",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 ContextKeyNamesResultListTypeDeserializer::deserialize(
                                     "MissingContextValues",
@@ -10208,12 +10193,15 @@ impl RoleDetailDeserializer {
                     }
                     "AttachedManagedPolicies" => {
                         obj.attached_managed_policies = match obj.attached_managed_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedManagedPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedManagedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedManagedPolicies",
                                 stack
@@ -10226,12 +10214,15 @@ impl RoleDetailDeserializer {
                     }
                     "InstanceProfileList" => {
                         obj.instance_profile_list = match obj.instance_profile_list {
-                            Some(existing) => Some(existing.append(try!(
-                                InstanceProfileListTypeDeserializer::deserialize(
-                                    "InstanceProfileList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    InstanceProfileListTypeDeserializer::deserialize(
+                                        "InstanceProfileList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(InstanceProfileListTypeDeserializer::deserialize(
                                 "InstanceProfileList",
                                 stack
@@ -10258,12 +10249,15 @@ impl RoleDetailDeserializer {
                     }
                     "RolePolicyList" => {
                         obj.role_policy_list = match obj.role_policy_list {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyDetailListTypeDeserializer::deserialize(
-                                    "RolePolicyList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDetailListTypeDeserializer::deserialize(
+                                        "RolePolicyList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyDetailListTypeDeserializer::deserialize(
                                 "RolePolicyList",
                                 stack
@@ -10472,9 +10466,13 @@ impl RoleUsageTypeDeserializer {
                     }
                     "Resources" => {
                         obj.resources = match obj.resources {
-                            Some(existing) => Some(existing.append(try!(
-                                ArnListTypeDeserializer::deserialize("Resources", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArnListTypeDeserializer::deserialize(
+                                    "Resources",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ArnListTypeDeserializer::deserialize(
                                 "Resources",
                                 stack
@@ -11502,12 +11500,15 @@ impl SimulatePolicyResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EvaluationResults" => {
                         obj.evaluation_results = match obj.evaluation_results {
-                            Some(existing) => Some(existing.append(try!(
-                                EvaluationResultsListTypeDeserializer::deserialize(
-                                    "EvaluationResults",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EvaluationResultsListTypeDeserializer::deserialize(
+                                        "EvaluationResults",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(EvaluationResultsListTypeDeserializer::deserialize(
                                 "EvaluationResults",
                                 stack
@@ -12855,12 +12856,15 @@ impl UserDetailDeserializer {
                     }
                     "AttachedManagedPolicies" => {
                         obj.attached_managed_policies = match obj.attached_managed_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedManagedPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedManagedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedManagedPolicies",
                                 stack
@@ -12873,9 +12877,13 @@ impl UserDetailDeserializer {
                     }
                     "GroupList" => {
                         obj.group_list = match obj.group_list {
-                            Some(existing) => Some(existing.append(try!(
-                                GroupNameListTypeDeserializer::deserialize("GroupList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(GroupNameListTypeDeserializer::deserialize(
+                                    "GroupList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(GroupNameListTypeDeserializer::deserialize(
                                 "GroupList",
                                 stack
@@ -12902,12 +12910,15 @@ impl UserDetailDeserializer {
                     }
                     "UserPolicyList" => {
                         obj.user_policy_list = match obj.user_policy_list {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyDetailListTypeDeserializer::deserialize(
-                                    "UserPolicyList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDetailListTypeDeserializer::deserialize(
+                                        "UserPolicyList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyDetailListTypeDeserializer::deserialize(
                                 "UserPolicyList",
                                 stack

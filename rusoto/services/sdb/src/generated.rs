@@ -554,9 +554,13 @@ impl GetAttributesResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Attribute" => {
                         obj.attributes = match obj.attributes {
-                            Some(existing) => Some(existing.append(try!(
-                                AttributeListDeserializer::deserialize("Attribute", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AttributeListDeserializer::deserialize(
+                                    "Attribute",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttributeListDeserializer::deserialize(
                                 "Attribute",
                                 stack
@@ -631,15 +635,11 @@ impl ItemDeserializer {
                         )));
                     }
                     "Attribute" => {
-                        obj.attributes = match obj.attributes {
-                            Some(existing) => Some(existing.append(try!(
-                                AttributeListDeserializer::deserialize("Attribute", stack)
-                            ))),
-                            None => Some(try!(AttributeListDeserializer::deserialize(
+                        obj.attributes
+                            .extend(try!(AttributeListDeserializer::deserialize(
                                 "Attribute",
                                 stack
-                            ))),
-                        };
+                            )));
                     }
                     "Name" => {
                         obj.name = try!(StringDeserializer::deserialize("Name", stack));
@@ -744,9 +744,13 @@ impl ListDomainsResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DomainName" => {
                         obj.domain_names = match obj.domain_names {
-                            Some(existing) => Some(existing.append(try!(
-                                DomainNameListDeserializer::deserialize("DomainName", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DomainNameListDeserializer::deserialize(
+                                    "DomainName",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DomainNameListDeserializer::deserialize(
                                 "DomainName",
                                 stack
@@ -970,10 +974,11 @@ impl SelectResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Item" => {
                         obj.items = match obj.items {
-                            Some(existing) => Some(
+                            Some(ref mut existing) => {
                                 existing
-                                    .append(try!(ItemListDeserializer::deserialize("Item", stack))),
-                            ),
+                                    .extend(try!(ItemListDeserializer::deserialize("Item", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ItemListDeserializer::deserialize("Item", stack))),
                         };
                     }

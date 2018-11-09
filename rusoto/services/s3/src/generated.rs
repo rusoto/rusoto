@@ -1622,30 +1622,14 @@ impl CORSRuleDeserializer {
                             };
                         }
                         "AllowedMethod" => {
-                            if obj.allowed_methods.len() > 0 {
-                                // append
-                                obj.allowed_methods.extend(try!(
-                                    AllowedMethodsDeserializer::deserialize("AllowedMethod", stack)
-                                ));
-                            } else {
-                                // grab what we can
-                                obj.allowed_methods = try!(
-                                    AllowedMethodsDeserializer::deserialize("AllowedMethod", stack)
-                                );
-                            }
+                            obj.allowed_methods.extend(try!(
+                                AllowedMethodsDeserializer::deserialize("AllowedMethod", stack)
+                            ));
                         }
                         "AllowedOrigin" => {
-                            if obj.allowed_origins.len() > 0 {
-                                // append
-                                obj.allowed_origins.extend(try!(
-                                    AllowedOriginsDeserializer::deserialize("AllowedOrigin", stack)
-                                ));
-                            } else {
-                                // grab what we can
-                                obj.allowed_origins = try!(
-                                    AllowedOriginsDeserializer::deserialize("AllowedOrigin", stack)
-                                );
-                            }
+                            obj.allowed_origins.extend(try!(
+                                AllowedOriginsDeserializer::deserialize("AllowedOrigin", stack)
+                            ));
                         }
                         "ExposeHeader" => {
                             obj.expose_headers = match obj.expose_headers {
@@ -5405,22 +5389,13 @@ impl GetBucketTaggingOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "TagSet" => {
-                            if obj.tag_set.len() > 0 {
-                                // append
-                                obj.tag_set
-                                    .extend(try!(TagSetDeserializer::deserialize("TagSet", stack)));
-                            } else {
-                                // grab what we can
-                                obj.tag_set =
-                                    try!(TagSetDeserializer::deserialize("TagSet", stack));
-                            }
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "TagSet" => {
+                        obj.tag_set
+                            .extend(try!(TagSetDeserializer::deserialize("TagSet", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5774,22 +5749,13 @@ impl GetObjectTaggingOutputDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "TagSet" => {
-                            if obj.tag_set.len() > 0 {
-                                // append
-                                obj.tag_set
-                                    .extend(try!(TagSetDeserializer::deserialize("TagSet", stack)));
-                            } else {
-                                // grab what we can
-                                obj.tag_set =
-                                    try!(TagSetDeserializer::deserialize("TagSet", stack));
-                            }
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "TagSet" => {
+                        obj.tag_set
+                            .extend(try!(TagSetDeserializer::deserialize("TagSet", stack)));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7658,39 +7624,29 @@ impl LambdaFunctionConfigurationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Event" => {
-                            if obj.events.len() > 0 {
-                                // append
-                                obj.events.extend(try!(EventListDeserializer::deserialize(
-                                    "Event", stack
-                                )));
-                            } else {
-                                // grab what we can
-                                obj.events =
-                                    try!(EventListDeserializer::deserialize("Event", stack));
-                            }
-                        }
-                        "Filter" => {
-                            obj.filter = Some(try!(
-                                NotificationConfigurationFilterDeserializer::deserialize(
-                                    "Filter", stack
-                                )
-                            ));
-                        }
-                        "Id" => {
-                            obj.id =
-                                Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
-                        }
-                        "CloudFunction" => {
-                            obj.lambda_function_arn = try!(
-                                LambdaFunctionArnDeserializer::deserialize("CloudFunction", stack)
-                            );
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Event" => {
+                        obj.events
+                            .extend(try!(EventListDeserializer::deserialize("Event", stack)));
                     }
-                }
+                    "Filter" => {
+                        obj.filter = Some(try!(
+                            NotificationConfigurationFilterDeserializer::deserialize(
+                                "Filter", stack
+                            )
+                        ));
+                    }
+                    "Id" => {
+                        obj.id = Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
+                    }
+                    "CloudFunction" => {
+                        obj.lambda_function_arn = try!(LambdaFunctionArnDeserializer::deserialize(
+                            "CloudFunction",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -12284,37 +12240,26 @@ impl QueueConfigurationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Event" => {
-                            if obj.events.len() > 0 {
-                                // append
-                                obj.events.extend(try!(EventListDeserializer::deserialize(
-                                    "Event", stack
-                                )));
-                            } else {
-                                // grab what we can
-                                obj.events =
-                                    try!(EventListDeserializer::deserialize("Event", stack));
-                            }
-                        }
-                        "Filter" => {
-                            obj.filter = Some(try!(
-                                NotificationConfigurationFilterDeserializer::deserialize(
-                                    "Filter", stack
-                                )
-                            ));
-                        }
-                        "Id" => {
-                            obj.id =
-                                Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
-                        }
-                        "Queue" => {
-                            obj.queue_arn = try!(QueueArnDeserializer::deserialize("Queue", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Event" => {
+                        obj.events
+                            .extend(try!(EventListDeserializer::deserialize("Event", stack)));
                     }
-                }
+                    "Filter" => {
+                        obj.filter = Some(try!(
+                            NotificationConfigurationFilterDeserializer::deserialize(
+                                "Filter", stack
+                            )
+                        ));
+                    }
+                    "Id" => {
+                        obj.id = Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
+                    }
+                    "Queue" => {
+                        obj.queue_arn = try!(QueueArnDeserializer::deserialize("Queue", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -12999,27 +12944,18 @@ impl ReplicationConfigurationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Role" => {
-                            obj.role = try!(RoleDeserializer::deserialize("Role", stack));
-                        }
-                        "Rule" => {
-                            if obj.rules.len() > 0 {
-                                // append
-                                obj.rules
-                                    .extend(try!(ReplicationRulesDeserializer::deserialize(
-                                        "Rule", stack
-                                    )));
-                            } else {
-                                // grab what we can
-                                obj.rules =
-                                    try!(ReplicationRulesDeserializer::deserialize("Rule", stack));
-                            }
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Role" => {
+                        obj.role = try!(RoleDeserializer::deserialize("Role", stack));
                     }
-                }
+                    "Rule" => {
+                        obj.rules
+                            .extend(try!(ReplicationRulesDeserializer::deserialize(
+                                "Rule", stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -14606,27 +14542,15 @@ impl ServerSideEncryptionConfigurationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Rule" => {
-                            if obj.rules.len() > 0 {
-                                // append
-                                obj.rules.extend(try!(
-                                    ServerSideEncryptionRulesDeserializer::deserialize(
-                                        "Rule", stack
-                                    )
-                                ));
-                            } else {
-                                // grab what we can
-                                obj.rules =
-                                    try!(ServerSideEncryptionRulesDeserializer::deserialize(
-                                        "Rule", stack
-                                    ));
-                            }
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Rule" => {
+                        obj.rules
+                            .extend(try!(ServerSideEncryptionRulesDeserializer::deserialize(
+                                "Rule", stack
+                            )));
                     }
-                }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -15872,37 +15796,26 @@ impl TopicConfigurationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Event" => {
-                            if obj.events.len() > 0 {
-                                // append
-                                obj.events.extend(try!(EventListDeserializer::deserialize(
-                                    "Event", stack
-                                )));
-                            } else {
-                                // grab what we can
-                                obj.events =
-                                    try!(EventListDeserializer::deserialize("Event", stack));
-                            }
-                        }
-                        "Filter" => {
-                            obj.filter = Some(try!(
-                                NotificationConfigurationFilterDeserializer::deserialize(
-                                    "Filter", stack
-                                )
-                            ));
-                        }
-                        "Id" => {
-                            obj.id =
-                                Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
-                        }
-                        "Topic" => {
-                            obj.topic_arn = try!(TopicArnDeserializer::deserialize("Topic", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Event" => {
+                        obj.events
+                            .extend(try!(EventListDeserializer::deserialize("Event", stack)));
                     }
-                }
+                    "Filter" => {
+                        obj.filter = Some(try!(
+                            NotificationConfigurationFilterDeserializer::deserialize(
+                                "Filter", stack
+                            )
+                        ));
+                    }
+                    "Id" => {
+                        obj.id = Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
+                    }
+                    "Topic" => {
+                        obj.topic_arn = try!(TopicArnDeserializer::deserialize("Topic", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();

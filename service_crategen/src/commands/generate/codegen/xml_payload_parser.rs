@@ -437,13 +437,7 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
                 if shape.required(member_name) {
                     Some(format!(
                         "\"{location_name}\" => {{
-                            if obj.{field_name}.len() > 0 {{
-                                // append
-                                obj.{field_name}.extend({parse_expression});
-                            }} else {{
-                                // grab what we can
-                                obj.{field_name} = {parse_expression};
-                            }}
+                            obj.{field_name}.extend({parse_expression});
                         }}",
                         field_name = generate_field_name(member_name),
                         parse_expression = parse_expression,
@@ -496,13 +490,9 @@ fn generate_struct_field_parse_expression(shape: &Shape,
         location_name = location_name,
     );
 
-    if shape.required(member_name) {
+    if shape.required(member_name) || ignore_some {
         expression
     } else {
-        if ignore_some {
-            expression
-        } else {
-            format!("Some({})", expression)
-        }
+        format!("Some({})", expression)
     }
 }

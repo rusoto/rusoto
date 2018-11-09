@@ -272,12 +272,13 @@ impl AddAvailabilityZonesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
-                            Some(existing) => Some(existing.append(try!(
-                                AvailabilityZonesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
                                 stack
@@ -661,9 +662,13 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "SecurityGroups" => {
                         obj.security_groups = match obj.security_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                SecurityGroupsDeserializer::deserialize("SecurityGroups", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SecurityGroupsDeserializer::deserialize(
+                                    "SecurityGroups",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SecurityGroupsDeserializer::deserialize(
                                 "SecurityGroups",
                                 stack
@@ -741,10 +746,11 @@ impl AttachLoadBalancerToSubnetsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Subnets" => {
                         obj.subnets = match obj.subnets {
-                            Some(existing) => {
-                                Some(existing.append(try!(SubnetsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetsDeserializer::deserialize(
                                     "Subnets", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(SubnetsDeserializer::deserialize("Subnets", stack))),
                         };
@@ -912,9 +918,13 @@ impl BackendServerDescriptionDeserializer {
                     }
                     "PolicyNames" => {
                         obj.policy_names = match obj.policy_names {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyNamesDeserializer::deserialize("PolicyNames", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyNamesDeserializer::deserialize(
+                                    "PolicyNames",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyNamesDeserializer::deserialize(
                                 "PolicyNames",
                                 stack
@@ -1913,9 +1923,13 @@ impl DeregisterEndPointsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Instances" => {
                         obj.instances = match obj.instances {
-                            Some(existing) => Some(existing.append(try!(
-                                InstancesDeserializer::deserialize("Instances", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstancesDeserializer::deserialize(
+                                    "Instances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(InstancesDeserializer::deserialize("Instances", stack)))
                             }
@@ -2007,12 +2021,15 @@ impl DescribeAccessPointsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LoadBalancerDescriptions" => {
                         obj.load_balancer_descriptions = match obj.load_balancer_descriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                LoadBalancerDescriptionsDeserializer::deserialize(
-                                    "LoadBalancerDescriptions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    LoadBalancerDescriptionsDeserializer::deserialize(
+                                        "LoadBalancerDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(LoadBalancerDescriptionsDeserializer::deserialize(
                                 "LoadBalancerDescriptions",
                                 stack
@@ -2098,10 +2115,11 @@ impl DescribeAccountLimitsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Limits" => {
                         obj.limits = match obj.limits {
-                            Some(existing) => Some(
+                            Some(ref mut existing) => {
                                 existing
-                                    .append(try!(LimitsDeserializer::deserialize("Limits", stack))),
-                            ),
+                                    .extend(try!(LimitsDeserializer::deserialize("Limits", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(LimitsDeserializer::deserialize("Limits", stack))),
                         };
                     }
@@ -2186,9 +2204,13 @@ impl DescribeEndPointStateOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "InstanceStates" => {
                         obj.instance_states = match obj.instance_states {
-                            Some(existing) => Some(existing.append(try!(
-                                InstanceStatesDeserializer::deserialize("InstanceStates", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstanceStatesDeserializer::deserialize(
+                                    "InstanceStates",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(InstanceStatesDeserializer::deserialize(
                                 "InstanceStates",
                                 stack
@@ -2344,12 +2366,13 @@ impl DescribeLoadBalancerPoliciesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyDescriptions" => {
                         obj.policy_descriptions = match obj.policy_descriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyDescriptionsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyDescriptionsDeserializer::deserialize(
                                     "PolicyDescriptions",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyDescriptionsDeserializer::deserialize(
                                 "PolicyDescriptions",
                                 stack
@@ -2427,12 +2450,15 @@ impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyTypeDescriptions" => {
                         obj.policy_type_descriptions = match obj.policy_type_descriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyTypeDescriptionsDeserializer::deserialize(
-                                    "PolicyTypeDescriptions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyTypeDescriptionsDeserializer::deserialize(
+                                        "PolicyTypeDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyTypeDescriptionsDeserializer::deserialize(
                                 "PolicyTypeDescriptions",
                                 stack
@@ -2508,9 +2534,13 @@ impl DescribeTagsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TagDescriptions" => {
                         obj.tag_descriptions = match obj.tag_descriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                TagDescriptionsDeserializer::deserialize("TagDescriptions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TagDescriptionsDeserializer::deserialize(
+                                    "TagDescriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TagDescriptionsDeserializer::deserialize(
                                 "TagDescriptions",
                                 stack
@@ -2602,10 +2632,11 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Subnets" => {
                         obj.subnets = match obj.subnets {
-                            Some(existing) => {
-                                Some(existing.append(try!(SubnetsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetsDeserializer::deserialize(
                                     "Subnets", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(SubnetsDeserializer::deserialize("Subnets", stack))),
                         };
@@ -3390,9 +3421,13 @@ impl ListenerDescriptionDeserializer {
                     }
                     "PolicyNames" => {
                         obj.policy_names = match obj.policy_names {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyNamesDeserializer::deserialize("PolicyNames", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyNamesDeserializer::deserialize(
+                                    "PolicyNames",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyNamesDeserializer::deserialize(
                                 "PolicyNames",
                                 stack
@@ -3510,12 +3545,15 @@ impl LoadBalancerAttributesDeserializer {
                     }
                     "AdditionalAttributes" => {
                         obj.additional_attributes = match obj.additional_attributes {
-                            Some(existing) => Some(existing.append(try!(
-                                AdditionalAttributesDeserializer::deserialize(
-                                    "AdditionalAttributes",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AdditionalAttributesDeserializer::deserialize(
+                                        "AdditionalAttributes",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AdditionalAttributesDeserializer::deserialize(
                                 "AdditionalAttributes",
                                 stack
@@ -3666,12 +3704,13 @@ impl LoadBalancerDescriptionDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
-                            Some(existing) => Some(existing.append(try!(
-                                AvailabilityZonesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
                                 stack
@@ -3680,12 +3719,15 @@ impl LoadBalancerDescriptionDeserializer {
                     }
                     "BackendServerDescriptions" => {
                         obj.backend_server_descriptions = match obj.backend_server_descriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                BackendServerDescriptionsDeserializer::deserialize(
-                                    "BackendServerDescriptions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    BackendServerDescriptionsDeserializer::deserialize(
+                                        "BackendServerDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(BackendServerDescriptionsDeserializer::deserialize(
                                 "BackendServerDescriptions",
                                 stack
@@ -3720,9 +3762,13 @@ impl LoadBalancerDescriptionDeserializer {
                     }
                     "Instances" => {
                         obj.instances = match obj.instances {
-                            Some(existing) => Some(existing.append(try!(
-                                InstancesDeserializer::deserialize("Instances", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstancesDeserializer::deserialize(
+                                    "Instances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(InstancesDeserializer::deserialize("Instances", stack)))
                             }
@@ -3730,12 +3776,15 @@ impl LoadBalancerDescriptionDeserializer {
                     }
                     "ListenerDescriptions" => {
                         obj.listener_descriptions = match obj.listener_descriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                ListenerDescriptionsDeserializer::deserialize(
-                                    "ListenerDescriptions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ListenerDescriptionsDeserializer::deserialize(
+                                        "ListenerDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ListenerDescriptionsDeserializer::deserialize(
                                 "ListenerDescriptions",
                                 stack
@@ -3758,9 +3807,13 @@ impl LoadBalancerDescriptionDeserializer {
                     }
                     "SecurityGroups" => {
                         obj.security_groups = match obj.security_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                SecurityGroupsDeserializer::deserialize("SecurityGroups", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SecurityGroupsDeserializer::deserialize(
+                                    "SecurityGroups",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SecurityGroupsDeserializer::deserialize(
                                 "SecurityGroups",
                                 stack
@@ -3776,10 +3829,11 @@ impl LoadBalancerDescriptionDeserializer {
                     }
                     "Subnets" => {
                         obj.subnets = match obj.subnets {
-                            Some(existing) => {
-                                Some(existing.append(try!(SubnetsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetsDeserializer::deserialize(
                                     "Subnets", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(SubnetsDeserializer::deserialize("Subnets", stack))),
                         };
@@ -4045,12 +4099,15 @@ impl PoliciesDeserializer {
                     "AppCookieStickinessPolicies" => {
                         obj.app_cookie_stickiness_policies =
                             match obj.app_cookie_stickiness_policies {
-                                Some(existing) => Some(existing.append(try!(
-                                    AppCookieStickinessPoliciesDeserializer::deserialize(
-                                        "AppCookieStickinessPolicies",
-                                        stack
-                                    )
-                                ))),
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        AppCookieStickinessPoliciesDeserializer::deserialize(
+                                            "AppCookieStickinessPolicies",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(
                                     AppCookieStickinessPoliciesDeserializer::deserialize(
                                         "AppCookieStickinessPolicies",
@@ -4062,12 +4119,15 @@ impl PoliciesDeserializer {
                     "LBCookieStickinessPolicies" => {
                         obj.lb_cookie_stickiness_policies = match obj.lb_cookie_stickiness_policies
                         {
-                            Some(existing) => Some(existing.append(try!(
-                                LBCookieStickinessPoliciesDeserializer::deserialize(
-                                    "LBCookieStickinessPolicies",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    LBCookieStickinessPoliciesDeserializer::deserialize(
+                                        "LBCookieStickinessPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(LBCookieStickinessPoliciesDeserializer::deserialize(
                                     "LBCookieStickinessPolicies",
@@ -4078,9 +4138,13 @@ impl PoliciesDeserializer {
                     }
                     "OtherPolicies" => {
                         obj.other_policies = match obj.other_policies {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyNamesDeserializer::deserialize("OtherPolicies", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyNamesDeserializer::deserialize(
+                                    "OtherPolicies",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PolicyNamesDeserializer::deserialize(
                                 "OtherPolicies",
                                 stack
@@ -4400,12 +4464,15 @@ impl PolicyDescriptionDeserializer {
                     "PolicyAttributeDescriptions" => {
                         obj.policy_attribute_descriptions = match obj.policy_attribute_descriptions
                         {
-                            Some(existing) => Some(existing.append(try!(
-                                PolicyAttributeDescriptionsDeserializer::deserialize(
-                                    "PolicyAttributeDescriptions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyAttributeDescriptionsDeserializer::deserialize(
+                                        "PolicyAttributeDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(PolicyAttributeDescriptionsDeserializer::deserialize(
                                     "PolicyAttributeDescriptions",
@@ -4590,12 +4657,15 @@ impl PolicyTypeDescriptionDeserializer {
                     "PolicyAttributeTypeDescriptions" => {
                         obj.policy_attribute_type_descriptions =
                             match obj.policy_attribute_type_descriptions {
-                                Some(existing) => Some(existing.append(try!(
-                                    PolicyAttributeTypeDescriptionsDeserializer::deserialize(
-                                        "PolicyAttributeTypeDescriptions",
-                                        stack
-                                    )
-                                ))),
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        PolicyAttributeTypeDescriptionsDeserializer::deserialize(
+                                            "PolicyAttributeTypeDescriptions",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(
                                     PolicyAttributeTypeDescriptionsDeserializer::deserialize(
                                         "PolicyAttributeTypeDescriptions",
@@ -4792,9 +4862,13 @@ impl RegisterEndPointsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Instances" => {
                         obj.instances = match obj.instances {
-                            Some(existing) => Some(existing.append(try!(
-                                InstancesDeserializer::deserialize("Instances", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstancesDeserializer::deserialize(
+                                    "Instances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(InstancesDeserializer::deserialize("Instances", stack)))
                             }
@@ -4875,12 +4949,13 @@ impl RemoveAvailabilityZonesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
-                            Some(existing) => Some(existing.append(try!(
-                                AvailabilityZonesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
                                 stack
@@ -5489,10 +5564,11 @@ impl TagDescriptionDeserializer {
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
-                            Some(existing) => Some(
+                            Some(ref mut existing) => {
                                 existing
-                                    .append(try!(TagListDeserializer::deserialize("Tags", stack))),
-                            ),
+                                    .extend(try!(TagListDeserializer::deserialize("Tags", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TagListDeserializer::deserialize("Tags", stack))),
                         };
                     }

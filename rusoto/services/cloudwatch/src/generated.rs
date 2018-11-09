@@ -889,12 +889,13 @@ impl DescribeAlarmHistoryOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AlarmHistoryItems" => {
                         obj.alarm_history_items = match obj.alarm_history_items {
-                            Some(existing) => Some(existing.append(try!(
-                                AlarmHistoryItemsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AlarmHistoryItemsDeserializer::deserialize(
                                     "AlarmHistoryItems",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AlarmHistoryItemsDeserializer::deserialize(
                                 "AlarmHistoryItems",
                                 stack
@@ -1000,9 +1001,13 @@ impl DescribeAlarmsForMetricOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MetricAlarms" => {
                         obj.metric_alarms = match obj.metric_alarms {
-                            Some(existing) => Some(existing.append(try!(
-                                MetricAlarmsDeserializer::deserialize("MetricAlarms", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(MetricAlarmsDeserializer::deserialize(
+                                    "MetricAlarms",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(MetricAlarmsDeserializer::deserialize(
                                 "MetricAlarms",
                                 stack
@@ -1108,9 +1113,13 @@ impl DescribeAlarmsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MetricAlarms" => {
                         obj.metric_alarms = match obj.metric_alarms {
-                            Some(existing) => Some(existing.append(try!(
-                                MetricAlarmsDeserializer::deserialize("MetricAlarms", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(MetricAlarmsDeserializer::deserialize(
+                                    "MetricAlarms",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(MetricAlarmsDeserializer::deserialize(
                                 "MetricAlarms",
                                 stack
@@ -1582,12 +1591,13 @@ impl GetMetricDataOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MetricDataResults" => {
                         obj.metric_data_results = match obj.metric_data_results {
-                            Some(existing) => Some(existing.append(try!(
-                                MetricDataResultsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(MetricDataResultsDeserializer::deserialize(
                                     "MetricDataResults",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(MetricDataResultsDeserializer::deserialize(
                                 "MetricDataResults",
                                 stack
@@ -1707,9 +1717,13 @@ impl GetMetricStatisticsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Datapoints" => {
                         obj.datapoints = match obj.datapoints {
-                            Some(existing) => Some(existing.append(try!(
-                                DatapointsDeserializer::deserialize("Datapoints", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DatapointsDeserializer::deserialize(
+                                    "Datapoints",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DatapointsDeserializer::deserialize(
                                 "Datapoints",
                                 stack
@@ -1851,12 +1865,13 @@ impl ListDashboardsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DashboardEntries" => {
                         obj.dashboard_entries = match obj.dashboard_entries {
-                            Some(existing) => Some(existing.append(try!(
-                                DashboardEntriesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DashboardEntriesDeserializer::deserialize(
                                     "DashboardEntries",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DashboardEntriesDeserializer::deserialize(
                                 "DashboardEntries",
                                 stack
@@ -1953,10 +1968,11 @@ impl ListMetricsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Metrics" => {
                         obj.metrics = match obj.metrics {
-                            Some(existing) => {
-                                Some(existing.append(try!(MetricsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(MetricsDeserializer::deserialize(
                                     "Metrics", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(MetricsDeserializer::deserialize("Metrics", stack))),
                         };
@@ -2111,9 +2127,13 @@ impl MetricDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Dimensions" => {
                         obj.dimensions = match obj.dimensions {
-                            Some(existing) => Some(existing.append(try!(
-                                DimensionsDeserializer::deserialize("Dimensions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DimensionsDeserializer::deserialize(
+                                    "Dimensions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DimensionsDeserializer::deserialize(
                                 "Dimensions",
                                 stack
@@ -2255,9 +2275,13 @@ impl MetricAlarmDeserializer {
                     }
                     "AlarmActions" => {
                         obj.alarm_actions = match obj.alarm_actions {
-                            Some(existing) => Some(existing.append(try!(
-                                ResourceListDeserializer::deserialize("AlarmActions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ResourceListDeserializer::deserialize(
+                                    "AlarmActions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ResourceListDeserializer::deserialize(
                                 "AlarmActions",
                                 stack
@@ -2298,9 +2322,13 @@ impl MetricAlarmDeserializer {
                     }
                     "Dimensions" => {
                         obj.dimensions = match obj.dimensions {
-                            Some(existing) => Some(existing.append(try!(
-                                DimensionsDeserializer::deserialize("Dimensions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DimensionsDeserializer::deserialize(
+                                    "Dimensions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DimensionsDeserializer::deserialize(
                                 "Dimensions",
                                 stack
@@ -2327,11 +2355,12 @@ impl MetricAlarmDeserializer {
                     }
                     "InsufficientDataActions" => {
                         obj.insufficient_data_actions = match obj.insufficient_data_actions {
-                            Some(existing) => {
-                                Some(existing.append(try!(ResourceListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ResourceListDeserializer::deserialize(
                                     "InsufficientDataActions",
                                     stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(ResourceListDeserializer::deserialize(
                                 "InsufficientDataActions",
@@ -2351,9 +2380,13 @@ impl MetricAlarmDeserializer {
                     }
                     "OKActions" => {
                         obj.ok_actions = match obj.ok_actions {
-                            Some(existing) => Some(existing.append(try!(
-                                ResourceListDeserializer::deserialize("OKActions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ResourceListDeserializer::deserialize(
+                                    "OKActions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ResourceListDeserializer::deserialize(
                                 "OKActions",
                                 stack
@@ -2573,11 +2606,14 @@ impl MetricDataResultDeserializer {
                     }
                     "Messages" => {
                         obj.messages = match obj.messages {
-                            Some(existing) => Some(existing.append(try!(
-                                MetricDataResultMessagesDeserializer::deserialize(
-                                    "Messages", stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    MetricDataResultMessagesDeserializer::deserialize(
+                                        "Messages", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(MetricDataResultMessagesDeserializer::deserialize(
                                 "Messages", stack
                             ))),
@@ -2591,9 +2627,13 @@ impl MetricDataResultDeserializer {
                     }
                     "Timestamps" => {
                         obj.timestamps = match obj.timestamps {
-                            Some(existing) => Some(existing.append(try!(
-                                TimestampsDeserializer::deserialize("Timestamps", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TimestampsDeserializer::deserialize(
+                                    "Timestamps",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TimestampsDeserializer::deserialize(
                                 "Timestamps",
                                 stack
@@ -2602,9 +2642,12 @@ impl MetricDataResultDeserializer {
                     }
                     "Values" => {
                         obj.values = match obj.values {
-                            Some(existing) => Some(existing.append(try!(
-                                DatapointValuesDeserializer::deserialize("Values", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DatapointValuesDeserializer::deserialize(
+                                    "Values", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DatapointValuesDeserializer::deserialize(
                                 "Values", stack
                             ))),
@@ -2981,12 +3024,15 @@ impl PutDashboardOutputDeserializer {
                     "DashboardValidationMessages" => {
                         obj.dashboard_validation_messages = match obj.dashboard_validation_messages
                         {
-                            Some(existing) => Some(existing.append(try!(
-                                DashboardValidationMessagesDeserializer::deserialize(
-                                    "DashboardValidationMessages",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DashboardValidationMessagesDeserializer::deserialize(
+                                        "DashboardValidationMessages",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(DashboardValidationMessagesDeserializer::deserialize(
                                     "DashboardValidationMessages",

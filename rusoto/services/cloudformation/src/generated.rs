@@ -1724,9 +1724,13 @@ impl DescribeAccountLimitsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccountLimits" => {
                         obj.account_limits = match obj.account_limits {
-                            Some(existing) => Some(existing.append(try!(
-                                AccountLimitListDeserializer::deserialize("AccountLimits", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AccountLimitListDeserializer::deserialize(
+                                    "AccountLimits",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AccountLimitListDeserializer::deserialize(
                                 "AccountLimits",
                                 stack
@@ -1845,9 +1849,13 @@ impl DescribeChangeSetOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
-                            Some(existing) => Some(existing.append(try!(
-                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                    "Capabilities",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
                                 stack
@@ -1868,10 +1876,11 @@ impl DescribeChangeSetOutputDeserializer {
                     }
                     "Changes" => {
                         obj.changes = match obj.changes {
-                            Some(existing) => {
-                                Some(existing.append(try!(ChangesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ChangesDeserializer::deserialize(
                                     "Changes", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(ChangesDeserializer::deserialize("Changes", stack))),
                         };
@@ -1899,12 +1908,13 @@ impl DescribeChangeSetOutputDeserializer {
                     }
                     "NotificationARNs" => {
                         obj.notification_ar_ns = match obj.notification_ar_ns {
-                            Some(existing) => Some(existing.append(try!(
-                                NotificationARNsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(NotificationARNsDeserializer::deserialize(
                                     "NotificationARNs",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(NotificationARNsDeserializer::deserialize(
                                 "NotificationARNs",
                                 stack
@@ -1913,9 +1923,13 @@ impl DescribeChangeSetOutputDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -1949,9 +1963,10 @@ impl DescribeChangeSetOutputDeserializer {
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
-                            Some(existing) => Some(
-                                existing.append(try!(TagsDeserializer::deserialize("Tags", stack))),
-                            ),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TagsDeserializer::deserialize("Tags", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
                         };
                     }
@@ -2033,9 +2048,13 @@ impl DescribeStackEventsOutputDeserializer {
                     }
                     "StackEvents" => {
                         obj.stack_events = match obj.stack_events {
-                            Some(existing) => Some(existing.append(try!(
-                                StackEventsDeserializer::deserialize("StackEvents", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StackEventsDeserializer::deserialize(
+                                    "StackEvents",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StackEventsDeserializer::deserialize(
                                 "StackEvents",
                                 stack
@@ -2277,9 +2296,13 @@ impl DescribeStackResourcesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackResources" => {
                         obj.stack_resources = match obj.stack_resources {
-                            Some(existing) => Some(existing.append(try!(
-                                StackResourcesDeserializer::deserialize("StackResources", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StackResourcesDeserializer::deserialize(
+                                    "StackResources",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StackResourcesDeserializer::deserialize(
                                 "StackResources",
                                 stack
@@ -2504,10 +2527,11 @@ impl DescribeStacksOutputDeserializer {
                     }
                     "Stacks" => {
                         obj.stacks = match obj.stacks {
-                            Some(existing) => Some(
+                            Some(ref mut existing) => {
                                 existing
-                                    .append(try!(StacksDeserializer::deserialize("Stacks", stack))),
-                            ),
+                                    .extend(try!(StacksDeserializer::deserialize("Stacks", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StacksDeserializer::deserialize("Stacks", stack))),
                         };
                     }
@@ -3047,9 +3071,13 @@ impl GetTemplateOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StagesAvailable" => {
                         obj.stages_available = match obj.stages_available {
-                            Some(existing) => Some(existing.append(try!(
-                                StageListDeserializer::deserialize("StagesAvailable", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StageListDeserializer::deserialize(
+                                    "StagesAvailable",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StageListDeserializer::deserialize(
                                 "StagesAvailable",
                                 stack
@@ -3158,9 +3186,13 @@ impl GetTemplateSummaryOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
-                            Some(existing) => Some(existing.append(try!(
-                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                    "Capabilities",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
                                 stack
@@ -3176,12 +3208,13 @@ impl GetTemplateSummaryOutputDeserializer {
                     }
                     "DeclaredTransforms" => {
                         obj.declared_transforms = match obj.declared_transforms {
-                            Some(existing) => Some(existing.append(try!(
-                                TransformsListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TransformsListDeserializer::deserialize(
                                     "DeclaredTransforms",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TransformsListDeserializer::deserialize(
                                 "DeclaredTransforms",
                                 stack
@@ -3200,9 +3233,15 @@ impl GetTemplateSummaryOutputDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParameterDeclarationsDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ParameterDeclarationsDeserializer::deserialize(
+                                        "Parameters",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParameterDeclarationsDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -3211,9 +3250,13 @@ impl GetTemplateSummaryOutputDeserializer {
                     }
                     "ResourceTypes" => {
                         obj.resource_types = match obj.resource_types {
-                            Some(existing) => Some(existing.append(try!(
-                                ResourceTypesDeserializer::deserialize("ResourceTypes", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ResourceTypesDeserializer::deserialize(
+                                    "ResourceTypes",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ResourceTypesDeserializer::deserialize(
                                 "ResourceTypes",
                                 stack
@@ -3382,9 +3425,13 @@ impl ListChangeSetsOutputDeserializer {
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                ChangeSetSummariesDeserializer::deserialize("Summaries", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ChangeSetSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ChangeSetSummariesDeserializer::deserialize(
                                 "Summaries",
                                 stack
@@ -3458,10 +3505,11 @@ impl ListExportsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Exports" => {
                         obj.exports = match obj.exports {
-                            Some(existing) => {
-                                Some(existing.append(try!(ExportsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ExportsDeserializer::deserialize(
                                     "Exports", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(ExportsDeserializer::deserialize("Exports", stack))),
                         };
@@ -3540,10 +3588,11 @@ impl ListImportsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Imports" => {
                         obj.imports = match obj.imports {
-                            Some(existing) => {
-                                Some(existing.append(try!(ImportsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ImportsDeserializer::deserialize(
                                     "Imports", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(ImportsDeserializer::deserialize("Imports", stack))),
                         };
@@ -3653,9 +3702,15 @@ impl ListStackInstancesOutputDeserializer {
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                StackInstanceSummariesDeserializer::deserialize("Summaries", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    StackInstanceSummariesDeserializer::deserialize(
+                                        "Summaries",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StackInstanceSummariesDeserializer::deserialize(
                                 "Summaries",
                                 stack
@@ -3738,12 +3793,15 @@ impl ListStackResourcesOutputDeserializer {
                     }
                     "StackResourceSummaries" => {
                         obj.stack_resource_summaries = match obj.stack_resource_summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                StackResourceSummariesDeserializer::deserialize(
-                                    "StackResourceSummaries",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    StackResourceSummariesDeserializer::deserialize(
+                                        "StackResourceSummaries",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StackResourceSummariesDeserializer::deserialize(
                                 "StackResourceSummaries",
                                 stack
@@ -3838,12 +3896,15 @@ impl ListStackSetOperationResultsOutputDeserializer {
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                StackSetOperationResultSummariesDeserializer::deserialize(
-                                    "Summaries",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    StackSetOperationResultSummariesDeserializer::deserialize(
+                                        "Summaries",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 StackSetOperationResultSummariesDeserializer::deserialize(
                                     "Summaries",
@@ -3937,12 +3998,15 @@ impl ListStackSetOperationsOutputDeserializer {
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                StackSetOperationSummariesDeserializer::deserialize(
-                                    "Summaries",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    StackSetOperationSummariesDeserializer::deserialize(
+                                        "Summaries",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(StackSetOperationSummariesDeserializer::deserialize(
                                     "Summaries",
@@ -4035,9 +4099,13 @@ impl ListStackSetsOutputDeserializer {
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                StackSetSummariesDeserializer::deserialize("Summaries", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StackSetSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StackSetSummariesDeserializer::deserialize(
                                 "Summaries",
                                 stack
@@ -4126,9 +4194,13 @@ impl ListStacksOutputDeserializer {
                     }
                     "StackSummaries" => {
                         obj.stack_summaries = match obj.stack_summaries {
-                            Some(existing) => Some(existing.append(try!(
-                                StackSummariesDeserializer::deserialize("StackSummaries", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StackSummariesDeserializer::deserialize(
+                                    "StackSummaries",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(StackSummariesDeserializer::deserialize(
                                 "StackSummaries",
                                 stack
@@ -4585,9 +4657,13 @@ impl ParameterConstraintsDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllowedValues" => {
                         obj.allowed_values = match obj.allowed_values {
-                            Some(existing) => Some(existing.append(try!(
-                                AllowedValuesDeserializer::deserialize("AllowedValues", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AllowedValuesDeserializer::deserialize(
+                                    "AllowedValues",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AllowedValuesDeserializer::deserialize(
                                 "AllowedValues",
                                 stack
@@ -5028,9 +5104,14 @@ impl ResourceChangeDeserializer {
                     }
                     "Details" => {
                         obj.details = match obj.details {
-                            Some(existing) => Some(existing.append(try!(
-                                ResourceChangeDetailsDeserializer::deserialize("Details", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ResourceChangeDetailsDeserializer::deserialize(
+                                        "Details", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ResourceChangeDetailsDeserializer::deserialize(
                                 "Details", stack
                             ))),
@@ -5062,10 +5143,11 @@ impl ResourceChangeDeserializer {
                     }
                     "Scope" => {
                         obj.scope = match obj.scope {
-                            Some(existing) => Some(
+                            Some(ref mut existing) => {
                                 existing
-                                    .append(try!(ScopeDeserializer::deserialize("Scope", stack))),
-                            ),
+                                    .extend(try!(ScopeDeserializer::deserialize("Scope", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ScopeDeserializer::deserialize("Scope", stack))),
                         };
                     }
@@ -5458,12 +5540,13 @@ impl RollbackConfigurationDeserializer {
                     }
                     "RollbackTriggers" => {
                         obj.rollback_triggers = match obj.rollback_triggers {
-                            Some(existing) => Some(existing.append(try!(
-                                RollbackTriggersDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RollbackTriggersDeserializer::deserialize(
                                     "RollbackTriggers",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(RollbackTriggersDeserializer::deserialize(
                                 "RollbackTriggers",
                                 stack
@@ -5805,9 +5888,13 @@ impl StackDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
-                            Some(existing) => Some(existing.append(try!(
-                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                    "Capabilities",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
                                 stack
@@ -5855,12 +5942,13 @@ impl StackDeserializer {
                     }
                     "NotificationARNs" => {
                         obj.notification_ar_ns = match obj.notification_ar_ns {
-                            Some(existing) => Some(existing.append(try!(
-                                NotificationARNsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(NotificationARNsDeserializer::deserialize(
                                     "NotificationARNs",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(NotificationARNsDeserializer::deserialize(
                                 "NotificationARNs",
                                 stack
@@ -5869,19 +5957,24 @@ impl StackDeserializer {
                     }
                     "Outputs" => {
                         obj.outputs = match obj.outputs {
-                            Some(existing) => {
-                                Some(existing.append(try!(OutputsDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(OutputsDeserializer::deserialize(
                                     "Outputs", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(OutputsDeserializer::deserialize("Outputs", stack))),
                         };
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -5925,9 +6018,10 @@ impl StackDeserializer {
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
-                            Some(existing) => Some(
-                                existing.append(try!(TagsDeserializer::deserialize("Tags", stack))),
-                            ),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TagsDeserializer::deserialize("Tags", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
                         };
                     }
@@ -6173,9 +6267,13 @@ impl StackInstanceDeserializer {
                     }
                     "ParameterOverrides" => {
                         obj.parameter_overrides = match obj.parameter_overrides {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersDeserializer::deserialize("ParameterOverrides", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                    "ParameterOverrides",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersDeserializer::deserialize(
                                 "ParameterOverrides",
                                 stack
@@ -6833,9 +6931,13 @@ impl StackSetDeserializer {
                     }
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
-                            Some(existing) => Some(existing.append(try!(
-                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                    "Capabilities",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
                                 stack
@@ -6855,9 +6957,13 @@ impl StackSetDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -6889,9 +6995,10 @@ impl StackSetDeserializer {
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
-                            Some(existing) => Some(
-                                existing.append(try!(TagsDeserializer::deserialize("Tags", stack))),
-                            ),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TagsDeserializer::deserialize("Tags", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
                         };
                     }
@@ -7156,9 +7263,13 @@ impl StackSetOperationPreferencesDeserializer {
                     }
                     "RegionOrder" => {
                         obj.region_order = match obj.region_order {
-                            Some(existing) => Some(existing.append(try!(
-                                RegionListDeserializer::deserialize("RegionOrder", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RegionListDeserializer::deserialize(
+                                    "RegionOrder",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(RegionListDeserializer::deserialize(
                                 "RegionOrder",
                                 stack
@@ -8927,9 +9038,13 @@ impl ValidateTemplateOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
-                            Some(existing) => Some(existing.append(try!(
-                                CapabilitiesDeserializer::deserialize("Capabilities", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                    "Capabilities",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
                                 stack
@@ -8945,12 +9060,13 @@ impl ValidateTemplateOutputDeserializer {
                     }
                     "DeclaredTransforms" => {
                         obj.declared_transforms = match obj.declared_transforms {
-                            Some(existing) => Some(existing.append(try!(
-                                TransformsListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TransformsListDeserializer::deserialize(
                                     "DeclaredTransforms",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TransformsListDeserializer::deserialize(
                                 "DeclaredTransforms",
                                 stack
@@ -8965,9 +9081,13 @@ impl ValidateTemplateOutputDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                TemplateParametersDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TemplateParametersDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(TemplateParametersDeserializer::deserialize(
                                 "Parameters",
                                 stack

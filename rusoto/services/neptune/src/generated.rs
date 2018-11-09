@@ -1915,9 +1915,13 @@ impl DBClusterDeserializer {
                     }
                     "AssociatedRoles" => {
                         obj.associated_roles = match obj.associated_roles {
-                            Some(existing) => Some(existing.append(try!(
-                                DBClusterRolesDeserializer::deserialize("AssociatedRoles", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DBClusterRolesDeserializer::deserialize(
+                                    "AssociatedRoles",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBClusterRolesDeserializer::deserialize(
                                 "AssociatedRoles",
                                 stack
@@ -1926,12 +1930,13 @@ impl DBClusterDeserializer {
                     }
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
-                            Some(existing) => Some(existing.append(try!(
-                                AvailabilityZonesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
                                 stack
@@ -1973,12 +1978,15 @@ impl DBClusterDeserializer {
                     }
                     "DBClusterMembers" => {
                         obj.db_cluster_members = match obj.db_cluster_members {
-                            Some(existing) => Some(existing.append(try!(
-                                DBClusterMemberListDeserializer::deserialize(
-                                    "DBClusterMembers",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBClusterMemberListDeserializer::deserialize(
+                                        "DBClusterMembers",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBClusterMemberListDeserializer::deserialize(
                                 "DBClusterMembers",
                                 stack
@@ -1988,12 +1996,15 @@ impl DBClusterDeserializer {
                     "DBClusterOptionGroupMemberships" => {
                         obj.db_cluster_option_group_memberships =
                             match obj.db_cluster_option_group_memberships {
-                                Some(existing) => Some(existing.append(try!(
-                                    DBClusterOptionGroupMembershipsDeserializer::deserialize(
-                                        "DBClusterOptionGroupMemberships",
-                                        stack
-                                    )
-                                ))),
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        DBClusterOptionGroupMembershipsDeserializer::deserialize(
+                                            "DBClusterOptionGroupMemberships",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(
                                     DBClusterOptionGroupMembershipsDeserializer::deserialize(
                                         "DBClusterOptionGroupMemberships",
@@ -2097,12 +2108,15 @@ impl DBClusterDeserializer {
                     }
                     "ReadReplicaIdentifiers" => {
                         obj.read_replica_identifiers = match obj.read_replica_identifiers {
-                            Some(existing) => Some(existing.append(try!(
-                                ReadReplicaIdentifierListDeserializer::deserialize(
-                                    "ReadReplicaIdentifiers",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ReadReplicaIdentifierListDeserializer::deserialize(
+                                        "ReadReplicaIdentifiers",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ReadReplicaIdentifierListDeserializer::deserialize(
                                 "ReadReplicaIdentifiers",
                                 stack
@@ -2131,12 +2145,15 @@ impl DBClusterDeserializer {
                     }
                     "VpcSecurityGroups" => {
                         obj.vpc_security_groups = match obj.vpc_security_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                VpcSecurityGroupMembershipListDeserializer::deserialize(
-                                    "VpcSecurityGroups",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    VpcSecurityGroupMembershipListDeserializer::deserialize(
+                                        "VpcSecurityGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 VpcSecurityGroupMembershipListDeserializer::deserialize(
                                     "VpcSecurityGroups",
@@ -2347,9 +2364,13 @@ impl DBClusterMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusters" => {
                         obj.db_clusters = match obj.db_clusters {
-                            Some(existing) => Some(existing.append(try!(
-                                DBClusterListDeserializer::deserialize("DBClusters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DBClusterListDeserializer::deserialize(
+                                    "DBClusters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBClusterListDeserializer::deserialize(
                                 "DBClusters",
                                 stack
@@ -2573,9 +2594,13 @@ impl DBClusterParameterGroupDetailsDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersListDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersListDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersListDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -2720,12 +2745,15 @@ impl DBClusterParameterGroupsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterParameterGroups" => {
                         obj.db_cluster_parameter_groups = match obj.db_cluster_parameter_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                DBClusterParameterGroupListDeserializer::deserialize(
-                                    "DBClusterParameterGroups",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBClusterParameterGroupListDeserializer::deserialize(
+                                        "DBClusterParameterGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(DBClusterParameterGroupListDeserializer::deserialize(
                                     "DBClusterParameterGroups",
@@ -2921,12 +2949,13 @@ impl DBClusterSnapshotDeserializer {
                     }
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
-                            Some(existing) => Some(existing.append(try!(
-                                AvailabilityZonesDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
                                 stack
@@ -3075,12 +3104,13 @@ impl DBClusterSnapshotAttributeDeserializer {
                     }
                     "AttributeValues" => {
                         obj.attribute_values = match obj.attribute_values {
-                            Some(existing) => Some(existing.append(try!(
-                                AttributeValueListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AttributeValueListDeserializer::deserialize(
                                     "AttributeValues",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AttributeValueListDeserializer::deserialize(
                                 "AttributeValues",
                                 stack
@@ -3178,12 +3208,15 @@ impl DBClusterSnapshotAttributesResultDeserializer {
                     "DBClusterSnapshotAttributes" => {
                         obj.db_cluster_snapshot_attributes =
                             match obj.db_cluster_snapshot_attributes {
-                                Some(existing) => Some(existing.append(try!(
-                                    DBClusterSnapshotAttributeListDeserializer::deserialize(
-                                        "DBClusterSnapshotAttributes",
-                                        stack
-                                    )
-                                ))),
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        DBClusterSnapshotAttributeListDeserializer::deserialize(
+                                            "DBClusterSnapshotAttributes",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(
                                     DBClusterSnapshotAttributeListDeserializer::deserialize(
                                         "DBClusterSnapshotAttributes",
@@ -3287,12 +3320,15 @@ impl DBClusterSnapshotMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshots" => {
                         obj.db_cluster_snapshots = match obj.db_cluster_snapshots {
-                            Some(existing) => Some(existing.append(try!(
-                                DBClusterSnapshotListDeserializer::deserialize(
-                                    "DBClusterSnapshots",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBClusterSnapshotListDeserializer::deserialize(
+                                        "DBClusterSnapshots",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBClusterSnapshotListDeserializer::deserialize(
                                 "DBClusterSnapshots",
                                 stack
@@ -3399,9 +3435,13 @@ impl DBEngineVersionDeserializer {
                     }
                     "ExportableLogTypes" => {
                         obj.exportable_log_types = match obj.exportable_log_types {
-                            Some(existing) => Some(existing.append(try!(
-                                LogTypeListDeserializer::deserialize("ExportableLogTypes", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                    "ExportableLogTypes",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(LogTypeListDeserializer::deserialize(
                                 "ExportableLogTypes",
                                 stack
@@ -3410,12 +3450,15 @@ impl DBEngineVersionDeserializer {
                     }
                     "SupportedCharacterSets" => {
                         obj.supported_character_sets = match obj.supported_character_sets {
-                            Some(existing) => Some(existing.append(try!(
-                                SupportedCharacterSetsListDeserializer::deserialize(
-                                    "SupportedCharacterSets",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    SupportedCharacterSetsListDeserializer::deserialize(
+                                        "SupportedCharacterSets",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(SupportedCharacterSetsListDeserializer::deserialize(
                                     "SupportedCharacterSets",
@@ -3426,12 +3469,15 @@ impl DBEngineVersionDeserializer {
                     }
                     "SupportedTimezones" => {
                         obj.supported_timezones = match obj.supported_timezones {
-                            Some(existing) => Some(existing.append(try!(
-                                SupportedTimezonesListDeserializer::deserialize(
-                                    "SupportedTimezones",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    SupportedTimezonesListDeserializer::deserialize(
+                                        "SupportedTimezones",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SupportedTimezonesListDeserializer::deserialize(
                                 "SupportedTimezones",
                                 stack
@@ -3453,12 +3499,15 @@ impl DBEngineVersionDeserializer {
                     }
                     "ValidUpgradeTarget" => {
                         obj.valid_upgrade_target = match obj.valid_upgrade_target {
-                            Some(existing) => Some(existing.append(try!(
-                                ValidUpgradeTargetListDeserializer::deserialize(
-                                    "ValidUpgradeTarget",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ValidUpgradeTargetListDeserializer::deserialize(
+                                        "ValidUpgradeTarget",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ValidUpgradeTargetListDeserializer::deserialize(
                                 "ValidUpgradeTarget",
                                 stack
@@ -3555,12 +3604,15 @@ impl DBEngineVersionMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBEngineVersions" => {
                         obj.db_engine_versions = match obj.db_engine_versions {
-                            Some(existing) => Some(existing.append(try!(
-                                DBEngineVersionListDeserializer::deserialize(
-                                    "DBEngineVersions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBEngineVersionListDeserializer::deserialize(
+                                        "DBEngineVersions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBEngineVersionListDeserializer::deserialize(
                                 "DBEngineVersions",
                                 stack
@@ -3788,12 +3840,15 @@ impl DBInstanceDeserializer {
                     }
                     "DBParameterGroups" => {
                         obj.db_parameter_groups = match obj.db_parameter_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                DBParameterGroupStatusListDeserializer::deserialize(
-                                    "DBParameterGroups",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBParameterGroupStatusListDeserializer::deserialize(
+                                        "DBParameterGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(DBParameterGroupStatusListDeserializer::deserialize(
                                     "DBParameterGroups",
@@ -3804,12 +3859,15 @@ impl DBInstanceDeserializer {
                     }
                     "DBSecurityGroups" => {
                         obj.db_security_groups = match obj.db_security_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                DBSecurityGroupMembershipListDeserializer::deserialize(
-                                    "DBSecurityGroups",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBSecurityGroupMembershipListDeserializer::deserialize(
+                                        "DBSecurityGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 DBSecurityGroupMembershipListDeserializer::deserialize(
                                     "DBSecurityGroups",
@@ -3838,12 +3896,15 @@ impl DBInstanceDeserializer {
                     }
                     "DomainMemberships" => {
                         obj.domain_memberships = match obj.domain_memberships {
-                            Some(existing) => Some(existing.append(try!(
-                                DomainMembershipListDeserializer::deserialize(
-                                    "DomainMemberships",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DomainMembershipListDeserializer::deserialize(
+                                        "DomainMemberships",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DomainMembershipListDeserializer::deserialize(
                                 "DomainMemberships",
                                 stack
@@ -3853,12 +3914,13 @@ impl DBInstanceDeserializer {
                     "EnabledCloudwatchLogsExports" => {
                         obj.enabled_cloudwatch_logs_exports =
                             match obj.enabled_cloudwatch_logs_exports {
-                                Some(existing) => Some(existing.append(try!(
-                                    LogTypeListDeserializer::deserialize(
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(LogTypeListDeserializer::deserialize(
                                         "EnabledCloudwatchLogsExports",
                                         stack
-                                    )
-                                ))),
+                                    )));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(LogTypeListDeserializer::deserialize(
                                     "EnabledCloudwatchLogsExports",
                                     stack
@@ -3938,12 +4000,15 @@ impl DBInstanceDeserializer {
                     }
                     "OptionGroupMemberships" => {
                         obj.option_group_memberships = match obj.option_group_memberships {
-                            Some(existing) => Some(existing.append(try!(
-                                OptionGroupMembershipListDeserializer::deserialize(
-                                    "OptionGroupMemberships",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    OptionGroupMembershipListDeserializer::deserialize(
+                                        "OptionGroupMemberships",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(OptionGroupMembershipListDeserializer::deserialize(
                                 "OptionGroupMemberships",
                                 stack
@@ -3989,12 +4054,15 @@ impl DBInstanceDeserializer {
                     "ReadReplicaDBClusterIdentifiers" => {
                         obj.read_replica_db_cluster_identifiers =
                             match obj.read_replica_db_cluster_identifiers {
-                                Some(existing) => Some(existing.append(try!(
-                                    ReadReplicaDBClusterIdentifierListDeserializer::deserialize(
-                                        "ReadReplicaDBClusterIdentifiers",
-                                        stack
-                                    )
-                                ))),
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        ReadReplicaDBClusterIdentifierListDeserializer::deserialize(
+                                            "ReadReplicaDBClusterIdentifiers",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(
                                     ReadReplicaDBClusterIdentifierListDeserializer::deserialize(
                                         "ReadReplicaDBClusterIdentifiers",
@@ -4004,21 +4072,25 @@ impl DBInstanceDeserializer {
                             };
                     }
                     "ReadReplicaDBInstanceIdentifiers" => {
-                        obj.read_replica_db_instance_identifiers =
-                            match obj.read_replica_db_instance_identifiers {
-                                Some(existing) => Some(existing.append(try!(
+                        obj.read_replica_db_instance_identifiers = match obj
+                            .read_replica_db_instance_identifiers
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
                                     ReadReplicaDBInstanceIdentifierListDeserializer::deserialize(
                                         "ReadReplicaDBInstanceIdentifiers",
                                         stack
                                     )
-                                ))),
-                                None => Some(try!(
-                                    ReadReplicaDBInstanceIdentifierListDeserializer::deserialize(
-                                        "ReadReplicaDBInstanceIdentifiers",
-                                        stack
-                                    )
-                                )),
-                            };
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                ReadReplicaDBInstanceIdentifierListDeserializer::deserialize(
+                                    "ReadReplicaDBInstanceIdentifiers",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     "ReadReplicaSourceDBInstanceIdentifier" => {
                         obj.read_replica_source_db_instance_identifier =
@@ -4034,12 +4106,15 @@ impl DBInstanceDeserializer {
                     }
                     "StatusInfos" => {
                         obj.status_infos = match obj.status_infos {
-                            Some(existing) => Some(existing.append(try!(
-                                DBInstanceStatusInfoListDeserializer::deserialize(
-                                    "StatusInfos",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBInstanceStatusInfoListDeserializer::deserialize(
+                                        "StatusInfos",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBInstanceStatusInfoListDeserializer::deserialize(
                                 "StatusInfos",
                                 stack
@@ -4068,12 +4143,15 @@ impl DBInstanceDeserializer {
                     }
                     "VpcSecurityGroups" => {
                         obj.vpc_security_groups = match obj.vpc_security_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                VpcSecurityGroupMembershipListDeserializer::deserialize(
-                                    "VpcSecurityGroups",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    VpcSecurityGroupMembershipListDeserializer::deserialize(
+                                        "VpcSecurityGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 VpcSecurityGroupMembershipListDeserializer::deserialize(
                                     "VpcSecurityGroups",
@@ -4172,9 +4250,13 @@ impl DBInstanceMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBInstances" => {
                         obj.db_instances = match obj.db_instances {
-                            Some(existing) => Some(existing.append(try!(
-                                DBInstanceListDeserializer::deserialize("DBInstances", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DBInstanceListDeserializer::deserialize(
+                                    "DBInstances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBInstanceListDeserializer::deserialize(
                                 "DBInstances",
                                 stack
@@ -4409,9 +4491,13 @@ impl DBParameterGroupDetailsDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersListDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersListDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersListDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -4657,12 +4743,15 @@ impl DBParameterGroupsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBParameterGroups" => {
                         obj.db_parameter_groups = match obj.db_parameter_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                DBParameterGroupListDeserializer::deserialize(
-                                    "DBParameterGroups",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    DBParameterGroupListDeserializer::deserialize(
+                                        "DBParameterGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBParameterGroupListDeserializer::deserialize(
                                 "DBParameterGroups",
                                 stack
@@ -4859,9 +4948,12 @@ impl DBSubnetGroupDeserializer {
                     }
                     "Subnets" => {
                         obj.subnets = match obj.subnets {
-                            Some(existing) => Some(existing.append(try!(
-                                SubnetListDeserializer::deserialize("Subnets", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetListDeserializer::deserialize(
+                                    "Subnets", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(SubnetListDeserializer::deserialize("Subnets", stack)))
                             }
@@ -4917,9 +5009,13 @@ impl DBSubnetGroupMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBSubnetGroups" => {
                         obj.db_subnet_groups = match obj.db_subnet_groups {
-                            Some(existing) => Some(existing.append(try!(
-                                DBSubnetGroupsDeserializer::deserialize("DBSubnetGroups", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DBSubnetGroupsDeserializer::deserialize(
+                                    "DBSubnetGroups",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DBSubnetGroupsDeserializer::deserialize(
                                 "DBSubnetGroups",
                                 stack
@@ -6774,9 +6870,13 @@ impl EngineDefaultsDeserializer {
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
-                            Some(existing) => Some(existing.append(try!(
-                                ParametersListDeserializer::deserialize("Parameters", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ParametersListDeserializer::deserialize(
+                                    "Parameters",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ParametersListDeserializer::deserialize(
                                 "Parameters",
                                 stack
@@ -6841,12 +6941,15 @@ impl EventDeserializer {
                     }
                     "EventCategories" => {
                         obj.event_categories = match obj.event_categories {
-                            Some(existing) => Some(existing.append(try!(
-                                EventCategoriesListDeserializer::deserialize(
-                                    "EventCategories",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EventCategoriesListDeserializer::deserialize(
+                                        "EventCategories",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(EventCategoriesListDeserializer::deserialize(
                                 "EventCategories",
                                 stack
@@ -6974,12 +7077,15 @@ impl EventCategoriesMapDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventCategories" => {
                         obj.event_categories = match obj.event_categories {
-                            Some(existing) => Some(existing.append(try!(
-                                EventCategoriesListDeserializer::deserialize(
-                                    "EventCategories",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EventCategoriesListDeserializer::deserialize(
+                                        "EventCategories",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(EventCategoriesListDeserializer::deserialize(
                                 "EventCategories",
                                 stack
@@ -7078,12 +7184,15 @@ impl EventCategoriesMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventCategoriesMapList" => {
                         obj.event_categories_map_list = match obj.event_categories_map_list {
-                            Some(existing) => Some(existing.append(try!(
-                                EventCategoriesMapListDeserializer::deserialize(
-                                    "EventCategoriesMapList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EventCategoriesMapListDeserializer::deserialize(
+                                        "EventCategoriesMapList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(EventCategoriesMapListDeserializer::deserialize(
                                 "EventCategoriesMapList",
                                 stack
@@ -7209,12 +7318,15 @@ impl EventSubscriptionDeserializer {
                     }
                     "EventCategoriesList" => {
                         obj.event_categories_list = match obj.event_categories_list {
-                            Some(existing) => Some(existing.append(try!(
-                                EventCategoriesListDeserializer::deserialize(
-                                    "EventCategoriesList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EventCategoriesListDeserializer::deserialize(
+                                        "EventCategoriesList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(EventCategoriesListDeserializer::deserialize(
                                 "EventCategoriesList",
                                 stack
@@ -7233,9 +7345,13 @@ impl EventSubscriptionDeserializer {
                     }
                     "SourceIdsList" => {
                         obj.source_ids_list = match obj.source_ids_list {
-                            Some(existing) => Some(existing.append(try!(
-                                SourceIdsListDeserializer::deserialize("SourceIdsList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SourceIdsListDeserializer::deserialize(
+                                    "SourceIdsList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SourceIdsListDeserializer::deserialize(
                                 "SourceIdsList",
                                 stack
@@ -7344,12 +7460,15 @@ impl EventSubscriptionsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventSubscriptionsList" => {
                         obj.event_subscriptions_list = match obj.event_subscriptions_list {
-                            Some(existing) => Some(existing.append(try!(
-                                EventSubscriptionsListDeserializer::deserialize(
-                                    "EventSubscriptionsList",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EventSubscriptionsListDeserializer::deserialize(
+                                        "EventSubscriptionsList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(EventSubscriptionsListDeserializer::deserialize(
                                 "EventSubscriptionsList",
                                 stack
@@ -7406,10 +7525,11 @@ impl EventsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Events" => {
                         obj.events = match obj.events {
-                            Some(existing) => {
-                                Some(existing.append(try!(EventListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(EventListDeserializer::deserialize(
                                     "Events", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(EventListDeserializer::deserialize("Events", stack))),
                         };
@@ -8645,12 +8765,15 @@ impl OrderableDBInstanceOptionDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
-                            Some(existing) => Some(existing.append(try!(
-                                AvailabilityZoneListDeserializer::deserialize(
-                                    "AvailabilityZones",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AvailabilityZoneListDeserializer::deserialize(
+                                        "AvailabilityZones",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(AvailabilityZoneListDeserializer::deserialize(
                                 "AvailabilityZones",
                                 stack
@@ -8849,12 +8972,15 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
                     "OrderableDBInstanceOptions" => {
                         obj.orderable_db_instance_options = match obj.orderable_db_instance_options
                         {
-                            Some(existing) => Some(existing.append(try!(
-                                OrderableDBInstanceOptionsListDeserializer::deserialize(
-                                    "OrderableDBInstanceOptions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    OrderableDBInstanceOptionsListDeserializer::deserialize(
+                                        "OrderableDBInstanceOptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(
                                 OrderableDBInstanceOptionsListDeserializer::deserialize(
                                     "OrderableDBInstanceOptions",
@@ -9123,9 +9249,13 @@ impl PendingCloudwatchLogsExportsDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LogTypesToDisable" => {
                         obj.log_types_to_disable = match obj.log_types_to_disable {
-                            Some(existing) => Some(existing.append(try!(
-                                LogTypeListDeserializer::deserialize("LogTypesToDisable", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                    "LogTypesToDisable",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(LogTypeListDeserializer::deserialize(
                                 "LogTypesToDisable",
                                 stack
@@ -9134,9 +9264,13 @@ impl PendingCloudwatchLogsExportsDeserializer {
                     }
                     "LogTypesToEnable" => {
                         obj.log_types_to_enable = match obj.log_types_to_enable {
-                            Some(existing) => Some(existing.append(try!(
-                                LogTypeListDeserializer::deserialize("LogTypesToEnable", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                    "LogTypesToEnable",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(LogTypeListDeserializer::deserialize(
                                 "LogTypesToEnable",
                                 stack
@@ -9363,12 +9497,15 @@ impl PendingMaintenanceActionsMessageDeserializer {
                     }
                     "PendingMaintenanceActions" => {
                         obj.pending_maintenance_actions = match obj.pending_maintenance_actions {
-                            Some(existing) => Some(existing.append(try!(
-                                PendingMaintenanceActionsDeserializer::deserialize(
-                                    "PendingMaintenanceActions",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PendingMaintenanceActionsDeserializer::deserialize(
+                                        "PendingMaintenanceActions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PendingMaintenanceActionsDeserializer::deserialize(
                                 "PendingMaintenanceActions",
                                 stack
@@ -10148,12 +10285,15 @@ impl ResourcePendingMaintenanceActionsDeserializer {
                     "PendingMaintenanceActionDetails" => {
                         obj.pending_maintenance_action_details =
                             match obj.pending_maintenance_action_details {
-                                Some(existing) => Some(existing.append(try!(
-                                    PendingMaintenanceActionDetailsDeserializer::deserialize(
-                                        "PendingMaintenanceActionDetails",
-                                        stack
-                                    )
-                                ))),
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        PendingMaintenanceActionDetailsDeserializer::deserialize(
+                                            "PendingMaintenanceActionDetails",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
                                 None => Some(try!(
                                     PendingMaintenanceActionDetailsDeserializer::deserialize(
                                         "PendingMaintenanceActionDetails",
@@ -10898,10 +11038,11 @@ impl TagListMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TagList" => {
                         obj.tag_list = match obj.tag_list {
-                            Some(existing) => {
-                                Some(existing.append(try!(TagListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TagListDeserializer::deserialize(
                                     "TagList", stack
-                                ))))
+                                )));
+                                Some(existing.to_vec())
                             }
                             None => Some(try!(TagListDeserializer::deserialize("TagList", stack))),
                         };
@@ -11071,9 +11212,14 @@ impl ValidDBInstanceModificationsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Storage" => {
                         obj.storage = match obj.storage {
-                            Some(existing) => Some(existing.append(try!(
-                                ValidStorageOptionsListDeserializer::deserialize("Storage", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ValidStorageOptionsListDeserializer::deserialize(
+                                        "Storage", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ValidStorageOptionsListDeserializer::deserialize(
                                 "Storage", stack
                             ))),
@@ -11130,12 +11276,13 @@ impl ValidStorageOptionsDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "IopsToStorageRatio" => {
                         obj.iops_to_storage_ratio = match obj.iops_to_storage_ratio {
-                            Some(existing) => Some(existing.append(try!(
-                                DoubleRangeListDeserializer::deserialize(
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DoubleRangeListDeserializer::deserialize(
                                     "IopsToStorageRatio",
                                     stack
-                                )
-                            ))),
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(DoubleRangeListDeserializer::deserialize(
                                 "IopsToStorageRatio",
                                 stack
@@ -11144,9 +11291,13 @@ impl ValidStorageOptionsDeserializer {
                     }
                     "ProvisionedIops" => {
                         obj.provisioned_iops = match obj.provisioned_iops {
-                            Some(existing) => Some(existing.append(try!(
-                                RangeListDeserializer::deserialize("ProvisionedIops", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RangeListDeserializer::deserialize(
+                                    "ProvisionedIops",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(RangeListDeserializer::deserialize(
                                 "ProvisionedIops",
                                 stack
@@ -11155,9 +11306,13 @@ impl ValidStorageOptionsDeserializer {
                     }
                     "StorageSize" => {
                         obj.storage_size = match obj.storage_size {
-                            Some(existing) => Some(existing.append(try!(
-                                RangeListDeserializer::deserialize("StorageSize", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RangeListDeserializer::deserialize(
+                                    "StorageSize",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(RangeListDeserializer::deserialize(
                                 "StorageSize",
                                 stack

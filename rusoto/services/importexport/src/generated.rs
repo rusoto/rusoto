@@ -286,9 +286,13 @@ impl CreateJobOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ArtifactList" => {
                         obj.artifact_list = match obj.artifact_list {
-                            Some(existing) => Some(existing.append(try!(
-                                ArtifactListDeserializer::deserialize("ArtifactList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArtifactListDeserializer::deserialize(
+                                    "ArtifactList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ArtifactListDeserializer::deserialize(
                                 "ArtifactList",
                                 stack
@@ -585,9 +589,13 @@ impl GetStatusOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ArtifactList" => {
                         obj.artifact_list = match obj.artifact_list {
-                            Some(existing) => Some(existing.append(try!(
-                                ArtifactListDeserializer::deserialize("ArtifactList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArtifactListDeserializer::deserialize(
+                                    "ArtifactList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ArtifactListDeserializer::deserialize(
                                 "ArtifactList",
                                 stack
@@ -921,10 +929,11 @@ impl ListJobsOutputDeserializer {
                     }
                     "Jobs" => {
                         obj.jobs = match obj.jobs {
-                            Some(existing) => Some(
+                            Some(ref mut existing) => {
                                 existing
-                                    .append(try!(JobsListDeserializer::deserialize("Jobs", stack))),
-                            ),
+                                    .extend(try!(JobsListDeserializer::deserialize("Jobs", stack)));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(JobsListDeserializer::deserialize("Jobs", stack))),
                         };
                     }
@@ -1160,9 +1169,13 @@ impl UpdateJobOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ArtifactList" => {
                         obj.artifact_list = match obj.artifact_list {
-                            Some(existing) => Some(existing.append(try!(
-                                ArtifactListDeserializer::deserialize("ArtifactList", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArtifactListDeserializer::deserialize(
+                                    "ArtifactList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ArtifactListDeserializer::deserialize(
                                 "ArtifactList",
                                 stack

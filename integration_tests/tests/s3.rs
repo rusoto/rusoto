@@ -25,8 +25,7 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody, DeleteBucketError,
-                 ListObjectVersionsRequest};
+                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody, DeleteBucketError};
 
 type TestClient = S3Client;
 
@@ -48,140 +47,130 @@ fn test_all_the_things() {
     let client = S3Client::new(region.clone());
     let credentials = DefaultCredentialsProvider::new().unwrap().credentials().wait().unwrap();
 
-    let test_bucket = "rusoto-test-bucket-1541481924"; //format!("rusoto-test-bucket-{}", get_time().sec);
-    // let filename = format!("test_file_{}", get_time().sec);
-    // let utf8_filename = format!("test[über]file@{}", get_time().sec);
-    // let binary_filename = format!("test_file_b{}", get_time().sec);
-    // let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
-    // let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
+    let test_bucket = format!("rusoto-test-bucket-{}", get_time().sec);
+    let filename = format!("test_file_{}", get_time().sec);
+    let utf8_filename = format!("test[über]file@{}", get_time().sec);
+    let binary_filename = format!("test_file_b{}", get_time().sec);
+    let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
+    let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
 
-    // // get a list of list_buckets
-    // test_list_buckets(&client);
+    // get a list of list_buckets
+    test_list_buckets(&client);
 
-    // // create a bucket for these tests
-    // test_create_bucket(&client, &test_bucket);
+    // create a bucket for these tests
+    test_create_bucket(&client, &test_bucket);
 
     // list items v2
     list_items_in_bucket(&client, &test_bucket);
 
-    // list item versions:
-    let list_obj_versions_req = ListObjectVersionsRequest {
-        bucket: test_bucket.to_owned(),
-        ..Default::default()
-    };
-    let result = client.list_object_versions(list_obj_versions_req).sync()
-        .expect("Couldn't list item versions in bucket");
-    println!("Item versions in bucket: {:#?}", result);
-    panic!("hi");
+    // do a multipart upload
+    test_multipart_upload(&client, &test_bucket, &multipart_filename);
 
-    // // do a multipart upload
-    // test_multipart_upload(&client, &test_bucket, &multipart_filename);
+    // modify the bucket's CORS properties
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // Minio support: CORS is not implemented by Minio
+        test_put_bucket_cors(&client, &test_bucket);
+    }
 
-    // // modify the bucket's CORS properties
-    // if cfg!(not(feature = "disable_minio_unsupported")) {
-    //     // Minio support: CORS is not implemented by Minio
-    //     test_put_bucket_cors(&client, &test_bucket);
-    // }
+    // PUT an object via buffer (no_credentials is an arbitrary choice)
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &filename,
+                                  &"tests/sample-data/no_credentials");
 
-    // // PUT an object via buffer (no_credentials is an arbitrary choice)
-    // test_put_object_with_filename(&client,
-    //                               &test_bucket,
-    //                               &filename,
-    //                               &"tests/sample-data/no_credentials");
+    // HEAD the object that was PUT
+    test_head_object(&client, &test_bucket, &filename);
 
-    // // HEAD the object that was PUT
-    // test_head_object(&client, &test_bucket, &filename);
+    // GET the object
+    test_get_object(&client, &test_bucket, &filename);
+    test_get_object_range(&client, &test_bucket, &filename);
 
-    // // GET the object
-    // test_get_object(&client, &test_bucket, &filename);
-    // test_get_object_range(&client, &test_bucket, &filename);
+    // copy the object to change its settings
+    test_copy_object(&client, &test_bucket, &filename);
 
-    // // copy the object to change its settings
-    // test_copy_object(&client, &test_bucket, &filename);
+    // UTF8 filenames
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &utf8_filename,
+                                  &"tests/sample-data/no_credentials");
 
-    // // UTF8 filenames
-    // test_put_object_with_filename(&client,
-    //                               &test_bucket,
-    //                               &utf8_filename,
-    //                               &"tests/sample-data/no_credentials");
+    test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
 
-    // test_copy_object_utf8(&client, &test_bucket, &utf8_filename);
+    test_delete_object(&client, &test_bucket, &utf8_filename);
 
-    // test_delete_object(&client, &test_bucket, &utf8_filename);
+    // test failure responses
+    test_get_object_no_such_object(&client, &test_bucket, &binary_filename);
 
-    // // test failure responses
-    // test_get_object_no_such_object(&client, &test_bucket, &binary_filename);
+    // Binary objects:
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &binary_filename,
+                                  &"tests/sample-data/binary-file");
+    test_get_object(&client, &test_bucket, &binary_filename);
 
-    // // Binary objects:
-    // test_put_object_with_filename(&client,
-    //                               &test_bucket,
-    //                               &binary_filename,
-    //                               &"tests/sample-data/binary-file");
-    // test_get_object(&client, &test_bucket, &binary_filename);
+    // PUT an object via stream
+    let another_filename = format!("streaming{}", filename);
+    test_put_object_stream_with_filename(&client,
+                                         &test_bucket,
+                                         &another_filename,
+                                         &"tests/sample-data/binary-file");
 
-    // // PUT an object via stream
-    // let another_filename = format!("streaming{}", filename);
-    // test_put_object_stream_with_filename(&client,
-    //                                      &test_bucket,
-    //                                      &another_filename,
-    //                                      &"tests/sample-data/binary-file");
+    // metadata tests
+    let mut metadata = HashMap::<String, String>::new();
+    metadata.insert("rusoto-metadata-some".to_string(), "some-test-value".to_string());
+    metadata.insert("rusoto-metadata-none".to_string(), "".to_string());
 
-    // // metadata tests
-    // let mut metadata = HashMap::<String, String>::new();
-    // metadata.insert("rusoto-metadata-some".to_string(), "some-test-value".to_string());
-    // metadata.insert("rusoto-metadata-none".to_string(), "".to_string());
+    test_put_object_with_metadata(&client,
+                                  &test_bucket,
+                                  &metadata_filename,
+                                  &"tests/sample-data/no_credentials",
+                                  &metadata);
 
-    // test_put_object_with_metadata(&client,
-    //                               &test_bucket,
-    //                               &metadata_filename,
-    //                               &"tests/sample-data/no_credentials",
-    //                               &metadata);
+    test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+    test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
 
-    // test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
-    // test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
+    // list items with paging using list object API v1
+    list_items_in_bucket_paged_v1(&client, &test_bucket);
 
-    // // list items with paging using list object API v1
-    // list_items_in_bucket_paged_v1(&client, &test_bucket);
+    // list items with paging using list object API v2
+    if cfg!(not(feature = "disable_ceph_unsupported")) {
+        // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
+        list_items_in_bucket_paged_v2(&client, &test_bucket);
+    }
 
-    // // list items with paging using list object API v2
-    // if cfg!(not(feature = "disable_ceph_unsupported")) {
-    //     // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
-    //     list_items_in_bucket_paged_v2(&client, &test_bucket);
-    // }
+    test_delete_object(&client, &test_bucket, &metadata_filename);
+    test_delete_object(&client, &test_bucket, &binary_filename);
+    test_delete_object(&client, &test_bucket, &another_filename);
 
-    // test_delete_object(&client, &test_bucket, &metadata_filename);
-    // test_delete_object(&client, &test_bucket, &binary_filename);
-    // test_delete_object(&client, &test_bucket, &another_filename);
+    // DELETE the object
+    test_delete_object(&client, &test_bucket, &filename);
 
-    // // DELETE the object
-    // test_delete_object(&client, &test_bucket, &filename);
+    let filename = format!("{}_for_presigned", filename);
+    // PUT an object for presigned url
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &filename,
+                                  &"tests/sample-data/no_credentials");
+    // generate a presigned url
+    test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
 
-    // let filename = format!("{}_for_presigned", filename);
-    // // PUT an object for presigned url
-    // test_put_object_with_filename(&client,
-    //                               &test_bucket,
-    //                               &filename,
-    //                               &"tests/sample-data/no_credentials");
-    // // generate a presigned url
-    // test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
-    // test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &filename);
-    // test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
-    // test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
+    let utf8_filename = format!("{}_for_presigned", utf8_filename);
+    // UTF8 filenames for presigned url
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &utf8_filename,
+                                  &"tests/sample-data/no_credentials");
+    // generate a presigned url
+    test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
+    test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
+    test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
+    test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
 
-    // let utf8_filename = format!("{}_for_presigned", utf8_filename);
-    // // UTF8 filenames for presigned url
-    // test_put_object_with_filename(&client,
-    //                               &test_bucket,
-    //                               &utf8_filename,
-    //                               &"tests/sample-data/no_credentials");
-    // // generate a presigned url
-    // test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    // test_get_object_with_expired_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    // test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    // test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-
-    // // delete the test bucket
-    // test_delete_bucket(&client, &test_bucket);
+    // delete the test bucket
+    test_delete_bucket(&client, &test_bucket);
 }
 
 fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {

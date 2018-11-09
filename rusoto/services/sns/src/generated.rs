@@ -1030,9 +1030,13 @@ impl ListEndpointsByPlatformApplicationResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Endpoints" => {
                         obj.endpoints = match obj.endpoints {
-                            Some(existing) => Some(existing.append(try!(
-                                ListOfEndpointsDeserializer::deserialize("Endpoints", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ListOfEndpointsDeserializer::deserialize(
+                                    "Endpoints",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(ListOfEndpointsDeserializer::deserialize(
                                 "Endpoints",
                                 stack
@@ -1198,9 +1202,13 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
                     }
                     "phoneNumbers" => {
                         obj.phone_numbers = match obj.phone_numbers {
-                            Some(existing) => Some(existing.append(try!(
-                                PhoneNumberListDeserializer::deserialize("phoneNumbers", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PhoneNumberListDeserializer::deserialize(
+                                    "phoneNumbers",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(PhoneNumberListDeserializer::deserialize(
                                 "phoneNumbers",
                                 stack
@@ -1280,12 +1288,15 @@ impl ListPlatformApplicationsResponseDeserializer {
                     }
                     "PlatformApplications" => {
                         obj.platform_applications = match obj.platform_applications {
-                            Some(existing) => Some(existing.append(try!(
-                                ListOfPlatformApplicationsDeserializer::deserialize(
-                                    "PlatformApplications",
-                                    stack
-                                )
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ListOfPlatformApplicationsDeserializer::deserialize(
+                                        "PlatformApplications",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(ListOfPlatformApplicationsDeserializer::deserialize(
                                     "PlatformApplications",
@@ -1382,9 +1393,13 @@ impl ListSubscriptionsByTopicResponseDeserializer {
                     }
                     "Subscriptions" => {
                         obj.subscriptions = match obj.subscriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                SubscriptionsListDeserializer::deserialize("Subscriptions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubscriptionsListDeserializer::deserialize(
+                                    "Subscriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SubscriptionsListDeserializer::deserialize(
                                 "Subscriptions",
                                 stack
@@ -1464,9 +1479,13 @@ impl ListSubscriptionsResponseDeserializer {
                     }
                     "Subscriptions" => {
                         obj.subscriptions = match obj.subscriptions {
-                            Some(existing) => Some(existing.append(try!(
-                                SubscriptionsListDeserializer::deserialize("Subscriptions", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubscriptionsListDeserializer::deserialize(
+                                    "Subscriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => Some(try!(SubscriptionsListDeserializer::deserialize(
                                 "Subscriptions",
                                 stack
@@ -1545,9 +1564,12 @@ impl ListTopicsResponseDeserializer {
                     }
                     "Topics" => {
                         obj.topics = match obj.topics {
-                            Some(existing) => Some(existing.append(try!(
-                                TopicsListDeserializer::deserialize("Topics", stack)
-                            ))),
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TopicsListDeserializer::deserialize(
+                                    "Topics", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
                             None => {
                                 Some(try!(TopicsListDeserializer::deserialize("Topics", stack)))
                             }
