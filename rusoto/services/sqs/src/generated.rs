@@ -394,13 +394,15 @@ impl ChangeMessageVisibilityBatchResultDeserializer {
                 DeserializerNext::Element(name) => {
                     match &name[..] {
                         "BatchResultErrorEntry" => {
-                            obj.failed = try!(BatchResultErrorEntryListDeserializer::deserialize(
-                                "BatchResultErrorEntry",
-                                stack
+                            obj.failed.extend(try!(
+                                BatchResultErrorEntryListDeserializer::deserialize(
+                                    "BatchResultErrorEntry",
+                                    stack
+                                )
                             ));
                         }
                         "ChangeMessageVisibilityBatchResultEntry" => {
-                            obj.successful = try!(ChangeMessageVisibilityBatchResultEntryListDeserializer::deserialize("ChangeMessageVisibilityBatchResultEntry", stack));
+                            obj.successful.extend(try!(ChangeMessageVisibilityBatchResultEntryListDeserializer::deserialize("ChangeMessageVisibilityBatchResultEntry", stack)));
                         }
                         _ => skip_tree(stack),
                     }
@@ -695,17 +697,20 @@ impl DeleteMessageBatchResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "BatchResultErrorEntry" => {
-                        obj.failed = try!(BatchResultErrorEntryListDeserializer::deserialize(
-                            "BatchResultErrorEntry",
-                            stack
+                        obj.failed.extend(try!(
+                            BatchResultErrorEntryListDeserializer::deserialize(
+                                "BatchResultErrorEntry",
+                                stack
+                            )
                         ));
                     }
                     "DeleteMessageBatchResultEntry" => {
-                        obj.successful =
-                            try!(DeleteMessageBatchResultEntryListDeserializer::deserialize(
+                        obj.successful.extend(try!(
+                            DeleteMessageBatchResultEntryListDeserializer::deserialize(
                                 "DeleteMessageBatchResultEntry",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1043,8 +1048,10 @@ impl ListDeadLetterSourceQueuesResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "QueueUrl" => {
-                        obj.queue_urls =
-                            try!(QueueUrlListDeserializer::deserialize("QueueUrl", stack));
+                        obj.queue_urls
+                            .extend(try!(QueueUrlListDeserializer::deserialize(
+                                "QueueUrl", stack
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1176,9 +1183,17 @@ impl ListQueuesResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "QueueUrl" => {
-                        obj.queue_urls = Some(try!(QueueUrlListDeserializer::deserialize(
-                            "QueueUrl", stack
-                        )));
+                        obj.queue_urls = match obj.queue_urls {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(QueueUrlListDeserializer::deserialize(
+                                    "QueueUrl", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(QueueUrlListDeserializer::deserialize(
+                                "QueueUrl", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1333,10 +1348,19 @@ impl MessageAttributeValueDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "BinaryListValue" => {
-                        obj.binary_list_values = Some(try!(BinaryListDeserializer::deserialize(
-                            "BinaryListValue",
-                            stack
-                        )));
+                        obj.binary_list_values = match obj.binary_list_values {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(BinaryListDeserializer::deserialize(
+                                    "BinaryListValue",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(BinaryListDeserializer::deserialize(
+                                "BinaryListValue",
+                                stack
+                            ))),
+                        };
                     }
                     "BinaryValue" => {
                         obj.binary_value =
@@ -1346,10 +1370,19 @@ impl MessageAttributeValueDeserializer {
                         obj.data_type = try!(StringDeserializer::deserialize("DataType", stack));
                     }
                     "StringListValue" => {
-                        obj.string_list_values = Some(try!(StringListDeserializer::deserialize(
-                            "StringListValue",
-                            stack
-                        )));
+                        obj.string_list_values = match obj.string_list_values {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StringListDeserializer::deserialize(
+                                    "StringListValue",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(StringListDeserializer::deserialize(
+                                "StringListValue",
+                                stack
+                            ))),
+                        };
                     }
                     "StringValue" => {
                         obj.string_value =
@@ -1706,8 +1739,17 @@ impl ReceiveMessageResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Message" => {
-                        obj.messages =
-                            Some(try!(MessageListDeserializer::deserialize("Message", stack)));
+                        obj.messages = match obj.messages {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(MessageListDeserializer::deserialize(
+                                    "Message", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(MessageListDeserializer::deserialize("Message", stack)))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1869,17 +1911,20 @@ impl SendMessageBatchResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "BatchResultErrorEntry" => {
-                        obj.failed = try!(BatchResultErrorEntryListDeserializer::deserialize(
-                            "BatchResultErrorEntry",
-                            stack
+                        obj.failed.extend(try!(
+                            BatchResultErrorEntryListDeserializer::deserialize(
+                                "BatchResultErrorEntry",
+                                stack
+                            )
                         ));
                     }
                     "SendMessageBatchResultEntry" => {
-                        obj.successful =
-                            try!(SendMessageBatchResultEntryListDeserializer::deserialize(
+                        obj.successful.extend(try!(
+                            SendMessageBatchResultEntryListDeserializer::deserialize(
                                 "SendMessageBatchResultEntry",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     _ => skip_tree(stack),
                 },

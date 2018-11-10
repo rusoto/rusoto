@@ -553,10 +553,19 @@ impl GetAttributesResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Attribute" => {
-                        obj.attributes = Some(try!(AttributeListDeserializer::deserialize(
-                            "Attribute",
-                            stack
-                        )));
+                        obj.attributes = match obj.attributes {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AttributeListDeserializer::deserialize(
+                                    "Attribute",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttributeListDeserializer::deserialize(
+                                "Attribute",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -626,8 +635,11 @@ impl ItemDeserializer {
                         )));
                     }
                     "Attribute" => {
-                        obj.attributes =
-                            try!(AttributeListDeserializer::deserialize("Attribute", stack));
+                        obj.attributes
+                            .extend(try!(AttributeListDeserializer::deserialize(
+                                "Attribute",
+                                stack
+                            )));
                     }
                     "Name" => {
                         obj.name = try!(StringDeserializer::deserialize("Name", stack));
@@ -731,10 +743,19 @@ impl ListDomainsResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DomainName" => {
-                        obj.domain_names = Some(try!(DomainNameListDeserializer::deserialize(
-                            "DomainName",
-                            stack
-                        )));
+                        obj.domain_names = match obj.domain_names {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(DomainNameListDeserializer::deserialize(
+                                    "DomainName",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(DomainNameListDeserializer::deserialize(
+                                "DomainName",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -952,7 +973,14 @@ impl SelectResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Item" => {
-                        obj.items = Some(try!(ItemListDeserializer::deserialize("Item", stack)));
+                        obj.items = match obj.items {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(try!(ItemListDeserializer::deserialize("Item", stack)));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ItemListDeserializer::deserialize("Item", stack))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =

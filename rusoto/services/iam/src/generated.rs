@@ -2715,9 +2715,19 @@ impl DeletionTaskFailureReasonTypeDeserializer {
                             Some(try!(ReasonTypeDeserializer::deserialize("Reason", stack)));
                     }
                     "RoleUsageList" => {
-                        obj.role_usage_list = Some(try!(
-                            RoleUsageListTypeDeserializer::deserialize("RoleUsageList", stack)
-                        ));
+                        obj.role_usage_list = match obj.role_usage_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RoleUsageListTypeDeserializer::deserialize(
+                                    "RoleUsageList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(RoleUsageListTypeDeserializer::deserialize(
+                                "RoleUsageList",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2982,17 +2992,38 @@ impl EvaluationResultDeserializer {
                         ));
                     }
                     "MatchedStatements" => {
-                        obj.matched_statements = Some(try!(
-                            StatementListTypeDeserializer::deserialize("MatchedStatements", stack)
-                        ));
+                        obj.matched_statements = match obj.matched_statements {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StatementListTypeDeserializer::deserialize(
+                                    "MatchedStatements",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(StatementListTypeDeserializer::deserialize(
+                                "MatchedStatements",
+                                stack
+                            ))),
+                        };
                     }
                     "MissingContextValues" => {
-                        obj.missing_context_values = Some(try!(
-                            ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                "MissingContextValues",
-                                stack
-                            )
-                        ));
+                        obj.missing_context_values = match obj.missing_context_values {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                        "MissingContextValues",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                    "MissingContextValues",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     "OrganizationsDecisionDetail" => {
                         obj.organizations_decision_detail =
@@ -3002,12 +3033,23 @@ impl EvaluationResultDeserializer {
                             )));
                     }
                     "ResourceSpecificResults" => {
-                        obj.resource_specific_results = Some(try!(
-                            ResourceSpecificResultListTypeDeserializer::deserialize(
-                                "ResourceSpecificResults",
-                                stack
-                            )
-                        ));
+                        obj.resource_specific_results = match obj.resource_specific_results {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ResourceSpecificResultListTypeDeserializer::deserialize(
+                                        "ResourceSpecificResults",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                ResourceSpecificResultListTypeDeserializer::deserialize(
+                                    "ResourceSpecificResults",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3288,9 +3330,21 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "GroupDetailList" => {
-                        obj.group_detail_list = Some(try!(
-                            GroupDetailListTypeDeserializer::deserialize("GroupDetailList", stack)
-                        ));
+                        obj.group_detail_list = match obj.group_detail_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    GroupDetailListTypeDeserializer::deserialize(
+                                        "GroupDetailList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(GroupDetailListTypeDeserializer::deserialize(
+                                "GroupDetailList",
+                                stack
+                            ))),
+                        };
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -3303,19 +3357,51 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Policies" => {
-                        obj.policies = Some(try!(
-                            ManagedPolicyDetailListTypeDeserializer::deserialize("Policies", stack)
-                        ));
+                        obj.policies = match obj.policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ManagedPolicyDetailListTypeDeserializer::deserialize(
+                                        "Policies", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(ManagedPolicyDetailListTypeDeserializer::deserialize(
+                                    "Policies", stack
+                                )))
+                            }
+                        };
                     }
                     "RoleDetailList" => {
-                        obj.role_detail_list = Some(try!(
-                            RoleDetailListTypeDeserializer::deserialize("RoleDetailList", stack)
-                        ));
+                        obj.role_detail_list = match obj.role_detail_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(RoleDetailListTypeDeserializer::deserialize(
+                                    "RoleDetailList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(RoleDetailListTypeDeserializer::deserialize(
+                                "RoleDetailList",
+                                stack
+                            ))),
+                        };
                     }
                     "UserDetailList" => {
-                        obj.user_detail_list = Some(try!(
-                            UserDetailListTypeDeserializer::deserialize("UserDetailList", stack)
-                        ));
+                        obj.user_detail_list = match obj.user_detail_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(UserDetailListTypeDeserializer::deserialize(
+                                    "UserDetailList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(UserDetailListTypeDeserializer::deserialize(
+                                "UserDetailList",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3482,12 +3568,23 @@ impl GetContextKeysForPolicyResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ContextKeyNames" => {
-                        obj.context_key_names = Some(try!(
-                            ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                "ContextKeyNames",
-                                stack
-                            )
-                        ));
+                        obj.context_key_names = match obj.context_key_names {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                        "ContextKeyNames",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                    "ContextKeyNames",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3762,7 +3859,8 @@ impl GetGroupResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Users" => {
-                        obj.users = try!(UserListTypeDeserializer::deserialize("Users", stack));
+                        obj.users
+                            .extend(try!(UserListTypeDeserializer::deserialize("Users", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -3973,19 +4071,38 @@ impl GetOpenIDConnectProviderResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ClientIDList" => {
-                        obj.client_id_list = Some(try!(ClientIDListTypeDeserializer::deserialize(
-                            "ClientIDList",
-                            stack
-                        )));
+                        obj.client_id_list = match obj.client_id_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ClientIDListTypeDeserializer::deserialize(
+                                    "ClientIDList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ClientIDListTypeDeserializer::deserialize(
+                                "ClientIDList",
+                                stack
+                            ))),
+                        };
                     }
                     "CreateDate" => {
                         obj.create_date =
                             Some(try!(DateTypeDeserializer::deserialize("CreateDate", stack)));
                     }
                     "ThumbprintList" => {
-                        obj.thumbprint_list = Some(try!(
-                            ThumbprintListTypeDeserializer::deserialize("ThumbprintList", stack)
-                        ));
+                        obj.thumbprint_list = match obj.thumbprint_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ThumbprintListTypeDeserializer::deserialize(
+                                    "ThumbprintList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ThumbprintListTypeDeserializer::deserialize(
+                                "ThumbprintList",
+                                stack
+                            ))),
+                        };
                     }
                     "Url" => {
                         obj.url = Some(try!(
@@ -4861,11 +4978,21 @@ impl GroupDetailDeserializer {
                         obj.arn = Some(try!(ArnTypeDeserializer::deserialize("Arn", stack)));
                     }
                     "AttachedManagedPolicies" => {
-                        obj.attached_managed_policies =
-                            Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_managed_policies = match obj.attached_managed_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedManagedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedManagedPolicies",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "CreateDate" => {
                         obj.create_date =
@@ -4882,9 +5009,21 @@ impl GroupDetailDeserializer {
                         )));
                     }
                     "GroupPolicyList" => {
-                        obj.group_policy_list = Some(try!(
-                            PolicyDetailListTypeDeserializer::deserialize("GroupPolicyList", stack)
-                        ));
+                        obj.group_policy_list = match obj.group_policy_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDetailListTypeDeserializer::deserialize(
+                                        "GroupPolicyList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyDetailListTypeDeserializer::deserialize(
+                                "GroupPolicyList",
+                                stack
+                            ))),
+                        };
                     }
                     "Path" => {
                         obj.path = Some(try!(PathTypeDeserializer::deserialize("Path", stack)));
@@ -5114,7 +5253,8 @@ impl InstanceProfileDeserializer {
                         obj.path = try!(PathTypeDeserializer::deserialize("Path", stack));
                     }
                     "Roles" => {
-                        obj.roles = try!(RoleListTypeDeserializer::deserialize("Roles", stack));
+                        obj.roles
+                            .extend(try!(RoleListTypeDeserializer::deserialize("Roles", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -5268,11 +5408,12 @@ impl ListAccessKeysResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccessKeyMetadata" => {
-                        obj.access_key_metadata =
-                            try!(AccessKeyMetadataListTypeDeserializer::deserialize(
+                        obj.access_key_metadata.extend(try!(
+                            AccessKeyMetadataListTypeDeserializer::deserialize(
                                 "AccessKeyMetadata",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -5361,9 +5502,8 @@ impl ListAccountAliasesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccountAliases" => {
-                        obj.account_aliases = try!(AccountAliasListTypeDeserializer::deserialize(
-                            "AccountAliases",
-                            stack
+                        obj.account_aliases.extend(try!(
+                            AccountAliasListTypeDeserializer::deserialize("AccountAliases", stack)
                         ));
                     }
                     "IsTruncated" => {
@@ -5461,11 +5601,21 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttachedPolicies" => {
-                        obj.attached_policies =
-                            Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_policies = match obj.attached_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -5562,11 +5712,21 @@ impl ListAttachedRolePoliciesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttachedPolicies" => {
-                        obj.attached_policies =
-                            Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_policies = match obj.attached_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -5663,11 +5823,21 @@ impl ListAttachedUserPoliciesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttachedPolicies" => {
-                        obj.attached_policies =
-                            Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_policies = match obj.attached_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -5776,36 +5946,66 @@ impl ListEntitiesForPolicyResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IsTruncated" => {
-                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                                "IsTruncated",
-                                stack
-                            )));
-                        }
-                        "Marker" => {
-                            obj.marker =
-                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                        }
-                        "PolicyGroups" => {
-                            obj.policy_groups = Some(try!(
-                                PolicyGroupListTypeDeserializer::deserialize("PolicyGroups", stack)
-                            ));
-                        }
-                        "PolicyRoles" => {
-                            obj.policy_roles = Some(try!(
-                                PolicyRoleListTypeDeserializer::deserialize("PolicyRoles", stack)
-                            ));
-                        }
-                        "PolicyUsers" => {
-                            obj.policy_users = Some(try!(
-                                PolicyUserListTypeDeserializer::deserialize("PolicyUsers", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                            "IsTruncated",
+                            stack
+                        )));
                     }
-                }
+                    "Marker" => {
+                        obj.marker =
+                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                    }
+                    "PolicyGroups" => {
+                        obj.policy_groups = match obj.policy_groups {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyGroupListTypeDeserializer::deserialize(
+                                        "PolicyGroups",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyGroupListTypeDeserializer::deserialize(
+                                "PolicyGroups",
+                                stack
+                            ))),
+                        };
+                    }
+                    "PolicyRoles" => {
+                        obj.policy_roles = match obj.policy_roles {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyRoleListTypeDeserializer::deserialize(
+                                    "PolicyRoles",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyRoleListTypeDeserializer::deserialize(
+                                "PolicyRoles",
+                                stack
+                            ))),
+                        };
+                    }
+                    "PolicyUsers" => {
+                        obj.policy_users = match obj.policy_users {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyUserListTypeDeserializer::deserialize(
+                                    "PolicyUsers",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyUserListTypeDeserializer::deserialize(
+                                "PolicyUsers",
+                                stack
+                            ))),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5882,25 +6082,26 @@ impl ListGroupPoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
+                                stack
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyNames" => {
+                            obj.policy_names.extend(try!(
+                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyNames" => {
-                        obj.policy_names = try!(PolicyNameListTypeDeserializer::deserialize(
-                            "PolicyNames",
-                            stack
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5979,7 +6180,10 @@ impl ListGroupsForUserResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Groups" => {
-                        obj.groups = try!(GroupListTypeDeserializer::deserialize("Groups", stack));
+                        obj.groups
+                            .extend(try!(GroupListTypeDeserializer::deserialize(
+                                "Groups", stack
+                            )));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6073,7 +6277,10 @@ impl ListGroupsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Groups" => {
-                        obj.groups = try!(GroupListTypeDeserializer::deserialize("Groups", stack));
+                        obj.groups
+                            .extend(try!(GroupListTypeDeserializer::deserialize(
+                                "Groups", stack
+                            )));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6165,11 +6372,12 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "InstanceProfiles" => {
-                        obj.instance_profiles =
-                            try!(InstanceProfileListTypeDeserializer::deserialize(
+                        obj.instance_profiles.extend(try!(
+                            InstanceProfileListTypeDeserializer::deserialize(
                                 "InstanceProfiles",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6263,11 +6471,12 @@ impl ListInstanceProfilesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "InstanceProfiles" => {
-                        obj.instance_profiles =
-                            try!(InstanceProfileListTypeDeserializer::deserialize(
+                        obj.instance_profiles.extend(try!(
+                            InstanceProfileListTypeDeserializer::deserialize(
                                 "InstanceProfiles",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -6359,25 +6568,26 @@ impl ListMFADevicesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
+                                stack
+                            )));
+                        }
+                        "MFADevices" => {
+                            obj.mfa_devices.extend(try!(
+                                MfaDeviceListTypeDeserializer::deserialize("MFADevices", stack)
+                            ));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "MFADevices" => {
-                        obj.mfa_devices = try!(MfaDeviceListTypeDeserializer::deserialize(
-                            "MFADevices",
-                            stack
-                        ));
-                    }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6434,12 +6644,24 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OpenIDConnectProviderList" => {
-                        obj.open_id_connect_provider_list = Some(try!(
-                            OpenIDConnectProviderListTypeDeserializer::deserialize(
-                                "OpenIDConnectProviderList",
-                                stack
-                            )
-                        ));
+                        obj.open_id_connect_provider_list = match obj.open_id_connect_provider_list
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    OpenIDConnectProviderListTypeDeserializer::deserialize(
+                                        "OpenIDConnectProviderList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                OpenIDConnectProviderListTypeDeserializer::deserialize(
+                                    "OpenIDConnectProviderList",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -6551,9 +6773,17 @@ impl ListPoliciesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Policies" => {
-                        obj.policies = Some(try!(PolicyListTypeDeserializer::deserialize(
-                            "Policies", stack
-                        )));
+                        obj.policies = match obj.policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyListTypeDeserializer::deserialize(
+                                    "Policies", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyListTypeDeserializer::deserialize(
+                                "Policies", stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -6645,11 +6875,21 @@ impl ListPolicyVersionsResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Versions" => {
-                        obj.versions = Some(try!(
-                            PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                "Versions", stack
-                            )
-                        ));
+                        obj.versions = match obj.versions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDocumentVersionListTypeDeserializer::deserialize(
+                                        "Versions", stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                PolicyDocumentVersionListTypeDeserializer::deserialize(
+                                    "Versions", stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -6729,25 +6969,26 @@ impl ListRolePoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
+                                stack
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyNames" => {
+                            obj.policy_names.extend(try!(
+                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyNames" => {
-                        obj.policy_names = try!(PolicyNameListTypeDeserializer::deserialize(
-                            "PolicyNames",
-                            stack
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6838,7 +7079,8 @@ impl ListRolesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Roles" => {
-                        obj.roles = try!(RoleListTypeDeserializer::deserialize("Roles", stack));
+                        obj.roles
+                            .extend(try!(RoleListTypeDeserializer::deserialize("Roles", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -6898,11 +7140,21 @@ impl ListSAMLProvidersResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "SAMLProviderList" => {
-                        obj.saml_provider_list =
-                            Some(try!(SAMLProviderListTypeDeserializer::deserialize(
+                        obj.saml_provider_list = match obj.saml_provider_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    SAMLProviderListTypeDeserializer::deserialize(
+                                        "SAMLProviderList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SAMLProviderListTypeDeserializer::deserialize(
                                 "SAMLProviderList",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -6996,9 +7248,21 @@ impl ListSSHPublicKeysResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "SSHPublicKeys" => {
-                        obj.ssh_public_keys = Some(try!(
-                            SSHPublicKeyListTypeDeserializer::deserialize("SSHPublicKeys", stack)
-                        ));
+                        obj.ssh_public_keys = match obj.ssh_public_keys {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    SSHPublicKeyListTypeDeserializer::deserialize(
+                                        "SSHPublicKeys",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SSHPublicKeyListTypeDeserializer::deserialize(
+                                "SSHPublicKeys",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -7092,11 +7356,12 @@ impl ListServerCertificatesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "ServerCertificateMetadataList" => {
-                        obj.server_certificate_metadata_list =
-                            try!(ServerCertificateMetadataListTypeDeserializer::deserialize(
+                        obj.server_certificate_metadata_list.extend(try!(
+                            ServerCertificateMetadataListTypeDeserializer::deserialize(
                                 "ServerCertificateMetadataList",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7167,12 +7432,23 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ServiceSpecificCredentials" => {
-                        obj.service_specific_credentials = Some(try!(
-                            ServiceSpecificCredentialsListTypeDeserializer::deserialize(
-                                "ServiceSpecificCredentials",
-                                stack
-                            )
-                        ));
+                        obj.service_specific_credentials = match obj.service_specific_credentials {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ServiceSpecificCredentialsListTypeDeserializer::deserialize(
+                                        "ServiceSpecificCredentials",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                ServiceSpecificCredentialsListTypeDeserializer::deserialize(
+                                    "ServiceSpecificCredentials",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -7256,9 +7532,8 @@ impl ListSigningCertificatesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Certificates" => {
-                        obj.certificates = try!(CertificateListTypeDeserializer::deserialize(
-                            "Certificates",
-                            stack
+                        obj.certificates.extend(try!(
+                            CertificateListTypeDeserializer::deserialize("Certificates", stack)
                         ));
                     }
                     "IsTruncated" => {
@@ -7349,25 +7624,26 @@ impl ListUserPoliciesResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
+                                stack
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyNames" => {
+                            obj.policy_names.extend(try!(
+                                PolicyNameListTypeDeserializer::deserialize("PolicyNames", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyNames" => {
-                        obj.policy_names = try!(PolicyNameListTypeDeserializer::deserialize(
-                            "PolicyNames",
-                            stack
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7458,7 +7734,8 @@ impl ListUsersResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "Users" => {
-                        obj.users = try!(UserListTypeDeserializer::deserialize("Users", stack));
+                        obj.users
+                            .extend(try!(UserListTypeDeserializer::deserialize("Users", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7552,11 +7829,12 @@ impl ListVirtualMFADevicesResponseDeserializer {
                             Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
                     }
                     "VirtualMFADevices" => {
-                        obj.virtual_mfa_devices =
-                            try!(VirtualMFADeviceListTypeDeserializer::deserialize(
+                        obj.virtual_mfa_devices.extend(try!(
+                            VirtualMFADeviceListTypeDeserializer::deserialize(
                                 "VirtualMFADevices",
                                 stack
-                            ));
+                            )
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7793,12 +8071,23 @@ impl ManagedPolicyDetailDeserializer {
                         )));
                     }
                     "PolicyVersionList" => {
-                        obj.policy_version_list = Some(try!(
-                            PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                "PolicyVersionList",
-                                stack
-                            )
-                        ));
+                        obj.policy_version_list = match obj.policy_version_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDocumentVersionListTypeDeserializer::deserialize(
+                                        "PolicyVersionList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                PolicyDocumentVersionListTypeDeserializer::deserialize(
+                                    "PolicyVersionList",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     "UpdateDate" => {
                         obj.update_date =
@@ -9606,17 +9895,38 @@ impl ResourceSpecificResultDeserializer {
                         ));
                     }
                     "MatchedStatements" => {
-                        obj.matched_statements = Some(try!(
-                            StatementListTypeDeserializer::deserialize("MatchedStatements", stack)
-                        ));
+                        obj.matched_statements = match obj.matched_statements {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(StatementListTypeDeserializer::deserialize(
+                                    "MatchedStatements",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(StatementListTypeDeserializer::deserialize(
+                                "MatchedStatements",
+                                stack
+                            ))),
+                        };
                     }
                     "MissingContextValues" => {
-                        obj.missing_context_values = Some(try!(
-                            ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                "MissingContextValues",
-                                stack
-                            )
-                        ));
+                        obj.missing_context_values = match obj.missing_context_values {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                        "MissingContextValues",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(
+                                ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                    "MissingContextValues",
+                                    stack
+                                )
+                            )),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -9882,22 +10192,42 @@ impl RoleDetailDeserializer {
                             )));
                     }
                     "AttachedManagedPolicies" => {
-                        obj.attached_managed_policies =
-                            Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_managed_policies = match obj.attached_managed_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedManagedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedManagedPolicies",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "CreateDate" => {
                         obj.create_date =
                             Some(try!(DateTypeDeserializer::deserialize("CreateDate", stack)));
                     }
                     "InstanceProfileList" => {
-                        obj.instance_profile_list =
-                            Some(try!(InstanceProfileListTypeDeserializer::deserialize(
+                        obj.instance_profile_list = match obj.instance_profile_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    InstanceProfileListTypeDeserializer::deserialize(
+                                        "InstanceProfileList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(InstanceProfileListTypeDeserializer::deserialize(
                                 "InstanceProfileList",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "Path" => {
                         obj.path = Some(try!(PathTypeDeserializer::deserialize("Path", stack)));
@@ -9918,9 +10248,21 @@ impl RoleDetailDeserializer {
                         )));
                     }
                     "RolePolicyList" => {
-                        obj.role_policy_list = Some(try!(
-                            PolicyDetailListTypeDeserializer::deserialize("RolePolicyList", stack)
-                        ));
+                        obj.role_policy_list = match obj.role_policy_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDetailListTypeDeserializer::deserialize(
+                                        "RolePolicyList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyDetailListTypeDeserializer::deserialize(
+                                "RolePolicyList",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -10123,10 +10465,19 @@ impl RoleUsageTypeDeserializer {
                         )));
                     }
                     "Resources" => {
-                        obj.resources = Some(try!(ArnListTypeDeserializer::deserialize(
-                            "Resources",
-                            stack
-                        )));
+                        obj.resources = match obj.resources {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArnListTypeDeserializer::deserialize(
+                                    "Resources",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ArnListTypeDeserializer::deserialize(
+                                "Resources",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -11148,11 +11499,21 @@ impl SimulatePolicyResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EvaluationResults" => {
-                        obj.evaluation_results =
-                            Some(try!(EvaluationResultsListTypeDeserializer::deserialize(
+                        obj.evaluation_results = match obj.evaluation_results {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    EvaluationResultsListTypeDeserializer::deserialize(
+                                        "EvaluationResults",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(EvaluationResultsListTypeDeserializer::deserialize(
                                 "EvaluationResults",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "IsTruncated" => {
                         obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
@@ -12494,21 +12855,40 @@ impl UserDetailDeserializer {
                         obj.arn = Some(try!(ArnTypeDeserializer::deserialize("Arn", stack)));
                     }
                     "AttachedManagedPolicies" => {
-                        obj.attached_managed_policies =
-                            Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_managed_policies = match obj.attached_managed_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AttachedPoliciesListTypeDeserializer::deserialize(
+                                        "AttachedManagedPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedManagedPolicies",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "CreateDate" => {
                         obj.create_date =
                             Some(try!(DateTypeDeserializer::deserialize("CreateDate", stack)));
                     }
                     "GroupList" => {
-                        obj.group_list = Some(try!(GroupNameListTypeDeserializer::deserialize(
-                            "GroupList",
-                            stack
-                        )));
+                        obj.group_list = match obj.group_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(GroupNameListTypeDeserializer::deserialize(
+                                    "GroupList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(GroupNameListTypeDeserializer::deserialize(
+                                "GroupList",
+                                stack
+                            ))),
+                        };
                     }
                     "Path" => {
                         obj.path = Some(try!(PathTypeDeserializer::deserialize("Path", stack)));
@@ -12529,9 +12909,21 @@ impl UserDetailDeserializer {
                         )));
                     }
                     "UserPolicyList" => {
-                        obj.user_policy_list = Some(try!(
-                            PolicyDetailListTypeDeserializer::deserialize("UserPolicyList", stack)
-                        ));
+                        obj.user_policy_list = match obj.user_policy_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyDetailListTypeDeserializer::deserialize(
+                                        "UserPolicyList",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyDetailListTypeDeserializer::deserialize(
+                                "UserPolicyList",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },

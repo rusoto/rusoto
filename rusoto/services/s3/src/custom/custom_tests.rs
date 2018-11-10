@@ -8,6 +8,34 @@ use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
 
 #[test]
+fn test_list_object_versions_with_multiple_versions() {
+    let mock = MockRequestDispatcher::with_status(200).with_body(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+        <ListVersionsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+          <DeleteMarker>
+          </DeleteMarker>
+          <Version>
+          </Version>
+          <DeleteMarker>
+          </DeleteMarker>
+          <Version>
+          </Version>
+        </ListVersionsResult>
+        "#,
+    );
+     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    let result = client
+        .list_object_versions(ListObjectVersionsRequest {
+            bucket: "test_bucket".to_string(),
+            ..Default::default()
+        })
+        .sync()
+        .unwrap();
+    assert_eq!(result.versions.unwrap().len(), 2);
+    assert_eq!(result.delete_markers.unwrap().len(), 2);
+}
+
+#[test]
 fn initiate_multipart_upload_happy_path() {
     let body = MockResponseReader::read_response("test_resources/custom", "s3_initiate_multipart_upload.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);

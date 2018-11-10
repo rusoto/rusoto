@@ -271,9 +271,19 @@ impl AddAvailabilityZonesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
-                        obj.availability_zones = Some(try!(
-                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)
-                        ));
+                        obj.availability_zones = match obj.availability_zones {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
+                                    "AvailabilityZones",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AvailabilityZonesDeserializer::deserialize(
+                                "AvailabilityZones",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -651,10 +661,19 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "SecurityGroups" => {
-                        obj.security_groups = Some(try!(SecurityGroupsDeserializer::deserialize(
-                            "SecurityGroups",
-                            stack
-                        )));
+                        obj.security_groups = match obj.security_groups {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SecurityGroupsDeserializer::deserialize(
+                                    "SecurityGroups",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SecurityGroupsDeserializer::deserialize(
+                                "SecurityGroups",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -726,8 +745,15 @@ impl AttachLoadBalancerToSubnetsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Subnets" => {
-                        obj.subnets =
-                            Some(try!(SubnetsDeserializer::deserialize("Subnets", stack)));
+                        obj.subnets = match obj.subnets {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetsDeserializer::deserialize(
+                                    "Subnets", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SubnetsDeserializer::deserialize("Subnets", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -891,10 +917,19 @@ impl BackendServerDescriptionDeserializer {
                         )));
                     }
                     "PolicyNames" => {
-                        obj.policy_names = Some(try!(PolicyNamesDeserializer::deserialize(
-                            "PolicyNames",
-                            stack
-                        )));
+                        obj.policy_names = match obj.policy_names {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyNamesDeserializer::deserialize(
+                                    "PolicyNames",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyNamesDeserializer::deserialize(
+                                "PolicyNames",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1887,8 +1922,18 @@ impl DeregisterEndPointsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Instances" => {
-                        obj.instances =
-                            Some(try!(InstancesDeserializer::deserialize("Instances", stack)));
+                        obj.instances = match obj.instances {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstancesDeserializer::deserialize(
+                                    "Instances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(InstancesDeserializer::deserialize("Instances", stack)))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1975,11 +2020,21 @@ impl DescribeAccessPointsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LoadBalancerDescriptions" => {
-                        obj.load_balancer_descriptions =
-                            Some(try!(LoadBalancerDescriptionsDeserializer::deserialize(
+                        obj.load_balancer_descriptions = match obj.load_balancer_descriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    LoadBalancerDescriptionsDeserializer::deserialize(
+                                        "LoadBalancerDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(LoadBalancerDescriptionsDeserializer::deserialize(
                                 "LoadBalancerDescriptions",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "NextMarker" => {
                         obj.next_marker =
@@ -2059,7 +2114,14 @@ impl DescribeAccountLimitsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Limits" => {
-                        obj.limits = Some(try!(LimitsDeserializer::deserialize("Limits", stack)));
+                        obj.limits = match obj.limits {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(try!(LimitsDeserializer::deserialize("Limits", stack)));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(LimitsDeserializer::deserialize("Limits", stack))),
+                        };
                     }
                     "NextMarker" => {
                         obj.next_marker =
@@ -2141,10 +2203,19 @@ impl DescribeEndPointStateOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "InstanceStates" => {
-                        obj.instance_states = Some(try!(InstanceStatesDeserializer::deserialize(
-                            "InstanceStates",
-                            stack
-                        )));
+                        obj.instance_states = match obj.instance_states {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstanceStatesDeserializer::deserialize(
+                                    "InstanceStates",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(InstanceStatesDeserializer::deserialize(
+                                "InstanceStates",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2294,11 +2365,19 @@ impl DescribeLoadBalancerPoliciesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyDescriptions" => {
-                        obj.policy_descriptions =
-                            Some(try!(PolicyDescriptionsDeserializer::deserialize(
+                        obj.policy_descriptions = match obj.policy_descriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyDescriptionsDeserializer::deserialize(
+                                    "PolicyDescriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyDescriptionsDeserializer::deserialize(
                                 "PolicyDescriptions",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2370,11 +2449,21 @@ impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyTypeDescriptions" => {
-                        obj.policy_type_descriptions =
-                            Some(try!(PolicyTypeDescriptionsDeserializer::deserialize(
+                        obj.policy_type_descriptions = match obj.policy_type_descriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyTypeDescriptionsDeserializer::deserialize(
+                                        "PolicyTypeDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyTypeDescriptionsDeserializer::deserialize(
                                 "PolicyTypeDescriptions",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2444,9 +2533,19 @@ impl DescribeTagsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TagDescriptions" => {
-                        obj.tag_descriptions = Some(try!(
-                            TagDescriptionsDeserializer::deserialize("TagDescriptions", stack)
-                        ));
+                        obj.tag_descriptions = match obj.tag_descriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TagDescriptionsDeserializer::deserialize(
+                                    "TagDescriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(TagDescriptionsDeserializer::deserialize(
+                                "TagDescriptions",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -2532,8 +2631,15 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Subnets" => {
-                        obj.subnets =
-                            Some(try!(SubnetsDeserializer::deserialize("Subnets", stack)));
+                        obj.subnets = match obj.subnets {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetsDeserializer::deserialize(
+                                    "Subnets", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SubnetsDeserializer::deserialize("Subnets", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3314,10 +3420,19 @@ impl ListenerDescriptionDeserializer {
                             Some(try!(ListenerDeserializer::deserialize("Listener", stack)));
                     }
                     "PolicyNames" => {
-                        obj.policy_names = Some(try!(PolicyNamesDeserializer::deserialize(
-                            "PolicyNames",
-                            stack
-                        )));
+                        obj.policy_names = match obj.policy_names {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyNamesDeserializer::deserialize(
+                                    "PolicyNames",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyNamesDeserializer::deserialize(
+                                "PolicyNames",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -3429,11 +3544,21 @@ impl LoadBalancerAttributesDeserializer {
                             Some(try!(AccessLogDeserializer::deserialize("AccessLog", stack)));
                     }
                     "AdditionalAttributes" => {
-                        obj.additional_attributes =
-                            Some(try!(AdditionalAttributesDeserializer::deserialize(
+                        obj.additional_attributes = match obj.additional_attributes {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    AdditionalAttributesDeserializer::deserialize(
+                                        "AdditionalAttributes",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AdditionalAttributesDeserializer::deserialize(
                                 "AdditionalAttributes",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "ConnectionDraining" => {
                         obj.connection_draining =
@@ -3578,16 +3703,36 @@ impl LoadBalancerDescriptionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
-                        obj.availability_zones = Some(try!(
-                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)
-                        ));
+                        obj.availability_zones = match obj.availability_zones {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
+                                    "AvailabilityZones",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AvailabilityZonesDeserializer::deserialize(
+                                "AvailabilityZones",
+                                stack
+                            ))),
+                        };
                     }
                     "BackendServerDescriptions" => {
-                        obj.backend_server_descriptions =
-                            Some(try!(BackendServerDescriptionsDeserializer::deserialize(
+                        obj.backend_server_descriptions = match obj.backend_server_descriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    BackendServerDescriptionsDeserializer::deserialize(
+                                        "BackendServerDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(BackendServerDescriptionsDeserializer::deserialize(
                                 "BackendServerDescriptions",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "CanonicalHostedZoneName" => {
                         obj.canonical_hosted_zone_name = Some(try!(
@@ -3616,15 +3761,35 @@ impl LoadBalancerDescriptionDeserializer {
                         )));
                     }
                     "Instances" => {
-                        obj.instances =
-                            Some(try!(InstancesDeserializer::deserialize("Instances", stack)));
+                        obj.instances = match obj.instances {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstancesDeserializer::deserialize(
+                                    "Instances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(InstancesDeserializer::deserialize("Instances", stack)))
+                            }
+                        };
                     }
                     "ListenerDescriptions" => {
-                        obj.listener_descriptions =
-                            Some(try!(ListenerDescriptionsDeserializer::deserialize(
+                        obj.listener_descriptions = match obj.listener_descriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ListenerDescriptionsDeserializer::deserialize(
+                                        "ListenerDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ListenerDescriptionsDeserializer::deserialize(
                                 "ListenerDescriptions",
                                 stack
-                            )));
+                            ))),
+                        };
                     }
                     "LoadBalancerName" => {
                         obj.load_balancer_name = Some(try!(
@@ -3641,10 +3806,19 @@ impl LoadBalancerDescriptionDeserializer {
                         )));
                     }
                     "SecurityGroups" => {
-                        obj.security_groups = Some(try!(SecurityGroupsDeserializer::deserialize(
-                            "SecurityGroups",
-                            stack
-                        )));
+                        obj.security_groups = match obj.security_groups {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SecurityGroupsDeserializer::deserialize(
+                                    "SecurityGroups",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SecurityGroupsDeserializer::deserialize(
+                                "SecurityGroups",
+                                stack
+                            ))),
+                        };
                     }
                     "SourceSecurityGroup" => {
                         obj.source_security_group =
@@ -3654,8 +3828,15 @@ impl LoadBalancerDescriptionDeserializer {
                             )));
                     }
                     "Subnets" => {
-                        obj.subnets =
-                            Some(try!(SubnetsDeserializer::deserialize("Subnets", stack)));
+                        obj.subnets = match obj.subnets {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubnetsDeserializer::deserialize(
+                                    "Subnets", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SubnetsDeserializer::deserialize("Subnets", stack))),
+                        };
                     }
                     "VPCId" => {
                         obj.vpc_id = Some(try!(VPCIdDeserializer::deserialize("VPCId", stack)));
@@ -3917,23 +4098,58 @@ impl PoliciesDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AppCookieStickinessPolicies" => {
                         obj.app_cookie_stickiness_policies =
-                            Some(try!(AppCookieStickinessPoliciesDeserializer::deserialize(
-                                "AppCookieStickinessPolicies",
-                                stack
-                            )));
+                            match obj.app_cookie_stickiness_policies {
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        AppCookieStickinessPoliciesDeserializer::deserialize(
+                                            "AppCookieStickinessPolicies",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
+                                None => Some(try!(
+                                    AppCookieStickinessPoliciesDeserializer::deserialize(
+                                        "AppCookieStickinessPolicies",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     "LBCookieStickinessPolicies" => {
-                        obj.lb_cookie_stickiness_policies =
-                            Some(try!(LBCookieStickinessPoliciesDeserializer::deserialize(
-                                "LBCookieStickinessPolicies",
-                                stack
-                            )));
+                        obj.lb_cookie_stickiness_policies = match obj.lb_cookie_stickiness_policies
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    LBCookieStickinessPoliciesDeserializer::deserialize(
+                                        "LBCookieStickinessPolicies",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(LBCookieStickinessPoliciesDeserializer::deserialize(
+                                    "LBCookieStickinessPolicies",
+                                    stack
+                                )))
+                            }
+                        };
                     }
                     "OtherPolicies" => {
-                        obj.other_policies = Some(try!(PolicyNamesDeserializer::deserialize(
-                            "OtherPolicies",
-                            stack
-                        )));
+                        obj.other_policies = match obj.other_policies {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PolicyNamesDeserializer::deserialize(
+                                    "OtherPolicies",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PolicyNamesDeserializer::deserialize(
+                                "OtherPolicies",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4246,11 +4462,24 @@ impl PolicyDescriptionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyAttributeDescriptions" => {
-                        obj.policy_attribute_descriptions =
-                            Some(try!(PolicyAttributeDescriptionsDeserializer::deserialize(
-                                "PolicyAttributeDescriptions",
-                                stack
-                            )));
+                        obj.policy_attribute_descriptions = match obj.policy_attribute_descriptions
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    PolicyAttributeDescriptionsDeserializer::deserialize(
+                                        "PolicyAttributeDescriptions",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(PolicyAttributeDescriptionsDeserializer::deserialize(
+                                    "PolicyAttributeDescriptions",
+                                    stack
+                                )))
+                            }
+                        };
                     }
                     "PolicyName" => {
                         obj.policy_name = Some(try!(PolicyNameDeserializer::deserialize(
@@ -4426,12 +4655,24 @@ impl PolicyTypeDescriptionDeserializer {
                         )));
                     }
                     "PolicyAttributeTypeDescriptions" => {
-                        obj.policy_attribute_type_descriptions = Some(try!(
-                            PolicyAttributeTypeDescriptionsDeserializer::deserialize(
-                                "PolicyAttributeTypeDescriptions",
-                                stack
-                            )
-                        ));
+                        obj.policy_attribute_type_descriptions =
+                            match obj.policy_attribute_type_descriptions {
+                                Some(ref mut existing) => {
+                                    existing.extend(try!(
+                                        PolicyAttributeTypeDescriptionsDeserializer::deserialize(
+                                            "PolicyAttributeTypeDescriptions",
+                                            stack
+                                        )
+                                    ));
+                                    Some(existing.to_vec())
+                                }
+                                None => Some(try!(
+                                    PolicyAttributeTypeDescriptionsDeserializer::deserialize(
+                                        "PolicyAttributeTypeDescriptions",
+                                        stack
+                                    )
+                                )),
+                            };
                     }
                     "PolicyTypeName" => {
                         obj.policy_type_name = Some(try!(PolicyTypeNameDeserializer::deserialize(
@@ -4620,8 +4861,18 @@ impl RegisterEndPointsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Instances" => {
-                        obj.instances =
-                            Some(try!(InstancesDeserializer::deserialize("Instances", stack)));
+                        obj.instances = match obj.instances {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(InstancesDeserializer::deserialize(
+                                    "Instances",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(InstancesDeserializer::deserialize("Instances", stack)))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -4697,9 +4948,19 @@ impl RemoveAvailabilityZonesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AvailabilityZones" => {
-                        obj.availability_zones = Some(try!(
-                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)
-                        ));
+                        obj.availability_zones = match obj.availability_zones {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
+                                    "AvailabilityZones",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(AvailabilityZonesDeserializer::deserialize(
+                                "AvailabilityZones",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -5302,7 +5563,14 @@ impl TagDescriptionDeserializer {
                         ));
                     }
                     "Tags" => {
-                        obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(try!(TagListDeserializer::deserialize("Tags", stack)));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(TagListDeserializer::deserialize("Tags", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },

@@ -1029,10 +1029,19 @@ impl ListEndpointsByPlatformApplicationResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Endpoints" => {
-                        obj.endpoints = Some(try!(ListOfEndpointsDeserializer::deserialize(
-                            "Endpoints",
-                            stack
-                        )));
+                        obj.endpoints = match obj.endpoints {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ListOfEndpointsDeserializer::deserialize(
+                                    "Endpoints",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ListOfEndpointsDeserializer::deserialize(
+                                "Endpoints",
+                                stack
+                            ))),
+                        };
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1192,10 +1201,19 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
                             Some(try!(StringDeserializer::deserialize("nextToken", stack)));
                     }
                     "phoneNumbers" => {
-                        obj.phone_numbers = Some(try!(PhoneNumberListDeserializer::deserialize(
-                            "phoneNumbers",
-                            stack
-                        )));
+                        obj.phone_numbers = match obj.phone_numbers {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(PhoneNumberListDeserializer::deserialize(
+                                    "phoneNumbers",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(PhoneNumberListDeserializer::deserialize(
+                                "phoneNumbers",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1269,11 +1287,23 @@ impl ListPlatformApplicationsResponseDeserializer {
                             Some(try!(StringDeserializer::deserialize("NextToken", stack)));
                     }
                     "PlatformApplications" => {
-                        obj.platform_applications =
-                            Some(try!(ListOfPlatformApplicationsDeserializer::deserialize(
-                                "PlatformApplications",
-                                stack
-                            )));
+                        obj.platform_applications = match obj.platform_applications {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(
+                                    ListOfPlatformApplicationsDeserializer::deserialize(
+                                        "PlatformApplications",
+                                        stack
+                                    )
+                                ));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(ListOfPlatformApplicationsDeserializer::deserialize(
+                                    "PlatformApplications",
+                                    stack
+                                )))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1362,10 +1392,19 @@ impl ListSubscriptionsByTopicResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Subscriptions" => {
-                        obj.subscriptions = Some(try!(SubscriptionsListDeserializer::deserialize(
-                            "Subscriptions",
-                            stack
-                        )));
+                        obj.subscriptions = match obj.subscriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubscriptionsListDeserializer::deserialize(
+                                    "Subscriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SubscriptionsListDeserializer::deserialize(
+                                "Subscriptions",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1439,10 +1478,19 @@ impl ListSubscriptionsResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Subscriptions" => {
-                        obj.subscriptions = Some(try!(SubscriptionsListDeserializer::deserialize(
-                            "Subscriptions",
-                            stack
-                        )));
+                        obj.subscriptions = match obj.subscriptions {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(SubscriptionsListDeserializer::deserialize(
+                                    "Subscriptions",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(SubscriptionsListDeserializer::deserialize(
+                                "Subscriptions",
+                                stack
+                            ))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1515,8 +1563,17 @@ impl ListTopicsResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Topics" => {
-                        obj.topics =
-                            Some(try!(TopicsListDeserializer::deserialize("Topics", stack)));
+                        obj.topics = match obj.topics {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(TopicsListDeserializer::deserialize(
+                                    "Topics", stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(try!(TopicsListDeserializer::deserialize("Topics", stack)))
+                            }
+                        };
                     }
                     _ => skip_tree(stack),
                 },

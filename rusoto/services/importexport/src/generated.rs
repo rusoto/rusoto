@@ -285,10 +285,19 @@ impl CreateJobOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ArtifactList" => {
-                        obj.artifact_list = Some(try!(ArtifactListDeserializer::deserialize(
-                            "ArtifactList",
-                            stack
-                        )));
+                        obj.artifact_list = match obj.artifact_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArtifactListDeserializer::deserialize(
+                                    "ArtifactList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ArtifactListDeserializer::deserialize(
+                                "ArtifactList",
+                                stack
+                            ))),
+                        };
                     }
                     "JobId" => {
                         obj.job_id = Some(try!(JobIdDeserializer::deserialize("JobId", stack)));
@@ -579,10 +588,19 @@ impl GetStatusOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ArtifactList" => {
-                        obj.artifact_list = Some(try!(ArtifactListDeserializer::deserialize(
-                            "ArtifactList",
-                            stack
-                        )));
+                        obj.artifact_list = match obj.artifact_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArtifactListDeserializer::deserialize(
+                                    "ArtifactList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ArtifactListDeserializer::deserialize(
+                                "ArtifactList",
+                                stack
+                            ))),
+                        };
                     }
                     "Carrier" => {
                         obj.carrier =
@@ -910,7 +928,14 @@ impl ListJobsOutputDeserializer {
                         )));
                     }
                     "Jobs" => {
-                        obj.jobs = Some(try!(JobsListDeserializer::deserialize("Jobs", stack)));
+                        obj.jobs = match obj.jobs {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(try!(JobsListDeserializer::deserialize("Jobs", stack)));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(JobsListDeserializer::deserialize("Jobs", stack))),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -1143,10 +1168,19 @@ impl UpdateJobOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ArtifactList" => {
-                        obj.artifact_list = Some(try!(ArtifactListDeserializer::deserialize(
-                            "ArtifactList",
-                            stack
-                        )));
+                        obj.artifact_list = match obj.artifact_list {
+                            Some(ref mut existing) => {
+                                existing.extend(try!(ArtifactListDeserializer::deserialize(
+                                    "ArtifactList",
+                                    stack
+                                )));
+                                Some(existing.to_vec())
+                            }
+                            None => Some(try!(ArtifactListDeserializer::deserialize(
+                                "ArtifactList",
+                                stack
+                            ))),
+                        };
                     }
                     "Success" => {
                         obj.success =
