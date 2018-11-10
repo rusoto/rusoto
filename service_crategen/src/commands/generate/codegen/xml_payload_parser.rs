@@ -357,8 +357,8 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
             .get(payload_member_name)
             .expect("failed to get payload member");
 
-        let deserialize = format!("{payload_shape}Deserializer::deserialize(\"{name}\", stack)",
-                                  name = name,
+        let deserialize = format!("{payload_shape}Deserializer::deserialize(\"{payload_member_name}\", stack)",
+                                  payload_member_name = payload_member_name,
                                   payload_shape = payload_member.shape);
 
         let unwrapping = if shape.required(payload_member_name) {
