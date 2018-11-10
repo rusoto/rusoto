@@ -92,6 +92,7 @@ members = [
     "rusoto/services/organizations",
     "rusoto/services/pi",
     "rusoto/services/polly",
+    "rusoto/services/pricing",
     "rusoto/services/rds",
     "rusoto/services/redshift",
     "rusoto/services/rekognition",
