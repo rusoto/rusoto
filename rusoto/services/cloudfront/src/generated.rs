@@ -1460,39 +1460,15 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = CreateCloudFrontOriginAccessIdentityResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.cloud_front_origin_access_identity =
+            match CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                "CloudFrontOriginAccessIdentity",
+                stack,
+            ) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CloudFrontOriginAccessIdentity" => {
-                        obj.cloud_front_origin_access_identity = Some(try!(
-                            CloudFrontOriginAccessIdentityDeserializer::deserialize(
-                                "CloudFrontOriginAccessIdentity",
-                                stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -1522,37 +1498,11 @@ impl CreateDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = CreateDistributionResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Distribution" => {
-                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
-                            "Distribution",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -1582,37 +1532,11 @@ impl CreateDistributionWithTagsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionWithTagsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = CreateDistributionWithTagsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Distribution" => {
-                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
-                            "Distribution",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -1642,37 +1566,11 @@ impl CreateInvalidationResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInvalidationResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = CreateInvalidationResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Invalidation" => {
-                        obj.invalidation = Some(try!(InvalidationDeserializer::deserialize(
-                            "Invalidation",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.invalidation = match InvalidationDeserializer::deserialize("Invalidation", stack) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -1702,38 +1600,12 @@ impl CreateStreamingDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = CreateStreamingDistributionResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.streaming_distribution =
+            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "StreamingDistribution" => {
-                        obj.streaming_distribution =
-                            Some(try!(StreamingDistributionDeserializer::deserialize(
-                                "StreamingDistribution",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -1762,38 +1634,12 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = CreateStreamingDistributionWithTagsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.streaming_distribution =
+            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "StreamingDistribution" => {
-                        obj.streaming_distribution =
-                            Some(try!(StreamingDistributionDeserializer::deserialize(
-                                "StreamingDistribution",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -3476,39 +3322,15 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetCloudFrontOriginAccessIdentityConfigResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.cloud_front_origin_access_identity_config =
+            match CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
+                "CloudFrontOriginAccessIdentityConfig",
+                stack,
+            ) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CloudFrontOriginAccessIdentityConfig" => {
-                        obj.cloud_front_origin_access_identity_config = Some(try!(
-                            CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
-                                "CloudFrontOriginAccessIdentityConfig",
-                                stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -3536,39 +3358,15 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetCloudFrontOriginAccessIdentityResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.cloud_front_origin_access_identity =
+            match CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                "CloudFrontOriginAccessIdentity",
+                stack,
+            ) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CloudFrontOriginAccessIdentity" => {
-                        obj.cloud_front_origin_access_identity = Some(try!(
-                            CloudFrontOriginAccessIdentityDeserializer::deserialize(
-                                "CloudFrontOriginAccessIdentity",
-                                stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -3596,38 +3394,12 @@ impl GetDistributionConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionConfigResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetDistributionConfigResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.distribution_config =
+            match DistributionConfigDeserializer::deserialize("DistributionConfig", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DistributionConfig" => {
-                        obj.distribution_config =
-                            Some(try!(DistributionConfigDeserializer::deserialize(
-                                "DistributionConfig",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -3655,37 +3427,11 @@ impl GetDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetDistributionResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Distribution" => {
-                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
-                            "Distribution",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -3713,37 +3459,11 @@ impl GetInvalidationResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetInvalidationResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetInvalidationResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Invalidation" => {
-                        obj.invalidation = Some(try!(InvalidationDeserializer::deserialize(
-                            "Invalidation",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.invalidation = match InvalidationDeserializer::deserialize("Invalidation", stack) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -3771,38 +3491,15 @@ impl GetStreamingDistributionConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetStreamingDistributionConfigResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.streaming_distribution_config =
+            match StreamingDistributionConfigDeserializer::deserialize(
+                "StreamingDistributionConfig",
+                stack,
+            ) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "StreamingDistributionConfig" => {
-                        obj.streaming_distribution_config =
-                            Some(try!(StreamingDistributionConfigDeserializer::deserialize(
-                                "StreamingDistributionConfig",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -3830,38 +3527,12 @@ impl GetStreamingDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetStreamingDistributionResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.streaming_distribution =
+            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "StreamingDistribution" => {
-                        obj.streaming_distribution =
-                            Some(try!(StreamingDistributionDeserializer::deserialize(
-                                "StreamingDistribution",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -4813,39 +4484,15 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListCloudFrontOriginAccessIdentitiesResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.cloud_front_origin_access_identity_list =
+            match CloudFrontOriginAccessIdentityListDeserializer::deserialize(
+                "CloudFrontOriginAccessIdentityList",
+                stack,
+            ) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CloudFrontOriginAccessIdentityList" => {
-                        obj.cloud_front_origin_access_identity_list = Some(try!(
-                            CloudFrontOriginAccessIdentityListDeserializer::deserialize(
-                                "CloudFrontOriginAccessIdentityList",
-                                stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -4875,36 +4522,12 @@ impl ListDistributionsByWebACLIdResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListDistributionsByWebACLIdResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.distribution_list =
+            match DistributionListDeserializer::deserialize("DistributionList", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DistributionList" => {
-                        obj.distribution_list = Some(try!(
-                            DistributionListDeserializer::deserialize("DistributionList", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -4932,36 +4555,12 @@ impl ListDistributionsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListDistributionsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.distribution_list =
+            match DistributionListDeserializer::deserialize("DistributionList", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DistributionList" => {
-                        obj.distribution_list = Some(try!(
-                            DistributionListDeserializer::deserialize("DistributionList", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -4991,36 +4590,12 @@ impl ListInvalidationsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInvalidationsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListInvalidationsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.invalidation_list =
+            match InvalidationListDeserializer::deserialize("InvalidationList", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "InvalidationList" => {
-                        obj.invalidation_list = Some(try!(
-                            InvalidationListDeserializer::deserialize("InvalidationList", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -5048,38 +4623,14 @@ impl ListStreamingDistributionsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStreamingDistributionsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListStreamingDistributionsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "StreamingDistributionList" => {
-                        obj.streaming_distribution_list =
-                            Some(try!(StreamingDistributionListDeserializer::deserialize(
-                                "StreamingDistributionList",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.streaming_distribution_list = match StreamingDistributionListDeserializer::deserialize(
+            "StreamingDistributionList",
+            stack,
+        ) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -5105,34 +4656,8 @@ impl ListTagsForResourceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListTagsForResourceResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Tags" => {
-                        obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
 
         Ok(obj)
     }
@@ -7912,39 +7437,15 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = UpdateCloudFrontOriginAccessIdentityResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.cloud_front_origin_access_identity =
+            match CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                "CloudFrontOriginAccessIdentity",
+                stack,
+            ) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CloudFrontOriginAccessIdentity" => {
-                        obj.cloud_front_origin_access_identity = Some(try!(
-                            CloudFrontOriginAccessIdentityDeserializer::deserialize(
-                                "CloudFrontOriginAccessIdentity",
-                                stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -7976,37 +7477,11 @@ impl UpdateDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateDistributionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = UpdateDistributionResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Distribution" => {
-                        obj.distribution = Some(try!(DistributionDeserializer::deserialize(
-                            "Distribution",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
+        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
+            Ok(payload) => Some(payload),
+            Err(_) => None,
+        };
 
         Ok(obj)
     }
@@ -8038,38 +7513,12 @@ impl UpdateStreamingDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStreamingDistributionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = UpdateStreamingDistributionResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
+        obj.streaming_distribution =
+            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
+                Ok(payload) => Some(payload),
+                Err(_) => None,
             };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "StreamingDistribution" => {
-                        obj.streaming_distribution =
-                            Some(try!(StreamingDistributionDeserializer::deserialize(
-                                "StreamingDistribution",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
