@@ -30,7 +30,7 @@ fn test_multipart_upload_copy_response() {
         .sync()
         .unwrap();
     assert!(result.copy_part_result.is_some(), "Should have result in etag field");
-    assert_eq!(result.copy_part_result.unwrap().e_tag.unwrap(), "9a9d1bbe80188883302bff764b4cb321");
+    assert_eq!(result.copy_part_result.unwrap().e_tag.unwrap(), "\"9a9d1bbe80188883302bff764b4cb321\"");
 }
 
 #[test]
@@ -88,7 +88,7 @@ fn initiate_multipart_upload_happy_path() {
 fn complete_multipart_upload_happy_path() {
     let body = MockResponseReader::read_response("test_resources/custom", "s3_complete_multipart_upload.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
-    
+
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.complete_multipart_upload(CompleteMultipartUploadRequest {
         bucket: "example-bucket".to_owned(),
@@ -111,7 +111,7 @@ fn complete_multipart_upload_happy_path() {
 fn list_multipart_upload_happy_path() {
     let body = MockResponseReader::read_response("test_resources/custom", "s3_list_multipart_uploads.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
-    
+
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.list_multipart_uploads(ListMultipartUploadsRequest {
         bucket: "example-bucket".to_owned(),
@@ -367,7 +367,7 @@ fn should_serialize_complicated_request() {
 fn should_parse_location_constraint() {
     let body = MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-location.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
-    
+
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
     let result = client.get_bucket_location(GetBucketLocationRequest {
         bucket: "example-bucket".to_owned()
