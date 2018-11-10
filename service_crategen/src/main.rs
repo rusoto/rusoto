@@ -53,7 +53,13 @@ fn main() {
                 .long("outdir")
                 .short("o")
                 .takes_value(true)
-                .required(true)))
+                .required(true))
+            .arg(Arg::with_name("service")
+                .long("service")
+                .short("s")
+                .takes_value(true)
+                .multiple(true)
+                .required(false)))
         .get_matches();
 
     if let Some(matches) = matches.subcommand_matches("check") {
@@ -68,7 +74,8 @@ fn main() {
         let service_configs = ServiceConfig::load_all(services_config_path).expect("Unable to read services configuration file.");
 
         let out_dir = Path::new(matches.value_of("out_dir").unwrap());
+        let service:Option<Vec<&str>> = matches.values_of("service").map(|x| x.collect());
 
-        commands::generate::generate_services(&service_configs, out_dir); 
+        commands::generate::generate_services(&service_configs, out_dir, &service.as_ref()); 
     }
 }
