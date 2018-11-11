@@ -357,30 +357,24 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
             .get(payload_member_name)
             .expect("failed to get payload member");
 
-        let deserialize = format!("{payload_shape}Deserializer::deserialize(\"{payload_member_name}\", stack)",
-                                  payload_member_name = payload_member_name,
-                                  payload_shape = payload_member.shape);
+        let mut deserialize = format!("try!({payload_shape}Deserializer::deserialize(\"{payload_member_name}\", stack))",
+                                      payload_member_name = payload_member_name,
+                                      payload_shape = payload_member.shape);
 
-        let unwrapping = if shape.required(payload_member_name) {
-            format!("try!({deserialize})", deserialize = deserialize)
-        } else {
-            format!("match {deserialize} {{
-                        Ok(payload) => Some(payload),
-                        Err(_) => None
-                    }}",
-                    deserialize = deserialize)
+        if !shape.required(payload_member_name) {
+            deserialize = format!("Some({deserialize})", deserialize = deserialize);
         };
 
         return format!(
             "
-            let mut obj = {name}::default();
-            obj.{member} = {value};
-
-            Ok(obj)
+            Ok({name} {{
+                {member}: {deserialize},
+                ..{name}::default()
+            }})
             ",
             name = name,
             member = payload_member_name.to_snake_case(),
-            value = unwrapping
+            deserialize = deserialize
         );
     }
 

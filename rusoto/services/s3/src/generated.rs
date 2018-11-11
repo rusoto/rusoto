@@ -2511,14 +2511,13 @@ impl CopyObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectOutput, XmlParseError> {
-        let mut obj = CopyObjectOutput::default();
-        obj.copy_object_result =
-            match CopyObjectResultDeserializer::deserialize("CopyObjectResult", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(CopyObjectOutput {
+            copy_object_result: Some(try!(CopyObjectResultDeserializer::deserialize(
+                "CopyObjectResult",
+                stack
+            ))),
+            ..CopyObjectOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4755,16 +4754,13 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAnalyticsConfigurationOutput, XmlParseError> {
-        let mut obj = GetBucketAnalyticsConfigurationOutput::default();
-        obj.analytics_configuration = match AnalyticsConfigurationDeserializer::deserialize(
-            "AnalyticsConfiguration",
-            stack,
-        ) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(GetBucketAnalyticsConfigurationOutput {
+            analytics_configuration: Some(try!(AnalyticsConfigurationDeserializer::deserialize(
+                "AnalyticsConfiguration",
+                stack
+            ))),
+            ..GetBucketAnalyticsConfigurationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4846,17 +4842,15 @@ impl GetBucketEncryptionOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketEncryptionOutput, XmlParseError> {
-        let mut obj = GetBucketEncryptionOutput::default();
-        obj.server_side_encryption_configuration =
-            match ServerSideEncryptionConfigurationDeserializer::deserialize(
-                "ServerSideEncryptionConfiguration",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetBucketEncryptionOutput {
+            server_side_encryption_configuration: Some(try!(
+                ServerSideEncryptionConfigurationDeserializer::deserialize(
+                    "ServerSideEncryptionConfiguration",
+                    stack
+                )
+            )),
+            ..GetBucketEncryptionOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4878,16 +4872,13 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketInventoryConfigurationOutput, XmlParseError> {
-        let mut obj = GetBucketInventoryConfigurationOutput::default();
-        obj.inventory_configuration = match InventoryConfigurationDeserializer::deserialize(
-            "InventoryConfiguration",
-            stack,
-        ) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(GetBucketInventoryConfigurationOutput {
+            inventory_configuration: Some(try!(InventoryConfigurationDeserializer::deserialize(
+                "InventoryConfiguration",
+                stack
+            ))),
+            ..GetBucketInventoryConfigurationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5103,14 +5094,13 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketMetricsConfigurationOutput, XmlParseError> {
-        let mut obj = GetBucketMetricsConfigurationOutput::default();
-        obj.metrics_configuration =
-            match MetricsConfigurationDeserializer::deserialize("MetricsConfiguration", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetBucketMetricsConfigurationOutput {
+            metrics_configuration: Some(try!(MetricsConfigurationDeserializer::deserialize(
+                "MetricsConfiguration",
+                stack
+            ))),
+            ..GetBucketMetricsConfigurationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5150,16 +5140,15 @@ impl GetBucketReplicationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketReplicationOutput, XmlParseError> {
-        let mut obj = GetBucketReplicationOutput::default();
-        obj.replication_configuration = match ReplicationConfigurationDeserializer::deserialize(
-            "ReplicationConfiguration",
-            stack,
-        ) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(GetBucketReplicationOutput {
+            replication_configuration: Some(try!(
+                ReplicationConfigurationDeserializer::deserialize(
+                    "ReplicationConfiguration",
+                    stack
+                )
+            )),
+            ..GetBucketReplicationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -14102,14 +14091,12 @@ impl SelectObjectContentOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SelectObjectContentOutput, XmlParseError> {
-        let mut obj = SelectObjectContentOutput::default();
-        obj.payload =
-            match SelectObjectContentEventStreamDeserializer::deserialize("Payload", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(SelectObjectContentOutput {
+            payload: Some(try!(
+                SelectObjectContentEventStreamDeserializer::deserialize("Payload", stack)
+            )),
+            ..SelectObjectContentOutput::default()
+        })
     }
 }
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
@@ -16139,14 +16126,13 @@ impl UploadPartCopyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartCopyOutput, XmlParseError> {
-        let mut obj = UploadPartCopyOutput::default();
-        obj.copy_part_result =
-            match CopyPartResultDeserializer::deserialize("CopyPartResult", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(UploadPartCopyOutput {
+            copy_part_result: Some(try!(CopyPartResultDeserializer::deserialize(
+                "CopyPartResult",
+                stack
+            ))),
+            ..UploadPartCopyOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]

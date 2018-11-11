@@ -1460,17 +1460,15 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        let mut obj = CreateCloudFrontOriginAccessIdentityResult::default();
-        obj.cloud_front_origin_access_identity =
-            match CloudFrontOriginAccessIdentityDeserializer::deserialize(
-                "CloudFrontOriginAccessIdentity",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(CreateCloudFrontOriginAccessIdentityResult {
+            cloud_front_origin_access_identity: Some(try!(
+                CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                    "CloudFrontOriginAccessIdentity",
+                    stack
+                )
+            )),
+            ..CreateCloudFrontOriginAccessIdentityResult::default()
+        })
     }
 }
 /// <p>The request to create a new distribution.</p>
@@ -1498,13 +1496,13 @@ impl CreateDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionResult, XmlParseError> {
-        let mut obj = CreateDistributionResult::default();
-        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(CreateDistributionResult {
+            distribution: Some(try!(DistributionDeserializer::deserialize(
+                "Distribution",
+                stack
+            ))),
+            ..CreateDistributionResult::default()
+        })
     }
 }
 /// <p>The request to create a new distribution with tags. </p>
@@ -1532,13 +1530,13 @@ impl CreateDistributionWithTagsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionWithTagsResult, XmlParseError> {
-        let mut obj = CreateDistributionWithTagsResult::default();
-        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(CreateDistributionWithTagsResult {
+            distribution: Some(try!(DistributionDeserializer::deserialize(
+                "Distribution",
+                stack
+            ))),
+            ..CreateDistributionWithTagsResult::default()
+        })
     }
 }
 /// <p>The request to create an invalidation.</p>
@@ -1566,13 +1564,13 @@ impl CreateInvalidationResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInvalidationResult, XmlParseError> {
-        let mut obj = CreateInvalidationResult::default();
-        obj.invalidation = match InvalidationDeserializer::deserialize("Invalidation", stack) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(CreateInvalidationResult {
+            invalidation: Some(try!(InvalidationDeserializer::deserialize(
+                "Invalidation",
+                stack
+            ))),
+            ..CreateInvalidationResult::default()
+        })
     }
 }
 /// <p>The request to create a new streaming distribution.</p>
@@ -1600,14 +1598,13 @@ impl CreateStreamingDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionResult, XmlParseError> {
-        let mut obj = CreateStreamingDistributionResult::default();
-        obj.streaming_distribution =
-            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(CreateStreamingDistributionResult {
+            streaming_distribution: Some(try!(StreamingDistributionDeserializer::deserialize(
+                "StreamingDistribution",
+                stack
+            ))),
+            ..CreateStreamingDistributionResult::default()
+        })
     }
 }
 /// <p>The request to create a new streaming distribution with tags.</p>
@@ -1634,14 +1631,13 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
-        let mut obj = CreateStreamingDistributionWithTagsResult::default();
-        obj.streaming_distribution =
-            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(CreateStreamingDistributionWithTagsResult {
+            streaming_distribution: Some(try!(StreamingDistributionDeserializer::deserialize(
+                "StreamingDistribution",
+                stack
+            ))),
+            ..CreateStreamingDistributionWithTagsResult::default()
+        })
     }
 }
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -3322,17 +3318,15 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
-        let mut obj = GetCloudFrontOriginAccessIdentityConfigResult::default();
-        obj.cloud_front_origin_access_identity_config =
-            match CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
-                "CloudFrontOriginAccessIdentityConfig",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetCloudFrontOriginAccessIdentityConfigResult {
+            cloud_front_origin_access_identity_config: Some(try!(
+                CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
+                    "CloudFrontOriginAccessIdentityConfig",
+                    stack
+                )
+            )),
+            ..GetCloudFrontOriginAccessIdentityConfigResult::default()
+        })
     }
 }
 /// <p>The request to get an origin access identity's information.</p>
@@ -3358,17 +3352,15 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        let mut obj = GetCloudFrontOriginAccessIdentityResult::default();
-        obj.cloud_front_origin_access_identity =
-            match CloudFrontOriginAccessIdentityDeserializer::deserialize(
-                "CloudFrontOriginAccessIdentity",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetCloudFrontOriginAccessIdentityResult {
+            cloud_front_origin_access_identity: Some(try!(
+                CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                    "CloudFrontOriginAccessIdentity",
+                    stack
+                )
+            )),
+            ..GetCloudFrontOriginAccessIdentityResult::default()
+        })
     }
 }
 /// <p>The request to get a distribution configuration.</p>
@@ -3394,14 +3386,13 @@ impl GetDistributionConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionConfigResult, XmlParseError> {
-        let mut obj = GetDistributionConfigResult::default();
-        obj.distribution_config =
-            match DistributionConfigDeserializer::deserialize("DistributionConfig", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetDistributionConfigResult {
+            distribution_config: Some(try!(DistributionConfigDeserializer::deserialize(
+                "DistributionConfig",
+                stack
+            ))),
+            ..GetDistributionConfigResult::default()
+        })
     }
 }
 /// <p>The request to get a distribution's information.</p>
@@ -3427,13 +3418,13 @@ impl GetDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionResult, XmlParseError> {
-        let mut obj = GetDistributionResult::default();
-        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(GetDistributionResult {
+            distribution: Some(try!(DistributionDeserializer::deserialize(
+                "Distribution",
+                stack
+            ))),
+            ..GetDistributionResult::default()
+        })
     }
 }
 /// <p>The request to get an invalidation's information. </p>
@@ -3459,13 +3450,13 @@ impl GetInvalidationResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetInvalidationResult, XmlParseError> {
-        let mut obj = GetInvalidationResult::default();
-        obj.invalidation = match InvalidationDeserializer::deserialize("Invalidation", stack) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(GetInvalidationResult {
+            invalidation: Some(try!(InvalidationDeserializer::deserialize(
+                "Invalidation",
+                stack
+            ))),
+            ..GetInvalidationResult::default()
+        })
     }
 }
 /// <p>To request to get a streaming distribution configuration.</p>
@@ -3491,17 +3482,15 @@ impl GetStreamingDistributionConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
-        let mut obj = GetStreamingDistributionConfigResult::default();
-        obj.streaming_distribution_config =
-            match StreamingDistributionConfigDeserializer::deserialize(
-                "StreamingDistributionConfig",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetStreamingDistributionConfigResult {
+            streaming_distribution_config: Some(try!(
+                StreamingDistributionConfigDeserializer::deserialize(
+                    "StreamingDistributionConfig",
+                    stack
+                )
+            )),
+            ..GetStreamingDistributionConfigResult::default()
+        })
     }
 }
 /// <p>The request to get a streaming distribution's information.</p>
@@ -3527,14 +3516,13 @@ impl GetStreamingDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionResult, XmlParseError> {
-        let mut obj = GetStreamingDistributionResult::default();
-        obj.streaming_distribution =
-            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(GetStreamingDistributionResult {
+            streaming_distribution: Some(try!(StreamingDistributionDeserializer::deserialize(
+                "StreamingDistribution",
+                stack
+            ))),
+            ..GetStreamingDistributionResult::default()
+        })
     }
 }
 struct HeaderListDeserializer;
@@ -4484,17 +4472,15 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
-        let mut obj = ListCloudFrontOriginAccessIdentitiesResult::default();
-        obj.cloud_front_origin_access_identity_list =
-            match CloudFrontOriginAccessIdentityListDeserializer::deserialize(
-                "CloudFrontOriginAccessIdentityList",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(ListCloudFrontOriginAccessIdentitiesResult {
+            cloud_front_origin_access_identity_list: Some(try!(
+                CloudFrontOriginAccessIdentityListDeserializer::deserialize(
+                    "CloudFrontOriginAccessIdentityList",
+                    stack
+                )
+            )),
+            ..ListCloudFrontOriginAccessIdentitiesResult::default()
+        })
     }
 }
 /// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
@@ -4522,14 +4508,13 @@ impl ListDistributionsByWebACLIdResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
-        let mut obj = ListDistributionsByWebACLIdResult::default();
-        obj.distribution_list =
-            match DistributionListDeserializer::deserialize("DistributionList", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(ListDistributionsByWebACLIdResult {
+            distribution_list: Some(try!(DistributionListDeserializer::deserialize(
+                "DistributionList",
+                stack
+            ))),
+            ..ListDistributionsByWebACLIdResult::default()
+        })
     }
 }
 /// <p>The request to list your distributions. </p>
@@ -4555,14 +4540,13 @@ impl ListDistributionsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsResult, XmlParseError> {
-        let mut obj = ListDistributionsResult::default();
-        obj.distribution_list =
-            match DistributionListDeserializer::deserialize("DistributionList", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(ListDistributionsResult {
+            distribution_list: Some(try!(DistributionListDeserializer::deserialize(
+                "DistributionList",
+                stack
+            ))),
+            ..ListDistributionsResult::default()
+        })
     }
 }
 /// <p>The request to list invalidations. </p>
@@ -4590,14 +4574,13 @@ impl ListInvalidationsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInvalidationsResult, XmlParseError> {
-        let mut obj = ListInvalidationsResult::default();
-        obj.invalidation_list =
-            match InvalidationListDeserializer::deserialize("InvalidationList", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(ListInvalidationsResult {
+            invalidation_list: Some(try!(InvalidationListDeserializer::deserialize(
+                "InvalidationList",
+                stack
+            ))),
+            ..ListInvalidationsResult::default()
+        })
     }
 }
 /// <p>The request to list your streaming distributions. </p>
@@ -4623,16 +4606,15 @@ impl ListStreamingDistributionsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStreamingDistributionsResult, XmlParseError> {
-        let mut obj = ListStreamingDistributionsResult::default();
-        obj.streaming_distribution_list = match StreamingDistributionListDeserializer::deserialize(
-            "StreamingDistributionList",
-            stack,
-        ) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(ListStreamingDistributionsResult {
+            streaming_distribution_list: Some(try!(
+                StreamingDistributionListDeserializer::deserialize(
+                    "StreamingDistributionList",
+                    stack
+                )
+            )),
+            ..ListStreamingDistributionsResult::default()
+        })
     }
 }
 /// <p> The request to list tags for a CloudFront resource.</p>
@@ -4656,10 +4638,10 @@ impl ListTagsForResourceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResult, XmlParseError> {
-        let mut obj = ListTagsForResourceResult::default();
-        obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
-
-        Ok(obj)
+        Ok(ListTagsForResourceResult {
+            tags: try!(TagsDeserializer::deserialize("Tags", stack)),
+            ..ListTagsForResourceResult::default()
+        })
     }
 }
 struct LocationListDeserializer;
@@ -7437,17 +7419,15 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        let mut obj = UpdateCloudFrontOriginAccessIdentityResult::default();
-        obj.cloud_front_origin_access_identity =
-            match CloudFrontOriginAccessIdentityDeserializer::deserialize(
-                "CloudFrontOriginAccessIdentity",
-                stack,
-            ) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(UpdateCloudFrontOriginAccessIdentityResult {
+            cloud_front_origin_access_identity: Some(try!(
+                CloudFrontOriginAccessIdentityDeserializer::deserialize(
+                    "CloudFrontOriginAccessIdentity",
+                    stack
+                )
+            )),
+            ..UpdateCloudFrontOriginAccessIdentityResult::default()
+        })
     }
 }
 /// <p>The request to update a distribution.</p>
@@ -7477,13 +7457,13 @@ impl UpdateDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateDistributionResult, XmlParseError> {
-        let mut obj = UpdateDistributionResult::default();
-        obj.distribution = match DistributionDeserializer::deserialize("Distribution", stack) {
-            Ok(payload) => Some(payload),
-            Err(_) => None,
-        };
-
-        Ok(obj)
+        Ok(UpdateDistributionResult {
+            distribution: Some(try!(DistributionDeserializer::deserialize(
+                "Distribution",
+                stack
+            ))),
+            ..UpdateDistributionResult::default()
+        })
     }
 }
 /// <p>The request to update a streaming distribution.</p>
@@ -7513,14 +7493,13 @@ impl UpdateStreamingDistributionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStreamingDistributionResult, XmlParseError> {
-        let mut obj = UpdateStreamingDistributionResult::default();
-        obj.streaming_distribution =
-            match StreamingDistributionDeserializer::deserialize("StreamingDistribution", stack) {
-                Ok(payload) => Some(payload),
-                Err(_) => None,
-            };
-
-        Ok(obj)
+        Ok(UpdateStreamingDistributionResult {
+            streaming_distribution: Some(try!(StreamingDistributionDeserializer::deserialize(
+                "StreamingDistribution",
+                stack
+            ))),
+            ..UpdateStreamingDistributionResult::default()
+        })
     }
 }
 /// <p>A complex type that specifies the following:</p> <ul> <li> <p>Whether you want viewers to use HTTP or HTTPS to request your objects.</p> </li> <li> <p>If you want viewers to use HTTPS, whether you're using an alternate domain name such as <code>example.com</code> or the CloudFront domain name for your distribution, such as <code>d111111abcdef8.cloudfront.net</code>.</p> </li> <li> <p>If you're using an alternate domain name, whether AWS Certificate Manager (ACM) provided the certificate, or you purchased a certificate from a third-party certificate authority and imported it into ACM or uploaded it to the IAM certificate store.</p> </li> </ul> <p>You must specify only one of the following values: </p> <ul> <li> <p> <a>ViewerCertificate$ACMCertificateArn</a> </p> </li> <li> <p> <a>ViewerCertificate$IAMCertificateId</a> </p> </li> <li> <p> <a>ViewerCertificate$CloudFrontDefaultCertificate</a> </p> </li> </ul> <p>Don't specify <code>false</code> for <code>CloudFrontDefaultCertificate</code>.</p> <p> <b>If you want viewers to use HTTP instead of HTTPS to request your objects</b>: Specify the following value:</p> <p> <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code> </p> <p>In addition, specify <code>allow-all</code> for <code>ViewerProtocolPolicy</code> for all of your cache behaviors.</p> <p> <b>If you want viewers to use HTTPS to request your objects</b>: Choose the type of certificate that you want to use based on whether you're using an alternate domain name for your objects or the CloudFront domain name:</p> <ul> <li> <p> <b>If you're using an alternate domain name, such as example.com</b>: Specify one of the following values, depending on whether ACM provided your certificate or you purchased your certificate from third-party certificate authority:</p> <ul> <li> <p> <code>&lt;ACMCertificateArn&gt;<i>ARN for ACM SSL/TLS certificate</i>&lt;ACMCertificateArn&gt;</code> where <code> <i>ARN for ACM SSL/TLS certificate</i> </code> is the ARN for the ACM SSL/TLS certificate that you want to use for this distribution.</p> </li> <li> <p> <code>&lt;IAMCertificateId&gt;<i>IAM certificate ID</i>&lt;IAMCertificateId&gt;</code> where <code> <i>IAM certificate ID</i> </code> is the ID that IAM returned when you added the certificate to the IAM certificate store.</p> </li> </ul> <p>If you specify <code>ACMCertificateArn</code> or <code>IAMCertificateId</code>, you must also specify a value for <code>SSLSupportMethod</code>.</p> <p>If you choose to use an ACM certificate or a certificate in the IAM certificate store, we recommend that you use only an alternate domain name in your object URLs (<code>https://example.com/logo.jpg</code>). If you use the domain name that is associated with your CloudFront distribution (such as <code>https://d111111abcdef8.cloudfront.net/logo.jpg</code>) and the viewer supports <code>SNI</code>, then CloudFront behaves normally. However, if the browser does not support SNI, the user's experience depends on the value that you choose for <code>SSLSupportMethod</code>:</p> <ul> <li> <p> <code>vip</code>: The viewer displays a warning because there is a mismatch between the CloudFront domain name and the domain name in your SSL/TLS certificate.</p> </li> <li> <p> <code>sni-only</code>: CloudFront drops the connection with the browser without returning the object.</p> </li> </ul> </li> <li> <p> <b>If you're using the CloudFront domain name for your distribution, such as <code>d111111abcdef8.cloudfront.net</code> </b>: Specify the following value:</p> <p> <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt; </code> </p> </li> </ul> <p>If you want viewers to use HTTPS, you must also specify one of the following values in your cache behaviors:</p> <ul> <li> <p> <code> &lt;ViewerProtocolPolicy&gt;https-only&lt;ViewerProtocolPolicy&gt;</code> </p> </li> <li> <p> <code>&lt;ViewerProtocolPolicy&gt;redirect-to-https&lt;ViewerProtocolPolicy&gt;</code> </p> </li> </ul> <p>You can also optionally require that CloudFront use HTTPS to communicate with your origin by specifying one of the following values for the applicable origins:</p> <ul> <li> <p> <code>&lt;OriginProtocolPolicy&gt;https-only&lt;OriginProtocolPolicy&gt; </code> </p> </li> <li> <p> <code>&lt;OriginProtocolPolicy&gt;match-viewer&lt;OriginProtocolPolicy&gt; </code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
