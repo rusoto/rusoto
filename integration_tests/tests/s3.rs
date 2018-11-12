@@ -107,6 +107,7 @@ fn test_all_the_things() {
                                   &binary_filename,
                                   &"tests/sample-data/binary-file");
     test_get_object(&client, &test_bucket, &binary_filename);
+    test_get_object_blocking_read(&client, &test_bucket, &binary_filename);
 
     // PUT an object via stream
     let another_filename = format!("streaming{}", filename);
@@ -316,6 +317,23 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
 
     let stream = result.body.unwrap();
     let body = stream.concat2().wait().unwrap();
+
+    assert!(body.len() > 0);
+}
+
+fn test_get_object_blocking_read(client: &TestClient, bucket: &str, filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+
+    let result = client.get_object(get_req).sync().expect("Couldn't GET object");
+    println!("get object result: {:#?}", result);
+
+    let mut stream = result.body.unwrap().into_blocking_read();
+    let mut body = Vec::new();
+    stream.read_to_end(&mut body).unwrap();
 
     assert!(body.len() > 0);
 }

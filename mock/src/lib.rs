@@ -44,13 +44,12 @@ use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
-use futures::future::{ok, FutureResult};
-use futures::stream::once;
-use http::{HttpTryFrom, StatusCode};
-use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use rusoto_core::{DispatchSignedRequest, HttpDispatchError, ByteStream};
+use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use rusoto_core::request::{Headers, HttpResponse};
 use rusoto_core::signature::SignedRequest;
-use rusoto_core::{DispatchSignedRequest, HttpDispatchError};
+use futures::future::{FutureResult, ok};
+use http::{HttpTryFrom, StatusCode};
 use serde::Serialize;
 
 /// Provides a set of credentials that always resolve
@@ -131,7 +130,7 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         }
         ok(HttpResponse {
             status: self.status,
-            body: Box::new(once(Ok(self.body.clone()))),
+            body: ByteStream::from(self.body.clone()),
             headers: Headers::new(self.headers.iter().map(|(k, v)| (k.as_ref(), v.to_owned()))),
         })
     }

@@ -2,7 +2,7 @@ use inflector::Inflector;
 
 use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
-use super::{generate_field_name, mutate_type_name, mutate_type_name_for_streaming};
+use super::{generate_field_name, mutate_type_name};
 
 pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Service) -> String {
     format!("struct {name}Deserializer;
@@ -94,13 +94,12 @@ fn payload_body_parser(payload_type: ShapeType,
         ShapeType::Blob if streaming => {
             format!("
                 let mut result = {output_shape}::default();
-                result.{payload_member} = Some({streaming_constructor} {{ len: None, inner: response.body }});
+                result.{payload_member} = Some(response.body);
                 {parse_non_payload}
                 Box::new(future::ok(result))
                 ",
                     output_shape = output_shape,
                     payload_member = payload_member.to_snake_case(),
-                    streaming_constructor = mutate_type_name_for_streaming(payload_member),
                     parse_non_payload = parse_non_payload)
         },
         _ => {
