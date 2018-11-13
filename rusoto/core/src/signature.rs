@@ -249,7 +249,7 @@ impl SignedRequest {
         self.remove_header("X-Amz-Content-Sha256");
 
         self.remove_header("X-Amz-Date");
-        
+
         self.remove_header("Content-Type");
 
         if let Some(ref token) = *creds.token() {
@@ -276,7 +276,7 @@ impl SignedRequest {
         self.params.put("X-Amz-Date", current_time_fmted);
 
         self.canonical_query_string = build_canonical_query_string(&self.params);
-        
+
         debug!("canonical_uri: {:?}", self.canonical_uri);
         debug!("canonical_headers: {:?}", canonical_headers);
         debug!("signed_headers: {:?}", signed_headers);
@@ -380,7 +380,7 @@ impl SignedRequest {
                                             canonical_headers,
                                             signed_headers,
                                             &to_hexdigest(""));
-                (Some(to_hexdigest("")), None)
+                (Some(to_hexdigest("")), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
