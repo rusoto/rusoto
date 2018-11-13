@@ -232,14 +232,14 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     // https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPartCopy.html
     let create_multipart_req2 = CreateMultipartUploadRequest {
         bucket: bucket.to_owned(),
-        key: "multipartfilename".to_owned(),
+        key: filename.to_owned(),
         ..Default::default()
     };
     let upload_multi_response = client.create_multipart_upload(create_multipart_req2).sync().expect("Couldn't create multipart upload2");
     println!("{:#?}", upload_multi_response);
     let upload_id2 = upload_multi_response.upload_id.unwrap();
     let upload_part_copy_req = UploadPartCopyRequest {
-        key: "multipartfilename".to_owned(),
+        key: filename.to_owned(),
         bucket: bucket.to_owned(),
         part_number: 1,
         upload_id: upload_id2.clone(),
@@ -250,7 +250,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     println!("copy response: {:#?}", copy_response);
 
     let upload_part_copy_req2 = UploadPartCopyRequest {
-        key: "multipartfilename".to_owned(),
+        key: filename.to_owned(),
         bucket: bucket.to_owned(),
         part_number: 2,
         upload_id: upload_id2.clone(),
@@ -258,7 +258,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
     let copy_response2 = client.upload_part_copy(upload_part_copy_req2).sync().expect("Should have had copy part work");
-    println!("copy response2: {:#?}", copy_response);
+    println!("copy response2: {:#?}", copy_response2);
 
     // complete the upload_part_copy upload:
     let completed_parts_2 = vec!(
@@ -274,7 +274,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     let completed_upload2 = CompletedMultipartUpload { parts: Some(completed_parts_2) };
     let complete_req2 = CompleteMultipartUploadRequest {
         bucket: bucket.to_owned(),
-        key: "multipartfilename".to_owned(),
+        key: filename.to_owned(),
         upload_id: upload_id2.to_owned(),
         multipart_upload: Some(completed_upload2),
         ..Default::default()
