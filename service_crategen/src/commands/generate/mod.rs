@@ -56,13 +56,17 @@ fn generate_examples(crate_dir_path: &Path) -> Option<String> {
     Some(output)
 }
 
-pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &Path) {
+pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &Path, service_to_generate: &Option<&Vec<&str>>) {
     let _ = env_logger::try_init();
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
 
     services.par_iter().for_each(|(name, service_config)| {
+        if !service_to_generate.map(|s| s.contains(&name.as_str())).unwrap_or(true) {
+            return;
+        }
+        
         let sw = Stopwatch::start_new();
         let service = {
             let service_definition = ServiceDefinition::load(name, &service_config.protocol_version)
