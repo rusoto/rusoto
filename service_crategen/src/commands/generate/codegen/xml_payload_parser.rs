@@ -345,6 +345,38 @@ fn generate_primitive_deserializer(shape: &Shape) -> String {
 }
 
 fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) -> String {
+    // Handling of payload delegate deserialization - this is needed for shapes which
+    // have a payload representing a single member. An example of this is the member
+    // CopyPartResult of the S3 UploadPartCopyOutput shape; the XML itself represents
+    // the member field, so this is just a pass through to the parser for the member.
+    if let Some(ref payload_member_name) = shape.payload {
+        let payload_member = shape.members
+            .as_ref()
+            .expect("failed to get output shape members")
+            .get(payload_member_name)
+            .expect("failed to get payload member");
+
+        let mut deserialize = format!("try!({payload_shape}Deserializer::deserialize(\"{payload_member_name}\", stack))",
+                                      payload_member_name = payload_member_name,
+                                      payload_shape = payload_member.shape);
+
+        if !shape.required(payload_member_name) {
+            deserialize = format!("Some({deserialize})", deserialize = deserialize);
+        };
+
+        return format!(
+            "
+            Ok({name} {{
+                {member}: {deserialize},
+                ..{name}::default()
+            }})
+            ",
+            name = name,
+            member = payload_member_name.to_snake_case(),
+            deserialize = deserialize
+        );
+    }
+
     let mut needs_xml_deserializer = false;
 
     // don't generate an xml deserializer if we don't need to

@@ -2472,38 +2472,13 @@ impl CopyObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyObjectOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = CopyObjectOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CopyObjectResult" => {
-                        obj.copy_object_result = Some(try!(
-                            CopyObjectResultDeserializer::deserialize("CopyObjectResult", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(CopyObjectOutput {
+            copy_object_result: Some(try!(CopyObjectResultDeserializer::deserialize(
+                "CopyObjectResult",
+                stack
+            ))),
+            ..CopyObjectOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4740,40 +4715,13 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketAnalyticsConfigurationOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetBucketAnalyticsConfigurationOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AnalyticsConfiguration" => {
-                        obj.analytics_configuration =
-                            Some(try!(AnalyticsConfigurationDeserializer::deserialize(
-                                "AnalyticsConfiguration",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(GetBucketAnalyticsConfigurationOutput {
+            analytics_configuration: Some(try!(AnalyticsConfigurationDeserializer::deserialize(
+                "AnalyticsConfiguration",
+                stack
+            ))),
+            ..GetBucketAnalyticsConfigurationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4855,41 +4803,15 @@ impl GetBucketEncryptionOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketEncryptionOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetBucketEncryptionOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ServerSideEncryptionConfiguration" => {
-                        obj.server_side_encryption_configuration = Some(try!(
-                            ServerSideEncryptionConfigurationDeserializer::deserialize(
-                                "ServerSideEncryptionConfiguration",
-                                stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(GetBucketEncryptionOutput {
+            server_side_encryption_configuration: Some(try!(
+                ServerSideEncryptionConfigurationDeserializer::deserialize(
+                    "ServerSideEncryptionConfiguration",
+                    stack
+                )
+            )),
+            ..GetBucketEncryptionOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4911,40 +4833,13 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketInventoryConfigurationOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetBucketInventoryConfigurationOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "InventoryConfiguration" => {
-                        obj.inventory_configuration =
-                            Some(try!(InventoryConfigurationDeserializer::deserialize(
-                                "InventoryConfiguration",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(GetBucketInventoryConfigurationOutput {
+            inventory_configuration: Some(try!(InventoryConfigurationDeserializer::deserialize(
+                "InventoryConfiguration",
+                stack
+            ))),
+            ..GetBucketInventoryConfigurationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5160,40 +5055,13 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketMetricsConfigurationOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetBucketMetricsConfigurationOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MetricsConfiguration" => {
-                        obj.metrics_configuration =
-                            Some(try!(MetricsConfigurationDeserializer::deserialize(
-                                "MetricsConfiguration",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(GetBucketMetricsConfigurationOutput {
+            metrics_configuration: Some(try!(MetricsConfigurationDeserializer::deserialize(
+                "MetricsConfiguration",
+                stack
+            ))),
+            ..GetBucketMetricsConfigurationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5233,40 +5101,15 @@ impl GetBucketReplicationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketReplicationOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = GetBucketReplicationOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ReplicationConfiguration" => {
-                        obj.replication_configuration =
-                            Some(try!(ReplicationConfigurationDeserializer::deserialize(
-                                "ReplicationConfiguration",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(GetBucketReplicationOutput {
+            replication_configuration: Some(try!(
+                ReplicationConfigurationDeserializer::deserialize(
+                    "ReplicationConfiguration",
+                    stack
+                )
+            )),
+            ..GetBucketReplicationOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -14209,40 +14052,12 @@ impl SelectObjectContentOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SelectObjectContentOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = SelectObjectContentOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Payload" => {
-                        obj.payload = Some(try!(
-                            SelectObjectContentEventStreamDeserializer::deserialize(
-                                "Payload", stack
-                            )
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(SelectObjectContentOutput {
+            payload: Some(try!(
+                SelectObjectContentEventStreamDeserializer::deserialize("Payload", stack)
+            )),
+            ..SelectObjectContentOutput::default()
+        })
     }
 }
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
@@ -16272,39 +16087,13 @@ impl UploadPartCopyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartCopyOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
-        let mut obj = UploadPartCopyOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CopyPartResult" => {
-                        obj.copy_part_result = Some(try!(CopyPartResultDeserializer::deserialize(
-                            "CopyPartResult",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        try!(end_element(tag_name, stack));
-
-        Ok(obj)
+        Ok(UploadPartCopyOutput {
+            copy_part_result: Some(try!(CopyPartResultDeserializer::deserialize(
+                "CopyPartResult",
+                stack
+            ))),
+            ..UploadPartCopyOutput::default()
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]

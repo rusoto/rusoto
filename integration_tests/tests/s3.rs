@@ -25,7 +25,8 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody, DeleteBucketError};
+                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody, DeleteBucketError,
+                 UploadPartCopyRequest};
 
 type TestClient = S3Client;
 
@@ -227,6 +228,61 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
 
     let response = client.complete_multipart_upload(complete_req).sync().expect("Couldn't complete multipart upload");
     println!("{:#?}", response);
+
+    // Add copy upload part to this test
+    // https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPartCopy.html
+    let create_multipart_req2 = CreateMultipartUploadRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+    let upload_multi_response = client.create_multipart_upload(create_multipart_req2).sync().expect("Couldn't create multipart upload2");
+    println!("{:#?}", upload_multi_response);
+    let upload_id2 = upload_multi_response.upload_id.unwrap();
+    let upload_part_copy_req = UploadPartCopyRequest {
+        key: filename.to_owned(),
+        bucket: bucket.to_owned(),
+        part_number: 1,
+        upload_id: upload_id2.clone(),
+        copy_source: format!("{}/{}", bucket, filename).to_owned(),
+        ..Default::default()
+    };
+    let copy_response = client.upload_part_copy(upload_part_copy_req).sync().expect("Should have had copy part work");
+    println!("copy response: {:#?}", copy_response);
+
+    let upload_part_copy_req2 = UploadPartCopyRequest {
+        key: filename.to_owned(),
+        bucket: bucket.to_owned(),
+        part_number: 2,
+        upload_id: upload_id2.clone(),
+        copy_source: format!("{}/{}", bucket, filename).to_owned(),
+        ..Default::default()
+    };
+    let copy_response2 = client.upload_part_copy(upload_part_copy_req2).sync().expect("Should have had copy part work");
+    println!("copy response2: {:#?}", copy_response2);
+
+    // complete the upload_part_copy upload:
+    let completed_parts_2 = vec!(
+        CompletedPart {
+            e_tag: copy_response.copy_part_result.unwrap().e_tag.clone(),
+            part_number: Some(1),
+        },
+        CompletedPart {
+            e_tag: copy_response2.copy_part_result.unwrap().e_tag.clone(),
+            part_number: Some(2),
+        }
+    );
+    let completed_upload2 = CompletedMultipartUpload { parts: Some(completed_parts_2) };
+    let complete_req2 = CompleteMultipartUploadRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        upload_id: upload_id2.to_owned(),
+        multipart_upload: Some(completed_upload2),
+        ..Default::default()
+    };
+
+    let response2 = client.complete_multipart_upload(complete_req2).sync().expect("Couldn't complete multipart upload2");
+    println!("{:#?}", response2);
 
     // delete the completed file
     test_delete_object(client, bucket, filename);

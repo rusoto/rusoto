@@ -379,7 +379,7 @@ impl SignedRequest {
                                             canonical_headers,
                                             signed_headers,
                                             &to_hexdigest(""));
-                (Some(to_hexdigest("")), None)
+                (Some(to_hexdigest("")), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
