@@ -1539,7 +1539,6 @@ impl CreateDistributionWithTagsResultDeserializer {
         })
     }
 }
-
 /// <p>The request to create an invalidation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInvalidationRequest {
@@ -3396,7 +3395,6 @@ impl GetDistributionConfigResultDeserializer {
         })
     }
 }
-
 /// <p>The request to get a distribution's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetDistributionRequest {
@@ -4646,7 +4644,6 @@ impl ListTagsForResourceResultDeserializer {
         })
     }
 }
-
 struct LocationListDeserializer;
 impl LocationListDeserializer {
     #[allow(unused_variables)]
@@ -7469,7 +7466,6 @@ impl UpdateDistributionResultDeserializer {
         })
     }
 }
-
 /// <p>The request to update a streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStreamingDistributionRequest {
