@@ -10438,7 +10438,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10478,7 +10478,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10520,7 +10520,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10566,7 +10566,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10611,7 +10611,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10654,7 +10654,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10701,7 +10701,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10743,7 +10743,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10788,7 +10788,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10832,7 +10832,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10876,7 +10876,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10923,7 +10923,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -10967,7 +10967,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11014,7 +11014,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11056,7 +11056,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11101,7 +11101,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11145,7 +11145,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11186,7 +11186,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11234,7 +11234,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11275,7 +11275,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11314,7 +11314,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11353,7 +11353,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11387,7 +11387,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11426,7 +11426,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11465,7 +11465,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11502,7 +11502,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11540,7 +11540,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11576,7 +11576,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11616,7 +11616,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11656,7 +11656,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11695,7 +11695,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11732,7 +11732,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11770,7 +11770,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11809,7 +11809,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11845,7 +11845,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11883,7 +11883,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11919,7 +11919,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11951,7 +11951,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -11991,7 +11991,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12030,7 +12030,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12071,7 +12071,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12110,7 +12110,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12146,7 +12146,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12184,7 +12184,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12220,7 +12220,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12254,7 +12254,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12291,7 +12291,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12326,7 +12326,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12375,7 +12375,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12419,7 +12419,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12467,7 +12467,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12515,7 +12515,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12559,7 +12559,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12608,7 +12608,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12652,7 +12652,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12690,7 +12690,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12739,7 +12739,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12785,7 +12785,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12833,7 +12833,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12877,7 +12877,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12926,7 +12926,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -12970,7 +12970,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13019,7 +13019,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13065,7 +13065,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13110,7 +13110,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13152,7 +13152,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13194,7 +13194,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13236,7 +13236,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13278,7 +13278,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13315,7 +13315,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13360,7 +13360,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13404,7 +13404,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13446,7 +13446,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
@@ -13486,7 +13486,7 @@ impl GreenGrass for GreenGrassClient {
                 Box::new(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body == b"null" || body.is_empty() {
                         body = b"{}".to_vec();
                     }
 
