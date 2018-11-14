@@ -27,9 +27,9 @@ mod tests {
             "cloudfront-create-distribution-with-tags-in-progress.xml",
             );
         let mock = MockRequestDispatcher::with_status(201).with_body(&mock_response);
-        let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateDistributionWithTagsRequest::default();
-        let result = client.create_distribution_with_tags(&request).sync();
+        let result = client.create_distribution_with_tags(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
         let result = result.unwrap();
         assert!(result.distribution.is_some(), "Failed to parse Distribution");
