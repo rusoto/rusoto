@@ -419,6 +419,10 @@ path = "../rusoto/services/s3"
 optional = true
 path = "../rusoto/services/sagemaker"
 
+[dependencies.rusoto_sagemaker_runtime]
+optional = true
+path = "../rusoto/services/sagemaker-runtime"
+
 [dependencies.rusoto_sdb]
 optional = true
 path = "../rusoto/services/sdb"
@@ -620,14 +624,15 @@ all = [
 	   	"redshift",
 		"rekognition",
 		"resourcegroupstaggingapi",
-	   	"rds",
-	   	"route53",
-	   	"route53domains",
-	   	"s3",
-			"sagemaker",
-	   	"sdb",
-	   	    "secretsmanager",
-	   	"serverlessrepo",
+		"rds",
+		"route53",
+		"route53domains",
+		"s3",
+		"sagemaker",
+		"sagemaker-runtime",
+		"sdb",
+		"secretsmanager",
+		"serverlessrepo",
 		"servicecatalog",
 		"servicediscovery",
 	   	"ses",
@@ -749,6 +754,7 @@ route53 = ["rusoto_route53"]
 route53domains = ["rusoto_route53domains"]
 s3 = ["rusoto_s3"]
 sagemaker = ["rusoto_sagemaker"]
+sagemaker-runtime = ["rusoto_sagemaker_runtime"]
 sdb = ["rusoto_sdb"]
 secretsmanager = ["rusoto_secretsmanager"]
 serverlessrepo = ["rusoto_serverlessrepo"]

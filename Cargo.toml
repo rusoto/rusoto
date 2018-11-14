@@ -104,6 +104,7 @@ members = [
     "rusoto/services/route53domains",
     "rusoto/services/s3",
     "rusoto/services/sagemaker",
+    "rusoto/services/sagemaker-runtime",
     "rusoto/services/sdb",
     "rusoto/services/secretsmanager",
     "rusoto/services/serverlessrepo",
