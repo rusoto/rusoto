@@ -482,6 +482,12 @@
     "protocolVersion": "2017-01-11",
     "baseTypeName": "MarketplaceEntitlement"
   },
+  "mediaconvert": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-08-29",
+    "baseTypeName": "MediaConvert"
+  },
   "mediastore": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
