@@ -123,5 +123,15 @@ fn should_list_distributions() {
     assert!(&result.distribution_list.is_some());
     let parsed_result = result.distribution_list.unwrap();
     assert!(&parsed_result.items.is_some());
-    assert_eq!(parsed_result.items.unwrap().len(), 1);
+    let items = parsed_result.items.unwrap();
+    assert_eq!(items.len(), 1);
+    let first_item = &items[0];
+    assert_eq!(first_item.id, "EDFDVBD6EXAMPLE");
+    assert_eq!(first_item.status, "Deployed");
+    assert_eq!(first_item.domain_name, "d111111abcdef8.cloudfront.net");
+    assert_eq!(first_item.origins.quantity, 2);
+    match first_item.origins.items {
+        Some(ref i) => assert_eq!(i[1].domain_name, "example.com"),
+        None => panic!("Should have items"),
+    }
 }
