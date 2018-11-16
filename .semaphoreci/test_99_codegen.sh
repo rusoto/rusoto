@@ -3,7 +3,7 @@ set -Eeu
 
 cd service_crategen
 git submodule update --init
-cargo +nightly run -- generate -c ./services.json -o ../rusoto/services
+cargo run -- generate -c ./services.json -o ../rusoto/services
 diff=$(git diff)
 if [ -n "$diff" ]; then
     echo
