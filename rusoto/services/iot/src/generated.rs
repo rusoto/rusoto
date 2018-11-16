@@ -845,7 +845,7 @@ pub struct CodeSigningSignature {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_document: Option<Vec<u8>>,

@@ -998,7 +998,7 @@ pub struct Image {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bytes: Option<Vec<u8>>,
@@ -6169,8 +6169,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<CompareFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6206,8 +6205,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<CreateCollectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6243,8 +6241,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<CreateStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6279,8 +6276,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DeleteCollectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6316,8 +6312,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DeleteFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6353,8 +6348,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DeleteStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6389,8 +6383,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DescribeStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6423,8 +6416,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6460,8 +6452,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectLabelsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6497,8 +6488,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectModerationLabelsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6533,8 +6523,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectTextResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6570,8 +6559,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetCelebrityInfoResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6607,8 +6595,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetCelebrityRecognitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6641,8 +6628,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetContentModerationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6677,8 +6663,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetFaceDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6714,8 +6699,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetFaceSearchResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6751,8 +6735,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetLabelDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6788,8 +6771,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetPersonTrackingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6825,8 +6807,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<IndexFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6862,8 +6843,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<ListCollectionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6899,8 +6879,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<ListFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6936,8 +6915,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<ListStreamProcessorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6972,8 +6950,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<RecognizeCelebritiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7008,8 +6985,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<SearchFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7045,8 +7021,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<SearchFacesByImageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7085,8 +7060,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartCelebrityRecognitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7119,8 +7093,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartContentModerationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7155,8 +7128,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartFaceDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7192,8 +7164,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartFaceSearchResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7229,8 +7200,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartLabelDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7265,8 +7235,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartPersonTrackingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7301,8 +7270,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7337,8 +7305,7 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StopStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

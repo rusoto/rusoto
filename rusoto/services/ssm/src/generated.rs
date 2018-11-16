@@ -4437,7 +4437,7 @@ pub struct MaintenanceWindowLambdaParameters {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload: Option<Vec<u8>>,
@@ -17539,8 +17539,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<AddTagsToResourceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17576,8 +17575,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CancelCommandResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17613,8 +17611,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreateActivationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17650,8 +17647,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreateAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17687,8 +17683,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreateAssociationBatchResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17723,8 +17718,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreateDocumentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17760,8 +17754,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreateMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17794,8 +17787,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreatePatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17830,8 +17822,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<CreateResourceDataSyncResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17866,8 +17857,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteActivationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17903,8 +17893,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17940,8 +17929,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteDocumentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -17977,8 +17965,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteInventoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18014,8 +18001,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18048,8 +18034,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteParameterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18085,8 +18070,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteParametersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18122,8 +18106,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeletePatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18158,8 +18141,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeleteResourceDataSyncResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18194,8 +18176,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeregisterManagedInstanceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18234,8 +18215,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeregisterPatchBaselineForPatchGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18276,8 +18256,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeregisterTargetFromMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18318,8 +18297,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DeregisterTaskFromMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18354,8 +18332,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeActivationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18390,8 +18367,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18432,8 +18408,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeAssociationExecutionTargetsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18468,8 +18443,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeAssociationExecutionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18502,8 +18476,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeAutomationExecutionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18537,8 +18510,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeAutomationStepExecutionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18573,8 +18545,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeAvailablePatchesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18607,8 +18578,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeDocumentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -18644,8 +18614,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeDocumentPermissionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18684,8 +18653,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeEffectiveInstanceAssociationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18726,8 +18694,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeEffectivePatchesForPatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18766,8 +18733,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeInstanceAssociationsStatusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18802,8 +18768,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeInstanceInformationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18836,8 +18801,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeInstancePatchStatesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18876,8 +18840,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeInstancePatchStatesForPatchGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18910,8 +18873,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeInstancePatchesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18944,8 +18906,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeInventoryDeletionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18984,8 +18945,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19028,8 +18988,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeMaintenanceWindowExecutionTasksResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19070,8 +19029,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeMaintenanceWindowExecutionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19107,8 +19065,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeMaintenanceWindowTargetsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19144,8 +19101,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeMaintenanceWindowTasksResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19178,8 +19134,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeMaintenanceWindowsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19212,8 +19167,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribeParametersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19249,8 +19203,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribePatchBaselinesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19285,8 +19238,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribePatchGroupStateResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19319,8 +19271,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<DescribePatchGroupsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19355,8 +19306,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetAutomationExecutionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19391,8 +19341,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetCommandInvocationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19427,8 +19376,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetDefaultPatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19467,8 +19415,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetDeployablePatchSnapshotForInstanceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19503,8 +19450,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetDocumentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19540,8 +19486,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetInventoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19577,8 +19522,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetInventorySchemaResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19614,8 +19558,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19650,8 +19593,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetMaintenanceWindowExecutionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19688,8 +19630,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetMaintenanceWindowExecutionTaskResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19730,8 +19671,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetMaintenanceWindowExecutionTaskInvocationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19764,8 +19704,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetMaintenanceWindowTaskResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19798,8 +19737,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetParameterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19835,8 +19773,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetParameterHistoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19871,8 +19808,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetParametersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19908,8 +19844,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetParametersByPathResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19944,8 +19879,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetPatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -19981,8 +19915,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<GetPatchBaselineForPatchGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20014,8 +19947,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<LabelParameterVersionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20050,8 +19982,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListAssociationVersionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20084,8 +20015,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListAssociationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20121,8 +20051,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListCommandInvocationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20157,8 +20086,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListCommandsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20194,8 +20122,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListComplianceItemsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20230,8 +20157,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListComplianceSummariesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20264,8 +20190,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListDocumentVersionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20300,8 +20225,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListDocumentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20337,8 +20261,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListInventoryEntriesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20374,8 +20297,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListResourceComplianceSummariesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20410,8 +20332,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListResourceDataSyncResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20446,8 +20367,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ListTagsForResourceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20482,8 +20402,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<ModifyDocumentPermissionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20516,8 +20435,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<PutComplianceItemsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20553,8 +20471,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<PutInventoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20590,8 +20507,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<PutParameterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20627,8 +20543,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<RegisterDefaultPatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20667,8 +20582,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<RegisterPatchBaselineForPatchGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20709,8 +20623,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<RegisterTargetWithMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20749,8 +20662,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<RegisterTaskWithMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20785,8 +20697,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<RemoveTagsFromResourceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20821,8 +20732,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<SendAutomationSignalResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20857,8 +20767,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<SendCommandResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20894,8 +20803,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<StartAssociationsOnceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -20930,8 +20838,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<StartAutomationExecutionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20964,8 +20871,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<StopAutomationExecutionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -20998,8 +20904,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -21035,8 +20940,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateAssociationStatusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -21069,8 +20973,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateDocumentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -21106,8 +21009,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateDocumentDefaultVersionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -21140,8 +21042,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateMaintenanceWindowResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -21174,8 +21075,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateMaintenanceWindowTargetResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -21208,8 +21108,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateMaintenanceWindowTaskResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -21242,8 +21141,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdateManagedInstanceRoleResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -21276,8 +21174,7 @@ impl Ssm for SsmClient {
 
                     serde_json::from_str::<UpdatePatchBaselineResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

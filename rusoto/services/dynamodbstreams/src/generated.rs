@@ -37,7 +37,7 @@ pub struct AttributeValue {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub b: Option<Vec<u8>>,
@@ -829,8 +829,7 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<DescribeStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -866,8 +865,7 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<GetRecordsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -903,8 +901,7 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<GetShardIteratorOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -940,8 +937,7 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<ListStreamsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

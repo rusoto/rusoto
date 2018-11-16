@@ -410,7 +410,7 @@ pub struct FunctionCode {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_file: Option<Vec<u8>>,
@@ -637,7 +637,7 @@ pub struct InvocationRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload: Option<Vec<u8>>,
@@ -673,7 +673,7 @@ pub struct InvokeAsyncRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub invoke_args: Vec<u8>,
 }
@@ -1005,7 +1005,7 @@ pub struct UpdateFunctionCodeRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_file: Option<Vec<u8>>,

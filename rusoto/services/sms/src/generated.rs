@@ -1701,8 +1701,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<CreateReplicationJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1740,8 +1739,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<DeleteReplicationJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1777,8 +1775,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<DeleteServerCatalogResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1816,8 +1813,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<DisassociateConnectorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1855,8 +1851,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetConnectorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1895,8 +1890,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetReplicationJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1935,8 +1929,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetReplicationRunsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1975,8 +1968,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetServersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2013,8 +2005,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<ImportServerCatalogResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2052,8 +2043,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<StartOnDemandReplicationRunResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2089,8 +2079,7 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<UpdateReplicationJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

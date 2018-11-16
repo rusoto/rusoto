@@ -74,7 +74,7 @@ pub struct CreateSecretRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_binary: Option<Vec<u8>>,
@@ -321,7 +321,7 @@ pub struct GetSecretValueResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_binary: Option<Vec<u8>>,
@@ -438,7 +438,7 @@ pub struct PutSecretValueRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_binary: Option<Vec<u8>>,
@@ -673,7 +673,7 @@ pub struct UpdateSecretRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_binary: Option<Vec<u8>>,
@@ -2745,8 +2745,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<CancelRotateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2782,8 +2781,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<CreateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2819,8 +2817,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<DeleteResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2855,8 +2852,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<DeleteSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2892,8 +2888,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<DescribeSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2929,8 +2924,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<GetRandomPasswordResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2966,8 +2960,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<GetResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3003,8 +2996,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<GetSecretValueResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3040,8 +3032,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<ListSecretVersionIdsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3076,8 +3067,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<ListSecretsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3113,8 +3103,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<PutResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3150,8 +3139,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<PutSecretValueResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3187,8 +3175,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<RestoreSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3224,8 +3211,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<RotateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3307,8 +3293,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<UpdateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3344,8 +3329,7 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<UpdateSecretVersionStageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

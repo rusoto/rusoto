@@ -354,7 +354,7 @@ pub struct ImportCertificateAuthorityCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub certificate: Vec<u8>,
     /// <p>The Amazon Resource Name (ARN) that was returned when you called <a>CreateCertificateAuthority</a>. This must be of the form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code> </p>
@@ -365,7 +365,7 @@ pub struct ImportCertificateAuthorityCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub certificate_chain: Vec<u8>,
 }
@@ -380,7 +380,7 @@ pub struct IssueCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub csr: Vec<u8>,
     /// <p>Custom string that can be used to distinguish between calls to the <b>IssueCertificate</b> operation. Idempotency tokens time out after one hour. Therefore, if you call <b>IssueCertificate</b> multiple times with the same idempotency token within 5 minutes, ACM PCA recognizes that you are requesting only one certificate and will issue only one. If you change the idempotency token for each call, PCA recognizes that you are requesting multiple certificates.</p>
@@ -2531,8 +2531,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<CreateCertificateAuthorityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2571,8 +2570,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<CreateCertificateAuthorityAuditReportResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2630,8 +2628,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<DescribeCertificateAuthorityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2670,8 +2667,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<DescribeCertificateAuthorityAuditReportResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2706,8 +2702,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<GetCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2749,8 +2744,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<GetCertificateAuthorityCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2785,8 +2779,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<GetCertificateAuthorityCsrResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2847,8 +2840,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<IssueCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2884,8 +2876,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<ListCertificateAuthoritiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2915,8 +2906,7 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

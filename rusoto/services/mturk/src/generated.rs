@@ -5266,8 +5266,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<AcceptQualificationRequestResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5303,8 +5302,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ApproveAssignmentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5344,8 +5342,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<AssociateQualificationWithWorkerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5386,8 +5383,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<CreateAdditionalAssignmentsForHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5422,8 +5418,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<CreateHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5462,8 +5457,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<CreateHITTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5502,8 +5496,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<CreateHITWithHITTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5541,8 +5534,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<CreateQualificationTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5578,8 +5570,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<CreateWorkerBlockResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5615,8 +5606,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<DeleteHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5655,8 +5645,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<DeleteQualificationTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5692,8 +5681,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<DeleteWorkerBlockResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5735,8 +5723,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<DisassociateQualificationFromWorkerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5772,8 +5759,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<GetAccountBalanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5812,8 +5798,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<GetAssignmentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5852,8 +5837,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<GetFileUploadURLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5886,8 +5870,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<GetHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5926,8 +5909,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<GetQualificationScoreResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5965,8 +5947,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<GetQualificationTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6004,8 +5985,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListAssignmentsForHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6043,8 +6023,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListBonusPaymentsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6077,8 +6056,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListHITsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6117,8 +6095,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListHITsForQualificationTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6154,8 +6131,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListQualificationRequestsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6191,8 +6167,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListQualificationTypesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6231,8 +6206,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListReviewPolicyResultsForHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6268,8 +6242,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListReviewableHITsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6308,8 +6281,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListWorkerBlocksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6349,8 +6321,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<ListWorkersWithQualificationTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6388,8 +6359,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<NotifyWorkersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6428,8 +6398,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<RejectAssignmentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6468,8 +6437,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<RejectQualificationRequestResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6502,8 +6470,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<SendBonusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6542,8 +6509,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<SendTestEventNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6579,8 +6545,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<UpdateExpirationForHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6618,8 +6583,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<UpdateHITReviewStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6657,8 +6621,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<UpdateHITTypeOfHITResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6697,8 +6660,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<UpdateNotificationSettingsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6734,8 +6696,7 @@ impl MechanicalTurk for MechanicalTurkClient {
 
                     serde_json::from_str::<UpdateQualificationTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

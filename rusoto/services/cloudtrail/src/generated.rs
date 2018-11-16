@@ -468,7 +468,7 @@ pub struct PublicKey {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<Vec<u8>>,
@@ -2503,8 +2503,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<AddTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2543,8 +2542,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<CreateTrailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2583,8 +2581,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<DeleteTrailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2623,8 +2620,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<DescribeTrailsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2663,8 +2659,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<GetEventSelectorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2703,8 +2698,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<GetTrailStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2743,8 +2737,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<ListPublicKeysResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2780,8 +2773,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2820,8 +2812,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<LookupEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2860,8 +2851,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<PutEventSelectorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2900,8 +2890,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<RemoveTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2940,8 +2929,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<StartLoggingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2980,8 +2968,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<StopLoggingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3020,8 +3007,7 @@ impl CloudTrail for CloudTrailClient {
 
                     serde_json::from_str::<UpdateTrailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

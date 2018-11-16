@@ -1724,8 +1724,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetAdminAccountResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1761,8 +1760,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetComplianceDetailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1795,8 +1793,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetNotificationChannelResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1831,8 +1828,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1868,8 +1864,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<ListComplianceStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1904,8 +1899,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<ListPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1966,8 +1960,7 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<PutPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
