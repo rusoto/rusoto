@@ -10,10 +10,10 @@ use rusoto_core::Region;
 #[test]
 fn should_list_distributions() {
     let _ = env_logger::try_init();
-    let client = CloudFrontClient::simple(Region::UsEast1);
+    let client = CloudFrontClient::new(Region::UsEast1);
     let request = ListDistributionsRequest::default();
 
-    let result = client.list_distributions(&request).sync();
+    let result = client.list_distributions(request).sync();
     println!("{:#?}", result);
     assert!(result.is_ok());
 }
