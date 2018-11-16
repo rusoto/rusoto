@@ -8,25 +8,18 @@ In order to run the service generator, first make sure that the botocore submodu
 $ git submodule update --init
 ```
 
-Then, make sure you have Rust nightly installed. The service generator needs this because it relies on [`rustfmt-nightly`](https://crates.io/crates/rustfmt-nightly)
-to format the generated code nicely.
+The service generator uses the `stable` version of `rustfmt` to format the generated code nicely.
 
-You can install Rust nightly easily via [`rustup`](https://www.rustup.rs/):
+Install the `rustfmt` component via `rustup`:
 
 ```bash
-$ rustup install nightly
+$ rustup component add rustfmt-preview
 ```
 
-You'll also need to install the `rustfmt` component via `rustup`:
+From the `service_crategen` directory, call:
 
 ```bash
-$ rustup component add rustfmt-preview --toolchain nightly
-```
-
-Finally, from the `service_crategen` directory, call:
-
-```bash
-$ cargo +nightly run -- generate -c ./services.json -o ../rusoto/services
+$ cargo run -- generate -c ./services.json -o ../rusoto/services
 ```
 
 This will regenerate all services in the `rusoto/services` directory, updating them with the configuration defined in the `services.json` file and applying any code generation changes.
@@ -61,7 +54,7 @@ This will tests service crates, in addition to the `rusoto_core` crate.
 The crate generator is also able to check for any missing or outdated services with the `check` command:
 
 ```bash
-$ cargo +nightly run -- check -c ./services.json
+$ cargo run -- check -c ./services.json
 ```
 
 If there are any missing or outdated services, they will be output in a formatted list along with useful information.
@@ -71,5 +64,5 @@ If there are any missing or outdated services, they will be output in a formatte
 To output timing information on crate generation, run with logging set to debug level:
 
 ```bash
-$ RUST_LOG=rusoto_service_crategen=debug cargo +nightly run -- generate -c ./services.json -o ../rusoto/services
+$ RUST_LOG=rusoto_service_crategen=debug cargo run -- generate -c ./services.json -o ../rusoto/services
 ```
