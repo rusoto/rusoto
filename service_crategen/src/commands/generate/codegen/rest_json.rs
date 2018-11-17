@@ -304,13 +304,22 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
                 .shape;
             let payload_shape = &service.get_shape(payload_member_shape)
                 .expect("Shape missing from service definition");
+            // is the shape required?
+            let payload_shape_required = match output_shape.required {
+                Some(ref s) => {
+                    // if there's any required shape present the body payload parser will handle it
+                    s.len() > 0
+                },
+                None => false,
+            };
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
                     payload_body_parser(payload_type,
                                         shape_name,
                                         payload_member_name,
-                                        mutable_result)
+                                        mutable_result,
+                                        payload_shape_required)
                 }
                 _ => json_body_parser(shape_name, mutable_result),
             }
@@ -323,12 +332,23 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
 fn payload_body_parser(payload_type: ShapeType,
                        output_shape: &str,
                        payload_member: &str,
-                       mutable_result: bool)
+                       mutable_result: bool,
+                       payload_required: bool)
                        -> String {
 
-    let response_body = match payload_type {
-        ShapeType::Blob => "Some(response.body)",
-        _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
+    let response_body = match payload_required {
+        true => {
+            match payload_type {
+                ShapeType::Blob => "response.body",
+                _ => "String::from_utf8_lossy(response.body.as_ref())",
+            }
+        },
+        false => {
+            match payload_type {
+                ShapeType::Blob => "Some(response.body)",
+                _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
+            }
+        }
     };
 
     format!("

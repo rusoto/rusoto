@@ -614,6 +614,12 @@
     "protocolVersion": "2017-07-24",
     "baseTypeName": "SageMaker"
   },
+  "sagemaker-runtime": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-05-13",
+    "baseTypeName": "SageMakerRuntime"
+  },
   "sdb": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
