@@ -29,12 +29,6 @@ You may be looking for:
 * [API documentation][api-documentation]
 * [Getting help with Rusoto][rusoto-help]
 
-## Requirements
-
-Rust 1.26.1 or later is required.
-
-On Linux, OpenSSL is required unless `features=["rustls"]` is used.
-
 ## Installation
 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto_core).
