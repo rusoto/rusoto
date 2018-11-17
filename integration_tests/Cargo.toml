@@ -299,6 +299,10 @@ path = "../rusoto/services/kinesis"
 optional = true
 path = "../rusoto/services/kinesisanalytics"
 
+[dependencies.rusoto_kinesisvideo]
+optional = true
+path = "../rusoto/services/kinesisvideo"
+
 [dependencies.rusoto_kms]
 optional = true
 path = "../rusoto/services/kms"
@@ -597,12 +601,13 @@ all = [
 		"glue",
 		"greengrass",
 		"guardduty",
-	   	"iam",
-	   	"importexport",
-	   	"inspector",
-	   	"iot",
-	   	"kinesis",
+		"iam",
+		"importexport",
+		"inspector",
+		"iot",
+		"kinesis",
 		"kinesisanalytics",
+		"kinesisvideo",
 		"kms",
 		"lambda",
 		"lex-models",
@@ -729,6 +734,7 @@ inspector = ["rusoto_inspector"]
 iot = ["rusoto_iot"]
 kinesis = ["rusoto_kinesis"]
 kinesisanalytics = ["rusoto_kinesisanalytics"]
+kinesisvideo = ["rusoto_kinesisvideo"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
 lightsail = ["rusoto_lightsail"]

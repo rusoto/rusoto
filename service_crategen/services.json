@@ -419,6 +419,12 @@
     "protocolVersion": "2015-08-14",
     "baseTypeName": "KinesisAnalytics"
   },
+  "kinesisvideo": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-09-30",
+    "baseTypeName": "KinesisVideo"
+  },
   "kms": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
