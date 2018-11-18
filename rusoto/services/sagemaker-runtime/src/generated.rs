@@ -39,7 +39,7 @@ pub struct InvokeEndpointInput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub body: Vec<u8>,
     /// <p>The MIME type of the input data in the request body.</p>
