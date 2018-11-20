@@ -338,6 +338,7 @@ pub struct ImportCertificateRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_chain: Option<Vec<u8>>,
     /// <p>The private key that matches the public key in the certificate.</p>
     #[serde(rename = "PrivateKey")]

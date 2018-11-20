@@ -4439,6 +4439,7 @@ pub struct MaintenanceWindowLambdaParameters {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub payload: Option<Vec<u8>>,
     /// <p>(Optional) Specify a Lambda function version or alias name. If you specify a function version, the action uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the action uses the alias ARN to invoke the Lambda function version to which the alias points.</p>
     #[serde(rename = "Qualifier")]

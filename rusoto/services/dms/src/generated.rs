@@ -103,6 +103,7 @@ pub struct Certificate {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_wallet: Option<Vec<u8>>,
     /// <p>The key length of the cryptographic algorithm being used.</p>
     #[serde(rename = "KeyLength")]
@@ -1270,6 +1271,7 @@ pub struct ImportCertificateMessage {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_wallet: Option<Vec<u8>>,
     /// <p>The tags associated with the certificate.</p>
     #[serde(rename = "Tags")]
