@@ -90,6 +90,7 @@ members = [
     "rusoto/services/mediatailor",
     "rusoto/services/meteringmarketplace",
     "rusoto/services/mgh",
+    "rusoto/services/mobile",
     "rusoto/services/mq",
     "rusoto/services/mturk",
     "rusoto/services/opsworks",

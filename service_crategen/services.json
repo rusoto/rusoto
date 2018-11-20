@@ -518,6 +518,12 @@
     "protocolVersion": "2017-05-31",
     "baseTypeName": "MigrationHub"
   },
+  "mobile": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-07-01",
+    "baseTypeName": "Mobile"
+  },
   "mq": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",

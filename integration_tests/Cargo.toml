@@ -363,6 +363,10 @@ path = "../rusoto/services/mediatailor"
 optional = true
 path = "../rusoto/services/mgh"
 
+[dependencies.rusoto_mobile]
+optional = true
+path = "../rusoto/services/mobile"
+
 [dependencies.rusoto_mq]
 optional = true
 path = "../rusoto/services/mq"
@@ -623,6 +627,7 @@ all = [
 		"mediastore",
 		"mediatailor",
 		"mgh",
+		"mobile",
 		"mq",
 		"mturk",
 		"opsworks",
@@ -750,6 +755,7 @@ mediaconvert = ["rusoto_mediaconvert"]
 mediastore = ["rusoto_mediastore"]
 mediatailor = ["rusoto_mediatailor"]
 mgh = ["rusoto_mgh"]
+mobile = ["rusoto_mobile"]
 mq = ["rusoto_mq"]
 mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
