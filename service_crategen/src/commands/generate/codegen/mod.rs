@@ -449,9 +449,11 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
                             default,
                         )]".to_owned()
                     );
-                } else if !shape.required(member_name) {
-                    lines.push("#[serde(skip_serializing_if=\"Option::is_none\")]".to_owned());
                 }
+            }
+
+            if !shape.required(member_name) {
+                lines.push("#[serde(skip_serializing_if=\"Option::is_none\")]".to_owned());
             }
         }
 
