@@ -351,6 +351,10 @@ path = "../rusoto/services/marketplace-entitlement"
 optional = true
 path = "../rusoto/services/mediaconvert"
 
+[dependencies.rusoto_medialive]
+optional = true
+path = "../rusoto/services/medialive"
+
 [dependencies.rusoto_mediastore]
 optional = true
 path = "../rusoto/services/mediastore"
@@ -620,6 +624,7 @@ all = [
 		"marketplacecommerceanalytics",
 		"marketplace-entitlement",
 		"mediaconvert",
+		"medialive",
 		"mediastore",
 		"mediatailor",
 		"mgh",
@@ -747,6 +752,7 @@ macie = ["rusoto_macie"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
 mediaconvert = ["rusoto_mediaconvert"]
+medialive = ["rusoto_medialive"]
 mediastore = ["rusoto_mediastore"]
 mediatailor = ["rusoto_mediatailor"]
 mgh = ["rusoto_mgh"]
