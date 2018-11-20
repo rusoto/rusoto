@@ -590,6 +590,12 @@
     "protocolVersion": "2016-06-27",
     "baseTypeName": "Rekognition"
   },
+  "resource-groups": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-11-27",
+    "baseTypeName": "ResourceGroups"
+  },
   "resourcegroupstaggingapi": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",

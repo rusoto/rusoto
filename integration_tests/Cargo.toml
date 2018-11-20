@@ -403,6 +403,10 @@ path = "../rusoto/services/redshift"
 optional = true
 path = "../rusoto/services/rekognition"
 
+[dependencies.rusoto_resource_groups]
+optional = true
+path = "../rusoto/services/resource-groups"
+
 [dependencies.rusoto_resourcegroupstaggingapi]
 optional = true
 path = "../rusoto/services/resourcegroupstaggingapi"
@@ -633,6 +637,7 @@ all = [
 		"pricing",
 	   	"redshift",
 		"rekognition",
+		"resource-groups",
 		"resourcegroupstaggingapi",
 		"rds",
 		"route53",
@@ -760,6 +765,7 @@ polly = ["rusoto_polly"]
 pricing = ["rusoto_pricing"]
 redshift = ["rusoto_redshift"]
 rekognition = ["rusoto_rekognition"]
+resource-groups = ["rusoto_resource_groups"]
 resourcegroupstaggingapi = ["rusoto_resourcegroupstaggingapi"]
 rds = ["rusoto_rds"]
 route53 = ["rusoto_route53"]
