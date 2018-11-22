@@ -675,6 +675,14 @@ fn build_hostname(service: &str, region: &Region) -> String {
                 _ => format!("{}.amazonaws.com", service),
             }
         }
+        "importexport" => {
+            match *region {
+                Region::Custom { ref endpoint, .. } => {
+                    remove_scheme_from_custom_hostname(endpoint).to_owned()
+                }
+                _ => "importexport.amazonaws.com".to_owned(),
+            }
+        }
         "s3" => {
             match *region {
                 Region::Custom { ref endpoint, .. } => {
