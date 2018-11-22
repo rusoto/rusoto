@@ -506,6 +506,12 @@
     "protocolVersion": "2017-10-14",
     "baseTypeName": "MediaLive"
   },
+  "mediapackage": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-10-12",
+    "baseTypeName": "MediaPackage"
+  },
   "mediastore": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
