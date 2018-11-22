@@ -295,6 +295,10 @@ path = "../rusoto/services/iot"
 optional = true
 path = "../rusoto/services/iot-data"
 
+[dependencies.rusoto_iot_jobs_data]
+optional = true
+path = "../rusoto/services/iot-jobs-data"
+
 [dependencies.rusoto_kinesis]
 optional = true
 path = "../rusoto/services/kinesis"
@@ -753,6 +757,7 @@ importexport = ["rusoto_importexport"]
 inspector = ["rusoto_inspector"]
 iot = ["rusoto_iot"]
 iotdata = ["rusoto_iot_data"]
+iotjobsdata = ["rusoto_iot_jobs_data"]
 kinesis = ["rusoto_kinesis"]
 kinesisanalytics = ["rusoto_kinesisanalytics"]
 kinesisvideo = ["rusoto_kinesisvideo"]
