@@ -63,6 +63,7 @@ pub struct CreateProjectRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contents: Option<Vec<u8>>,
     /// <p> Name of the project. </p>
     #[serde(rename = "name")]
@@ -331,6 +332,7 @@ pub struct UpdateProjectRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contents: Option<Vec<u8>>,
     /// <p> Unique project identifier. </p>
     #[serde(rename = "projectId")]
