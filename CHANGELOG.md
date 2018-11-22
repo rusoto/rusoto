@@ -4,6 +4,7 @@
 - Add Connect service
 - Add MediaTailor support
 - Add ByteStream struct to core
+- Skip serializing blobs when they are `Option::None`
 
 ## [0.35.0] - 2018-10-31
 

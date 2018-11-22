@@ -2726,6 +2726,7 @@ pub struct TypedAttributeValue {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub binary_value: Option<Vec<u8>>,
     /// <p>A Boolean data value.</p>
     #[serde(rename = "BooleanValue")]

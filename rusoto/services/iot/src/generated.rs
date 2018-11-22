@@ -847,6 +847,7 @@ pub struct CodeSigningSignature {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_document: Option<Vec<u8>>,
     /// <p>A stream of the code signing signature.</p>
     #[serde(rename = "stream")]

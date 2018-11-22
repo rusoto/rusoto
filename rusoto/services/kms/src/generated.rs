@@ -185,6 +185,7 @@ pub struct DecryptResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plaintext: Option<Vec<u8>>,
 }
 
@@ -283,6 +284,7 @@ pub struct EncryptResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The ID of the key used during encryption.</p>
     #[serde(rename = "KeyId")]
@@ -323,6 +325,7 @@ pub struct GenerateDataKeyResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
     #[serde(rename = "KeyId")]
@@ -335,6 +338,7 @@ pub struct GenerateDataKeyResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plaintext: Option<Vec<u8>>,
 }
 
@@ -371,6 +375,7 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
     #[serde(rename = "KeyId")]
@@ -396,6 +401,7 @@ pub struct GenerateRandomResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub plaintext: Option<Vec<u8>>,
 }
 
@@ -457,6 +463,7 @@ pub struct GetParametersForImportResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub import_token: Option<Vec<u8>>,
     /// <p>The identifier of the CMK to use in a subsequent <a>ImportKeyMaterial</a> request. This is the same CMK specified in the <code>GetParametersForImport</code> request.</p>
     #[serde(rename = "KeyId")]
@@ -473,6 +480,7 @@ pub struct GetParametersForImportResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<Vec<u8>>,
 }
 
@@ -864,6 +872,7 @@ pub struct ReEncryptResponse {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>Unique identifier of the CMK used to reencrypt the data.</p>
     #[serde(rename = "KeyId")]

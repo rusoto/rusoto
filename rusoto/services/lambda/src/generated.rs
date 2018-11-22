@@ -412,6 +412,7 @@ pub struct FunctionCode {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_file: Option<Vec<u8>>,
 }
 
@@ -638,6 +639,7 @@ pub struct InvocationRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub payload: Option<Vec<u8>>,
     /// <p>You can use this optional parameter to specify a Lambda function version or alias name. If you specify a function version, the API uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the API uses the alias ARN to invoke the Lambda function version to which the alias points.</p> <p>If you don't provide this parameter, then the API uses unqualified function ARN which results in invocation of the <code>$LATEST</code> version.</p>
     #[serde(rename = "Qualifier")]
@@ -1005,6 +1007,7 @@ pub struct UpdateFunctionCodeRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_file: Option<Vec<u8>>,
 }
 

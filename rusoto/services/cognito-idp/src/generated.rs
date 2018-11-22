@@ -2804,6 +2804,7 @@ pub struct SetUICustomizationRequest {
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
         default
     )]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub image_file: Option<Vec<u8>>,
     /// <p>The user pool ID for the user pool.</p>
     #[serde(rename = "UserPoolId")]
