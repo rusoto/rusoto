@@ -437,6 +437,12 @@
     "protocolVersion": "2017-09-30",
     "baseTypeName": "KinesisVideo"
   },
+  "kinesis-video-media": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-09-30",
+    "baseTypeName": "KinesisVideoMedia"
+  },
   "kms": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",

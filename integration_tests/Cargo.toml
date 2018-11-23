@@ -311,6 +311,10 @@ path = "../rusoto/services/kinesisanalytics"
 optional = true
 path = "../rusoto/services/kinesisvideo"
 
+[dependencies.rusoto_kinesis_video_media]
+optional = true
+path = "../rusoto/services/kinesis-video-media"
+
 [dependencies.rusoto_kms]
 optional = true
 path = "../rusoto/services/kms"
@@ -633,6 +637,7 @@ all = [
 		"kinesis",
 		"kinesisanalytics",
 		"kinesisvideo",
+		"kinesisvideomedia",
 		"kms",
 		"lambda",
 		"lex-models",
@@ -766,6 +771,7 @@ iotjobsdata = ["rusoto_iot_jobs_data"]
 kinesis = ["rusoto_kinesis"]
 kinesisanalytics = ["rusoto_kinesisanalytics"]
 kinesisvideo = ["rusoto_kinesisvideo"]
+kinesisvideomedia = ["rusoto_kinesis_video_media"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
 lightsail = ["rusoto_lightsail"]

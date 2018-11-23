@@ -76,6 +76,7 @@ members = [
     "rusoto/services/kinesis",
     "rusoto/services/kinesisanalytics",
     "rusoto/services/kinesisvideo",
+    "rusoto/services/kinesis-video-media",
     "rusoto/services/kms",
     "rusoto/services/lambda",
     "rusoto/services/lex-models",
