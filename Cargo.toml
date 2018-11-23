@@ -88,6 +88,7 @@ members = [
     "rusoto/services/marketplace-entitlement",
     "rusoto/services/mediaconvert",
     "rusoto/services/medialive",
+    "rusoto/services/mediapackage",
     "rusoto/services/mediastore",
     "rusoto/services/mediatailor",
     "rusoto/services/meteringmarketplace",
