@@ -425,6 +425,12 @@
     "protocolVersion": "2017-09-29",
     "baseTypeName": "IotJobsData"
   },
+  "iot1click-devices": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2018-05-14",
+    "baseTypeName": "Iot1ClickDevices"
+  },
   "kinesis": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
