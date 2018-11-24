@@ -407,6 +407,12 @@
     "protocolVersion": "2015-05-28",
     "baseTypeName": "Iot"
   },
+  "iotanalytics": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-11-27",
+    "baseTypeName": "IotAnalytics"
+  },
   "iot-data": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",

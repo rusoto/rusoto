@@ -71,6 +71,7 @@ members = [
     "rusoto/services/importexport",
     "rusoto/services/inspector",
     "rusoto/services/iot",
+    "rusoto/services/iotanalytics",
     "rusoto/services/iot-data",
     "rusoto/services/iot-jobs-data",
     "rusoto/services/kinesis",
