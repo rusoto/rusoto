@@ -555,6 +555,10 @@ path = "../rusoto/services/waf-regional"
 optional = true
 path = "../rusoto/services/workdocs"
 
+[dependencies.rusoto_workmail]
+optional = true
+path = "../rusoto/services/workmail"
+
 [dependencies.rusoto_workspaces]
 optional = true
 path = "../rusoto/services/workspaces"
@@ -706,7 +710,8 @@ all = [
 	   	"waf",
 		"waf-regional",
 		"workdocs",
-	   	"workspaces",
+		"workmail",
+		"workspaces",
 		"xray"
 	]
 acm = ["rusoto_acm"]
@@ -841,6 +846,7 @@ transcribe = ["rusoto_transcribe"]
 translate = ["rusoto_translate"]
 waf = ["rusoto_waf"]
 waf-regional = ["rusoto_waf_regional"]
+workmail = ["rusoto_workmail"]
 workspaces = ["rusoto_workspaces"]
 workdocs = ["rusoto_workdocs"]
 xray = ["rusoto_xray"]

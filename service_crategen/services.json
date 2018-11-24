@@ -815,6 +815,12 @@
     "protocolVersion": "2016-05-01",
     "baseTypeName": "Workdocs"
   },
+  "workmail": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2017-10-01",
+    "baseTypeName": "Workmail"
+  },
   "workspaces": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",
