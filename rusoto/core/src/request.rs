@@ -33,6 +33,8 @@ use log::Level::Debug;
 use signature::{SignedRequest, SignedRequestPayload};
 use stream::ByteStream;
 
+const READ_BUF_SIZE : usize = 1024 * 1024 * 2;
+
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
 
@@ -329,6 +331,7 @@ where
     /// Allows for a custom connector to be used with the HttpClient
     pub fn from_connector(connector: C) -> Self {
         let inner = HyperClient::builder()
+            .http1_read_buf_exact_size(READ_BUF_SIZE)
             .build(connector);
 
         HttpClient {
