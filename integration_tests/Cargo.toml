@@ -327,6 +327,10 @@ path = "../rusoto/services/kinesisvideo"
 optional = true
 path = "../rusoto/services/kinesis-video-media"
 
+[dependencies.rusoto_kinesis_video_archived_media]
+optional = true
+path = "../rusoto/services/kinesis-video-archived-media"
+
 [dependencies.rusoto_kms]
 optional = true
 path = "../rusoto/services/kms"
@@ -657,6 +661,7 @@ all = [
 		"kinesisanalytics",
 		"kinesisvideo",
 		"kinesisvideomedia",
+		"kinesisvideoarchivedmedia",
 		"kms",
 		"lambda",
 		"lex-models",
@@ -795,6 +800,7 @@ kinesis = ["rusoto_kinesis"]
 kinesisanalytics = ["rusoto_kinesisanalytics"]
 kinesisvideo = ["rusoto_kinesisvideo"]
 kinesisvideomedia = ["rusoto_kinesis_video_media"]
+kinesisvideoarchivedmedia = ["rusoto_kinesis_video_archived_media"]
 kms = ["rusoto_kms"]
 lambda = ["rusoto_lambda"]
 lightsail = ["rusoto_lightsail"]
