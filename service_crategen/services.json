@@ -431,6 +431,12 @@
     "protocolVersion": "2018-05-14",
     "baseTypeName": "Iot1ClickDevices"
   },
+  "iot1click-projects": {
+    "version": "0.35.0",
+    "coreVersion": "0.35.0",
+    "protocolVersion": "2018-05-14",
+    "baseTypeName": "Iot1ClickProjects"
+  },
   "kinesis": {
     "version": "0.35.0",
     "coreVersion": "0.35.0",

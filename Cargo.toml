@@ -75,6 +75,7 @@ members = [
     "rusoto/services/iot-data",
     "rusoto/services/iot-jobs-data",
     "rusoto/services/iot1click-devices",
+    "rusoto/services/iot1click-projects",
     "rusoto/services/kinesis",
     "rusoto/services/kinesisanalytics",
     "rusoto/services/kinesisvideo",
