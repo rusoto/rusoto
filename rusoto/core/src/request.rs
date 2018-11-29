@@ -304,6 +304,11 @@ pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
 impl HttpClient {
     /// Create a tls-enabled http client.
     pub fn new() -> Result<Self, TlsError> {
+        HttpClient::new_with_readbuff(None)
+    }
+
+    /// Make a tls-enabled http client with readbuf size set.
+    pub fn new_with_readbuff(readbuf_size: Option<usize>) -> Result<Self, TlsError> {
         #[cfg(feature="native-tls")]
         let connector = match HttpsConnector::new(4) {
             Ok(connector) => connector,
@@ -317,7 +322,7 @@ impl HttpClient {
         #[cfg(feature="rustls")]
         let connector = HttpsConnector::new(4);
 
-        Ok(Self::from_connector(connector))
+        Ok(Self::from_connector(connector, readbuf_size))
     }
 }
 
@@ -327,9 +332,18 @@ where
     C::Future: 'static
 {
     /// Allows for a custom connector to be used with the HttpClient
-    pub fn from_connector(connector: C) -> Self {
-        let inner = HyperClient::builder()
-            .build(connector);
+    pub fn from_connector(connector: C, readbuf_size: Option<usize>) -> Self {
+        let inner = match readbuf_size {
+            Some(s) => {
+                HyperClient::builder()
+                    .http1_read_buf_exact_size(s)
+                    .build(connector)
+            },
+            None => {
+                HyperClient::builder()
+                    .build(connector)
+            }
+        };
 
         HttpClient {
             inner

@@ -5,10 +5,14 @@ extern crate rusoto_ecs;
 
 use rusoto_ecs::{Ecs, EcsClient, ListClustersRequest, ListClustersError};
 use rusoto_core::Region;
+use rusoto_core::DefaultCredentialsProvider;
+use rusoto_core::request::HttpClient;
 
 #[test]
 fn main() {
-    let ecs = EcsClient::new(Region::UsEast1);
+    let cred_provider =  DefaultCredentialsProvider::new().unwrap();
+    let http_provider = HttpClient::new_with_readbuff(Some(1024 * 1024 * 2)).unwrap();
+    let ecs = EcsClient::new_with(http_provider, cred_provider, Region::UsEast1);
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(ListClustersRequest::default()).sync() {
