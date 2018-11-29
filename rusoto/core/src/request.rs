@@ -372,6 +372,11 @@ pub struct HttpConfig {
 }
 
 impl HttpConfig {
+
+    /// Create a new HttpConfig
+    pub fn new() -> HttpConfig {
+        HttpConfig { read_buf_size: None }
+    }
     /// Sets the size of the read buffer for inbound data
     /// A larger buffer size might result in better performance
     /// by requiring fewer copies out of the socket buffer. 

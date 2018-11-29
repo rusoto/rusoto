@@ -52,7 +52,7 @@ pub mod xmlerror;
 pub mod xmlutil;
 
 pub use credential::{ProvideAwsCredentials, DefaultCredentialsProvider, CredentialsError};
-pub use request::{DispatchSignedRequest, HttpClient, HttpDispatchError};
+pub use request::{DispatchSignedRequest, HttpConfig, HttpClient, HttpDispatchError};
 pub use region::Region;
 pub use future::RusotoFuture;
 pub use stream::ByteStream;
