@@ -1638,7 +1638,7 @@ impl MessageAttributeMapSerializer {
         obj: &::std::collections::HashMap<String, MessageAttributeValue>,
     ) {
         for (index, (key, value)) in obj.iter().enumerate() {
-            let prefix = format!("{}.{}", name, index + 1);
+            let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "Name"), &key);
             MessageAttributeValueSerializer::serialize(
                 params,

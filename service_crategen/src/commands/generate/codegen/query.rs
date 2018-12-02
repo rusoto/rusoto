@@ -197,10 +197,18 @@ fn list_member_format(service: &Service, flattened: bool) -> String {
 fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
     let mut parts = Vec::new();
 
+    let prefix_snip: String;
+    if service.service_id() == Some("SNS") && shape.value.is_some() && shape.value.as_ref().unwrap().shape == "MessageAttributeValue" {
+        prefix_snip = "let prefix = format!(\"{}.entry.{}\", name, index+1);".to_string();
+    } else {
+        prefix_snip = "let prefix = format!(\"{}.{}\", name, index+1);".to_string();
+    }
+
     // the key is always a string type
     parts.push(format!("for (index, (key, value)) in obj.iter().enumerate() {{
-            let prefix = format!(\"{{}}.{{}}\", name, index+1);
+            {prefix_snip}
             params.put(&format!(\"{{}}.{{}}\", prefix, \"{key_name}\"), &key);",
+            prefix_snip = prefix_snip,
             key_name = key_name(service, shape),
         ));
 
