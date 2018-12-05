@@ -23,7 +23,7 @@ To use `rusoto_codedeploy` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_codedeploy = "0.35.0"
+rusoto_codedeploy = "0.36.0"
 ```
 
 ## Contributing

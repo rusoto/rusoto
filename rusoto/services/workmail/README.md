@@ -23,7 +23,7 @@ To use `rusoto_workmail` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_workmail = "0.35.0"
+rusoto_workmail = "0.36.0"
 ```
 
 ## Contributing

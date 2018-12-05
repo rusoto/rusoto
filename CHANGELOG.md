@@ -1,6 +1,9 @@
 # Rusoto changes
 
 ## [Unreleased]
+
+## [0.36.0] - 2018-12-04
+
 - Add Connect service
 - Add MediaTailor support
 - Add ByteStream struct to core

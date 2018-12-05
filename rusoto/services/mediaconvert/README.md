@@ -23,7 +23,7 @@ To use `rusoto_mediaconvert` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_mediaconvert = "0.35.0"
+rusoto_mediaconvert = "0.36.0"
 ```
 
 ## Contributing
