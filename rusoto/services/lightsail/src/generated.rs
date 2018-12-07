@@ -2557,30 +2557,30 @@ impl AllocateStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AllocateStaticIpError::AccessDenied(String::from(error_message))
+                    return AllocateStaticIpError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return AllocateStaticIpError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AllocateStaticIpError::InvalidInput(String::from(error_message))
+                    return AllocateStaticIpError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return AllocateStaticIpError::NotFound(String::from(error_message))
+                    return AllocateStaticIpError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return AllocateStaticIpError::OperationFailure(String::from(error_message))
+                    return AllocateStaticIpError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return AllocateStaticIpError::Service(String::from(error_message))
+                    return AllocateStaticIpError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return AllocateStaticIpError::Unauthenticated(String::from(error_message))
+                    return AllocateStaticIpError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AllocateStaticIpError::Validation(error_message.to_string())
+                    return AllocateStaticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2675,26 +2675,26 @@ impl AttachDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AttachDiskError::AccessDenied(String::from(error_message))
+                    return AttachDiskError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return AttachDiskError::AccountSetupInProgress(String::from(error_message))
+                    return AttachDiskError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AttachDiskError::InvalidInput(String::from(error_message))
+                    return AttachDiskError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return AttachDiskError::NotFound(String::from(error_message))
+                    return AttachDiskError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return AttachDiskError::OperationFailure(String::from(error_message))
+                    return AttachDiskError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return AttachDiskError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return AttachDiskError::Unauthenticated(String::from(error_message))
+                    return AttachDiskError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachDiskError::Validation(error_message.to_string())
+                    return AttachDiskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2791,36 +2791,36 @@ impl AttachInstancesToLoadBalancerError {
                 "AccessDeniedException" => {
                     return AttachInstancesToLoadBalancerError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return AttachInstancesToLoadBalancerError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return AttachInstancesToLoadBalancerError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return AttachInstancesToLoadBalancerError::NotFound(String::from(error_message))
+                    return AttachInstancesToLoadBalancerError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return AttachInstancesToLoadBalancerError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return AttachInstancesToLoadBalancerError::Service(String::from(error_message))
+                    return AttachInstancesToLoadBalancerError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return AttachInstancesToLoadBalancerError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AttachInstancesToLoadBalancerError::Validation(error_message.to_string())
+                    return AttachInstancesToLoadBalancerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2919,42 +2919,42 @@ impl AttachLoadBalancerTlsCertificateError {
                 "AccessDeniedException" => {
                     return AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return AttachLoadBalancerTlsCertificateError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationFailureException" => {
                     return AttachLoadBalancerTlsCertificateError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return AttachLoadBalancerTlsCertificateError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthenticatedException" => {
                     return AttachLoadBalancerTlsCertificateError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AttachLoadBalancerTlsCertificateError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3051,28 +3051,28 @@ impl AttachStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AttachStaticIpError::AccessDenied(String::from(error_message))
+                    return AttachStaticIpError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return AttachStaticIpError::AccountSetupInProgress(String::from(error_message))
+                    return AttachStaticIpError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AttachStaticIpError::InvalidInput(String::from(error_message))
+                    return AttachStaticIpError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return AttachStaticIpError::NotFound(String::from(error_message))
+                    return AttachStaticIpError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return AttachStaticIpError::OperationFailure(String::from(error_message))
+                    return AttachStaticIpError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return AttachStaticIpError::Service(String::from(error_message))
+                    return AttachStaticIpError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return AttachStaticIpError::Unauthenticated(String::from(error_message))
+                    return AttachStaticIpError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachStaticIpError::Validation(error_message.to_string())
+                    return AttachStaticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3167,34 +3167,34 @@ impl CloseInstancePublicPortsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CloseInstancePublicPortsError::AccessDenied(String::from(error_message))
+                    return CloseInstancePublicPortsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return CloseInstancePublicPortsError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CloseInstancePublicPortsError::InvalidInput(String::from(error_message))
+                    return CloseInstancePublicPortsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CloseInstancePublicPortsError::NotFound(String::from(error_message))
+                    return CloseInstancePublicPortsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return CloseInstancePublicPortsError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CloseInstancePublicPortsError::Service(String::from(error_message))
+                    return CloseInstancePublicPortsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return CloseInstancePublicPortsError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CloseInstancePublicPortsError::Validation(error_message.to_string())
+                    return CloseInstancePublicPortsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3291,26 +3291,26 @@ impl CreateDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDiskError::AccessDenied(String::from(error_message))
+                    return CreateDiskError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateDiskError::AccountSetupInProgress(String::from(error_message))
+                    return CreateDiskError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDiskError::InvalidInput(String::from(error_message))
+                    return CreateDiskError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDiskError::NotFound(String::from(error_message))
+                    return CreateDiskError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateDiskError::OperationFailure(String::from(error_message))
+                    return CreateDiskError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return CreateDiskError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return CreateDiskError::Unauthenticated(String::from(error_message))
+                    return CreateDiskError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDiskError::Validation(error_message.to_string())
+                    return CreateDiskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3405,32 +3405,32 @@ impl CreateDiskFromSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDiskFromSnapshotError::AccessDenied(String::from(error_message))
+                    return CreateDiskFromSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateDiskFromSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateDiskFromSnapshotError::InvalidInput(String::from(error_message))
+                    return CreateDiskFromSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDiskFromSnapshotError::NotFound(String::from(error_message))
+                    return CreateDiskFromSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return CreateDiskFromSnapshotError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateDiskFromSnapshotError::Service(String::from(error_message))
+                    return CreateDiskFromSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDiskFromSnapshotError::Unauthenticated(String::from(error_message))
+                    return CreateDiskFromSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDiskFromSnapshotError::Validation(error_message.to_string())
+                    return CreateDiskFromSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3527,30 +3527,30 @@ impl CreateDiskSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDiskSnapshotError::AccessDenied(String::from(error_message))
+                    return CreateDiskSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateDiskSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateDiskSnapshotError::InvalidInput(String::from(error_message))
+                    return CreateDiskSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDiskSnapshotError::NotFound(String::from(error_message))
+                    return CreateDiskSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateDiskSnapshotError::OperationFailure(String::from(error_message))
+                    return CreateDiskSnapshotError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateDiskSnapshotError::Service(String::from(error_message))
+                    return CreateDiskSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDiskSnapshotError::Unauthenticated(String::from(error_message))
+                    return CreateDiskSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDiskSnapshotError::Validation(error_message.to_string())
+                    return CreateDiskSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3647,28 +3647,28 @@ impl CreateDomainError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDomainError::AccessDenied(String::from(error_message))
+                    return CreateDomainError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateDomainError::AccountSetupInProgress(String::from(error_message))
+                    return CreateDomainError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDomainError::InvalidInput(String::from(error_message))
+                    return CreateDomainError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDomainError::NotFound(String::from(error_message))
+                    return CreateDomainError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateDomainError::OperationFailure(String::from(error_message))
+                    return CreateDomainError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateDomainError::Service(String::from(error_message))
+                    return CreateDomainError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDomainError::Unauthenticated(String::from(error_message))
+                    return CreateDomainError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDomainError::Validation(error_message.to_string())
+                    return CreateDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3763,30 +3763,30 @@ impl CreateDomainEntryError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDomainEntryError::AccessDenied(String::from(error_message))
+                    return CreateDomainEntryError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateDomainEntryError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateDomainEntryError::InvalidInput(String::from(error_message))
+                    return CreateDomainEntryError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDomainEntryError::NotFound(String::from(error_message))
+                    return CreateDomainEntryError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateDomainEntryError::OperationFailure(String::from(error_message))
+                    return CreateDomainEntryError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateDomainEntryError::Service(String::from(error_message))
+                    return CreateDomainEntryError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDomainEntryError::Unauthenticated(String::from(error_message))
+                    return CreateDomainEntryError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDomainEntryError::Validation(error_message.to_string())
+                    return CreateDomainEntryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3883,32 +3883,32 @@ impl CreateInstanceSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateInstanceSnapshotError::AccessDenied(String::from(error_message))
+                    return CreateInstanceSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateInstanceSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateInstanceSnapshotError::InvalidInput(String::from(error_message))
+                    return CreateInstanceSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateInstanceSnapshotError::NotFound(String::from(error_message))
+                    return CreateInstanceSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return CreateInstanceSnapshotError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateInstanceSnapshotError::Service(String::from(error_message))
+                    return CreateInstanceSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateInstanceSnapshotError::Unauthenticated(String::from(error_message))
+                    return CreateInstanceSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateInstanceSnapshotError::Validation(error_message.to_string())
+                    return CreateInstanceSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4005,28 +4005,28 @@ impl CreateInstancesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateInstancesError::AccessDenied(String::from(error_message))
+                    return CreateInstancesError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateInstancesError::AccountSetupInProgress(String::from(error_message))
+                    return CreateInstancesError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateInstancesError::InvalidInput(String::from(error_message))
+                    return CreateInstancesError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateInstancesError::NotFound(String::from(error_message))
+                    return CreateInstancesError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateInstancesError::OperationFailure(String::from(error_message))
+                    return CreateInstancesError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateInstancesError::Service(String::from(error_message))
+                    return CreateInstancesError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateInstancesError::Unauthenticated(String::from(error_message))
+                    return CreateInstancesError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateInstancesError::Validation(error_message.to_string())
+                    return CreateInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4123,36 +4123,36 @@ impl CreateInstancesFromSnapshotError {
                 "AccessDeniedException" => {
                     return CreateInstancesFromSnapshotError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateInstancesFromSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return CreateInstancesFromSnapshotError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateInstancesFromSnapshotError::NotFound(String::from(error_message))
+                    return CreateInstancesFromSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return CreateInstancesFromSnapshotError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateInstancesFromSnapshotError::Service(String::from(error_message))
+                    return CreateInstancesFromSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return CreateInstancesFromSnapshotError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateInstancesFromSnapshotError::Validation(error_message.to_string())
+                    return CreateInstancesFromSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4249,28 +4249,28 @@ impl CreateKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateKeyPairError::AccessDenied(String::from(error_message))
+                    return CreateKeyPairError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateKeyPairError::AccountSetupInProgress(String::from(error_message))
+                    return CreateKeyPairError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateKeyPairError::InvalidInput(String::from(error_message))
+                    return CreateKeyPairError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateKeyPairError::NotFound(String::from(error_message))
+                    return CreateKeyPairError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateKeyPairError::OperationFailure(String::from(error_message))
+                    return CreateKeyPairError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateKeyPairError::Service(String::from(error_message))
+                    return CreateKeyPairError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateKeyPairError::Unauthenticated(String::from(error_message))
+                    return CreateKeyPairError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateKeyPairError::Validation(error_message.to_string())
+                    return CreateKeyPairError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4365,30 +4365,30 @@ impl CreateLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateLoadBalancerError::AccessDenied(String::from(error_message))
+                    return CreateLoadBalancerError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateLoadBalancerError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateLoadBalancerError::InvalidInput(String::from(error_message))
+                    return CreateLoadBalancerError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateLoadBalancerError::NotFound(String::from(error_message))
+                    return CreateLoadBalancerError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return CreateLoadBalancerError::OperationFailure(String::from(error_message))
+                    return CreateLoadBalancerError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateLoadBalancerError::Service(String::from(error_message))
+                    return CreateLoadBalancerError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return CreateLoadBalancerError::Unauthenticated(String::from(error_message))
+                    return CreateLoadBalancerError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLoadBalancerError::Validation(error_message.to_string())
+                    return CreateLoadBalancerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4487,42 +4487,42 @@ impl CreateLoadBalancerTlsCertificateError {
                 "AccessDeniedException" => {
                     return CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return CreateLoadBalancerTlsCertificateError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationFailureException" => {
                     return CreateLoadBalancerTlsCertificateError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return CreateLoadBalancerTlsCertificateError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthenticatedException" => {
                     return CreateLoadBalancerTlsCertificateError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateLoadBalancerTlsCertificateError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4619,26 +4619,26 @@ impl DeleteDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDiskError::AccessDenied(String::from(error_message))
+                    return DeleteDiskError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteDiskError::AccountSetupInProgress(String::from(error_message))
+                    return DeleteDiskError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteDiskError::InvalidInput(String::from(error_message))
+                    return DeleteDiskError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDiskError::NotFound(String::from(error_message))
+                    return DeleteDiskError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteDiskError::OperationFailure(String::from(error_message))
+                    return DeleteDiskError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return DeleteDiskError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return DeleteDiskError::Unauthenticated(String::from(error_message))
+                    return DeleteDiskError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDiskError::Validation(error_message.to_string())
+                    return DeleteDiskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4733,30 +4733,30 @@ impl DeleteDiskSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDiskSnapshotError::AccessDenied(String::from(error_message))
+                    return DeleteDiskSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return DeleteDiskSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDiskSnapshotError::InvalidInput(String::from(error_message))
+                    return DeleteDiskSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDiskSnapshotError::NotFound(String::from(error_message))
+                    return DeleteDiskSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteDiskSnapshotError::OperationFailure(String::from(error_message))
+                    return DeleteDiskSnapshotError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteDiskSnapshotError::Service(String::from(error_message))
+                    return DeleteDiskSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteDiskSnapshotError::Unauthenticated(String::from(error_message))
+                    return DeleteDiskSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDiskSnapshotError::Validation(error_message.to_string())
+                    return DeleteDiskSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4853,28 +4853,28 @@ impl DeleteDomainError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDomainError::AccessDenied(String::from(error_message))
+                    return DeleteDomainError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteDomainError::AccountSetupInProgress(String::from(error_message))
+                    return DeleteDomainError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteDomainError::InvalidInput(String::from(error_message))
+                    return DeleteDomainError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDomainError::NotFound(String::from(error_message))
+                    return DeleteDomainError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteDomainError::OperationFailure(String::from(error_message))
+                    return DeleteDomainError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteDomainError::Service(String::from(error_message))
+                    return DeleteDomainError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteDomainError::Unauthenticated(String::from(error_message))
+                    return DeleteDomainError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDomainError::Validation(error_message.to_string())
+                    return DeleteDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4969,30 +4969,30 @@ impl DeleteDomainEntryError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDomainEntryError::AccessDenied(String::from(error_message))
+                    return DeleteDomainEntryError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return DeleteDomainEntryError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDomainEntryError::InvalidInput(String::from(error_message))
+                    return DeleteDomainEntryError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDomainEntryError::NotFound(String::from(error_message))
+                    return DeleteDomainEntryError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteDomainEntryError::OperationFailure(String::from(error_message))
+                    return DeleteDomainEntryError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteDomainEntryError::Service(String::from(error_message))
+                    return DeleteDomainEntryError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteDomainEntryError::Unauthenticated(String::from(error_message))
+                    return DeleteDomainEntryError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDomainEntryError::Validation(error_message.to_string())
+                    return DeleteDomainEntryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5089,28 +5089,28 @@ impl DeleteInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteInstanceError::AccessDenied(String::from(error_message))
+                    return DeleteInstanceError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteInstanceError::AccountSetupInProgress(String::from(error_message))
+                    return DeleteInstanceError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteInstanceError::InvalidInput(String::from(error_message))
+                    return DeleteInstanceError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteInstanceError::NotFound(String::from(error_message))
+                    return DeleteInstanceError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteInstanceError::OperationFailure(String::from(error_message))
+                    return DeleteInstanceError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteInstanceError::Service(String::from(error_message))
+                    return DeleteInstanceError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteInstanceError::Unauthenticated(String::from(error_message))
+                    return DeleteInstanceError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInstanceError::Validation(error_message.to_string())
+                    return DeleteInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5205,32 +5205,32 @@ impl DeleteInstanceSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteInstanceSnapshotError::AccessDenied(String::from(error_message))
+                    return DeleteInstanceSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return DeleteInstanceSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteInstanceSnapshotError::InvalidInput(String::from(error_message))
+                    return DeleteInstanceSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteInstanceSnapshotError::NotFound(String::from(error_message))
+                    return DeleteInstanceSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return DeleteInstanceSnapshotError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteInstanceSnapshotError::Service(String::from(error_message))
+                    return DeleteInstanceSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteInstanceSnapshotError::Unauthenticated(String::from(error_message))
+                    return DeleteInstanceSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInstanceSnapshotError::Validation(error_message.to_string())
+                    return DeleteInstanceSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5327,28 +5327,28 @@ impl DeleteKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteKeyPairError::AccessDenied(String::from(error_message))
+                    return DeleteKeyPairError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteKeyPairError::AccountSetupInProgress(String::from(error_message))
+                    return DeleteKeyPairError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteKeyPairError::InvalidInput(String::from(error_message))
+                    return DeleteKeyPairError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteKeyPairError::NotFound(String::from(error_message))
+                    return DeleteKeyPairError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteKeyPairError::OperationFailure(String::from(error_message))
+                    return DeleteKeyPairError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteKeyPairError::Service(String::from(error_message))
+                    return DeleteKeyPairError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteKeyPairError::Unauthenticated(String::from(error_message))
+                    return DeleteKeyPairError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteKeyPairError::Validation(error_message.to_string())
+                    return DeleteKeyPairError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5443,30 +5443,30 @@ impl DeleteLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteLoadBalancerError::AccessDenied(String::from(error_message))
+                    return DeleteLoadBalancerError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return DeleteLoadBalancerError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteLoadBalancerError::InvalidInput(String::from(error_message))
+                    return DeleteLoadBalancerError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteLoadBalancerError::NotFound(String::from(error_message))
+                    return DeleteLoadBalancerError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DeleteLoadBalancerError::OperationFailure(String::from(error_message))
+                    return DeleteLoadBalancerError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteLoadBalancerError::Service(String::from(error_message))
+                    return DeleteLoadBalancerError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteLoadBalancerError::Unauthenticated(String::from(error_message))
+                    return DeleteLoadBalancerError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLoadBalancerError::Validation(error_message.to_string())
+                    return DeleteLoadBalancerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5565,42 +5565,42 @@ impl DeleteLoadBalancerTlsCertificateError {
                 "AccessDeniedException" => {
                     return DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return DeleteLoadBalancerTlsCertificateError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationFailureException" => {
                     return DeleteLoadBalancerTlsCertificateError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return DeleteLoadBalancerTlsCertificateError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthenticatedException" => {
                     return DeleteLoadBalancerTlsCertificateError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DeleteLoadBalancerTlsCertificateError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5697,26 +5697,26 @@ impl DetachDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetachDiskError::AccessDenied(String::from(error_message))
+                    return DetachDiskError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return DetachDiskError::AccountSetupInProgress(String::from(error_message))
+                    return DetachDiskError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DetachDiskError::InvalidInput(String::from(error_message))
+                    return DetachDiskError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DetachDiskError::NotFound(String::from(error_message))
+                    return DetachDiskError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DetachDiskError::OperationFailure(String::from(error_message))
+                    return DetachDiskError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return DetachDiskError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return DetachDiskError::Unauthenticated(String::from(error_message))
+                    return DetachDiskError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachDiskError::Validation(error_message.to_string())
+                    return DetachDiskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5813,42 +5813,42 @@ impl DetachInstancesFromLoadBalancerError {
                 "AccessDeniedException" => {
                     return DetachInstancesFromLoadBalancerError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return DetachInstancesFromLoadBalancerError::AccountSetupInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return DetachInstancesFromLoadBalancerError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return DetachInstancesFromLoadBalancerError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationFailureException" => {
                     return DetachInstancesFromLoadBalancerError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return DetachInstancesFromLoadBalancerError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthenticatedException" => {
                     return DetachInstancesFromLoadBalancerError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DetachInstancesFromLoadBalancerError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5945,28 +5945,28 @@ impl DetachStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetachStaticIpError::AccessDenied(String::from(error_message))
+                    return DetachStaticIpError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return DetachStaticIpError::AccountSetupInProgress(String::from(error_message))
+                    return DetachStaticIpError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DetachStaticIpError::InvalidInput(String::from(error_message))
+                    return DetachStaticIpError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DetachStaticIpError::NotFound(String::from(error_message))
+                    return DetachStaticIpError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return DetachStaticIpError::OperationFailure(String::from(error_message))
+                    return DetachStaticIpError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DetachStaticIpError::Service(String::from(error_message))
+                    return DetachStaticIpError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DetachStaticIpError::Unauthenticated(String::from(error_message))
+                    return DetachStaticIpError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachStaticIpError::Validation(error_message.to_string())
+                    return DetachStaticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6061,32 +6061,32 @@ impl DownloadDefaultKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DownloadDefaultKeyPairError::AccessDenied(String::from(error_message))
+                    return DownloadDefaultKeyPairError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return DownloadDefaultKeyPairError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DownloadDefaultKeyPairError::InvalidInput(String::from(error_message))
+                    return DownloadDefaultKeyPairError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DownloadDefaultKeyPairError::NotFound(String::from(error_message))
+                    return DownloadDefaultKeyPairError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return DownloadDefaultKeyPairError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DownloadDefaultKeyPairError::Service(String::from(error_message))
+                    return DownloadDefaultKeyPairError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return DownloadDefaultKeyPairError::Unauthenticated(String::from(error_message))
+                    return DownloadDefaultKeyPairError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DownloadDefaultKeyPairError::Validation(error_message.to_string())
+                    return DownloadDefaultKeyPairError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6183,28 +6183,28 @@ impl GetActiveNamesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetActiveNamesError::AccessDenied(String::from(error_message))
+                    return GetActiveNamesError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetActiveNamesError::AccountSetupInProgress(String::from(error_message))
+                    return GetActiveNamesError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetActiveNamesError::InvalidInput(String::from(error_message))
+                    return GetActiveNamesError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetActiveNamesError::NotFound(String::from(error_message))
+                    return GetActiveNamesError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetActiveNamesError::OperationFailure(String::from(error_message))
+                    return GetActiveNamesError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetActiveNamesError::Service(String::from(error_message))
+                    return GetActiveNamesError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetActiveNamesError::Unauthenticated(String::from(error_message))
+                    return GetActiveNamesError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetActiveNamesError::Validation(error_message.to_string())
+                    return GetActiveNamesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6299,28 +6299,28 @@ impl GetBlueprintsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetBlueprintsError::AccessDenied(String::from(error_message))
+                    return GetBlueprintsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetBlueprintsError::AccountSetupInProgress(String::from(error_message))
+                    return GetBlueprintsError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetBlueprintsError::InvalidInput(String::from(error_message))
+                    return GetBlueprintsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetBlueprintsError::NotFound(String::from(error_message))
+                    return GetBlueprintsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetBlueprintsError::OperationFailure(String::from(error_message))
+                    return GetBlueprintsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetBlueprintsError::Service(String::from(error_message))
+                    return GetBlueprintsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetBlueprintsError::Unauthenticated(String::from(error_message))
+                    return GetBlueprintsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBlueprintsError::Validation(error_message.to_string())
+                    return GetBlueprintsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6415,26 +6415,26 @@ impl GetBundlesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetBundlesError::AccessDenied(String::from(error_message))
+                    return GetBundlesError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetBundlesError::AccountSetupInProgress(String::from(error_message))
+                    return GetBundlesError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetBundlesError::InvalidInput(String::from(error_message))
+                    return GetBundlesError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetBundlesError::NotFound(String::from(error_message))
+                    return GetBundlesError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetBundlesError::OperationFailure(String::from(error_message))
+                    return GetBundlesError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetBundlesError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetBundlesError::Unauthenticated(String::from(error_message))
+                    return GetBundlesError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBundlesError::Validation(error_message.to_string())
+                    return GetBundlesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6529,21 +6529,21 @@ impl GetDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDiskError::AccessDenied(String::from(error_message))
+                    return GetDiskError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDiskError::AccountSetupInProgress(String::from(error_message))
+                    return GetDiskError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDiskError::InvalidInput(String::from(error_message))
+                    return GetDiskError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => return GetDiskError::NotFound(String::from(error_message)),
                 "OperationFailureException" => {
-                    return GetDiskError::OperationFailure(String::from(error_message))
+                    return GetDiskError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetDiskError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetDiskError::Unauthenticated(String::from(error_message))
+                    return GetDiskError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => return GetDiskError::Validation(error_message.to_string()),
                 _ => {}
@@ -6639,28 +6639,28 @@ impl GetDiskSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDiskSnapshotError::AccessDenied(String::from(error_message))
+                    return GetDiskSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDiskSnapshotError::AccountSetupInProgress(String::from(error_message))
+                    return GetDiskSnapshotError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDiskSnapshotError::InvalidInput(String::from(error_message))
+                    return GetDiskSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDiskSnapshotError::NotFound(String::from(error_message))
+                    return GetDiskSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetDiskSnapshotError::OperationFailure(String::from(error_message))
+                    return GetDiskSnapshotError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetDiskSnapshotError::Service(String::from(error_message))
+                    return GetDiskSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetDiskSnapshotError::Unauthenticated(String::from(error_message))
+                    return GetDiskSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDiskSnapshotError::Validation(error_message.to_string())
+                    return GetDiskSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6755,30 +6755,30 @@ impl GetDiskSnapshotsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDiskSnapshotsError::AccessDenied(String::from(error_message))
+                    return GetDiskSnapshotsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetDiskSnapshotsError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDiskSnapshotsError::InvalidInput(String::from(error_message))
+                    return GetDiskSnapshotsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDiskSnapshotsError::NotFound(String::from(error_message))
+                    return GetDiskSnapshotsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetDiskSnapshotsError::OperationFailure(String::from(error_message))
+                    return GetDiskSnapshotsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetDiskSnapshotsError::Service(String::from(error_message))
+                    return GetDiskSnapshotsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetDiskSnapshotsError::Unauthenticated(String::from(error_message))
+                    return GetDiskSnapshotsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDiskSnapshotsError::Validation(error_message.to_string())
+                    return GetDiskSnapshotsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6873,24 +6873,24 @@ impl GetDisksError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDisksError::AccessDenied(String::from(error_message))
+                    return GetDisksError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDisksError::AccountSetupInProgress(String::from(error_message))
+                    return GetDisksError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDisksError::InvalidInput(String::from(error_message))
+                    return GetDisksError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => return GetDisksError::NotFound(String::from(error_message)),
                 "OperationFailureException" => {
-                    return GetDisksError::OperationFailure(String::from(error_message))
+                    return GetDisksError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetDisksError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetDisksError::Unauthenticated(String::from(error_message))
+                    return GetDisksError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDisksError::Validation(error_message.to_string())
+                    return GetDisksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6985,24 +6985,24 @@ impl GetDomainError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDomainError::AccessDenied(String::from(error_message))
+                    return GetDomainError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDomainError::AccountSetupInProgress(String::from(error_message))
+                    return GetDomainError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDomainError::InvalidInput(String::from(error_message))
+                    return GetDomainError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => return GetDomainError::NotFound(String::from(error_message)),
                 "OperationFailureException" => {
-                    return GetDomainError::OperationFailure(String::from(error_message))
+                    return GetDomainError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetDomainError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetDomainError::Unauthenticated(String::from(error_message))
+                    return GetDomainError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDomainError::Validation(error_message.to_string())
+                    return GetDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7097,26 +7097,26 @@ impl GetDomainsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDomainsError::AccessDenied(String::from(error_message))
+                    return GetDomainsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDomainsError::AccountSetupInProgress(String::from(error_message))
+                    return GetDomainsError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDomainsError::InvalidInput(String::from(error_message))
+                    return GetDomainsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDomainsError::NotFound(String::from(error_message))
+                    return GetDomainsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetDomainsError::OperationFailure(String::from(error_message))
+                    return GetDomainsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetDomainsError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetDomainsError::Unauthenticated(String::from(error_message))
+                    return GetDomainsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDomainsError::Validation(error_message.to_string())
+                    return GetDomainsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7211,26 +7211,26 @@ impl GetInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceError::AccessDenied(String::from(error_message))
+                    return GetInstanceError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstanceError::AccountSetupInProgress(String::from(error_message))
+                    return GetInstanceError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceError::InvalidInput(String::from(error_message))
+                    return GetInstanceError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceError::NotFound(String::from(error_message))
+                    return GetInstanceError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceError::OperationFailure(String::from(error_message))
+                    return GetInstanceError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetInstanceError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetInstanceError::Unauthenticated(String::from(error_message))
+                    return GetInstanceError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceError::Validation(error_message.to_string())
+                    return GetInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7325,34 +7325,34 @@ impl GetInstanceAccessDetailsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceAccessDetailsError::AccessDenied(String::from(error_message))
+                    return GetInstanceAccessDetailsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetInstanceAccessDetailsError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceAccessDetailsError::InvalidInput(String::from(error_message))
+                    return GetInstanceAccessDetailsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceAccessDetailsError::NotFound(String::from(error_message))
+                    return GetInstanceAccessDetailsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return GetInstanceAccessDetailsError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return GetInstanceAccessDetailsError::Service(String::from(error_message))
+                    return GetInstanceAccessDetailsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return GetInstanceAccessDetailsError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetInstanceAccessDetailsError::Validation(error_message.to_string())
+                    return GetInstanceAccessDetailsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7449,30 +7449,30 @@ impl GetInstanceMetricDataError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceMetricDataError::AccessDenied(String::from(error_message))
+                    return GetInstanceMetricDataError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetInstanceMetricDataError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceMetricDataError::InvalidInput(String::from(error_message))
+                    return GetInstanceMetricDataError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceMetricDataError::NotFound(String::from(error_message))
+                    return GetInstanceMetricDataError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceMetricDataError::OperationFailure(String::from(error_message))
+                    return GetInstanceMetricDataError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetInstanceMetricDataError::Service(String::from(error_message))
+                    return GetInstanceMetricDataError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceMetricDataError::Unauthenticated(String::from(error_message))
+                    return GetInstanceMetricDataError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceMetricDataError::Validation(error_message.to_string())
+                    return GetInstanceMetricDataError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7569,30 +7569,30 @@ impl GetInstancePortStatesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstancePortStatesError::AccessDenied(String::from(error_message))
+                    return GetInstancePortStatesError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetInstancePortStatesError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstancePortStatesError::InvalidInput(String::from(error_message))
+                    return GetInstancePortStatesError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstancePortStatesError::NotFound(String::from(error_message))
+                    return GetInstancePortStatesError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstancePortStatesError::OperationFailure(String::from(error_message))
+                    return GetInstancePortStatesError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetInstancePortStatesError::Service(String::from(error_message))
+                    return GetInstancePortStatesError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstancePortStatesError::Unauthenticated(String::from(error_message))
+                    return GetInstancePortStatesError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstancePortStatesError::Validation(error_message.to_string())
+                    return GetInstancePortStatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7689,30 +7689,30 @@ impl GetInstanceSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceSnapshotError::AccessDenied(String::from(error_message))
+                    return GetInstanceSnapshotError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetInstanceSnapshotError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceSnapshotError::InvalidInput(String::from(error_message))
+                    return GetInstanceSnapshotError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceSnapshotError::NotFound(String::from(error_message))
+                    return GetInstanceSnapshotError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceSnapshotError::OperationFailure(String::from(error_message))
+                    return GetInstanceSnapshotError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetInstanceSnapshotError::Service(String::from(error_message))
+                    return GetInstanceSnapshotError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceSnapshotError::Unauthenticated(String::from(error_message))
+                    return GetInstanceSnapshotError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceSnapshotError::Validation(error_message.to_string())
+                    return GetInstanceSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7809,30 +7809,30 @@ impl GetInstanceSnapshotsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceSnapshotsError::AccessDenied(String::from(error_message))
+                    return GetInstanceSnapshotsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetInstanceSnapshotsError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceSnapshotsError::InvalidInput(String::from(error_message))
+                    return GetInstanceSnapshotsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceSnapshotsError::NotFound(String::from(error_message))
+                    return GetInstanceSnapshotsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceSnapshotsError::OperationFailure(String::from(error_message))
+                    return GetInstanceSnapshotsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetInstanceSnapshotsError::Service(String::from(error_message))
+                    return GetInstanceSnapshotsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceSnapshotsError::Unauthenticated(String::from(error_message))
+                    return GetInstanceSnapshotsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceSnapshotsError::Validation(error_message.to_string())
+                    return GetInstanceSnapshotsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7929,30 +7929,30 @@ impl GetInstanceStateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceStateError::AccessDenied(String::from(error_message))
+                    return GetInstanceStateError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetInstanceStateError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceStateError::InvalidInput(String::from(error_message))
+                    return GetInstanceStateError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceStateError::NotFound(String::from(error_message))
+                    return GetInstanceStateError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceStateError::OperationFailure(String::from(error_message))
+                    return GetInstanceStateError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetInstanceStateError::Service(String::from(error_message))
+                    return GetInstanceStateError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceStateError::Unauthenticated(String::from(error_message))
+                    return GetInstanceStateError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceStateError::Validation(error_message.to_string())
+                    return GetInstanceStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8047,28 +8047,28 @@ impl GetInstancesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstancesError::AccessDenied(String::from(error_message))
+                    return GetInstancesError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstancesError::AccountSetupInProgress(String::from(error_message))
+                    return GetInstancesError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetInstancesError::InvalidInput(String::from(error_message))
+                    return GetInstancesError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstancesError::NotFound(String::from(error_message))
+                    return GetInstancesError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetInstancesError::OperationFailure(String::from(error_message))
+                    return GetInstancesError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetInstancesError::Service(String::from(error_message))
+                    return GetInstancesError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstancesError::Unauthenticated(String::from(error_message))
+                    return GetInstancesError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstancesError::Validation(error_message.to_string())
+                    return GetInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8163,26 +8163,26 @@ impl GetKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetKeyPairError::AccessDenied(String::from(error_message))
+                    return GetKeyPairError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetKeyPairError::AccountSetupInProgress(String::from(error_message))
+                    return GetKeyPairError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetKeyPairError::InvalidInput(String::from(error_message))
+                    return GetKeyPairError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetKeyPairError::NotFound(String::from(error_message))
+                    return GetKeyPairError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetKeyPairError::OperationFailure(String::from(error_message))
+                    return GetKeyPairError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetKeyPairError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetKeyPairError::Unauthenticated(String::from(error_message))
+                    return GetKeyPairError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetKeyPairError::Validation(error_message.to_string())
+                    return GetKeyPairError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8277,26 +8277,26 @@ impl GetKeyPairsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetKeyPairsError::AccessDenied(String::from(error_message))
+                    return GetKeyPairsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetKeyPairsError::AccountSetupInProgress(String::from(error_message))
+                    return GetKeyPairsError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetKeyPairsError::InvalidInput(String::from(error_message))
+                    return GetKeyPairsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetKeyPairsError::NotFound(String::from(error_message))
+                    return GetKeyPairsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetKeyPairsError::OperationFailure(String::from(error_message))
+                    return GetKeyPairsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetKeyPairsError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetKeyPairsError::Unauthenticated(String::from(error_message))
+                    return GetKeyPairsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetKeyPairsError::Validation(error_message.to_string())
+                    return GetKeyPairsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8391,28 +8391,28 @@ impl GetLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancerError::AccessDenied(String::from(error_message))
+                    return GetLoadBalancerError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetLoadBalancerError::AccountSetupInProgress(String::from(error_message))
+                    return GetLoadBalancerError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetLoadBalancerError::InvalidInput(String::from(error_message))
+                    return GetLoadBalancerError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancerError::NotFound(String::from(error_message))
+                    return GetLoadBalancerError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetLoadBalancerError::OperationFailure(String::from(error_message))
+                    return GetLoadBalancerError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancerError::Service(String::from(error_message))
+                    return GetLoadBalancerError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetLoadBalancerError::Unauthenticated(String::from(error_message))
+                    return GetLoadBalancerError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLoadBalancerError::Validation(error_message.to_string())
+                    return GetLoadBalancerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8507,34 +8507,34 @@ impl GetLoadBalancerMetricDataError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancerMetricDataError::AccessDenied(String::from(error_message))
+                    return GetLoadBalancerMetricDataError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetLoadBalancerMetricDataError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetLoadBalancerMetricDataError::InvalidInput(String::from(error_message))
+                    return GetLoadBalancerMetricDataError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancerMetricDataError::NotFound(String::from(error_message))
+                    return GetLoadBalancerMetricDataError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return GetLoadBalancerMetricDataError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancerMetricDataError::Service(String::from(error_message))
+                    return GetLoadBalancerMetricDataError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return GetLoadBalancerMetricDataError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetLoadBalancerMetricDataError::Validation(error_message.to_string())
+                    return GetLoadBalancerMetricDataError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8633,40 +8633,40 @@ impl GetLoadBalancerTlsCertificatesError {
                 "AccessDeniedException" => {
                     return GetLoadBalancerTlsCertificatesError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return GetLoadBalancerTlsCertificatesError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return GetLoadBalancerTlsCertificatesError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationFailureException" => {
                     return GetLoadBalancerTlsCertificatesError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancerTlsCertificatesError::Service(String::from(error_message))
+                    return GetLoadBalancerTlsCertificatesError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return GetLoadBalancerTlsCertificatesError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetLoadBalancerTlsCertificatesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8763,30 +8763,30 @@ impl GetLoadBalancersError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancersError::AccessDenied(String::from(error_message))
+                    return GetLoadBalancersError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetLoadBalancersError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetLoadBalancersError::InvalidInput(String::from(error_message))
+                    return GetLoadBalancersError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancersError::NotFound(String::from(error_message))
+                    return GetLoadBalancersError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetLoadBalancersError::OperationFailure(String::from(error_message))
+                    return GetLoadBalancersError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancersError::Service(String::from(error_message))
+                    return GetLoadBalancersError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetLoadBalancersError::Unauthenticated(String::from(error_message))
+                    return GetLoadBalancersError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLoadBalancersError::Validation(error_message.to_string())
+                    return GetLoadBalancersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8881,28 +8881,28 @@ impl GetOperationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetOperationError::AccessDenied(String::from(error_message))
+                    return GetOperationError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetOperationError::AccountSetupInProgress(String::from(error_message))
+                    return GetOperationError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetOperationError::InvalidInput(String::from(error_message))
+                    return GetOperationError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetOperationError::NotFound(String::from(error_message))
+                    return GetOperationError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetOperationError::OperationFailure(String::from(error_message))
+                    return GetOperationError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetOperationError::Service(String::from(error_message))
+                    return GetOperationError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetOperationError::Unauthenticated(String::from(error_message))
+                    return GetOperationError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetOperationError::Validation(error_message.to_string())
+                    return GetOperationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8997,28 +8997,28 @@ impl GetOperationsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetOperationsError::AccessDenied(String::from(error_message))
+                    return GetOperationsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetOperationsError::AccountSetupInProgress(String::from(error_message))
+                    return GetOperationsError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetOperationsError::InvalidInput(String::from(error_message))
+                    return GetOperationsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetOperationsError::NotFound(String::from(error_message))
+                    return GetOperationsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetOperationsError::OperationFailure(String::from(error_message))
+                    return GetOperationsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetOperationsError::Service(String::from(error_message))
+                    return GetOperationsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetOperationsError::Unauthenticated(String::from(error_message))
+                    return GetOperationsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetOperationsError::Validation(error_message.to_string())
+                    return GetOperationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9113,34 +9113,34 @@ impl GetOperationsForResourceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetOperationsForResourceError::AccessDenied(String::from(error_message))
+                    return GetOperationsForResourceError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return GetOperationsForResourceError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetOperationsForResourceError::InvalidInput(String::from(error_message))
+                    return GetOperationsForResourceError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetOperationsForResourceError::NotFound(String::from(error_message))
+                    return GetOperationsForResourceError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return GetOperationsForResourceError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return GetOperationsForResourceError::Service(String::from(error_message))
+                    return GetOperationsForResourceError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return GetOperationsForResourceError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetOperationsForResourceError::Validation(error_message.to_string())
+                    return GetOperationsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9237,26 +9237,26 @@ impl GetRegionsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRegionsError::AccessDenied(String::from(error_message))
+                    return GetRegionsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRegionsError::AccountSetupInProgress(String::from(error_message))
+                    return GetRegionsError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetRegionsError::InvalidInput(String::from(error_message))
+                    return GetRegionsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetRegionsError::NotFound(String::from(error_message))
+                    return GetRegionsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetRegionsError::OperationFailure(String::from(error_message))
+                    return GetRegionsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetRegionsError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetRegionsError::Unauthenticated(String::from(error_message))
+                    return GetRegionsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRegionsError::Validation(error_message.to_string())
+                    return GetRegionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9351,26 +9351,26 @@ impl GetStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetStaticIpError::AccessDenied(String::from(error_message))
+                    return GetStaticIpError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetStaticIpError::AccountSetupInProgress(String::from(error_message))
+                    return GetStaticIpError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetStaticIpError::InvalidInput(String::from(error_message))
+                    return GetStaticIpError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetStaticIpError::NotFound(String::from(error_message))
+                    return GetStaticIpError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetStaticIpError::OperationFailure(String::from(error_message))
+                    return GetStaticIpError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return GetStaticIpError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return GetStaticIpError::Unauthenticated(String::from(error_message))
+                    return GetStaticIpError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetStaticIpError::Validation(error_message.to_string())
+                    return GetStaticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9465,28 +9465,28 @@ impl GetStaticIpsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetStaticIpsError::AccessDenied(String::from(error_message))
+                    return GetStaticIpsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetStaticIpsError::AccountSetupInProgress(String::from(error_message))
+                    return GetStaticIpsError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetStaticIpsError::InvalidInput(String::from(error_message))
+                    return GetStaticIpsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetStaticIpsError::NotFound(String::from(error_message))
+                    return GetStaticIpsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return GetStaticIpsError::OperationFailure(String::from(error_message))
+                    return GetStaticIpsError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetStaticIpsError::Service(String::from(error_message))
+                    return GetStaticIpsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return GetStaticIpsError::Unauthenticated(String::from(error_message))
+                    return GetStaticIpsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetStaticIpsError::Validation(error_message.to_string())
+                    return GetStaticIpsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9581,28 +9581,28 @@ impl ImportKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ImportKeyPairError::AccessDenied(String::from(error_message))
+                    return ImportKeyPairError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return ImportKeyPairError::AccountSetupInProgress(String::from(error_message))
+                    return ImportKeyPairError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ImportKeyPairError::InvalidInput(String::from(error_message))
+                    return ImportKeyPairError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ImportKeyPairError::NotFound(String::from(error_message))
+                    return ImportKeyPairError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return ImportKeyPairError::OperationFailure(String::from(error_message))
+                    return ImportKeyPairError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ImportKeyPairError::Service(String::from(error_message))
+                    return ImportKeyPairError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return ImportKeyPairError::Unauthenticated(String::from(error_message))
+                    return ImportKeyPairError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ImportKeyPairError::Validation(error_message.to_string())
+                    return ImportKeyPairError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9697,26 +9697,26 @@ impl IsVpcPeeredError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return IsVpcPeeredError::AccessDenied(String::from(error_message))
+                    return IsVpcPeeredError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return IsVpcPeeredError::AccountSetupInProgress(String::from(error_message))
+                    return IsVpcPeeredError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return IsVpcPeeredError::InvalidInput(String::from(error_message))
+                    return IsVpcPeeredError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return IsVpcPeeredError::NotFound(String::from(error_message))
+                    return IsVpcPeeredError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return IsVpcPeeredError::OperationFailure(String::from(error_message))
+                    return IsVpcPeeredError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return IsVpcPeeredError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return IsVpcPeeredError::Unauthenticated(String::from(error_message))
+                    return IsVpcPeeredError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return IsVpcPeeredError::Validation(error_message.to_string())
+                    return IsVpcPeeredError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9811,34 +9811,34 @@ impl OpenInstancePublicPortsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return OpenInstancePublicPortsError::AccessDenied(String::from(error_message))
+                    return OpenInstancePublicPortsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return OpenInstancePublicPortsError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return OpenInstancePublicPortsError::InvalidInput(String::from(error_message))
+                    return OpenInstancePublicPortsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return OpenInstancePublicPortsError::NotFound(String::from(error_message))
+                    return OpenInstancePublicPortsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return OpenInstancePublicPortsError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return OpenInstancePublicPortsError::Service(String::from(error_message))
+                    return OpenInstancePublicPortsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return OpenInstancePublicPortsError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return OpenInstancePublicPortsError::Validation(error_message.to_string())
+                    return OpenInstancePublicPortsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9935,21 +9935,21 @@ impl PeerVpcError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return PeerVpcError::AccessDenied(String::from(error_message))
+                    return PeerVpcError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return PeerVpcError::AccountSetupInProgress(String::from(error_message))
+                    return PeerVpcError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return PeerVpcError::InvalidInput(String::from(error_message))
+                    return PeerVpcError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => return PeerVpcError::NotFound(String::from(error_message)),
                 "OperationFailureException" => {
-                    return PeerVpcError::OperationFailure(String::from(error_message))
+                    return PeerVpcError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return PeerVpcError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return PeerVpcError::Unauthenticated(String::from(error_message))
+                    return PeerVpcError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => return PeerVpcError::Validation(error_message.to_string()),
                 _ => {}
@@ -10045,32 +10045,32 @@ impl PutInstancePublicPortsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return PutInstancePublicPortsError::AccessDenied(String::from(error_message))
+                    return PutInstancePublicPortsError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return PutInstancePublicPortsError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return PutInstancePublicPortsError::InvalidInput(String::from(error_message))
+                    return PutInstancePublicPortsError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutInstancePublicPortsError::NotFound(String::from(error_message))
+                    return PutInstancePublicPortsError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return PutInstancePublicPortsError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return PutInstancePublicPortsError::Service(String::from(error_message))
+                    return PutInstancePublicPortsError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return PutInstancePublicPortsError::Unauthenticated(String::from(error_message))
+                    return PutInstancePublicPortsError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutInstancePublicPortsError::Validation(error_message.to_string())
+                    return PutInstancePublicPortsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10167,28 +10167,28 @@ impl RebootInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RebootInstanceError::AccessDenied(String::from(error_message))
+                    return RebootInstanceError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return RebootInstanceError::AccountSetupInProgress(String::from(error_message))
+                    return RebootInstanceError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return RebootInstanceError::InvalidInput(String::from(error_message))
+                    return RebootInstanceError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return RebootInstanceError::NotFound(String::from(error_message))
+                    return RebootInstanceError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return RebootInstanceError::OperationFailure(String::from(error_message))
+                    return RebootInstanceError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return RebootInstanceError::Service(String::from(error_message))
+                    return RebootInstanceError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return RebootInstanceError::Unauthenticated(String::from(error_message))
+                    return RebootInstanceError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RebootInstanceError::Validation(error_message.to_string())
+                    return RebootInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10283,28 +10283,28 @@ impl ReleaseStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ReleaseStaticIpError::AccessDenied(String::from(error_message))
+                    return ReleaseStaticIpError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return ReleaseStaticIpError::AccountSetupInProgress(String::from(error_message))
+                    return ReleaseStaticIpError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ReleaseStaticIpError::InvalidInput(String::from(error_message))
+                    return ReleaseStaticIpError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ReleaseStaticIpError::NotFound(String::from(error_message))
+                    return ReleaseStaticIpError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return ReleaseStaticIpError::OperationFailure(String::from(error_message))
+                    return ReleaseStaticIpError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ReleaseStaticIpError::Service(String::from(error_message))
+                    return ReleaseStaticIpError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return ReleaseStaticIpError::Unauthenticated(String::from(error_message))
+                    return ReleaseStaticIpError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ReleaseStaticIpError::Validation(error_message.to_string())
+                    return ReleaseStaticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10399,28 +10399,28 @@ impl StartInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartInstanceError::AccessDenied(String::from(error_message))
+                    return StartInstanceError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return StartInstanceError::AccountSetupInProgress(String::from(error_message))
+                    return StartInstanceError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StartInstanceError::InvalidInput(String::from(error_message))
+                    return StartInstanceError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StartInstanceError::NotFound(String::from(error_message))
+                    return StartInstanceError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return StartInstanceError::OperationFailure(String::from(error_message))
+                    return StartInstanceError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return StartInstanceError::Service(String::from(error_message))
+                    return StartInstanceError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return StartInstanceError::Unauthenticated(String::from(error_message))
+                    return StartInstanceError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartInstanceError::Validation(error_message.to_string())
+                    return StartInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10515,28 +10515,28 @@ impl StopInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StopInstanceError::AccessDenied(String::from(error_message))
+                    return StopInstanceError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return StopInstanceError::AccountSetupInProgress(String::from(error_message))
+                    return StopInstanceError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StopInstanceError::InvalidInput(String::from(error_message))
+                    return StopInstanceError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StopInstanceError::NotFound(String::from(error_message))
+                    return StopInstanceError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return StopInstanceError::OperationFailure(String::from(error_message))
+                    return StopInstanceError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return StopInstanceError::Service(String::from(error_message))
+                    return StopInstanceError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return StopInstanceError::Unauthenticated(String::from(error_message))
+                    return StopInstanceError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopInstanceError::Validation(error_message.to_string())
+                    return StopInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10631,24 +10631,24 @@ impl UnpeerVpcError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UnpeerVpcError::AccessDenied(String::from(error_message))
+                    return UnpeerVpcError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
-                    return UnpeerVpcError::AccountSetupInProgress(String::from(error_message))
+                    return UnpeerVpcError::AccountSetupInProgress(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UnpeerVpcError::InvalidInput(String::from(error_message))
+                    return UnpeerVpcError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => return UnpeerVpcError::NotFound(String::from(error_message)),
                 "OperationFailureException" => {
-                    return UnpeerVpcError::OperationFailure(String::from(error_message))
+                    return UnpeerVpcError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => return UnpeerVpcError::Service(String::from(error_message)),
                 "UnauthenticatedException" => {
-                    return UnpeerVpcError::Unauthenticated(String::from(error_message))
+                    return UnpeerVpcError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UnpeerVpcError::Validation(error_message.to_string())
+                    return UnpeerVpcError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10743,30 +10743,30 @@ impl UpdateDomainEntryError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateDomainEntryError::AccessDenied(String::from(error_message))
+                    return UpdateDomainEntryError::AccessDenied(String::from(error_message));
                 }
                 "AccountSetupInProgressException" => {
                     return UpdateDomainEntryError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateDomainEntryError::InvalidInput(String::from(error_message))
+                    return UpdateDomainEntryError::InvalidInput(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDomainEntryError::NotFound(String::from(error_message))
+                    return UpdateDomainEntryError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
-                    return UpdateDomainEntryError::OperationFailure(String::from(error_message))
+                    return UpdateDomainEntryError::OperationFailure(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return UpdateDomainEntryError::Service(String::from(error_message))
+                    return UpdateDomainEntryError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
-                    return UpdateDomainEntryError::Unauthenticated(String::from(error_message))
+                    return UpdateDomainEntryError::Unauthenticated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDomainEntryError::Validation(error_message.to_string())
+                    return UpdateDomainEntryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10865,36 +10865,36 @@ impl UpdateLoadBalancerAttributeError {
                 "AccessDeniedException" => {
                     return UpdateLoadBalancerAttributeError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountSetupInProgressException" => {
                     return UpdateLoadBalancerAttributeError::AccountSetupInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return UpdateLoadBalancerAttributeError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateLoadBalancerAttributeError::NotFound(String::from(error_message))
+                    return UpdateLoadBalancerAttributeError::NotFound(String::from(error_message));
                 }
                 "OperationFailureException" => {
                     return UpdateLoadBalancerAttributeError::OperationFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateLoadBalancerAttributeError::Service(String::from(error_message))
+                    return UpdateLoadBalancerAttributeError::Service(String::from(error_message));
                 }
                 "UnauthenticatedException" => {
                     return UpdateLoadBalancerAttributeError::Unauthenticated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateLoadBalancerAttributeError::Validation(error_message.to_string())
+                    return UpdateLoadBalancerAttributeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -8659,12 +8659,12 @@ impl AttachInstancesError {
                     "ResourceContention" => {
                         return AttachInstancesError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceLinkedRoleFailure" => {
                         return AttachInstancesError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8751,12 +8751,12 @@ impl AttachLoadBalancerTargetGroupsError {
                     "ResourceContention" => {
                         return AttachLoadBalancerTargetGroupsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ServiceLinkedRoleFailure" => {
                         return AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -8845,12 +8845,12 @@ impl AttachLoadBalancersError {
                     "ResourceContention" => {
                         return AttachLoadBalancersError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceLinkedRoleFailure" => {
                         return AttachLoadBalancersError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8937,7 +8937,7 @@ impl CompleteLifecycleActionError {
                     "ResourceContention" => {
                         return CompleteLifecycleActionError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9029,22 +9029,22 @@ impl CreateAutoScalingGroupError {
                     "AlreadyExists" => {
                         return CreateAutoScalingGroupError::AlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateAutoScalingGroupError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return CreateAutoScalingGroupError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceLinkedRoleFailure" => {
                         return CreateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9137,17 +9137,17 @@ impl CreateLaunchConfigurationError {
                     "AlreadyExists" => {
                         return CreateLaunchConfigurationError::AlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateLaunchConfigurationError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return CreateLaunchConfigurationError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9241,22 +9241,22 @@ impl CreateOrUpdateTagsError {
                     "AlreadyExists" => {
                         return CreateOrUpdateTagsError::AlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateOrUpdateTagsError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return CreateOrUpdateTagsError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return CreateOrUpdateTagsError::ResourceInUseFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9349,17 +9349,17 @@ impl DeleteAutoScalingGroupError {
                     "ResourceContention" => {
                         return DeleteAutoScalingGroupError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return DeleteAutoScalingGroupError::ResourceInUseFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ScalingActivityInProgress" => {
                         return DeleteAutoScalingGroupError::ScalingActivityInProgressFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9449,12 +9449,12 @@ impl DeleteLaunchConfigurationError {
                     "ResourceContention" => {
                         return DeleteLaunchConfigurationError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ResourceInUse" => {
                         return DeleteLaunchConfigurationError::ResourceInUseFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9541,7 +9541,7 @@ impl DeleteLifecycleHookError {
                     "ResourceContention" => {
                         return DeleteLifecycleHookError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9627,7 +9627,7 @@ impl DeleteNotificationConfigurationError {
                     "ResourceContention" => {
                         return DeleteNotificationConfigurationError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9715,12 +9715,12 @@ impl DeletePolicyError {
                     "ResourceContention" => {
                         return DeletePolicyError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceLinkedRoleFailure" => {
                         return DeletePolicyError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9805,7 +9805,7 @@ impl DeleteScheduledActionError {
                     "ResourceContention" => {
                         return DeleteScheduledActionError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9893,12 +9893,12 @@ impl DeleteTagsError {
                     "ResourceContention" => {
                         return DeleteTagsError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return DeleteTagsError::ResourceInUseFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9983,7 +9983,7 @@ impl DescribeAccountLimitsError {
                     "ResourceContention" => {
                         return DescribeAccountLimitsError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10069,7 +10069,7 @@ impl DescribeAdjustmentTypesError {
                     "ResourceContention" => {
                         return DescribeAdjustmentTypesError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10157,12 +10157,12 @@ impl DescribeAutoScalingGroupsError {
                     "InvalidNextToken" => {
                         return DescribeAutoScalingGroupsError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribeAutoScalingGroupsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10251,12 +10251,12 @@ impl DescribeAutoScalingInstancesError {
                     "InvalidNextToken" => {
                         return DescribeAutoScalingInstancesError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribeAutoScalingInstancesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10343,7 +10343,7 @@ impl DescribeAutoScalingNotificationTypesError {
                     "ResourceContention" => {
                         return DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10431,12 +10431,12 @@ impl DescribeLaunchConfigurationsError {
                     "InvalidNextToken" => {
                         return DescribeLaunchConfigurationsError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribeLaunchConfigurationsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10523,7 +10523,7 @@ impl DescribeLifecycleHookTypesError {
                     "ResourceContention" => {
                         return DescribeLifecycleHookTypesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10609,7 +10609,7 @@ impl DescribeLifecycleHooksError {
                     "ResourceContention" => {
                         return DescribeLifecycleHooksError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10695,7 +10695,7 @@ impl DescribeLoadBalancerTargetGroupsError {
                     "ResourceContention" => {
                         return DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10781,7 +10781,7 @@ impl DescribeLoadBalancersError {
                     "ResourceContention" => {
                         return DescribeLoadBalancersError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10867,7 +10867,7 @@ impl DescribeMetricCollectionTypesError {
                     "ResourceContention" => {
                         return DescribeMetricCollectionTypesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10955,12 +10955,12 @@ impl DescribeNotificationConfigurationsError {
                     "InvalidNextToken" => {
                         return DescribeNotificationConfigurationsError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ResourceContention" => {
                         return DescribeNotificationConfigurationsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11051,17 +11051,17 @@ impl DescribePoliciesError {
                     "InvalidNextToken" => {
                         return DescribePoliciesError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribePoliciesError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceLinkedRoleFailure" => {
                         return DescribePoliciesError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11149,12 +11149,12 @@ impl DescribeScalingActivitiesError {
                     "InvalidNextToken" => {
                         return DescribeScalingActivitiesError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribeScalingActivitiesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11241,7 +11241,7 @@ impl DescribeScalingProcessTypesError {
                     "ResourceContention" => {
                         return DescribeScalingProcessTypesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11329,12 +11329,12 @@ impl DescribeScheduledActionsError {
                     "InvalidNextToken" => {
                         return DescribeScheduledActionsError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribeScheduledActionsError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11423,12 +11423,12 @@ impl DescribeTagsError {
                     "InvalidNextToken" => {
                         return DescribeTagsError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return DescribeTagsError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11513,7 +11513,7 @@ impl DescribeTerminationPolicyTypesError {
                     "ResourceContention" => {
                         return DescribeTerminationPolicyTypesError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11599,7 +11599,7 @@ impl DetachInstancesError {
                     "ResourceContention" => {
                         return DetachInstancesError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11683,7 +11683,7 @@ impl DetachLoadBalancerTargetGroupsError {
                     "ResourceContention" => {
                         return DetachLoadBalancerTargetGroupsError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11769,7 +11769,7 @@ impl DetachLoadBalancersError {
                     "ResourceContention" => {
                         return DetachLoadBalancersError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11855,7 +11855,7 @@ impl DisableMetricsCollectionError {
                     "ResourceContention" => {
                         return DisableMetricsCollectionError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11941,7 +11941,7 @@ impl EnableMetricsCollectionError {
                     "ResourceContention" => {
                         return EnableMetricsCollectionError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12027,7 +12027,7 @@ impl EnterStandbyError {
                     "ResourceContention" => {
                         return EnterStandbyError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12113,12 +12113,12 @@ impl ExecutePolicyError {
                     "ResourceContention" => {
                         return ExecutePolicyError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ScalingActivityInProgress" => {
                         return ExecutePolicyError::ScalingActivityInProgressFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12203,7 +12203,7 @@ impl ExitStandbyError {
                     "ResourceContention" => {
                         return ExitStandbyError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12289,12 +12289,12 @@ impl PutLifecycleHookError {
                     "LimitExceeded" => {
                         return PutLifecycleHookError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return PutLifecycleHookError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12383,17 +12383,17 @@ impl PutNotificationConfigurationError {
                     "LimitExceeded" => {
                         return PutNotificationConfigurationError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return PutNotificationConfigurationError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ServiceLinkedRoleFailure" => {
                         return PutNotificationConfigurationError::ServiceLinkedRoleFailure(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12485,17 +12485,17 @@ impl PutScalingPolicyError {
                     "LimitExceeded" => {
                         return PutScalingPolicyError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return PutScalingPolicyError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceLinkedRoleFailure" => {
                         return PutScalingPolicyError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12585,17 +12585,17 @@ impl PutScheduledUpdateGroupActionError {
                     "AlreadyExists" => {
                         return PutScheduledUpdateGroupActionError::AlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return PutScheduledUpdateGroupActionError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return PutScheduledUpdateGroupActionError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12683,7 +12683,7 @@ impl RecordLifecycleActionHeartbeatError {
                     "ResourceContention" => {
                         return RecordLifecycleActionHeartbeatError::ResourceContentionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12771,12 +12771,12 @@ impl ResumeProcessesError {
                     "ResourceContention" => {
                         return ResumeProcessesError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return ResumeProcessesError::ResourceInUseFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12863,12 +12863,12 @@ impl SetDesiredCapacityError {
                     "ResourceContention" => {
                         return SetDesiredCapacityError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ScalingActivityInProgress" => {
                         return SetDesiredCapacityError::ScalingActivityInProgressFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12955,7 +12955,7 @@ impl SetInstanceHealthError {
                     "ResourceContention" => {
                         return SetInstanceHealthError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13043,12 +13043,12 @@ impl SetInstanceProtectionError {
                     "LimitExceeded" => {
                         return SetInstanceProtectionError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceContention" => {
                         return SetInstanceProtectionError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13137,12 +13137,12 @@ impl SuspendProcessesError {
                     "ResourceContention" => {
                         return SuspendProcessesError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return SuspendProcessesError::ResourceInUseFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13317,17 +13317,17 @@ impl UpdateAutoScalingGroupError {
                     "ResourceContention" => {
                         return UpdateAutoScalingGroupError::ResourceContentionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ScalingActivityInProgress" => {
                         return UpdateAutoScalingGroupError::ScalingActivityInProgressFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ServiceLinkedRoleFailure" => {
                         return UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

@@ -8809,17 +8809,17 @@ impl CloneReceiptRuleSetError {
                     "AlreadyExists" => {
                         return CloneReceiptRuleSetError::AlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CloneReceiptRuleSetError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleSetDoesNotExist" => {
                         return CloneReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8911,17 +8911,17 @@ impl CreateConfigurationSetError {
                     "ConfigurationSetAlreadyExists" => {
                         return CreateConfigurationSetError::ConfigurationSetAlreadyExists(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidConfigurationSet" => {
                         return CreateConfigurationSetError::InvalidConfigurationSet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateConfigurationSetError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9294,12 +9294,12 @@ impl CreateReceiptFilterError {
                     "AlreadyExists" => {
                         return CreateReceiptFilterError::AlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateReceiptFilterError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9398,37 +9398,37 @@ impl CreateReceiptRuleError {
                     "AlreadyExists" => {
                         return CreateReceiptRuleError::AlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLambdaFunction" => {
                         return CreateReceiptRuleError::InvalidLambdaFunction(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidS3Configuration" => {
                         return CreateReceiptRuleError::InvalidS3Configuration(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSnsTopic" => {
                         return CreateReceiptRuleError::InvalidSnsTopic(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateReceiptRuleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleDoesNotExist" => {
                         return CreateReceiptRuleError::RuleDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleSetDoesNotExist" => {
                         return CreateReceiptRuleError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9522,12 +9522,12 @@ impl CreateReceiptRuleSetError {
                     "AlreadyExists" => {
                         return CreateReceiptRuleSetError::AlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateReceiptRuleSetError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9618,17 +9618,17 @@ impl CreateTemplateError {
                     "AlreadyExists" => {
                         return CreateTemplateError::AlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTemplate" => {
                         return CreateTemplateError::InvalidTemplate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateTemplateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9714,7 +9714,7 @@ impl DeleteConfigurationSetError {
                     "ConfigurationSetDoesNotExist" => {
                         return DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10286,7 +10286,7 @@ impl DeleteReceiptRuleError {
                     "RuleSetDoesNotExist" => {
                         return DeleteReceiptRuleError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10372,7 +10372,7 @@ impl DeleteReceiptRuleSetError {
                     "CannotDelete" => {
                         return DeleteReceiptRuleSetError::CannotDelete(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10690,7 +10690,7 @@ impl DescribeConfigurationSetError {
                     "ConfigurationSetDoesNotExist" => {
                         return DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10778,12 +10778,12 @@ impl DescribeReceiptRuleError {
                     "RuleDoesNotExist" => {
                         return DescribeReceiptRuleError::RuleDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleSetDoesNotExist" => {
                         return DescribeReceiptRuleError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10870,7 +10870,7 @@ impl DescribeReceiptRuleSetError {
                     "RuleSetDoesNotExist" => {
                         return DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11657,7 +11657,7 @@ impl GetTemplateError {
                     "TemplateDoesNotExist" => {
                         return GetTemplateError::TemplateDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12361,7 +12361,7 @@ impl PutIdentityPolicyError {
                     "InvalidPolicy" => {
                         return PutIdentityPolicyError::InvalidPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12449,12 +12449,12 @@ impl ReorderReceiptRuleSetError {
                     "RuleDoesNotExist" => {
                         return ReorderReceiptRuleSetError::RuleDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleSetDoesNotExist" => {
                         return ReorderReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12539,7 +12539,7 @@ impl SendBounceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MessageRejected" => {
-                        return SendBounceError::MessageRejected(String::from(parsed_error.message))
+                        return SendBounceError::MessageRejected(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -12633,32 +12633,32 @@ impl SendBulkTemplatedEmailError {
                     "AccountSendingPausedException" => {
                         return SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MessageRejected" => {
                         return SendBulkTemplatedEmailError::MessageRejected(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TemplateDoesNotExist" => {
                         return SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12852,25 +12852,25 @@ impl SendEmailError {
                     "AccountSendingPausedException" => {
                         return SendEmailError::AccountSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return SendEmailError::ConfigurationSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return SendEmailError::ConfigurationSetSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return SendEmailError::MailFromDomainNotVerified(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MessageRejected" => {
-                        return SendEmailError::MessageRejected(String::from(parsed_error.message))
+                        return SendEmailError::MessageRejected(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -12966,27 +12966,27 @@ impl SendRawEmailError {
                     "AccountSendingPausedException" => {
                         return SendRawEmailError::AccountSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return SendRawEmailError::ConfigurationSetSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return SendRawEmailError::MailFromDomainNotVerified(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MessageRejected" => {
                         return SendRawEmailError::MessageRejected(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13084,32 +13084,32 @@ impl SendTemplatedEmailError {
                     "AccountSendingPausedException" => {
                         return SendTemplatedEmailError::AccountSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MessageRejected" => {
                         return SendTemplatedEmailError::MessageRejected(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TemplateDoesNotExist" => {
                         return SendTemplatedEmailError::TemplateDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13200,7 +13200,7 @@ impl SetActiveReceiptRuleSetError {
                     "RuleSetDoesNotExist" => {
                         return SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13682,12 +13682,12 @@ impl SetReceiptRulePositionError {
                     "RuleDoesNotExist" => {
                         return SetReceiptRulePositionError::RuleDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleSetDoesNotExist" => {
                         return SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13778,17 +13778,17 @@ impl TestRenderTemplateError {
                     "InvalidRenderingParameter" => {
                         return TestRenderTemplateError::InvalidRenderingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingRenderingAttribute" => {
                         return TestRenderTemplateError::MissingRenderingAttribute(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TemplateDoesNotExist" => {
                         return TestRenderTemplateError::TemplateDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14413,32 +14413,32 @@ impl UpdateReceiptRuleError {
                     "InvalidLambdaFunction" => {
                         return UpdateReceiptRuleError::InvalidLambdaFunction(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidS3Configuration" => {
                         return UpdateReceiptRuleError::InvalidS3Configuration(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSnsTopic" => {
                         return UpdateReceiptRuleError::InvalidSnsTopic(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateReceiptRuleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleDoesNotExist" => {
                         return UpdateReceiptRuleError::RuleDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleSetDoesNotExist" => {
                         return UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14531,12 +14531,12 @@ impl UpdateTemplateError {
                     "InvalidTemplate" => {
                         return UpdateTemplateError::InvalidTemplate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TemplateDoesNotExist" => {
                         return UpdateTemplateError::TemplateDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

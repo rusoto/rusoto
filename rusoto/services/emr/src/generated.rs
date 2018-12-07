@@ -2404,13 +2404,13 @@ impl AddInstanceFleetError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return AddInstanceFleetError::InternalServer(String::from(error_message))
+                    return AddInstanceFleetError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return AddInstanceFleetError::InvalidRequest(String::from(error_message))
+                    return AddInstanceFleetError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddInstanceFleetError::Validation(error_message.to_string())
+                    return AddInstanceFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2488,10 +2488,10 @@ impl AddInstanceGroupsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddInstanceGroupsError::InternalServerError(String::from(error_message))
+                    return AddInstanceGroupsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddInstanceGroupsError::Validation(error_message.to_string())
+                    return AddInstanceGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2570,10 +2570,10 @@ impl AddJobFlowStepsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddJobFlowStepsError::InternalServerError(String::from(error_message))
+                    return AddJobFlowStepsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddJobFlowStepsError::Validation(error_message.to_string())
+                    return AddJobFlowStepsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2652,10 +2652,10 @@ impl AddTagsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return AddTagsError::InternalServer(String::from(error_message))
+                    return AddTagsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return AddTagsError::InvalidRequest(String::from(error_message))
+                    return AddTagsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => return AddTagsError::Validation(error_message.to_string()),
                 _ => {}
@@ -2736,13 +2736,13 @@ impl CancelStepsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CancelStepsError::InternalServerError(String::from(error_message))
+                    return CancelStepsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CancelStepsError::InvalidRequest(String::from(error_message))
+                    return CancelStepsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelStepsError::Validation(error_message.to_string())
+                    return CancelStepsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2824,15 +2824,15 @@ impl CreateSecurityConfigurationError {
                 "InternalServerException" => {
                     return CreateSecurityConfigurationError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return CreateSecurityConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSecurityConfigurationError::Validation(error_message.to_string())
+                    return CreateSecurityConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2916,15 +2916,15 @@ impl DeleteSecurityConfigurationError {
                 "InternalServerException" => {
                     return DeleteSecurityConfigurationError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DeleteSecurityConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteSecurityConfigurationError::Validation(error_message.to_string())
+                    return DeleteSecurityConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3006,13 +3006,13 @@ impl DescribeClusterError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeClusterError::InternalServer(String::from(error_message))
+                    return DescribeClusterError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeClusterError::InvalidRequest(String::from(error_message))
+                    return DescribeClusterError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeClusterError::Validation(error_message.to_string())
+                    return DescribeClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3090,10 +3090,10 @@ impl DescribeJobFlowsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeJobFlowsError::InternalServerError(String::from(error_message))
+                    return DescribeJobFlowsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeJobFlowsError::Validation(error_message.to_string())
+                    return DescribeJobFlowsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3174,15 +3174,15 @@ impl DescribeSecurityConfigurationError {
                 "InternalServerException" => {
                     return DescribeSecurityConfigurationError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeSecurityConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSecurityConfigurationError::Validation(error_message.to_string())
+                    return DescribeSecurityConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3264,13 +3264,13 @@ impl DescribeStepError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeStepError::InternalServer(String::from(error_message))
+                    return DescribeStepError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeStepError::InvalidRequest(String::from(error_message))
+                    return DescribeStepError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStepError::Validation(error_message.to_string())
+                    return DescribeStepError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3350,13 +3350,13 @@ impl ListBootstrapActionsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListBootstrapActionsError::InternalServer(String::from(error_message))
+                    return ListBootstrapActionsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListBootstrapActionsError::InvalidRequest(String::from(error_message))
+                    return ListBootstrapActionsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBootstrapActionsError::Validation(error_message.to_string())
+                    return ListBootstrapActionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3438,13 +3438,13 @@ impl ListClustersError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListClustersError::InternalServer(String::from(error_message))
+                    return ListClustersError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListClustersError::InvalidRequest(String::from(error_message))
+                    return ListClustersError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListClustersError::Validation(error_message.to_string())
+                    return ListClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3524,13 +3524,13 @@ impl ListInstanceFleetsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListInstanceFleetsError::InternalServer(String::from(error_message))
+                    return ListInstanceFleetsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListInstanceFleetsError::InvalidRequest(String::from(error_message))
+                    return ListInstanceFleetsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInstanceFleetsError::Validation(error_message.to_string())
+                    return ListInstanceFleetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3612,13 +3612,13 @@ impl ListInstanceGroupsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListInstanceGroupsError::InternalServer(String::from(error_message))
+                    return ListInstanceGroupsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListInstanceGroupsError::InvalidRequest(String::from(error_message))
+                    return ListInstanceGroupsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInstanceGroupsError::Validation(error_message.to_string())
+                    return ListInstanceGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3700,13 +3700,13 @@ impl ListInstancesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListInstancesError::InternalServer(String::from(error_message))
+                    return ListInstancesError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListInstancesError::InvalidRequest(String::from(error_message))
+                    return ListInstancesError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInstancesError::Validation(error_message.to_string())
+                    return ListInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3788,15 +3788,15 @@ impl ListSecurityConfigurationsError {
                 "InternalServerException" => {
                     return ListSecurityConfigurationsError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ListSecurityConfigurationsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListSecurityConfigurationsError::Validation(error_message.to_string())
+                    return ListSecurityConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3878,13 +3878,13 @@ impl ListStepsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListStepsError::InternalServer(String::from(error_message))
+                    return ListStepsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListStepsError::InvalidRequest(String::from(error_message))
+                    return ListStepsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListStepsError::Validation(error_message.to_string())
+                    return ListStepsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3964,13 +3964,13 @@ impl ModifyInstanceFleetError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ModifyInstanceFleetError::InternalServer(String::from(error_message))
+                    return ModifyInstanceFleetError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ModifyInstanceFleetError::InvalidRequest(String::from(error_message))
+                    return ModifyInstanceFleetError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ModifyInstanceFleetError::Validation(error_message.to_string())
+                    return ModifyInstanceFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4052,10 +4052,10 @@ impl ModifyInstanceGroupsError {
                 "InternalServerError" => {
                     return ModifyInstanceGroupsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ModifyInstanceGroupsError::Validation(error_message.to_string())
+                    return ModifyInstanceGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4132,7 +4132,7 @@ impl PutAutoScalingPolicyError {
 
             match *error_type {
                 "ValidationException" => {
-                    return PutAutoScalingPolicyError::Validation(error_message.to_string())
+                    return PutAutoScalingPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4208,7 +4208,7 @@ impl RemoveAutoScalingPolicyError {
 
             match *error_type {
                 "ValidationException" => {
-                    return RemoveAutoScalingPolicyError::Validation(error_message.to_string())
+                    return RemoveAutoScalingPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4288,13 +4288,13 @@ impl RemoveTagsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RemoveTagsError::InternalServer(String::from(error_message))
+                    return RemoveTagsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return RemoveTagsError::InvalidRequest(String::from(error_message))
+                    return RemoveTagsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsError::Validation(error_message.to_string())
+                    return RemoveTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4372,10 +4372,10 @@ impl RunJobFlowError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RunJobFlowError::InternalServerError(String::from(error_message))
+                    return RunJobFlowError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RunJobFlowError::Validation(error_message.to_string())
+                    return RunJobFlowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4454,10 +4454,10 @@ impl SetTerminationProtectionError {
                 "InternalServerError" => {
                     return SetTerminationProtectionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetTerminationProtectionError::Validation(error_message.to_string())
+                    return SetTerminationProtectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4538,10 +4538,10 @@ impl SetVisibleToAllUsersError {
                 "InternalServerError" => {
                     return SetVisibleToAllUsersError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetVisibleToAllUsersError::Validation(error_message.to_string())
+                    return SetVisibleToAllUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4620,10 +4620,10 @@ impl TerminateJobFlowsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return TerminateJobFlowsError::InternalServerError(String::from(error_message))
+                    return TerminateJobFlowsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TerminateJobFlowsError::Validation(error_message.to_string())
+                    return TerminateJobFlowsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

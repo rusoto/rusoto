@@ -2275,10 +2275,10 @@ impl CreateEndpointError {
 
             match *error_type {
                 "ResourceLimitExceeded" => {
-                    return CreateEndpointError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateEndpointError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateEndpointError::Validation(error_message.to_string())
+                    return CreateEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2357,10 +2357,10 @@ impl CreateEndpointConfigError {
                 "ResourceLimitExceeded" => {
                     return CreateEndpointConfigError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateEndpointConfigError::Validation(error_message.to_string())
+                    return CreateEndpointConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2443,15 +2443,15 @@ impl CreateHyperParameterTuningJobError {
                 "ResourceInUse" => {
                     return CreateHyperParameterTuningJobError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceeded" => {
                     return CreateHyperParameterTuningJobError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateHyperParameterTuningJobError::Validation(error_message.to_string())
+                    return CreateHyperParameterTuningJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2531,10 +2531,10 @@ impl CreateModelError {
 
             match *error_type {
                 "ResourceLimitExceeded" => {
-                    return CreateModelError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateModelError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateModelError::Validation(error_message.to_string())
+                    return CreateModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2613,10 +2613,10 @@ impl CreateNotebookInstanceError {
                 "ResourceLimitExceeded" => {
                     return CreateNotebookInstanceError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateNotebookInstanceError::Validation(error_message.to_string())
+                    return CreateNotebookInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2697,12 +2697,12 @@ impl CreateNotebookInstanceLifecycleConfigError {
                 "ResourceLimitExceeded" => {
                     return CreateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return CreateNotebookInstanceLifecycleConfigError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2781,7 +2781,7 @@ impl CreatePresignedNotebookInstanceUrlError {
                 "ValidationException" => {
                     return CreatePresignedNotebookInstanceUrlError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2861,15 +2861,15 @@ impl CreateTrainingJobError {
 
             match *error_type {
                 "ResourceInUse" => {
-                    return CreateTrainingJobError::ResourceInUse(String::from(error_message))
+                    return CreateTrainingJobError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceLimitExceeded" => {
                     return CreateTrainingJobError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateTrainingJobError::Validation(error_message.to_string())
+                    return CreateTrainingJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2951,15 +2951,15 @@ impl CreateTransformJobError {
 
             match *error_type {
                 "ResourceInUse" => {
-                    return CreateTransformJobError::ResourceInUse(String::from(error_message))
+                    return CreateTransformJobError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceLimitExceeded" => {
                     return CreateTransformJobError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateTransformJobError::Validation(error_message.to_string())
+                    return CreateTransformJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3037,7 +3037,7 @@ impl DeleteEndpointError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteEndpointError::Validation(error_message.to_string())
+                    return DeleteEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3111,7 +3111,7 @@ impl DeleteEndpointConfigError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteEndpointConfigError::Validation(error_message.to_string())
+                    return DeleteEndpointConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3187,7 +3187,7 @@ impl DeleteModelError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteModelError::Validation(error_message.to_string())
+                    return DeleteModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3261,7 +3261,7 @@ impl DeleteNotebookInstanceError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteNotebookInstanceError::Validation(error_message.to_string())
+                    return DeleteNotebookInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3339,7 +3339,7 @@ impl DeleteNotebookInstanceLifecycleConfigError {
                 "ValidationException" => {
                     return DeleteNotebookInstanceLifecycleConfigError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3415,7 +3415,7 @@ impl DeleteTagsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string())
+                    return DeleteTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3489,7 +3489,7 @@ impl DescribeEndpointError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeEndpointError::Validation(error_message.to_string())
+                    return DescribeEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3563,7 +3563,7 @@ impl DescribeEndpointConfigError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeEndpointConfigError::Validation(error_message.to_string())
+                    return DescribeEndpointConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3643,12 +3643,12 @@ impl DescribeHyperParameterTuningJobError {
                 "ResourceNotFound" => {
                     return DescribeHyperParameterTuningJobError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeHyperParameterTuningJobError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3725,7 +3725,7 @@ impl DescribeModelError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeModelError::Validation(error_message.to_string())
+                    return DescribeModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3799,7 +3799,7 @@ impl DescribeNotebookInstanceError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeNotebookInstanceError::Validation(error_message.to_string())
+                    return DescribeNotebookInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3879,7 +3879,7 @@ impl DescribeNotebookInstanceLifecycleConfigError {
                 "ValidationException" => {
                     return DescribeNotebookInstanceLifecycleConfigError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3957,10 +3957,10 @@ impl DescribeTrainingJobError {
 
             match *error_type {
                 "ResourceNotFound" => {
-                    return DescribeTrainingJobError::ResourceNotFound(String::from(error_message))
+                    return DescribeTrainingJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTrainingJobError::Validation(error_message.to_string())
+                    return DescribeTrainingJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4039,10 +4039,10 @@ impl DescribeTransformJobError {
 
             match *error_type {
                 "ResourceNotFound" => {
-                    return DescribeTransformJobError::ResourceNotFound(String::from(error_message))
+                    return DescribeTransformJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTransformJobError::Validation(error_message.to_string())
+                    return DescribeTransformJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4119,7 +4119,7 @@ impl ListEndpointConfigsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListEndpointConfigsError::Validation(error_message.to_string())
+                    return ListEndpointConfigsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4195,7 +4195,7 @@ impl ListEndpointsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListEndpointsError::Validation(error_message.to_string())
+                    return ListEndpointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4269,7 +4269,7 @@ impl ListHyperParameterTuningJobsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListHyperParameterTuningJobsError::Validation(error_message.to_string())
+                    return ListHyperParameterTuningJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4345,7 +4345,7 @@ impl ListModelsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListModelsError::Validation(error_message.to_string())
+                    return ListModelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4421,7 +4421,7 @@ impl ListNotebookInstanceLifecycleConfigsError {
                 "ValidationException" => {
                     return ListNotebookInstanceLifecycleConfigsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4497,7 +4497,7 @@ impl ListNotebookInstancesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListNotebookInstancesError::Validation(error_message.to_string())
+                    return ListNotebookInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4573,7 +4573,7 @@ impl ListTagsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4647,7 +4647,7 @@ impl ListTrainingJobsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListTrainingJobsError::Validation(error_message.to_string())
+                    return ListTrainingJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4727,12 +4727,12 @@ impl ListTrainingJobsForHyperParameterTuningJobError {
                 "ResourceNotFound" => {
                     return ListTrainingJobsForHyperParameterTuningJobError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return ListTrainingJobsForHyperParameterTuningJobError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4811,7 +4811,7 @@ impl ListTransformJobsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListTransformJobsError::Validation(error_message.to_string())
+                    return ListTransformJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4891,10 +4891,10 @@ impl StartNotebookInstanceError {
                 "ResourceLimitExceeded" => {
                     return StartNotebookInstanceError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartNotebookInstanceError::Validation(error_message.to_string())
+                    return StartNotebookInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4975,10 +4975,10 @@ impl StopHyperParameterTuningJobError {
                 "ResourceNotFound" => {
                     return StopHyperParameterTuningJobError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StopHyperParameterTuningJobError::Validation(error_message.to_string())
+                    return StopHyperParameterTuningJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5055,7 +5055,7 @@ impl StopNotebookInstanceError {
 
             match *error_type {
                 "ValidationException" => {
-                    return StopNotebookInstanceError::Validation(error_message.to_string())
+                    return StopNotebookInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5133,10 +5133,10 @@ impl StopTrainingJobError {
 
             match *error_type {
                 "ResourceNotFound" => {
-                    return StopTrainingJobError::ResourceNotFound(String::from(error_message))
+                    return StopTrainingJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopTrainingJobError::Validation(error_message.to_string())
+                    return StopTrainingJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5213,10 +5213,10 @@ impl StopTransformJobError {
 
             match *error_type {
                 "ResourceNotFound" => {
-                    return StopTransformJobError::ResourceNotFound(String::from(error_message))
+                    return StopTransformJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopTransformJobError::Validation(error_message.to_string())
+                    return StopTransformJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5293,10 +5293,10 @@ impl UpdateEndpointError {
 
             match *error_type {
                 "ResourceLimitExceeded" => {
-                    return UpdateEndpointError::ResourceLimitExceeded(String::from(error_message))
+                    return UpdateEndpointError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateEndpointError::Validation(error_message.to_string())
+                    return UpdateEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5375,12 +5375,12 @@ impl UpdateEndpointWeightsAndCapacitiesError {
                 "ResourceLimitExceeded" => {
                     return UpdateEndpointWeightsAndCapacitiesError::ResourceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return UpdateEndpointWeightsAndCapacitiesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5461,10 +5461,10 @@ impl UpdateNotebookInstanceError {
                 "ResourceLimitExceeded" => {
                     return UpdateNotebookInstanceError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateNotebookInstanceError::Validation(error_message.to_string())
+                    return UpdateNotebookInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5545,12 +5545,12 @@ impl UpdateNotebookInstanceLifecycleConfigError {
                 "ResourceLimitExceeded" => {
                     return UpdateNotebookInstanceLifecycleConfigError::ResourceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return UpdateNotebookInstanceLifecycleConfigError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }

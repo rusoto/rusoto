@@ -668,16 +668,16 @@ impl DeleteScalingPolicyError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeleteScalingPolicyError::ConcurrentUpdate(String::from(error_message))
+                    return DeleteScalingPolicyError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteScalingPolicyError::InternalService(String::from(error_message))
+                    return DeleteScalingPolicyError::InternalService(String::from(error_message));
                 }
                 "ObjectNotFoundException" => {
-                    return DeleteScalingPolicyError::ObjectNotFound(String::from(error_message))
+                    return DeleteScalingPolicyError::ObjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteScalingPolicyError::Validation(error_message.to_string())
+                    return DeleteScalingPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -762,16 +762,16 @@ impl DeleteScheduledActionError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeleteScheduledActionError::ConcurrentUpdate(String::from(error_message))
+                    return DeleteScheduledActionError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteScheduledActionError::InternalService(String::from(error_message))
+                    return DeleteScheduledActionError::InternalService(String::from(error_message));
                 }
                 "ObjectNotFoundException" => {
-                    return DeleteScheduledActionError::ObjectNotFound(String::from(error_message))
+                    return DeleteScheduledActionError::ObjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteScheduledActionError::Validation(error_message.to_string())
+                    return DeleteScheduledActionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -858,20 +858,20 @@ impl DeregisterScalableTargetError {
                 "ConcurrentUpdateException" => {
                     return DeregisterScalableTargetError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DeregisterScalableTargetError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ObjectNotFoundException" => {
                     return DeregisterScalableTargetError::ObjectNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeregisterScalableTargetError::Validation(error_message.to_string())
+                    return DeregisterScalableTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -958,20 +958,20 @@ impl DescribeScalableTargetsError {
                 "ConcurrentUpdateException" => {
                     return DescribeScalableTargetsError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DescribeScalableTargetsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeScalableTargetsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeScalableTargetsError::Validation(error_message.to_string())
+                    return DescribeScalableTargetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1058,20 +1058,20 @@ impl DescribeScalingActivitiesError {
                 "ConcurrentUpdateException" => {
                     return DescribeScalingActivitiesError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DescribeScalingActivitiesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeScalingActivitiesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeScalingActivitiesError::Validation(error_message.to_string())
+                    return DescribeScalingActivitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1160,25 +1160,25 @@ impl DescribeScalingPoliciesError {
                 "ConcurrentUpdateException" => {
                     return DescribeScalingPoliciesError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FailedResourceAccessException" => {
                     return DescribeScalingPoliciesError::FailedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DescribeScalingPoliciesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeScalingPoliciesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeScalingPoliciesError::Validation(error_message.to_string())
+                    return DescribeScalingPoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1266,20 +1266,20 @@ impl DescribeScheduledActionsError {
                 "ConcurrentUpdateException" => {
                     return DescribeScheduledActionsError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DescribeScheduledActionsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeScheduledActionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeScheduledActionsError::Validation(error_message.to_string())
+                    return DescribeScheduledActionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1368,22 +1368,22 @@ impl PutScalingPolicyError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return PutScalingPolicyError::ConcurrentUpdate(String::from(error_message))
+                    return PutScalingPolicyError::ConcurrentUpdate(String::from(error_message));
                 }
                 "FailedResourceAccessException" => {
-                    return PutScalingPolicyError::FailedResourceAccess(String::from(error_message))
+                    return PutScalingPolicyError::FailedResourceAccess(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return PutScalingPolicyError::InternalService(String::from(error_message))
+                    return PutScalingPolicyError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutScalingPolicyError::LimitExceeded(String::from(error_message))
+                    return PutScalingPolicyError::LimitExceeded(String::from(error_message));
                 }
                 "ObjectNotFoundException" => {
-                    return PutScalingPolicyError::ObjectNotFound(String::from(error_message))
+                    return PutScalingPolicyError::ObjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutScalingPolicyError::Validation(error_message.to_string())
+                    return PutScalingPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1470,19 +1470,19 @@ impl PutScheduledActionError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return PutScheduledActionError::ConcurrentUpdate(String::from(error_message))
+                    return PutScheduledActionError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return PutScheduledActionError::InternalService(String::from(error_message))
+                    return PutScheduledActionError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutScheduledActionError::LimitExceeded(String::from(error_message))
+                    return PutScheduledActionError::LimitExceeded(String::from(error_message));
                 }
                 "ObjectNotFoundException" => {
-                    return PutScheduledActionError::ObjectNotFound(String::from(error_message))
+                    return PutScheduledActionError::ObjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutScheduledActionError::Validation(error_message.to_string())
+                    return PutScheduledActionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1570,16 +1570,16 @@ impl RegisterScalableTargetError {
                 "ConcurrentUpdateException" => {
                     return RegisterScalableTargetError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return RegisterScalableTargetError::InternalService(String::from(error_message))
+                    return RegisterScalableTargetError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return RegisterScalableTargetError::LimitExceeded(String::from(error_message))
+                    return RegisterScalableTargetError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterScalableTargetError::Validation(error_message.to_string())
+                    return RegisterScalableTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

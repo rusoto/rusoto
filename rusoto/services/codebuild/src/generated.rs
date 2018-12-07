@@ -1031,10 +1031,10 @@ impl BatchDeleteBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return BatchDeleteBuildsError::InvalidInput(String::from(error_message))
+                    return BatchDeleteBuildsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchDeleteBuildsError::Validation(error_message.to_string())
+                    return BatchDeleteBuildsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1113,10 +1113,10 @@ impl BatchGetBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return BatchGetBuildsError::InvalidInput(String::from(error_message))
+                    return BatchGetBuildsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetBuildsError::Validation(error_message.to_string())
+                    return BatchGetBuildsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1193,10 +1193,10 @@ impl BatchGetProjectsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return BatchGetProjectsError::InvalidInput(String::from(error_message))
+                    return BatchGetProjectsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetProjectsError::Validation(error_message.to_string())
+                    return BatchGetProjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1277,16 +1277,16 @@ impl CreateProjectError {
 
             match *error_type {
                 "AccountLimitExceededException" => {
-                    return CreateProjectError::AccountLimitExceeded(String::from(error_message))
+                    return CreateProjectError::AccountLimitExceeded(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateProjectError::InvalidInput(String::from(error_message))
+                    return CreateProjectError::InvalidInput(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateProjectError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateProjectError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string())
+                    return CreateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1371,19 +1371,19 @@ impl CreateWebhookError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return CreateWebhookError::InvalidInput(String::from(error_message))
+                    return CreateWebhookError::InvalidInput(String::from(error_message));
                 }
                 "OAuthProviderException" => {
-                    return CreateWebhookError::OAuthProvider(String::from(error_message))
+                    return CreateWebhookError::OAuthProvider(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateWebhookError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateWebhookError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateWebhookError::ResourceNotFound(String::from(error_message))
+                    return CreateWebhookError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateWebhookError::Validation(error_message.to_string())
+                    return CreateWebhookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1463,10 +1463,10 @@ impl DeleteProjectError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return DeleteProjectError::InvalidInput(String::from(error_message))
+                    return DeleteProjectError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string())
+                    return DeleteProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1547,16 +1547,16 @@ impl DeleteWebhookError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return DeleteWebhookError::InvalidInput(String::from(error_message))
+                    return DeleteWebhookError::InvalidInput(String::from(error_message));
                 }
                 "OAuthProviderException" => {
-                    return DeleteWebhookError::OAuthProvider(String::from(error_message))
+                    return DeleteWebhookError::OAuthProvider(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteWebhookError::ResourceNotFound(String::from(error_message))
+                    return DeleteWebhookError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteWebhookError::Validation(error_message.to_string())
+                    return DeleteWebhookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1637,15 +1637,15 @@ impl InvalidateProjectCacheError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return InvalidateProjectCacheError::InvalidInput(String::from(error_message))
+                    return InvalidateProjectCacheError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return InvalidateProjectCacheError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return InvalidateProjectCacheError::Validation(error_message.to_string())
+                    return InvalidateProjectCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1725,10 +1725,10 @@ impl ListBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return ListBuildsError::InvalidInput(String::from(error_message))
+                    return ListBuildsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBuildsError::Validation(error_message.to_string())
+                    return ListBuildsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1807,13 +1807,13 @@ impl ListBuildsForProjectError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return ListBuildsForProjectError::InvalidInput(String::from(error_message))
+                    return ListBuildsForProjectError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListBuildsForProjectError::ResourceNotFound(String::from(error_message))
+                    return ListBuildsForProjectError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBuildsForProjectError::Validation(error_message.to_string())
+                    return ListBuildsForProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1891,7 +1891,7 @@ impl ListCuratedEnvironmentImagesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListCuratedEnvironmentImagesError::Validation(error_message.to_string())
+                    return ListCuratedEnvironmentImagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1969,10 +1969,10 @@ impl ListProjectsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return ListProjectsError::InvalidInput(String::from(error_message))
+                    return ListProjectsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string())
+                    return ListProjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2053,16 +2053,16 @@ impl StartBuildError {
 
             match *error_type {
                 "AccountLimitExceededException" => {
-                    return StartBuildError::AccountLimitExceeded(String::from(error_message))
+                    return StartBuildError::AccountLimitExceeded(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StartBuildError::InvalidInput(String::from(error_message))
+                    return StartBuildError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartBuildError::ResourceNotFound(String::from(error_message))
+                    return StartBuildError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartBuildError::Validation(error_message.to_string())
+                    return StartBuildError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2143,13 +2143,13 @@ impl StopBuildError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return StopBuildError::InvalidInput(String::from(error_message))
+                    return StopBuildError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopBuildError::ResourceNotFound(String::from(error_message))
+                    return StopBuildError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopBuildError::Validation(error_message.to_string())
+                    return StopBuildError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2229,13 +2229,13 @@ impl UpdateProjectError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return UpdateProjectError::InvalidInput(String::from(error_message))
+                    return UpdateProjectError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateProjectError::ResourceNotFound(String::from(error_message))
+                    return UpdateProjectError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string())
+                    return UpdateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2317,16 +2317,16 @@ impl UpdateWebhookError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return UpdateWebhookError::InvalidInput(String::from(error_message))
+                    return UpdateWebhookError::InvalidInput(String::from(error_message));
                 }
                 "OAuthProviderException" => {
-                    return UpdateWebhookError::OAuthProvider(String::from(error_message))
+                    return UpdateWebhookError::OAuthProvider(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateWebhookError::ResourceNotFound(String::from(error_message))
+                    return UpdateWebhookError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateWebhookError::Validation(error_message.to_string())
+                    return UpdateWebhookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -865,22 +865,22 @@ impl CreateApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateApplicationError::BadRequest(String::from(error_message))
+                    return CreateApplicationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateApplicationError::Conflict(String::from(error_message))
+                    return CreateApplicationError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateApplicationError::Forbidden(String::from(error_message))
+                    return CreateApplicationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateApplicationError::InternalServerError(String::from(error_message))
+                    return CreateApplicationError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateApplicationError::TooManyRequests(String::from(error_message))
+                    return CreateApplicationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string())
+                    return CreateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -985,26 +985,26 @@ impl CreateApplicationVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateApplicationVersionError::BadRequest(String::from(error_message))
+                    return CreateApplicationVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateApplicationVersionError::Conflict(String::from(error_message))
+                    return CreateApplicationVersionError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateApplicationVersionError::Forbidden(String::from(error_message))
+                    return CreateApplicationVersionError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateApplicationVersionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return CreateApplicationVersionError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateApplicationVersionError::Validation(error_message.to_string())
+                    return CreateApplicationVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1109,25 +1109,25 @@ impl CreateCloudFormationChangeSetError {
                 "BadRequestException" => {
                     return CreateCloudFormationChangeSetError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ForbiddenException" => {
                     return CreateCloudFormationChangeSetError::Forbidden(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return CreateCloudFormationChangeSetError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return CreateCloudFormationChangeSetError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateCloudFormationChangeSetError::Validation(error_message.to_string())
+                    return CreateCloudFormationChangeSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1233,25 +1233,25 @@ impl DeleteApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteApplicationError::BadRequest(String::from(error_message))
+                    return DeleteApplicationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteApplicationError::Conflict(String::from(error_message))
+                    return DeleteApplicationError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteApplicationError::Forbidden(String::from(error_message))
+                    return DeleteApplicationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteApplicationError::InternalServerError(String::from(error_message))
+                    return DeleteApplicationError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteApplicationError::NotFound(String::from(error_message))
+                    return DeleteApplicationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteApplicationError::TooManyRequests(String::from(error_message))
+                    return DeleteApplicationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteApplicationError::Validation(error_message.to_string())
+                    return DeleteApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1357,22 +1357,22 @@ impl GetApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetApplicationError::BadRequest(String::from(error_message))
+                    return GetApplicationError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return GetApplicationError::Forbidden(String::from(error_message))
+                    return GetApplicationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetApplicationError::InternalServerError(String::from(error_message))
+                    return GetApplicationError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetApplicationError::NotFound(String::from(error_message))
+                    return GetApplicationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetApplicationError::TooManyRequests(String::from(error_message))
+                    return GetApplicationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetApplicationError::Validation(error_message.to_string())
+                    return GetApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1475,24 +1475,24 @@ impl GetApplicationPolicyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetApplicationPolicyError::BadRequest(String::from(error_message))
+                    return GetApplicationPolicyError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return GetApplicationPolicyError::Forbidden(String::from(error_message))
+                    return GetApplicationPolicyError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return GetApplicationPolicyError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetApplicationPolicyError::NotFound(String::from(error_message))
+                    return GetApplicationPolicyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetApplicationPolicyError::TooManyRequests(String::from(error_message))
+                    return GetApplicationPolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetApplicationPolicyError::Validation(error_message.to_string())
+                    return GetApplicationPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1597,26 +1597,26 @@ impl ListApplicationVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListApplicationVersionsError::BadRequest(String::from(error_message))
+                    return ListApplicationVersionsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListApplicationVersionsError::Forbidden(String::from(error_message))
+                    return ListApplicationVersionsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return ListApplicationVersionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListApplicationVersionsError::NotFound(String::from(error_message))
+                    return ListApplicationVersionsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ListApplicationVersionsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListApplicationVersionsError::Validation(error_message.to_string())
+                    return ListApplicationVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1719,19 +1719,19 @@ impl ListApplicationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListApplicationsError::BadRequest(String::from(error_message))
+                    return ListApplicationsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListApplicationsError::Forbidden(String::from(error_message))
+                    return ListApplicationsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListApplicationsError::InternalServerError(String::from(error_message))
+                    return ListApplicationsError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListApplicationsError::NotFound(String::from(error_message))
+                    return ListApplicationsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListApplicationsError::Validation(error_message.to_string())
+                    return ListApplicationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1833,24 +1833,24 @@ impl PutApplicationPolicyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutApplicationPolicyError::BadRequest(String::from(error_message))
+                    return PutApplicationPolicyError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return PutApplicationPolicyError::Forbidden(String::from(error_message))
+                    return PutApplicationPolicyError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return PutApplicationPolicyError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return PutApplicationPolicyError::NotFound(String::from(error_message))
+                    return PutApplicationPolicyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutApplicationPolicyError::TooManyRequests(String::from(error_message))
+                    return PutApplicationPolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutApplicationPolicyError::Validation(error_message.to_string())
+                    return PutApplicationPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1957,25 +1957,25 @@ impl UpdateApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateApplicationError::BadRequest(String::from(error_message))
+                    return UpdateApplicationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateApplicationError::Conflict(String::from(error_message))
+                    return UpdateApplicationError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateApplicationError::Forbidden(String::from(error_message))
+                    return UpdateApplicationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateApplicationError::InternalServerError(String::from(error_message))
+                    return UpdateApplicationError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateApplicationError::NotFound(String::from(error_message))
+                    return UpdateApplicationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateApplicationError::TooManyRequests(String::from(error_message))
+                    return UpdateApplicationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string())
+                    return UpdateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

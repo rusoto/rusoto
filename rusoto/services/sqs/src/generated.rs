@@ -2405,7 +2405,7 @@ impl AddPermissionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OverLimit" => {
-                        return AddPermissionError::OverLimit(String::from(parsed_error.message))
+                        return AddPermissionError::OverLimit(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -2491,12 +2491,12 @@ impl ChangeMessageVisibilityError {
                     "AWS.SimpleQueueService.MessageNotInflight" => {
                         return ChangeMessageVisibilityError::MessageNotInflight(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReceiptHandleIsInvalid" => {
                         return ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -2589,22 +2589,22 @@ impl ChangeMessageVisibilityBatchError {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                         return ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -2695,10 +2695,10 @@ impl CreateQueueError {
                     "AWS.SimpleQueueService.QueueDeletedRecently" => {
                         return CreateQueueError::QueueDeletedRecently(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "QueueAlreadyExists" => {
-                        return CreateQueueError::QueueNameExists(String::from(parsed_error.message))
+                        return CreateQueueError::QueueNameExists(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -2785,12 +2785,12 @@ impl DeleteMessageError {
                     "InvalidIdFormat" => {
                         return DeleteMessageError::InvalidIdFormat(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReceiptHandleIsInvalid" => {
                         return DeleteMessageError::ReceiptHandleIsInvalid(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -2881,22 +2881,22 @@ impl DeleteMessageBatchError {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                         return DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return DeleteMessageBatchError::EmptyBatchRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return DeleteMessageBatchError::InvalidBatchEntryId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3061,7 +3061,7 @@ impl GetQueueAttributesError {
                     "InvalidAttributeName" => {
                         return GetQueueAttributesError::InvalidAttributeName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3147,7 +3147,7 @@ impl GetQueueUrlError {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return GetQueueUrlError::QueueDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3231,7 +3231,7 @@ impl ListDeadLetterSourceQueuesError {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3471,12 +3471,12 @@ impl PurgeQueueError {
                     "AWS.SimpleQueueService.PurgeQueueInProgress" => {
                         return PurgeQueueError::PurgeQueueInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return PurgeQueueError::QueueDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3559,7 +3559,7 @@ impl ReceiveMessageError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OverLimit" => {
-                        return ReceiveMessageError::OverLimit(String::from(parsed_error.message))
+                        return ReceiveMessageError::OverLimit(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -3721,12 +3721,12 @@ impl SendMessageError {
                     "InvalidMessageContents" => {
                         return SendMessageError::InvalidMessageContents(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
                         return SendMessageError::UnsupportedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3821,32 +3821,32 @@ impl SendMessageBatchError {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                         return SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.BatchRequestTooLong" => {
                         return SendMessageBatchError::BatchRequestTooLong(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return SendMessageBatchError::EmptyBatchRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return SendMessageBatchError::InvalidBatchEntryId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
                         return SendMessageBatchError::UnsupportedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3935,7 +3935,7 @@ impl SetQueueAttributesError {
                     "InvalidAttributeName" => {
                         return SetQueueAttributesError::InvalidAttributeName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

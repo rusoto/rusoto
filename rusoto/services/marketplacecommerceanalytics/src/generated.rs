@@ -137,10 +137,10 @@ impl GenerateDataSetError {
                 "MarketplaceCommerceAnalyticsException" => {
                     return GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GenerateDataSetError::Validation(error_message.to_string())
+                    return GenerateDataSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -219,10 +219,10 @@ impl StartSupportDataExportError {
                 "MarketplaceCommerceAnalyticsException" => {
                     return StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartSupportDataExportError::Validation(error_message.to_string())
+                    return StartSupportDataExportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -7875,202 +7875,202 @@ impl CreateDistributionError {
                     "AccessDenied" => {
                         return CreateDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CNAMEAlreadyExists" => {
                         return CreateDistributionError::CNAMEAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DistributionAlreadyExists" => {
                         return CreateDistributionError::DistributionAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InconsistentQuantities" => {
                         return CreateDistributionError::InconsistentQuantities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return CreateDistributionError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDefaultRootObject" => {
                         return CreateDistributionError::InvalidDefaultRootObject(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidErrorCode" => {
                         return CreateDistributionError::InvalidErrorCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidForwardCookies" => {
                         return CreateDistributionError::InvalidForwardCookies(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return CreateDistributionError::InvalidGeoRestrictionParameter(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidHeadersForS3Origin" => {
                         return CreateDistributionError::InvalidHeadersForS3Origin(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return CreateDistributionError::InvalidLambdaFunctionAssociation(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidLocationCode" => {
                         return CreateDistributionError::InvalidLocationCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return CreateDistributionError::InvalidMinimumProtocolVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOrigin" => {
                         return CreateDistributionError::InvalidOrigin(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginAccessIdentity" => {
                         return CreateDistributionError::InvalidOriginAccessIdentity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginReadTimeout" => {
                         return CreateDistributionError::InvalidOriginReadTimeout(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidProtocolSettings" => {
                         return CreateDistributionError::InvalidProtocolSettings(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidQueryStringParameters" => {
                         return CreateDistributionError::InvalidQueryStringParameters(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidRelativePath" => {
                         return CreateDistributionError::InvalidRelativePath(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidRequiredProtocol" => {
                         return CreateDistributionError::InvalidRequiredProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidResponseCode" => {
                         return CreateDistributionError::InvalidResponseCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTTLOrder" => {
                         return CreateDistributionError::InvalidTTLOrder(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidViewerCertificate" => {
                         return CreateDistributionError::InvalidViewerCertificate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidWebACLId" => {
                         return CreateDistributionError::InvalidWebACLId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingBody" => {
                         return CreateDistributionError::MissingBody(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchOrigin" => {
                         return CreateDistributionError::NoSuchOrigin(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCacheBehaviors" => {
                         return CreateDistributionError::TooManyCacheBehaviors(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCertificates" => {
                         return CreateDistributionError::TooManyCertificates(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyDistributionCNAMEs" => {
                         return CreateDistributionError::TooManyDistributionCNAMEs(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyDistributions" => {
                         return CreateDistributionError::TooManyDistributions(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyDistributionsWithLambdaAssociations" => {
                         return CreateDistributionError::TooManyDistributionsWithLambdaAssociations(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyHeadersInForwardedValues" => {
                         return CreateDistributionError::TooManyHeadersInForwardedValues(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return CreateDistributionError::TooManyLambdaFunctionAssociations(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyOriginCustomHeaders" => {
                         return CreateDistributionError::TooManyOriginCustomHeaders(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyOrigins" => {
                         return CreateDistributionError::TooManyOrigins(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyQueryStringParameters" => {
                         return CreateDistributionError::TooManyQueryStringParameters(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTrustedSigners" => {
                         return CreateDistributionError::TooManyTrustedSigners(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TrustedSignerDoesNotExist" => {
                         return CreateDistributionError::TrustedSignerDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8410,37 +8410,37 @@ impl CreateInvalidationError {
                     "AccessDenied" => {
                         return CreateInvalidationError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "BatchTooLarge" => {
                         return CreateInvalidationError::BatchTooLarge(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InconsistentQuantities" => {
                         return CreateInvalidationError::InconsistentQuantities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return CreateInvalidationError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingBody" => {
                         return CreateInvalidationError::MissingBody(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return CreateInvalidationError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyInvalidationsInProgress" => {
                         return CreateInvalidationError::TooManyInvalidationsInProgress(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -8554,62 +8554,62 @@ impl CreateStreamingDistributionError {
                     "AccessDenied" => {
                         return CreateStreamingDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CNAMEAlreadyExists" => {
                         return CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InconsistentQuantities" => {
                         return CreateStreamingDistributionError::InconsistentQuantities(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidArgument" => {
                         return CreateStreamingDistributionError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOrigin" => {
                         return CreateStreamingDistributionError::InvalidOrigin(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginAccessIdentity" => {
                         return CreateStreamingDistributionError::InvalidOriginAccessIdentity(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "MissingBody" => {
                         return CreateStreamingDistributionError::MissingBody(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StreamingDistributionAlreadyExists" => {
                         return CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyStreamingDistributionCNAMEs" => {
                         return CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyStreamingDistributions" => {
                         return CreateStreamingDistributionError::TooManyStreamingDistributions(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyTrustedSigners" => {
                         return CreateStreamingDistributionError::TooManyTrustedSigners(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TrustedSignerDoesNotExist" => {
                         return CreateStreamingDistributionError::TrustedSignerDoesNotExist(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -8940,27 +8940,27 @@ impl DeleteDistributionError {
                     "AccessDenied" => {
                         return DeleteDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DistributionNotDisabled" => {
                         return DeleteDistributionError::DistributionNotDisabled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidIfMatchVersion" => {
                         return DeleteDistributionError::InvalidIfMatchVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return DeleteDistributionError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PreconditionFailed" => {
                         return DeleteDistributionError::PreconditionFailed(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9056,22 +9056,22 @@ impl DeleteServiceLinkedRoleError {
                     "AccessDenied" => {
                         return DeleteServiceLinkedRoleError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return DeleteServiceLinkedRoleError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchResource" => {
                         return DeleteServiceLinkedRoleError::NoSuchResource(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return DeleteServiceLinkedRoleError::ResourceInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9168,27 +9168,27 @@ impl DeleteStreamingDistributionError {
                     "AccessDenied" => {
                         return DeleteStreamingDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidIfMatchVersion" => {
                         return DeleteStreamingDistributionError::InvalidIfMatchVersion(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NoSuchStreamingDistribution" => {
                         return DeleteStreamingDistributionError::NoSuchStreamingDistribution(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PreconditionFailed" => {
                         return DeleteStreamingDistributionError::PreconditionFailed(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StreamingDistributionNotDisabled" => {
                         return DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9454,12 +9454,12 @@ impl GetDistributionError {
                     "AccessDenied" => {
                         return GetDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return GetDistributionError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9546,12 +9546,12 @@ impl GetDistributionConfigError {
                     "AccessDenied" => {
                         return GetDistributionConfigError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return GetDistributionConfigError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9642,17 +9642,17 @@ impl GetInvalidationError {
                     "AccessDenied" => {
                         return GetInvalidationError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return GetInvalidationError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchInvalidation" => {
                         return GetInvalidationError::NoSuchInvalidation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9740,12 +9740,12 @@ impl GetStreamingDistributionError {
                     "AccessDenied" => {
                         return GetStreamingDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchStreamingDistribution" => {
                         return GetStreamingDistributionError::NoSuchStreamingDistribution(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9834,12 +9834,12 @@ impl GetStreamingDistributionConfigError {
                     "AccessDenied" => {
                         return GetStreamingDistributionConfigError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchStreamingDistribution" => {
                         return GetStreamingDistributionConfigError::NoSuchStreamingDistribution(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9926,7 +9926,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
                     "InvalidArgument" => {
                         return ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10012,7 +10012,7 @@ impl ListDistributionsError {
                     "InvalidArgument" => {
                         return ListDistributionsError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10100,12 +10100,12 @@ impl ListDistributionsByWebACLIdError {
                     "InvalidArgument" => {
                         return ListDistributionsByWebACLIdError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidWebACLId" => {
                         return ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10196,17 +10196,17 @@ impl ListInvalidationsError {
                     "AccessDenied" => {
                         return ListInvalidationsError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return ListInvalidationsError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return ListInvalidationsError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10294,7 +10294,7 @@ impl ListStreamingDistributionsError {
                     "InvalidArgument" => {
                         return ListStreamingDistributionsError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10386,22 +10386,22 @@ impl ListTagsForResourceError {
                     "AccessDenied" => {
                         return ListTagsForResourceError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return ListTagsForResourceError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTagging" => {
                         return ListTagsForResourceError::InvalidTagging(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchResource" => {
                         return ListTagsForResourceError::NoSuchResource(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10494,16 +10494,16 @@ impl TagResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return TagResourceError::AccessDenied(String::from(parsed_error.message))
+                        return TagResourceError::AccessDenied(String::from(parsed_error.message));
                     }
                     "InvalidArgument" => {
-                        return TagResourceError::InvalidArgument(String::from(parsed_error.message))
+                        return TagResourceError::InvalidArgument(String::from(parsed_error.message));
                     }
                     "InvalidTagging" => {
-                        return TagResourceError::InvalidTagging(String::from(parsed_error.message))
+                        return TagResourceError::InvalidTagging(String::from(parsed_error.message));
                     }
                     "NoSuchResource" => {
-                        return TagResourceError::NoSuchResource(String::from(parsed_error.message))
+                        return TagResourceError::NoSuchResource(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -10594,22 +10594,22 @@ impl UntagResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return UntagResourceError::AccessDenied(String::from(parsed_error.message))
+                        return UntagResourceError::AccessDenied(String::from(parsed_error.message));
                     }
                     "InvalidArgument" => {
                         return UntagResourceError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTagging" => {
                         return UntagResourceError::InvalidTagging(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchResource" => {
                         return UntagResourceError::NoSuchResource(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10878,202 +10878,202 @@ impl UpdateDistributionError {
                     "AccessDenied" => {
                         return UpdateDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CNAMEAlreadyExists" => {
                         return UpdateDistributionError::CNAMEAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IllegalUpdate" => {
                         return UpdateDistributionError::IllegalUpdate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InconsistentQuantities" => {
                         return UpdateDistributionError::InconsistentQuantities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return UpdateDistributionError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDefaultRootObject" => {
                         return UpdateDistributionError::InvalidDefaultRootObject(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidErrorCode" => {
                         return UpdateDistributionError::InvalidErrorCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidForwardCookies" => {
                         return UpdateDistributionError::InvalidForwardCookies(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return UpdateDistributionError::InvalidGeoRestrictionParameter(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidHeadersForS3Origin" => {
                         return UpdateDistributionError::InvalidHeadersForS3Origin(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidIfMatchVersion" => {
                         return UpdateDistributionError::InvalidIfMatchVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return UpdateDistributionError::InvalidLambdaFunctionAssociation(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidLocationCode" => {
                         return UpdateDistributionError::InvalidLocationCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginAccessIdentity" => {
                         return UpdateDistributionError::InvalidOriginAccessIdentity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidOriginReadTimeout" => {
                         return UpdateDistributionError::InvalidOriginReadTimeout(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidQueryStringParameters" => {
                         return UpdateDistributionError::InvalidQueryStringParameters(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidRelativePath" => {
                         return UpdateDistributionError::InvalidRelativePath(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidRequiredProtocol" => {
                         return UpdateDistributionError::InvalidRequiredProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidResponseCode" => {
                         return UpdateDistributionError::InvalidResponseCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTTLOrder" => {
                         return UpdateDistributionError::InvalidTTLOrder(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidViewerCertificate" => {
                         return UpdateDistributionError::InvalidViewerCertificate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidWebACLId" => {
                         return UpdateDistributionError::InvalidWebACLId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingBody" => {
                         return UpdateDistributionError::MissingBody(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDistribution" => {
                         return UpdateDistributionError::NoSuchDistribution(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchOrigin" => {
                         return UpdateDistributionError::NoSuchOrigin(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PreconditionFailed" => {
                         return UpdateDistributionError::PreconditionFailed(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCacheBehaviors" => {
                         return UpdateDistributionError::TooManyCacheBehaviors(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCertificates" => {
                         return UpdateDistributionError::TooManyCertificates(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyDistributionCNAMEs" => {
                         return UpdateDistributionError::TooManyDistributionCNAMEs(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyDistributionsWithLambdaAssociations" => {
                         return UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyHeadersInForwardedValues" => {
                         return UpdateDistributionError::TooManyHeadersInForwardedValues(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return UpdateDistributionError::TooManyLambdaFunctionAssociations(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyOriginCustomHeaders" => {
                         return UpdateDistributionError::TooManyOriginCustomHeaders(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyOrigins" => {
                         return UpdateDistributionError::TooManyOrigins(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyQueryStringParameters" => {
                         return UpdateDistributionError::TooManyQueryStringParameters(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTrustedSigners" => {
                         return UpdateDistributionError::TooManyTrustedSigners(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TrustedSignerDoesNotExist" => {
                         return UpdateDistributionError::TrustedSignerDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11222,67 +11222,67 @@ impl UpdateStreamingDistributionError {
                     "AccessDenied" => {
                         return UpdateStreamingDistributionError::AccessDenied(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CNAMEAlreadyExists" => {
                         return UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IllegalUpdate" => {
                         return UpdateStreamingDistributionError::IllegalUpdate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InconsistentQuantities" => {
                         return UpdateStreamingDistributionError::InconsistentQuantities(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidArgument" => {
                         return UpdateStreamingDistributionError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidIfMatchVersion" => {
                         return UpdateStreamingDistributionError::InvalidIfMatchVersion(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidOriginAccessIdentity" => {
                         return UpdateStreamingDistributionError::InvalidOriginAccessIdentity(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "MissingBody" => {
                         return UpdateStreamingDistributionError::MissingBody(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchStreamingDistribution" => {
                         return UpdateStreamingDistributionError::NoSuchStreamingDistribution(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PreconditionFailed" => {
                         return UpdateStreamingDistributionError::PreconditionFailed(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyStreamingDistributionCNAMEs" => {
                         return UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyTrustedSigners" => {
                         return UpdateStreamingDistributionError::TooManyTrustedSigners(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TrustedSignerDoesNotExist" => {
                         return UpdateStreamingDistributionError::TrustedSignerDoesNotExist(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }

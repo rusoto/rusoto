@@ -2248,18 +2248,18 @@ impl BatchGetItemError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return BatchGetItemError::InternalServerError(String::from(error_message))
+                    return BatchGetItemError::InternalServerError(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return BatchGetItemError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return BatchGetItemError::ResourceNotFound(String::from(error_message))
+                    return BatchGetItemError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetItemError::Validation(error_message.to_string())
+                    return BatchGetItemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2344,23 +2344,23 @@ impl BatchWriteItemError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return BatchWriteItemError::InternalServerError(String::from(error_message))
+                    return BatchWriteItemError::InternalServerError(String::from(error_message));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return BatchWriteItemError::ItemCollectionSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return BatchWriteItemError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return BatchWriteItemError::ResourceNotFound(String::from(error_message))
+                    return BatchWriteItemError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchWriteItemError::Validation(error_message.to_string())
+                    return BatchWriteItemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2450,27 +2450,27 @@ impl CreateBackupError {
 
             match *error_type {
                 "BackupInUseException" => {
-                    return CreateBackupError::BackupInUse(String::from(error_message))
+                    return CreateBackupError::BackupInUse(String::from(error_message));
                 }
                 "ContinuousBackupsUnavailableException" => {
                     return CreateBackupError::ContinuousBackupsUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateBackupError::InternalServerError(String::from(error_message))
+                    return CreateBackupError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateBackupError::LimitExceeded(String::from(error_message))
+                    return CreateBackupError::LimitExceeded(String::from(error_message));
                 }
                 "TableInUseException" => {
-                    return CreateBackupError::TableInUse(String::from(error_message))
+                    return CreateBackupError::TableInUse(String::from(error_message));
                 }
                 "TableNotFoundException" => {
-                    return CreateBackupError::TableNotFound(String::from(error_message))
+                    return CreateBackupError::TableNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBackupError::Validation(error_message.to_string())
+                    return CreateBackupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2560,19 +2560,19 @@ impl CreateGlobalTableError {
                 "GlobalTableAlreadyExistsException" => {
                     return CreateGlobalTableError::GlobalTableAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateGlobalTableError::InternalServerError(String::from(error_message))
+                    return CreateGlobalTableError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateGlobalTableError::LimitExceeded(String::from(error_message))
+                    return CreateGlobalTableError::LimitExceeded(String::from(error_message));
                 }
                 "TableNotFoundException" => {
-                    return CreateGlobalTableError::TableNotFound(String::from(error_message))
+                    return CreateGlobalTableError::TableNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGlobalTableError::Validation(error_message.to_string())
+                    return CreateGlobalTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2658,16 +2658,16 @@ impl CreateTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateTableError::InternalServerError(String::from(error_message))
+                    return CreateTableError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateTableError::LimitExceeded(String::from(error_message))
+                    return CreateTableError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateTableError::ResourceInUse(String::from(error_message))
+                    return CreateTableError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTableError::Validation(error_message.to_string())
+                    return CreateTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2752,19 +2752,19 @@ impl DeleteBackupError {
 
             match *error_type {
                 "BackupInUseException" => {
-                    return DeleteBackupError::BackupInUse(String::from(error_message))
+                    return DeleteBackupError::BackupInUse(String::from(error_message));
                 }
                 "BackupNotFoundException" => {
-                    return DeleteBackupError::BackupNotFound(String::from(error_message))
+                    return DeleteBackupError::BackupNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteBackupError::InternalServerError(String::from(error_message))
+                    return DeleteBackupError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteBackupError::LimitExceeded(String::from(error_message))
+                    return DeleteBackupError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBackupError::Validation(error_message.to_string())
+                    return DeleteBackupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2852,26 +2852,26 @@ impl DeleteItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return DeleteItemError::ConditionalCheckFailed(String::from(error_message))
+                    return DeleteItemError::ConditionalCheckFailed(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteItemError::InternalServerError(String::from(error_message))
+                    return DeleteItemError::InternalServerError(String::from(error_message));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return DeleteItemError::ItemCollectionSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DeleteItemError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteItemError::ResourceNotFound(String::from(error_message))
+                    return DeleteItemError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteItemError::Validation(error_message.to_string())
+                    return DeleteItemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2958,19 +2958,19 @@ impl DeleteTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteTableError::InternalServerError(String::from(error_message))
+                    return DeleteTableError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteTableError::LimitExceeded(String::from(error_message))
+                    return DeleteTableError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteTableError::ResourceInUse(String::from(error_message))
+                    return DeleteTableError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTableError::ResourceNotFound(String::from(error_message))
+                    return DeleteTableError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTableError::Validation(error_message.to_string())
+                    return DeleteTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3052,13 +3052,13 @@ impl DescribeBackupError {
 
             match *error_type {
                 "BackupNotFoundException" => {
-                    return DescribeBackupError::BackupNotFound(String::from(error_message))
+                    return DescribeBackupError::BackupNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DescribeBackupError::InternalServerError(String::from(error_message))
+                    return DescribeBackupError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBackupError::Validation(error_message.to_string())
+                    return DescribeBackupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3140,15 +3140,15 @@ impl DescribeContinuousBackupsError {
                 "InternalServerError" => {
                     return DescribeContinuousBackupsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TableNotFoundException" => {
                     return DescribeContinuousBackupsError::TableNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeContinuousBackupsError::Validation(error_message.to_string())
+                    return DescribeContinuousBackupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3232,15 +3232,15 @@ impl DescribeGlobalTableError {
                 "GlobalTableNotFoundException" => {
                     return DescribeGlobalTableError::GlobalTableNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeGlobalTableError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeGlobalTableError::Validation(error_message.to_string())
+                    return DescribeGlobalTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3324,15 +3324,15 @@ impl DescribeGlobalTableSettingsError {
                 "GlobalTableNotFoundException" => {
                     return DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeGlobalTableSettingsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeGlobalTableSettingsError::Validation(error_message.to_string())
+                    return DescribeGlobalTableSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3412,10 +3412,10 @@ impl DescribeLimitsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeLimitsError::InternalServerError(String::from(error_message))
+                    return DescribeLimitsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLimitsError::Validation(error_message.to_string())
+                    return DescribeLimitsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3494,13 +3494,13 @@ impl DescribeTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTableError::InternalServerError(String::from(error_message))
+                    return DescribeTableError::InternalServerError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTableError::ResourceNotFound(String::from(error_message))
+                    return DescribeTableError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTableError::Validation(error_message.to_string())
+                    return DescribeTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3580,13 +3580,13 @@ impl DescribeTimeToLiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTimeToLiveError::InternalServerError(String::from(error_message))
+                    return DescribeTimeToLiveError::InternalServerError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTimeToLiveError::ResourceNotFound(String::from(error_message))
+                    return DescribeTimeToLiveError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTimeToLiveError::Validation(error_message.to_string())
+                    return DescribeTimeToLiveError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3670,13 +3670,13 @@ impl GetItemError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetItemError::InternalServerError(String::from(error_message))
+                    return GetItemError::InternalServerError(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return GetItemError::ProvisionedThroughputExceeded(String::from(error_message))
+                    return GetItemError::ProvisionedThroughputExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetItemError::ResourceNotFound(String::from(error_message))
+                    return GetItemError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => return GetItemError::Validation(error_message.to_string()),
                 _ => {}
@@ -3756,10 +3756,10 @@ impl ListBackupsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListBackupsError::InternalServerError(String::from(error_message))
+                    return ListBackupsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBackupsError::Validation(error_message.to_string())
+                    return ListBackupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3836,10 +3836,10 @@ impl ListGlobalTablesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListGlobalTablesError::InternalServerError(String::from(error_message))
+                    return ListGlobalTablesError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGlobalTablesError::Validation(error_message.to_string())
+                    return ListGlobalTablesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3916,10 +3916,10 @@ impl ListTablesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTablesError::InternalServerError(String::from(error_message))
+                    return ListTablesError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTablesError::Validation(error_message.to_string())
+                    return ListTablesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3998,13 +3998,13 @@ impl ListTagsOfResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTagsOfResourceError::InternalServerError(String::from(error_message))
+                    return ListTagsOfResourceError::InternalServerError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsOfResourceError::ResourceNotFound(String::from(error_message))
+                    return ListTagsOfResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsOfResourceError::Validation(error_message.to_string())
+                    return ListTagsOfResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4092,21 +4092,21 @@ impl PutItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return PutItemError::ConditionalCheckFailed(String::from(error_message))
+                    return PutItemError::ConditionalCheckFailed(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return PutItemError::InternalServerError(String::from(error_message))
+                    return PutItemError::InternalServerError(String::from(error_message));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return PutItemError::ItemCollectionSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return PutItemError::ProvisionedThroughputExceeded(String::from(error_message))
+                    return PutItemError::ProvisionedThroughputExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutItemError::ResourceNotFound(String::from(error_message))
+                    return PutItemError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => return PutItemError::Validation(error_message.to_string()),
                 _ => {}
@@ -4192,13 +4192,13 @@ impl QueryError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return QueryError::InternalServerError(String::from(error_message))
+                    return QueryError::InternalServerError(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return QueryError::ProvisionedThroughputExceeded(String::from(error_message))
+                    return QueryError::ProvisionedThroughputExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return QueryError::ResourceNotFound(String::from(error_message))
+                    return QueryError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => return QueryError::Validation(error_message.to_string()),
                 _ => {}
@@ -4288,29 +4288,29 @@ impl RestoreTableFromBackupError {
 
             match *error_type {
                 "BackupInUseException" => {
-                    return RestoreTableFromBackupError::BackupInUse(String::from(error_message))
+                    return RestoreTableFromBackupError::BackupInUse(String::from(error_message));
                 }
                 "BackupNotFoundException" => {
-                    return RestoreTableFromBackupError::BackupNotFound(String::from(error_message))
+                    return RestoreTableFromBackupError::BackupNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return RestoreTableFromBackupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return RestoreTableFromBackupError::LimitExceeded(String::from(error_message))
+                    return RestoreTableFromBackupError::LimitExceeded(String::from(error_message));
                 }
                 "TableAlreadyExistsException" => {
                     return RestoreTableFromBackupError::TableAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TableInUseException" => {
-                    return RestoreTableFromBackupError::TableInUse(String::from(error_message))
+                    return RestoreTableFromBackupError::TableInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RestoreTableFromBackupError::Validation(error_message.to_string())
+                    return RestoreTableFromBackupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4408,38 +4408,38 @@ impl RestoreTableToPointInTimeError {
                 "InternalServerError" => {
                     return RestoreTableToPointInTimeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRestoreTimeException" => {
                     return RestoreTableToPointInTimeError::InvalidRestoreTime(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return RestoreTableToPointInTimeError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PointInTimeRecoveryUnavailableException" => {
                     return RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "TableAlreadyExistsException" => {
                     return RestoreTableToPointInTimeError::TableAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TableInUseException" => {
-                    return RestoreTableToPointInTimeError::TableInUse(String::from(error_message))
+                    return RestoreTableToPointInTimeError::TableInUse(String::from(error_message));
                 }
                 "TableNotFoundException" => {
                     return RestoreTableToPointInTimeError::TableNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RestoreTableToPointInTimeError::Validation(error_message.to_string())
+                    return RestoreTableToPointInTimeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4528,13 +4528,13 @@ impl ScanError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ScanError::InternalServerError(String::from(error_message))
+                    return ScanError::InternalServerError(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return ScanError::ProvisionedThroughputExceeded(String::from(error_message))
+                    return ScanError::ProvisionedThroughputExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ScanError::ResourceNotFound(String::from(error_message))
+                    return ScanError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => return ScanError::Validation(error_message.to_string()),
                 _ => {}
@@ -4620,19 +4620,19 @@ impl TagResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return TagResourceError::InternalServerError(String::from(error_message))
+                    return TagResourceError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message))
+                    return TagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return TagResourceError::ResourceInUse(String::from(error_message))
+                    return TagResourceError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4718,19 +4718,19 @@ impl UntagResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UntagResourceError::InternalServerError(String::from(error_message))
+                    return UntagResourceError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UntagResourceError::LimitExceeded(String::from(error_message))
+                    return UntagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UntagResourceError::ResourceInUse(String::from(error_message))
+                    return UntagResourceError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4816,18 +4816,18 @@ impl UpdateContinuousBackupsError {
                 "ContinuousBackupsUnavailableException" => {
                     return UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return UpdateContinuousBackupsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TableNotFoundException" => {
-                    return UpdateContinuousBackupsError::TableNotFound(String::from(error_message))
+                    return UpdateContinuousBackupsError::TableNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateContinuousBackupsError::Validation(error_message.to_string())
+                    return UpdateContinuousBackupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4916,22 +4916,22 @@ impl UpdateGlobalTableError {
 
             match *error_type {
                 "GlobalTableNotFoundException" => {
-                    return UpdateGlobalTableError::GlobalTableNotFound(String::from(error_message))
+                    return UpdateGlobalTableError::GlobalTableNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return UpdateGlobalTableError::InternalServerError(String::from(error_message))
+                    return UpdateGlobalTableError::InternalServerError(String::from(error_message));
                 }
                 "ReplicaAlreadyExistsException" => {
-                    return UpdateGlobalTableError::ReplicaAlreadyExists(String::from(error_message))
+                    return UpdateGlobalTableError::ReplicaAlreadyExists(String::from(error_message));
                 }
                 "ReplicaNotFoundException" => {
-                    return UpdateGlobalTableError::ReplicaNotFound(String::from(error_message))
+                    return UpdateGlobalTableError::ReplicaNotFound(String::from(error_message));
                 }
                 "TableNotFoundException" => {
-                    return UpdateGlobalTableError::TableNotFound(String::from(error_message))
+                    return UpdateGlobalTableError::TableNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGlobalTableError::Validation(error_message.to_string())
+                    return UpdateGlobalTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5026,35 +5026,35 @@ impl UpdateGlobalTableSettingsError {
                 "GlobalTableNotFoundException" => {
                     return UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IndexNotFoundException" => {
                     return UpdateGlobalTableSettingsError::IndexNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return UpdateGlobalTableSettingsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return UpdateGlobalTableSettingsError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReplicaNotFoundException" => {
                     return UpdateGlobalTableSettingsError::ReplicaNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return UpdateGlobalTableSettingsError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateGlobalTableSettingsError::Validation(error_message.to_string())
+                    return UpdateGlobalTableSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5146,26 +5146,26 @@ impl UpdateItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return UpdateItemError::ConditionalCheckFailed(String::from(error_message))
+                    return UpdateItemError::ConditionalCheckFailed(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return UpdateItemError::InternalServerError(String::from(error_message))
+                    return UpdateItemError::InternalServerError(String::from(error_message));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return UpdateItemError::ItemCollectionSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return UpdateItemError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateItemError::ResourceNotFound(String::from(error_message))
+                    return UpdateItemError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateItemError::Validation(error_message.to_string())
+                    return UpdateItemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5252,19 +5252,19 @@ impl UpdateTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateTableError::InternalServerError(String::from(error_message))
+                    return UpdateTableError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateTableError::LimitExceeded(String::from(error_message))
+                    return UpdateTableError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateTableError::ResourceInUse(String::from(error_message))
+                    return UpdateTableError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTableError::ResourceNotFound(String::from(error_message))
+                    return UpdateTableError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTableError::Validation(error_message.to_string())
+                    return UpdateTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5350,19 +5350,19 @@ impl UpdateTimeToLiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateTimeToLiveError::InternalServerError(String::from(error_message))
+                    return UpdateTimeToLiveError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateTimeToLiveError::LimitExceeded(String::from(error_message))
+                    return UpdateTimeToLiveError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateTimeToLiveError::ResourceInUse(String::from(error_message))
+                    return UpdateTimeToLiveError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTimeToLiveError::ResourceNotFound(String::from(error_message))
+                    return UpdateTimeToLiveError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTimeToLiveError::Validation(error_message.to_string())
+                    return UpdateTimeToLiveError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

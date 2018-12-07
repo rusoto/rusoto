@@ -270,40 +270,40 @@ impl PostContentError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return PostContentError::BadGateway(String::from(error_message))
+                    return PostContentError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return PostContentError::BadRequest(String::from(error_message))
+                    return PostContentError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PostContentError::Conflict(String::from(error_message))
+                    return PostContentError::Conflict(String::from(error_message));
                 }
                 "DependencyFailedException" => {
-                    return PostContentError::DependencyFailed(String::from(error_message))
+                    return PostContentError::DependencyFailed(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return PostContentError::InternalFailure(String::from(error_message))
+                    return PostContentError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PostContentError::LimitExceeded(String::from(error_message))
+                    return PostContentError::LimitExceeded(String::from(error_message));
                 }
                 "LoopDetectedException" => {
-                    return PostContentError::LoopDetected(String::from(error_message))
+                    return PostContentError::LoopDetected(String::from(error_message));
                 }
                 "NotAcceptableException" => {
-                    return PostContentError::NotAcceptable(String::from(error_message))
+                    return PostContentError::NotAcceptable(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PostContentError::NotFound(String::from(error_message))
+                    return PostContentError::NotFound(String::from(error_message));
                 }
                 "RequestTimeoutException" => {
-                    return PostContentError::RequestTimeout(String::from(error_message))
+                    return PostContentError::RequestTimeout(String::from(error_message));
                 }
                 "UnsupportedMediaTypeException" => {
-                    return PostContentError::UnsupportedMediaType(String::from(error_message))
+                    return PostContentError::UnsupportedMediaType(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PostContentError::Validation(error_message.to_string())
+                    return PostContentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -418,27 +418,27 @@ impl PostTextError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return PostTextError::BadGateway(String::from(error_message))
+                    return PostTextError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return PostTextError::BadRequest(String::from(error_message))
+                    return PostTextError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return PostTextError::Conflict(String::from(error_message)),
                 "DependencyFailedException" => {
-                    return PostTextError::DependencyFailed(String::from(error_message))
+                    return PostTextError::DependencyFailed(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return PostTextError::InternalFailure(String::from(error_message))
+                    return PostTextError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PostTextError::LimitExceeded(String::from(error_message))
+                    return PostTextError::LimitExceeded(String::from(error_message));
                 }
                 "LoopDetectedException" => {
-                    return PostTextError::LoopDetected(String::from(error_message))
+                    return PostTextError::LoopDetected(String::from(error_message));
                 }
                 "NotFoundException" => return PostTextError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return PostTextError::Validation(error_message.to_string())
+                    return PostTextError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

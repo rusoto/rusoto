@@ -1467,22 +1467,22 @@ impl CancelJobError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CancelJobError::AccessDenied(String::from(error_message))
+                    return CancelJobError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return CancelJobError::IncompatibleVersion(String::from(error_message))
+                    return CancelJobError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CancelJobError::InternalService(String::from(error_message))
+                    return CancelJobError::InternalService(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CancelJobError::ResourceInUse(String::from(error_message))
+                    return CancelJobError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CancelJobError::ResourceNotFound(String::from(error_message))
+                    return CancelJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string())
+                    return CancelJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1585,22 +1585,22 @@ impl CreateJobError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateJobError::AccessDenied(String::from(error_message))
+                    return CreateJobError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return CreateJobError::IncompatibleVersion(String::from(error_message))
+                    return CreateJobError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateJobError::InternalService(String::from(error_message))
+                    return CreateJobError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateJobError::LimitExceeded(String::from(error_message))
+                    return CreateJobError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateJobError::ResourceNotFound(String::from(error_message))
+                    return CreateJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string())
+                    return CreateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1703,22 +1703,22 @@ impl CreatePipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreatePipelineError::AccessDenied(String::from(error_message))
+                    return CreatePipelineError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return CreatePipelineError::IncompatibleVersion(String::from(error_message))
+                    return CreatePipelineError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreatePipelineError::InternalService(String::from(error_message))
+                    return CreatePipelineError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreatePipelineError::LimitExceeded(String::from(error_message))
+                    return CreatePipelineError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreatePipelineError::ResourceNotFound(String::from(error_message))
+                    return CreatePipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string())
+                    return CreatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1819,19 +1819,19 @@ impl CreatePresetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreatePresetError::AccessDenied(String::from(error_message))
+                    return CreatePresetError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return CreatePresetError::IncompatibleVersion(String::from(error_message))
+                    return CreatePresetError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreatePresetError::InternalService(String::from(error_message))
+                    return CreatePresetError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreatePresetError::LimitExceeded(String::from(error_message))
+                    return CreatePresetError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePresetError::Validation(error_message.to_string())
+                    return CreatePresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1933,22 +1933,22 @@ impl DeletePipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeletePipelineError::AccessDenied(String::from(error_message))
+                    return DeletePipelineError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return DeletePipelineError::IncompatibleVersion(String::from(error_message))
+                    return DeletePipelineError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeletePipelineError::InternalService(String::from(error_message))
+                    return DeletePipelineError::InternalService(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeletePipelineError::ResourceInUse(String::from(error_message))
+                    return DeletePipelineError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePipelineError::ResourceNotFound(String::from(error_message))
+                    return DeletePipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string())
+                    return DeletePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2049,19 +2049,19 @@ impl DeletePresetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeletePresetError::AccessDenied(String::from(error_message))
+                    return DeletePresetError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return DeletePresetError::IncompatibleVersion(String::from(error_message))
+                    return DeletePresetError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeletePresetError::InternalService(String::from(error_message))
+                    return DeletePresetError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePresetError::ResourceNotFound(String::from(error_message))
+                    return DeletePresetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePresetError::Validation(error_message.to_string())
+                    return DeletePresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2161,19 +2161,19 @@ impl ListJobsByPipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListJobsByPipelineError::AccessDenied(String::from(error_message))
+                    return ListJobsByPipelineError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ListJobsByPipelineError::IncompatibleVersion(String::from(error_message))
+                    return ListJobsByPipelineError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListJobsByPipelineError::InternalService(String::from(error_message))
+                    return ListJobsByPipelineError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListJobsByPipelineError::ResourceNotFound(String::from(error_message))
+                    return ListJobsByPipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobsByPipelineError::Validation(error_message.to_string())
+                    return ListJobsByPipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2275,19 +2275,19 @@ impl ListJobsByStatusError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListJobsByStatusError::AccessDenied(String::from(error_message))
+                    return ListJobsByStatusError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ListJobsByStatusError::IncompatibleVersion(String::from(error_message))
+                    return ListJobsByStatusError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListJobsByStatusError::InternalService(String::from(error_message))
+                    return ListJobsByStatusError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListJobsByStatusError::ResourceNotFound(String::from(error_message))
+                    return ListJobsByStatusError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobsByStatusError::Validation(error_message.to_string())
+                    return ListJobsByStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2385,16 +2385,16 @@ impl ListPipelinesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPipelinesError::AccessDenied(String::from(error_message))
+                    return ListPipelinesError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ListPipelinesError::IncompatibleVersion(String::from(error_message))
+                    return ListPipelinesError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListPipelinesError::InternalService(String::from(error_message))
+                    return ListPipelinesError::InternalService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string())
+                    return ListPipelinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2491,16 +2491,16 @@ impl ListPresetsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPresetsError::AccessDenied(String::from(error_message))
+                    return ListPresetsError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ListPresetsError::IncompatibleVersion(String::from(error_message))
+                    return ListPresetsError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListPresetsError::InternalService(String::from(error_message))
+                    return ListPresetsError::InternalService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPresetsError::Validation(error_message.to_string())
+                    return ListPresetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2599,16 +2599,16 @@ impl ReadJobError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ReadJobError::AccessDenied(String::from(error_message))
+                    return ReadJobError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ReadJobError::IncompatibleVersion(String::from(error_message))
+                    return ReadJobError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ReadJobError::InternalService(String::from(error_message))
+                    return ReadJobError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ReadJobError::ResourceNotFound(String::from(error_message))
+                    return ReadJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => return ReadJobError::Validation(error_message.to_string()),
                 _ => {}
@@ -2709,19 +2709,19 @@ impl ReadPipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ReadPipelineError::AccessDenied(String::from(error_message))
+                    return ReadPipelineError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ReadPipelineError::IncompatibleVersion(String::from(error_message))
+                    return ReadPipelineError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ReadPipelineError::InternalService(String::from(error_message))
+                    return ReadPipelineError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ReadPipelineError::ResourceNotFound(String::from(error_message))
+                    return ReadPipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ReadPipelineError::Validation(error_message.to_string())
+                    return ReadPipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2821,19 +2821,19 @@ impl ReadPresetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ReadPresetError::AccessDenied(String::from(error_message))
+                    return ReadPresetError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return ReadPresetError::IncompatibleVersion(String::from(error_message))
+                    return ReadPresetError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ReadPresetError::InternalService(String::from(error_message))
+                    return ReadPresetError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ReadPresetError::ResourceNotFound(String::from(error_message))
+                    return ReadPresetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ReadPresetError::Validation(error_message.to_string())
+                    return ReadPresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2933,19 +2933,19 @@ impl TestRoleError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return TestRoleError::AccessDenied(String::from(error_message))
+                    return TestRoleError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return TestRoleError::IncompatibleVersion(String::from(error_message))
+                    return TestRoleError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return TestRoleError::InternalService(String::from(error_message))
+                    return TestRoleError::InternalService(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TestRoleError::ResourceNotFound(String::from(error_message))
+                    return TestRoleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TestRoleError::Validation(error_message.to_string())
+                    return TestRoleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3047,22 +3047,22 @@ impl UpdatePipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdatePipelineError::AccessDenied(String::from(error_message))
+                    return UpdatePipelineError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
-                    return UpdatePipelineError::IncompatibleVersion(String::from(error_message))
+                    return UpdatePipelineError::IncompatibleVersion(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdatePipelineError::InternalService(String::from(error_message))
+                    return UpdatePipelineError::InternalService(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdatePipelineError::ResourceInUse(String::from(error_message))
+                    return UpdatePipelineError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePipelineError::ResourceNotFound(String::from(error_message))
+                    return UpdatePipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePipelineError::Validation(error_message.to_string())
+                    return UpdatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3167,30 +3167,30 @@ impl UpdatePipelineNotificationsError {
                 "AccessDeniedException" => {
                     return UpdatePipelineNotificationsError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IncompatibleVersionException" => {
                     return UpdatePipelineNotificationsError::IncompatibleVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return UpdatePipelineNotificationsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return UpdatePipelineNotificationsError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdatePipelineNotificationsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdatePipelineNotificationsError::Validation(error_message.to_string())
+                    return UpdatePipelineNotificationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3295,24 +3295,24 @@ impl UpdatePipelineStatusError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdatePipelineStatusError::AccessDenied(String::from(error_message))
+                    return UpdatePipelineStatusError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleVersionException" => {
                     return UpdatePipelineStatusError::IncompatibleVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdatePipelineStatusError::InternalService(String::from(error_message))
+                    return UpdatePipelineStatusError::InternalService(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdatePipelineStatusError::ResourceInUse(String::from(error_message))
+                    return UpdatePipelineStatusError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePipelineStatusError::ResourceNotFound(String::from(error_message))
+                    return UpdatePipelineStatusError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePipelineStatusError::Validation(error_message.to_string())
+                    return UpdatePipelineStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

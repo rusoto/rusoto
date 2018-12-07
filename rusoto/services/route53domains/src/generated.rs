@@ -906,13 +906,13 @@ impl CheckDomainAvailabilityError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return CheckDomainAvailabilityError::InvalidInput(String::from(error_message))
+                    return CheckDomainAvailabilityError::InvalidInput(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message))
+                    return CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CheckDomainAvailabilityError::Validation(error_message.to_string())
+                    return CheckDomainAvailabilityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -996,15 +996,15 @@ impl CheckDomainTransferabilityError {
                 "InvalidInput" => {
                     return CheckDomainTransferabilityError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
                     return CheckDomainTransferabilityError::UnsupportedTLD(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CheckDomainTransferabilityError::Validation(error_message.to_string())
+                    return CheckDomainTransferabilityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1088,18 +1088,18 @@ impl DeleteTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DeleteTagsForDomainError::InvalidInput(String::from(error_message))
+                    return DeleteTagsForDomainError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return DeleteTagsForDomainError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message))
+                    return DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTagsForDomainError::Validation(error_message.to_string())
+                    return DeleteTagsForDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1182,13 +1182,13 @@ impl DisableDomainAutoRenewError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DisableDomainAutoRenewError::InvalidInput(String::from(error_message))
+                    return DisableDomainAutoRenewError::InvalidInput(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message))
+                    return DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableDomainAutoRenewError::Validation(error_message.to_string())
+                    return DisableDomainAutoRenewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1278,28 +1278,28 @@ impl DisableDomainTransferLockError {
                 "DuplicateRequest" => {
                     return DisableDomainTransferLockError::DuplicateRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
-                    return DisableDomainTransferLockError::InvalidInput(String::from(error_message))
+                    return DisableDomainTransferLockError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return DisableDomainTransferLockError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TLDRulesViolation" => {
                     return DisableDomainTransferLockError::TLDRulesViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
                     return DisableDomainTransferLockError::UnsupportedTLD(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisableDomainTransferLockError::Validation(error_message.to_string())
+                    return DisableDomainTransferLockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1386,18 +1386,18 @@ impl EnableDomainAutoRenewError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return EnableDomainAutoRenewError::InvalidInput(String::from(error_message))
+                    return EnableDomainAutoRenewError::InvalidInput(String::from(error_message));
                 }
                 "TLDRulesViolation" => {
                     return EnableDomainAutoRenewError::TLDRulesViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message))
+                    return EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableDomainAutoRenewError::Validation(error_message.to_string())
+                    return EnableDomainAutoRenewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1488,28 +1488,28 @@ impl EnableDomainTransferLockError {
                 "DuplicateRequest" => {
                     return EnableDomainTransferLockError::DuplicateRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
-                    return EnableDomainTransferLockError::InvalidInput(String::from(error_message))
+                    return EnableDomainTransferLockError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return EnableDomainTransferLockError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TLDRulesViolation" => {
                     return EnableDomainTransferLockError::TLDRulesViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
                     return EnableDomainTransferLockError::UnsupportedTLD(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return EnableDomainTransferLockError::Validation(error_message.to_string())
+                    return EnableDomainTransferLockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1598,20 +1598,20 @@ impl GetContactReachabilityStatusError {
                 "InvalidInput" => {
                     return GetContactReachabilityStatusError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationLimitExceeded" => {
                     return GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
                     return GetContactReachabilityStatusError::UnsupportedTLD(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetContactReachabilityStatusError::Validation(error_message.to_string())
+                    return GetContactReachabilityStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1694,13 +1694,13 @@ impl GetDomainDetailError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetDomainDetailError::InvalidInput(String::from(error_message))
+                    return GetDomainDetailError::InvalidInput(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return GetDomainDetailError::UnsupportedTLD(String::from(error_message))
+                    return GetDomainDetailError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDomainDetailError::Validation(error_message.to_string())
+                    return GetDomainDetailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1780,13 +1780,13 @@ impl GetDomainSuggestionsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetDomainSuggestionsError::InvalidInput(String::from(error_message))
+                    return GetDomainSuggestionsError::InvalidInput(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message))
+                    return GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDomainSuggestionsError::Validation(error_message.to_string())
+                    return GetDomainSuggestionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1866,10 +1866,10 @@ impl GetOperationDetailError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetOperationDetailError::InvalidInput(String::from(error_message))
+                    return GetOperationDetailError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetOperationDetailError::Validation(error_message.to_string())
+                    return GetOperationDetailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1948,10 +1948,10 @@ impl ListDomainsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListDomainsError::InvalidInput(String::from(error_message))
+                    return ListDomainsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDomainsError::Validation(error_message.to_string())
+                    return ListDomainsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2028,10 +2028,10 @@ impl ListOperationsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListOperationsError::InvalidInput(String::from(error_message))
+                    return ListOperationsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListOperationsError::Validation(error_message.to_string())
+                    return ListOperationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2112,18 +2112,18 @@ impl ListTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListTagsForDomainError::InvalidInput(String::from(error_message))
+                    return ListTagsForDomainError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return ListTagsForDomainError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return ListTagsForDomainError::UnsupportedTLD(String::from(error_message))
+                    return ListTagsForDomainError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForDomainError::Validation(error_message.to_string())
+                    return ListTagsForDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2214,25 +2214,25 @@ impl RegisterDomainError {
 
             match *error_type {
                 "DomainLimitExceeded" => {
-                    return RegisterDomainError::DomainLimitExceeded(String::from(error_message))
+                    return RegisterDomainError::DomainLimitExceeded(String::from(error_message));
                 }
                 "DuplicateRequest" => {
-                    return RegisterDomainError::DuplicateRequest(String::from(error_message))
+                    return RegisterDomainError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return RegisterDomainError::InvalidInput(String::from(error_message))
+                    return RegisterDomainError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
-                    return RegisterDomainError::OperationLimitExceeded(String::from(error_message))
+                    return RegisterDomainError::OperationLimitExceeded(String::from(error_message));
                 }
                 "TLDRulesViolation" => {
-                    return RegisterDomainError::TLDRulesViolation(String::from(error_message))
+                    return RegisterDomainError::TLDRulesViolation(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return RegisterDomainError::UnsupportedTLD(String::from(error_message))
+                    return RegisterDomainError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterDomainError::Validation(error_message.to_string())
+                    return RegisterDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2322,22 +2322,22 @@ impl RenewDomainError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return RenewDomainError::DuplicateRequest(String::from(error_message))
+                    return RenewDomainError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return RenewDomainError::InvalidInput(String::from(error_message))
+                    return RenewDomainError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
-                    return RenewDomainError::OperationLimitExceeded(String::from(error_message))
+                    return RenewDomainError::OperationLimitExceeded(String::from(error_message));
                 }
                 "TLDRulesViolation" => {
-                    return RenewDomainError::TLDRulesViolation(String::from(error_message))
+                    return RenewDomainError::TLDRulesViolation(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return RenewDomainError::UnsupportedTLD(String::from(error_message))
+                    return RenewDomainError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RenewDomainError::Validation(error_message.to_string())
+                    return RenewDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2424,22 +2424,22 @@ impl ResendContactReachabilityEmailError {
                 "InvalidInput" => {
                     return ResendContactReachabilityEmailError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationLimitExceeded" => {
                     return ResendContactReachabilityEmailError::OperationLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnsupportedTLD" => {
                     return ResendContactReachabilityEmailError::UnsupportedTLD(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ResendContactReachabilityEmailError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2522,13 +2522,13 @@ impl RetrieveDomainAuthCodeError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message))
+                    return RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message))
+                    return RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RetrieveDomainAuthCodeError::Validation(error_message.to_string())
+                    return RetrieveDomainAuthCodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2618,25 +2618,25 @@ impl TransferDomainError {
 
             match *error_type {
                 "DomainLimitExceeded" => {
-                    return TransferDomainError::DomainLimitExceeded(String::from(error_message))
+                    return TransferDomainError::DomainLimitExceeded(String::from(error_message));
                 }
                 "DuplicateRequest" => {
-                    return TransferDomainError::DuplicateRequest(String::from(error_message))
+                    return TransferDomainError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return TransferDomainError::InvalidInput(String::from(error_message))
+                    return TransferDomainError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
-                    return TransferDomainError::OperationLimitExceeded(String::from(error_message))
+                    return TransferDomainError::OperationLimitExceeded(String::from(error_message));
                 }
                 "TLDRulesViolation" => {
-                    return TransferDomainError::TLDRulesViolation(String::from(error_message))
+                    return TransferDomainError::TLDRulesViolation(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return TransferDomainError::UnsupportedTLD(String::from(error_message))
+                    return TransferDomainError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TransferDomainError::Validation(error_message.to_string())
+                    return TransferDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2726,24 +2726,24 @@ impl UpdateDomainContactError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return UpdateDomainContactError::DuplicateRequest(String::from(error_message))
+                    return UpdateDomainContactError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return UpdateDomainContactError::InvalidInput(String::from(error_message))
+                    return UpdateDomainContactError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return UpdateDomainContactError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TLDRulesViolation" => {
-                    return UpdateDomainContactError::TLDRulesViolation(String::from(error_message))
+                    return UpdateDomainContactError::TLDRulesViolation(String::from(error_message));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateDomainContactError::UnsupportedTLD(String::from(error_message))
+                    return UpdateDomainContactError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDomainContactError::Validation(error_message.to_string())
+                    return UpdateDomainContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2836,30 +2836,30 @@ impl UpdateDomainContactPrivacyError {
                 "DuplicateRequest" => {
                     return UpdateDomainContactPrivacyError::DuplicateRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
                     return UpdateDomainContactPrivacyError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationLimitExceeded" => {
                     return UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TLDRulesViolation" => {
                     return UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
                     return UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDomainContactPrivacyError::Validation(error_message.to_string())
+                    return UpdateDomainContactPrivacyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2952,26 +2952,26 @@ impl UpdateDomainNameserversError {
                 "DuplicateRequest" => {
                     return UpdateDomainNameserversError::DuplicateRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
-                    return UpdateDomainNameserversError::InvalidInput(String::from(error_message))
+                    return UpdateDomainNameserversError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return UpdateDomainNameserversError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TLDRulesViolation" => {
                     return UpdateDomainNameserversError::TLDRulesViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message))
+                    return UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDomainNameserversError::Validation(error_message.to_string())
+                    return UpdateDomainNameserversError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3058,18 +3058,18 @@ impl UpdateTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return UpdateTagsForDomainError::InvalidInput(String::from(error_message))
+                    return UpdateTagsForDomainError::InvalidInput(String::from(error_message));
                 }
                 "OperationLimitExceeded" => {
                     return UpdateTagsForDomainError::OperationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message))
+                    return UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTagsForDomainError::Validation(error_message.to_string())
+                    return UpdateTagsForDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3150,10 +3150,10 @@ impl ViewBillingError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ViewBillingError::InvalidInput(String::from(error_message))
+                    return ViewBillingError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ViewBillingError::Validation(error_message.to_string())
+                    return ViewBillingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

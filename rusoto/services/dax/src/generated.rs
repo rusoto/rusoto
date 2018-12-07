@@ -954,64 +954,64 @@ impl CreateClusterError {
                 "ClusterAlreadyExistsFault" => {
                     return CreateClusterError::ClusterAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ClusterQuotaForCustomerExceededFault" => {
                     return CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientClusterCapacityFault" => {
                     return CreateClusterError::InsufficientClusterCapacityFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidClusterStateFault" => {
-                    return CreateClusterError::InvalidClusterStateFault(String::from(error_message))
+                    return CreateClusterError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return CreateClusterError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterGroupStateFault" => {
                     return CreateClusterError::InvalidParameterGroupStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return CreateClusterError::InvalidParameterValue(String::from(error_message))
+                    return CreateClusterError::InvalidParameterValue(String::from(error_message));
                 }
                 "InvalidVPCNetworkStateFault" => {
                     return CreateClusterError::InvalidVPCNetworkStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NodeQuotaForClusterExceededFault" => {
                     return CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NodeQuotaForCustomerExceededFault" => {
                     return CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterGroupNotFoundFault" => {
                     return CreateClusterError::ParameterGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SubnetGroupNotFoundFault" => {
-                    return CreateClusterError::SubnetGroupNotFoundFault(String::from(error_message))
+                    return CreateClusterError::SubnetGroupNotFoundFault(String::from(error_message));
                 }
                 "TagQuotaPerResourceExceeded" => {
                     return CreateClusterError::TagQuotaPerResourceExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string())
+                    return CreateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1110,30 +1110,30 @@ impl CreateParameterGroupError {
                 "InvalidParameterCombinationException" => {
                     return CreateParameterGroupError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterGroupStateFault" => {
                     return CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return CreateParameterGroupError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterGroupAlreadyExistsFault" => {
                     return CreateParameterGroupError::ParameterGroupAlreadyExistsFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ParameterGroupQuotaExceededFault" => {
                     return CreateParameterGroupError::ParameterGroupQuotaExceededFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return CreateParameterGroupError::Validation(error_message.to_string())
+                    return CreateParameterGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1222,25 +1222,25 @@ impl CreateSubnetGroupError {
 
             match *error_type {
                 "InvalidSubnet" => {
-                    return CreateSubnetGroupError::InvalidSubnet(String::from(error_message))
+                    return CreateSubnetGroupError::InvalidSubnet(String::from(error_message));
                 }
                 "SubnetGroupAlreadyExistsFault" => {
                     return CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SubnetGroupQuotaExceededFault" => {
                     return CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SubnetQuotaExceededFault" => {
                     return CreateSubnetGroupError::SubnetQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSubnetGroupError::Validation(error_message.to_string())
+                    return CreateSubnetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1332,30 +1332,30 @@ impl DecreaseReplicationFactorError {
                 "ClusterNotFoundFault" => {
                     return DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidClusterStateFault" => {
                     return DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
                     return DecreaseReplicationFactorError::InvalidParameterCombination(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterValueException" => {
                     return DecreaseReplicationFactorError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NodeNotFoundFault" => {
                     return DecreaseReplicationFactorError::NodeNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DecreaseReplicationFactorError::Validation(error_message.to_string())
+                    return DecreaseReplicationFactorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1444,21 +1444,21 @@ impl DeleteClusterError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return DeleteClusterError::ClusterNotFoundFault(String::from(error_message))
+                    return DeleteClusterError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidClusterStateFault" => {
-                    return DeleteClusterError::InvalidClusterStateFault(String::from(error_message))
+                    return DeleteClusterError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return DeleteClusterError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DeleteClusterError::InvalidParameterValue(String::from(error_message))
+                    return DeleteClusterError::InvalidParameterValue(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string())
+                    return DeleteClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1546,25 +1546,25 @@ impl DeleteParameterGroupError {
                 "InvalidParameterCombinationException" => {
                     return DeleteParameterGroupError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterGroupStateFault" => {
                     return DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DeleteParameterGroupError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterGroupNotFoundFault" => {
                     return DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteParameterGroupError::Validation(error_message.to_string())
+                    return DeleteParameterGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1650,15 +1650,15 @@ impl DeleteSubnetGroupError {
                 "SubnetGroupInUseFault" => {
                     return DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SubnetGroupNotFoundFault" => {
                     return DeleteSubnetGroupError::SubnetGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteSubnetGroupError::Validation(error_message.to_string())
+                    return DeleteSubnetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1742,18 +1742,18 @@ impl DescribeClustersError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return DescribeClustersError::ClusterNotFoundFault(String::from(error_message))
+                    return DescribeClustersError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return DescribeClustersError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeClustersError::InvalidParameterValue(String::from(error_message))
+                    return DescribeClustersError::InvalidParameterValue(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeClustersError::Validation(error_message.to_string())
+                    return DescribeClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1836,15 +1836,15 @@ impl DescribeDefaultParametersError {
                 "InvalidParameterCombinationException" => {
                     return DescribeDefaultParametersError::InvalidParameterCombination(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterValueException" => {
                     return DescribeDefaultParametersError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDefaultParametersError::Validation(error_message.to_string())
+                    return DescribeDefaultParametersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1928,13 +1928,13 @@ impl DescribeEventsError {
                 "InvalidParameterCombinationException" => {
                     return DescribeEventsError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeEventsError::InvalidParameterValue(String::from(error_message))
+                    return DescribeEventsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventsError::Validation(error_message.to_string())
+                    return DescribeEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2018,20 +2018,20 @@ impl DescribeParameterGroupsError {
                 "InvalidParameterCombinationException" => {
                     return DescribeParameterGroupsError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeParameterGroupsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterGroupNotFoundFault" => {
                     return DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeParameterGroupsError::Validation(error_message.to_string())
+                    return DescribeParameterGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2118,20 +2118,20 @@ impl DescribeParametersError {
                 "InvalidParameterCombinationException" => {
                     return DescribeParametersError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeParametersError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterGroupNotFoundFault" => {
                     return DescribeParametersError::ParameterGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeParametersError::Validation(error_message.to_string())
+                    return DescribeParametersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2214,10 +2214,10 @@ impl DescribeSubnetGroupsError {
                 "SubnetGroupNotFoundFault" => {
                     return DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSubnetGroupsError::Validation(error_message.to_string())
+                    return DescribeSubnetGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2312,45 +2312,45 @@ impl IncreaseReplicationFactorError {
                 "ClusterNotFoundFault" => {
                     return IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientClusterCapacityFault" => {
                     return IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidClusterStateFault" => {
                     return IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
                     return IncreaseReplicationFactorError::InvalidParameterCombination(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterValueException" => {
                     return IncreaseReplicationFactorError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidVPCNetworkStateFault" => {
                     return IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NodeQuotaForClusterExceededFault" => {
                     return IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NodeQuotaForCustomerExceededFault" => {
                     return IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return IncreaseReplicationFactorError::Validation(error_message.to_string())
+                    return IncreaseReplicationFactorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2444,22 +2444,22 @@ impl ListTagsError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return ListTagsError::ClusterNotFoundFault(String::from(error_message))
+                    return ListTagsError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidARNFault" => {
-                    return ListTagsError::InvalidARNFault(String::from(error_message))
+                    return ListTagsError::InvalidARNFault(String::from(error_message));
                 }
                 "InvalidClusterStateFault" => {
-                    return ListTagsError::InvalidClusterStateFault(String::from(error_message))
+                    return ListTagsError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
-                    return ListTagsError::InvalidParameterCombination(String::from(error_message))
+                    return ListTagsError::InvalidParameterCombination(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return ListTagsError::InvalidParameterValue(String::from(error_message))
+                    return ListTagsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2548,22 +2548,22 @@ impl RebootNodeError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return RebootNodeError::ClusterNotFoundFault(String::from(error_message))
+                    return RebootNodeError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidClusterStateFault" => {
-                    return RebootNodeError::InvalidClusterStateFault(String::from(error_message))
+                    return RebootNodeError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
-                    return RebootNodeError::InvalidParameterCombination(String::from(error_message))
+                    return RebootNodeError::InvalidParameterCombination(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return RebootNodeError::InvalidParameterValue(String::from(error_message))
+                    return RebootNodeError::InvalidParameterValue(String::from(error_message));
                 }
                 "NodeNotFoundFault" => {
-                    return RebootNodeError::NodeNotFoundFault(String::from(error_message))
+                    return RebootNodeError::NodeNotFoundFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RebootNodeError::Validation(error_message.to_string())
+                    return RebootNodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2654,29 +2654,29 @@ impl TagResourceError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return TagResourceError::ClusterNotFoundFault(String::from(error_message))
+                    return TagResourceError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidARNFault" => {
-                    return TagResourceError::InvalidARNFault(String::from(error_message))
+                    return TagResourceError::InvalidARNFault(String::from(error_message));
                 }
                 "InvalidClusterStateFault" => {
-                    return TagResourceError::InvalidClusterStateFault(String::from(error_message))
+                    return TagResourceError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return TagResourceError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return TagResourceError::InvalidParameterValue(String::from(error_message))
+                    return TagResourceError::InvalidParameterValue(String::from(error_message));
                 }
                 "TagQuotaPerResourceExceeded" => {
                     return TagResourceError::TagQuotaPerResourceExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2768,27 +2768,27 @@ impl UntagResourceError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return UntagResourceError::ClusterNotFoundFault(String::from(error_message))
+                    return UntagResourceError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidARNFault" => {
-                    return UntagResourceError::InvalidARNFault(String::from(error_message))
+                    return UntagResourceError::InvalidARNFault(String::from(error_message));
                 }
                 "InvalidClusterStateFault" => {
-                    return UntagResourceError::InvalidClusterStateFault(String::from(error_message))
+                    return UntagResourceError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return UntagResourceError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return UntagResourceError::InvalidParameterValue(String::from(error_message))
+                    return UntagResourceError::InvalidParameterValue(String::from(error_message));
                 }
                 "TagNotFoundFault" => {
-                    return UntagResourceError::TagNotFoundFault(String::from(error_message))
+                    return UntagResourceError::TagNotFoundFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2880,31 +2880,31 @@ impl UpdateClusterError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return UpdateClusterError::ClusterNotFoundFault(String::from(error_message))
+                    return UpdateClusterError::ClusterNotFoundFault(String::from(error_message));
                 }
                 "InvalidClusterStateFault" => {
-                    return UpdateClusterError::InvalidClusterStateFault(String::from(error_message))
+                    return UpdateClusterError::InvalidClusterStateFault(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return UpdateClusterError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterGroupStateFault" => {
                     return UpdateClusterError::InvalidParameterGroupStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return UpdateClusterError::InvalidParameterValue(String::from(error_message))
+                    return UpdateClusterError::InvalidParameterValue(String::from(error_message));
                 }
                 "ParameterGroupNotFoundFault" => {
                     return UpdateClusterError::ParameterGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateClusterError::Validation(error_message.to_string())
+                    return UpdateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2994,25 +2994,25 @@ impl UpdateParameterGroupError {
                 "InvalidParameterCombinationException" => {
                     return UpdateParameterGroupError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterGroupStateFault" => {
                     return UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return UpdateParameterGroupError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterGroupNotFoundFault" => {
                     return UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateParameterGroupError::Validation(error_message.to_string())
+                    return UpdateParameterGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3100,23 +3100,23 @@ impl UpdateSubnetGroupError {
 
             match *error_type {
                 "InvalidSubnet" => {
-                    return UpdateSubnetGroupError::InvalidSubnet(String::from(error_message))
+                    return UpdateSubnetGroupError::InvalidSubnet(String::from(error_message));
                 }
                 "SubnetGroupNotFoundFault" => {
                     return UpdateSubnetGroupError::SubnetGroupNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SubnetInUse" => {
-                    return UpdateSubnetGroupError::SubnetInUse(String::from(error_message))
+                    return UpdateSubnetGroupError::SubnetInUse(String::from(error_message));
                 }
                 "SubnetQuotaExceededFault" => {
                     return UpdateSubnetGroupError::SubnetQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateSubnetGroupError::Validation(error_message.to_string())
+                    return UpdateSubnetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

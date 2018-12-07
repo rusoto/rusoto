@@ -16385,7 +16385,7 @@ impl AbortMultipartUploadError {
                     "NoSuchUpload" => {
                         return AbortMultipartUploadError::NoSuchUpload(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16547,7 +16547,7 @@ impl CopyObjectError {
                     "ObjectNotInActiveTierError" => {
                         return CopyObjectError::ObjectNotInActiveTierError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16632,12 +16632,12 @@ impl CreateBucketError {
                     "BucketAlreadyExists" => {
                         return CreateBucketError::BucketAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "BucketAlreadyOwnedByYou" => {
                         return CreateBucketError::BucketAlreadyOwnedByYou(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19317,7 +19317,7 @@ impl GetObjectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return GetObjectError::NoSuchKey(String::from(parsed_error.message))
+                        return GetObjectError::NoSuchKey(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -19398,7 +19398,7 @@ impl GetObjectAclError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return GetObjectAclError::NoSuchKey(String::from(parsed_error.message))
+                        return GetObjectAclError::NoSuchKey(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -19629,7 +19629,7 @@ impl HeadBucketError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return HeadBucketError::NoSuchBucket(String::from(parsed_error.message))
+                        return HeadBucketError::NoSuchBucket(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -19710,7 +19710,7 @@ impl HeadObjectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return HeadObjectError::NoSuchKey(String::from(parsed_error.message))
+                        return HeadObjectError::NoSuchKey(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -20251,7 +20251,7 @@ impl ListObjectsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return ListObjectsError::NoSuchBucket(String::from(parsed_error.message))
+                        return ListObjectsError::NoSuchBucket(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -20332,7 +20332,7 @@ impl ListObjectsV2Error {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return ListObjectsV2Error::NoSuchBucket(String::from(parsed_error.message))
+                        return ListObjectsV2Error::NoSuchBucket(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -21937,7 +21937,7 @@ impl PutObjectAclError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return PutObjectAclError::NoSuchKey(String::from(parsed_error.message))
+                        return PutObjectAclError::NoSuchKey(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -22095,7 +22095,7 @@ impl RestoreObjectError {
                     "ObjectAlreadyInActiveTierError" => {
                         return RestoreObjectError::ObjectAlreadyInActiveTierError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

@@ -380,25 +380,25 @@ impl CreateStreamError {
                 "AccountStreamLimitExceededException" => {
                     return CreateStreamError::AccountStreamLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ClientLimitExceededException" => {
-                    return CreateStreamError::ClientLimitExceeded(String::from(error_message))
+                    return CreateStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "DeviceStreamLimitExceededException" => {
-                    return CreateStreamError::DeviceStreamLimitExceeded(String::from(error_message))
+                    return CreateStreamError::DeviceStreamLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return CreateStreamError::InvalidArgument(String::from(error_message))
+                    return CreateStreamError::InvalidArgument(String::from(error_message));
                 }
                 "InvalidDeviceException" => {
-                    return CreateStreamError::InvalidDevice(String::from(error_message))
+                    return CreateStreamError::InvalidDevice(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateStreamError::ResourceInUse(String::from(error_message))
+                    return CreateStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateStreamError::Validation(error_message.to_string())
+                    return CreateStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -500,19 +500,19 @@ impl DeleteStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return DeleteStreamError::ClientLimitExceeded(String::from(error_message))
+                    return DeleteStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return DeleteStreamError::InvalidArgument(String::from(error_message))
+                    return DeleteStreamError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteStreamError::NotAuthorized(String::from(error_message))
+                    return DeleteStreamError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStreamError::ResourceNotFound(String::from(error_message))
+                    return DeleteStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStreamError::Validation(error_message.to_string())
+                    return DeleteStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -612,19 +612,19 @@ impl DescribeStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return DescribeStreamError::ClientLimitExceeded(String::from(error_message))
+                    return DescribeStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeStreamError::InvalidArgument(String::from(error_message))
+                    return DescribeStreamError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeStreamError::NotAuthorized(String::from(error_message))
+                    return DescribeStreamError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamError::ResourceNotFound(String::from(error_message))
+                    return DescribeStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStreamError::Validation(error_message.to_string())
+                    return DescribeStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -724,19 +724,19 @@ impl GetDataEndpointError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return GetDataEndpointError::ClientLimitExceeded(String::from(error_message))
+                    return GetDataEndpointError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return GetDataEndpointError::InvalidArgument(String::from(error_message))
+                    return GetDataEndpointError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetDataEndpointError::NotAuthorized(String::from(error_message))
+                    return GetDataEndpointError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDataEndpointError::ResourceNotFound(String::from(error_message))
+                    return GetDataEndpointError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDataEndpointError::Validation(error_message.to_string())
+                    return GetDataEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -832,13 +832,13 @@ impl ListStreamsError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return ListStreamsError::ClientLimitExceeded(String::from(error_message))
+                    return ListStreamsError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return ListStreamsError::InvalidArgument(String::from(error_message))
+                    return ListStreamsError::InvalidArgument(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListStreamsError::Validation(error_message.to_string())
+                    return ListStreamsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -938,24 +938,24 @@ impl ListTagsForStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return ListTagsForStreamError::ClientLimitExceeded(String::from(error_message))
+                    return ListTagsForStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return ListTagsForStreamError::InvalidArgument(String::from(error_message))
+                    return ListTagsForStreamError::InvalidArgument(String::from(error_message));
                 }
                 "InvalidResourceFormatException" => {
                     return ListTagsForStreamError::InvalidResourceFormat(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListTagsForStreamError::NotAuthorized(String::from(error_message))
+                    return ListTagsForStreamError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForStreamError::ResourceNotFound(String::from(error_message))
+                    return ListTagsForStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForStreamError::Validation(error_message.to_string())
+                    return ListTagsForStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1062,25 +1062,25 @@ impl TagStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return TagStreamError::ClientLimitExceeded(String::from(error_message))
+                    return TagStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return TagStreamError::InvalidArgument(String::from(error_message))
+                    return TagStreamError::InvalidArgument(String::from(error_message));
                 }
                 "InvalidResourceFormatException" => {
-                    return TagStreamError::InvalidResourceFormat(String::from(error_message))
+                    return TagStreamError::InvalidResourceFormat(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return TagStreamError::NotAuthorized(String::from(error_message))
+                    return TagStreamError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagStreamError::ResourceNotFound(String::from(error_message))
+                    return TagStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "TagsPerResourceExceededLimitException" => {
-                    return TagStreamError::TagsPerResourceExceededLimit(String::from(error_message))
+                    return TagStreamError::TagsPerResourceExceededLimit(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagStreamError::Validation(error_message.to_string())
+                    return TagStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1184,22 +1184,22 @@ impl UntagStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return UntagStreamError::ClientLimitExceeded(String::from(error_message))
+                    return UntagStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return UntagStreamError::InvalidArgument(String::from(error_message))
+                    return UntagStreamError::InvalidArgument(String::from(error_message));
                 }
                 "InvalidResourceFormatException" => {
-                    return UntagStreamError::InvalidResourceFormat(String::from(error_message))
+                    return UntagStreamError::InvalidResourceFormat(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UntagStreamError::NotAuthorized(String::from(error_message))
+                    return UntagStreamError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagStreamError::ResourceNotFound(String::from(error_message))
+                    return UntagStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagStreamError::Validation(error_message.to_string())
+                    return UntagStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1306,25 +1306,25 @@ impl UpdateDataRetentionError {
                 "ClientLimitExceededException" => {
                     return UpdateDataRetentionError::ClientLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateDataRetentionError::InvalidArgument(String::from(error_message))
+                    return UpdateDataRetentionError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateDataRetentionError::NotAuthorized(String::from(error_message))
+                    return UpdateDataRetentionError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateDataRetentionError::ResourceInUse(String::from(error_message))
+                    return UpdateDataRetentionError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDataRetentionError::ResourceNotFound(String::from(error_message))
+                    return UpdateDataRetentionError::ResourceNotFound(String::from(error_message));
                 }
                 "VersionMismatchException" => {
-                    return UpdateDataRetentionError::VersionMismatch(String::from(error_message))
+                    return UpdateDataRetentionError::VersionMismatch(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDataRetentionError::Validation(error_message.to_string())
+                    return UpdateDataRetentionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1432,25 +1432,25 @@ impl UpdateStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return UpdateStreamError::ClientLimitExceeded(String::from(error_message))
+                    return UpdateStreamError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateStreamError::InvalidArgument(String::from(error_message))
+                    return UpdateStreamError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateStreamError::NotAuthorized(String::from(error_message))
+                    return UpdateStreamError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateStreamError::ResourceInUse(String::from(error_message))
+                    return UpdateStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateStreamError::ResourceNotFound(String::from(error_message))
+                    return UpdateStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "VersionMismatchException" => {
-                    return UpdateStreamError::VersionMismatch(String::from(error_message))
+                    return UpdateStreamError::VersionMismatch(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateStreamError::Validation(error_message.to_string())
+                    return UpdateStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

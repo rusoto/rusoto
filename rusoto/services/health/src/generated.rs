@@ -493,15 +493,15 @@ impl DescribeAffectedEntitiesError {
                 "InvalidPaginationToken" => {
                     return DescribeAffectedEntitiesError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedLocale" => {
                     return DescribeAffectedEntitiesError::UnsupportedLocale(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeAffectedEntitiesError::Validation(error_message.to_string())
+                    return DescribeAffectedEntitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -579,7 +579,7 @@ impl DescribeEntityAggregatesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeEntityAggregatesError::Validation(error_message.to_string())
+                    return DescribeEntityAggregatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -659,10 +659,10 @@ impl DescribeEventAggregatesError {
                 "InvalidPaginationToken" => {
                     return DescribeEventAggregatesError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeEventAggregatesError::Validation(error_message.to_string())
+                    return DescribeEventAggregatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -741,10 +741,10 @@ impl DescribeEventDetailsError {
 
             match *error_type {
                 "UnsupportedLocale" => {
-                    return DescribeEventDetailsError::UnsupportedLocale(String::from(error_message))
+                    return DescribeEventDetailsError::UnsupportedLocale(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventDetailsError::Validation(error_message.to_string())
+                    return DescribeEventDetailsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -827,13 +827,13 @@ impl DescribeEventTypesError {
                 "InvalidPaginationToken" => {
                     return DescribeEventTypesError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedLocale" => {
-                    return DescribeEventTypesError::UnsupportedLocale(String::from(error_message))
+                    return DescribeEventTypesError::UnsupportedLocale(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventTypesError::Validation(error_message.to_string())
+                    return DescribeEventTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -915,13 +915,13 @@ impl DescribeEventsError {
 
             match *error_type {
                 "InvalidPaginationToken" => {
-                    return DescribeEventsError::InvalidPaginationToken(String::from(error_message))
+                    return DescribeEventsError::InvalidPaginationToken(String::from(error_message));
                 }
                 "UnsupportedLocale" => {
-                    return DescribeEventsError::UnsupportedLocale(String::from(error_message))
+                    return DescribeEventsError::UnsupportedLocale(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventsError::Validation(error_message.to_string())
+                    return DescribeEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

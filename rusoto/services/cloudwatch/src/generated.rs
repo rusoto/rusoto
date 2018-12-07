@@ -3565,7 +3565,7 @@ impl DeleteAlarmsError {
                     "ResourceNotFound" => {
                         return DeleteAlarmsError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3653,17 +3653,17 @@ impl DeleteDashboardsError {
                     "ResourceNotFound" => {
                         return DeleteDashboardsError::DashboardNotFoundError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalServiceError" => {
                         return DeleteDashboardsError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return DeleteDashboardsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3749,7 +3749,7 @@ impl DescribeAlarmHistoryError {
                     "InvalidNextToken" => {
                         return DescribeAlarmHistoryError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3835,7 +3835,7 @@ impl DescribeAlarmsError {
                     "InvalidNextToken" => {
                         return DescribeAlarmsError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4157,17 +4157,17 @@ impl GetDashboardError {
                     "ResourceNotFound" => {
                         return GetDashboardError::DashboardNotFoundError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalServiceError" => {
                         return GetDashboardError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return GetDashboardError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4253,7 +4253,7 @@ impl GetMetricDataError {
                     "InvalidNextToken" => {
                         return GetMetricDataError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4343,22 +4343,22 @@ impl GetMetricStatisticsError {
                     "InternalServiceError" => {
                         return GetMetricStatisticsError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return GetMetricStatisticsError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return GetMetricStatisticsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return GetMetricStatisticsError::MissingRequiredParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4449,12 +4449,12 @@ impl ListDashboardsError {
                     "InternalServiceError" => {
                         return ListDashboardsError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return ListDashboardsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4541,12 +4541,12 @@ impl ListMetricsError {
                     "InternalServiceError" => {
                         return ListMetricsError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return ListMetricsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4633,12 +4633,12 @@ impl PutDashboardError {
                     "InvalidParameterInput" => {
                         return PutDashboardError::DashboardInvalidInputError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalServiceError" => {
                         return PutDashboardError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4723,7 +4723,7 @@ impl PutMetricAlarmError {
                     "LimitExceeded" => {
                         return PutMetricAlarmError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4813,22 +4813,22 @@ impl PutMetricDataError {
                     "InternalServiceError" => {
                         return PutMetricDataError::InternalServiceFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return PutMetricDataError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return PutMetricDataError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return PutMetricDataError::MissingRequiredParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4917,12 +4917,12 @@ impl SetAlarmStateError {
                     "InvalidFormat" => {
                         return SetAlarmStateError::InvalidFormatFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return SetAlarmStateError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

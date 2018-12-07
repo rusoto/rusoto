@@ -541,38 +541,38 @@ impl AssociateCreatedArtifactError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AssociateCreatedArtifactError::AccessDenied(String::from(error_message))
+                    return AssociateCreatedArtifactError::AccessDenied(String::from(error_message));
                 }
                 "DryRunOperation" => {
                     return AssociateCreatedArtifactError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return AssociateCreatedArtifactError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AssociateCreatedArtifactError::InvalidInput(String::from(error_message))
+                    return AssociateCreatedArtifactError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AssociateCreatedArtifactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return AssociateCreatedArtifactError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return AssociateCreatedArtifactError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateCreatedArtifactError::Validation(error_message.to_string())
+                    return AssociateCreatedArtifactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -673,45 +673,45 @@ impl AssociateDiscoveredResourceError {
                 "AccessDeniedException" => {
                     return AssociateDiscoveredResourceError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DryRunOperation" => {
                     return AssociateDiscoveredResourceError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return AssociateDiscoveredResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return AssociateDiscoveredResourceError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PolicyErrorException" => {
                     return AssociateDiscoveredResourceError::PolicyError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AssociateDiscoveredResourceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return AssociateDiscoveredResourceError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return AssociateDiscoveredResourceError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateDiscoveredResourceError::Validation(error_message.to_string())
+                    return AssociateDiscoveredResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -809,35 +809,35 @@ impl CreateProgressUpdateStreamError {
                 "AccessDeniedException" => {
                     return CreateProgressUpdateStreamError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DryRunOperation" => {
                     return CreateProgressUpdateStreamError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return CreateProgressUpdateStreamError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return CreateProgressUpdateStreamError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return CreateProgressUpdateStreamError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return CreateProgressUpdateStreamError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateProgressUpdateStreamError::Validation(error_message.to_string())
+                    return CreateProgressUpdateStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -935,40 +935,40 @@ impl DeleteProgressUpdateStreamError {
                 "AccessDeniedException" => {
                     return DeleteProgressUpdateStreamError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DryRunOperation" => {
                     return DeleteProgressUpdateStreamError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DeleteProgressUpdateStreamError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return DeleteProgressUpdateStreamError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteProgressUpdateStreamError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteProgressUpdateStreamError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return DeleteProgressUpdateStreamError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteProgressUpdateStreamError::Validation(error_message.to_string())
+                    return DeleteProgressUpdateStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1063,31 +1063,31 @@ impl DescribeApplicationStateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeApplicationStateError::AccessDenied(String::from(error_message))
+                    return DescribeApplicationStateError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DescribeApplicationStateError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DescribeApplicationStateError::InvalidInput(String::from(error_message))
+                    return DescribeApplicationStateError::InvalidInput(String::from(error_message));
                 }
                 "PolicyErrorException" => {
-                    return DescribeApplicationStateError::PolicyError(String::from(error_message))
+                    return DescribeApplicationStateError::PolicyError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeApplicationStateError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeApplicationStateError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeApplicationStateError::Validation(error_message.to_string())
+                    return DescribeApplicationStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1179,26 +1179,26 @@ impl DescribeMigrationTaskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeMigrationTaskError::AccessDenied(String::from(error_message))
+                    return DescribeMigrationTaskError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DescribeMigrationTaskError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DescribeMigrationTaskError::InvalidInput(String::from(error_message))
+                    return DescribeMigrationTaskError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeMigrationTaskError::ResourceNotFound(String::from(error_message))
+                    return DescribeMigrationTaskError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeMigrationTaskError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeMigrationTaskError::Validation(error_message.to_string())
+                    return DescribeMigrationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1295,40 +1295,40 @@ impl DisassociateCreatedArtifactError {
                 "AccessDeniedException" => {
                     return DisassociateCreatedArtifactError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DryRunOperation" => {
                     return DisassociateCreatedArtifactError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DisassociateCreatedArtifactError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return DisassociateCreatedArtifactError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociateCreatedArtifactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DisassociateCreatedArtifactError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return DisassociateCreatedArtifactError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateCreatedArtifactError::Validation(error_message.to_string())
+                    return DisassociateCreatedArtifactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1427,42 +1427,42 @@ impl DisassociateDiscoveredResourceError {
                 "AccessDeniedException" => {
                     return DisassociateDiscoveredResourceError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DryRunOperation" => {
                     return DisassociateDiscoveredResourceError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DisassociateDiscoveredResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return DisassociateDiscoveredResourceError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociateDiscoveredResourceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DisassociateDiscoveredResourceError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return DisassociateDiscoveredResourceError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DisassociateDiscoveredResourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1559,32 +1559,32 @@ impl ImportMigrationTaskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ImportMigrationTaskError::AccessDenied(String::from(error_message))
+                    return ImportMigrationTaskError::AccessDenied(String::from(error_message));
                 }
                 "DryRunOperation" => {
-                    return ImportMigrationTaskError::DryRunOperation(String::from(error_message))
+                    return ImportMigrationTaskError::DryRunOperation(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return ImportMigrationTaskError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ImportMigrationTaskError::InvalidInput(String::from(error_message))
+                    return ImportMigrationTaskError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ImportMigrationTaskError::ResourceNotFound(String::from(error_message))
+                    return ImportMigrationTaskError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ImportMigrationTaskError::ServiceUnavailable(String::from(error_message))
+                    return ImportMigrationTaskError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperation" => {
                     return ImportMigrationTaskError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ImportMigrationTaskError::Validation(error_message.to_string())
+                    return ImportMigrationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1677,26 +1677,26 @@ impl ListCreatedArtifactsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListCreatedArtifactsError::AccessDenied(String::from(error_message))
+                    return ListCreatedArtifactsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return ListCreatedArtifactsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListCreatedArtifactsError::InvalidInput(String::from(error_message))
+                    return ListCreatedArtifactsError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListCreatedArtifactsError::ResourceNotFound(String::from(error_message))
+                    return ListCreatedArtifactsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return ListCreatedArtifactsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListCreatedArtifactsError::Validation(error_message.to_string())
+                    return ListCreatedArtifactsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1787,28 +1787,28 @@ impl ListDiscoveredResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListDiscoveredResourcesError::AccessDenied(String::from(error_message))
+                    return ListDiscoveredResourcesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return ListDiscoveredResourcesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListDiscoveredResourcesError::InvalidInput(String::from(error_message))
+                    return ListDiscoveredResourcesError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ListDiscoveredResourcesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return ListDiscoveredResourcesError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListDiscoveredResourcesError::Validation(error_message.to_string())
+                    return ListDiscoveredResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1901,25 +1901,25 @@ impl ListMigrationTasksError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListMigrationTasksError::AccessDenied(String::from(error_message))
+                    return ListMigrationTasksError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return ListMigrationTasksError::InternalServerError(String::from(error_message))
+                    return ListMigrationTasksError::InternalServerError(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListMigrationTasksError::InvalidInput(String::from(error_message))
+                    return ListMigrationTasksError::InvalidInput(String::from(error_message));
                 }
                 "PolicyErrorException" => {
-                    return ListMigrationTasksError::PolicyError(String::from(error_message))
+                    return ListMigrationTasksError::PolicyError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListMigrationTasksError::ResourceNotFound(String::from(error_message))
+                    return ListMigrationTasksError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListMigrationTasksError::ServiceUnavailable(String::from(error_message))
+                    return ListMigrationTasksError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListMigrationTasksError::Validation(error_message.to_string())
+                    return ListMigrationTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2009,23 +2009,23 @@ impl ListProgressUpdateStreamsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListProgressUpdateStreamsError::AccessDenied(String::from(error_message))
+                    return ListProgressUpdateStreamsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return ListProgressUpdateStreamsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListProgressUpdateStreamsError::InvalidInput(String::from(error_message))
+                    return ListProgressUpdateStreamsError::InvalidInput(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return ListProgressUpdateStreamsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListProgressUpdateStreamsError::Validation(error_message.to_string())
+                    return ListProgressUpdateStreamsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2121,39 +2121,39 @@ impl NotifyApplicationStateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return NotifyApplicationStateError::AccessDenied(String::from(error_message))
+                    return NotifyApplicationStateError::AccessDenied(String::from(error_message));
                 }
                 "DryRunOperation" => {
-                    return NotifyApplicationStateError::DryRunOperation(String::from(error_message))
+                    return NotifyApplicationStateError::DryRunOperation(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return NotifyApplicationStateError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return NotifyApplicationStateError::InvalidInput(String::from(error_message))
+                    return NotifyApplicationStateError::InvalidInput(String::from(error_message));
                 }
                 "PolicyErrorException" => {
-                    return NotifyApplicationStateError::PolicyError(String::from(error_message))
+                    return NotifyApplicationStateError::PolicyError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return NotifyApplicationStateError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return NotifyApplicationStateError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return NotifyApplicationStateError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return NotifyApplicationStateError::Validation(error_message.to_string())
+                    return NotifyApplicationStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2251,38 +2251,38 @@ impl NotifyMigrationTaskStateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return NotifyMigrationTaskStateError::AccessDenied(String::from(error_message))
+                    return NotifyMigrationTaskStateError::AccessDenied(String::from(error_message));
                 }
                 "DryRunOperation" => {
                     return NotifyMigrationTaskStateError::DryRunOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return NotifyMigrationTaskStateError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return NotifyMigrationTaskStateError::InvalidInput(String::from(error_message))
+                    return NotifyMigrationTaskStateError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return NotifyMigrationTaskStateError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return NotifyMigrationTaskStateError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return NotifyMigrationTaskStateError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return NotifyMigrationTaskStateError::Validation(error_message.to_string())
+                    return NotifyMigrationTaskStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2379,34 +2379,34 @@ impl PutResourceAttributesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return PutResourceAttributesError::AccessDenied(String::from(error_message))
+                    return PutResourceAttributesError::AccessDenied(String::from(error_message));
                 }
                 "DryRunOperation" => {
-                    return PutResourceAttributesError::DryRunOperation(String::from(error_message))
+                    return PutResourceAttributesError::DryRunOperation(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return PutResourceAttributesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return PutResourceAttributesError::InvalidInput(String::from(error_message))
+                    return PutResourceAttributesError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutResourceAttributesError::ResourceNotFound(String::from(error_message))
+                    return PutResourceAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return PutResourceAttributesError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperation" => {
                     return PutResourceAttributesError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutResourceAttributesError::Validation(error_message.to_string())
+                    return PutResourceAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

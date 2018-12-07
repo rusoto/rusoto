@@ -3855,27 +3855,27 @@ impl AddCustomAttributesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AddCustomAttributesError::InternalError(String::from(error_message))
+                    return AddCustomAttributesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AddCustomAttributesError::InvalidParameter(String::from(error_message))
+                    return AddCustomAttributesError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AddCustomAttributesError::NotAuthorized(String::from(error_message))
+                    return AddCustomAttributesError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddCustomAttributesError::ResourceNotFound(String::from(error_message))
+                    return AddCustomAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AddCustomAttributesError::TooManyRequests(String::from(error_message))
+                    return AddCustomAttributesError::TooManyRequests(String::from(error_message));
                 }
                 "UserImportInProgressException" => {
                     return AddCustomAttributesError::UserImportInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddCustomAttributesError::Validation(error_message.to_string())
+                    return AddCustomAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3969,25 +3969,25 @@ impl AdminAddUserToGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminAddUserToGroupError::InternalError(String::from(error_message))
+                    return AdminAddUserToGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminAddUserToGroupError::InvalidParameter(String::from(error_message))
+                    return AdminAddUserToGroupError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminAddUserToGroupError::NotAuthorized(String::from(error_message))
+                    return AdminAddUserToGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminAddUserToGroupError::ResourceNotFound(String::from(error_message))
+                    return AdminAddUserToGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminAddUserToGroupError::TooManyRequests(String::from(error_message))
+                    return AdminAddUserToGroupError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminAddUserToGroupError::UserNotFound(String::from(error_message))
+                    return AdminAddUserToGroupError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminAddUserToGroupError::Validation(error_message.to_string())
+                    return AdminAddUserToGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4091,46 +4091,46 @@ impl AdminConfirmSignUpError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminConfirmSignUpError::InternalError(String::from(error_message))
+                    return AdminConfirmSignUpError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
                     return AdminConfirmSignUpError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminConfirmSignUpError::InvalidParameter(String::from(error_message))
+                    return AdminConfirmSignUpError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AdminConfirmSignUpError::LimitExceeded(String::from(error_message))
+                    return AdminConfirmSignUpError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminConfirmSignUpError::NotAuthorized(String::from(error_message))
+                    return AdminConfirmSignUpError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminConfirmSignUpError::ResourceNotFound(String::from(error_message))
+                    return AdminConfirmSignUpError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyFailedAttemptsException" => {
                     return AdminConfirmSignUpError::TooManyFailedAttempts(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminConfirmSignUpError::TooManyRequests(String::from(error_message))
+                    return AdminConfirmSignUpError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminConfirmSignUpError::UnexpectedLambda(String::from(error_message))
+                    return AdminConfirmSignUpError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
                     return AdminConfirmSignUpError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminConfirmSignUpError::UserNotFound(String::from(error_message))
+                    return AdminConfirmSignUpError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminConfirmSignUpError::Validation(error_message.to_string())
+                    return AdminConfirmSignUpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4249,59 +4249,59 @@ impl AdminCreateUserError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return AdminCreateUserError::CodeDeliveryFailure(String::from(error_message))
+                    return AdminCreateUserError::CodeDeliveryFailure(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return AdminCreateUserError::InternalError(String::from(error_message))
+                    return AdminCreateUserError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
-                    return AdminCreateUserError::InvalidLambdaResponse(String::from(error_message))
+                    return AdminCreateUserError::InvalidLambdaResponse(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminCreateUserError::InvalidParameter(String::from(error_message))
+                    return AdminCreateUserError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return AdminCreateUserError::InvalidPassword(String::from(error_message))
+                    return AdminCreateUserError::InvalidPassword(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return AdminCreateUserError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminCreateUserError::NotAuthorized(String::from(error_message))
+                    return AdminCreateUserError::NotAuthorized(String::from(error_message));
                 }
                 "PreconditionNotMetException" => {
-                    return AdminCreateUserError::PreconditionNotMet(String::from(error_message))
+                    return AdminCreateUserError::PreconditionNotMet(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminCreateUserError::ResourceNotFound(String::from(error_message))
+                    return AdminCreateUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminCreateUserError::TooManyRequests(String::from(error_message))
+                    return AdminCreateUserError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminCreateUserError::UnexpectedLambda(String::from(error_message))
+                    return AdminCreateUserError::UnexpectedLambda(String::from(error_message));
                 }
                 "UnsupportedUserStateException" => {
-                    return AdminCreateUserError::UnsupportedUserState(String::from(error_message))
+                    return AdminCreateUserError::UnsupportedUserState(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminCreateUserError::UserLambdaValidation(String::from(error_message))
+                    return AdminCreateUserError::UserLambdaValidation(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminCreateUserError::UserNotFound(String::from(error_message))
+                    return AdminCreateUserError::UserNotFound(String::from(error_message));
                 }
                 "UsernameExistsException" => {
-                    return AdminCreateUserError::UsernameExists(String::from(error_message))
+                    return AdminCreateUserError::UsernameExists(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminCreateUserError::Validation(error_message.to_string())
+                    return AdminCreateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4403,25 +4403,25 @@ impl AdminDeleteUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminDeleteUserError::InternalError(String::from(error_message))
+                    return AdminDeleteUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminDeleteUserError::InvalidParameter(String::from(error_message))
+                    return AdminDeleteUserError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminDeleteUserError::NotAuthorized(String::from(error_message))
+                    return AdminDeleteUserError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminDeleteUserError::ResourceNotFound(String::from(error_message))
+                    return AdminDeleteUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminDeleteUserError::TooManyRequests(String::from(error_message))
+                    return AdminDeleteUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminDeleteUserError::UserNotFound(String::from(error_message))
+                    return AdminDeleteUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminDeleteUserError::Validation(error_message.to_string())
+                    return AdminDeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4515,33 +4515,33 @@ impl AdminDeleteUserAttributesError {
                 "InternalErrorException" => {
                     return AdminDeleteUserAttributesError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminDeleteUserAttributesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return AdminDeleteUserAttributesError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AdminDeleteUserAttributesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminDeleteUserAttributesError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminDeleteUserAttributesError::UserNotFound(String::from(error_message))
+                    return AdminDeleteUserAttributesError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminDeleteUserAttributesError::Validation(error_message.to_string())
+                    return AdminDeleteUserAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4639,40 +4639,40 @@ impl AdminDisableProviderForUserError {
                 "AliasExistsException" => {
                     return AdminDisableProviderForUserError::AliasExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
                     return AdminDisableProviderForUserError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminDisableProviderForUserError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return AdminDisableProviderForUserError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AdminDisableProviderForUserError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminDisableProviderForUserError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
                     return AdminDisableProviderForUserError::UserNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AdminDisableProviderForUserError::Validation(error_message.to_string())
+                    return AdminDisableProviderForUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4767,25 +4767,25 @@ impl AdminDisableUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminDisableUserError::InternalError(String::from(error_message))
+                    return AdminDisableUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminDisableUserError::InvalidParameter(String::from(error_message))
+                    return AdminDisableUserError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminDisableUserError::NotAuthorized(String::from(error_message))
+                    return AdminDisableUserError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminDisableUserError::ResourceNotFound(String::from(error_message))
+                    return AdminDisableUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminDisableUserError::TooManyRequests(String::from(error_message))
+                    return AdminDisableUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminDisableUserError::UserNotFound(String::from(error_message))
+                    return AdminDisableUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminDisableUserError::Validation(error_message.to_string())
+                    return AdminDisableUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4877,25 +4877,25 @@ impl AdminEnableUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminEnableUserError::InternalError(String::from(error_message))
+                    return AdminEnableUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminEnableUserError::InvalidParameter(String::from(error_message))
+                    return AdminEnableUserError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminEnableUserError::NotAuthorized(String::from(error_message))
+                    return AdminEnableUserError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminEnableUserError::ResourceNotFound(String::from(error_message))
+                    return AdminEnableUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminEnableUserError::TooManyRequests(String::from(error_message))
+                    return AdminEnableUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminEnableUserError::UserNotFound(String::from(error_message))
+                    return AdminEnableUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminEnableUserError::Validation(error_message.to_string())
+                    return AdminEnableUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4989,30 +4989,30 @@ impl AdminForgetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminForgetDeviceError::InternalError(String::from(error_message))
+                    return AdminForgetDeviceError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminForgetDeviceError::InvalidParameter(String::from(error_message))
+                    return AdminForgetDeviceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminForgetDeviceError::NotAuthorized(String::from(error_message))
+                    return AdminForgetDeviceError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminForgetDeviceError::ResourceNotFound(String::from(error_message))
+                    return AdminForgetDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminForgetDeviceError::TooManyRequests(String::from(error_message))
+                    return AdminForgetDeviceError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminForgetDeviceError::UserNotFound(String::from(error_message))
+                    return AdminForgetDeviceError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminForgetDeviceError::Validation(error_message.to_string())
+                    return AdminForgetDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5107,27 +5107,27 @@ impl AdminGetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminGetDeviceError::InternalError(String::from(error_message))
+                    return AdminGetDeviceError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminGetDeviceError::InvalidParameter(String::from(error_message))
+                    return AdminGetDeviceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return AdminGetDeviceError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminGetDeviceError::NotAuthorized(String::from(error_message))
+                    return AdminGetDeviceError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminGetDeviceError::ResourceNotFound(String::from(error_message))
+                    return AdminGetDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminGetDeviceError::TooManyRequests(String::from(error_message))
+                    return AdminGetDeviceError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminGetDeviceError::Validation(error_message.to_string())
+                    return AdminGetDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5219,25 +5219,25 @@ impl AdminGetUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminGetUserError::InternalError(String::from(error_message))
+                    return AdminGetUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminGetUserError::InvalidParameter(String::from(error_message))
+                    return AdminGetUserError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminGetUserError::NotAuthorized(String::from(error_message))
+                    return AdminGetUserError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminGetUserError::ResourceNotFound(String::from(error_message))
+                    return AdminGetUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminGetUserError::TooManyRequests(String::from(error_message))
+                    return AdminGetUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminGetUserError::UserNotFound(String::from(error_message))
+                    return AdminGetUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminGetUserError::Validation(error_message.to_string())
+                    return AdminGetUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5347,62 +5347,62 @@ impl AdminInitiateAuthError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminInitiateAuthError::InternalError(String::from(error_message))
+                    return AdminInitiateAuthError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
                     return AdminInitiateAuthError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminInitiateAuthError::InvalidParameter(String::from(error_message))
+                    return AdminInitiateAuthError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MFAMethodNotFoundException" => {
-                    return AdminInitiateAuthError::MFAMethodNotFound(String::from(error_message))
+                    return AdminInitiateAuthError::MFAMethodNotFound(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminInitiateAuthError::NotAuthorized(String::from(error_message))
+                    return AdminInitiateAuthError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return AdminInitiateAuthError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminInitiateAuthError::ResourceNotFound(String::from(error_message))
+                    return AdminInitiateAuthError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminInitiateAuthError::TooManyRequests(String::from(error_message))
+                    return AdminInitiateAuthError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminInitiateAuthError::UnexpectedLambda(String::from(error_message))
+                    return AdminInitiateAuthError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminInitiateAuthError::UserLambdaValidation(String::from(error_message))
+                    return AdminInitiateAuthError::UserLambdaValidation(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return AdminInitiateAuthError::UserNotConfirmed(String::from(error_message))
+                    return AdminInitiateAuthError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminInitiateAuthError::UserNotFound(String::from(error_message))
+                    return AdminInitiateAuthError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminInitiateAuthError::Validation(error_message.to_string())
+                    return AdminInitiateAuthError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5507,34 +5507,34 @@ impl AdminLinkProviderForUserError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return AdminLinkProviderForUserError::AliasExists(String::from(error_message))
+                    return AdminLinkProviderForUserError::AliasExists(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return AdminLinkProviderForUserError::InternalError(String::from(error_message))
+                    return AdminLinkProviderForUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AdminLinkProviderForUserError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminLinkProviderForUserError::NotAuthorized(String::from(error_message))
+                    return AdminLinkProviderForUserError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminLinkProviderForUserError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminLinkProviderForUserError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminLinkProviderForUserError::UserNotFound(String::from(error_message))
+                    return AdminLinkProviderForUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminLinkProviderForUserError::Validation(error_message.to_string())
+                    return AdminLinkProviderForUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5629,27 +5629,27 @@ impl AdminListDevicesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminListDevicesError::InternalError(String::from(error_message))
+                    return AdminListDevicesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminListDevicesError::InvalidParameter(String::from(error_message))
+                    return AdminListDevicesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return AdminListDevicesError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminListDevicesError::NotAuthorized(String::from(error_message))
+                    return AdminListDevicesError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminListDevicesError::ResourceNotFound(String::from(error_message))
+                    return AdminListDevicesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AdminListDevicesError::TooManyRequests(String::from(error_message))
+                    return AdminListDevicesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminListDevicesError::Validation(error_message.to_string())
+                    return AdminListDevicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5741,29 +5741,29 @@ impl AdminListGroupsForUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminListGroupsForUserError::InternalError(String::from(error_message))
+                    return AdminListGroupsForUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AdminListGroupsForUserError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminListGroupsForUserError::NotAuthorized(String::from(error_message))
+                    return AdminListGroupsForUserError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminListGroupsForUserError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminListGroupsForUserError::TooManyRequests(String::from(error_message))
+                    return AdminListGroupsForUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminListGroupsForUserError::UserNotFound(String::from(error_message))
+                    return AdminListGroupsForUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminListGroupsForUserError::Validation(error_message.to_string())
+                    return AdminListGroupsForUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5859,36 +5859,36 @@ impl AdminListUserAuthEventsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminListUserAuthEventsError::InternalError(String::from(error_message))
+                    return AdminListUserAuthEventsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AdminListUserAuthEventsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminListUserAuthEventsError::NotAuthorized(String::from(error_message))
+                    return AdminListUserAuthEventsError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminListUserAuthEventsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminListUserAuthEventsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminListUserAuthEventsError::UserNotFound(String::from(error_message))
+                    return AdminListUserAuthEventsError::UserNotFound(String::from(error_message));
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AdminListUserAuthEventsError::Validation(error_message.to_string())
+                    return AdminListUserAuthEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5983,31 +5983,31 @@ impl AdminRemoveUserFromGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminRemoveUserFromGroupError::InternalError(String::from(error_message))
+                    return AdminRemoveUserFromGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AdminRemoveUserFromGroupError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminRemoveUserFromGroupError::NotAuthorized(String::from(error_message))
+                    return AdminRemoveUserFromGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminRemoveUserFromGroupError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminRemoveUserFromGroupError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminRemoveUserFromGroupError::UserNotFound(String::from(error_message))
+                    return AdminRemoveUserFromGroupError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminRemoveUserFromGroupError::Validation(error_message.to_string())
+                    return AdminRemoveUserFromGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6115,62 +6115,62 @@ impl AdminResetUserPasswordError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminResetUserPasswordError::InternalError(String::from(error_message))
+                    return AdminResetUserPasswordError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
                     return AdminResetUserPasswordError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminResetUserPasswordError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "LimitExceededException" => {
-                    return AdminResetUserPasswordError::LimitExceeded(String::from(error_message))
+                    return AdminResetUserPasswordError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminResetUserPasswordError::NotAuthorized(String::from(error_message))
+                    return AdminResetUserPasswordError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminResetUserPasswordError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminResetUserPasswordError::TooManyRequests(String::from(error_message))
+                    return AdminResetUserPasswordError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
                     return AdminResetUserPasswordError::UnexpectedLambda(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserLambdaValidationException" => {
                     return AdminResetUserPasswordError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminResetUserPasswordError::UserNotFound(String::from(error_message))
+                    return AdminResetUserPasswordError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminResetUserPasswordError::Validation(error_message.to_string())
+                    return AdminResetUserPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6301,105 +6301,105 @@ impl AdminRespondToAuthChallengeError {
                 "AliasExistsException" => {
                     return AdminRespondToAuthChallengeError::AliasExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CodeMismatchException" => {
                     return AdminRespondToAuthChallengeError::CodeMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ExpiredCodeException" => {
                     return AdminRespondToAuthChallengeError::ExpiredCode(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
                     return AdminRespondToAuthChallengeError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
                     return AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminRespondToAuthChallengeError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPasswordException" => {
                     return AdminRespondToAuthChallengeError::InvalidPassword(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "MFAMethodNotFoundException" => {
                     return AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return AdminRespondToAuthChallengeError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PasswordResetRequiredException" => {
                     return AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AdminRespondToAuthChallengeError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminRespondToAuthChallengeError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnexpectedLambdaException" => {
                     return AdminRespondToAuthChallengeError::UnexpectedLambda(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserLambdaValidationException" => {
                     return AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotConfirmedException" => {
                     return AdminRespondToAuthChallengeError::UserNotConfirmed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
                     return AdminRespondToAuthChallengeError::UserNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AdminRespondToAuthChallengeError::Validation(error_message.to_string())
+                    return AdminRespondToAuthChallengeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6511,38 +6511,38 @@ impl AdminSetUserMFAPreferenceError {
                 "InternalErrorException" => {
                     return AdminSetUserMFAPreferenceError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminSetUserMFAPreferenceError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return AdminSetUserMFAPreferenceError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PasswordResetRequiredException" => {
                     return AdminSetUserMFAPreferenceError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AdminSetUserMFAPreferenceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotConfirmedException" => {
                     return AdminSetUserMFAPreferenceError::UserNotConfirmed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminSetUserMFAPreferenceError::UserNotFound(String::from(error_message))
+                    return AdminSetUserMFAPreferenceError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminSetUserMFAPreferenceError::Validation(error_message.to_string())
+                    return AdminSetUserMFAPreferenceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6635,22 +6635,22 @@ impl AdminSetUserSettingsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminSetUserSettingsError::InternalError(String::from(error_message))
+                    return AdminSetUserSettingsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AdminSetUserSettingsError::InvalidParameter(String::from(error_message))
+                    return AdminSetUserSettingsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return AdminSetUserSettingsError::NotAuthorized(String::from(error_message))
+                    return AdminSetUserSettingsError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminSetUserSettingsError::ResourceNotFound(String::from(error_message))
+                    return AdminSetUserSettingsError::ResourceNotFound(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminSetUserSettingsError::UserNotFound(String::from(error_message))
+                    return AdminSetUserSettingsError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminSetUserSettingsError::Validation(error_message.to_string())
+                    return AdminSetUserSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6747,40 +6747,40 @@ impl AdminUpdateAuthEventFeedbackError {
                 "InternalErrorException" => {
                     return AdminUpdateAuthEventFeedbackError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminUpdateAuthEventFeedbackError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return AdminUpdateAuthEventFeedbackError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AdminUpdateAuthEventFeedbackError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminUpdateAuthEventFeedbackError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
                     return AdminUpdateAuthEventFeedbackError::UserNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AdminUpdateAuthEventFeedbackError::Validation(error_message.to_string())
+                    return AdminUpdateAuthEventFeedbackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6877,36 +6877,36 @@ impl AdminUpdateDeviceStatusError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminUpdateDeviceStatusError::InternalError(String::from(error_message))
+                    return AdminUpdateDeviceStatusError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AdminUpdateDeviceStatusError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminUpdateDeviceStatusError::NotAuthorized(String::from(error_message))
+                    return AdminUpdateDeviceStatusError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminUpdateDeviceStatusError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminUpdateDeviceStatusError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminUpdateDeviceStatusError::UserNotFound(String::from(error_message))
+                    return AdminUpdateDeviceStatusError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminUpdateDeviceStatusError::Validation(error_message.to_string())
+                    return AdminUpdateDeviceStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7009,53 +7009,53 @@ impl AdminUpdateUserAttributesError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return AdminUpdateUserAttributesError::AliasExists(String::from(error_message))
+                    return AdminUpdateUserAttributesError::AliasExists(String::from(error_message));
                 }
                 "InternalErrorException" => {
                     return AdminUpdateUserAttributesError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
                     return AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AdminUpdateUserAttributesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return AdminUpdateUserAttributesError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AdminUpdateUserAttributesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return AdminUpdateUserAttributesError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnexpectedLambdaException" => {
                     return AdminUpdateUserAttributesError::UnexpectedLambda(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserLambdaValidationException" => {
                     return AdminUpdateUserAttributesError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminUpdateUserAttributesError::UserNotFound(String::from(error_message))
+                    return AdminUpdateUserAttributesError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminUpdateUserAttributesError::Validation(error_message.to_string())
+                    return AdminUpdateUserAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7153,29 +7153,29 @@ impl AdminUserGlobalSignOutError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminUserGlobalSignOutError::InternalError(String::from(error_message))
+                    return AdminUserGlobalSignOutError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AdminUserGlobalSignOutError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminUserGlobalSignOutError::NotAuthorized(String::from(error_message))
+                    return AdminUserGlobalSignOutError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AdminUserGlobalSignOutError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminUserGlobalSignOutError::TooManyRequests(String::from(error_message))
+                    return AdminUserGlobalSignOutError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return AdminUserGlobalSignOutError::UserNotFound(String::from(error_message))
+                    return AdminUserGlobalSignOutError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AdminUserGlobalSignOutError::Validation(error_message.to_string())
+                    return AdminUserGlobalSignOutError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7267,28 +7267,28 @@ impl AssociateSoftwareTokenError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AssociateSoftwareTokenError::InternalError(String::from(error_message))
+                    return AssociateSoftwareTokenError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AssociateSoftwareTokenError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AssociateSoftwareTokenError::NotAuthorized(String::from(error_message))
+                    return AssociateSoftwareTokenError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return AssociateSoftwareTokenError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return AssociateSoftwareTokenError::SoftwareTokenMFANotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateSoftwareTokenError::Validation(error_message.to_string())
+                    return AssociateSoftwareTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7389,37 +7389,37 @@ impl ChangePasswordError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ChangePasswordError::InternalError(String::from(error_message))
+                    return ChangePasswordError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ChangePasswordError::InvalidParameter(String::from(error_message))
+                    return ChangePasswordError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return ChangePasswordError::InvalidPassword(String::from(error_message))
+                    return ChangePasswordError::InvalidPassword(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ChangePasswordError::LimitExceeded(String::from(error_message))
+                    return ChangePasswordError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ChangePasswordError::NotAuthorized(String::from(error_message))
+                    return ChangePasswordError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return ChangePasswordError::PasswordResetRequired(String::from(error_message))
+                    return ChangePasswordError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ChangePasswordError::ResourceNotFound(String::from(error_message))
+                    return ChangePasswordError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ChangePasswordError::TooManyRequests(String::from(error_message))
+                    return ChangePasswordError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return ChangePasswordError::UserNotConfirmed(String::from(error_message))
+                    return ChangePasswordError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ChangePasswordError::UserNotFound(String::from(error_message))
+                    return ChangePasswordError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ChangePasswordError::Validation(error_message.to_string())
+                    return ChangePasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7527,45 +7527,45 @@ impl ConfirmDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ConfirmDeviceError::InternalError(String::from(error_message))
+                    return ConfirmDeviceError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ConfirmDeviceError::InvalidLambdaResponse(String::from(error_message))
+                    return ConfirmDeviceError::InvalidLambdaResponse(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ConfirmDeviceError::InvalidParameter(String::from(error_message))
+                    return ConfirmDeviceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return ConfirmDeviceError::InvalidPassword(String::from(error_message))
+                    return ConfirmDeviceError::InvalidPassword(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return ConfirmDeviceError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ConfirmDeviceError::NotAuthorized(String::from(error_message))
+                    return ConfirmDeviceError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return ConfirmDeviceError::PasswordResetRequired(String::from(error_message))
+                    return ConfirmDeviceError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ConfirmDeviceError::ResourceNotFound(String::from(error_message))
+                    return ConfirmDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ConfirmDeviceError::TooManyRequests(String::from(error_message))
+                    return ConfirmDeviceError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return ConfirmDeviceError::UserNotConfirmed(String::from(error_message))
+                    return ConfirmDeviceError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ConfirmDeviceError::UserNotFound(String::from(error_message))
+                    return ConfirmDeviceError::UserNotFound(String::from(error_message));
                 }
                 "UsernameExistsException" => {
-                    return ConfirmDeviceError::UsernameExists(String::from(error_message))
+                    return ConfirmDeviceError::UsernameExists(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ConfirmDeviceError::Validation(error_message.to_string())
+                    return ConfirmDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7681,58 +7681,58 @@ impl ConfirmForgotPasswordError {
 
             match *error_type {
                 "CodeMismatchException" => {
-                    return ConfirmForgotPasswordError::CodeMismatch(String::from(error_message))
+                    return ConfirmForgotPasswordError::CodeMismatch(String::from(error_message));
                 }
                 "ExpiredCodeException" => {
-                    return ConfirmForgotPasswordError::ExpiredCode(String::from(error_message))
+                    return ConfirmForgotPasswordError::ExpiredCode(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return ConfirmForgotPasswordError::InternalError(String::from(error_message))
+                    return ConfirmForgotPasswordError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
                     return ConfirmForgotPasswordError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ConfirmForgotPasswordError::InvalidParameter(String::from(error_message))
+                    return ConfirmForgotPasswordError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return ConfirmForgotPasswordError::InvalidPassword(String::from(error_message))
+                    return ConfirmForgotPasswordError::InvalidPassword(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ConfirmForgotPasswordError::LimitExceeded(String::from(error_message))
+                    return ConfirmForgotPasswordError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ConfirmForgotPasswordError::NotAuthorized(String::from(error_message))
+                    return ConfirmForgotPasswordError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ConfirmForgotPasswordError::ResourceNotFound(String::from(error_message))
+                    return ConfirmForgotPasswordError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyFailedAttemptsException" => {
                     return ConfirmForgotPasswordError::TooManyFailedAttempts(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ConfirmForgotPasswordError::TooManyRequests(String::from(error_message))
+                    return ConfirmForgotPasswordError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return ConfirmForgotPasswordError::UnexpectedLambda(String::from(error_message))
+                    return ConfirmForgotPasswordError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
                     return ConfirmForgotPasswordError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return ConfirmForgotPasswordError::UserNotConfirmed(String::from(error_message))
+                    return ConfirmForgotPasswordError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ConfirmForgotPasswordError::UserNotFound(String::from(error_message))
+                    return ConfirmForgotPasswordError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ConfirmForgotPasswordError::Validation(error_message.to_string())
+                    return ConfirmForgotPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7851,49 +7851,49 @@ impl ConfirmSignUpError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return ConfirmSignUpError::AliasExists(String::from(error_message))
+                    return ConfirmSignUpError::AliasExists(String::from(error_message));
                 }
                 "CodeMismatchException" => {
-                    return ConfirmSignUpError::CodeMismatch(String::from(error_message))
+                    return ConfirmSignUpError::CodeMismatch(String::from(error_message));
                 }
                 "ExpiredCodeException" => {
-                    return ConfirmSignUpError::ExpiredCode(String::from(error_message))
+                    return ConfirmSignUpError::ExpiredCode(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return ConfirmSignUpError::InternalError(String::from(error_message))
+                    return ConfirmSignUpError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ConfirmSignUpError::InvalidLambdaResponse(String::from(error_message))
+                    return ConfirmSignUpError::InvalidLambdaResponse(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ConfirmSignUpError::InvalidParameter(String::from(error_message))
+                    return ConfirmSignUpError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ConfirmSignUpError::LimitExceeded(String::from(error_message))
+                    return ConfirmSignUpError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ConfirmSignUpError::NotAuthorized(String::from(error_message))
+                    return ConfirmSignUpError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ConfirmSignUpError::ResourceNotFound(String::from(error_message))
+                    return ConfirmSignUpError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyFailedAttemptsException" => {
-                    return ConfirmSignUpError::TooManyFailedAttempts(String::from(error_message))
+                    return ConfirmSignUpError::TooManyFailedAttempts(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ConfirmSignUpError::TooManyRequests(String::from(error_message))
+                    return ConfirmSignUpError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return ConfirmSignUpError::UnexpectedLambda(String::from(error_message))
+                    return ConfirmSignUpError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
-                    return ConfirmSignUpError::UserLambdaValidation(String::from(error_message))
+                    return ConfirmSignUpError::UserLambdaValidation(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ConfirmSignUpError::UserNotFound(String::from(error_message))
+                    return ConfirmSignUpError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ConfirmSignUpError::Validation(error_message.to_string())
+                    return ConfirmSignUpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7995,28 +7995,28 @@ impl CreateGroupError {
 
             match *error_type {
                 "GroupExistsException" => {
-                    return CreateGroupError::GroupExists(String::from(error_message))
+                    return CreateGroupError::GroupExists(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return CreateGroupError::InternalError(String::from(error_message))
+                    return CreateGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateGroupError::InvalidParameter(String::from(error_message))
+                    return CreateGroupError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateGroupError::LimitExceeded(String::from(error_message))
+                    return CreateGroupError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateGroupError::NotAuthorized(String::from(error_message))
+                    return CreateGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateGroupError::ResourceNotFound(String::from(error_message))
+                    return CreateGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateGroupError::TooManyRequests(String::from(error_message))
+                    return CreateGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string())
+                    return CreateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8113,32 +8113,32 @@ impl CreateIdentityProviderError {
                 "DuplicateProviderException" => {
                     return CreateIdentityProviderError::DuplicateProvider(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return CreateIdentityProviderError::InternalError(String::from(error_message))
+                    return CreateIdentityProviderError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return CreateIdentityProviderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateIdentityProviderError::LimitExceeded(String::from(error_message))
+                    return CreateIdentityProviderError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateIdentityProviderError::NotAuthorized(String::from(error_message))
+                    return CreateIdentityProviderError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return CreateIdentityProviderError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateIdentityProviderError::TooManyRequests(String::from(error_message))
+                    return CreateIdentityProviderError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIdentityProviderError::Validation(error_message.to_string())
+                    return CreateIdentityProviderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8233,25 +8233,25 @@ impl CreateResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateResourceServerError::InternalError(String::from(error_message))
+                    return CreateResourceServerError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateResourceServerError::InvalidParameter(String::from(error_message))
+                    return CreateResourceServerError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateResourceServerError::LimitExceeded(String::from(error_message))
+                    return CreateResourceServerError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateResourceServerError::NotAuthorized(String::from(error_message))
+                    return CreateResourceServerError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateResourceServerError::ResourceNotFound(String::from(error_message))
+                    return CreateResourceServerError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateResourceServerError::TooManyRequests(String::from(error_message))
+                    return CreateResourceServerError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateResourceServerError::Validation(error_message.to_string())
+                    return CreateResourceServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8347,28 +8347,28 @@ impl CreateUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserImportJobError::InternalError(String::from(error_message))
+                    return CreateUserImportJobError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserImportJobError::InvalidParameter(String::from(error_message))
+                    return CreateUserImportJobError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateUserImportJobError::LimitExceeded(String::from(error_message))
+                    return CreateUserImportJobError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserImportJobError::NotAuthorized(String::from(error_message))
+                    return CreateUserImportJobError::NotAuthorized(String::from(error_message));
                 }
                 "PreconditionNotMetException" => {
-                    return CreateUserImportJobError::PreconditionNotMet(String::from(error_message))
+                    return CreateUserImportJobError::PreconditionNotMet(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserImportJobError::ResourceNotFound(String::from(error_message))
+                    return CreateUserImportJobError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUserImportJobError::TooManyRequests(String::from(error_message))
+                    return CreateUserImportJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserImportJobError::Validation(error_message.to_string())
+                    return CreateUserImportJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8469,40 +8469,40 @@ impl CreateUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserPoolError::InternalError(String::from(error_message))
+                    return CreateUserPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return CreateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserPoolError::InvalidParameter(String::from(error_message))
+                    return CreateUserPoolError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return CreateUserPoolError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateUserPoolError::LimitExceeded(String::from(error_message))
+                    return CreateUserPoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserPoolError::NotAuthorized(String::from(error_message))
+                    return CreateUserPoolError::NotAuthorized(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUserPoolError::TooManyRequests(String::from(error_message))
+                    return CreateUserPoolError::TooManyRequests(String::from(error_message));
                 }
                 "UserPoolTaggingException" => {
-                    return CreateUserPoolError::UserPoolTagging(String::from(error_message))
+                    return CreateUserPoolError::UserPoolTagging(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserPoolError::Validation(error_message.to_string())
+                    return CreateUserPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8601,31 +8601,31 @@ impl CreateUserPoolClientError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserPoolClientError::InternalError(String::from(error_message))
+                    return CreateUserPoolClientError::InternalError(String::from(error_message));
                 }
                 "InvalidOAuthFlowException" => {
-                    return CreateUserPoolClientError::InvalidOAuthFlow(String::from(error_message))
+                    return CreateUserPoolClientError::InvalidOAuthFlow(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserPoolClientError::InvalidParameter(String::from(error_message))
+                    return CreateUserPoolClientError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateUserPoolClientError::LimitExceeded(String::from(error_message))
+                    return CreateUserPoolClientError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserPoolClientError::NotAuthorized(String::from(error_message))
+                    return CreateUserPoolClientError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserPoolClientError::ResourceNotFound(String::from(error_message))
+                    return CreateUserPoolClientError::ResourceNotFound(String::from(error_message));
                 }
                 "ScopeDoesNotExistException" => {
-                    return CreateUserPoolClientError::ScopeDoesNotExist(String::from(error_message))
+                    return CreateUserPoolClientError::ScopeDoesNotExist(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUserPoolClientError::TooManyRequests(String::from(error_message))
+                    return CreateUserPoolClientError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserPoolClientError::Validation(error_message.to_string())
+                    return CreateUserPoolClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8717,19 +8717,19 @@ impl CreateUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserPoolDomainError::InternalError(String::from(error_message))
+                    return CreateUserPoolDomainError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserPoolDomainError::InvalidParameter(String::from(error_message))
+                    return CreateUserPoolDomainError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserPoolDomainError::NotAuthorized(String::from(error_message))
+                    return CreateUserPoolDomainError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserPoolDomainError::ResourceNotFound(String::from(error_message))
+                    return CreateUserPoolDomainError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserPoolDomainError::Validation(error_message.to_string())
+                    return CreateUserPoolDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8819,22 +8819,22 @@ impl DeleteGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteGroupError::InternalError(String::from(error_message))
+                    return DeleteGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteGroupError::InvalidParameter(String::from(error_message))
+                    return DeleteGroupError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteGroupError::NotAuthorized(String::from(error_message))
+                    return DeleteGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteGroupError::ResourceNotFound(String::from(error_message))
+                    return DeleteGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteGroupError::TooManyRequests(String::from(error_message))
+                    return DeleteGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string())
+                    return DeleteGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8925,31 +8925,31 @@ impl DeleteIdentityProviderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteIdentityProviderError::InternalError(String::from(error_message))
+                    return DeleteIdentityProviderError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DeleteIdentityProviderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteIdentityProviderError::NotAuthorized(String::from(error_message))
+                    return DeleteIdentityProviderError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteIdentityProviderError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIdentityProviderError::TooManyRequests(String::from(error_message))
+                    return DeleteIdentityProviderError::TooManyRequests(String::from(error_message));
                 }
                 "UnsupportedIdentityProviderException" => {
                     return DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteIdentityProviderError::Validation(error_message.to_string())
+                    return DeleteIdentityProviderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9041,22 +9041,22 @@ impl DeleteResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteResourceServerError::InternalError(String::from(error_message))
+                    return DeleteResourceServerError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteResourceServerError::InvalidParameter(String::from(error_message))
+                    return DeleteResourceServerError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteResourceServerError::NotAuthorized(String::from(error_message))
+                    return DeleteResourceServerError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteResourceServerError::ResourceNotFound(String::from(error_message))
+                    return DeleteResourceServerError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteResourceServerError::TooManyRequests(String::from(error_message))
+                    return DeleteResourceServerError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteResourceServerError::Validation(error_message.to_string())
+                    return DeleteResourceServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9153,31 +9153,31 @@ impl DeleteUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserError::InternalError(String::from(error_message))
+                    return DeleteUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserError::InvalidParameter(String::from(error_message))
+                    return DeleteUserError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserError::NotAuthorized(String::from(error_message))
+                    return DeleteUserError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return DeleteUserError::PasswordResetRequired(String::from(error_message))
+                    return DeleteUserError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserError::TooManyRequests(String::from(error_message))
+                    return DeleteUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return DeleteUserError::UserNotConfirmed(String::from(error_message))
+                    return DeleteUserError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return DeleteUserError::UserNotFound(String::from(error_message))
+                    return DeleteUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string())
+                    return DeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9275,33 +9275,33 @@ impl DeleteUserAttributesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserAttributesError::InternalError(String::from(error_message))
+                    return DeleteUserAttributesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserAttributesError::InvalidParameter(String::from(error_message))
+                    return DeleteUserAttributesError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserAttributesError::NotAuthorized(String::from(error_message))
+                    return DeleteUserAttributesError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return DeleteUserAttributesError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserAttributesError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserAttributesError::TooManyRequests(String::from(error_message))
+                    return DeleteUserAttributesError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return DeleteUserAttributesError::UserNotConfirmed(String::from(error_message))
+                    return DeleteUserAttributesError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return DeleteUserAttributesError::UserNotFound(String::from(error_message))
+                    return DeleteUserAttributesError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserAttributesError::Validation(error_message.to_string())
+                    return DeleteUserAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9397,25 +9397,25 @@ impl DeleteUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserPoolError::InternalError(String::from(error_message))
+                    return DeleteUserPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserPoolError::InvalidParameter(String::from(error_message))
+                    return DeleteUserPoolError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserPoolError::NotAuthorized(String::from(error_message))
+                    return DeleteUserPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserPoolError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserPoolError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserPoolError::TooManyRequests(String::from(error_message))
+                    return DeleteUserPoolError::TooManyRequests(String::from(error_message));
                 }
                 "UserImportInProgressException" => {
-                    return DeleteUserPoolError::UserImportInProgress(String::from(error_message))
+                    return DeleteUserPoolError::UserImportInProgress(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserPoolError::Validation(error_message.to_string())
+                    return DeleteUserPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9505,22 +9505,22 @@ impl DeleteUserPoolClientError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserPoolClientError::InternalError(String::from(error_message))
+                    return DeleteUserPoolClientError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserPoolClientError::InvalidParameter(String::from(error_message))
+                    return DeleteUserPoolClientError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserPoolClientError::NotAuthorized(String::from(error_message))
+                    return DeleteUserPoolClientError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserPoolClientError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserPoolClientError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserPoolClientError::TooManyRequests(String::from(error_message))
+                    return DeleteUserPoolClientError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserPoolClientError::Validation(error_message.to_string())
+                    return DeleteUserPoolClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9609,19 +9609,19 @@ impl DeleteUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserPoolDomainError::InternalError(String::from(error_message))
+                    return DeleteUserPoolDomainError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserPoolDomainError::InvalidParameter(String::from(error_message))
+                    return DeleteUserPoolDomainError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserPoolDomainError::NotAuthorized(String::from(error_message))
+                    return DeleteUserPoolDomainError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserPoolDomainError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserPoolDomainError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserPoolDomainError::Validation(error_message.to_string())
+                    return DeleteUserPoolDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9711,28 +9711,28 @@ impl DescribeIdentityProviderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeIdentityProviderError::InternalError(String::from(error_message))
+                    return DescribeIdentityProviderError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DescribeIdentityProviderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeIdentityProviderError::NotAuthorized(String::from(error_message))
+                    return DescribeIdentityProviderError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeIdentityProviderError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeIdentityProviderError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeIdentityProviderError::Validation(error_message.to_string())
+                    return DescribeIdentityProviderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9823,26 +9823,26 @@ impl DescribeResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeResourceServerError::InternalError(String::from(error_message))
+                    return DescribeResourceServerError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DescribeResourceServerError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeResourceServerError::NotAuthorized(String::from(error_message))
+                    return DescribeResourceServerError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeResourceServerError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeResourceServerError::TooManyRequests(String::from(error_message))
+                    return DescribeResourceServerError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeResourceServerError::Validation(error_message.to_string())
+                    return DescribeResourceServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9937,35 +9937,35 @@ impl DescribeRiskConfigurationError {
                 "InternalErrorException" => {
                     return DescribeRiskConfigurationError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeRiskConfigurationError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return DescribeRiskConfigurationError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeRiskConfigurationError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeRiskConfigurationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeRiskConfigurationError::Validation(error_message.to_string())
+                    return DescribeRiskConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10057,22 +10057,22 @@ impl DescribeUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserImportJobError::InternalError(String::from(error_message))
+                    return DescribeUserImportJobError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserImportJobError::InvalidParameter(String::from(error_message))
+                    return DescribeUserImportJobError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserImportJobError::NotAuthorized(String::from(error_message))
+                    return DescribeUserImportJobError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUserImportJobError::ResourceNotFound(String::from(error_message))
+                    return DescribeUserImportJobError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeUserImportJobError::TooManyRequests(String::from(error_message))
+                    return DescribeUserImportJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserImportJobError::Validation(error_message.to_string())
+                    return DescribeUserImportJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10165,25 +10165,25 @@ impl DescribeUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserPoolError::InternalError(String::from(error_message))
+                    return DescribeUserPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserPoolError::InvalidParameter(String::from(error_message))
+                    return DescribeUserPoolError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserPoolError::NotAuthorized(String::from(error_message))
+                    return DescribeUserPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUserPoolError::ResourceNotFound(String::from(error_message))
+                    return DescribeUserPoolError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeUserPoolError::TooManyRequests(String::from(error_message))
+                    return DescribeUserPoolError::TooManyRequests(String::from(error_message));
                 }
                 "UserPoolTaggingException" => {
-                    return DescribeUserPoolError::UserPoolTagging(String::from(error_message))
+                    return DescribeUserPoolError::UserPoolTagging(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserPoolError::Validation(error_message.to_string())
+                    return DescribeUserPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10273,26 +10273,26 @@ impl DescribeUserPoolClientError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserPoolClientError::InternalError(String::from(error_message))
+                    return DescribeUserPoolClientError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DescribeUserPoolClientError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserPoolClientError::NotAuthorized(String::from(error_message))
+                    return DescribeUserPoolClientError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeUserPoolClientError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeUserPoolClientError::TooManyRequests(String::from(error_message))
+                    return DescribeUserPoolClientError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserPoolClientError::Validation(error_message.to_string())
+                    return DescribeUserPoolClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10381,23 +10381,23 @@ impl DescribeUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserPoolDomainError::InternalError(String::from(error_message))
+                    return DescribeUserPoolDomainError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DescribeUserPoolDomainError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserPoolDomainError::NotAuthorized(String::from(error_message))
+                    return DescribeUserPoolDomainError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeUserPoolDomainError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeUserPoolDomainError::Validation(error_message.to_string())
+                    return DescribeUserPoolDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10495,36 +10495,36 @@ impl ForgetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ForgetDeviceError::InternalError(String::from(error_message))
+                    return ForgetDeviceError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ForgetDeviceError::InvalidParameter(String::from(error_message))
+                    return ForgetDeviceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return ForgetDeviceError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ForgetDeviceError::NotAuthorized(String::from(error_message))
+                    return ForgetDeviceError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return ForgetDeviceError::PasswordResetRequired(String::from(error_message))
+                    return ForgetDeviceError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ForgetDeviceError::ResourceNotFound(String::from(error_message))
+                    return ForgetDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ForgetDeviceError::TooManyRequests(String::from(error_message))
+                    return ForgetDeviceError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return ForgetDeviceError::UserNotConfirmed(String::from(error_message))
+                    return ForgetDeviceError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ForgetDeviceError::UserNotFound(String::from(error_message))
+                    return ForgetDeviceError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ForgetDeviceError::Validation(error_message.to_string())
+                    return ForgetDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10637,58 +10637,58 @@ impl ForgotPasswordError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return ForgotPasswordError::CodeDeliveryFailure(String::from(error_message))
+                    return ForgotPasswordError::CodeDeliveryFailure(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return ForgotPasswordError::InternalError(String::from(error_message))
+                    return ForgotPasswordError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return ForgotPasswordError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ForgotPasswordError::InvalidLambdaResponse(String::from(error_message))
+                    return ForgotPasswordError::InvalidLambdaResponse(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ForgotPasswordError::InvalidParameter(String::from(error_message))
+                    return ForgotPasswordError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return ForgotPasswordError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ForgotPasswordError::LimitExceeded(String::from(error_message))
+                    return ForgotPasswordError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ForgotPasswordError::NotAuthorized(String::from(error_message))
+                    return ForgotPasswordError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ForgotPasswordError::ResourceNotFound(String::from(error_message))
+                    return ForgotPasswordError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ForgotPasswordError::TooManyRequests(String::from(error_message))
+                    return ForgotPasswordError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return ForgotPasswordError::UnexpectedLambda(String::from(error_message))
+                    return ForgotPasswordError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
-                    return ForgotPasswordError::UserLambdaValidation(String::from(error_message))
+                    return ForgotPasswordError::UserLambdaValidation(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return ForgotPasswordError::UserNotConfirmed(String::from(error_message))
+                    return ForgotPasswordError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ForgotPasswordError::UserNotFound(String::from(error_message))
+                    return ForgotPasswordError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ForgotPasswordError::Validation(error_message.to_string())
+                    return ForgotPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10787,22 +10787,22 @@ impl GetCSVHeaderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetCSVHeaderError::InternalError(String::from(error_message))
+                    return GetCSVHeaderError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetCSVHeaderError::InvalidParameter(String::from(error_message))
+                    return GetCSVHeaderError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetCSVHeaderError::NotAuthorized(String::from(error_message))
+                    return GetCSVHeaderError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCSVHeaderError::ResourceNotFound(String::from(error_message))
+                    return GetCSVHeaderError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetCSVHeaderError::TooManyRequests(String::from(error_message))
+                    return GetCSVHeaderError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCSVHeaderError::Validation(error_message.to_string())
+                    return GetCSVHeaderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10899,34 +10899,34 @@ impl GetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetDeviceError::InternalError(String::from(error_message))
+                    return GetDeviceError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetDeviceError::InvalidParameter(String::from(error_message))
+                    return GetDeviceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return GetDeviceError::InvalidUserPoolConfiguration(String::from(error_message))
+                    return GetDeviceError::InvalidUserPoolConfiguration(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetDeviceError::NotAuthorized(String::from(error_message))
+                    return GetDeviceError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return GetDeviceError::PasswordResetRequired(String::from(error_message))
+                    return GetDeviceError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDeviceError::ResourceNotFound(String::from(error_message))
+                    return GetDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDeviceError::TooManyRequests(String::from(error_message))
+                    return GetDeviceError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return GetDeviceError::UserNotConfirmed(String::from(error_message))
+                    return GetDeviceError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return GetDeviceError::UserNotFound(String::from(error_message))
+                    return GetDeviceError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeviceError::Validation(error_message.to_string())
+                    return GetDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11019,22 +11019,22 @@ impl GetGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetGroupError::InternalError(String::from(error_message))
+                    return GetGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetGroupError::InvalidParameter(String::from(error_message))
+                    return GetGroupError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetGroupError::NotAuthorized(String::from(error_message))
+                    return GetGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetGroupError::ResourceNotFound(String::from(error_message))
+                    return GetGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetGroupError::TooManyRequests(String::from(error_message))
+                    return GetGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGroupError::Validation(error_message.to_string())
+                    return GetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11125,32 +11125,32 @@ impl GetIdentityProviderByIdentifierError {
                 "InternalErrorException" => {
                     return GetIdentityProviderByIdentifierError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return GetIdentityProviderByIdentifierError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return GetIdentityProviderByIdentifierError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return GetIdentityProviderByIdentifierError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetIdentityProviderByIdentifierError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -11235,13 +11235,13 @@ impl GetSigningCertificateError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetSigningCertificateError::InternalError(String::from(error_message))
+                    return GetSigningCertificateError::InternalError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetSigningCertificateError::ResourceNotFound(String::from(error_message))
+                    return GetSigningCertificateError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSigningCertificateError::Validation(error_message.to_string())
+                    return GetSigningCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11329,22 +11329,22 @@ impl GetUICustomizationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetUICustomizationError::InternalError(String::from(error_message))
+                    return GetUICustomizationError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetUICustomizationError::InvalidParameter(String::from(error_message))
+                    return GetUICustomizationError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetUICustomizationError::NotAuthorized(String::from(error_message))
+                    return GetUICustomizationError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetUICustomizationError::ResourceNotFound(String::from(error_message))
+                    return GetUICustomizationError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUICustomizationError::TooManyRequests(String::from(error_message))
+                    return GetUICustomizationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUICustomizationError::Validation(error_message.to_string())
+                    return GetUICustomizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11441,28 +11441,28 @@ impl GetUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetUserError::InternalError(String::from(error_message))
+                    return GetUserError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetUserError::InvalidParameter(String::from(error_message))
+                    return GetUserError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetUserError::NotAuthorized(String::from(error_message))
+                    return GetUserError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return GetUserError::PasswordResetRequired(String::from(error_message))
+                    return GetUserError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetUserError::ResourceNotFound(String::from(error_message))
+                    return GetUserError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUserError::TooManyRequests(String::from(error_message))
+                    return GetUserError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return GetUserError::UserNotConfirmed(String::from(error_message))
+                    return GetUserError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return GetUserError::UserNotFound(String::from(error_message))
+                    return GetUserError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => return GetUserError::Validation(error_message.to_string()),
                 _ => {}
@@ -11579,87 +11579,87 @@ impl GetUserAttributeVerificationCodeError {
                 "CodeDeliveryFailureException" => {
                     return GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
                     return GetUserAttributeVerificationCodeError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidLambdaResponseException" => {
                     return GetUserAttributeVerificationCodeError::InvalidLambdaResponse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterException" => {
                     return GetUserAttributeVerificationCodeError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "LimitExceededException" => {
                     return GetUserAttributeVerificationCodeError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return GetUserAttributeVerificationCodeError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PasswordResetRequiredException" => {
                     return GetUserAttributeVerificationCodeError::PasswordResetRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return GetUserAttributeVerificationCodeError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnexpectedLambdaException" => {
                     return GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserLambdaValidationException" => {
                     return GetUserAttributeVerificationCodeError::UserLambdaValidation(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UserNotConfirmedException" => {
                     return GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
                     return GetUserAttributeVerificationCodeError::UserNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetUserAttributeVerificationCodeError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -11763,22 +11763,22 @@ impl GetUserPoolMfaConfigError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetUserPoolMfaConfigError::InternalError(String::from(error_message))
+                    return GetUserPoolMfaConfigError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetUserPoolMfaConfigError::InvalidParameter(String::from(error_message))
+                    return GetUserPoolMfaConfigError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetUserPoolMfaConfigError::NotAuthorized(String::from(error_message))
+                    return GetUserPoolMfaConfigError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message))
+                    return GetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUserPoolMfaConfigError::TooManyRequests(String::from(error_message))
+                    return GetUserPoolMfaConfigError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUserPoolMfaConfigError::Validation(error_message.to_string())
+                    return GetUserPoolMfaConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11873,28 +11873,28 @@ impl GlobalSignOutError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GlobalSignOutError::InternalError(String::from(error_message))
+                    return GlobalSignOutError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GlobalSignOutError::InvalidParameter(String::from(error_message))
+                    return GlobalSignOutError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GlobalSignOutError::NotAuthorized(String::from(error_message))
+                    return GlobalSignOutError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return GlobalSignOutError::PasswordResetRequired(String::from(error_message))
+                    return GlobalSignOutError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GlobalSignOutError::ResourceNotFound(String::from(error_message))
+                    return GlobalSignOutError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GlobalSignOutError::TooManyRequests(String::from(error_message))
+                    return GlobalSignOutError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return GlobalSignOutError::UserNotConfirmed(String::from(error_message))
+                    return GlobalSignOutError::UserNotConfirmed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GlobalSignOutError::Validation(error_message.to_string())
+                    return GlobalSignOutError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11999,45 +11999,45 @@ impl InitiateAuthError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return InitiateAuthError::InternalError(String::from(error_message))
+                    return InitiateAuthError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
-                    return InitiateAuthError::InvalidLambdaResponse(String::from(error_message))
+                    return InitiateAuthError::InvalidLambdaResponse(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return InitiateAuthError::InvalidParameter(String::from(error_message))
+                    return InitiateAuthError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return InitiateAuthError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return InitiateAuthError::NotAuthorized(String::from(error_message))
+                    return InitiateAuthError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return InitiateAuthError::PasswordResetRequired(String::from(error_message))
+                    return InitiateAuthError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateAuthError::ResourceNotFound(String::from(error_message))
+                    return InitiateAuthError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return InitiateAuthError::TooManyRequests(String::from(error_message))
+                    return InitiateAuthError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return InitiateAuthError::UnexpectedLambda(String::from(error_message))
+                    return InitiateAuthError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
-                    return InitiateAuthError::UserLambdaValidation(String::from(error_message))
+                    return InitiateAuthError::UserLambdaValidation(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return InitiateAuthError::UserNotConfirmed(String::from(error_message))
+                    return InitiateAuthError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return InitiateAuthError::UserNotFound(String::from(error_message))
+                    return InitiateAuthError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InitiateAuthError::Validation(error_message.to_string())
+                    return InitiateAuthError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12141,36 +12141,36 @@ impl ListDevicesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListDevicesError::InternalError(String::from(error_message))
+                    return ListDevicesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListDevicesError::InvalidParameter(String::from(error_message))
+                    return ListDevicesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return ListDevicesError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListDevicesError::NotAuthorized(String::from(error_message))
+                    return ListDevicesError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return ListDevicesError::PasswordResetRequired(String::from(error_message))
+                    return ListDevicesError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListDevicesError::ResourceNotFound(String::from(error_message))
+                    return ListDevicesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListDevicesError::TooManyRequests(String::from(error_message))
+                    return ListDevicesError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return ListDevicesError::UserNotConfirmed(String::from(error_message))
+                    return ListDevicesError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return ListDevicesError::UserNotFound(String::from(error_message))
+                    return ListDevicesError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDevicesError::Validation(error_message.to_string())
+                    return ListDevicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12263,22 +12263,22 @@ impl ListGroupsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListGroupsError::InternalError(String::from(error_message))
+                    return ListGroupsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListGroupsError::InvalidParameter(String::from(error_message))
+                    return ListGroupsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListGroupsError::NotAuthorized(String::from(error_message))
+                    return ListGroupsError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListGroupsError::ResourceNotFound(String::from(error_message))
+                    return ListGroupsError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListGroupsError::TooManyRequests(String::from(error_message))
+                    return ListGroupsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string())
+                    return ListGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12367,22 +12367,22 @@ impl ListIdentityProvidersError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListIdentityProvidersError::InternalError(String::from(error_message))
+                    return ListIdentityProvidersError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListIdentityProvidersError::InvalidParameter(String::from(error_message))
+                    return ListIdentityProvidersError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListIdentityProvidersError::NotAuthorized(String::from(error_message))
+                    return ListIdentityProvidersError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListIdentityProvidersError::ResourceNotFound(String::from(error_message))
+                    return ListIdentityProvidersError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListIdentityProvidersError::TooManyRequests(String::from(error_message))
+                    return ListIdentityProvidersError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIdentityProvidersError::Validation(error_message.to_string())
+                    return ListIdentityProvidersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12473,22 +12473,22 @@ impl ListResourceServersError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListResourceServersError::InternalError(String::from(error_message))
+                    return ListResourceServersError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListResourceServersError::InvalidParameter(String::from(error_message))
+                    return ListResourceServersError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListResourceServersError::NotAuthorized(String::from(error_message))
+                    return ListResourceServersError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListResourceServersError::ResourceNotFound(String::from(error_message))
+                    return ListResourceServersError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListResourceServersError::TooManyRequests(String::from(error_message))
+                    return ListResourceServersError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListResourceServersError::Validation(error_message.to_string())
+                    return ListResourceServersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12579,22 +12579,22 @@ impl ListUserImportJobsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUserImportJobsError::InternalError(String::from(error_message))
+                    return ListUserImportJobsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListUserImportJobsError::InvalidParameter(String::from(error_message))
+                    return ListUserImportJobsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListUserImportJobsError::NotAuthorized(String::from(error_message))
+                    return ListUserImportJobsError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUserImportJobsError::ResourceNotFound(String::from(error_message))
+                    return ListUserImportJobsError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListUserImportJobsError::TooManyRequests(String::from(error_message))
+                    return ListUserImportJobsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUserImportJobsError::Validation(error_message.to_string())
+                    return ListUserImportJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12685,22 +12685,22 @@ impl ListUserPoolClientsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUserPoolClientsError::InternalError(String::from(error_message))
+                    return ListUserPoolClientsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListUserPoolClientsError::InvalidParameter(String::from(error_message))
+                    return ListUserPoolClientsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListUserPoolClientsError::NotAuthorized(String::from(error_message))
+                    return ListUserPoolClientsError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUserPoolClientsError::ResourceNotFound(String::from(error_message))
+                    return ListUserPoolClientsError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListUserPoolClientsError::TooManyRequests(String::from(error_message))
+                    return ListUserPoolClientsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUserPoolClientsError::Validation(error_message.to_string())
+                    return ListUserPoolClientsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12789,19 +12789,19 @@ impl ListUserPoolsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUserPoolsError::InternalError(String::from(error_message))
+                    return ListUserPoolsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListUserPoolsError::InvalidParameter(String::from(error_message))
+                    return ListUserPoolsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListUserPoolsError::NotAuthorized(String::from(error_message))
+                    return ListUserPoolsError::NotAuthorized(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListUserPoolsError::TooManyRequests(String::from(error_message))
+                    return ListUserPoolsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUserPoolsError::Validation(error_message.to_string())
+                    return ListUserPoolsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12889,22 +12889,22 @@ impl ListUsersError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUsersError::InternalError(String::from(error_message))
+                    return ListUsersError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListUsersError::InvalidParameter(String::from(error_message))
+                    return ListUsersError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListUsersError::NotAuthorized(String::from(error_message))
+                    return ListUsersError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUsersError::ResourceNotFound(String::from(error_message))
+                    return ListUsersError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListUsersError::TooManyRequests(String::from(error_message))
+                    return ListUsersError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUsersError::Validation(error_message.to_string())
+                    return ListUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12993,22 +12993,22 @@ impl ListUsersInGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUsersInGroupError::InternalError(String::from(error_message))
+                    return ListUsersInGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListUsersInGroupError::InvalidParameter(String::from(error_message))
+                    return ListUsersInGroupError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListUsersInGroupError::NotAuthorized(String::from(error_message))
+                    return ListUsersInGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUsersInGroupError::ResourceNotFound(String::from(error_message))
+                    return ListUsersInGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListUsersInGroupError::TooManyRequests(String::from(error_message))
+                    return ListUsersInGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUsersInGroupError::Validation(error_message.to_string())
+                    return ListUsersInGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13117,65 +13117,65 @@ impl ResendConfirmationCodeError {
                 "CodeDeliveryFailureException" => {
                     return ResendConfirmationCodeError::CodeDeliveryFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return ResendConfirmationCodeError::InternalError(String::from(error_message))
+                    return ResendConfirmationCodeError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
                     return ResendConfirmationCodeError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return ResendConfirmationCodeError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "LimitExceededException" => {
-                    return ResendConfirmationCodeError::LimitExceeded(String::from(error_message))
+                    return ResendConfirmationCodeError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ResendConfirmationCodeError::NotAuthorized(String::from(error_message))
+                    return ResendConfirmationCodeError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ResendConfirmationCodeError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ResendConfirmationCodeError::TooManyRequests(String::from(error_message))
+                    return ResendConfirmationCodeError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
                     return ResendConfirmationCodeError::UnexpectedLambda(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserLambdaValidationException" => {
                     return ResendConfirmationCodeError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return ResendConfirmationCodeError::UserNotFound(String::from(error_message))
+                    return ResendConfirmationCodeError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResendConfirmationCodeError::Validation(error_message.to_string())
+                    return ResendConfirmationCodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13305,91 +13305,91 @@ impl RespondToAuthChallengeError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return RespondToAuthChallengeError::AliasExists(String::from(error_message))
+                    return RespondToAuthChallengeError::AliasExists(String::from(error_message));
                 }
                 "CodeMismatchException" => {
-                    return RespondToAuthChallengeError::CodeMismatch(String::from(error_message))
+                    return RespondToAuthChallengeError::CodeMismatch(String::from(error_message));
                 }
                 "ExpiredCodeException" => {
-                    return RespondToAuthChallengeError::ExpiredCode(String::from(error_message))
+                    return RespondToAuthChallengeError::ExpiredCode(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return RespondToAuthChallengeError::InternalError(String::from(error_message))
+                    return RespondToAuthChallengeError::InternalError(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
                     return RespondToAuthChallengeError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return RespondToAuthChallengeError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPasswordException" => {
-                    return RespondToAuthChallengeError::InvalidPassword(String::from(error_message))
+                    return RespondToAuthChallengeError::InvalidPassword(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MFAMethodNotFoundException" => {
                     return RespondToAuthChallengeError::MFAMethodNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return RespondToAuthChallengeError::NotAuthorized(String::from(error_message))
+                    return RespondToAuthChallengeError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return RespondToAuthChallengeError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return RespondToAuthChallengeError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return RespondToAuthChallengeError::TooManyRequests(String::from(error_message))
+                    return RespondToAuthChallengeError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
                     return RespondToAuthChallengeError::UnexpectedLambda(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserLambdaValidationException" => {
                     return RespondToAuthChallengeError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotConfirmedException" => {
                     return RespondToAuthChallengeError::UserNotConfirmed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return RespondToAuthChallengeError::UserNotFound(String::from(error_message))
+                    return RespondToAuthChallengeError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RespondToAuthChallengeError::Validation(error_message.to_string())
+                    return RespondToAuthChallengeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13503,35 +13503,35 @@ impl SetRiskConfigurationError {
                 "CodeDeliveryFailureException" => {
                     return SetRiskConfigurationError::CodeDeliveryFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return SetRiskConfigurationError::InternalError(String::from(error_message))
+                    return SetRiskConfigurationError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return SetRiskConfigurationError::InvalidParameter(String::from(error_message))
+                    return SetRiskConfigurationError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return SetRiskConfigurationError::NotAuthorized(String::from(error_message))
+                    return SetRiskConfigurationError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SetRiskConfigurationError::ResourceNotFound(String::from(error_message))
+                    return SetRiskConfigurationError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return SetRiskConfigurationError::TooManyRequests(String::from(error_message))
+                    return SetRiskConfigurationError::TooManyRequests(String::from(error_message));
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return SetRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetRiskConfigurationError::Validation(error_message.to_string())
+                    return SetRiskConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13625,22 +13625,22 @@ impl SetUICustomizationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUICustomizationError::InternalError(String::from(error_message))
+                    return SetUICustomizationError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SetUICustomizationError::InvalidParameter(String::from(error_message))
+                    return SetUICustomizationError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return SetUICustomizationError::NotAuthorized(String::from(error_message))
+                    return SetUICustomizationError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUICustomizationError::ResourceNotFound(String::from(error_message))
+                    return SetUICustomizationError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return SetUICustomizationError::TooManyRequests(String::from(error_message))
+                    return SetUICustomizationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetUICustomizationError::Validation(error_message.to_string())
+                    return SetUICustomizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13735,30 +13735,30 @@ impl SetUserMFAPreferenceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUserMFAPreferenceError::InternalError(String::from(error_message))
+                    return SetUserMFAPreferenceError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SetUserMFAPreferenceError::InvalidParameter(String::from(error_message))
+                    return SetUserMFAPreferenceError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return SetUserMFAPreferenceError::NotAuthorized(String::from(error_message))
+                    return SetUserMFAPreferenceError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return SetUserMFAPreferenceError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUserMFAPreferenceError::ResourceNotFound(String::from(error_message))
+                    return SetUserMFAPreferenceError::ResourceNotFound(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return SetUserMFAPreferenceError::UserNotConfirmed(String::from(error_message))
+                    return SetUserMFAPreferenceError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return SetUserMFAPreferenceError::UserNotFound(String::from(error_message))
+                    return SetUserMFAPreferenceError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetUserMFAPreferenceError::Validation(error_message.to_string())
+                    return SetUserMFAPreferenceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13855,32 +13855,32 @@ impl SetUserPoolMfaConfigError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUserPoolMfaConfigError::InternalError(String::from(error_message))
+                    return SetUserPoolMfaConfigError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SetUserPoolMfaConfigError::InvalidParameter(String::from(error_message))
+                    return SetUserPoolMfaConfigError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return SetUserPoolMfaConfigError::NotAuthorized(String::from(error_message))
+                    return SetUserPoolMfaConfigError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message))
+                    return SetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return SetUserPoolMfaConfigError::TooManyRequests(String::from(error_message))
+                    return SetUserPoolMfaConfigError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetUserPoolMfaConfigError::Validation(error_message.to_string())
+                    return SetUserPoolMfaConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13977,28 +13977,28 @@ impl SetUserSettingsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUserSettingsError::InternalError(String::from(error_message))
+                    return SetUserSettingsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SetUserSettingsError::InvalidParameter(String::from(error_message))
+                    return SetUserSettingsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return SetUserSettingsError::NotAuthorized(String::from(error_message))
+                    return SetUserSettingsError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
-                    return SetUserSettingsError::PasswordResetRequired(String::from(error_message))
+                    return SetUserSettingsError::PasswordResetRequired(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUserSettingsError::ResourceNotFound(String::from(error_message))
+                    return SetUserSettingsError::ResourceNotFound(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return SetUserSettingsError::UserNotConfirmed(String::from(error_message))
+                    return SetUserSettingsError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return SetUserSettingsError::UserNotFound(String::from(error_message))
+                    return SetUserSettingsError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetUserSettingsError::Validation(error_message.to_string())
+                    return SetUserSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14107,46 +14107,46 @@ impl SignUpError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return SignUpError::CodeDeliveryFailure(String::from(error_message))
+                    return SignUpError::CodeDeliveryFailure(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return SignUpError::InternalError(String::from(error_message))
+                    return SignUpError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return SignUpError::InvalidEmailRoleAccessPolicy(String::from(error_message))
+                    return SignUpError::InvalidEmailRoleAccessPolicy(String::from(error_message));
                 }
                 "InvalidLambdaResponseException" => {
-                    return SignUpError::InvalidLambdaResponse(String::from(error_message))
+                    return SignUpError::InvalidLambdaResponse(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SignUpError::InvalidParameter(String::from(error_message))
+                    return SignUpError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return SignUpError::InvalidPassword(String::from(error_message))
+                    return SignUpError::InvalidPassword(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return SignUpError::InvalidSmsRoleAccessPolicy(String::from(error_message))
+                    return SignUpError::InvalidSmsRoleAccessPolicy(String::from(error_message));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return SignUpError::InvalidSmsRoleTrustRelationship(String::from(error_message))
+                    return SignUpError::InvalidSmsRoleTrustRelationship(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return SignUpError::NotAuthorized(String::from(error_message))
+                    return SignUpError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SignUpError::ResourceNotFound(String::from(error_message))
+                    return SignUpError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return SignUpError::TooManyRequests(String::from(error_message))
+                    return SignUpError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return SignUpError::UnexpectedLambda(String::from(error_message))
+                    return SignUpError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
-                    return SignUpError::UserLambdaValidation(String::from(error_message))
+                    return SignUpError::UserLambdaValidation(String::from(error_message));
                 }
                 "UsernameExistsException" => {
-                    return SignUpError::UsernameExists(String::from(error_message))
+                    return SignUpError::UsernameExists(String::from(error_message));
                 }
                 "ValidationException" => return SignUpError::Validation(error_message.to_string()),
                 _ => {}
@@ -14247,25 +14247,25 @@ impl StartUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return StartUserImportJobError::InternalError(String::from(error_message))
+                    return StartUserImportJobError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StartUserImportJobError::InvalidParameter(String::from(error_message))
+                    return StartUserImportJobError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return StartUserImportJobError::NotAuthorized(String::from(error_message))
+                    return StartUserImportJobError::NotAuthorized(String::from(error_message));
                 }
                 "PreconditionNotMetException" => {
-                    return StartUserImportJobError::PreconditionNotMet(String::from(error_message))
+                    return StartUserImportJobError::PreconditionNotMet(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartUserImportJobError::ResourceNotFound(String::from(error_message))
+                    return StartUserImportJobError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return StartUserImportJobError::TooManyRequests(String::from(error_message))
+                    return StartUserImportJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartUserImportJobError::Validation(error_message.to_string())
+                    return StartUserImportJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14359,25 +14359,25 @@ impl StopUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return StopUserImportJobError::InternalError(String::from(error_message))
+                    return StopUserImportJobError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StopUserImportJobError::InvalidParameter(String::from(error_message))
+                    return StopUserImportJobError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return StopUserImportJobError::NotAuthorized(String::from(error_message))
+                    return StopUserImportJobError::NotAuthorized(String::from(error_message));
                 }
                 "PreconditionNotMetException" => {
-                    return StopUserImportJobError::PreconditionNotMet(String::from(error_message))
+                    return StopUserImportJobError::PreconditionNotMet(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopUserImportJobError::ResourceNotFound(String::from(error_message))
+                    return StopUserImportJobError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return StopUserImportJobError::TooManyRequests(String::from(error_message))
+                    return StopUserImportJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopUserImportJobError::Validation(error_message.to_string())
+                    return StopUserImportJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14473,36 +14473,36 @@ impl UpdateAuthEventFeedbackError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateAuthEventFeedbackError::InternalError(String::from(error_message))
+                    return UpdateAuthEventFeedbackError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return UpdateAuthEventFeedbackError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateAuthEventFeedbackError::NotAuthorized(String::from(error_message))
+                    return UpdateAuthEventFeedbackError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateAuthEventFeedbackError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return UpdateAuthEventFeedbackError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return UpdateAuthEventFeedbackError::UserNotFound(String::from(error_message))
+                    return UpdateAuthEventFeedbackError::UserNotFound(String::from(error_message));
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateAuthEventFeedbackError::Validation(error_message.to_string())
+                    return UpdateAuthEventFeedbackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14603,38 +14603,38 @@ impl UpdateDeviceStatusError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateDeviceStatusError::InternalError(String::from(error_message))
+                    return UpdateDeviceStatusError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateDeviceStatusError::InvalidParameter(String::from(error_message))
+                    return UpdateDeviceStatusError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateDeviceStatusError::NotAuthorized(String::from(error_message))
+                    return UpdateDeviceStatusError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return UpdateDeviceStatusError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDeviceStatusError::ResourceNotFound(String::from(error_message))
+                    return UpdateDeviceStatusError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateDeviceStatusError::TooManyRequests(String::from(error_message))
+                    return UpdateDeviceStatusError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return UpdateDeviceStatusError::UserNotConfirmed(String::from(error_message))
+                    return UpdateDeviceStatusError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return UpdateDeviceStatusError::UserNotFound(String::from(error_message))
+                    return UpdateDeviceStatusError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDeviceStatusError::Validation(error_message.to_string())
+                    return UpdateDeviceStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14729,22 +14729,22 @@ impl UpdateGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateGroupError::InternalError(String::from(error_message))
+                    return UpdateGroupError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateGroupError::InvalidParameter(String::from(error_message))
+                    return UpdateGroupError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateGroupError::NotAuthorized(String::from(error_message))
+                    return UpdateGroupError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateGroupError::ResourceNotFound(String::from(error_message))
+                    return UpdateGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGroupError::TooManyRequests(String::from(error_message))
+                    return UpdateGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGroupError::Validation(error_message.to_string())
+                    return UpdateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14835,31 +14835,31 @@ impl UpdateIdentityProviderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateIdentityProviderError::InternalError(String::from(error_message))
+                    return UpdateIdentityProviderError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return UpdateIdentityProviderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateIdentityProviderError::NotAuthorized(String::from(error_message))
+                    return UpdateIdentityProviderError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateIdentityProviderError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateIdentityProviderError::TooManyRequests(String::from(error_message))
+                    return UpdateIdentityProviderError::TooManyRequests(String::from(error_message));
                 }
                 "UnsupportedIdentityProviderException" => {
                     return UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateIdentityProviderError::Validation(error_message.to_string())
+                    return UpdateIdentityProviderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14951,22 +14951,22 @@ impl UpdateResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateResourceServerError::InternalError(String::from(error_message))
+                    return UpdateResourceServerError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateResourceServerError::InvalidParameter(String::from(error_message))
+                    return UpdateResourceServerError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateResourceServerError::NotAuthorized(String::from(error_message))
+                    return UpdateResourceServerError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateResourceServerError::ResourceNotFound(String::from(error_message))
+                    return UpdateResourceServerError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateResourceServerError::TooManyRequests(String::from(error_message))
+                    return UpdateResourceServerError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateResourceServerError::Validation(error_message.to_string())
+                    return UpdateResourceServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15083,75 +15083,75 @@ impl UpdateUserAttributesError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return UpdateUserAttributesError::AliasExists(String::from(error_message))
+                    return UpdateUserAttributesError::AliasExists(String::from(error_message));
                 }
                 "CodeDeliveryFailureException" => {
                     return UpdateUserAttributesError::CodeDeliveryFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CodeMismatchException" => {
-                    return UpdateUserAttributesError::CodeMismatch(String::from(error_message))
+                    return UpdateUserAttributesError::CodeMismatch(String::from(error_message));
                 }
                 "ExpiredCodeException" => {
-                    return UpdateUserAttributesError::ExpiredCode(String::from(error_message))
+                    return UpdateUserAttributesError::ExpiredCode(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return UpdateUserAttributesError::InternalError(String::from(error_message))
+                    return UpdateUserAttributesError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
                     return UpdateUserAttributesError::InvalidLambdaResponse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserAttributesError::InvalidParameter(String::from(error_message))
+                    return UpdateUserAttributesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserAttributesError::NotAuthorized(String::from(error_message))
+                    return UpdateUserAttributesError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return UpdateUserAttributesError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserAttributesError::ResourceNotFound(String::from(error_message))
+                    return UpdateUserAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserAttributesError::TooManyRequests(String::from(error_message))
+                    return UpdateUserAttributesError::TooManyRequests(String::from(error_message));
                 }
                 "UnexpectedLambdaException" => {
-                    return UpdateUserAttributesError::UnexpectedLambda(String::from(error_message))
+                    return UpdateUserAttributesError::UnexpectedLambda(String::from(error_message));
                 }
                 "UserLambdaValidationException" => {
                     return UpdateUserAttributesError::UserLambdaValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return UpdateUserAttributesError::UserNotConfirmed(String::from(error_message))
+                    return UpdateUserAttributesError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return UpdateUserAttributesError::UserNotFound(String::from(error_message))
+                    return UpdateUserAttributesError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserAttributesError::Validation(error_message.to_string())
+                    return UpdateUserAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15267,46 +15267,46 @@ impl UpdateUserPoolError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateUserPoolError::ConcurrentModification(String::from(error_message))
+                    return UpdateUserPoolError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return UpdateUserPoolError::InternalError(String::from(error_message))
+                    return UpdateUserPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return UpdateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserPoolError::InvalidParameter(String::from(error_message))
+                    return UpdateUserPoolError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return UpdateUserPoolError::InvalidSmsRoleAccessPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserPoolError::NotAuthorized(String::from(error_message))
+                    return UpdateUserPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserPoolError::ResourceNotFound(String::from(error_message))
+                    return UpdateUserPoolError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserPoolError::TooManyRequests(String::from(error_message))
+                    return UpdateUserPoolError::TooManyRequests(String::from(error_message));
                 }
                 "UserImportInProgressException" => {
-                    return UpdateUserPoolError::UserImportInProgress(String::from(error_message))
+                    return UpdateUserPoolError::UserImportInProgress(String::from(error_message));
                 }
                 "UserPoolTaggingException" => {
-                    return UpdateUserPoolError::UserPoolTagging(String::from(error_message))
+                    return UpdateUserPoolError::UserPoolTagging(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserPoolError::Validation(error_message.to_string())
+                    return UpdateUserPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15409,31 +15409,31 @@ impl UpdateUserPoolClientError {
                 "ConcurrentModificationException" => {
                     return UpdateUserPoolClientError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return UpdateUserPoolClientError::InternalError(String::from(error_message))
+                    return UpdateUserPoolClientError::InternalError(String::from(error_message));
                 }
                 "InvalidOAuthFlowException" => {
-                    return UpdateUserPoolClientError::InvalidOAuthFlow(String::from(error_message))
+                    return UpdateUserPoolClientError::InvalidOAuthFlow(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserPoolClientError::InvalidParameter(String::from(error_message))
+                    return UpdateUserPoolClientError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserPoolClientError::NotAuthorized(String::from(error_message))
+                    return UpdateUserPoolClientError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserPoolClientError::ResourceNotFound(String::from(error_message))
+                    return UpdateUserPoolClientError::ResourceNotFound(String::from(error_message));
                 }
                 "ScopeDoesNotExistException" => {
-                    return UpdateUserPoolClientError::ScopeDoesNotExist(String::from(error_message))
+                    return UpdateUserPoolClientError::ScopeDoesNotExist(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserPoolClientError::TooManyRequests(String::from(error_message))
+                    return UpdateUserPoolClientError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserPoolClientError::Validation(error_message.to_string())
+                    return UpdateUserPoolClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15541,51 +15541,51 @@ impl VerifySoftwareTokenError {
 
             match *error_type {
                 "CodeMismatchException" => {
-                    return VerifySoftwareTokenError::CodeMismatch(String::from(error_message))
+                    return VerifySoftwareTokenError::CodeMismatch(String::from(error_message));
                 }
                 "EnableSoftwareTokenMFAException" => {
                     return VerifySoftwareTokenError::EnableSoftwareTokenMFA(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return VerifySoftwareTokenError::InternalError(String::from(error_message))
+                    return VerifySoftwareTokenError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return VerifySoftwareTokenError::InvalidParameter(String::from(error_message))
+                    return VerifySoftwareTokenError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return VerifySoftwareTokenError::InvalidUserPoolConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return VerifySoftwareTokenError::NotAuthorized(String::from(error_message))
+                    return VerifySoftwareTokenError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return VerifySoftwareTokenError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return VerifySoftwareTokenError::ResourceNotFound(String::from(error_message))
+                    return VerifySoftwareTokenError::ResourceNotFound(String::from(error_message));
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return VerifySoftwareTokenError::SoftwareTokenMFANotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return VerifySoftwareTokenError::TooManyRequests(String::from(error_message))
+                    return VerifySoftwareTokenError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return VerifySoftwareTokenError::UserNotConfirmed(String::from(error_message))
+                    return VerifySoftwareTokenError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return VerifySoftwareTokenError::UserNotFound(String::from(error_message))
+                    return VerifySoftwareTokenError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return VerifySoftwareTokenError::Validation(error_message.to_string())
+                    return VerifySoftwareTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15695,42 +15695,42 @@ impl VerifyUserAttributeError {
 
             match *error_type {
                 "CodeMismatchException" => {
-                    return VerifyUserAttributeError::CodeMismatch(String::from(error_message))
+                    return VerifyUserAttributeError::CodeMismatch(String::from(error_message));
                 }
                 "ExpiredCodeException" => {
-                    return VerifyUserAttributeError::ExpiredCode(String::from(error_message))
+                    return VerifyUserAttributeError::ExpiredCode(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return VerifyUserAttributeError::InternalError(String::from(error_message))
+                    return VerifyUserAttributeError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return VerifyUserAttributeError::InvalidParameter(String::from(error_message))
+                    return VerifyUserAttributeError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return VerifyUserAttributeError::LimitExceeded(String::from(error_message))
+                    return VerifyUserAttributeError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return VerifyUserAttributeError::NotAuthorized(String::from(error_message))
+                    return VerifyUserAttributeError::NotAuthorized(String::from(error_message));
                 }
                 "PasswordResetRequiredException" => {
                     return VerifyUserAttributeError::PasswordResetRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return VerifyUserAttributeError::ResourceNotFound(String::from(error_message))
+                    return VerifyUserAttributeError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return VerifyUserAttributeError::TooManyRequests(String::from(error_message))
+                    return VerifyUserAttributeError::TooManyRequests(String::from(error_message));
                 }
                 "UserNotConfirmedException" => {
-                    return VerifyUserAttributeError::UserNotConfirmed(String::from(error_message))
+                    return VerifyUserAttributeError::UserNotConfirmed(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return VerifyUserAttributeError::UserNotFound(String::from(error_message))
+                    return VerifyUserAttributeError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return VerifyUserAttributeError::Validation(error_message.to_string())
+                    return VerifyUserAttributeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

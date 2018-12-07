@@ -528,19 +528,19 @@ impl CreateBudgetError {
 
             match *error_type {
                 "CreationLimitExceededException" => {
-                    return CreateBudgetError::CreationLimitExceeded(String::from(error_message))
+                    return CreateBudgetError::CreationLimitExceeded(String::from(error_message));
                 }
                 "DuplicateRecordException" => {
-                    return CreateBudgetError::DuplicateRecord(String::from(error_message))
+                    return CreateBudgetError::DuplicateRecord(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return CreateBudgetError::InternalError(String::from(error_message))
+                    return CreateBudgetError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateBudgetError::InvalidParameter(String::from(error_message))
+                    return CreateBudgetError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBudgetError::Validation(error_message.to_string())
+                    return CreateBudgetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -630,22 +630,22 @@ impl CreateNotificationError {
                 "CreationLimitExceededException" => {
                     return CreateNotificationError::CreationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DuplicateRecordException" => {
-                    return CreateNotificationError::DuplicateRecord(String::from(error_message))
+                    return CreateNotificationError::DuplicateRecord(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return CreateNotificationError::InternalError(String::from(error_message))
+                    return CreateNotificationError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateNotificationError::InvalidParameter(String::from(error_message))
+                    return CreateNotificationError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateNotificationError::NotFound(String::from(error_message))
+                    return CreateNotificationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateNotificationError::Validation(error_message.to_string())
+                    return CreateNotificationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -736,22 +736,22 @@ impl CreateSubscriberError {
 
             match *error_type {
                 "CreationLimitExceededException" => {
-                    return CreateSubscriberError::CreationLimitExceeded(String::from(error_message))
+                    return CreateSubscriberError::CreationLimitExceeded(String::from(error_message));
                 }
                 "DuplicateRecordException" => {
-                    return CreateSubscriberError::DuplicateRecord(String::from(error_message))
+                    return CreateSubscriberError::DuplicateRecord(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return CreateSubscriberError::InternalError(String::from(error_message))
+                    return CreateSubscriberError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateSubscriberError::InvalidParameter(String::from(error_message))
+                    return CreateSubscriberError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateSubscriberError::NotFound(String::from(error_message))
+                    return CreateSubscriberError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSubscriberError::Validation(error_message.to_string())
+                    return CreateSubscriberError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -836,16 +836,16 @@ impl DeleteBudgetError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteBudgetError::InternalError(String::from(error_message))
+                    return DeleteBudgetError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteBudgetError::InvalidParameter(String::from(error_message))
+                    return DeleteBudgetError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteBudgetError::NotFound(String::from(error_message))
+                    return DeleteBudgetError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBudgetError::Validation(error_message.to_string())
+                    return DeleteBudgetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -928,16 +928,16 @@ impl DeleteNotificationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteNotificationError::InternalError(String::from(error_message))
+                    return DeleteNotificationError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteNotificationError::InvalidParameter(String::from(error_message))
+                    return DeleteNotificationError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteNotificationError::NotFound(String::from(error_message))
+                    return DeleteNotificationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteNotificationError::Validation(error_message.to_string())
+                    return DeleteNotificationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1022,16 +1022,16 @@ impl DeleteSubscriberError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteSubscriberError::InternalError(String::from(error_message))
+                    return DeleteSubscriberError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteSubscriberError::InvalidParameter(String::from(error_message))
+                    return DeleteSubscriberError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteSubscriberError::NotFound(String::from(error_message))
+                    return DeleteSubscriberError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSubscriberError::Validation(error_message.to_string())
+                    return DeleteSubscriberError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1114,16 +1114,16 @@ impl DescribeBudgetError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeBudgetError::InternalError(String::from(error_message))
+                    return DescribeBudgetError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeBudgetError::InvalidParameter(String::from(error_message))
+                    return DescribeBudgetError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeBudgetError::NotFound(String::from(error_message))
+                    return DescribeBudgetError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBudgetError::Validation(error_message.to_string())
+                    return DescribeBudgetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1210,22 +1210,22 @@ impl DescribeBudgetsError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeBudgetsError::ExpiredNextToken(String::from(error_message))
+                    return DescribeBudgetsError::ExpiredNextToken(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return DescribeBudgetsError::InternalError(String::from(error_message))
+                    return DescribeBudgetsError::InternalError(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeBudgetsError::InvalidNextToken(String::from(error_message))
+                    return DescribeBudgetsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeBudgetsError::InvalidParameter(String::from(error_message))
+                    return DescribeBudgetsError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeBudgetsError::NotFound(String::from(error_message))
+                    return DescribeBudgetsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBudgetsError::Validation(error_message.to_string())
+                    return DescribeBudgetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1316,32 +1316,32 @@ impl DescribeNotificationsForBudgetError {
                 "ExpiredNextTokenException" => {
                     return DescribeNotificationsForBudgetError::ExpiredNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
                     return DescribeNotificationsForBudgetError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeNotificationsForBudgetError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return DescribeNotificationsForBudgetError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeNotificationsForBudgetError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1434,32 +1434,32 @@ impl DescribeSubscribersForNotificationError {
                 "ExpiredNextTokenException" => {
                     return DescribeSubscribersForNotificationError::ExpiredNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
                     return DescribeSubscribersForNotificationError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeSubscribersForNotificationError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeSubscribersForNotificationError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return DescribeSubscribersForNotificationError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeSubscribersForNotificationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1546,16 +1546,16 @@ impl UpdateBudgetError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateBudgetError::InternalError(String::from(error_message))
+                    return UpdateBudgetError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateBudgetError::InvalidParameter(String::from(error_message))
+                    return UpdateBudgetError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateBudgetError::NotFound(String::from(error_message))
+                    return UpdateBudgetError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateBudgetError::Validation(error_message.to_string())
+                    return UpdateBudgetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1640,19 +1640,19 @@ impl UpdateNotificationError {
 
             match *error_type {
                 "DuplicateRecordException" => {
-                    return UpdateNotificationError::DuplicateRecord(String::from(error_message))
+                    return UpdateNotificationError::DuplicateRecord(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return UpdateNotificationError::InternalError(String::from(error_message))
+                    return UpdateNotificationError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateNotificationError::InvalidParameter(String::from(error_message))
+                    return UpdateNotificationError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateNotificationError::NotFound(String::from(error_message))
+                    return UpdateNotificationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateNotificationError::Validation(error_message.to_string())
+                    return UpdateNotificationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1740,19 +1740,19 @@ impl UpdateSubscriberError {
 
             match *error_type {
                 "DuplicateRecordException" => {
-                    return UpdateSubscriberError::DuplicateRecord(String::from(error_message))
+                    return UpdateSubscriberError::DuplicateRecord(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return UpdateSubscriberError::InternalError(String::from(error_message))
+                    return UpdateSubscriberError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateSubscriberError::InvalidParameter(String::from(error_message))
+                    return UpdateSubscriberError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateSubscriberError::NotFound(String::from(error_message))
+                    return UpdateSubscriberError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateSubscriberError::Validation(error_message.to_string())
+                    return UpdateSubscriberError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

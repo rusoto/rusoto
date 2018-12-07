@@ -1256,26 +1256,26 @@ impl CancelJobError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CanceledJobIdException" => {
-                        return CancelJobError::CanceledJobId(String::from(parsed_error.message))
+                        return CancelJobError::CanceledJobId(String::from(parsed_error.message));
                     }
                     "ExpiredJobIdException" => {
-                        return CancelJobError::ExpiredJobId(String::from(parsed_error.message))
+                        return CancelJobError::ExpiredJobId(String::from(parsed_error.message));
                     }
                     "InvalidAccessKeyIdException" => {
                         return CancelJobError::InvalidAccessKeyId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidJobIdException" => {
-                        return CancelJobError::InvalidJobId(String::from(parsed_error.message))
+                        return CancelJobError::InvalidJobId(String::from(parsed_error.message));
                     }
                     "InvalidVersionException" => {
-                        return CancelJobError::InvalidVersion(String::from(parsed_error.message))
+                        return CancelJobError::InvalidVersion(String::from(parsed_error.message));
                     }
                     "UnableToCancelJobIdException" => {
                         return CancelJobError::UnableToCancelJobId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1392,60 +1392,60 @@ impl CreateJobError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BucketPermissionException" => {
-                        return CreateJobError::BucketPermission(String::from(parsed_error.message))
+                        return CreateJobError::BucketPermission(String::from(parsed_error.message));
                     }
                     "CreateJobQuotaExceededException" => {
                         return CreateJobError::CreateJobQuotaExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidAccessKeyIdException" => {
                         return CreateJobError::InvalidAccessKeyId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidAddressException" => {
-                        return CreateJobError::InvalidAddress(String::from(parsed_error.message))
+                        return CreateJobError::InvalidAddress(String::from(parsed_error.message));
                     }
                     "InvalidCustomsException" => {
-                        return CreateJobError::InvalidCustoms(String::from(parsed_error.message))
+                        return CreateJobError::InvalidCustoms(String::from(parsed_error.message));
                     }
                     "InvalidFileSystemException" => {
-                        return CreateJobError::InvalidFileSystem(String::from(parsed_error.message))
+                        return CreateJobError::InvalidFileSystem(String::from(parsed_error.message));
                     }
                     "InvalidJobIdException" => {
-                        return CreateJobError::InvalidJobId(String::from(parsed_error.message))
+                        return CreateJobError::InvalidJobId(String::from(parsed_error.message));
                     }
                     "InvalidManifestFieldException" => {
                         return CreateJobError::InvalidManifestField(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterException" => {
-                        return CreateJobError::InvalidParameter(String::from(parsed_error.message))
+                        return CreateJobError::InvalidParameter(String::from(parsed_error.message));
                     }
                     "InvalidVersionException" => {
-                        return CreateJobError::InvalidVersion(String::from(parsed_error.message))
+                        return CreateJobError::InvalidVersion(String::from(parsed_error.message));
                     }
                     "MalformedManifestException" => {
-                        return CreateJobError::MalformedManifest(String::from(parsed_error.message))
+                        return CreateJobError::MalformedManifest(String::from(parsed_error.message));
                     }
                     "MissingCustomsException" => {
-                        return CreateJobError::MissingCustoms(String::from(parsed_error.message))
+                        return CreateJobError::MissingCustoms(String::from(parsed_error.message));
                     }
                     "MissingManifestFieldException" => {
                         return CreateJobError::MissingManifestField(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameterException" => {
-                        return CreateJobError::MissingParameter(String::from(parsed_error.message))
+                        return CreateJobError::MissingParameter(String::from(parsed_error.message));
                     }
                     "MultipleRegionsException" => {
-                        return CreateJobError::MultipleRegions(String::from(parsed_error.message))
+                        return CreateJobError::MultipleRegions(String::from(parsed_error.message));
                     }
                     "NoSuchBucketException" => {
-                        return CreateJobError::NoSuchBucket(String::from(parsed_error.message))
+                        return CreateJobError::NoSuchBucket(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -1556,37 +1556,37 @@ impl GetShippingLabelError {
                     "CanceledJobIdException" => {
                         return GetShippingLabelError::CanceledJobId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ExpiredJobIdException" => {
                         return GetShippingLabelError::ExpiredJobId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidAccessKeyIdException" => {
                         return GetShippingLabelError::InvalidAccessKeyId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidAddressException" => {
                         return GetShippingLabelError::InvalidAddress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidJobIdException" => {
                         return GetShippingLabelError::InvalidJobId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterException" => {
                         return GetShippingLabelError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVersionException" => {
                         return GetShippingLabelError::InvalidVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1682,21 +1682,21 @@ impl GetStatusError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CanceledJobIdException" => {
-                        return GetStatusError::CanceledJobId(String::from(parsed_error.message))
+                        return GetStatusError::CanceledJobId(String::from(parsed_error.message));
                     }
                     "ExpiredJobIdException" => {
-                        return GetStatusError::ExpiredJobId(String::from(parsed_error.message))
+                        return GetStatusError::ExpiredJobId(String::from(parsed_error.message));
                     }
                     "InvalidAccessKeyIdException" => {
                         return GetStatusError::InvalidAccessKeyId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidJobIdException" => {
-                        return GetStatusError::InvalidJobId(String::from(parsed_error.message))
+                        return GetStatusError::InvalidJobId(String::from(parsed_error.message));
                     }
                     "InvalidVersionException" => {
-                        return GetStatusError::InvalidVersion(String::from(parsed_error.message))
+                        return GetStatusError::InvalidVersion(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -1786,13 +1786,13 @@ impl ListJobsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidAccessKeyIdException" => {
-                        return ListJobsError::InvalidAccessKeyId(String::from(parsed_error.message))
+                        return ListJobsError::InvalidAccessKeyId(String::from(parsed_error.message));
                     }
                     "InvalidParameterException" => {
-                        return ListJobsError::InvalidParameter(String::from(parsed_error.message))
+                        return ListJobsError::InvalidParameter(String::from(parsed_error.message));
                     }
                     "InvalidVersionException" => {
-                        return ListJobsError::InvalidVersion(String::from(parsed_error.message))
+                        return ListJobsError::InvalidVersion(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -1910,66 +1910,66 @@ impl UpdateJobError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BucketPermissionException" => {
-                        return UpdateJobError::BucketPermission(String::from(parsed_error.message))
+                        return UpdateJobError::BucketPermission(String::from(parsed_error.message));
                     }
                     "CanceledJobIdException" => {
-                        return UpdateJobError::CanceledJobId(String::from(parsed_error.message))
+                        return UpdateJobError::CanceledJobId(String::from(parsed_error.message));
                     }
                     "ExpiredJobIdException" => {
-                        return UpdateJobError::ExpiredJobId(String::from(parsed_error.message))
+                        return UpdateJobError::ExpiredJobId(String::from(parsed_error.message));
                     }
                     "InvalidAccessKeyIdException" => {
                         return UpdateJobError::InvalidAccessKeyId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidAddressException" => {
-                        return UpdateJobError::InvalidAddress(String::from(parsed_error.message))
+                        return UpdateJobError::InvalidAddress(String::from(parsed_error.message));
                     }
                     "InvalidCustomsException" => {
-                        return UpdateJobError::InvalidCustoms(String::from(parsed_error.message))
+                        return UpdateJobError::InvalidCustoms(String::from(parsed_error.message));
                     }
                     "InvalidFileSystemException" => {
-                        return UpdateJobError::InvalidFileSystem(String::from(parsed_error.message))
+                        return UpdateJobError::InvalidFileSystem(String::from(parsed_error.message));
                     }
                     "InvalidJobIdException" => {
-                        return UpdateJobError::InvalidJobId(String::from(parsed_error.message))
+                        return UpdateJobError::InvalidJobId(String::from(parsed_error.message));
                     }
                     "InvalidManifestFieldException" => {
                         return UpdateJobError::InvalidManifestField(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterException" => {
-                        return UpdateJobError::InvalidParameter(String::from(parsed_error.message))
+                        return UpdateJobError::InvalidParameter(String::from(parsed_error.message));
                     }
                     "InvalidVersionException" => {
-                        return UpdateJobError::InvalidVersion(String::from(parsed_error.message))
+                        return UpdateJobError::InvalidVersion(String::from(parsed_error.message));
                     }
                     "MalformedManifestException" => {
-                        return UpdateJobError::MalformedManifest(String::from(parsed_error.message))
+                        return UpdateJobError::MalformedManifest(String::from(parsed_error.message));
                     }
                     "MissingCustomsException" => {
-                        return UpdateJobError::MissingCustoms(String::from(parsed_error.message))
+                        return UpdateJobError::MissingCustoms(String::from(parsed_error.message));
                     }
                     "MissingManifestFieldException" => {
                         return UpdateJobError::MissingManifestField(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameterException" => {
-                        return UpdateJobError::MissingParameter(String::from(parsed_error.message))
+                        return UpdateJobError::MissingParameter(String::from(parsed_error.message));
                     }
                     "MultipleRegionsException" => {
-                        return UpdateJobError::MultipleRegions(String::from(parsed_error.message))
+                        return UpdateJobError::MultipleRegions(String::from(parsed_error.message));
                     }
                     "NoSuchBucketException" => {
-                        return UpdateJobError::NoSuchBucket(String::from(parsed_error.message))
+                        return UpdateJobError::NoSuchBucket(String::from(parsed_error.message));
                     }
                     "UnableToUpdateJobIdException" => {
                         return UpdateJobError::UnableToUpdateJobId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

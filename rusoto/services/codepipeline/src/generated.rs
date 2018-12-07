@@ -1629,13 +1629,13 @@ impl AcknowledgeJobError {
 
             match *error_type {
                 "InvalidNonceException" => {
-                    return AcknowledgeJobError::InvalidNonce(String::from(error_message))
+                    return AcknowledgeJobError::InvalidNonce(String::from(error_message));
                 }
                 "JobNotFoundException" => {
-                    return AcknowledgeJobError::JobNotFound(String::from(error_message))
+                    return AcknowledgeJobError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AcknowledgeJobError::Validation(error_message.to_string())
+                    return AcknowledgeJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1719,16 +1719,16 @@ impl AcknowledgeThirdPartyJobError {
                 "InvalidClientTokenException" => {
                     return AcknowledgeThirdPartyJobError::InvalidClientToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNonceException" => {
-                    return AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message))
+                    return AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message));
                 }
                 "JobNotFoundException" => {
-                    return AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message))
+                    return AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AcknowledgeThirdPartyJobError::Validation(error_message.to_string())
+                    return AcknowledgeThirdPartyJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1809,10 +1809,10 @@ impl CreateCustomActionTypeError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return CreateCustomActionTypeError::LimitExceeded(String::from(error_message))
+                    return CreateCustomActionTypeError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateCustomActionTypeError::Validation(error_message.to_string())
+                    return CreateCustomActionTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1903,27 +1903,27 @@ impl CreatePipelineError {
                 "InvalidActionDeclarationException" => {
                     return CreatePipelineError::InvalidActionDeclaration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBlockerDeclarationException" => {
                     return CreatePipelineError::InvalidBlockerDeclaration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStageDeclarationException" => {
-                    return CreatePipelineError::InvalidStageDeclaration(String::from(error_message))
+                    return CreatePipelineError::InvalidStageDeclaration(String::from(error_message));
                 }
                 "InvalidStructureException" => {
-                    return CreatePipelineError::InvalidStructure(String::from(error_message))
+                    return CreatePipelineError::InvalidStructure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreatePipelineError::LimitExceeded(String::from(error_message))
+                    return CreatePipelineError::LimitExceeded(String::from(error_message));
                 }
                 "PipelineNameInUseException" => {
-                    return CreatePipelineError::PipelineNameInUse(String::from(error_message))
+                    return CreatePipelineError::PipelineNameInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string())
+                    return CreatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2003,7 +2003,7 @@ impl DeleteCustomActionTypeError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteCustomActionTypeError::Validation(error_message.to_string())
+                    return DeleteCustomActionTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2079,7 +2079,7 @@ impl DeletePipelineError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string())
+                    return DeletePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2153,7 +2153,7 @@ impl DeleteWebhookError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteWebhookError::Validation(error_message.to_string())
+                    return DeleteWebhookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2231,12 +2231,12 @@ impl DeregisterWebhookWithThirdPartyError {
                 "WebhookNotFoundException" => {
                     return DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DeregisterWebhookWithThirdPartyError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2319,13 +2319,13 @@ impl DisableStageTransitionError {
                 "PipelineNotFoundException" => {
                     return DisableStageTransitionError::PipelineNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StageNotFoundException" => {
-                    return DisableStageTransitionError::StageNotFound(String::from(error_message))
+                    return DisableStageTransitionError::StageNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableStageTransitionError::Validation(error_message.to_string())
+                    return DisableStageTransitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2407,13 +2407,13 @@ impl EnableStageTransitionError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return EnableStageTransitionError::PipelineNotFound(String::from(error_message))
+                    return EnableStageTransitionError::PipelineNotFound(String::from(error_message));
                 }
                 "StageNotFoundException" => {
-                    return EnableStageTransitionError::StageNotFound(String::from(error_message))
+                    return EnableStageTransitionError::StageNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableStageTransitionError::Validation(error_message.to_string())
+                    return EnableStageTransitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2493,10 +2493,10 @@ impl GetJobDetailsError {
 
             match *error_type {
                 "JobNotFoundException" => {
-                    return GetJobDetailsError::JobNotFound(String::from(error_message))
+                    return GetJobDetailsError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobDetailsError::Validation(error_message.to_string())
+                    return GetJobDetailsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2575,13 +2575,13 @@ impl GetPipelineError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return GetPipelineError::PipelineNotFound(String::from(error_message))
+                    return GetPipelineError::PipelineNotFound(String::from(error_message));
                 }
                 "PipelineVersionNotFoundException" => {
-                    return GetPipelineError::PipelineVersionNotFound(String::from(error_message))
+                    return GetPipelineError::PipelineVersionNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPipelineError::Validation(error_message.to_string())
+                    return GetPipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2663,13 +2663,13 @@ impl GetPipelineExecutionError {
                 "PipelineExecutionNotFoundException" => {
                     return GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return GetPipelineExecutionError::PipelineNotFound(String::from(error_message))
+                    return GetPipelineExecutionError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPipelineExecutionError::Validation(error_message.to_string())
+                    return GetPipelineExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2749,10 +2749,10 @@ impl GetPipelineStateError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return GetPipelineStateError::PipelineNotFound(String::from(error_message))
+                    return GetPipelineStateError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPipelineStateError::Validation(error_message.to_string())
+                    return GetPipelineStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2835,16 +2835,16 @@ impl GetThirdPartyJobDetailsError {
                 "InvalidClientTokenException" => {
                     return GetThirdPartyJobDetailsError::InvalidClientToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidJobException" => {
-                    return GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message))
+                    return GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message));
                 }
                 "JobNotFoundException" => {
-                    return GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message))
+                    return GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetThirdPartyJobDetailsError::Validation(error_message.to_string())
+                    return GetThirdPartyJobDetailsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2925,10 +2925,10 @@ impl ListActionTypesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListActionTypesError::InvalidNextToken(String::from(error_message))
+                    return ListActionTypesError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListActionTypesError::Validation(error_message.to_string())
+                    return ListActionTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3009,15 +3009,15 @@ impl ListPipelineExecutionsError {
                 "InvalidNextTokenException" => {
                     return ListPipelineExecutionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PipelineNotFoundException" => {
                     return ListPipelineExecutionsError::PipelineNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListPipelineExecutionsError::Validation(error_message.to_string())
+                    return ListPipelineExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3097,10 +3097,10 @@ impl ListPipelinesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListPipelinesError::InvalidNextToken(String::from(error_message))
+                    return ListPipelinesError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string())
+                    return ListPipelinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3177,10 +3177,10 @@ impl ListWebhooksError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListWebhooksError::InvalidNextToken(String::from(error_message))
+                    return ListWebhooksError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListWebhooksError::Validation(error_message.to_string())
+                    return ListWebhooksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3257,10 +3257,10 @@ impl PollForJobsError {
 
             match *error_type {
                 "ActionTypeNotFoundException" => {
-                    return PollForJobsError::ActionTypeNotFound(String::from(error_message))
+                    return PollForJobsError::ActionTypeNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PollForJobsError::Validation(error_message.to_string())
+                    return PollForJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3339,10 +3339,10 @@ impl PollForThirdPartyJobsError {
                 "ActionTypeNotFoundException" => {
                     return PollForThirdPartyJobsError::ActionTypeNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PollForThirdPartyJobsError::Validation(error_message.to_string())
+                    return PollForThirdPartyJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3425,16 +3425,16 @@ impl PutActionRevisionError {
 
             match *error_type {
                 "ActionNotFoundException" => {
-                    return PutActionRevisionError::ActionNotFound(String::from(error_message))
+                    return PutActionRevisionError::ActionNotFound(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return PutActionRevisionError::PipelineNotFound(String::from(error_message))
+                    return PutActionRevisionError::PipelineNotFound(String::from(error_message));
                 }
                 "StageNotFoundException" => {
-                    return PutActionRevisionError::StageNotFound(String::from(error_message))
+                    return PutActionRevisionError::StageNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutActionRevisionError::Validation(error_message.to_string())
+                    return PutActionRevisionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3523,24 +3523,24 @@ impl PutApprovalResultError {
 
             match *error_type {
                 "ActionNotFoundException" => {
-                    return PutApprovalResultError::ActionNotFound(String::from(error_message))
+                    return PutApprovalResultError::ActionNotFound(String::from(error_message));
                 }
                 "ApprovalAlreadyCompletedException" => {
                     return PutApprovalResultError::ApprovalAlreadyCompleted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApprovalTokenException" => {
-                    return PutApprovalResultError::InvalidApprovalToken(String::from(error_message))
+                    return PutApprovalResultError::InvalidApprovalToken(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return PutApprovalResultError::PipelineNotFound(String::from(error_message))
+                    return PutApprovalResultError::PipelineNotFound(String::from(error_message));
                 }
                 "StageNotFoundException" => {
-                    return PutApprovalResultError::StageNotFound(String::from(error_message))
+                    return PutApprovalResultError::StageNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutApprovalResultError::Validation(error_message.to_string())
+                    return PutApprovalResultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3625,13 +3625,13 @@ impl PutJobFailureResultError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return PutJobFailureResultError::InvalidJobState(String::from(error_message))
+                    return PutJobFailureResultError::InvalidJobState(String::from(error_message));
                 }
                 "JobNotFoundException" => {
-                    return PutJobFailureResultError::JobNotFound(String::from(error_message))
+                    return PutJobFailureResultError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutJobFailureResultError::Validation(error_message.to_string())
+                    return PutJobFailureResultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3713,13 +3713,13 @@ impl PutJobSuccessResultError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return PutJobSuccessResultError::InvalidJobState(String::from(error_message))
+                    return PutJobSuccessResultError::InvalidJobState(String::from(error_message));
                 }
                 "JobNotFoundException" => {
-                    return PutJobSuccessResultError::JobNotFound(String::from(error_message))
+                    return PutJobSuccessResultError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutJobSuccessResultError::Validation(error_message.to_string())
+                    return PutJobSuccessResultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3805,20 +3805,20 @@ impl PutThirdPartyJobFailureResultError {
                 "InvalidClientTokenException" => {
                     return PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidJobStateException" => {
                     return PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return PutThirdPartyJobFailureResultError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutThirdPartyJobFailureResultError::Validation(error_message.to_string())
+                    return PutThirdPartyJobFailureResultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3905,20 +3905,20 @@ impl PutThirdPartyJobSuccessResultError {
                 "InvalidClientTokenException" => {
                     return PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidJobStateException" => {
                     return PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return PutThirdPartyJobSuccessResultError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutThirdPartyJobSuccessResultError::Validation(error_message.to_string())
+                    return PutThirdPartyJobSuccessResultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4007,19 +4007,19 @@ impl PutWebhookError {
                 "InvalidWebhookAuthenticationParametersException" => {
                     return PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidWebhookFilterPatternException" => {
-                    return PutWebhookError::InvalidWebhookFilterPattern(String::from(error_message))
+                    return PutWebhookError::InvalidWebhookFilterPattern(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutWebhookError::LimitExceeded(String::from(error_message))
+                    return PutWebhookError::LimitExceeded(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return PutWebhookError::PipelineNotFound(String::from(error_message))
+                    return PutWebhookError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutWebhookError::Validation(error_message.to_string())
+                    return PutWebhookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4101,10 +4101,10 @@ impl RegisterWebhookWithThirdPartyError {
                 "WebhookNotFoundException" => {
                     return RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterWebhookWithThirdPartyError::Validation(error_message.to_string())
+                    return RegisterWebhookWithThirdPartyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4191,19 +4191,19 @@ impl RetryStageExecutionError {
                 "NotLatestPipelineExecutionException" => {
                     return RetryStageExecutionError::NotLatestPipelineExecution(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return RetryStageExecutionError::PipelineNotFound(String::from(error_message))
+                    return RetryStageExecutionError::PipelineNotFound(String::from(error_message));
                 }
                 "StageNotFoundException" => {
-                    return RetryStageExecutionError::StageNotFound(String::from(error_message))
+                    return RetryStageExecutionError::StageNotFound(String::from(error_message));
                 }
                 "StageNotRetryableException" => {
-                    return RetryStageExecutionError::StageNotRetryable(String::from(error_message))
+                    return RetryStageExecutionError::StageNotRetryable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RetryStageExecutionError::Validation(error_message.to_string())
+                    return RetryStageExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4287,10 +4287,10 @@ impl StartPipelineExecutionError {
                 "PipelineNotFoundException" => {
                     return StartPipelineExecutionError::PipelineNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartPipelineExecutionError::Validation(error_message.to_string())
+                    return StartPipelineExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4379,24 +4379,24 @@ impl UpdatePipelineError {
                 "InvalidActionDeclarationException" => {
                     return UpdatePipelineError::InvalidActionDeclaration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBlockerDeclarationException" => {
                     return UpdatePipelineError::InvalidBlockerDeclaration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStageDeclarationException" => {
-                    return UpdatePipelineError::InvalidStageDeclaration(String::from(error_message))
+                    return UpdatePipelineError::InvalidStageDeclaration(String::from(error_message));
                 }
                 "InvalidStructureException" => {
-                    return UpdatePipelineError::InvalidStructure(String::from(error_message))
+                    return UpdatePipelineError::InvalidStructure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdatePipelineError::LimitExceeded(String::from(error_message))
+                    return UpdatePipelineError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePipelineError::Validation(error_message.to_string())
+                    return UpdatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

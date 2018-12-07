@@ -949,16 +949,16 @@ impl CancelClusterError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return CancelClusterError::InvalidJobState(String::from(error_message))
+                    return CancelClusterError::InvalidJobState(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return CancelClusterError::InvalidResource(String::from(error_message))
+                    return CancelClusterError::InvalidResource(String::from(error_message));
                 }
                 "KMSRequestFailedException" => {
-                    return CancelClusterError::KMSRequestFailed(String::from(error_message))
+                    return CancelClusterError::KMSRequestFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelClusterError::Validation(error_message.to_string())
+                    return CancelClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1041,16 +1041,16 @@ impl CancelJobError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return CancelJobError::InvalidJobState(String::from(error_message))
+                    return CancelJobError::InvalidJobState(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return CancelJobError::InvalidResource(String::from(error_message))
+                    return CancelJobError::InvalidResource(String::from(error_message));
                 }
                 "KMSRequestFailedException" => {
-                    return CancelJobError::KMSRequestFailed(String::from(error_message))
+                    return CancelJobError::KMSRequestFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string())
+                    return CancelJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1131,13 +1131,13 @@ impl CreateAddressError {
 
             match *error_type {
                 "InvalidAddressException" => {
-                    return CreateAddressError::InvalidAddress(String::from(error_message))
+                    return CreateAddressError::InvalidAddress(String::from(error_message));
                 }
                 "UnsupportedAddressException" => {
-                    return CreateAddressError::UnsupportedAddress(String::from(error_message))
+                    return CreateAddressError::UnsupportedAddress(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAddressError::Validation(error_message.to_string())
+                    return CreateAddressError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1221,19 +1221,19 @@ impl CreateClusterError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return CreateClusterError::Ec2RequestFailed(String::from(error_message))
+                    return CreateClusterError::Ec2RequestFailed(String::from(error_message));
                 }
                 "InvalidInputCombinationException" => {
-                    return CreateClusterError::InvalidInputCombination(String::from(error_message))
+                    return CreateClusterError::InvalidInputCombination(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return CreateClusterError::InvalidResource(String::from(error_message))
+                    return CreateClusterError::InvalidResource(String::from(error_message));
                 }
                 "KMSRequestFailedException" => {
-                    return CreateClusterError::KMSRequestFailed(String::from(error_message))
+                    return CreateClusterError::KMSRequestFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string())
+                    return CreateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1321,22 +1321,22 @@ impl CreateJobError {
 
             match *error_type {
                 "ClusterLimitExceededException" => {
-                    return CreateJobError::ClusterLimitExceeded(String::from(error_message))
+                    return CreateJobError::ClusterLimitExceeded(String::from(error_message));
                 }
                 "Ec2RequestFailedException" => {
-                    return CreateJobError::Ec2RequestFailed(String::from(error_message))
+                    return CreateJobError::Ec2RequestFailed(String::from(error_message));
                 }
                 "InvalidInputCombinationException" => {
-                    return CreateJobError::InvalidInputCombination(String::from(error_message))
+                    return CreateJobError::InvalidInputCombination(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return CreateJobError::InvalidResource(String::from(error_message))
+                    return CreateJobError::InvalidResource(String::from(error_message));
                 }
                 "KMSRequestFailedException" => {
-                    return CreateJobError::KMSRequestFailed(String::from(error_message))
+                    return CreateJobError::KMSRequestFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string())
+                    return CreateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1417,10 +1417,10 @@ impl DescribeAddressError {
 
             match *error_type {
                 "InvalidResourceException" => {
-                    return DescribeAddressError::InvalidResource(String::from(error_message))
+                    return DescribeAddressError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAddressError::Validation(error_message.to_string())
+                    return DescribeAddressError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1499,13 +1499,13 @@ impl DescribeAddressesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeAddressesError::InvalidNextToken(String::from(error_message))
+                    return DescribeAddressesError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return DescribeAddressesError::InvalidResource(String::from(error_message))
+                    return DescribeAddressesError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAddressesError::Validation(error_message.to_string())
+                    return DescribeAddressesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1585,10 +1585,10 @@ impl DescribeClusterError {
 
             match *error_type {
                 "InvalidResourceException" => {
-                    return DescribeClusterError::InvalidResource(String::from(error_message))
+                    return DescribeClusterError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeClusterError::Validation(error_message.to_string())
+                    return DescribeClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1665,10 +1665,10 @@ impl DescribeJobError {
 
             match *error_type {
                 "InvalidResourceException" => {
-                    return DescribeJobError::InvalidResource(String::from(error_message))
+                    return DescribeJobError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeJobError::Validation(error_message.to_string())
+                    return DescribeJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1747,13 +1747,13 @@ impl GetJobManifestError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return GetJobManifestError::InvalidJobState(String::from(error_message))
+                    return GetJobManifestError::InvalidJobState(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return GetJobManifestError::InvalidResource(String::from(error_message))
+                    return GetJobManifestError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobManifestError::Validation(error_message.to_string())
+                    return GetJobManifestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1833,13 +1833,13 @@ impl GetJobUnlockCodeError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return GetJobUnlockCodeError::InvalidJobState(String::from(error_message))
+                    return GetJobUnlockCodeError::InvalidJobState(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return GetJobUnlockCodeError::InvalidResource(String::from(error_message))
+                    return GetJobUnlockCodeError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobUnlockCodeError::Validation(error_message.to_string())
+                    return GetJobUnlockCodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1915,7 +1915,7 @@ impl GetSnowballUsageError {
 
             match *error_type {
                 "ValidationException" => {
-                    return GetSnowballUsageError::Validation(error_message.to_string())
+                    return GetSnowballUsageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1993,13 +1993,13 @@ impl ListClusterJobsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListClusterJobsError::InvalidNextToken(String::from(error_message))
+                    return ListClusterJobsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return ListClusterJobsError::InvalidResource(String::from(error_message))
+                    return ListClusterJobsError::InvalidResource(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListClusterJobsError::Validation(error_message.to_string())
+                    return ListClusterJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2077,10 +2077,10 @@ impl ListClustersError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListClustersError::InvalidNextToken(String::from(error_message))
+                    return ListClustersError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListClustersError::Validation(error_message.to_string())
+                    return ListClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2159,13 +2159,13 @@ impl ListCompatibleImagesError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return ListCompatibleImagesError::Ec2RequestFailed(String::from(error_message))
+                    return ListCompatibleImagesError::Ec2RequestFailed(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListCompatibleImagesError::InvalidNextToken(String::from(error_message))
+                    return ListCompatibleImagesError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListCompatibleImagesError::Validation(error_message.to_string())
+                    return ListCompatibleImagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2245,10 +2245,10 @@ impl ListJobsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListJobsError::InvalidNextToken(String::from(error_message))
+                    return ListJobsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string())
+                    return ListJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2333,22 +2333,22 @@ impl UpdateClusterError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return UpdateClusterError::Ec2RequestFailed(String::from(error_message))
+                    return UpdateClusterError::Ec2RequestFailed(String::from(error_message));
                 }
                 "InvalidInputCombinationException" => {
-                    return UpdateClusterError::InvalidInputCombination(String::from(error_message))
+                    return UpdateClusterError::InvalidInputCombination(String::from(error_message));
                 }
                 "InvalidJobStateException" => {
-                    return UpdateClusterError::InvalidJobState(String::from(error_message))
+                    return UpdateClusterError::InvalidJobState(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return UpdateClusterError::InvalidResource(String::from(error_message))
+                    return UpdateClusterError::InvalidResource(String::from(error_message));
                 }
                 "KMSRequestFailedException" => {
-                    return UpdateClusterError::KMSRequestFailed(String::from(error_message))
+                    return UpdateClusterError::KMSRequestFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateClusterError::Validation(error_message.to_string())
+                    return UpdateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2439,25 +2439,25 @@ impl UpdateJobError {
 
             match *error_type {
                 "ClusterLimitExceededException" => {
-                    return UpdateJobError::ClusterLimitExceeded(String::from(error_message))
+                    return UpdateJobError::ClusterLimitExceeded(String::from(error_message));
                 }
                 "Ec2RequestFailedException" => {
-                    return UpdateJobError::Ec2RequestFailed(String::from(error_message))
+                    return UpdateJobError::Ec2RequestFailed(String::from(error_message));
                 }
                 "InvalidInputCombinationException" => {
-                    return UpdateJobError::InvalidInputCombination(String::from(error_message))
+                    return UpdateJobError::InvalidInputCombination(String::from(error_message));
                 }
                 "InvalidJobStateException" => {
-                    return UpdateJobError::InvalidJobState(String::from(error_message))
+                    return UpdateJobError::InvalidJobState(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return UpdateJobError::InvalidResource(String::from(error_message))
+                    return UpdateJobError::InvalidResource(String::from(error_message));
                 }
                 "KMSRequestFailedException" => {
-                    return UpdateJobError::KMSRequestFailed(String::from(error_message))
+                    return UpdateJobError::KMSRequestFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateJobError::Validation(error_message.to_string())
+                    return UpdateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -1345,23 +1345,23 @@ impl AbortMultipartUploadError {
                 "InvalidParameterValueException" => {
                     return AbortMultipartUploadError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return AbortMultipartUploadError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AbortMultipartUploadError::ResourceNotFound(String::from(error_message))
+                    return AbortMultipartUploadError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return AbortMultipartUploadError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AbortMultipartUploadError::Validation(error_message.to_string())
+                    return AbortMultipartUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1463,19 +1463,19 @@ impl AbortVaultLockError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AbortVaultLockError::InvalidParameterValue(String::from(error_message))
+                    return AbortVaultLockError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return AbortVaultLockError::MissingParameterValue(String::from(error_message))
+                    return AbortVaultLockError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AbortVaultLockError::ResourceNotFound(String::from(error_message))
+                    return AbortVaultLockError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return AbortVaultLockError::ServiceUnavailable(String::from(error_message))
+                    return AbortVaultLockError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AbortVaultLockError::Validation(error_message.to_string())
+                    return AbortVaultLockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1577,22 +1577,22 @@ impl AddTagsToVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AddTagsToVaultError::InvalidParameterValue(String::from(error_message))
+                    return AddTagsToVaultError::InvalidParameterValue(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AddTagsToVaultError::LimitExceeded(String::from(error_message))
+                    return AddTagsToVaultError::LimitExceeded(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return AddTagsToVaultError::MissingParameterValue(String::from(error_message))
+                    return AddTagsToVaultError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddTagsToVaultError::ResourceNotFound(String::from(error_message))
+                    return AddTagsToVaultError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return AddTagsToVaultError::ServiceUnavailable(String::from(error_message))
+                    return AddTagsToVaultError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddTagsToVaultError::Validation(error_message.to_string())
+                    return AddTagsToVaultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1695,25 +1695,25 @@ impl CompleteMultipartUploadError {
                 "InvalidParameterValueException" => {
                     return CompleteMultipartUploadError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return CompleteMultipartUploadError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CompleteMultipartUploadError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return CompleteMultipartUploadError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CompleteMultipartUploadError::Validation(error_message.to_string())
+                    return CompleteMultipartUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1817,21 +1817,21 @@ impl CompleteVaultLockError {
                 "InvalidParameterValueException" => {
                     return CompleteVaultLockError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return CompleteVaultLockError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CompleteVaultLockError::ResourceNotFound(String::from(error_message))
+                    return CompleteVaultLockError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CompleteVaultLockError::ServiceUnavailable(String::from(error_message))
+                    return CompleteVaultLockError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CompleteVaultLockError::Validation(error_message.to_string())
+                    return CompleteVaultLockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1933,19 +1933,19 @@ impl CreateVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CreateVaultError::InvalidParameterValue(String::from(error_message))
+                    return CreateVaultError::InvalidParameterValue(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateVaultError::LimitExceeded(String::from(error_message))
+                    return CreateVaultError::LimitExceeded(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return CreateVaultError::MissingParameterValue(String::from(error_message))
+                    return CreateVaultError::MissingParameterValue(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateVaultError::ServiceUnavailable(String::from(error_message))
+                    return CreateVaultError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateVaultError::Validation(error_message.to_string())
+                    return CreateVaultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2045,19 +2045,19 @@ impl DeleteArchiveError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteArchiveError::InvalidParameterValue(String::from(error_message))
+                    return DeleteArchiveError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return DeleteArchiveError::MissingParameterValue(String::from(error_message))
+                    return DeleteArchiveError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteArchiveError::ResourceNotFound(String::from(error_message))
+                    return DeleteArchiveError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteArchiveError::ServiceUnavailable(String::from(error_message))
+                    return DeleteArchiveError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteArchiveError::Validation(error_message.to_string())
+                    return DeleteArchiveError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2157,19 +2157,19 @@ impl DeleteVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteVaultError::InvalidParameterValue(String::from(error_message))
+                    return DeleteVaultError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return DeleteVaultError::MissingParameterValue(String::from(error_message))
+                    return DeleteVaultError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteVaultError::ResourceNotFound(String::from(error_message))
+                    return DeleteVaultError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteVaultError::ServiceUnavailable(String::from(error_message))
+                    return DeleteVaultError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteVaultError::Validation(error_message.to_string())
+                    return DeleteVaultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2271,25 +2271,25 @@ impl DeleteVaultAccessPolicyError {
                 "InvalidParameterValueException" => {
                     return DeleteVaultAccessPolicyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return DeleteVaultAccessPolicyError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteVaultAccessPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteVaultAccessPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteVaultAccessPolicyError::Validation(error_message.to_string())
+                    return DeleteVaultAccessPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2393,25 +2393,25 @@ impl DeleteVaultNotificationsError {
                 "InvalidParameterValueException" => {
                     return DeleteVaultNotificationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return DeleteVaultNotificationsError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteVaultNotificationsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteVaultNotificationsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteVaultNotificationsError::Validation(error_message.to_string())
+                    return DeleteVaultNotificationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2513,19 +2513,19 @@ impl DescribeJobError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DescribeJobError::InvalidParameterValue(String::from(error_message))
+                    return DescribeJobError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return DescribeJobError::MissingParameterValue(String::from(error_message))
+                    return DescribeJobError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeJobError::ResourceNotFound(String::from(error_message))
+                    return DescribeJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeJobError::ServiceUnavailable(String::from(error_message))
+                    return DescribeJobError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeJobError::Validation(error_message.to_string())
+                    return DescribeJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2625,19 +2625,19 @@ impl DescribeVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DescribeVaultError::InvalidParameterValue(String::from(error_message))
+                    return DescribeVaultError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return DescribeVaultError::MissingParameterValue(String::from(error_message))
+                    return DescribeVaultError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeVaultError::ResourceNotFound(String::from(error_message))
+                    return DescribeVaultError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeVaultError::ServiceUnavailable(String::from(error_message))
+                    return DescribeVaultError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeVaultError::Validation(error_message.to_string())
+                    return DescribeVaultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2737,20 +2737,20 @@ impl GetDataRetrievalPolicyError {
                 "InvalidParameterValueException" => {
                     return GetDataRetrievalPolicyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return GetDataRetrievalPolicyError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return GetDataRetrievalPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDataRetrievalPolicyError::Validation(error_message.to_string())
+                    return GetDataRetrievalPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2851,19 +2851,19 @@ impl GetJobOutputError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetJobOutputError::InvalidParameterValue(String::from(error_message))
+                    return GetJobOutputError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return GetJobOutputError::MissingParameterValue(String::from(error_message))
+                    return GetJobOutputError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetJobOutputError::ResourceNotFound(String::from(error_message))
+                    return GetJobOutputError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetJobOutputError::ServiceUnavailable(String::from(error_message))
+                    return GetJobOutputError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobOutputError::Validation(error_message.to_string())
+                    return GetJobOutputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2965,23 +2965,23 @@ impl GetVaultAccessPolicyError {
                 "InvalidParameterValueException" => {
                     return GetVaultAccessPolicyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return GetVaultAccessPolicyError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
+                    return GetVaultAccessPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return GetVaultAccessPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetVaultAccessPolicyError::Validation(error_message.to_string())
+                    return GetVaultAccessPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3083,19 +3083,19 @@ impl GetVaultLockError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetVaultLockError::InvalidParameterValue(String::from(error_message))
+                    return GetVaultLockError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return GetVaultLockError::MissingParameterValue(String::from(error_message))
+                    return GetVaultLockError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetVaultLockError::ResourceNotFound(String::from(error_message))
+                    return GetVaultLockError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetVaultLockError::ServiceUnavailable(String::from(error_message))
+                    return GetVaultLockError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetVaultLockError::Validation(error_message.to_string())
+                    return GetVaultLockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3197,23 +3197,23 @@ impl GetVaultNotificationsError {
                 "InvalidParameterValueException" => {
                     return GetVaultNotificationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return GetVaultNotificationsError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetVaultNotificationsError::ResourceNotFound(String::from(error_message))
+                    return GetVaultNotificationsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return GetVaultNotificationsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetVaultNotificationsError::Validation(error_message.to_string())
+                    return GetVaultNotificationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3319,25 +3319,25 @@ impl InitiateJobError {
 
             match error_type {
                 "InsufficientCapacityException" => {
-                    return InitiateJobError::InsufficientCapacity(String::from(error_message))
+                    return InitiateJobError::InsufficientCapacity(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return InitiateJobError::InvalidParameterValue(String::from(error_message))
+                    return InitiateJobError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return InitiateJobError::MissingParameterValue(String::from(error_message))
+                    return InitiateJobError::MissingParameterValue(String::from(error_message));
                 }
                 "PolicyEnforcedException" => {
-                    return InitiateJobError::PolicyEnforced(String::from(error_message))
+                    return InitiateJobError::PolicyEnforced(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateJobError::ResourceNotFound(String::from(error_message))
+                    return InitiateJobError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return InitiateJobError::ServiceUnavailable(String::from(error_message))
+                    return InitiateJobError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InitiateJobError::Validation(error_message.to_string())
+                    return InitiateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3441,25 +3441,25 @@ impl InitiateMultipartUploadError {
                 "InvalidParameterValueException" => {
                     return InitiateMultipartUploadError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return InitiateMultipartUploadError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return InitiateMultipartUploadError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return InitiateMultipartUploadError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return InitiateMultipartUploadError::Validation(error_message.to_string())
+                    return InitiateMultipartUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3563,21 +3563,21 @@ impl InitiateVaultLockError {
                 "InvalidParameterValueException" => {
                     return InitiateVaultLockError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return InitiateVaultLockError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateVaultLockError::ResourceNotFound(String::from(error_message))
+                    return InitiateVaultLockError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return InitiateVaultLockError::ServiceUnavailable(String::from(error_message))
+                    return InitiateVaultLockError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InitiateVaultLockError::Validation(error_message.to_string())
+                    return InitiateVaultLockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3679,19 +3679,19 @@ impl ListJobsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListJobsError::InvalidParameterValue(String::from(error_message))
+                    return ListJobsError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return ListJobsError::MissingParameterValue(String::from(error_message))
+                    return ListJobsError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListJobsError::ResourceNotFound(String::from(error_message))
+                    return ListJobsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListJobsError::ServiceUnavailable(String::from(error_message))
+                    return ListJobsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string())
+                    return ListJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3793,23 +3793,23 @@ impl ListMultipartUploadsError {
                 "InvalidParameterValueException" => {
                     return ListMultipartUploadsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return ListMultipartUploadsError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListMultipartUploadsError::ResourceNotFound(String::from(error_message))
+                    return ListMultipartUploadsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return ListMultipartUploadsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListMultipartUploadsError::Validation(error_message.to_string())
+                    return ListMultipartUploadsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3911,19 +3911,19 @@ impl ListPartsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListPartsError::InvalidParameterValue(String::from(error_message))
+                    return ListPartsError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return ListPartsError::MissingParameterValue(String::from(error_message))
+                    return ListPartsError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPartsError::ResourceNotFound(String::from(error_message))
+                    return ListPartsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListPartsError::ServiceUnavailable(String::from(error_message))
+                    return ListPartsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPartsError::Validation(error_message.to_string())
+                    return ListPartsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4023,20 +4023,20 @@ impl ListProvisionedCapacityError {
                 "InvalidParameterValueException" => {
                     return ListProvisionedCapacityError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return ListProvisionedCapacityError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return ListProvisionedCapacityError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListProvisionedCapacityError::Validation(error_message.to_string())
+                    return ListProvisionedCapacityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4137,19 +4137,19 @@ impl ListTagsForVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListTagsForVaultError::InvalidParameterValue(String::from(error_message))
+                    return ListTagsForVaultError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return ListTagsForVaultError::MissingParameterValue(String::from(error_message))
+                    return ListTagsForVaultError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForVaultError::ResourceNotFound(String::from(error_message))
+                    return ListTagsForVaultError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListTagsForVaultError::ServiceUnavailable(String::from(error_message))
+                    return ListTagsForVaultError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForVaultError::Validation(error_message.to_string())
+                    return ListTagsForVaultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4249,19 +4249,19 @@ impl ListVaultsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListVaultsError::InvalidParameterValue(String::from(error_message))
+                    return ListVaultsError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return ListVaultsError::MissingParameterValue(String::from(error_message))
+                    return ListVaultsError::MissingParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListVaultsError::ResourceNotFound(String::from(error_message))
+                    return ListVaultsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListVaultsError::ServiceUnavailable(String::from(error_message))
+                    return ListVaultsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListVaultsError::Validation(error_message.to_string())
+                    return ListVaultsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4363,25 +4363,25 @@ impl PurchaseProvisionedCapacityError {
                 "InvalidParameterValueException" => {
                     return PurchaseProvisionedCapacityError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return PurchaseProvisionedCapacityError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return PurchaseProvisionedCapacityError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return PurchaseProvisionedCapacityError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PurchaseProvisionedCapacityError::Validation(error_message.to_string())
+                    return PurchaseProvisionedCapacityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4485,21 +4485,21 @@ impl RemoveTagsFromVaultError {
                 "InvalidParameterValueException" => {
                     return RemoveTagsFromVaultError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return RemoveTagsFromVaultError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveTagsFromVaultError::ResourceNotFound(String::from(error_message))
+                    return RemoveTagsFromVaultError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return RemoveTagsFromVaultError::ServiceUnavailable(String::from(error_message))
+                    return RemoveTagsFromVaultError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromVaultError::Validation(error_message.to_string())
+                    return RemoveTagsFromVaultError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4601,20 +4601,20 @@ impl SetDataRetrievalPolicyError {
                 "InvalidParameterValueException" => {
                     return SetDataRetrievalPolicyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return SetDataRetrievalPolicyError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return SetDataRetrievalPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetDataRetrievalPolicyError::Validation(error_message.to_string())
+                    return SetDataRetrievalPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4717,23 +4717,23 @@ impl SetVaultAccessPolicyError {
                 "InvalidParameterValueException" => {
                     return SetVaultAccessPolicyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return SetVaultAccessPolicyError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
+                    return SetVaultAccessPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return SetVaultAccessPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetVaultAccessPolicyError::Validation(error_message.to_string())
+                    return SetVaultAccessPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4837,23 +4837,23 @@ impl SetVaultNotificationsError {
                 "InvalidParameterValueException" => {
                     return SetVaultNotificationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return SetVaultNotificationsError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetVaultNotificationsError::ResourceNotFound(String::from(error_message))
+                    return SetVaultNotificationsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return SetVaultNotificationsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetVaultNotificationsError::Validation(error_message.to_string())
+                    return SetVaultNotificationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4957,22 +4957,22 @@ impl UploadArchiveError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UploadArchiveError::InvalidParameterValue(String::from(error_message))
+                    return UploadArchiveError::InvalidParameterValue(String::from(error_message));
                 }
                 "MissingParameterValueException" => {
-                    return UploadArchiveError::MissingParameterValue(String::from(error_message))
+                    return UploadArchiveError::MissingParameterValue(String::from(error_message));
                 }
                 "RequestTimeoutException" => {
-                    return UploadArchiveError::RequestTimeout(String::from(error_message))
+                    return UploadArchiveError::RequestTimeout(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UploadArchiveError::ResourceNotFound(String::from(error_message))
+                    return UploadArchiveError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UploadArchiveError::ServiceUnavailable(String::from(error_message))
+                    return UploadArchiveError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UploadArchiveError::Validation(error_message.to_string())
+                    return UploadArchiveError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5077,24 +5077,24 @@ impl UploadMultipartPartError {
                 "InvalidParameterValueException" => {
                     return UploadMultipartPartError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingParameterValueException" => {
                     return UploadMultipartPartError::MissingParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestTimeoutException" => {
-                    return UploadMultipartPartError::RequestTimeout(String::from(error_message))
+                    return UploadMultipartPartError::RequestTimeout(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UploadMultipartPartError::ResourceNotFound(String::from(error_message))
+                    return UploadMultipartPartError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UploadMultipartPartError::ServiceUnavailable(String::from(error_message))
+                    return UploadMultipartPartError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UploadMultipartPartError::Validation(error_message.to_string())
+                    return UploadMultipartPartError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

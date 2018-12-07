@@ -631,16 +631,16 @@ impl AddTagsToResourceError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return AddTagsToResourceError::CloudHsmInternal(String::from(error_message))
+                    return AddTagsToResourceError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return AddTagsToResourceError::CloudHsmService(String::from(error_message))
+                    return AddTagsToResourceError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return AddTagsToResourceError::InvalidRequest(String::from(error_message))
+                    return AddTagsToResourceError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string())
+                    return AddTagsToResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -725,16 +725,16 @@ impl CreateHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return CreateHapgError::CloudHsmInternal(String::from(error_message))
+                    return CreateHapgError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateHapgError::CloudHsmService(String::from(error_message))
+                    return CreateHapgError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateHapgError::InvalidRequest(String::from(error_message))
+                    return CreateHapgError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateHapgError::Validation(error_message.to_string())
+                    return CreateHapgError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -817,16 +817,16 @@ impl CreateHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return CreateHsmError::CloudHsmInternal(String::from(error_message))
+                    return CreateHsmError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateHsmError::CloudHsmService(String::from(error_message))
+                    return CreateHsmError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateHsmError::InvalidRequest(String::from(error_message))
+                    return CreateHsmError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateHsmError::Validation(error_message.to_string())
+                    return CreateHsmError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -909,16 +909,16 @@ impl CreateLunaClientError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return CreateLunaClientError::CloudHsmInternal(String::from(error_message))
+                    return CreateLunaClientError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateLunaClientError::CloudHsmService(String::from(error_message))
+                    return CreateLunaClientError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateLunaClientError::InvalidRequest(String::from(error_message))
+                    return CreateLunaClientError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLunaClientError::Validation(error_message.to_string())
+                    return CreateLunaClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1001,16 +1001,16 @@ impl DeleteHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DeleteHapgError::CloudHsmInternal(String::from(error_message))
+                    return DeleteHapgError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteHapgError::CloudHsmService(String::from(error_message))
+                    return DeleteHapgError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteHapgError::InvalidRequest(String::from(error_message))
+                    return DeleteHapgError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteHapgError::Validation(error_message.to_string())
+                    return DeleteHapgError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1093,16 +1093,16 @@ impl DeleteHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DeleteHsmError::CloudHsmInternal(String::from(error_message))
+                    return DeleteHsmError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteHsmError::CloudHsmService(String::from(error_message))
+                    return DeleteHsmError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteHsmError::InvalidRequest(String::from(error_message))
+                    return DeleteHsmError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteHsmError::Validation(error_message.to_string())
+                    return DeleteHsmError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1185,16 +1185,16 @@ impl DeleteLunaClientError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DeleteLunaClientError::CloudHsmInternal(String::from(error_message))
+                    return DeleteLunaClientError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteLunaClientError::CloudHsmService(String::from(error_message))
+                    return DeleteLunaClientError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteLunaClientError::InvalidRequest(String::from(error_message))
+                    return DeleteLunaClientError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLunaClientError::Validation(error_message.to_string())
+                    return DeleteLunaClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1277,16 +1277,16 @@ impl DescribeHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DescribeHapgError::CloudHsmInternal(String::from(error_message))
+                    return DescribeHapgError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeHapgError::CloudHsmService(String::from(error_message))
+                    return DescribeHapgError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeHapgError::InvalidRequest(String::from(error_message))
+                    return DescribeHapgError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeHapgError::Validation(error_message.to_string())
+                    return DescribeHapgError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1369,16 +1369,16 @@ impl DescribeHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DescribeHsmError::CloudHsmInternal(String::from(error_message))
+                    return DescribeHsmError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeHsmError::CloudHsmService(String::from(error_message))
+                    return DescribeHsmError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeHsmError::InvalidRequest(String::from(error_message))
+                    return DescribeHsmError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeHsmError::Validation(error_message.to_string())
+                    return DescribeHsmError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1461,16 +1461,16 @@ impl DescribeLunaClientError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DescribeLunaClientError::CloudHsmInternal(String::from(error_message))
+                    return DescribeLunaClientError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeLunaClientError::CloudHsmService(String::from(error_message))
+                    return DescribeLunaClientError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeLunaClientError::InvalidRequest(String::from(error_message))
+                    return DescribeLunaClientError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLunaClientError::Validation(error_message.to_string())
+                    return DescribeLunaClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1555,16 +1555,16 @@ impl GetConfigError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return GetConfigError::CloudHsmInternal(String::from(error_message))
+                    return GetConfigError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return GetConfigError::CloudHsmService(String::from(error_message))
+                    return GetConfigError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetConfigError::InvalidRequest(String::from(error_message))
+                    return GetConfigError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetConfigError::Validation(error_message.to_string())
+                    return GetConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1647,16 +1647,16 @@ impl ListAvailableZonesError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListAvailableZonesError::CloudHsmInternal(String::from(error_message))
+                    return ListAvailableZonesError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ListAvailableZonesError::CloudHsmService(String::from(error_message))
+                    return ListAvailableZonesError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListAvailableZonesError::InvalidRequest(String::from(error_message))
+                    return ListAvailableZonesError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAvailableZonesError::Validation(error_message.to_string())
+                    return ListAvailableZonesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1741,16 +1741,16 @@ impl ListHapgsError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListHapgsError::CloudHsmInternal(String::from(error_message))
+                    return ListHapgsError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ListHapgsError::CloudHsmService(String::from(error_message))
+                    return ListHapgsError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListHapgsError::InvalidRequest(String::from(error_message))
+                    return ListHapgsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListHapgsError::Validation(error_message.to_string())
+                    return ListHapgsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1833,16 +1833,16 @@ impl ListHsmsError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListHsmsError::CloudHsmInternal(String::from(error_message))
+                    return ListHsmsError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ListHsmsError::CloudHsmService(String::from(error_message))
+                    return ListHsmsError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListHsmsError::InvalidRequest(String::from(error_message))
+                    return ListHsmsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListHsmsError::Validation(error_message.to_string())
+                    return ListHsmsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1925,16 +1925,16 @@ impl ListLunaClientsError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListLunaClientsError::CloudHsmInternal(String::from(error_message))
+                    return ListLunaClientsError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ListLunaClientsError::CloudHsmService(String::from(error_message))
+                    return ListLunaClientsError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListLunaClientsError::InvalidRequest(String::from(error_message))
+                    return ListLunaClientsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListLunaClientsError::Validation(error_message.to_string())
+                    return ListLunaClientsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2017,16 +2017,16 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListTagsForResourceError::CloudHsmInternal(String::from(error_message))
+                    return ListTagsForResourceError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ListTagsForResourceError::CloudHsmService(String::from(error_message))
+                    return ListTagsForResourceError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListTagsForResourceError::InvalidRequest(String::from(error_message))
+                    return ListTagsForResourceError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2111,16 +2111,16 @@ impl ModifyHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ModifyHapgError::CloudHsmInternal(String::from(error_message))
+                    return ModifyHapgError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ModifyHapgError::CloudHsmService(String::from(error_message))
+                    return ModifyHapgError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ModifyHapgError::InvalidRequest(String::from(error_message))
+                    return ModifyHapgError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ModifyHapgError::Validation(error_message.to_string())
+                    return ModifyHapgError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2203,16 +2203,16 @@ impl ModifyHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ModifyHsmError::CloudHsmInternal(String::from(error_message))
+                    return ModifyHsmError::CloudHsmInternal(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ModifyHsmError::CloudHsmService(String::from(error_message))
+                    return ModifyHsmError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ModifyHsmError::InvalidRequest(String::from(error_message))
+                    return ModifyHsmError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ModifyHsmError::Validation(error_message.to_string())
+                    return ModifyHsmError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2291,10 +2291,10 @@ impl ModifyLunaClientError {
 
             match *error_type {
                 "CloudHsmServiceException" => {
-                    return ModifyLunaClientError::CloudHsmService(String::from(error_message))
+                    return ModifyLunaClientError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ModifyLunaClientError::Validation(error_message.to_string())
+                    return ModifyLunaClientError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2377,16 +2377,16 @@ impl RemoveTagsFromResourceError {
                 "CloudHsmInternalException" => {
                     return RemoveTagsFromResourceError::CloudHsmInternal(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return RemoveTagsFromResourceError::CloudHsmService(String::from(error_message))
+                    return RemoveTagsFromResourceError::CloudHsmService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return RemoveTagsFromResourceError::InvalidRequest(String::from(error_message))
+                    return RemoveTagsFromResourceError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

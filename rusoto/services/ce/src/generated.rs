@@ -963,22 +963,22 @@ impl GetCostAndUsageError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return GetCostAndUsageError::BillExpiration(String::from(error_message))
+                    return GetCostAndUsageError::BillExpiration(String::from(error_message));
                 }
                 "DataUnavailableException" => {
-                    return GetCostAndUsageError::DataUnavailable(String::from(error_message))
+                    return GetCostAndUsageError::DataUnavailable(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return GetCostAndUsageError::InvalidNextToken(String::from(error_message))
+                    return GetCostAndUsageError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetCostAndUsageError::LimitExceeded(String::from(error_message))
+                    return GetCostAndUsageError::LimitExceeded(String::from(error_message));
                 }
                 "RequestChangedException" => {
-                    return GetCostAndUsageError::RequestChanged(String::from(error_message))
+                    return GetCostAndUsageError::RequestChanged(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCostAndUsageError::Validation(error_message.to_string())
+                    return GetCostAndUsageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1067,22 +1067,22 @@ impl GetDimensionValuesError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return GetDimensionValuesError::BillExpiration(String::from(error_message))
+                    return GetDimensionValuesError::BillExpiration(String::from(error_message));
                 }
                 "DataUnavailableException" => {
-                    return GetDimensionValuesError::DataUnavailable(String::from(error_message))
+                    return GetDimensionValuesError::DataUnavailable(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return GetDimensionValuesError::InvalidNextToken(String::from(error_message))
+                    return GetDimensionValuesError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetDimensionValuesError::LimitExceeded(String::from(error_message))
+                    return GetDimensionValuesError::LimitExceeded(String::from(error_message));
                 }
                 "RequestChangedException" => {
-                    return GetDimensionValuesError::RequestChanged(String::from(error_message))
+                    return GetDimensionValuesError::RequestChanged(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDimensionValuesError::Validation(error_message.to_string())
+                    return GetDimensionValuesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1169,18 +1169,18 @@ impl GetReservationCoverageError {
 
             match *error_type {
                 "DataUnavailableException" => {
-                    return GetReservationCoverageError::DataUnavailable(String::from(error_message))
+                    return GetReservationCoverageError::DataUnavailable(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return GetReservationCoverageError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetReservationCoverageError::LimitExceeded(String::from(error_message))
+                    return GetReservationCoverageError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetReservationCoverageError::Validation(error_message.to_string())
+                    return GetReservationCoverageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1267,22 +1267,22 @@ impl GetReservationPurchaseRecommendationError {
                 "DataUnavailableException" => {
                     return GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return GetReservationPurchaseRecommendationError::InvalidNextToken(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "LimitExceededException" => {
                     return GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetReservationPurchaseRecommendationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1369,20 +1369,20 @@ impl GetReservationUtilizationError {
                 "DataUnavailableException" => {
                     return GetReservationUtilizationError::DataUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return GetReservationUtilizationError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return GetReservationUtilizationError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetReservationUtilizationError::Validation(error_message.to_string())
+                    return GetReservationUtilizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1471,19 +1471,19 @@ impl GetTagsError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return GetTagsError::BillExpiration(String::from(error_message))
+                    return GetTagsError::BillExpiration(String::from(error_message));
                 }
                 "DataUnavailableException" => {
-                    return GetTagsError::DataUnavailable(String::from(error_message))
+                    return GetTagsError::DataUnavailable(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return GetTagsError::InvalidNextToken(String::from(error_message))
+                    return GetTagsError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetTagsError::LimitExceeded(String::from(error_message))
+                    return GetTagsError::LimitExceeded(String::from(error_message));
                 }
                 "RequestChangedException" => {
-                    return GetTagsError::RequestChanged(String::from(error_message))
+                    return GetTagsError::RequestChanged(String::from(error_message));
                 }
                 "ValidationException" => return GetTagsError::Validation(error_message.to_string()),
                 _ => {}

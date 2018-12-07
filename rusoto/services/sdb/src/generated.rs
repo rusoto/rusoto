@@ -1168,47 +1168,47 @@ impl BatchPutAttributesError {
                     "DuplicateItemName" => {
                         return BatchPutAttributesError::DuplicateItemName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return BatchPutAttributesError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return BatchPutAttributesError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDomain" => {
                         return BatchPutAttributesError::NoSuchDomain(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberDomainAttributesExceeded" => {
                         return BatchPutAttributesError::NumberDomainAttributesExceeded(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NumberDomainBytesExceeded" => {
                         return BatchPutAttributesError::NumberDomainBytesExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberItemAttributesExceeded" => {
                         return BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberSubmittedAttributesExceeded" => {
                         return BatchPutAttributesError::NumberSubmittedAttributesExceeded(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NumberSubmittedItemsExceeded" => {
                         return BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1306,17 +1306,17 @@ impl CreateDomainError {
                     "InvalidParameterValue" => {
                         return CreateDomainError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return CreateDomainError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberDomainsExceeded" => {
                         return CreateDomainError::NumberDomainsExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1408,22 +1408,22 @@ impl DeleteAttributesError {
                     "AttributeDoesNotExist" => {
                         return DeleteAttributesError::AttributeDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return DeleteAttributesError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return DeleteAttributesError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDomain" => {
                         return DeleteAttributesError::NoSuchDomain(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1510,7 +1510,7 @@ impl DeleteDomainError {
                     "MissingParameter" => {
                         return DeleteDomainError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1596,10 +1596,10 @@ impl DomainMetadataError {
                     "MissingParameter" => {
                         return DomainMetadataError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDomain" => {
-                        return DomainMetadataError::NoSuchDomain(String::from(parsed_error.message))
+                        return DomainMetadataError::NoSuchDomain(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -1688,15 +1688,15 @@ impl GetAttributesError {
                     "InvalidParameterValue" => {
                         return GetAttributesError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return GetAttributesError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDomain" => {
-                        return GetAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                        return GetAttributesError::NoSuchDomain(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -1784,12 +1784,12 @@ impl ListDomainsError {
                     "InvalidNextToken" => {
                         return ListDomainsError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return ListDomainsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1886,35 +1886,35 @@ impl PutAttributesError {
                     "AttributeDoesNotExist" => {
                         return PutAttributesError::AttributeDoesNotExist(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return PutAttributesError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
                         return PutAttributesError::MissingParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDomain" => {
-                        return PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                        return PutAttributesError::NoSuchDomain(String::from(parsed_error.message));
                     }
                     "NumberDomainAttributesExceeded" => {
                         return PutAttributesError::NumberDomainAttributesExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberDomainBytesExceeded" => {
                         return PutAttributesError::NumberDomainBytesExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberItemAttributesExceeded" => {
                         return PutAttributesError::NumberItemAttributesExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -2018,41 +2018,41 @@ impl SelectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidNextToken" => {
-                        return SelectError::InvalidNextToken(String::from(parsed_error.message))
+                        return SelectError::InvalidNextToken(String::from(parsed_error.message));
                     }
                     "InvalidNumberPredicates" => {
                         return SelectError::InvalidNumberPredicates(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidNumberValueTests" => {
                         return SelectError::InvalidNumberValueTests(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return SelectError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidQueryExpression" => {
                         return SelectError::InvalidQueryExpression(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MissingParameter" => {
-                        return SelectError::MissingParameter(String::from(parsed_error.message))
+                        return SelectError::MissingParameter(String::from(parsed_error.message));
                     }
                     "NoSuchDomain" => {
-                        return SelectError::NoSuchDomain(String::from(parsed_error.message))
+                        return SelectError::NoSuchDomain(String::from(parsed_error.message));
                     }
                     "RequestTimeout" => {
-                        return SelectError::RequestTimeout(String::from(parsed_error.message))
+                        return SelectError::RequestTimeout(String::from(parsed_error.message));
                     }
                     "TooManyRequestedAttributes" => {
                         return SelectError::TooManyRequestedAttributes(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

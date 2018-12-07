@@ -162,33 +162,33 @@ impl DeleteThingShadowError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteThingShadowError::InternalFailure(String::from(error_message))
+                    return DeleteThingShadowError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteThingShadowError::InvalidRequest(String::from(error_message))
+                    return DeleteThingShadowError::InvalidRequest(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return DeleteThingShadowError::MethodNotAllowed(String::from(error_message))
+                    return DeleteThingShadowError::MethodNotAllowed(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteThingShadowError::ResourceNotFound(String::from(error_message))
+                    return DeleteThingShadowError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteThingShadowError::ServiceUnavailable(String::from(error_message))
+                    return DeleteThingShadowError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteThingShadowError::Throttling(String::from(error_message))
+                    return DeleteThingShadowError::Throttling(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteThingShadowError::Unauthorized(String::from(error_message))
+                    return DeleteThingShadowError::Unauthorized(String::from(error_message));
                 }
                 "UnsupportedDocumentEncodingException" => {
                     return DeleteThingShadowError::UnsupportedDocumentEncoding(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteThingShadowError::Validation(error_message.to_string())
+                    return DeleteThingShadowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -302,33 +302,33 @@ impl GetThingShadowError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetThingShadowError::InternalFailure(String::from(error_message))
+                    return GetThingShadowError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetThingShadowError::InvalidRequest(String::from(error_message))
+                    return GetThingShadowError::InvalidRequest(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return GetThingShadowError::MethodNotAllowed(String::from(error_message))
+                    return GetThingShadowError::MethodNotAllowed(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetThingShadowError::ResourceNotFound(String::from(error_message))
+                    return GetThingShadowError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetThingShadowError::ServiceUnavailable(String::from(error_message))
+                    return GetThingShadowError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetThingShadowError::Throttling(String::from(error_message))
+                    return GetThingShadowError::Throttling(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetThingShadowError::Unauthorized(String::from(error_message))
+                    return GetThingShadowError::Unauthorized(String::from(error_message));
                 }
                 "UnsupportedDocumentEncodingException" => {
                     return GetThingShadowError::UnsupportedDocumentEncoding(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetThingShadowError::Validation(error_message.to_string())
+                    return GetThingShadowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -432,16 +432,16 @@ impl PublishError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return PublishError::InternalFailure(String::from(error_message))
+                    return PublishError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return PublishError::InvalidRequest(String::from(error_message))
+                    return PublishError::InvalidRequest(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return PublishError::MethodNotAllowed(String::from(error_message))
+                    return PublishError::MethodNotAllowed(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PublishError::Unauthorized(String::from(error_message))
+                    return PublishError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => return PublishError::Validation(error_message.to_string()),
                 _ => {}
@@ -552,38 +552,38 @@ impl UpdateThingShadowError {
 
             match error_type {
                 "ConflictException" => {
-                    return UpdateThingShadowError::Conflict(String::from(error_message))
+                    return UpdateThingShadowError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return UpdateThingShadowError::InternalFailure(String::from(error_message))
+                    return UpdateThingShadowError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateThingShadowError::InvalidRequest(String::from(error_message))
+                    return UpdateThingShadowError::InvalidRequest(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return UpdateThingShadowError::MethodNotAllowed(String::from(error_message))
+                    return UpdateThingShadowError::MethodNotAllowed(String::from(error_message));
                 }
                 "RequestEntityTooLargeException" => {
                     return UpdateThingShadowError::RequestEntityTooLarge(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateThingShadowError::ServiceUnavailable(String::from(error_message))
+                    return UpdateThingShadowError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateThingShadowError::Throttling(String::from(error_message))
+                    return UpdateThingShadowError::Throttling(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateThingShadowError::Unauthorized(String::from(error_message))
+                    return UpdateThingShadowError::Unauthorized(String::from(error_message));
                 }
                 "UnsupportedDocumentEncodingException" => {
                     return UpdateThingShadowError::UnsupportedDocumentEncoding(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateThingShadowError::Validation(error_message.to_string())
+                    return UpdateThingShadowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

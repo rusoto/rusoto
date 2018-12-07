@@ -2618,18 +2618,18 @@ impl AddPermissionError {
                     "AuthorizationError" => {
                         return AddPermissionError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
-                        return AddPermissionError::InternalError(String::from(parsed_error.message))
+                        return AddPermissionError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
                         return AddPermissionError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
-                        return AddPermissionError::NotFound(String::from(parsed_error.message))
+                        return AddPermissionError::NotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -2722,22 +2722,22 @@ impl CheckIfPhoneNumberIsOptedOutError {
                     "AuthorizationError" => {
                         return CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "Throttled" => {
                         return CheckIfPhoneNumberIsOptedOutError::Throttled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -2834,27 +2834,27 @@ impl ConfirmSubscriptionError {
                     "AuthorizationError" => {
                         return ConfirmSubscriptionError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return ConfirmSubscriptionError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return ConfirmSubscriptionError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return ConfirmSubscriptionError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubscriptionLimitExceeded" => {
                         return ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -2948,17 +2948,17 @@ impl CreatePlatformApplicationError {
                     "AuthorizationError" => {
                         return CreatePlatformApplicationError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return CreatePlatformApplicationError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return CreatePlatformApplicationError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3052,22 +3052,22 @@ impl CreatePlatformEndpointError {
                     "AuthorizationError" => {
                         return CreatePlatformEndpointError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return CreatePlatformEndpointError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return CreatePlatformEndpointError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return CreatePlatformEndpointError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3162,20 +3162,20 @@ impl CreateTopicError {
                     "AuthorizationError" => {
                         return CreateTopicError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
-                        return CreateTopicError::InternalError(String::from(parsed_error.message))
+                        return CreateTopicError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
                         return CreateTopicError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TopicLimitExceeded" => {
                         return CreateTopicError::TopicLimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3266,17 +3266,17 @@ impl DeleteEndpointError {
                     "AuthorizationError" => {
                         return DeleteEndpointError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return DeleteEndpointError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return DeleteEndpointError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3366,17 +3366,17 @@ impl DeletePlatformApplicationError {
                     "AuthorizationError" => {
                         return DeletePlatformApplicationError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return DeletePlatformApplicationError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return DeletePlatformApplicationError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3470,18 +3470,18 @@ impl DeleteTopicError {
                     "AuthorizationError" => {
                         return DeleteTopicError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
-                        return DeleteTopicError::InternalError(String::from(parsed_error.message))
+                        return DeleteTopicError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
                         return DeleteTopicError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
-                        return DeleteTopicError::NotFound(String::from(parsed_error.message))
+                        return DeleteTopicError::NotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -3574,22 +3574,22 @@ impl GetEndpointAttributesError {
                     "AuthorizationError" => {
                         return GetEndpointAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return GetEndpointAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return GetEndpointAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return GetEndpointAttributesError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3684,22 +3684,22 @@ impl GetPlatformApplicationAttributesError {
                     "AuthorizationError" => {
                         return GetPlatformApplicationAttributesError::AuthorizationError(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InternalError" => {
                         return GetPlatformApplicationAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return GetPlatformApplicationAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NotFound" => {
                         return GetPlatformApplicationAttributesError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -3794,20 +3794,20 @@ impl GetSMSAttributesError {
                     "AuthorizationError" => {
                         return GetSMSAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return GetSMSAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return GetSMSAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "Throttled" => {
-                        return GetSMSAttributesError::Throttled(String::from(parsed_error.message))
+                        return GetSMSAttributesError::Throttled(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -3900,22 +3900,22 @@ impl GetSubscriptionAttributesError {
                     "AuthorizationError" => {
                         return GetSubscriptionAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return GetSubscriptionAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return GetSubscriptionAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return GetSubscriptionAttributesError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4010,20 +4010,20 @@ impl GetTopicAttributesError {
                     "AuthorizationError" => {
                         return GetTopicAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return GetTopicAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return GetTopicAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
-                        return GetTopicAttributesError::NotFound(String::from(parsed_error.message))
+                        return GetTopicAttributesError::NotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -4118,22 +4118,22 @@ impl ListEndpointsByPlatformApplicationError {
                     "AuthorizationError" => {
                         return ListEndpointsByPlatformApplicationError::AuthorizationError(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InternalError" => {
                         return ListEndpointsByPlatformApplicationError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return ListEndpointsByPlatformApplicationError::InvalidParameter(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NotFound" => {
                         return ListEndpointsByPlatformApplicationError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4228,22 +4228,22 @@ impl ListPhoneNumbersOptedOutError {
                     "AuthorizationError" => {
                         return ListPhoneNumbersOptedOutError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return ListPhoneNumbersOptedOutError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return ListPhoneNumbersOptedOutError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "Throttled" => {
                         return ListPhoneNumbersOptedOutError::Throttled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4336,17 +4336,17 @@ impl ListPlatformApplicationsError {
                     "AuthorizationError" => {
                         return ListPlatformApplicationsError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return ListPlatformApplicationsError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return ListPlatformApplicationsError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4438,17 +4438,17 @@ impl ListSubscriptionsError {
                     "AuthorizationError" => {
                         return ListSubscriptionsError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return ListSubscriptionsError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return ListSubscriptionsError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4542,22 +4542,22 @@ impl ListSubscriptionsByTopicError {
                     "AuthorizationError" => {
                         return ListSubscriptionsByTopicError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return ListSubscriptionsByTopicError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return ListSubscriptionsByTopicError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return ListSubscriptionsByTopicError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4650,13 +4650,13 @@ impl ListTopicsError {
                     "AuthorizationError" => {
                         return ListTopicsError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
-                        return ListTopicsError::InternalError(String::from(parsed_error.message))
+                        return ListTopicsError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
-                        return ListTopicsError::InvalidParameter(String::from(parsed_error.message))
+                        return ListTopicsError::InvalidParameter(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -4748,20 +4748,20 @@ impl OptInPhoneNumberError {
                     "AuthorizationError" => {
                         return OptInPhoneNumberError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return OptInPhoneNumberError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return OptInPhoneNumberError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "Throttled" => {
-                        return OptInPhoneNumberError::Throttled(String::from(parsed_error.message))
+                        return OptInPhoneNumberError::Throttled(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -4858,27 +4858,27 @@ impl PublishError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
-                        return PublishError::AuthorizationError(String::from(parsed_error.message))
+                        return PublishError::AuthorizationError(String::from(parsed_error.message));
                     }
                     "EndpointDisabled" => {
-                        return PublishError::EndpointDisabled(String::from(parsed_error.message))
+                        return PublishError::EndpointDisabled(String::from(parsed_error.message));
                     }
                     "InternalError" => {
-                        return PublishError::InternalError(String::from(parsed_error.message))
+                        return PublishError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
-                        return PublishError::InvalidParameter(String::from(parsed_error.message))
+                        return PublishError::InvalidParameter(String::from(parsed_error.message));
                     }
                     "ParameterValueInvalid" => {
                         return PublishError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => return PublishError::NotFound(String::from(parsed_error.message)),
                     "PlatformApplicationDisabled" => {
                         return PublishError::PlatformApplicationDisabled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -4974,20 +4974,20 @@ impl RemovePermissionError {
                     "AuthorizationError" => {
                         return RemovePermissionError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return RemovePermissionError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return RemovePermissionError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
-                        return RemovePermissionError::NotFound(String::from(parsed_error.message))
+                        return RemovePermissionError::NotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -5080,22 +5080,22 @@ impl SetEndpointAttributesError {
                     "AuthorizationError" => {
                         return SetEndpointAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return SetEndpointAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return SetEndpointAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return SetEndpointAttributesError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5190,22 +5190,22 @@ impl SetPlatformApplicationAttributesError {
                     "AuthorizationError" => {
                         return SetPlatformApplicationAttributesError::AuthorizationError(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InternalError" => {
                         return SetPlatformApplicationAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return SetPlatformApplicationAttributesError::InvalidParameter(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NotFound" => {
                         return SetPlatformApplicationAttributesError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5300,20 +5300,20 @@ impl SetSMSAttributesError {
                     "AuthorizationError" => {
                         return SetSMSAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return SetSMSAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return SetSMSAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "Throttled" => {
-                        return SetSMSAttributesError::Throttled(String::from(parsed_error.message))
+                        return SetSMSAttributesError::Throttled(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -5408,27 +5408,27 @@ impl SetSubscriptionAttributesError {
                     "AuthorizationError" => {
                         return SetSubscriptionAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "FilterPolicyLimitExceeded" => {
                         return SetSubscriptionAttributesError::FilterPolicyLimitExceeded(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InternalError" => {
                         return SetSubscriptionAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return SetSubscriptionAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
                         return SetSubscriptionAttributesError::NotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5524,20 +5524,20 @@ impl SetTopicAttributesError {
                     "AuthorizationError" => {
                         return SetTopicAttributesError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
                         return SetTopicAttributesError::InternalError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameter" => {
                         return SetTopicAttributesError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
-                        return SetTopicAttributesError::NotFound(String::from(parsed_error.message))
+                        return SetTopicAttributesError::NotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -5636,26 +5636,26 @@ impl SubscribeError {
                     "AuthorizationError" => {
                         return SubscribeError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "FilterPolicyLimitExceeded" => {
                         return SubscribeError::FilterPolicyLimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
-                        return SubscribeError::InternalError(String::from(parsed_error.message))
+                        return SubscribeError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
-                        return SubscribeError::InvalidParameter(String::from(parsed_error.message))
+                        return SubscribeError::InvalidParameter(String::from(parsed_error.message));
                     }
                     "NotFound" => {
-                        return SubscribeError::NotFound(String::from(parsed_error.message))
+                        return SubscribeError::NotFound(String::from(parsed_error.message));
                     }
                     "SubscriptionLimitExceeded" => {
                         return SubscribeError::SubscriptionLimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5750,18 +5750,18 @@ impl UnsubscribeError {
                     "AuthorizationError" => {
                         return UnsubscribeError::AuthorizationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalError" => {
-                        return UnsubscribeError::InternalError(String::from(parsed_error.message))
+                        return UnsubscribeError::InternalError(String::from(parsed_error.message));
                     }
                     "InvalidParameter" => {
                         return UnsubscribeError::InvalidParameter(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotFound" => {
-                        return UnsubscribeError::NotFound(String::from(parsed_error.message))
+                        return UnsubscribeError::NotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }

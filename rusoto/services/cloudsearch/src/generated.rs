@@ -5370,15 +5370,15 @@ impl BuildSuggestersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return BuildSuggestersError::Base(String::from(parsed_error.message))
+                        return BuildSuggestersError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return BuildSuggestersError::Internal(String::from(parsed_error.message))
+                        return BuildSuggestersError::Internal(String::from(parsed_error.message));
                     }
                     "ResourceNotFound" => {
                         return BuildSuggestersError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5466,13 +5466,13 @@ impl CreateDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return CreateDomainError::Base(String::from(parsed_error.message))
+                        return CreateDomainError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return CreateDomainError::Internal(String::from(parsed_error.message))
+                        return CreateDomainError::Internal(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return CreateDomainError::LimitExceeded(String::from(parsed_error.message))
+                        return CreateDomainError::LimitExceeded(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -5564,27 +5564,27 @@ impl DefineAnalysisSchemeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineAnalysisSchemeError::Base(String::from(parsed_error.message))
+                        return DefineAnalysisSchemeError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
                         return DefineAnalysisSchemeError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidType" => {
                         return DefineAnalysisSchemeError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DefineAnalysisSchemeError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DefineAnalysisSchemeError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5680,25 +5680,25 @@ impl DefineExpressionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineExpressionError::Base(String::from(parsed_error.message))
+                        return DefineExpressionError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DefineExpressionError::Internal(String::from(parsed_error.message))
+                        return DefineExpressionError::Internal(String::from(parsed_error.message));
                     }
                     "InvalidType" => {
                         return DefineExpressionError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DefineExpressionError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DefineExpressionError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5792,25 +5792,25 @@ impl DefineIndexFieldError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineIndexFieldError::Base(String::from(parsed_error.message))
+                        return DefineIndexFieldError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DefineIndexFieldError::Internal(String::from(parsed_error.message))
+                        return DefineIndexFieldError::Internal(String::from(parsed_error.message));
                     }
                     "InvalidType" => {
                         return DefineIndexFieldError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DefineIndexFieldError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DefineIndexFieldError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -5904,23 +5904,23 @@ impl DefineSuggesterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineSuggesterError::Base(String::from(parsed_error.message))
+                        return DefineSuggesterError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DefineSuggesterError::Internal(String::from(parsed_error.message))
+                        return DefineSuggesterError::Internal(String::from(parsed_error.message));
                     }
                     "InvalidType" => {
-                        return DefineSuggesterError::InvalidType(String::from(parsed_error.message))
+                        return DefineSuggesterError::InvalidType(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
                         return DefineSuggesterError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DefineSuggesterError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6012,22 +6012,22 @@ impl DeleteAnalysisSchemeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteAnalysisSchemeError::Base(String::from(parsed_error.message))
+                        return DeleteAnalysisSchemeError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
                         return DeleteAnalysisSchemeError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidType" => {
                         return DeleteAnalysisSchemeError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DeleteAnalysisSchemeError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6116,10 +6116,10 @@ impl DeleteDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteDomainError::Base(String::from(parsed_error.message))
+                        return DeleteDomainError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DeleteDomainError::Internal(String::from(parsed_error.message))
+                        return DeleteDomainError::Internal(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -6208,20 +6208,20 @@ impl DeleteExpressionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteExpressionError::Base(String::from(parsed_error.message))
+                        return DeleteExpressionError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DeleteExpressionError::Internal(String::from(parsed_error.message))
+                        return DeleteExpressionError::Internal(String::from(parsed_error.message));
                     }
                     "InvalidType" => {
                         return DeleteExpressionError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DeleteExpressionError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6312,20 +6312,20 @@ impl DeleteIndexFieldError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteIndexFieldError::Base(String::from(parsed_error.message))
+                        return DeleteIndexFieldError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DeleteIndexFieldError::Internal(String::from(parsed_error.message))
+                        return DeleteIndexFieldError::Internal(String::from(parsed_error.message));
                     }
                     "InvalidType" => {
                         return DeleteIndexFieldError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DeleteIndexFieldError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6416,18 +6416,18 @@ impl DeleteSuggesterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteSuggesterError::Base(String::from(parsed_error.message))
+                        return DeleteSuggesterError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DeleteSuggesterError::Internal(String::from(parsed_error.message))
+                        return DeleteSuggesterError::Internal(String::from(parsed_error.message));
                     }
                     "InvalidType" => {
-                        return DeleteSuggesterError::InvalidType(String::from(parsed_error.message))
+                        return DeleteSuggesterError::InvalidType(String::from(parsed_error.message));
                     }
                     "ResourceNotFound" => {
                         return DeleteSuggesterError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6518,17 +6518,17 @@ impl DescribeAnalysisSchemesError {
                     "BaseException" => {
                         return DescribeAnalysisSchemesError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return DescribeAnalysisSchemesError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DescribeAnalysisSchemesError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6626,32 +6626,32 @@ impl DescribeAvailabilityOptionsError {
                     "BaseException" => {
                         return DescribeAvailabilityOptionsError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DisabledAction" => {
                         return DescribeAvailabilityOptionsError::DisabledOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return DescribeAvailabilityOptionsError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidType" => {
                         return DescribeAvailabilityOptionsError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DescribeAvailabilityOptionsError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DescribeAvailabilityOptionsError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6742,10 +6742,10 @@ impl DescribeDomainsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeDomainsError::Base(String::from(parsed_error.message))
+                        return DescribeDomainsError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DescribeDomainsError::Internal(String::from(parsed_error.message))
+                        return DescribeDomainsError::Internal(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -6832,17 +6832,17 @@ impl DescribeExpressionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeExpressionsError::Base(String::from(parsed_error.message))
+                        return DescribeExpressionsError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
                         return DescribeExpressionsError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DescribeExpressionsError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6932,17 +6932,17 @@ impl DescribeIndexFieldsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeIndexFieldsError::Base(String::from(parsed_error.message))
+                        return DescribeIndexFieldsError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
                         return DescribeIndexFieldsError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DescribeIndexFieldsError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7034,17 +7034,17 @@ impl DescribeScalingParametersError {
                     "BaseException" => {
                         return DescribeScalingParametersError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return DescribeScalingParametersError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DescribeScalingParametersError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7136,17 +7136,17 @@ impl DescribeServiceAccessPoliciesError {
                     "BaseException" => {
                         return DescribeServiceAccessPoliciesError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return DescribeServiceAccessPoliciesError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7236,15 +7236,15 @@ impl DescribeSuggestersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeSuggestersError::Base(String::from(parsed_error.message))
+                        return DescribeSuggestersError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return DescribeSuggestersError::Internal(String::from(parsed_error.message))
+                        return DescribeSuggestersError::Internal(String::from(parsed_error.message));
                     }
                     "ResourceNotFound" => {
                         return DescribeSuggestersError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7334,15 +7334,15 @@ impl IndexDocumentsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return IndexDocumentsError::Base(String::from(parsed_error.message))
+                        return IndexDocumentsError::Base(String::from(parsed_error.message));
                     }
                     "InternalException" => {
-                        return IndexDocumentsError::Internal(String::from(parsed_error.message))
+                        return IndexDocumentsError::Internal(String::from(parsed_error.message));
                     }
                     "ResourceNotFound" => {
                         return IndexDocumentsError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7426,7 +7426,7 @@ impl ListDomainNamesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return ListDomainNamesError::Base(String::from(parsed_error.message))
+                        return ListDomainNamesError::Base(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -7520,32 +7520,32 @@ impl UpdateAvailabilityOptionsError {
                     "BaseException" => {
                         return UpdateAvailabilityOptionsError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DisabledAction" => {
                         return UpdateAvailabilityOptionsError::DisabledOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return UpdateAvailabilityOptionsError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidType" => {
                         return UpdateAvailabilityOptionsError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateAvailabilityOptionsError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return UpdateAvailabilityOptionsError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7644,27 +7644,27 @@ impl UpdateScalingParametersError {
                     "BaseException" => {
                         return UpdateScalingParametersError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return UpdateScalingParametersError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidType" => {
                         return UpdateScalingParametersError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateScalingParametersError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return UpdateScalingParametersError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7762,27 +7762,27 @@ impl UpdateServiceAccessPoliciesError {
                     "BaseException" => {
                         return UpdateServiceAccessPoliciesError::Base(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InternalException" => {
                         return UpdateServiceAccessPoliciesError::Internal(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidType" => {
                         return UpdateServiceAccessPoliciesError::InvalidType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFound" => {
                         return UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

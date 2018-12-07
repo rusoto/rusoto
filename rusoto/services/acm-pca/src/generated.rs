@@ -579,20 +579,20 @@ impl CreateCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArgsException" => {
-                    return CreateCertificateAuthorityError::InvalidArgs(String::from(error_message))
+                    return CreateCertificateAuthorityError::InvalidArgs(String::from(error_message));
                 }
                 "InvalidPolicyException" => {
                     return CreateCertificateAuthorityError::InvalidPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return CreateCertificateAuthorityError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateCertificateAuthorityError::Validation(error_message.to_string())
+                    return CreateCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -685,37 +685,37 @@ impl CreateCertificateAuthorityAuditReportError {
                 "InvalidArgsException" => {
                     return CreateCertificateAuthorityAuditReportError::InvalidArgs(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
                     return CreateCertificateAuthorityAuditReportError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return CreateCertificateAuthorityAuditReportError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestFailedException" => {
                     return CreateCertificateAuthorityAuditReportError::RequestFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestInProgressException" => {
                     return CreateCertificateAuthorityAuditReportError::RequestInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return CreateCertificateAuthorityAuditReportError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return CreateCertificateAuthorityAuditReportError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -807,23 +807,23 @@ impl DeleteCertificateAuthorityError {
                 "ConcurrentModificationException" => {
                     return DeleteCertificateAuthorityError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DeleteCertificateAuthorityError::InvalidArn(String::from(error_message))
+                    return DeleteCertificateAuthorityError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
                     return DeleteCertificateAuthorityError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteCertificateAuthorityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteCertificateAuthorityError::Validation(error_message.to_string())
+                    return DeleteCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -909,15 +909,15 @@ impl DescribeCertificateAuthorityError {
                 "InvalidArnException" => {
                     return DescribeCertificateAuthorityError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeCertificateAuthorityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCertificateAuthorityError::Validation(error_message.to_string())
+                    return DescribeCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1005,22 +1005,22 @@ impl DescribeCertificateAuthorityAuditReportError {
                 "InvalidArgsException" => {
                     return DescribeCertificateAuthorityAuditReportError::InvalidArgs(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
                     return DescribeCertificateAuthorityAuditReportError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeCertificateAuthorityAuditReportError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeCertificateAuthorityAuditReportError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1109,22 +1109,22 @@ impl GetCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return GetCertificateError::InvalidArn(String::from(error_message))
+                    return GetCertificateError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
-                    return GetCertificateError::InvalidState(String::from(error_message))
+                    return GetCertificateError::InvalidState(String::from(error_message));
                 }
                 "RequestFailedException" => {
-                    return GetCertificateError::RequestFailed(String::from(error_message))
+                    return GetCertificateError::RequestFailed(String::from(error_message));
                 }
                 "RequestInProgressException" => {
-                    return GetCertificateError::RequestInProgress(String::from(error_message))
+                    return GetCertificateError::RequestInProgress(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCertificateError::ResourceNotFound(String::from(error_message))
+                    return GetCertificateError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCertificateError::Validation(error_message.to_string())
+                    return GetCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1211,22 +1211,22 @@ impl GetCertificateAuthorityCertificateError {
                 "InvalidArnException" => {
                     return GetCertificateAuthorityCertificateError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return GetCertificateAuthorityCertificateError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetCertificateAuthorityCertificateError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetCertificateAuthorityCertificateError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1315,30 +1315,30 @@ impl GetCertificateAuthorityCsrError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return GetCertificateAuthorityCsrError::InvalidArn(String::from(error_message))
+                    return GetCertificateAuthorityCsrError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
                     return GetCertificateAuthorityCsrError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestFailedException" => {
                     return GetCertificateAuthorityCsrError::RequestFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestInProgressException" => {
                     return GetCertificateAuthorityCsrError::RequestInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetCertificateAuthorityCsrError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetCertificateAuthorityCsrError::Validation(error_message.to_string())
+                    return GetCertificateAuthorityCsrError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1437,47 +1437,47 @@ impl ImportCertificateAuthorityCertificateError {
                 "CertificateMismatchException" => {
                     return ImportCertificateAuthorityCertificateError::CertificateMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ConcurrentModificationException" => {
                     return ImportCertificateAuthorityCertificateError::ConcurrentModification(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArnException" => {
                     return ImportCertificateAuthorityCertificateError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return ImportCertificateAuthorityCertificateError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MalformedCertificateException" => {
                     return ImportCertificateAuthorityCertificateError::MalformedCertificate(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RequestFailedException" => {
                     return ImportCertificateAuthorityCertificateError::RequestFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestInProgressException" => {
                     return ImportCertificateAuthorityCertificateError::RequestInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return ImportCertificateAuthorityCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return ImportCertificateAuthorityCertificateError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1573,25 +1573,25 @@ impl IssueCertificateError {
 
             match *error_type {
                 "InvalidArgsException" => {
-                    return IssueCertificateError::InvalidArgs(String::from(error_message))
+                    return IssueCertificateError::InvalidArgs(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return IssueCertificateError::InvalidArn(String::from(error_message))
+                    return IssueCertificateError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
-                    return IssueCertificateError::InvalidState(String::from(error_message))
+                    return IssueCertificateError::InvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return IssueCertificateError::LimitExceeded(String::from(error_message))
+                    return IssueCertificateError::LimitExceeded(String::from(error_message));
                 }
                 "MalformedCSRException" => {
-                    return IssueCertificateError::MalformedCSR(String::from(error_message))
+                    return IssueCertificateError::MalformedCSR(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return IssueCertificateError::ResourceNotFound(String::from(error_message))
+                    return IssueCertificateError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return IssueCertificateError::Validation(error_message.to_string())
+                    return IssueCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1675,10 +1675,10 @@ impl ListCertificateAuthoritiesError {
                 "InvalidNextTokenException" => {
                     return ListCertificateAuthoritiesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListCertificateAuthoritiesError::Validation(error_message.to_string())
+                    return ListCertificateAuthoritiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1759,13 +1759,13 @@ impl ListTagsError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ListTagsError::InvalidArn(String::from(error_message))
+                    return ListTagsError::InvalidArn(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsError::ResourceNotFound(String::from(error_message))
+                    return ListTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1847,20 +1847,20 @@ impl RestoreCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return RestoreCertificateAuthorityError::InvalidArn(String::from(error_message))
+                    return RestoreCertificateAuthorityError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
                     return RestoreCertificateAuthorityError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return RestoreCertificateAuthorityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RestoreCertificateAuthorityError::Validation(error_message.to_string())
+                    return RestoreCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1955,30 +1955,30 @@ impl RevokeCertificateError {
                 "ConcurrentModificationException" => {
                     return RevokeCertificateError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return RevokeCertificateError::InvalidArn(String::from(error_message))
+                    return RevokeCertificateError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
-                    return RevokeCertificateError::InvalidState(String::from(error_message))
+                    return RevokeCertificateError::InvalidState(String::from(error_message));
                 }
                 "RequestAlreadyProcessedException" => {
                     return RevokeCertificateError::RequestAlreadyProcessed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RequestFailedException" => {
-                    return RevokeCertificateError::RequestFailed(String::from(error_message))
+                    return RevokeCertificateError::RequestFailed(String::from(error_message));
                 }
                 "RequestInProgressException" => {
-                    return RevokeCertificateError::RequestInProgress(String::from(error_message))
+                    return RevokeCertificateError::RequestInProgress(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RevokeCertificateError::ResourceNotFound(String::from(error_message))
+                    return RevokeCertificateError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RevokeCertificateError::Validation(error_message.to_string())
+                    return RevokeCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2071,24 +2071,24 @@ impl TagCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return TagCertificateAuthorityError::InvalidArn(String::from(error_message))
+                    return TagCertificateAuthorityError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
-                    return TagCertificateAuthorityError::InvalidState(String::from(error_message))
+                    return TagCertificateAuthorityError::InvalidState(String::from(error_message));
                 }
                 "InvalidTagException" => {
-                    return TagCertificateAuthorityError::InvalidTag(String::from(error_message))
+                    return TagCertificateAuthorityError::InvalidTag(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return TagCertificateAuthorityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyTagsException" => {
-                    return TagCertificateAuthorityError::TooManyTags(String::from(error_message))
+                    return TagCertificateAuthorityError::TooManyTags(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagCertificateAuthorityError::Validation(error_message.to_string())
+                    return TagCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2177,21 +2177,21 @@ impl UntagCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return UntagCertificateAuthorityError::InvalidArn(String::from(error_message))
+                    return UntagCertificateAuthorityError::InvalidArn(String::from(error_message));
                 }
                 "InvalidStateException" => {
-                    return UntagCertificateAuthorityError::InvalidState(String::from(error_message))
+                    return UntagCertificateAuthorityError::InvalidState(String::from(error_message));
                 }
                 "InvalidTagException" => {
-                    return UntagCertificateAuthorityError::InvalidTag(String::from(error_message))
+                    return UntagCertificateAuthorityError::InvalidTag(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UntagCertificateAuthorityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UntagCertificateAuthorityError::Validation(error_message.to_string())
+                    return UntagCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2285,31 +2285,31 @@ impl UpdateCertificateAuthorityError {
                 "ConcurrentModificationException" => {
                     return UpdateCertificateAuthorityError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgsException" => {
-                    return UpdateCertificateAuthorityError::InvalidArgs(String::from(error_message))
+                    return UpdateCertificateAuthorityError::InvalidArgs(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateCertificateAuthorityError::InvalidArn(String::from(error_message))
+                    return UpdateCertificateAuthorityError::InvalidArn(String::from(error_message));
                 }
                 "InvalidPolicyException" => {
                     return UpdateCertificateAuthorityError::InvalidPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return UpdateCertificateAuthorityError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateCertificateAuthorityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateCertificateAuthorityError::Validation(error_message.to_string())
+                    return UpdateCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

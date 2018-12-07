@@ -2807,19 +2807,19 @@ impl CreateDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateDevicePoolError::Argument(String::from(error_message))
+                    return CreateDevicePoolError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDevicePoolError::LimitExceeded(String::from(error_message))
+                    return CreateDevicePoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDevicePoolError::NotFound(String::from(error_message))
+                    return CreateDevicePoolError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return CreateDevicePoolError::ServiceAccount(String::from(error_message))
+                    return CreateDevicePoolError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDevicePoolError::Validation(error_message.to_string())
+                    return CreateDevicePoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2905,19 +2905,19 @@ impl CreateInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateInstanceProfileError::Argument(String::from(error_message))
+                    return CreateInstanceProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateInstanceProfileError::LimitExceeded(String::from(error_message))
+                    return CreateInstanceProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateInstanceProfileError::NotFound(String::from(error_message))
+                    return CreateInstanceProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return CreateInstanceProfileError::ServiceAccount(String::from(error_message))
+                    return CreateInstanceProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateInstanceProfileError::Validation(error_message.to_string())
+                    return CreateInstanceProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3005,19 +3005,19 @@ impl CreateNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateNetworkProfileError::Argument(String::from(error_message))
+                    return CreateNetworkProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateNetworkProfileError::LimitExceeded(String::from(error_message))
+                    return CreateNetworkProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateNetworkProfileError::NotFound(String::from(error_message))
+                    return CreateNetworkProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return CreateNetworkProfileError::ServiceAccount(String::from(error_message))
+                    return CreateNetworkProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateNetworkProfileError::Validation(error_message.to_string())
+                    return CreateNetworkProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3105,19 +3105,19 @@ impl CreateProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateProjectError::Argument(String::from(error_message))
+                    return CreateProjectError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateProjectError::LimitExceeded(String::from(error_message))
+                    return CreateProjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateProjectError::NotFound(String::from(error_message))
+                    return CreateProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return CreateProjectError::ServiceAccount(String::from(error_message))
+                    return CreateProjectError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string())
+                    return CreateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3203,23 +3203,23 @@ impl CreateRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateRemoteAccessSessionError::Argument(String::from(error_message))
+                    return CreateRemoteAccessSessionError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return CreateRemoteAccessSessionError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateRemoteAccessSessionError::NotFound(String::from(error_message))
+                    return CreateRemoteAccessSessionError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
                     return CreateRemoteAccessSessionError::ServiceAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateRemoteAccessSessionError::Validation(error_message.to_string())
+                    return CreateRemoteAccessSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3307,19 +3307,19 @@ impl CreateUploadError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateUploadError::Argument(String::from(error_message))
+                    return CreateUploadError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateUploadError::LimitExceeded(String::from(error_message))
+                    return CreateUploadError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateUploadError::NotFound(String::from(error_message))
+                    return CreateUploadError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return CreateUploadError::ServiceAccount(String::from(error_message))
+                    return CreateUploadError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUploadError::Validation(error_message.to_string())
+                    return CreateUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3403,16 +3403,16 @@ impl CreateVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateVPCEConfigurationError::Argument(String::from(error_message))
+                    return CreateVPCEConfigurationError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateVPCEConfigurationError::LimitExceeded(String::from(error_message))
+                    return CreateVPCEConfigurationError::LimitExceeded(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return CreateVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    return CreateVPCEConfigurationError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateVPCEConfigurationError::Validation(error_message.to_string())
+                    return CreateVPCEConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3499,19 +3499,19 @@ impl DeleteDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteDevicePoolError::Argument(String::from(error_message))
+                    return DeleteDevicePoolError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteDevicePoolError::LimitExceeded(String::from(error_message))
+                    return DeleteDevicePoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDevicePoolError::NotFound(String::from(error_message))
+                    return DeleteDevicePoolError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return DeleteDevicePoolError::ServiceAccount(String::from(error_message))
+                    return DeleteDevicePoolError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDevicePoolError::Validation(error_message.to_string())
+                    return DeleteDevicePoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3597,19 +3597,19 @@ impl DeleteInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteInstanceProfileError::Argument(String::from(error_message))
+                    return DeleteInstanceProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteInstanceProfileError::LimitExceeded(String::from(error_message))
+                    return DeleteInstanceProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteInstanceProfileError::NotFound(String::from(error_message))
+                    return DeleteInstanceProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return DeleteInstanceProfileError::ServiceAccount(String::from(error_message))
+                    return DeleteInstanceProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInstanceProfileError::Validation(error_message.to_string())
+                    return DeleteInstanceProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3697,19 +3697,19 @@ impl DeleteNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteNetworkProfileError::Argument(String::from(error_message))
+                    return DeleteNetworkProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteNetworkProfileError::LimitExceeded(String::from(error_message))
+                    return DeleteNetworkProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteNetworkProfileError::NotFound(String::from(error_message))
+                    return DeleteNetworkProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return DeleteNetworkProfileError::ServiceAccount(String::from(error_message))
+                    return DeleteNetworkProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteNetworkProfileError::Validation(error_message.to_string())
+                    return DeleteNetworkProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3797,19 +3797,19 @@ impl DeleteProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteProjectError::Argument(String::from(error_message))
+                    return DeleteProjectError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteProjectError::LimitExceeded(String::from(error_message))
+                    return DeleteProjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteProjectError::NotFound(String::from(error_message))
+                    return DeleteProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return DeleteProjectError::ServiceAccount(String::from(error_message))
+                    return DeleteProjectError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string())
+                    return DeleteProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3895,23 +3895,23 @@ impl DeleteRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteRemoteAccessSessionError::Argument(String::from(error_message))
+                    return DeleteRemoteAccessSessionError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return DeleteRemoteAccessSessionError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteRemoteAccessSessionError::NotFound(String::from(error_message))
+                    return DeleteRemoteAccessSessionError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
                     return DeleteRemoteAccessSessionError::ServiceAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteRemoteAccessSessionError::Validation(error_message.to_string())
+                    return DeleteRemoteAccessSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4000,14 +4000,14 @@ impl DeleteRunError {
             match *error_type {
                 "ArgumentException" => return DeleteRunError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return DeleteRunError::LimitExceeded(String::from(error_message))
+                    return DeleteRunError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return DeleteRunError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return DeleteRunError::ServiceAccount(String::from(error_message))
+                    return DeleteRunError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRunError::Validation(error_message.to_string())
+                    return DeleteRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4093,19 +4093,19 @@ impl DeleteUploadError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteUploadError::Argument(String::from(error_message))
+                    return DeleteUploadError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteUploadError::LimitExceeded(String::from(error_message))
+                    return DeleteUploadError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteUploadError::NotFound(String::from(error_message))
+                    return DeleteUploadError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return DeleteUploadError::ServiceAccount(String::from(error_message))
+                    return DeleteUploadError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUploadError::Validation(error_message.to_string())
+                    return DeleteUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4191,21 +4191,21 @@ impl DeleteVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteVPCEConfigurationError::Argument(String::from(error_message))
+                    return DeleteVPCEConfigurationError::Argument(String::from(error_message));
                 }
                 "InvalidOperationException" => {
                     return DeleteVPCEConfigurationError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteVPCEConfigurationError::NotFound(String::from(error_message))
+                    return DeleteVPCEConfigurationError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return DeleteVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    return DeleteVPCEConfigurationError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteVPCEConfigurationError::Validation(error_message.to_string())
+                    return DeleteVPCEConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4293,19 +4293,19 @@ impl GetAccountSettingsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetAccountSettingsError::Argument(String::from(error_message))
+                    return GetAccountSettingsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetAccountSettingsError::LimitExceeded(String::from(error_message))
+                    return GetAccountSettingsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetAccountSettingsError::NotFound(String::from(error_message))
+                    return GetAccountSettingsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetAccountSettingsError::ServiceAccount(String::from(error_message))
+                    return GetAccountSettingsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAccountSettingsError::Validation(error_message.to_string())
+                    return GetAccountSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4394,14 +4394,14 @@ impl GetDeviceError {
             match *error_type {
                 "ArgumentException" => return GetDeviceError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return GetDeviceError::LimitExceeded(String::from(error_message))
+                    return GetDeviceError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetDeviceError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return GetDeviceError::ServiceAccount(String::from(error_message))
+                    return GetDeviceError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeviceError::Validation(error_message.to_string())
+                    return GetDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4487,19 +4487,19 @@ impl GetDeviceInstanceError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetDeviceInstanceError::Argument(String::from(error_message))
+                    return GetDeviceInstanceError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetDeviceInstanceError::LimitExceeded(String::from(error_message))
+                    return GetDeviceInstanceError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDeviceInstanceError::NotFound(String::from(error_message))
+                    return GetDeviceInstanceError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetDeviceInstanceError::ServiceAccount(String::from(error_message))
+                    return GetDeviceInstanceError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeviceInstanceError::Validation(error_message.to_string())
+                    return GetDeviceInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4587,19 +4587,19 @@ impl GetDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetDevicePoolError::Argument(String::from(error_message))
+                    return GetDevicePoolError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetDevicePoolError::LimitExceeded(String::from(error_message))
+                    return GetDevicePoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDevicePoolError::NotFound(String::from(error_message))
+                    return GetDevicePoolError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetDevicePoolError::ServiceAccount(String::from(error_message))
+                    return GetDevicePoolError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDevicePoolError::Validation(error_message.to_string())
+                    return GetDevicePoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4685,23 +4685,23 @@ impl GetDevicePoolCompatibilityError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetDevicePoolCompatibilityError::Argument(String::from(error_message))
+                    return GetDevicePoolCompatibilityError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return GetDevicePoolCompatibilityError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetDevicePoolCompatibilityError::NotFound(String::from(error_message))
+                    return GetDevicePoolCompatibilityError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
                     return GetDevicePoolCompatibilityError::ServiceAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDevicePoolCompatibilityError::Validation(error_message.to_string())
+                    return GetDevicePoolCompatibilityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4789,19 +4789,19 @@ impl GetInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetInstanceProfileError::Argument(String::from(error_message))
+                    return GetInstanceProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetInstanceProfileError::LimitExceeded(String::from(error_message))
+                    return GetInstanceProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceProfileError::NotFound(String::from(error_message))
+                    return GetInstanceProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetInstanceProfileError::ServiceAccount(String::from(error_message))
+                    return GetInstanceProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceProfileError::Validation(error_message.to_string())
+                    return GetInstanceProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4890,11 +4890,11 @@ impl GetJobError {
             match *error_type {
                 "ArgumentException" => return GetJobError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return GetJobError::LimitExceeded(String::from(error_message))
+                    return GetJobError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetJobError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return GetJobError::ServiceAccount(String::from(error_message))
+                    return GetJobError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => return GetJobError::Validation(error_message.to_string()),
                 _ => {}
@@ -4981,19 +4981,19 @@ impl GetNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetNetworkProfileError::Argument(String::from(error_message))
+                    return GetNetworkProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetNetworkProfileError::LimitExceeded(String::from(error_message))
+                    return GetNetworkProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetNetworkProfileError::NotFound(String::from(error_message))
+                    return GetNetworkProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetNetworkProfileError::ServiceAccount(String::from(error_message))
+                    return GetNetworkProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetNetworkProfileError::Validation(error_message.to_string())
+                    return GetNetworkProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5083,22 +5083,22 @@ impl GetOfferingStatusError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetOfferingStatusError::Argument(String::from(error_message))
+                    return GetOfferingStatusError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetOfferingStatusError::LimitExceeded(String::from(error_message))
+                    return GetOfferingStatusError::LimitExceeded(String::from(error_message));
                 }
                 "NotEligibleException" => {
-                    return GetOfferingStatusError::NotEligible(String::from(error_message))
+                    return GetOfferingStatusError::NotEligible(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetOfferingStatusError::NotFound(String::from(error_message))
+                    return GetOfferingStatusError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetOfferingStatusError::ServiceAccount(String::from(error_message))
+                    return GetOfferingStatusError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetOfferingStatusError::Validation(error_message.to_string())
+                    return GetOfferingStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5187,19 +5187,19 @@ impl GetProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetProjectError::Argument(String::from(error_message))
+                    return GetProjectError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetProjectError::LimitExceeded(String::from(error_message))
+                    return GetProjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetProjectError::NotFound(String::from(error_message))
+                    return GetProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetProjectError::ServiceAccount(String::from(error_message))
+                    return GetProjectError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetProjectError::Validation(error_message.to_string())
+                    return GetProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5285,19 +5285,19 @@ impl GetRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetRemoteAccessSessionError::Argument(String::from(error_message))
+                    return GetRemoteAccessSessionError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetRemoteAccessSessionError::LimitExceeded(String::from(error_message))
+                    return GetRemoteAccessSessionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetRemoteAccessSessionError::NotFound(String::from(error_message))
+                    return GetRemoteAccessSessionError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetRemoteAccessSessionError::ServiceAccount(String::from(error_message))
+                    return GetRemoteAccessSessionError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRemoteAccessSessionError::Validation(error_message.to_string())
+                    return GetRemoteAccessSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5386,11 +5386,11 @@ impl GetRunError {
             match *error_type {
                 "ArgumentException" => return GetRunError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return GetRunError::LimitExceeded(String::from(error_message))
+                    return GetRunError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetRunError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return GetRunError::ServiceAccount(String::from(error_message))
+                    return GetRunError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => return GetRunError::Validation(error_message.to_string()),
                 _ => {}
@@ -5478,14 +5478,14 @@ impl GetSuiteError {
             match *error_type {
                 "ArgumentException" => return GetSuiteError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return GetSuiteError::LimitExceeded(String::from(error_message))
+                    return GetSuiteError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetSuiteError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return GetSuiteError::ServiceAccount(String::from(error_message))
+                    return GetSuiteError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSuiteError::Validation(error_message.to_string())
+                    return GetSuiteError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5572,11 +5572,11 @@ impl GetTestError {
             match *error_type {
                 "ArgumentException" => return GetTestError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return GetTestError::LimitExceeded(String::from(error_message))
+                    return GetTestError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetTestError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return GetTestError::ServiceAccount(String::from(error_message))
+                    return GetTestError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => return GetTestError::Validation(error_message.to_string()),
                 _ => {}
@@ -5664,14 +5664,14 @@ impl GetUploadError {
             match *error_type {
                 "ArgumentException" => return GetUploadError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return GetUploadError::LimitExceeded(String::from(error_message))
+                    return GetUploadError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetUploadError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return GetUploadError::ServiceAccount(String::from(error_message))
+                    return GetUploadError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUploadError::Validation(error_message.to_string())
+                    return GetUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5755,16 +5755,16 @@ impl GetVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetVPCEConfigurationError::Argument(String::from(error_message))
+                    return GetVPCEConfigurationError::Argument(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetVPCEConfigurationError::NotFound(String::from(error_message))
+                    return GetVPCEConfigurationError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return GetVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    return GetVPCEConfigurationError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetVPCEConfigurationError::Validation(error_message.to_string())
+                    return GetVPCEConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5851,23 +5851,23 @@ impl InstallToRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return InstallToRemoteAccessSessionError::Argument(String::from(error_message))
+                    return InstallToRemoteAccessSessionError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return InstallToRemoteAccessSessionError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return InstallToRemoteAccessSessionError::NotFound(String::from(error_message))
+                    return InstallToRemoteAccessSessionError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
                     return InstallToRemoteAccessSessionError::ServiceAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return InstallToRemoteAccessSessionError::Validation(error_message.to_string())
+                    return InstallToRemoteAccessSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5955,19 +5955,19 @@ impl ListArtifactsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListArtifactsError::Argument(String::from(error_message))
+                    return ListArtifactsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListArtifactsError::LimitExceeded(String::from(error_message))
+                    return ListArtifactsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListArtifactsError::NotFound(String::from(error_message))
+                    return ListArtifactsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListArtifactsError::ServiceAccount(String::from(error_message))
+                    return ListArtifactsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListArtifactsError::Validation(error_message.to_string())
+                    return ListArtifactsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6053,19 +6053,19 @@ impl ListDeviceInstancesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListDeviceInstancesError::Argument(String::from(error_message))
+                    return ListDeviceInstancesError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListDeviceInstancesError::LimitExceeded(String::from(error_message))
+                    return ListDeviceInstancesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListDeviceInstancesError::NotFound(String::from(error_message))
+                    return ListDeviceInstancesError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListDeviceInstancesError::ServiceAccount(String::from(error_message))
+                    return ListDeviceInstancesError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeviceInstancesError::Validation(error_message.to_string())
+                    return ListDeviceInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6153,19 +6153,19 @@ impl ListDevicePoolsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListDevicePoolsError::Argument(String::from(error_message))
+                    return ListDevicePoolsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListDevicePoolsError::LimitExceeded(String::from(error_message))
+                    return ListDevicePoolsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListDevicePoolsError::NotFound(String::from(error_message))
+                    return ListDevicePoolsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListDevicePoolsError::ServiceAccount(String::from(error_message))
+                    return ListDevicePoolsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDevicePoolsError::Validation(error_message.to_string())
+                    return ListDevicePoolsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6251,19 +6251,19 @@ impl ListDevicesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListDevicesError::Argument(String::from(error_message))
+                    return ListDevicesError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListDevicesError::LimitExceeded(String::from(error_message))
+                    return ListDevicesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListDevicesError::NotFound(String::from(error_message))
+                    return ListDevicesError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListDevicesError::ServiceAccount(String::from(error_message))
+                    return ListDevicesError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDevicesError::Validation(error_message.to_string())
+                    return ListDevicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6349,19 +6349,19 @@ impl ListInstanceProfilesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListInstanceProfilesError::Argument(String::from(error_message))
+                    return ListInstanceProfilesError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListInstanceProfilesError::LimitExceeded(String::from(error_message))
+                    return ListInstanceProfilesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListInstanceProfilesError::NotFound(String::from(error_message))
+                    return ListInstanceProfilesError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListInstanceProfilesError::ServiceAccount(String::from(error_message))
+                    return ListInstanceProfilesError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInstanceProfilesError::Validation(error_message.to_string())
+                    return ListInstanceProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6450,14 +6450,14 @@ impl ListJobsError {
             match *error_type {
                 "ArgumentException" => return ListJobsError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return ListJobsError::LimitExceeded(String::from(error_message))
+                    return ListJobsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return ListJobsError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return ListJobsError::ServiceAccount(String::from(error_message))
+                    return ListJobsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string())
+                    return ListJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6543,19 +6543,19 @@ impl ListNetworkProfilesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListNetworkProfilesError::Argument(String::from(error_message))
+                    return ListNetworkProfilesError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListNetworkProfilesError::LimitExceeded(String::from(error_message))
+                    return ListNetworkProfilesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListNetworkProfilesError::NotFound(String::from(error_message))
+                    return ListNetworkProfilesError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListNetworkProfilesError::ServiceAccount(String::from(error_message))
+                    return ListNetworkProfilesError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListNetworkProfilesError::Validation(error_message.to_string())
+                    return ListNetworkProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6645,22 +6645,22 @@ impl ListOfferingPromotionsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListOfferingPromotionsError::Argument(String::from(error_message))
+                    return ListOfferingPromotionsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListOfferingPromotionsError::LimitExceeded(String::from(error_message))
+                    return ListOfferingPromotionsError::LimitExceeded(String::from(error_message));
                 }
                 "NotEligibleException" => {
-                    return ListOfferingPromotionsError::NotEligible(String::from(error_message))
+                    return ListOfferingPromotionsError::NotEligible(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListOfferingPromotionsError::NotFound(String::from(error_message))
+                    return ListOfferingPromotionsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListOfferingPromotionsError::ServiceAccount(String::from(error_message))
+                    return ListOfferingPromotionsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListOfferingPromotionsError::Validation(error_message.to_string())
+                    return ListOfferingPromotionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6751,24 +6751,24 @@ impl ListOfferingTransactionsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListOfferingTransactionsError::Argument(String::from(error_message))
+                    return ListOfferingTransactionsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListOfferingTransactionsError::LimitExceeded(String::from(error_message))
+                    return ListOfferingTransactionsError::LimitExceeded(String::from(error_message));
                 }
                 "NotEligibleException" => {
-                    return ListOfferingTransactionsError::NotEligible(String::from(error_message))
+                    return ListOfferingTransactionsError::NotEligible(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListOfferingTransactionsError::NotFound(String::from(error_message))
+                    return ListOfferingTransactionsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
                     return ListOfferingTransactionsError::ServiceAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListOfferingTransactionsError::Validation(error_message.to_string())
+                    return ListOfferingTransactionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6859,22 +6859,22 @@ impl ListOfferingsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListOfferingsError::Argument(String::from(error_message))
+                    return ListOfferingsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListOfferingsError::LimitExceeded(String::from(error_message))
+                    return ListOfferingsError::LimitExceeded(String::from(error_message));
                 }
                 "NotEligibleException" => {
-                    return ListOfferingsError::NotEligible(String::from(error_message))
+                    return ListOfferingsError::NotEligible(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListOfferingsError::NotFound(String::from(error_message))
+                    return ListOfferingsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListOfferingsError::ServiceAccount(String::from(error_message))
+                    return ListOfferingsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListOfferingsError::Validation(error_message.to_string())
+                    return ListOfferingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6961,19 +6961,19 @@ impl ListProjectsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListProjectsError::Argument(String::from(error_message))
+                    return ListProjectsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListProjectsError::LimitExceeded(String::from(error_message))
+                    return ListProjectsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListProjectsError::NotFound(String::from(error_message))
+                    return ListProjectsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListProjectsError::ServiceAccount(String::from(error_message))
+                    return ListProjectsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string())
+                    return ListProjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7059,21 +7059,21 @@ impl ListRemoteAccessSessionsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListRemoteAccessSessionsError::Argument(String::from(error_message))
+                    return ListRemoteAccessSessionsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListRemoteAccessSessionsError::LimitExceeded(String::from(error_message))
+                    return ListRemoteAccessSessionsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListRemoteAccessSessionsError::NotFound(String::from(error_message))
+                    return ListRemoteAccessSessionsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
                     return ListRemoteAccessSessionsError::ServiceAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListRemoteAccessSessionsError::Validation(error_message.to_string())
+                    return ListRemoteAccessSessionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7162,14 +7162,14 @@ impl ListRunsError {
             match *error_type {
                 "ArgumentException" => return ListRunsError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return ListRunsError::LimitExceeded(String::from(error_message))
+                    return ListRunsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return ListRunsError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return ListRunsError::ServiceAccount(String::from(error_message))
+                    return ListRunsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRunsError::Validation(error_message.to_string())
+                    return ListRunsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7255,19 +7255,19 @@ impl ListSamplesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListSamplesError::Argument(String::from(error_message))
+                    return ListSamplesError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListSamplesError::LimitExceeded(String::from(error_message))
+                    return ListSamplesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListSamplesError::NotFound(String::from(error_message))
+                    return ListSamplesError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListSamplesError::ServiceAccount(String::from(error_message))
+                    return ListSamplesError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListSamplesError::Validation(error_message.to_string())
+                    return ListSamplesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7353,19 +7353,19 @@ impl ListSuitesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListSuitesError::Argument(String::from(error_message))
+                    return ListSuitesError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListSuitesError::LimitExceeded(String::from(error_message))
+                    return ListSuitesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListSuitesError::NotFound(String::from(error_message))
+                    return ListSuitesError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListSuitesError::ServiceAccount(String::from(error_message))
+                    return ListSuitesError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListSuitesError::Validation(error_message.to_string())
+                    return ListSuitesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7452,14 +7452,14 @@ impl ListTestsError {
             match *error_type {
                 "ArgumentException" => return ListTestsError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return ListTestsError::LimitExceeded(String::from(error_message))
+                    return ListTestsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return ListTestsError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return ListTestsError::ServiceAccount(String::from(error_message))
+                    return ListTestsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTestsError::Validation(error_message.to_string())
+                    return ListTestsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7545,19 +7545,19 @@ impl ListUniqueProblemsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListUniqueProblemsError::Argument(String::from(error_message))
+                    return ListUniqueProblemsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListUniqueProblemsError::LimitExceeded(String::from(error_message))
+                    return ListUniqueProblemsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListUniqueProblemsError::NotFound(String::from(error_message))
+                    return ListUniqueProblemsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListUniqueProblemsError::ServiceAccount(String::from(error_message))
+                    return ListUniqueProblemsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUniqueProblemsError::Validation(error_message.to_string())
+                    return ListUniqueProblemsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7645,19 +7645,19 @@ impl ListUploadsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListUploadsError::Argument(String::from(error_message))
+                    return ListUploadsError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListUploadsError::LimitExceeded(String::from(error_message))
+                    return ListUploadsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListUploadsError::NotFound(String::from(error_message))
+                    return ListUploadsError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListUploadsError::ServiceAccount(String::from(error_message))
+                    return ListUploadsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUploadsError::Validation(error_message.to_string())
+                    return ListUploadsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7739,13 +7739,13 @@ impl ListVPCEConfigurationsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListVPCEConfigurationsError::Argument(String::from(error_message))
+                    return ListVPCEConfigurationsError::Argument(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ListVPCEConfigurationsError::ServiceAccount(String::from(error_message))
+                    return ListVPCEConfigurationsError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListVPCEConfigurationsError::Validation(error_message.to_string())
+                    return ListVPCEConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7833,22 +7833,22 @@ impl PurchaseOfferingError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return PurchaseOfferingError::Argument(String::from(error_message))
+                    return PurchaseOfferingError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PurchaseOfferingError::LimitExceeded(String::from(error_message))
+                    return PurchaseOfferingError::LimitExceeded(String::from(error_message));
                 }
                 "NotEligibleException" => {
-                    return PurchaseOfferingError::NotEligible(String::from(error_message))
+                    return PurchaseOfferingError::NotEligible(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PurchaseOfferingError::NotFound(String::from(error_message))
+                    return PurchaseOfferingError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return PurchaseOfferingError::ServiceAccount(String::from(error_message))
+                    return PurchaseOfferingError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PurchaseOfferingError::Validation(error_message.to_string())
+                    return PurchaseOfferingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7937,22 +7937,22 @@ impl RenewOfferingError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RenewOfferingError::Argument(String::from(error_message))
+                    return RenewOfferingError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return RenewOfferingError::LimitExceeded(String::from(error_message))
+                    return RenewOfferingError::LimitExceeded(String::from(error_message));
                 }
                 "NotEligibleException" => {
-                    return RenewOfferingError::NotEligible(String::from(error_message))
+                    return RenewOfferingError::NotEligible(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return RenewOfferingError::NotFound(String::from(error_message))
+                    return RenewOfferingError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return RenewOfferingError::ServiceAccount(String::from(error_message))
+                    return RenewOfferingError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RenewOfferingError::Validation(error_message.to_string())
+                    return RenewOfferingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8041,22 +8041,22 @@ impl ScheduleRunError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ScheduleRunError::Argument(String::from(error_message))
+                    return ScheduleRunError::Argument(String::from(error_message));
                 }
                 "IdempotencyException" => {
-                    return ScheduleRunError::Idempotency(String::from(error_message))
+                    return ScheduleRunError::Idempotency(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ScheduleRunError::LimitExceeded(String::from(error_message))
+                    return ScheduleRunError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ScheduleRunError::NotFound(String::from(error_message))
+                    return ScheduleRunError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return ScheduleRunError::ServiceAccount(String::from(error_message))
+                    return ScheduleRunError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ScheduleRunError::Validation(error_message.to_string())
+                    return ScheduleRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8143,19 +8143,19 @@ impl StopRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return StopRemoteAccessSessionError::Argument(String::from(error_message))
+                    return StopRemoteAccessSessionError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StopRemoteAccessSessionError::LimitExceeded(String::from(error_message))
+                    return StopRemoteAccessSessionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StopRemoteAccessSessionError::NotFound(String::from(error_message))
+                    return StopRemoteAccessSessionError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return StopRemoteAccessSessionError::ServiceAccount(String::from(error_message))
+                    return StopRemoteAccessSessionError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopRemoteAccessSessionError::Validation(error_message.to_string())
+                    return StopRemoteAccessSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8244,11 +8244,11 @@ impl StopRunError {
             match *error_type {
                 "ArgumentException" => return StopRunError::Argument(String::from(error_message)),
                 "LimitExceededException" => {
-                    return StopRunError::LimitExceeded(String::from(error_message))
+                    return StopRunError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return StopRunError::NotFound(String::from(error_message)),
                 "ServiceAccountException" => {
-                    return StopRunError::ServiceAccount(String::from(error_message))
+                    return StopRunError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => return StopRunError::Validation(error_message.to_string()),
                 _ => {}
@@ -8335,19 +8335,19 @@ impl UpdateDeviceInstanceError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateDeviceInstanceError::Argument(String::from(error_message))
+                    return UpdateDeviceInstanceError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateDeviceInstanceError::LimitExceeded(String::from(error_message))
+                    return UpdateDeviceInstanceError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDeviceInstanceError::NotFound(String::from(error_message))
+                    return UpdateDeviceInstanceError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return UpdateDeviceInstanceError::ServiceAccount(String::from(error_message))
+                    return UpdateDeviceInstanceError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDeviceInstanceError::Validation(error_message.to_string())
+                    return UpdateDeviceInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8435,19 +8435,19 @@ impl UpdateDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateDevicePoolError::Argument(String::from(error_message))
+                    return UpdateDevicePoolError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateDevicePoolError::LimitExceeded(String::from(error_message))
+                    return UpdateDevicePoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDevicePoolError::NotFound(String::from(error_message))
+                    return UpdateDevicePoolError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return UpdateDevicePoolError::ServiceAccount(String::from(error_message))
+                    return UpdateDevicePoolError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDevicePoolError::Validation(error_message.to_string())
+                    return UpdateDevicePoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8533,19 +8533,19 @@ impl UpdateInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateInstanceProfileError::Argument(String::from(error_message))
+                    return UpdateInstanceProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateInstanceProfileError::LimitExceeded(String::from(error_message))
+                    return UpdateInstanceProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateInstanceProfileError::NotFound(String::from(error_message))
+                    return UpdateInstanceProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return UpdateInstanceProfileError::ServiceAccount(String::from(error_message))
+                    return UpdateInstanceProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateInstanceProfileError::Validation(error_message.to_string())
+                    return UpdateInstanceProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8633,19 +8633,19 @@ impl UpdateNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateNetworkProfileError::Argument(String::from(error_message))
+                    return UpdateNetworkProfileError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateNetworkProfileError::LimitExceeded(String::from(error_message))
+                    return UpdateNetworkProfileError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateNetworkProfileError::NotFound(String::from(error_message))
+                    return UpdateNetworkProfileError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return UpdateNetworkProfileError::ServiceAccount(String::from(error_message))
+                    return UpdateNetworkProfileError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateNetworkProfileError::Validation(error_message.to_string())
+                    return UpdateNetworkProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8733,19 +8733,19 @@ impl UpdateProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateProjectError::Argument(String::from(error_message))
+                    return UpdateProjectError::Argument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateProjectError::LimitExceeded(String::from(error_message))
+                    return UpdateProjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateProjectError::NotFound(String::from(error_message))
+                    return UpdateProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return UpdateProjectError::ServiceAccount(String::from(error_message))
+                    return UpdateProjectError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string())
+                    return UpdateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8831,21 +8831,21 @@ impl UpdateVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateVPCEConfigurationError::Argument(String::from(error_message))
+                    return UpdateVPCEConfigurationError::Argument(String::from(error_message));
                 }
                 "InvalidOperationException" => {
                     return UpdateVPCEConfigurationError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateVPCEConfigurationError::NotFound(String::from(error_message))
+                    return UpdateVPCEConfigurationError::NotFound(String::from(error_message));
                 }
                 "ServiceAccountException" => {
-                    return UpdateVPCEConfigurationError::ServiceAccount(String::from(error_message))
+                    return UpdateVPCEConfigurationError::ServiceAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateVPCEConfigurationError::Validation(error_message.to_string())
+                    return UpdateVPCEConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

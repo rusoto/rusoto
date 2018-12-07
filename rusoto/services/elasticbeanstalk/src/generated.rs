@@ -10355,7 +10355,7 @@ impl AbortEnvironmentUpdateError {
                     "InsufficientPrivilegesException" => {
                         return AbortEnvironmentUpdateError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10443,12 +10443,12 @@ impl ApplyEnvironmentManagedActionError {
                     "ElasticBeanstalkServiceException" => {
                         return ApplyEnvironmentManagedActionError::ElasticBeanstalkService(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ManagedActionInvalidStateException" => {
                         return ApplyEnvironmentManagedActionError::ManagedActionInvalidState(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10615,12 +10615,12 @@ impl ComposeEnvironmentsError {
                     "InsufficientPrivilegesException" => {
                         return ComposeEnvironmentsError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyEnvironmentsException" => {
                         return ComposeEnvironmentsError::TooManyEnvironments(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10707,7 +10707,7 @@ impl CreateApplicationError {
                     "TooManyApplicationsException" => {
                         return CreateApplicationError::TooManyApplications(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10801,27 +10801,27 @@ impl CreateApplicationVersionError {
                     "CodeBuildNotInServiceRegionException" => {
                         return CreateApplicationVersionError::CodeBuildNotInServiceRegion(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InsufficientPrivilegesException" => {
                         return CreateApplicationVersionError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "S3LocationNotInServiceRegionException" => {
                         return CreateApplicationVersionError::S3LocationNotInServiceRegion(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyApplicationVersionsException" => {
                         return CreateApplicationVersionError::TooManyApplicationVersions(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyApplicationsException" => {
                         return CreateApplicationVersionError::TooManyApplications(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10915,17 +10915,17 @@ impl CreateConfigurationTemplateError {
                     "InsufficientPrivilegesException" => {
                         return CreateConfigurationTemplateError::InsufficientPrivileges(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyBucketsException" => {
                         return CreateConfigurationTemplateError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyConfigurationTemplatesException" => {
                         return CreateConfigurationTemplateError::TooManyConfigurationTemplates(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11015,12 +11015,12 @@ impl CreateEnvironmentError {
                     "InsufficientPrivilegesException" => {
                         return CreateEnvironmentError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyEnvironmentsException" => {
                         return CreateEnvironmentError::TooManyEnvironments(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11111,17 +11111,17 @@ impl CreatePlatformVersionError {
                     "ElasticBeanstalkServiceException" => {
                         return CreatePlatformVersionError::ElasticBeanstalkService(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientPrivilegesException" => {
                         return CreatePlatformVersionError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyPlatformsException" => {
                         return CreatePlatformVersionError::TooManyPlatforms(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11213,17 +11213,17 @@ impl CreateStorageLocationError {
                     "InsufficientPrivilegesException" => {
                         return CreateStorageLocationError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "S3SubscriptionRequiredException" => {
                         return CreateStorageLocationError::S3SubscriptionRequired(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyBucketsException" => {
                         return CreateStorageLocationError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11311,7 +11311,7 @@ impl DeleteApplicationError {
                     "OperationInProgressFailure" => {
                         return DeleteApplicationError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11403,22 +11403,22 @@ impl DeleteApplicationVersionError {
                     "InsufficientPrivilegesException" => {
                         return DeleteApplicationVersionError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressFailure" => {
                         return DeleteApplicationVersionError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "S3LocationNotInServiceRegionException" => {
                         return DeleteApplicationVersionError::S3LocationNotInServiceRegion(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SourceBundleDeletionFailure" => {
                         return DeleteApplicationVersionError::SourceBundleDeletion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11507,7 +11507,7 @@ impl DeleteConfigurationTemplateError {
                     "OperationInProgressFailure" => {
                         return DeleteConfigurationTemplateError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11677,22 +11677,22 @@ impl DeletePlatformVersionError {
                     "ElasticBeanstalkServiceException" => {
                         return DeletePlatformVersionError::ElasticBeanstalkService(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientPrivilegesException" => {
                         return DeletePlatformVersionError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressFailure" => {
                         return DeletePlatformVersionError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PlatformVersionStillReferencedException" => {
                         return DeletePlatformVersionError::PlatformVersionStillReferenced(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11781,7 +11781,7 @@ impl DescribeAccountAttributesError {
                     "InsufficientPrivilegesException" => {
                         return DescribeAccountAttributesError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12023,7 +12023,7 @@ impl DescribeConfigurationOptionsError {
                     "TooManyBucketsException" => {
                         return DescribeConfigurationOptionsError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12109,7 +12109,7 @@ impl DescribeConfigurationSettingsError {
                     "TooManyBucketsException" => {
                         return DescribeConfigurationSettingsError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12197,12 +12197,12 @@ impl DescribeEnvironmentHealthError {
                     "ElasticBeanstalkServiceException" => {
                         return DescribeEnvironmentHealthError::ElasticBeanstalkService(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidRequestException" => {
                         return DescribeEnvironmentHealthError::InvalidRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12291,7 +12291,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
                     "ElasticBeanstalkServiceException" => {
                         return DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12379,7 +12379,7 @@ impl DescribeEnvironmentManagedActionsError {
                     "ElasticBeanstalkServiceException" => {
                         return DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12465,7 +12465,7 @@ impl DescribeEnvironmentResourcesError {
                     "InsufficientPrivilegesException" => {
                         return DescribeEnvironmentResourcesError::InsufficientPrivileges(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12707,12 +12707,12 @@ impl DescribeInstancesHealthError {
                     "ElasticBeanstalkServiceException" => {
                         return DescribeInstancesHealthError::ElasticBeanstalkService(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidRequestException" => {
                         return DescribeInstancesHealthError::InvalidRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12801,12 +12801,12 @@ impl DescribePlatformVersionError {
                     "ElasticBeanstalkServiceException" => {
                         return DescribePlatformVersionError::ElasticBeanstalkService(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientPrivilegesException" => {
                         return DescribePlatformVersionError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12973,12 +12973,12 @@ impl ListPlatformVersionsError {
                     "ElasticBeanstalkServiceException" => {
                         return ListPlatformVersionsError::ElasticBeanstalkService(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientPrivilegesException" => {
                         return ListPlatformVersionsError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13069,17 +13069,17 @@ impl ListTagsForResourceError {
                     "InsufficientPrivilegesException" => {
                         return ListTagsForResourceError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFoundException" => {
                         return ListTagsForResourceError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceTypeNotSupportedException" => {
                         return ListTagsForResourceError::ResourceTypeNotSupported(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13167,7 +13167,7 @@ impl RebuildEnvironmentError {
                     "InsufficientPrivilegesException" => {
                         return RebuildEnvironmentError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13563,7 +13563,7 @@ impl TerminateEnvironmentError {
                     "InsufficientPrivilegesException" => {
                         return TerminateEnvironmentError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13727,7 +13727,7 @@ impl UpdateApplicationResourceLifecycleError {
                     "InsufficientPrivilegesException" => {
                         return UpdateApplicationResourceLifecycleError::InsufficientPrivileges(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13893,12 +13893,12 @@ impl UpdateConfigurationTemplateError {
                     "InsufficientPrivilegesException" => {
                         return UpdateConfigurationTemplateError::InsufficientPrivileges(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyBucketsException" => {
                         return UpdateConfigurationTemplateError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13987,12 +13987,12 @@ impl UpdateEnvironmentError {
                     "InsufficientPrivilegesException" => {
                         return UpdateEnvironmentError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyBucketsException" => {
                         return UpdateEnvironmentError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14087,27 +14087,27 @@ impl UpdateTagsForResourceError {
                     "InsufficientPrivilegesException" => {
                         return UpdateTagsForResourceError::InsufficientPrivileges(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressFailure" => {
                         return UpdateTagsForResourceError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFoundException" => {
                         return UpdateTagsForResourceError::ResourceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceTypeNotSupportedException" => {
                         return UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTagsException" => {
                         return UpdateTagsForResourceError::TooManyTags(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14199,12 +14199,12 @@ impl ValidateConfigurationSettingsError {
                     "InsufficientPrivilegesException" => {
                         return ValidateConfigurationSettingsError::InsufficientPrivileges(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyBucketsException" => {
                         return ValidateConfigurationSettingsError::TooManyBuckets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

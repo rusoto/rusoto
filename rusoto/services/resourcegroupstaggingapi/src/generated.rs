@@ -242,19 +242,19 @@ impl GetResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetResourcesError::InternalService(String::from(error_message))
+                    return GetResourcesError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetResourcesError::InvalidParameter(String::from(error_message))
+                    return GetResourcesError::InvalidParameter(String::from(error_message));
                 }
                 "PaginationTokenExpiredException" => {
-                    return GetResourcesError::PaginationTokenExpired(String::from(error_message))
+                    return GetResourcesError::PaginationTokenExpired(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetResourcesError::Throttled(String::from(error_message))
+                    return GetResourcesError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResourcesError::Validation(error_message.to_string())
+                    return GetResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -340,19 +340,19 @@ impl GetTagKeysError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetTagKeysError::InternalService(String::from(error_message))
+                    return GetTagKeysError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetTagKeysError::InvalidParameter(String::from(error_message))
+                    return GetTagKeysError::InvalidParameter(String::from(error_message));
                 }
                 "PaginationTokenExpiredException" => {
-                    return GetTagKeysError::PaginationTokenExpired(String::from(error_message))
+                    return GetTagKeysError::PaginationTokenExpired(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetTagKeysError::Throttled(String::from(error_message))
+                    return GetTagKeysError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTagKeysError::Validation(error_message.to_string())
+                    return GetTagKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -438,19 +438,19 @@ impl GetTagValuesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetTagValuesError::InternalService(String::from(error_message))
+                    return GetTagValuesError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetTagValuesError::InvalidParameter(String::from(error_message))
+                    return GetTagValuesError::InvalidParameter(String::from(error_message));
                 }
                 "PaginationTokenExpiredException" => {
-                    return GetTagValuesError::PaginationTokenExpired(String::from(error_message))
+                    return GetTagValuesError::PaginationTokenExpired(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetTagValuesError::Throttled(String::from(error_message))
+                    return GetTagValuesError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTagValuesError::Validation(error_message.to_string())
+                    return GetTagValuesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -534,16 +534,16 @@ impl TagResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return TagResourcesError::InternalService(String::from(error_message))
+                    return TagResourcesError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return TagResourcesError::InvalidParameter(String::from(error_message))
+                    return TagResourcesError::InvalidParameter(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return TagResourcesError::Throttled(String::from(error_message))
+                    return TagResourcesError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourcesError::Validation(error_message.to_string())
+                    return TagResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -626,16 +626,16 @@ impl UntagResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return UntagResourcesError::InternalService(String::from(error_message))
+                    return UntagResourcesError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UntagResourcesError::InvalidParameter(String::from(error_message))
+                    return UntagResourcesError::InvalidParameter(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return UntagResourcesError::Throttled(String::from(error_message))
+                    return UntagResourcesError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourcesError::Validation(error_message.to_string())
+                    return UntagResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -285,16 +285,16 @@ impl AssociateMemberAccountError {
 
             match *error_type {
                 "InternalException" => {
-                    return AssociateMemberAccountError::Internal(String::from(error_message))
+                    return AssociateMemberAccountError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AssociateMemberAccountError::InvalidInput(String::from(error_message))
+                    return AssociateMemberAccountError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AssociateMemberAccountError::LimitExceeded(String::from(error_message))
+                    return AssociateMemberAccountError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateMemberAccountError::Validation(error_message.to_string())
+                    return AssociateMemberAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -381,19 +381,19 @@ impl AssociateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AssociateS3ResourcesError::AccessDenied(String::from(error_message))
+                    return AssociateS3ResourcesError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return AssociateS3ResourcesError::Internal(String::from(error_message))
+                    return AssociateS3ResourcesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AssociateS3ResourcesError::InvalidInput(String::from(error_message))
+                    return AssociateS3ResourcesError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AssociateS3ResourcesError::LimitExceeded(String::from(error_message))
+                    return AssociateS3ResourcesError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateS3ResourcesError::Validation(error_message.to_string())
+                    return AssociateS3ResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -477,13 +477,13 @@ impl DisassociateMemberAccountError {
 
             match *error_type {
                 "InternalException" => {
-                    return DisassociateMemberAccountError::Internal(String::from(error_message))
+                    return DisassociateMemberAccountError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DisassociateMemberAccountError::InvalidInput(String::from(error_message))
+                    return DisassociateMemberAccountError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateMemberAccountError::Validation(error_message.to_string())
+                    return DisassociateMemberAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -567,16 +567,16 @@ impl DisassociateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DisassociateS3ResourcesError::AccessDenied(String::from(error_message))
+                    return DisassociateS3ResourcesError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return DisassociateS3ResourcesError::Internal(String::from(error_message))
+                    return DisassociateS3ResourcesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DisassociateS3ResourcesError::InvalidInput(String::from(error_message))
+                    return DisassociateS3ResourcesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateS3ResourcesError::Validation(error_message.to_string())
+                    return DisassociateS3ResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -659,13 +659,13 @@ impl ListMemberAccountsError {
 
             match *error_type {
                 "InternalException" => {
-                    return ListMemberAccountsError::Internal(String::from(error_message))
+                    return ListMemberAccountsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListMemberAccountsError::InvalidInput(String::from(error_message))
+                    return ListMemberAccountsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListMemberAccountsError::Validation(error_message.to_string())
+                    return ListMemberAccountsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -749,16 +749,16 @@ impl ListS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListS3ResourcesError::AccessDenied(String::from(error_message))
+                    return ListS3ResourcesError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListS3ResourcesError::Internal(String::from(error_message))
+                    return ListS3ResourcesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListS3ResourcesError::InvalidInput(String::from(error_message))
+                    return ListS3ResourcesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListS3ResourcesError::Validation(error_message.to_string())
+                    return ListS3ResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -841,16 +841,16 @@ impl UpdateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateS3ResourcesError::AccessDenied(String::from(error_message))
+                    return UpdateS3ResourcesError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return UpdateS3ResourcesError::Internal(String::from(error_message))
+                    return UpdateS3ResourcesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateS3ResourcesError::InvalidInput(String::from(error_message))
+                    return UpdateS3ResourcesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateS3ResourcesError::Validation(error_message.to_string())
+                    return UpdateS3ResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

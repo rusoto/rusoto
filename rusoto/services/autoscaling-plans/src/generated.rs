@@ -395,16 +395,16 @@ impl CreateScalingPlanError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return CreateScalingPlanError::ConcurrentUpdate(String::from(error_message))
+                    return CreateScalingPlanError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateScalingPlanError::InternalService(String::from(error_message))
+                    return CreateScalingPlanError::InternalService(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateScalingPlanError::LimitExceeded(String::from(error_message))
+                    return CreateScalingPlanError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateScalingPlanError::Validation(error_message.to_string())
+                    return CreateScalingPlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -489,16 +489,16 @@ impl DeleteScalingPlanError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeleteScalingPlanError::ConcurrentUpdate(String::from(error_message))
+                    return DeleteScalingPlanError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteScalingPlanError::InternalService(String::from(error_message))
+                    return DeleteScalingPlanError::InternalService(String::from(error_message));
                 }
                 "ObjectNotFoundException" => {
-                    return DeleteScalingPlanError::ObjectNotFound(String::from(error_message))
+                    return DeleteScalingPlanError::ObjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteScalingPlanError::Validation(error_message.to_string())
+                    return DeleteScalingPlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -585,20 +585,20 @@ impl DescribeScalingPlanResourcesError {
                 "ConcurrentUpdateException" => {
                     return DescribeScalingPlanResourcesError::ConcurrentUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DescribeScalingPlanResourcesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeScalingPlanResourcesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeScalingPlanResourcesError::Validation(error_message.to_string())
+                    return DescribeScalingPlanResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -683,16 +683,16 @@ impl DescribeScalingPlansError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScalingPlansError::ConcurrentUpdate(String::from(error_message))
+                    return DescribeScalingPlansError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DescribeScalingPlansError::InternalService(String::from(error_message))
+                    return DescribeScalingPlansError::InternalService(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScalingPlansError::InvalidNextToken(String::from(error_message))
+                    return DescribeScalingPlansError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeScalingPlansError::Validation(error_message.to_string())
+                    return DescribeScalingPlansError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -777,16 +777,16 @@ impl UpdateScalingPlanError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return UpdateScalingPlanError::ConcurrentUpdate(String::from(error_message))
+                    return UpdateScalingPlanError::ConcurrentUpdate(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateScalingPlanError::InternalService(String::from(error_message))
+                    return UpdateScalingPlanError::InternalService(String::from(error_message));
                 }
                 "ObjectNotFoundException" => {
-                    return UpdateScalingPlanError::ObjectNotFound(String::from(error_message))
+                    return UpdateScalingPlanError::ObjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateScalingPlanError::Validation(error_message.to_string())
+                    return UpdateScalingPlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

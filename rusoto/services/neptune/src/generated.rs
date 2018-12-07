@@ -11566,22 +11566,22 @@ impl AddRoleToDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterRoleAlreadyExists" => {
                         return AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBClusterRoleQuotaExceeded" => {
                         return AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11671,12 +11671,12 @@ impl AddSourceIdentifierToSubscriptionError {
                     "SourceNotFound" => {
                         return AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionNotFound" => {
                         return AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11767,17 +11767,17 @@ impl AddTagsToResourceError {
                     "DBClusterNotFoundFault" => {
                         return AddTagsToResourceError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceNotFound" => {
                         return AddTagsToResourceError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSnapshotNotFound" => {
                         return AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11865,7 +11865,7 @@ impl ApplyPendingMaintenanceActionError {
                     "ResourceNotFoundFault" => {
                         return ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11955,17 +11955,17 @@ impl CopyDBClusterParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBParameterGroupNotFound" => {
                         return CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12067,32 +12067,32 @@ impl CopyDBClusterSnapshotError {
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotQuotaExceeded" => {
                         return CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12187,17 +12187,17 @@ impl CopyDBParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBParameterGroupNotFound" => {
                         return CopyDBParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12313,77 +12313,77 @@ impl CreateDBClusterError {
                     "DBClusterAlreadyExistsFault" => {
                         return CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterNotFoundFault" => {
                         return CreateDBClusterError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBClusterQuotaExceededFault" => {
                         return CreateDBClusterError::DBClusterQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceNotFound" => {
                         return CreateDBClusterError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientStorageClusterCapacity" => {
                         return CreateDBClusterError::InsufficientStorageClusterCapacityFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return CreateDBClusterError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBInstanceState" => {
                         return CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return CreateDBClusterError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return CreateDBClusterError::KMSKeyNotAccessibleFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StorageQuotaExceeded" => {
                         return CreateDBClusterError::StorageQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12577,27 +12577,27 @@ impl CreateDBClusterSnapshotError {
                     "DBClusterNotFoundFault" => {
                         return CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return CreateDBClusterSnapshotError::InvalidDBClusterStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotQuotaExceeded" => {
                         return CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12721,92 +12721,92 @@ impl CreateDBInstanceError {
                     "AuthorizationNotFound" => {
                         return CreateDBInstanceError::AuthorizationNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterNotFoundFault" => {
                         return CreateDBInstanceError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceAlreadyExists" => {
                         return CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBParameterGroupNotFound" => {
                         return CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSecurityGroupNotFound" => {
                         return CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DomainNotFoundFault" => {
                         return CreateDBInstanceError::DomainNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InstanceQuotaExceeded" => {
                         return CreateDBInstanceError::InstanceQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return CreateDBInstanceError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return CreateDBInstanceError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OptionGroupNotFoundFault" => {
                         return CreateDBInstanceError::OptionGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "StorageQuotaExceeded" => {
                         return CreateDBInstanceError::StorageQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StorageTypeNotSupported" => {
                         return CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12909,12 +12909,12 @@ impl CreateDBParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13009,27 +13009,27 @@ impl CreateDBSubnetGroupError {
                     "DBSubnetGroupAlreadyExists" => {
                         return CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetGroupQuotaExceeded" => {
                         return CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetQuotaExceededFault" => {
                         return CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return CreateDBSubnetGroupError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13130,37 +13130,37 @@ impl CreateEventSubscriptionError {
                     "EventSubscriptionQuotaExceeded" => {
                         return CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SNSInvalidTopic" => {
                         return CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSNoAuthorization" => {
                         return CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSTopicArnNotFound" => {
                         return CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SourceNotFound" => {
                         return CreateEventSubscriptionError::SourceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubscriptionAlreadyExist" => {
                         return CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionCategoryNotFound" => {
                         return CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13260,27 +13260,27 @@ impl DeleteDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return DeleteDBClusterError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return DeleteDBClusterError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotQuotaExceeded" => {
                         return DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13370,12 +13370,12 @@ impl DeleteDBClusterParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBParameterGroupState" => {
                         return DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13466,12 +13466,12 @@ impl DeleteDBClusterSnapshotError {
                     "DBClusterSnapshotNotFoundFault" => {
                         return DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13566,27 +13566,27 @@ impl DeleteDBInstanceError {
                     "DBInstanceNotFound" => {
                         return DeleteDBInstanceError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSnapshotAlreadyExists" => {
                         return DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBClusterStateFault" => {
                         return DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBInstanceState" => {
                         return DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotQuotaExceeded" => {
                         return DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13676,12 +13676,12 @@ impl DeleteDBParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBParameterGroupState" => {
                         return DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13772,17 +13772,17 @@ impl DeleteDBSubnetGroupError {
                     "DBSubnetGroupNotFoundFault" => {
                         return DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBSubnetStateFault" => {
                         return DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13871,12 +13871,12 @@ impl DeleteEventSubscriptionError {
                     "InvalidEventSubscriptionState" => {
                         return DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionNotFound" => {
                         return DeleteEventSubscriptionError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13963,7 +13963,7 @@ impl DescribeDBClusterParameterGroupsError {
                     "DBParameterGroupNotFound" => {
                         return DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14051,7 +14051,7 @@ impl DescribeDBClusterParametersError {
                     "DBParameterGroupNotFound" => {
                         return DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14220,7 +14220,7 @@ impl DescribeDBClusterSnapshotsError {
                     "DBClusterSnapshotNotFoundFault" => {
                         return DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14306,7 +14306,7 @@ impl DescribeDBClustersError {
                     "DBClusterNotFoundFault" => {
                         return DescribeDBClustersError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14470,7 +14470,7 @@ impl DescribeDBInstancesError {
                     "DBInstanceNotFound" => {
                         return DescribeDBInstancesError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14556,7 +14556,7 @@ impl DescribeDBParameterGroupsError {
                     "DBParameterGroupNotFound" => {
                         return DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14642,7 +14642,7 @@ impl DescribeDBParametersError {
                     "DBParameterGroupNotFound" => {
                         return DescribeDBParametersError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14728,7 +14728,7 @@ impl DescribeDBSubnetGroupsError {
                     "DBSubnetGroupNotFoundFault" => {
                         return DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15047,7 +15047,7 @@ impl DescribeEventSubscriptionsError {
                     "SubscriptionNotFound" => {
                         return DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15287,7 +15287,7 @@ impl DescribePendingMaintenanceActionsError {
                     "ResourceNotFoundFault" => {
                         return DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15463,17 +15463,17 @@ impl FailoverDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return FailoverDBClusterError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBClusterStateFault" => {
                         return FailoverDBClusterError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBInstanceState" => {
                         return FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15565,17 +15565,17 @@ impl ListTagsForResourceError {
                     "DBClusterNotFoundFault" => {
                         return ListTagsForResourceError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceNotFound" => {
                         return ListTagsForResourceError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSnapshotNotFound" => {
                         return ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15683,57 +15683,57 @@ impl ModifyDBClusterError {
                     "DBClusterAlreadyExistsFault" => {
                         return ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterNotFoundFault" => {
                         return ModifyDBClusterError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBClusterStateFault" => {
                         return ModifyDBClusterError::InvalidDBClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBInstanceState" => {
                         return ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBSecurityGroupState" => {
                         return ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return ModifyDBClusterError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StorageQuotaExceeded" => {
                         return ModifyDBClusterError::StorageQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15829,12 +15829,12 @@ impl ModifyDBClusterParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBParameterGroupState" => {
                         return ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16046,82 +16046,82 @@ impl ModifyDBInstanceError {
                     "AuthorizationNotFound" => {
                         return ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CertificateNotFound" => {
                         return ModifyDBInstanceError::CertificateNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceAlreadyExists" => {
                         return ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceNotFound" => {
                         return ModifyDBInstanceError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBParameterGroupNotFound" => {
                         return ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSecurityGroupNotFound" => {
                         return ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBUpgradeDependencyFailure" => {
                         return ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DomainNotFoundFault" => {
                         return ModifyDBInstanceError::DomainNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBInstanceState" => {
                         return ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBSecurityGroupState" => {
                         return ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OptionGroupNotFoundFault" => {
                         return ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "StorageQuotaExceeded" => {
                         return ModifyDBInstanceError::StorageQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StorageTypeNotSupported" => {
                         return ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16222,12 +16222,12 @@ impl ModifyDBParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBParameterGroupState" => {
                         return ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16322,27 +16322,27 @@ impl ModifyDBSubnetGroupError {
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSubnetQuotaExceededFault" => {
                         return ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return ModifyDBSubnetGroupError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetAlreadyInUse" => {
                         return ModifyDBSubnetGroupError::SubnetAlreadyInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16441,32 +16441,32 @@ impl ModifyEventSubscriptionError {
                     "EventSubscriptionQuotaExceeded" => {
                         return ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SNSInvalidTopic" => {
                         return ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSNoAuthorization" => {
                         return ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSTopicArnNotFound" => {
                         return ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubscriptionCategoryNotFound" => {
                         return ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionNotFound" => {
                         return ModifyEventSubscriptionError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16559,12 +16559,12 @@ impl PromoteReadReplicaDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16653,12 +16653,12 @@ impl RebootDBInstanceError {
                     "DBInstanceNotFound" => {
                         return RebootDBInstanceError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDBInstanceState" => {
                         return RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16747,17 +16747,17 @@ impl RemoveRoleFromDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBClusterRoleNotFound" => {
                         return RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
                         return RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16934,17 +16934,17 @@ impl RemoveTagsFromResourceError {
                     "DBClusterNotFoundFault" => {
                         return RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBInstanceNotFound" => {
                         return RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DBSnapshotNotFound" => {
                         return RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17034,12 +17034,12 @@ impl ResetDBClusterParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBParameterGroupState" => {
                         return ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -17130,12 +17130,12 @@ impl ResetDBParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidDBParameterGroupState" => {
                         return ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }

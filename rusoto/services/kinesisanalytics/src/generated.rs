@@ -1239,27 +1239,27 @@ impl AddApplicationCloudWatchLoggingOptionError {
                 "ConcurrentModificationException" => {
                     return AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArgumentException" => {
                     return AddApplicationCloudWatchLoggingOptionError::InvalidArgument(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceInUseException" => {
                     return AddApplicationCloudWatchLoggingOptionError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return AddApplicationCloudWatchLoggingOptionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1349,24 +1349,24 @@ impl AddApplicationInputError {
 
             match *error_type {
                 "CodeValidationException" => {
-                    return AddApplicationInputError::CodeValidation(String::from(error_message))
+                    return AddApplicationInputError::CodeValidation(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return AddApplicationInputError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationInputError::InvalidArgument(String::from(error_message))
+                    return AddApplicationInputError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return AddApplicationInputError::ResourceInUse(String::from(error_message))
+                    return AddApplicationInputError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddApplicationInputError::ResourceNotFound(String::from(error_message))
+                    return AddApplicationInputError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddApplicationInputError::Validation(error_message.to_string())
+                    return AddApplicationInputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1459,27 +1459,27 @@ impl AddApplicationInputProcessingConfigurationError {
                 "ConcurrentModificationException" => {
                     return AddApplicationInputProcessingConfigurationError::ConcurrentModification(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArgumentException" => {
                     return AddApplicationInputProcessingConfigurationError::InvalidArgument(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceInUseException" => {
                     return AddApplicationInputProcessingConfigurationError::ResourceInUse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationInputProcessingConfigurationError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return AddApplicationInputProcessingConfigurationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1573,19 +1573,19 @@ impl AddApplicationOutputError {
                 "ConcurrentModificationException" => {
                     return AddApplicationOutputError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationOutputError::InvalidArgument(String::from(error_message))
+                    return AddApplicationOutputError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return AddApplicationOutputError::ResourceInUse(String::from(error_message))
+                    return AddApplicationOutputError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddApplicationOutputError::ResourceNotFound(String::from(error_message))
+                    return AddApplicationOutputError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddApplicationOutputError::Validation(error_message.to_string())
+                    return AddApplicationOutputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1675,27 +1675,27 @@ impl AddApplicationReferenceDataSourceError {
                 "ConcurrentModificationException" => {
                     return AddApplicationReferenceDataSourceError::ConcurrentModification(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArgumentException" => {
                     return AddApplicationReferenceDataSourceError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return AddApplicationReferenceDataSourceError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationReferenceDataSourceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AddApplicationReferenceDataSourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1783,19 +1783,19 @@ impl CreateApplicationError {
 
             match *error_type {
                 "CodeValidationException" => {
-                    return CreateApplicationError::CodeValidation(String::from(error_message))
+                    return CreateApplicationError::CodeValidation(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return CreateApplicationError::InvalidArgument(String::from(error_message))
+                    return CreateApplicationError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateApplicationError::LimitExceeded(String::from(error_message))
+                    return CreateApplicationError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateApplicationError::ResourceInUse(String::from(error_message))
+                    return CreateApplicationError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string())
+                    return CreateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1883,16 +1883,16 @@ impl DeleteApplicationError {
                 "ConcurrentModificationException" => {
                     return DeleteApplicationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteApplicationError::ResourceInUse(String::from(error_message))
+                    return DeleteApplicationError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteApplicationError::ResourceNotFound(String::from(error_message))
+                    return DeleteApplicationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteApplicationError::Validation(error_message.to_string())
+                    return DeleteApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1983,27 +1983,27 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
                 "ConcurrentModificationException" => {
                     return DeleteApplicationCloudWatchLoggingOptionError::ConcurrentModification(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArgumentException" => {
                     return DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceInUseException" => {
                     return DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeleteApplicationCloudWatchLoggingOptionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2199,23 +2199,23 @@ impl DeleteApplicationOutputError {
                 "ConcurrentModificationException" => {
                     return DeleteApplicationOutputError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
                     return DeleteApplicationOutputError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteApplicationOutputError::ResourceInUse(String::from(error_message))
+                    return DeleteApplicationOutputError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationOutputError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteApplicationOutputError::Validation(error_message.to_string())
+                    return DeleteApplicationOutputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2305,27 +2305,27 @@ impl DeleteApplicationReferenceDataSourceError {
                 "ConcurrentModificationException" => {
                     return DeleteApplicationReferenceDataSourceError::ConcurrentModification(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArgumentException" => {
                     return DeleteApplicationReferenceDataSourceError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return DeleteApplicationReferenceDataSourceError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationReferenceDataSourceError::ResourceNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeleteApplicationReferenceDataSourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2407,10 +2407,10 @@ impl DescribeApplicationError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeApplicationError::ResourceNotFound(String::from(error_message))
+                    return DescribeApplicationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeApplicationError::Validation(error_message.to_string())
+                    return DescribeApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2495,23 +2495,23 @@ impl DiscoverInputSchemaError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return DiscoverInputSchemaError::InvalidArgument(String::from(error_message))
+                    return DiscoverInputSchemaError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceProvisionedThroughputExceededException" => {
                     return DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServiceUnavailableException" => {
-                    return DiscoverInputSchemaError::ServiceUnavailable(String::from(error_message))
+                    return DiscoverInputSchemaError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnableToDetectSchemaException" => {
                     return DiscoverInputSchemaError::UnableToDetectSchema(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DiscoverInputSchemaError::Validation(error_message.to_string())
+                    return DiscoverInputSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2591,7 +2591,7 @@ impl ListApplicationsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListApplicationsError::Validation(error_message.to_string())
+                    return ListApplicationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2675,19 +2675,19 @@ impl StartApplicationError {
                 "InvalidApplicationConfigurationException" => {
                     return StartApplicationError::InvalidApplicationConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return StartApplicationError::InvalidArgument(String::from(error_message))
+                    return StartApplicationError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return StartApplicationError::ResourceInUse(String::from(error_message))
+                    return StartApplicationError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartApplicationError::ResourceNotFound(String::from(error_message))
+                    return StartApplicationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartApplicationError::Validation(error_message.to_string())
+                    return StartApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2769,13 +2769,13 @@ impl StopApplicationError {
 
             match *error_type {
                 "ResourceInUseException" => {
-                    return StopApplicationError::ResourceInUse(String::from(error_message))
+                    return StopApplicationError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopApplicationError::ResourceNotFound(String::from(error_message))
+                    return StopApplicationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopApplicationError::Validation(error_message.to_string())
+                    return StopApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2861,24 +2861,24 @@ impl UpdateApplicationError {
 
             match *error_type {
                 "CodeValidationException" => {
-                    return UpdateApplicationError::CodeValidation(String::from(error_message))
+                    return UpdateApplicationError::CodeValidation(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return UpdateApplicationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateApplicationError::InvalidArgument(String::from(error_message))
+                    return UpdateApplicationError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateApplicationError::ResourceInUse(String::from(error_message))
+                    return UpdateApplicationError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateApplicationError::ResourceNotFound(String::from(error_message))
+                    return UpdateApplicationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string())
+                    return UpdateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

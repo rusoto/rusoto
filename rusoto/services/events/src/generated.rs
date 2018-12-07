@@ -625,13 +625,13 @@ impl DeleteRuleError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteRuleError::ConcurrentModification(String::from(error_message))
+                    return DeleteRuleError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => {
-                    return DeleteRuleError::Internal(String::from(error_message))
+                    return DeleteRuleError::Internal(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRuleError::Validation(error_message.to_string())
+                    return DeleteRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -711,13 +711,13 @@ impl DescribeEventBusError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeEventBusError::Internal(String::from(error_message))
+                    return DescribeEventBusError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeEventBusError::ResourceNotFound(String::from(error_message))
+                    return DescribeEventBusError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventBusError::Validation(error_message.to_string())
+                    return DescribeEventBusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -797,13 +797,13 @@ impl DescribeRuleError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeRuleError::Internal(String::from(error_message))
+                    return DescribeRuleError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeRuleError::ResourceNotFound(String::from(error_message))
+                    return DescribeRuleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeRuleError::Validation(error_message.to_string())
+                    return DescribeRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -885,16 +885,16 @@ impl DisableRuleError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DisableRuleError::ConcurrentModification(String::from(error_message))
+                    return DisableRuleError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => {
-                    return DisableRuleError::Internal(String::from(error_message))
+                    return DisableRuleError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DisableRuleError::ResourceNotFound(String::from(error_message))
+                    return DisableRuleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableRuleError::Validation(error_message.to_string())
+                    return DisableRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -977,16 +977,16 @@ impl EnableRuleError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return EnableRuleError::ConcurrentModification(String::from(error_message))
+                    return EnableRuleError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => {
-                    return EnableRuleError::Internal(String::from(error_message))
+                    return EnableRuleError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return EnableRuleError::ResourceNotFound(String::from(error_message))
+                    return EnableRuleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableRuleError::Validation(error_message.to_string())
+                    return EnableRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1065,10 +1065,10 @@ impl ListRuleNamesByTargetError {
 
             match *error_type {
                 "InternalException" => {
-                    return ListRuleNamesByTargetError::Internal(String::from(error_message))
+                    return ListRuleNamesByTargetError::Internal(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRuleNamesByTargetError::Validation(error_message.to_string())
+                    return ListRuleNamesByTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1148,7 +1148,7 @@ impl ListRulesError {
             match *error_type {
                 "InternalException" => return ListRulesError::Internal(String::from(error_message)),
                 "ValidationException" => {
-                    return ListRulesError::Validation(error_message.to_string())
+                    return ListRulesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1227,13 +1227,13 @@ impl ListTargetsByRuleError {
 
             match *error_type {
                 "InternalException" => {
-                    return ListTargetsByRuleError::Internal(String::from(error_message))
+                    return ListTargetsByRuleError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTargetsByRuleError::ResourceNotFound(String::from(error_message))
+                    return ListTargetsByRuleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTargetsByRuleError::Validation(error_message.to_string())
+                    return ListTargetsByRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1314,7 +1314,7 @@ impl PutEventsError {
             match *error_type {
                 "InternalException" => return PutEventsError::Internal(String::from(error_message)),
                 "ValidationException" => {
-                    return PutEventsError::Validation(error_message.to_string())
+                    return PutEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1397,19 +1397,19 @@ impl PutPermissionError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return PutPermissionError::ConcurrentModification(String::from(error_message))
+                    return PutPermissionError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => {
-                    return PutPermissionError::Internal(String::from(error_message))
+                    return PutPermissionError::Internal(String::from(error_message));
                 }
                 "PolicyLengthExceededException" => {
-                    return PutPermissionError::PolicyLengthExceeded(String::from(error_message))
+                    return PutPermissionError::PolicyLengthExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutPermissionError::ResourceNotFound(String::from(error_message))
+                    return PutPermissionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutPermissionError::Validation(error_message.to_string())
+                    return PutPermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1495,14 +1495,14 @@ impl PutRuleError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return PutRuleError::ConcurrentModification(String::from(error_message))
+                    return PutRuleError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => return PutRuleError::Internal(String::from(error_message)),
                 "InvalidEventPatternException" => {
-                    return PutRuleError::InvalidEventPattern(String::from(error_message))
+                    return PutRuleError::InvalidEventPattern(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutRuleError::LimitExceeded(String::from(error_message))
+                    return PutRuleError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => return PutRuleError::Validation(error_message.to_string()),
                 _ => {}
@@ -1589,19 +1589,19 @@ impl PutTargetsError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return PutTargetsError::ConcurrentModification(String::from(error_message))
+                    return PutTargetsError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => {
-                    return PutTargetsError::Internal(String::from(error_message))
+                    return PutTargetsError::Internal(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutTargetsError::LimitExceeded(String::from(error_message))
+                    return PutTargetsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutTargetsError::ResourceNotFound(String::from(error_message))
+                    return PutTargetsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutTargetsError::Validation(error_message.to_string())
+                    return PutTargetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1687,16 +1687,16 @@ impl RemovePermissionError {
                 "ConcurrentModificationException" => {
                     return RemovePermissionError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return RemovePermissionError::Internal(String::from(error_message))
+                    return RemovePermissionError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RemovePermissionError::ResourceNotFound(String::from(error_message))
+                    return RemovePermissionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemovePermissionError::Validation(error_message.to_string())
+                    return RemovePermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1779,16 +1779,16 @@ impl RemoveTargetsError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return RemoveTargetsError::ConcurrentModification(String::from(error_message))
+                    return RemoveTargetsError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalException" => {
-                    return RemoveTargetsError::Internal(String::from(error_message))
+                    return RemoveTargetsError::Internal(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveTargetsError::ResourceNotFound(String::from(error_message))
+                    return RemoveTargetsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTargetsError::Validation(error_message.to_string())
+                    return RemoveTargetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1869,13 +1869,13 @@ impl TestEventPatternError {
 
             match *error_type {
                 "InternalException" => {
-                    return TestEventPatternError::Internal(String::from(error_message))
+                    return TestEventPatternError::Internal(String::from(error_message));
                 }
                 "InvalidEventPatternException" => {
-                    return TestEventPatternError::InvalidEventPattern(String::from(error_message))
+                    return TestEventPatternError::InvalidEventPattern(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TestEventPatternError::Validation(error_message.to_string())
+                    return TestEventPatternError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

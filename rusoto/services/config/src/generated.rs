@@ -1932,10 +1932,10 @@ impl BatchGetResourceConfigError {
                 "NoAvailableConfigurationRecorderException" => {
                     return BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return BatchGetResourceConfigError::Validation(error_message.to_string())
+                    return BatchGetResourceConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2016,12 +2016,12 @@ impl DeleteAggregationAuthorizationError {
                 "InvalidParameterValueException" => {
                     return DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DeleteAggregationAuthorizationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2102,13 +2102,13 @@ impl DeleteConfigRuleError {
 
             match *error_type {
                 "NoSuchConfigRuleException" => {
-                    return DeleteConfigRuleError::NoSuchConfigRule(String::from(error_message))
+                    return DeleteConfigRuleError::NoSuchConfigRule(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteConfigRuleError::ResourceInUse(String::from(error_message))
+                    return DeleteConfigRuleError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteConfigRuleError::Validation(error_message.to_string())
+                    return DeleteConfigRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2188,10 +2188,10 @@ impl DeleteConfigurationAggregatorError {
                 "NoSuchConfigurationAggregatorException" => {
                     return DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return DeleteConfigurationAggregatorError::Validation(error_message.to_string())
+                    return DeleteConfigurationAggregatorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2272,10 +2272,10 @@ impl DeleteConfigurationRecorderError {
                 "NoSuchConfigurationRecorderException" => {
                     return DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return DeleteConfigurationRecorderError::Validation(error_message.to_string())
+                    return DeleteConfigurationRecorderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2358,15 +2358,15 @@ impl DeleteDeliveryChannelError {
                 "LastDeliveryChannelDeleteFailedException" => {
                     return DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoSuchDeliveryChannelException" => {
                     return DeleteDeliveryChannelError::NoSuchDeliveryChannel(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteDeliveryChannelError::Validation(error_message.to_string())
+                    return DeleteDeliveryChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2450,13 +2450,13 @@ impl DeleteEvaluationResultsError {
                 "NoSuchConfigRuleException" => {
                     return DeleteEvaluationResultsError::NoSuchConfigRule(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteEvaluationResultsError::ResourceInUse(String::from(error_message))
+                    return DeleteEvaluationResultsError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteEvaluationResultsError::Validation(error_message.to_string())
+                    return DeleteEvaluationResultsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2538,12 +2538,12 @@ impl DeletePendingAggregationRequestError {
                 "InvalidParameterValueException" => {
                     return DeletePendingAggregationRequestError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeletePendingAggregationRequestError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2626,15 +2626,15 @@ impl DeleteRetentionConfigurationError {
                 "InvalidParameterValueException" => {
                     return DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoSuchRetentionConfigurationException" => {
                     return DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return DeleteRetentionConfigurationError::Validation(error_message.to_string())
+                    return DeleteRetentionConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2720,20 +2720,20 @@ impl DeliverConfigSnapshotError {
                 "NoAvailableConfigurationRecorderException" => {
                     return DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoRunningConfigurationRecorderException" => {
                     return DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoSuchDeliveryChannelException" => {
                     return DeliverConfigSnapshotError::NoSuchDeliveryChannel(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeliverConfigSnapshotError::Validation(error_message.to_string())
+                    return DeliverConfigSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2912,22 +2912,22 @@ impl DescribeAggregationAuthorizationsError {
                 "InvalidLimitException" => {
                     return DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeAggregationAuthorizationsError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeAggregationAuthorizationsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3014,22 +3014,22 @@ impl DescribeComplianceByConfigRuleError {
                 "InvalidNextTokenException" => {
                     return DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoSuchConfigRuleException" => {
                     return DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeComplianceByConfigRuleError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3114,15 +3114,15 @@ impl DescribeComplianceByResourceError {
                 "InvalidNextTokenException" => {
                     return DescribeComplianceByResourceError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeComplianceByResourceError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeComplianceByResourceError::Validation(error_message.to_string())
+                    return DescribeComplianceByResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3208,22 +3208,22 @@ impl DescribeConfigRuleEvaluationStatusError {
                 "InvalidNextTokenException" => {
                     return DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoSuchConfigRuleException" => {
                     return DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeConfigRuleEvaluationStatusError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3306,13 +3306,13 @@ impl DescribeConfigRulesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeConfigRulesError::InvalidNextToken(String::from(error_message))
+                    return DescribeConfigRulesError::InvalidNextToken(String::from(error_message));
                 }
                 "NoSuchConfigRuleException" => {
-                    return DescribeConfigRulesError::NoSuchConfigRule(String::from(error_message))
+                    return DescribeConfigRulesError::NoSuchConfigRule(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeConfigRulesError::Validation(error_message.to_string())
+                    return DescribeConfigRulesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3500,27 +3500,27 @@ impl DescribeConfigurationAggregatorsError {
                 "InvalidLimitException" => {
                     return DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeConfigurationAggregatorsError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeConfigurationAggregatorsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3606,12 +3606,12 @@ impl DescribeConfigurationRecorderStatusError {
                 "NoSuchConfigurationRecorderException" => {
                     return DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeConfigurationRecorderStatusError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3694,12 +3694,12 @@ impl DescribeConfigurationRecordersError {
                 "NoSuchConfigurationRecorderException" => {
                     return DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeConfigurationRecordersError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3780,10 +3780,10 @@ impl DescribeDeliveryChannelStatusError {
                 "NoSuchDeliveryChannelException" => {
                     return DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDeliveryChannelStatusError::Validation(error_message.to_string())
+                    return DescribeDeliveryChannelStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3864,10 +3864,10 @@ impl DescribeDeliveryChannelsError {
                 "NoSuchDeliveryChannelException" => {
                     return DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDeliveryChannelsError::Validation(error_message.to_string())
+                    return DescribeDeliveryChannelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3952,22 +3952,22 @@ impl DescribePendingAggregationRequestsError {
                 "InvalidLimitException" => {
                     return DescribePendingAggregationRequestsError::InvalidLimit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribePendingAggregationRequestsError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribePendingAggregationRequestsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4054,22 +4054,22 @@ impl DescribeRetentionConfigurationsError {
                 "InvalidNextTokenException" => {
                     return DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeRetentionConfigurationsError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoSuchRetentionConfigurationException" => {
                     return DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeRetentionConfigurationsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4338,22 +4338,22 @@ impl GetComplianceDetailsByConfigRuleError {
                 "InvalidNextTokenException" => {
                     return GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return GetComplianceDetailsByConfigRuleError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoSuchConfigRuleException" => {
                     return GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetComplianceDetailsByConfigRuleError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4436,12 +4436,12 @@ impl GetComplianceDetailsByResourceError {
                 "InvalidParameterValueException" => {
                     return GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetComplianceDetailsByResourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4520,7 +4520,7 @@ impl GetComplianceSummaryByConfigRuleError {
                 "ValidationException" => {
                     return GetComplianceSummaryByConfigRuleError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4600,12 +4600,12 @@ impl GetComplianceSummaryByResourceTypeError {
                 "InvalidParameterValueException" => {
                     return GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return GetComplianceSummaryByResourceTypeError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4688,15 +4688,15 @@ impl GetDiscoveredResourceCountsError {
                 "InvalidLimitException" => {
                     return GetDiscoveredResourceCountsError::InvalidLimit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDiscoveredResourceCountsError::Validation(error_message.to_string())
+                    return GetDiscoveredResourceCountsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4784,30 +4784,30 @@ impl GetResourceConfigHistoryError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return GetResourceConfigHistoryError::InvalidLimit(String::from(error_message))
+                    return GetResourceConfigHistoryError::InvalidLimit(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return GetResourceConfigHistoryError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidTimeRangeException" => {
                     return GetResourceConfigHistoryError::InvalidTimeRange(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotDiscoveredException" => {
                     return GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetResourceConfigHistoryError::Validation(error_message.to_string())
+                    return GetResourceConfigHistoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4894,20 +4894,20 @@ impl ListDiscoveredResourcesError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return ListDiscoveredResourcesError::InvalidLimit(String::from(error_message))
+                    return ListDiscoveredResourcesError::InvalidLimit(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return ListDiscoveredResourcesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return ListDiscoveredResourcesError::Validation(error_message.to_string())
+                    return ListDiscoveredResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4990,10 +4990,10 @@ impl PutAggregationAuthorizationError {
                 "InvalidParameterValueException" => {
                     return PutAggregationAuthorizationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutAggregationAuthorizationError::Validation(error_message.to_string())
+                    return PutAggregationAuthorizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5080,26 +5080,26 @@ impl PutConfigRuleError {
 
             match *error_type {
                 "InsufficientPermissionsException" => {
-                    return PutConfigRuleError::InsufficientPermissions(String::from(error_message))
+                    return PutConfigRuleError::InsufficientPermissions(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return PutConfigRuleError::InvalidParameterValue(String::from(error_message))
+                    return PutConfigRuleError::InvalidParameterValue(String::from(error_message));
                 }
                 "MaxNumberOfConfigRulesExceededException" => {
                     return PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return PutConfigRuleError::ResourceInUse(String::from(error_message))
+                    return PutConfigRuleError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutConfigRuleError::Validation(error_message.to_string())
+                    return PutConfigRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5192,33 +5192,33 @@ impl PutConfigurationAggregatorError {
                 "InvalidParameterValueException" => {
                     return PutConfigurationAggregatorError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return PutConfigurationAggregatorError::InvalidRole(String::from(error_message))
+                    return PutConfigurationAggregatorError::InvalidRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return PutConfigurationAggregatorError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoAvailableOrganizationException" => {
                     return PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationAccessDeniedException" => {
                     return PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationAllFeaturesNotEnabledException" => {
                     return PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return PutConfigurationAggregatorError::Validation(error_message.to_string())
+                    return PutConfigurationAggregatorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5310,23 +5310,23 @@ impl PutConfigurationRecorderError {
                 "InvalidConfigurationRecorderNameException" => {
                     return PutConfigurationRecorderError::InvalidConfigurationRecorderName(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRecordingGroupException" => {
                     return PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return PutConfigurationRecorderError::InvalidRole(String::from(error_message))
+                    return PutConfigurationRecorderError::InvalidRole(String::from(error_message));
                 }
                 "MaxNumberOfConfigurationRecordersExceededException" => {
                     return PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return PutConfigurationRecorderError::Validation(error_message.to_string())
+                    return PutConfigurationRecorderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5424,34 +5424,34 @@ impl PutDeliveryChannelError {
                 "InsufficientDeliveryPolicyException" => {
                     return PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeliveryChannelNameException" => {
                     return PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3KeyPrefixException" => {
-                    return PutDeliveryChannelError::InvalidS3KeyPrefix(String::from(error_message))
+                    return PutDeliveryChannelError::InvalidS3KeyPrefix(String::from(error_message));
                 }
                 "InvalidSNSTopicARNException" => {
-                    return PutDeliveryChannelError::InvalidSNSTopicARN(String::from(error_message))
+                    return PutDeliveryChannelError::InvalidSNSTopicARN(String::from(error_message));
                 }
                 "MaxNumberOfDeliveryChannelsExceededException" => {
                     return PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoSuchBucketException" => {
-                    return PutDeliveryChannelError::NoSuchBucket(String::from(error_message))
+                    return PutDeliveryChannelError::NoSuchBucket(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutDeliveryChannelError::Validation(error_message.to_string())
+                    return PutDeliveryChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5540,16 +5540,16 @@ impl PutEvaluationsError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return PutEvaluationsError::InvalidParameterValue(String::from(error_message))
+                    return PutEvaluationsError::InvalidParameterValue(String::from(error_message));
                 }
                 "InvalidResultTokenException" => {
-                    return PutEvaluationsError::InvalidResultToken(String::from(error_message))
+                    return PutEvaluationsError::InvalidResultToken(String::from(error_message));
                 }
                 "NoSuchConfigRuleException" => {
-                    return PutEvaluationsError::NoSuchConfigRule(String::from(error_message))
+                    return PutEvaluationsError::NoSuchConfigRule(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutEvaluationsError::Validation(error_message.to_string())
+                    return PutEvaluationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5720,25 +5720,25 @@ impl StartConfigRulesEvaluationError {
                 "InvalidParameterValueException" => {
                     return StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return StartConfigRulesEvaluationError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoSuchConfigRuleException" => {
                     return StartConfigRulesEvaluationError::NoSuchConfigRule(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return StartConfigRulesEvaluationError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartConfigRulesEvaluationError::Validation(error_message.to_string())
+                    return StartConfigRulesEvaluationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5824,15 +5824,15 @@ impl StartConfigurationRecorderError {
                 "NoAvailableDeliveryChannelException" => {
                     return StartConfigurationRecorderError::NoAvailableDeliveryChannel(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "NoSuchConfigurationRecorderException" => {
                     return StartConfigurationRecorderError::NoSuchConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return StartConfigurationRecorderError::Validation(error_message.to_string())
+                    return StartConfigurationRecorderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5914,10 +5914,10 @@ impl StopConfigurationRecorderError {
                 "NoSuchConfigurationRecorderException" => {
                     return StopConfigurationRecorderError::NoSuchConfigurationRecorder(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return StopConfigurationRecorderError::Validation(error_message.to_string())
+                    return StopConfigurationRecorderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

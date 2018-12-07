@@ -499,28 +499,28 @@ impl CopyBackupToRegionError {
                 "CloudHsmAccessDeniedException" => {
                     return CopyBackupToRegionError::CloudHsmAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
                     return CopyBackupToRegionError::CloudHsmInternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
                     return CopyBackupToRegionError::CloudHsmInvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return CopyBackupToRegionError::CloudHsmResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return CopyBackupToRegionError::CloudHsmService(String::from(error_message))
+                    return CopyBackupToRegionError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CopyBackupToRegionError::Validation(error_message.to_string())
+                    return CopyBackupToRegionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -611,22 +611,22 @@ impl CreateClusterError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return CreateClusterError::CloudHsmAccessDenied(String::from(error_message))
+                    return CreateClusterError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return CreateClusterError::CloudHsmInternalFailure(String::from(error_message))
+                    return CreateClusterError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return CreateClusterError::CloudHsmInvalidRequest(String::from(error_message))
+                    return CreateClusterError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return CreateClusterError::CloudHsmResourceNotFound(String::from(error_message))
+                    return CreateClusterError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateClusterError::CloudHsmService(String::from(error_message))
+                    return CreateClusterError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string())
+                    return CreateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -715,22 +715,22 @@ impl CreateHsmError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return CreateHsmError::CloudHsmAccessDenied(String::from(error_message))
+                    return CreateHsmError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return CreateHsmError::CloudHsmInternalFailure(String::from(error_message))
+                    return CreateHsmError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return CreateHsmError::CloudHsmInvalidRequest(String::from(error_message))
+                    return CreateHsmError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return CreateHsmError::CloudHsmResourceNotFound(String::from(error_message))
+                    return CreateHsmError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateHsmError::CloudHsmService(String::from(error_message))
+                    return CreateHsmError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateHsmError::Validation(error_message.to_string())
+                    return CreateHsmError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -819,22 +819,22 @@ impl DeleteClusterError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DeleteClusterError::CloudHsmAccessDenied(String::from(error_message))
+                    return DeleteClusterError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DeleteClusterError::CloudHsmInternalFailure(String::from(error_message))
+                    return DeleteClusterError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DeleteClusterError::CloudHsmInvalidRequest(String::from(error_message))
+                    return DeleteClusterError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return DeleteClusterError::CloudHsmResourceNotFound(String::from(error_message))
+                    return DeleteClusterError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteClusterError::CloudHsmService(String::from(error_message))
+                    return DeleteClusterError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string())
+                    return DeleteClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -923,22 +923,22 @@ impl DeleteHsmError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DeleteHsmError::CloudHsmAccessDenied(String::from(error_message))
+                    return DeleteHsmError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DeleteHsmError::CloudHsmInternalFailure(String::from(error_message))
+                    return DeleteHsmError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DeleteHsmError::CloudHsmInvalidRequest(String::from(error_message))
+                    return DeleteHsmError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return DeleteHsmError::CloudHsmResourceNotFound(String::from(error_message))
+                    return DeleteHsmError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteHsmError::CloudHsmService(String::from(error_message))
+                    return DeleteHsmError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteHsmError::Validation(error_message.to_string())
+                    return DeleteHsmError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1027,26 +1027,26 @@ impl DescribeBackupsError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DescribeBackupsError::CloudHsmAccessDenied(String::from(error_message))
+                    return DescribeBackupsError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
                     return DescribeBackupsError::CloudHsmInternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DescribeBackupsError::CloudHsmInvalidRequest(String::from(error_message))
+                    return DescribeBackupsError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return DescribeBackupsError::CloudHsmResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeBackupsError::CloudHsmService(String::from(error_message))
+                    return DescribeBackupsError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBackupsError::Validation(error_message.to_string())
+                    return DescribeBackupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1133,23 +1133,23 @@ impl DescribeClustersError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DescribeClustersError::CloudHsmAccessDenied(String::from(error_message))
+                    return DescribeClustersError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
                     return DescribeClustersError::CloudHsmInternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
                     return DescribeClustersError::CloudHsmInvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeClustersError::CloudHsmService(String::from(error_message))
+                    return DescribeClustersError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeClustersError::Validation(error_message.to_string())
+                    return DescribeClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1237,28 +1237,28 @@ impl InitializeClusterError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return InitializeClusterError::CloudHsmAccessDenied(String::from(error_message))
+                    return InitializeClusterError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
                     return InitializeClusterError::CloudHsmInternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
                     return InitializeClusterError::CloudHsmInvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return InitializeClusterError::CloudHsmResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return InitializeClusterError::CloudHsmService(String::from(error_message))
+                    return InitializeClusterError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InitializeClusterError::Validation(error_message.to_string())
+                    return InitializeClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1349,22 +1349,22 @@ impl ListTagsError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return ListTagsError::CloudHsmAccessDenied(String::from(error_message))
+                    return ListTagsError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return ListTagsError::CloudHsmInternalFailure(String::from(error_message))
+                    return ListTagsError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return ListTagsError::CloudHsmInvalidRequest(String::from(error_message))
+                    return ListTagsError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return ListTagsError::CloudHsmResourceNotFound(String::from(error_message))
+                    return ListTagsError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return ListTagsError::CloudHsmService(String::from(error_message))
+                    return ListTagsError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1453,22 +1453,22 @@ impl TagResourceError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return TagResourceError::CloudHsmAccessDenied(String::from(error_message))
+                    return TagResourceError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return TagResourceError::CloudHsmInternalFailure(String::from(error_message))
+                    return TagResourceError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return TagResourceError::CloudHsmInvalidRequest(String::from(error_message))
+                    return TagResourceError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return TagResourceError::CloudHsmResourceNotFound(String::from(error_message))
+                    return TagResourceError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return TagResourceError::CloudHsmService(String::from(error_message))
+                    return TagResourceError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1557,22 +1557,22 @@ impl UntagResourceError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return UntagResourceError::CloudHsmAccessDenied(String::from(error_message))
+                    return UntagResourceError::CloudHsmAccessDenied(String::from(error_message));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return UntagResourceError::CloudHsmInternalFailure(String::from(error_message))
+                    return UntagResourceError::CloudHsmInternalFailure(String::from(error_message));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return UntagResourceError::CloudHsmInvalidRequest(String::from(error_message))
+                    return UntagResourceError::CloudHsmInvalidRequest(String::from(error_message));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return UntagResourceError::CloudHsmResourceNotFound(String::from(error_message))
+                    return UntagResourceError::CloudHsmResourceNotFound(String::from(error_message));
                 }
                 "CloudHsmServiceException" => {
-                    return UntagResourceError::CloudHsmService(String::from(error_message))
+                    return UntagResourceError::CloudHsmService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -1287,22 +1287,22 @@ impl BatchPutMessageError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return BatchPutMessageError::InternalFailure(String::from(error_message))
+                    return BatchPutMessageError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchPutMessageError::InvalidRequest(String::from(error_message))
+                    return BatchPutMessageError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return BatchPutMessageError::ResourceNotFound(String::from(error_message))
+                    return BatchPutMessageError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return BatchPutMessageError::ServiceUnavailable(String::from(error_message))
+                    return BatchPutMessageError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return BatchPutMessageError::Throttling(String::from(error_message))
+                    return BatchPutMessageError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchPutMessageError::Validation(error_message.to_string())
+                    return BatchPutMessageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1407,28 +1407,28 @@ impl CancelPipelineReprocessingError {
                 "InternalFailureException" => {
                     return CancelPipelineReprocessingError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return CancelPipelineReprocessingError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CancelPipelineReprocessingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return CancelPipelineReprocessingError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return CancelPipelineReprocessingError::Throttling(String::from(error_message))
+                    return CancelPipelineReprocessingError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelPipelineReprocessingError::Validation(error_message.to_string())
+                    return CancelPipelineReprocessingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1535,25 +1535,25 @@ impl CreateChannelError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreateChannelError::InternalFailure(String::from(error_message))
+                    return CreateChannelError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateChannelError::InvalidRequest(String::from(error_message))
+                    return CreateChannelError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateChannelError::LimitExceeded(String::from(error_message))
+                    return CreateChannelError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateChannelError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateChannelError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateChannelError::ServiceUnavailable(String::from(error_message))
+                    return CreateChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateChannelError::Throttling(String::from(error_message))
+                    return CreateChannelError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateChannelError::Validation(error_message.to_string())
+                    return CreateChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1659,25 +1659,25 @@ impl CreateDatasetError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreateDatasetError::InternalFailure(String::from(error_message))
+                    return CreateDatasetError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateDatasetError::InvalidRequest(String::from(error_message))
+                    return CreateDatasetError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDatasetError::LimitExceeded(String::from(error_message))
+                    return CreateDatasetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateDatasetError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateDatasetError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateDatasetError::ServiceUnavailable(String::from(error_message))
+                    return CreateDatasetError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateDatasetError::Throttling(String::from(error_message))
+                    return CreateDatasetError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDatasetError::Validation(error_message.to_string())
+                    return CreateDatasetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1781,24 +1781,24 @@ impl CreateDatasetContentError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreateDatasetContentError::InternalFailure(String::from(error_message))
+                    return CreateDatasetContentError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateDatasetContentError::InvalidRequest(String::from(error_message))
+                    return CreateDatasetContentError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateDatasetContentError::ResourceNotFound(String::from(error_message))
+                    return CreateDatasetContentError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return CreateDatasetContentError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return CreateDatasetContentError::Throttling(String::from(error_message))
+                    return CreateDatasetContentError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDatasetContentError::Validation(error_message.to_string())
+                    return CreateDatasetContentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1905,25 +1905,25 @@ impl CreateDatastoreError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreateDatastoreError::InternalFailure(String::from(error_message))
+                    return CreateDatastoreError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateDatastoreError::InvalidRequest(String::from(error_message))
+                    return CreateDatastoreError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDatastoreError::LimitExceeded(String::from(error_message))
+                    return CreateDatastoreError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateDatastoreError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateDatastoreError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateDatastoreError::ServiceUnavailable(String::from(error_message))
+                    return CreateDatastoreError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateDatastoreError::Throttling(String::from(error_message))
+                    return CreateDatastoreError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDatastoreError::Validation(error_message.to_string())
+                    return CreateDatastoreError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2029,25 +2029,25 @@ impl CreatePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreatePipelineError::InternalFailure(String::from(error_message))
+                    return CreatePipelineError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreatePipelineError::InvalidRequest(String::from(error_message))
+                    return CreatePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreatePipelineError::LimitExceeded(String::from(error_message))
+                    return CreatePipelineError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreatePipelineError::ResourceAlreadyExists(String::from(error_message))
+                    return CreatePipelineError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreatePipelineError::ServiceUnavailable(String::from(error_message))
+                    return CreatePipelineError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreatePipelineError::Throttling(String::from(error_message))
+                    return CreatePipelineError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string())
+                    return CreatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2151,22 +2151,22 @@ impl DeleteChannelError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteChannelError::InternalFailure(String::from(error_message))
+                    return DeleteChannelError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteChannelError::InvalidRequest(String::from(error_message))
+                    return DeleteChannelError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteChannelError::ResourceNotFound(String::from(error_message))
+                    return DeleteChannelError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteChannelError::ServiceUnavailable(String::from(error_message))
+                    return DeleteChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteChannelError::Throttling(String::from(error_message))
+                    return DeleteChannelError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteChannelError::Validation(error_message.to_string())
+                    return DeleteChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2269,22 +2269,22 @@ impl DeleteDatasetError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteDatasetError::InternalFailure(String::from(error_message))
+                    return DeleteDatasetError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteDatasetError::InvalidRequest(String::from(error_message))
+                    return DeleteDatasetError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDatasetError::ResourceNotFound(String::from(error_message))
+                    return DeleteDatasetError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteDatasetError::ServiceUnavailable(String::from(error_message))
+                    return DeleteDatasetError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteDatasetError::Throttling(String::from(error_message))
+                    return DeleteDatasetError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDatasetError::Validation(error_message.to_string())
+                    return DeleteDatasetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2387,24 +2387,24 @@ impl DeleteDatasetContentError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteDatasetContentError::InternalFailure(String::from(error_message))
+                    return DeleteDatasetContentError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteDatasetContentError::InvalidRequest(String::from(error_message))
+                    return DeleteDatasetContentError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDatasetContentError::ResourceNotFound(String::from(error_message))
+                    return DeleteDatasetContentError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteDatasetContentError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DeleteDatasetContentError::Throttling(String::from(error_message))
+                    return DeleteDatasetContentError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDatasetContentError::Validation(error_message.to_string())
+                    return DeleteDatasetContentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2509,22 +2509,22 @@ impl DeleteDatastoreError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteDatastoreError::InternalFailure(String::from(error_message))
+                    return DeleteDatastoreError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteDatastoreError::InvalidRequest(String::from(error_message))
+                    return DeleteDatastoreError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDatastoreError::ResourceNotFound(String::from(error_message))
+                    return DeleteDatastoreError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteDatastoreError::ServiceUnavailable(String::from(error_message))
+                    return DeleteDatastoreError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteDatastoreError::Throttling(String::from(error_message))
+                    return DeleteDatastoreError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDatastoreError::Validation(error_message.to_string())
+                    return DeleteDatastoreError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2627,22 +2627,22 @@ impl DeletePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeletePipelineError::InternalFailure(String::from(error_message))
+                    return DeletePipelineError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeletePipelineError::InvalidRequest(String::from(error_message))
+                    return DeletePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePipelineError::ResourceNotFound(String::from(error_message))
+                    return DeletePipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeletePipelineError::ServiceUnavailable(String::from(error_message))
+                    return DeletePipelineError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeletePipelineError::Throttling(String::from(error_message))
+                    return DeletePipelineError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string())
+                    return DeletePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2745,22 +2745,22 @@ impl DescribeChannelError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeChannelError::InternalFailure(String::from(error_message))
+                    return DescribeChannelError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeChannelError::InvalidRequest(String::from(error_message))
+                    return DescribeChannelError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeChannelError::ResourceNotFound(String::from(error_message))
+                    return DescribeChannelError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeChannelError::ServiceUnavailable(String::from(error_message))
+                    return DescribeChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DescribeChannelError::Throttling(String::from(error_message))
+                    return DescribeChannelError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeChannelError::Validation(error_message.to_string())
+                    return DescribeChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2863,22 +2863,22 @@ impl DescribeDatasetError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeDatasetError::InternalFailure(String::from(error_message))
+                    return DescribeDatasetError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeDatasetError::InvalidRequest(String::from(error_message))
+                    return DescribeDatasetError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeDatasetError::ResourceNotFound(String::from(error_message))
+                    return DescribeDatasetError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeDatasetError::ServiceUnavailable(String::from(error_message))
+                    return DescribeDatasetError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DescribeDatasetError::Throttling(String::from(error_message))
+                    return DescribeDatasetError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDatasetError::Validation(error_message.to_string())
+                    return DescribeDatasetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2981,22 +2981,22 @@ impl DescribeDatastoreError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeDatastoreError::InternalFailure(String::from(error_message))
+                    return DescribeDatastoreError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeDatastoreError::InvalidRequest(String::from(error_message))
+                    return DescribeDatastoreError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeDatastoreError::ResourceNotFound(String::from(error_message))
+                    return DescribeDatastoreError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeDatastoreError::ServiceUnavailable(String::from(error_message))
+                    return DescribeDatastoreError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DescribeDatastoreError::Throttling(String::from(error_message))
+                    return DescribeDatastoreError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDatastoreError::Validation(error_message.to_string())
+                    return DescribeDatastoreError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3101,26 +3101,26 @@ impl DescribeLoggingOptionsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeLoggingOptionsError::InternalFailure(String::from(error_message))
+                    return DescribeLoggingOptionsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeLoggingOptionsError::InvalidRequest(String::from(error_message))
+                    return DescribeLoggingOptionsError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeLoggingOptionsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeLoggingOptionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DescribeLoggingOptionsError::Throttling(String::from(error_message))
+                    return DescribeLoggingOptionsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLoggingOptionsError::Validation(error_message.to_string())
+                    return DescribeLoggingOptionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3225,22 +3225,22 @@ impl DescribePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribePipelineError::InternalFailure(String::from(error_message))
+                    return DescribePipelineError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribePipelineError::InvalidRequest(String::from(error_message))
+                    return DescribePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribePipelineError::ResourceNotFound(String::from(error_message))
+                    return DescribePipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribePipelineError::ServiceUnavailable(String::from(error_message))
+                    return DescribePipelineError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DescribePipelineError::Throttling(String::from(error_message))
+                    return DescribePipelineError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePipelineError::Validation(error_message.to_string())
+                    return DescribePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3343,22 +3343,22 @@ impl GetDatasetContentError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetDatasetContentError::InternalFailure(String::from(error_message))
+                    return GetDatasetContentError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetDatasetContentError::InvalidRequest(String::from(error_message))
+                    return GetDatasetContentError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDatasetContentError::ResourceNotFound(String::from(error_message))
+                    return GetDatasetContentError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDatasetContentError::ServiceUnavailable(String::from(error_message))
+                    return GetDatasetContentError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetDatasetContentError::Throttling(String::from(error_message))
+                    return GetDatasetContentError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDatasetContentError::Validation(error_message.to_string())
+                    return GetDatasetContentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3461,19 +3461,19 @@ impl ListChannelsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListChannelsError::InternalFailure(String::from(error_message))
+                    return ListChannelsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListChannelsError::InvalidRequest(String::from(error_message))
+                    return ListChannelsError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListChannelsError::ServiceUnavailable(String::from(error_message))
+                    return ListChannelsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListChannelsError::Throttling(String::from(error_message))
+                    return ListChannelsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListChannelsError::Validation(error_message.to_string())
+                    return ListChannelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3573,19 +3573,19 @@ impl ListDatasetsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListDatasetsError::InternalFailure(String::from(error_message))
+                    return ListDatasetsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListDatasetsError::InvalidRequest(String::from(error_message))
+                    return ListDatasetsError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListDatasetsError::ServiceUnavailable(String::from(error_message))
+                    return ListDatasetsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListDatasetsError::Throttling(String::from(error_message))
+                    return ListDatasetsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDatasetsError::Validation(error_message.to_string())
+                    return ListDatasetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3685,19 +3685,19 @@ impl ListDatastoresError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListDatastoresError::InternalFailure(String::from(error_message))
+                    return ListDatastoresError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListDatastoresError::InvalidRequest(String::from(error_message))
+                    return ListDatastoresError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListDatastoresError::ServiceUnavailable(String::from(error_message))
+                    return ListDatastoresError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListDatastoresError::Throttling(String::from(error_message))
+                    return ListDatastoresError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDatastoresError::Validation(error_message.to_string())
+                    return ListDatastoresError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3797,19 +3797,19 @@ impl ListPipelinesError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListPipelinesError::InternalFailure(String::from(error_message))
+                    return ListPipelinesError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListPipelinesError::InvalidRequest(String::from(error_message))
+                    return ListPipelinesError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListPipelinesError::ServiceUnavailable(String::from(error_message))
+                    return ListPipelinesError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListPipelinesError::Throttling(String::from(error_message))
+                    return ListPipelinesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string())
+                    return ListPipelinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3913,25 +3913,25 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListTagsForResourceError::InternalFailure(String::from(error_message))
+                    return ListTagsForResourceError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListTagsForResourceError::InvalidRequest(String::from(error_message))
+                    return ListTagsForResourceError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListTagsForResourceError::LimitExceeded(String::from(error_message))
+                    return ListTagsForResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message))
+                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListTagsForResourceError::ServiceUnavailable(String::from(error_message))
+                    return ListTagsForResourceError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListTagsForResourceError::Throttling(String::from(error_message))
+                    return ListTagsForResourceError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4035,19 +4035,19 @@ impl PutLoggingOptionsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return PutLoggingOptionsError::InternalFailure(String::from(error_message))
+                    return PutLoggingOptionsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return PutLoggingOptionsError::InvalidRequest(String::from(error_message))
+                    return PutLoggingOptionsError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutLoggingOptionsError::ServiceUnavailable(String::from(error_message))
+                    return PutLoggingOptionsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return PutLoggingOptionsError::Throttling(String::from(error_message))
+                    return PutLoggingOptionsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutLoggingOptionsError::Validation(error_message.to_string())
+                    return PutLoggingOptionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4149,19 +4149,19 @@ impl RunPipelineActivityError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RunPipelineActivityError::InternalFailure(String::from(error_message))
+                    return RunPipelineActivityError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return RunPipelineActivityError::InvalidRequest(String::from(error_message))
+                    return RunPipelineActivityError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return RunPipelineActivityError::ServiceUnavailable(String::from(error_message))
+                    return RunPipelineActivityError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return RunPipelineActivityError::Throttling(String::from(error_message))
+                    return RunPipelineActivityError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RunPipelineActivityError::Validation(error_message.to_string())
+                    return RunPipelineActivityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4265,22 +4265,22 @@ impl SampleChannelDataError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return SampleChannelDataError::InternalFailure(String::from(error_message))
+                    return SampleChannelDataError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return SampleChannelDataError::InvalidRequest(String::from(error_message))
+                    return SampleChannelDataError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SampleChannelDataError::ResourceNotFound(String::from(error_message))
+                    return SampleChannelDataError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return SampleChannelDataError::ServiceUnavailable(String::from(error_message))
+                    return SampleChannelDataError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return SampleChannelDataError::Throttling(String::from(error_message))
+                    return SampleChannelDataError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SampleChannelDataError::Validation(error_message.to_string())
+                    return SampleChannelDataError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4389,33 +4389,33 @@ impl StartPipelineReprocessingError {
                 "InternalFailureException" => {
                     return StartPipelineReprocessingError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartPipelineReprocessingError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
                     return StartPipelineReprocessingError::ResourceAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return StartPipelineReprocessingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return StartPipelineReprocessingError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartPipelineReprocessingError::Throttling(String::from(error_message))
+                    return StartPipelineReprocessingError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartPipelineReprocessingError::Validation(error_message.to_string())
+                    return StartPipelineReprocessingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4523,25 +4523,25 @@ impl TagResourceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return TagResourceError::InternalFailure(String::from(error_message))
+                    return TagResourceError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return TagResourceError::InvalidRequest(String::from(error_message))
+                    return TagResourceError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message))
+                    return TagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return TagResourceError::ServiceUnavailable(String::from(error_message))
+                    return TagResourceError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return TagResourceError::Throttling(String::from(error_message))
+                    return TagResourceError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4647,25 +4647,25 @@ impl UntagResourceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UntagResourceError::InternalFailure(String::from(error_message))
+                    return UntagResourceError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UntagResourceError::InvalidRequest(String::from(error_message))
+                    return UntagResourceError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UntagResourceError::LimitExceeded(String::from(error_message))
+                    return UntagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UntagResourceError::ServiceUnavailable(String::from(error_message))
+                    return UntagResourceError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UntagResourceError::Throttling(String::from(error_message))
+                    return UntagResourceError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4769,22 +4769,22 @@ impl UpdateChannelError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateChannelError::InternalFailure(String::from(error_message))
+                    return UpdateChannelError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateChannelError::InvalidRequest(String::from(error_message))
+                    return UpdateChannelError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateChannelError::ResourceNotFound(String::from(error_message))
+                    return UpdateChannelError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateChannelError::ServiceUnavailable(String::from(error_message))
+                    return UpdateChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateChannelError::Throttling(String::from(error_message))
+                    return UpdateChannelError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateChannelError::Validation(error_message.to_string())
+                    return UpdateChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4887,22 +4887,22 @@ impl UpdateDatasetError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateDatasetError::InternalFailure(String::from(error_message))
+                    return UpdateDatasetError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateDatasetError::InvalidRequest(String::from(error_message))
+                    return UpdateDatasetError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDatasetError::ResourceNotFound(String::from(error_message))
+                    return UpdateDatasetError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateDatasetError::ServiceUnavailable(String::from(error_message))
+                    return UpdateDatasetError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateDatasetError::Throttling(String::from(error_message))
+                    return UpdateDatasetError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDatasetError::Validation(error_message.to_string())
+                    return UpdateDatasetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5005,22 +5005,22 @@ impl UpdateDatastoreError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateDatastoreError::InternalFailure(String::from(error_message))
+                    return UpdateDatastoreError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateDatastoreError::InvalidRequest(String::from(error_message))
+                    return UpdateDatastoreError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDatastoreError::ResourceNotFound(String::from(error_message))
+                    return UpdateDatastoreError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateDatastoreError::ServiceUnavailable(String::from(error_message))
+                    return UpdateDatastoreError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateDatastoreError::Throttling(String::from(error_message))
+                    return UpdateDatastoreError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDatastoreError::Validation(error_message.to_string())
+                    return UpdateDatastoreError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5125,25 +5125,25 @@ impl UpdatePipelineError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdatePipelineError::InternalFailure(String::from(error_message))
+                    return UpdatePipelineError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdatePipelineError::InvalidRequest(String::from(error_message))
+                    return UpdatePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdatePipelineError::LimitExceeded(String::from(error_message))
+                    return UpdatePipelineError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePipelineError::ResourceNotFound(String::from(error_message))
+                    return UpdatePipelineError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdatePipelineError::ServiceUnavailable(String::from(error_message))
+                    return UpdatePipelineError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdatePipelineError::Throttling(String::from(error_message))
+                    return UpdatePipelineError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePipelineError::Validation(error_message.to_string())
+                    return UpdatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

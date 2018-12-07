@@ -1747,13 +1747,13 @@ impl AcceptInvitationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return AcceptInvitationError::BadRequest(String::from(error_message))
+                    return AcceptInvitationError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return AcceptInvitationError::InternalServerError(String::from(error_message))
+                    return AcceptInvitationError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AcceptInvitationError::Validation(error_message.to_string())
+                    return AcceptInvitationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1847,13 +1847,13 @@ impl ArchiveFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ArchiveFindingsError::BadRequest(String::from(error_message))
+                    return ArchiveFindingsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ArchiveFindingsError::InternalServerError(String::from(error_message))
+                    return ArchiveFindingsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ArchiveFindingsError::Validation(error_message.to_string())
+                    return ArchiveFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1947,13 +1947,13 @@ impl CreateDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDetectorError::BadRequest(String::from(error_message))
+                    return CreateDetectorError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateDetectorError::InternalServerError(String::from(error_message))
+                    return CreateDetectorError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDetectorError::Validation(error_message.to_string())
+                    return CreateDetectorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2047,13 +2047,13 @@ impl CreateFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateFilterError::BadRequest(String::from(error_message))
+                    return CreateFilterError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateFilterError::InternalServerError(String::from(error_message))
+                    return CreateFilterError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateFilterError::Validation(error_message.to_string())
+                    return CreateFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2147,13 +2147,13 @@ impl CreateIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateIPSetError::BadRequest(String::from(error_message))
+                    return CreateIPSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateIPSetError::InternalServerError(String::from(error_message))
+                    return CreateIPSetError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIPSetError::Validation(error_message.to_string())
+                    return CreateIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2247,13 +2247,13 @@ impl CreateMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateMembersError::BadRequest(String::from(error_message))
+                    return CreateMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateMembersError::InternalServerError(String::from(error_message))
+                    return CreateMembersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateMembersError::Validation(error_message.to_string())
+                    return CreateMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2347,15 +2347,15 @@ impl CreateSampleFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateSampleFindingsError::BadRequest(String::from(error_message))
+                    return CreateSampleFindingsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateSampleFindingsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSampleFindingsError::Validation(error_message.to_string())
+                    return CreateSampleFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2451,15 +2451,15 @@ impl CreateThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateThreatIntelSetError::BadRequest(String::from(error_message))
+                    return CreateThreatIntelSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateThreatIntelSetError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateThreatIntelSetError::Validation(error_message.to_string())
+                    return CreateThreatIntelSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2555,13 +2555,13 @@ impl DeclineInvitationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeclineInvitationsError::BadRequest(String::from(error_message))
+                    return DeclineInvitationsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeclineInvitationsError::InternalServerError(String::from(error_message))
+                    return DeclineInvitationsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeclineInvitationsError::Validation(error_message.to_string())
+                    return DeclineInvitationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2657,13 +2657,13 @@ impl DeleteDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDetectorError::BadRequest(String::from(error_message))
+                    return DeleteDetectorError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteDetectorError::InternalServerError(String::from(error_message))
+                    return DeleteDetectorError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDetectorError::Validation(error_message.to_string())
+                    return DeleteDetectorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2757,13 +2757,13 @@ impl DeleteFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteFilterError::BadRequest(String::from(error_message))
+                    return DeleteFilterError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteFilterError::InternalServerError(String::from(error_message))
+                    return DeleteFilterError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFilterError::Validation(error_message.to_string())
+                    return DeleteFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2857,13 +2857,13 @@ impl DeleteIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIPSetError::BadRequest(String::from(error_message))
+                    return DeleteIPSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteIPSetError::InternalServerError(String::from(error_message))
+                    return DeleteIPSetError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIPSetError::Validation(error_message.to_string())
+                    return DeleteIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2957,13 +2957,13 @@ impl DeleteInvitationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteInvitationsError::BadRequest(String::from(error_message))
+                    return DeleteInvitationsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteInvitationsError::InternalServerError(String::from(error_message))
+                    return DeleteInvitationsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInvitationsError::Validation(error_message.to_string())
+                    return DeleteInvitationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3059,13 +3059,13 @@ impl DeleteMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteMembersError::BadRequest(String::from(error_message))
+                    return DeleteMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteMembersError::InternalServerError(String::from(error_message))
+                    return DeleteMembersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteMembersError::Validation(error_message.to_string())
+                    return DeleteMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3159,15 +3159,15 @@ impl DeleteThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteThreatIntelSetError::BadRequest(String::from(error_message))
+                    return DeleteThreatIntelSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DeleteThreatIntelSetError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteThreatIntelSetError::Validation(error_message.to_string())
+                    return DeleteThreatIntelSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3265,15 +3265,15 @@ impl DisassociateFromMasterAccountError {
                 "BadRequestException" => {
                     return DisassociateFromMasterAccountError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return DisassociateFromMasterAccountError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateFromMasterAccountError::Validation(error_message.to_string())
+                    return DisassociateFromMasterAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3369,15 +3369,15 @@ impl DisassociateMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DisassociateMembersError::BadRequest(String::from(error_message))
+                    return DisassociateMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DisassociateMembersError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateMembersError::Validation(error_message.to_string())
+                    return DisassociateMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3473,13 +3473,13 @@ impl GetDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDetectorError::BadRequest(String::from(error_message))
+                    return GetDetectorError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetDetectorError::InternalServerError(String::from(error_message))
+                    return GetDetectorError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDetectorError::Validation(error_message.to_string())
+                    return GetDetectorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3573,13 +3573,13 @@ impl GetFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFilterError::BadRequest(String::from(error_message))
+                    return GetFilterError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetFilterError::InternalServerError(String::from(error_message))
+                    return GetFilterError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFilterError::Validation(error_message.to_string())
+                    return GetFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3673,13 +3673,13 @@ impl GetFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFindingsError::BadRequest(String::from(error_message))
+                    return GetFindingsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetFindingsError::InternalServerError(String::from(error_message))
+                    return GetFindingsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFindingsError::Validation(error_message.to_string())
+                    return GetFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3773,15 +3773,15 @@ impl GetFindingsStatisticsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFindingsStatisticsError::BadRequest(String::from(error_message))
+                    return GetFindingsStatisticsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return GetFindingsStatisticsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetFindingsStatisticsError::Validation(error_message.to_string())
+                    return GetFindingsStatisticsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3877,13 +3877,13 @@ impl GetIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIPSetError::BadRequest(String::from(error_message))
+                    return GetIPSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetIPSetError::InternalServerError(String::from(error_message))
+                    return GetIPSetError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIPSetError::Validation(error_message.to_string())
+                    return GetIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3977,15 +3977,15 @@ impl GetInvitationsCountError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetInvitationsCountError::BadRequest(String::from(error_message))
+                    return GetInvitationsCountError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return GetInvitationsCountError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetInvitationsCountError::Validation(error_message.to_string())
+                    return GetInvitationsCountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4081,13 +4081,13 @@ impl GetMasterAccountError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetMasterAccountError::BadRequest(String::from(error_message))
+                    return GetMasterAccountError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetMasterAccountError::InternalServerError(String::from(error_message))
+                    return GetMasterAccountError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMasterAccountError::Validation(error_message.to_string())
+                    return GetMasterAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4181,13 +4181,13 @@ impl GetMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetMembersError::BadRequest(String::from(error_message))
+                    return GetMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetMembersError::InternalServerError(String::from(error_message))
+                    return GetMembersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMembersError::Validation(error_message.to_string())
+                    return GetMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4281,13 +4281,13 @@ impl GetThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetThreatIntelSetError::BadRequest(String::from(error_message))
+                    return GetThreatIntelSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetThreatIntelSetError::InternalServerError(String::from(error_message))
+                    return GetThreatIntelSetError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetThreatIntelSetError::Validation(error_message.to_string())
+                    return GetThreatIntelSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4383,13 +4383,13 @@ impl InviteMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return InviteMembersError::BadRequest(String::from(error_message))
+                    return InviteMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return InviteMembersError::InternalServerError(String::from(error_message))
+                    return InviteMembersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InviteMembersError::Validation(error_message.to_string())
+                    return InviteMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4483,13 +4483,13 @@ impl ListDetectorsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListDetectorsError::BadRequest(String::from(error_message))
+                    return ListDetectorsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListDetectorsError::InternalServerError(String::from(error_message))
+                    return ListDetectorsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDetectorsError::Validation(error_message.to_string())
+                    return ListDetectorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4583,13 +4583,13 @@ impl ListFiltersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListFiltersError::BadRequest(String::from(error_message))
+                    return ListFiltersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListFiltersError::InternalServerError(String::from(error_message))
+                    return ListFiltersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFiltersError::Validation(error_message.to_string())
+                    return ListFiltersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4683,13 +4683,13 @@ impl ListFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListFindingsError::BadRequest(String::from(error_message))
+                    return ListFindingsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListFindingsError::InternalServerError(String::from(error_message))
+                    return ListFindingsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFindingsError::Validation(error_message.to_string())
+                    return ListFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4783,13 +4783,13 @@ impl ListIPSetsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListIPSetsError::BadRequest(String::from(error_message))
+                    return ListIPSetsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListIPSetsError::InternalServerError(String::from(error_message))
+                    return ListIPSetsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIPSetsError::Validation(error_message.to_string())
+                    return ListIPSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4883,13 +4883,13 @@ impl ListInvitationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListInvitationsError::BadRequest(String::from(error_message))
+                    return ListInvitationsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListInvitationsError::InternalServerError(String::from(error_message))
+                    return ListInvitationsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInvitationsError::Validation(error_message.to_string())
+                    return ListInvitationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4983,13 +4983,13 @@ impl ListMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListMembersError::BadRequest(String::from(error_message))
+                    return ListMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListMembersError::InternalServerError(String::from(error_message))
+                    return ListMembersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListMembersError::Validation(error_message.to_string())
+                    return ListMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5083,15 +5083,15 @@ impl ListThreatIntelSetsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListThreatIntelSetsError::BadRequest(String::from(error_message))
+                    return ListThreatIntelSetsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return ListThreatIntelSetsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListThreatIntelSetsError::Validation(error_message.to_string())
+                    return ListThreatIntelSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5187,15 +5187,15 @@ impl StartMonitoringMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StartMonitoringMembersError::BadRequest(String::from(error_message))
+                    return StartMonitoringMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return StartMonitoringMembersError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartMonitoringMembersError::Validation(error_message.to_string())
+                    return StartMonitoringMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5291,15 +5291,15 @@ impl StopMonitoringMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StopMonitoringMembersError::BadRequest(String::from(error_message))
+                    return StopMonitoringMembersError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return StopMonitoringMembersError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StopMonitoringMembersError::Validation(error_message.to_string())
+                    return StopMonitoringMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5395,13 +5395,13 @@ impl UnarchiveFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UnarchiveFindingsError::BadRequest(String::from(error_message))
+                    return UnarchiveFindingsError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UnarchiveFindingsError::InternalServerError(String::from(error_message))
+                    return UnarchiveFindingsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UnarchiveFindingsError::Validation(error_message.to_string())
+                    return UnarchiveFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5497,13 +5497,13 @@ impl UpdateDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDetectorError::BadRequest(String::from(error_message))
+                    return UpdateDetectorError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateDetectorError::InternalServerError(String::from(error_message))
+                    return UpdateDetectorError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDetectorError::Validation(error_message.to_string())
+                    return UpdateDetectorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5597,13 +5597,13 @@ impl UpdateFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateFilterError::BadRequest(String::from(error_message))
+                    return UpdateFilterError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateFilterError::InternalServerError(String::from(error_message))
+                    return UpdateFilterError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFilterError::Validation(error_message.to_string())
+                    return UpdateFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5697,15 +5697,15 @@ impl UpdateFindingsFeedbackError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateFindingsFeedbackError::BadRequest(String::from(error_message))
+                    return UpdateFindingsFeedbackError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return UpdateFindingsFeedbackError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateFindingsFeedbackError::Validation(error_message.to_string())
+                    return UpdateFindingsFeedbackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5801,13 +5801,13 @@ impl UpdateIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateIPSetError::BadRequest(String::from(error_message))
+                    return UpdateIPSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateIPSetError::InternalServerError(String::from(error_message))
+                    return UpdateIPSetError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateIPSetError::Validation(error_message.to_string())
+                    return UpdateIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5901,15 +5901,15 @@ impl UpdateThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateThreatIntelSetError::BadRequest(String::from(error_message))
+                    return UpdateThreatIntelSetError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return UpdateThreatIntelSetError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateThreatIntelSetError::Validation(error_message.to_string())
+                    return UpdateThreatIntelSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

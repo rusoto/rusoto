@@ -1504,25 +1504,25 @@ impl AssociateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AssociateFleetError::ConcurrentModification(String::from(error_message))
+                    return AssociateFleetError::ConcurrentModification(String::from(error_message));
                 }
                 "IncompatibleImageException" => {
-                    return AssociateFleetError::IncompatibleImage(String::from(error_message))
+                    return AssociateFleetError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return AssociateFleetError::InvalidAccountStatus(String::from(error_message))
+                    return AssociateFleetError::InvalidAccountStatus(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AssociateFleetError::LimitExceeded(String::from(error_message))
+                    return AssociateFleetError::LimitExceeded(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return AssociateFleetError::OperationNotPermitted(String::from(error_message))
+                    return AssociateFleetError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateFleetError::ResourceNotFound(String::from(error_message))
+                    return AssociateFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateFleetError::Validation(error_message.to_string())
+                    return AssociateFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1614,25 +1614,25 @@ impl CopyImageError {
 
             match *error_type {
                 "IncompatibleImageException" => {
-                    return CopyImageError::IncompatibleImage(String::from(error_message))
+                    return CopyImageError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return CopyImageError::InvalidAccountStatus(String::from(error_message))
+                    return CopyImageError::InvalidAccountStatus(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CopyImageError::LimitExceeded(String::from(error_message))
+                    return CopyImageError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CopyImageError::ResourceAlreadyExists(String::from(error_message))
+                    return CopyImageError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotAvailableException" => {
-                    return CopyImageError::ResourceNotAvailable(String::from(error_message))
+                    return CopyImageError::ResourceNotAvailable(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CopyImageError::ResourceNotFound(String::from(error_message))
+                    return CopyImageError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CopyImageError::Validation(error_message.to_string())
+                    return CopyImageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1720,18 +1720,18 @@ impl CreateDirectoryConfigError {
                 "InvalidAccountStatusException" => {
                     return CreateDirectoryConfigError::InvalidAccountStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateDirectoryConfigError::LimitExceeded(String::from(error_message))
+                    return CreateDirectoryConfigError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
                     return CreateDirectoryConfigError::ResourceAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDirectoryConfigError::Validation(error_message.to_string())
+                    return CreateDirectoryConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1830,39 +1830,39 @@ impl CreateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateFleetError::ConcurrentModification(String::from(error_message))
+                    return CreateFleetError::ConcurrentModification(String::from(error_message));
                 }
                 "IncompatibleImageException" => {
-                    return CreateFleetError::IncompatibleImage(String::from(error_message))
+                    return CreateFleetError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return CreateFleetError::InvalidAccountStatus(String::from(error_message))
+                    return CreateFleetError::InvalidAccountStatus(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return CreateFleetError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return CreateFleetError::InvalidRole(String::from(error_message))
+                    return CreateFleetError::InvalidRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateFleetError::LimitExceeded(String::from(error_message))
+                    return CreateFleetError::LimitExceeded(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateFleetError::OperationNotPermitted(String::from(error_message))
+                    return CreateFleetError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateFleetError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateFleetError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotAvailableException" => {
-                    return CreateFleetError::ResourceNotAvailable(String::from(error_message))
+                    return CreateFleetError::ResourceNotAvailable(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateFleetError::ResourceNotFound(String::from(error_message))
+                    return CreateFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateFleetError::Validation(error_message.to_string())
+                    return CreateFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1968,47 +1968,47 @@ impl CreateImageBuilderError {
                 "ConcurrentModificationException" => {
                     return CreateImageBuilderError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IncompatibleImageException" => {
-                    return CreateImageBuilderError::IncompatibleImage(String::from(error_message))
+                    return CreateImageBuilderError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
                     return CreateImageBuilderError::InvalidAccountStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
                     return CreateImageBuilderError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return CreateImageBuilderError::InvalidRole(String::from(error_message))
+                    return CreateImageBuilderError::InvalidRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateImageBuilderError::LimitExceeded(String::from(error_message))
+                    return CreateImageBuilderError::LimitExceeded(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
                     return CreateImageBuilderError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
                     return CreateImageBuilderError::ResourceAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotAvailableException" => {
                     return CreateImageBuilderError::ResourceNotAvailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateImageBuilderError::ResourceNotFound(String::from(error_message))
+                    return CreateImageBuilderError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateImageBuilderError::Validation(error_message.to_string())
+                    return CreateImageBuilderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2100,17 +2100,17 @@ impl CreateImageBuilderStreamingURLError {
                 "OperationNotPermittedException" => {
                     return CreateImageBuilderStreamingURLError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CreateImageBuilderStreamingURLError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateImageBuilderStreamingURLError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2202,30 +2202,30 @@ impl CreateStackError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateStackError::ConcurrentModification(String::from(error_message))
+                    return CreateStackError::ConcurrentModification(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return CreateStackError::InvalidAccountStatus(String::from(error_message))
+                    return CreateStackError::InvalidAccountStatus(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return CreateStackError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return CreateStackError::InvalidRole(String::from(error_message))
+                    return CreateStackError::InvalidRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateStackError::LimitExceeded(String::from(error_message))
+                    return CreateStackError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateStackError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateStackError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateStackError::ResourceNotFound(String::from(error_message))
+                    return CreateStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateStackError::Validation(error_message.to_string())
+                    return CreateStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2316,23 +2316,23 @@ impl CreateStreamingURLError {
                 "InvalidParameterCombinationException" => {
                     return CreateStreamingURLError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return CreateStreamingURLError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotAvailableException" => {
                     return CreateStreamingURLError::ResourceNotAvailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateStreamingURLError::ResourceNotFound(String::from(error_message))
+                    return CreateStreamingURLError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateStreamingURLError::Validation(error_message.to_string())
+                    return CreateStreamingURLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2416,13 +2416,13 @@ impl DeleteDirectoryConfigError {
 
             match *error_type {
                 "ResourceInUseException" => {
-                    return DeleteDirectoryConfigError::ResourceInUse(String::from(error_message))
+                    return DeleteDirectoryConfigError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDirectoryConfigError::ResourceNotFound(String::from(error_message))
+                    return DeleteDirectoryConfigError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDirectoryConfigError::Validation(error_message.to_string())
+                    return DeleteDirectoryConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2506,16 +2506,16 @@ impl DeleteFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteFleetError::ConcurrentModification(String::from(error_message))
+                    return DeleteFleetError::ConcurrentModification(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteFleetError::ResourceInUse(String::from(error_message))
+                    return DeleteFleetError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFleetError::ResourceNotFound(String::from(error_message))
+                    return DeleteFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFleetError::Validation(error_message.to_string())
+                    return DeleteFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2600,19 +2600,19 @@ impl DeleteImageError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteImageError::ConcurrentModification(String::from(error_message))
+                    return DeleteImageError::ConcurrentModification(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteImageError::OperationNotPermitted(String::from(error_message))
+                    return DeleteImageError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteImageError::ResourceInUse(String::from(error_message))
+                    return DeleteImageError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteImageError::ResourceNotFound(String::from(error_message))
+                    return DeleteImageError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteImageError::Validation(error_message.to_string())
+                    return DeleteImageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2698,18 +2698,18 @@ impl DeleteImageBuilderError {
                 "ConcurrentModificationException" => {
                     return DeleteImageBuilderError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return DeleteImageBuilderError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteImageBuilderError::ResourceNotFound(String::from(error_message))
+                    return DeleteImageBuilderError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteImageBuilderError::Validation(error_message.to_string())
+                    return DeleteImageBuilderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2794,15 +2794,15 @@ impl DeleteImagePermissionsError {
                 "ResourceNotAvailableException" => {
                     return DeleteImagePermissionsError::ResourceNotAvailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteImagePermissionsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteImagePermissionsError::Validation(error_message.to_string())
+                    return DeleteImagePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2886,16 +2886,16 @@ impl DeleteStackError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteStackError::ConcurrentModification(String::from(error_message))
+                    return DeleteStackError::ConcurrentModification(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteStackError::ResourceInUse(String::from(error_message))
+                    return DeleteStackError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStackError::ResourceNotFound(String::from(error_message))
+                    return DeleteStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStackError::Validation(error_message.to_string())
+                    return DeleteStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2976,10 +2976,10 @@ impl DescribeDirectoryConfigsError {
                 "ResourceNotFoundException" => {
                     return DescribeDirectoryConfigsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDirectoryConfigsError::Validation(error_message.to_string())
+                    return DescribeDirectoryConfigsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3058,10 +3058,10 @@ impl DescribeFleetsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeFleetsError::ResourceNotFound(String::from(error_message))
+                    return DescribeFleetsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFleetsError::Validation(error_message.to_string())
+                    return DescribeFleetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3138,10 +3138,10 @@ impl DescribeImageBuildersError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeImageBuildersError::ResourceNotFound(String::from(error_message))
+                    return DescribeImageBuildersError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeImageBuildersError::Validation(error_message.to_string())
+                    return DescribeImageBuildersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3222,10 +3222,10 @@ impl DescribeImagePermissionsError {
                 "ResourceNotFoundException" => {
                     return DescribeImagePermissionsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeImagePermissionsError::Validation(error_message.to_string())
+                    return DescribeImagePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3308,13 +3308,13 @@ impl DescribeImagesError {
                 "InvalidParameterCombinationException" => {
                     return DescribeImagesError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeImagesError::ResourceNotFound(String::from(error_message))
+                    return DescribeImagesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeImagesError::Validation(error_message.to_string())
+                    return DescribeImagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3394,10 +3394,10 @@ impl DescribeSessionsError {
                 "InvalidParameterCombinationException" => {
                     return DescribeSessionsError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSessionsError::Validation(error_message.to_string())
+                    return DescribeSessionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3474,10 +3474,10 @@ impl DescribeStacksError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeStacksError::ResourceNotFound(String::from(error_message))
+                    return DescribeStacksError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStacksError::Validation(error_message.to_string())
+                    return DescribeStacksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3560,16 +3560,16 @@ impl DisassociateFleetError {
                 "ConcurrentModificationException" => {
                     return DisassociateFleetError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DisassociateFleetError::ResourceInUse(String::from(error_message))
+                    return DisassociateFleetError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateFleetError::ResourceNotFound(String::from(error_message))
+                    return DisassociateFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateFleetError::Validation(error_message.to_string())
+                    return DisassociateFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3648,7 +3648,7 @@ impl ExpireSessionError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ExpireSessionError::Validation(error_message.to_string())
+                    return ExpireSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3722,7 +3722,7 @@ impl ListAssociatedFleetsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListAssociatedFleetsError::Validation(error_message.to_string())
+                    return ListAssociatedFleetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3798,7 +3798,7 @@ impl ListAssociatedStacksError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListAssociatedStacksError::Validation(error_message.to_string())
+                    return ListAssociatedStacksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3876,10 +3876,10 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message))
+                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3966,22 +3966,22 @@ impl StartFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StartFleetError::ConcurrentModification(String::from(error_message))
+                    return StartFleetError::ConcurrentModification(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return StartFleetError::InvalidAccountStatus(String::from(error_message))
+                    return StartFleetError::InvalidAccountStatus(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartFleetError::LimitExceeded(String::from(error_message))
+                    return StartFleetError::LimitExceeded(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return StartFleetError::OperationNotPermitted(String::from(error_message))
+                    return StartFleetError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartFleetError::ResourceNotFound(String::from(error_message))
+                    return StartFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartFleetError::Validation(error_message.to_string())
+                    return StartFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4072,22 +4072,22 @@ impl StartImageBuilderError {
                 "ConcurrentModificationException" => {
                     return StartImageBuilderError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IncompatibleImageException" => {
-                    return StartImageBuilderError::IncompatibleImage(String::from(error_message))
+                    return StartImageBuilderError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return StartImageBuilderError::InvalidAccountStatus(String::from(error_message))
+                    return StartImageBuilderError::InvalidAccountStatus(String::from(error_message));
                 }
                 "ResourceNotAvailableException" => {
-                    return StartImageBuilderError::ResourceNotAvailable(String::from(error_message))
+                    return StartImageBuilderError::ResourceNotAvailable(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartImageBuilderError::ResourceNotFound(String::from(error_message))
+                    return StartImageBuilderError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartImageBuilderError::Validation(error_message.to_string())
+                    return StartImageBuilderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4172,13 +4172,13 @@ impl StopFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StopFleetError::ConcurrentModification(String::from(error_message))
+                    return StopFleetError::ConcurrentModification(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopFleetError::ResourceNotFound(String::from(error_message))
+                    return StopFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopFleetError::Validation(error_message.to_string())
+                    return StopFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4262,16 +4262,16 @@ impl StopImageBuilderError {
                 "ConcurrentModificationException" => {
                     return StopImageBuilderError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return StopImageBuilderError::OperationNotPermitted(String::from(error_message))
+                    return StopImageBuilderError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopImageBuilderError::ResourceNotFound(String::from(error_message))
+                    return StopImageBuilderError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopImageBuilderError::Validation(error_message.to_string())
+                    return StopImageBuilderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4354,16 +4354,16 @@ impl TagResourceError {
 
             match *error_type {
                 "InvalidAccountStatusException" => {
-                    return TagResourceError::InvalidAccountStatus(String::from(error_message))
+                    return TagResourceError::InvalidAccountStatus(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message))
+                    return TagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4442,10 +4442,10 @@ impl UntagResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4528,16 +4528,16 @@ impl UpdateDirectoryConfigError {
                 "ConcurrentModificationException" => {
                     return UpdateDirectoryConfigError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateDirectoryConfigError::ResourceInUse(String::from(error_message))
+                    return UpdateDirectoryConfigError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDirectoryConfigError::ResourceNotFound(String::from(error_message))
+                    return UpdateDirectoryConfigError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDirectoryConfigError::Validation(error_message.to_string())
+                    return UpdateDirectoryConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4636,39 +4636,39 @@ impl UpdateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateFleetError::ConcurrentModification(String::from(error_message))
+                    return UpdateFleetError::ConcurrentModification(String::from(error_message));
                 }
                 "IncompatibleImageException" => {
-                    return UpdateFleetError::IncompatibleImage(String::from(error_message))
+                    return UpdateFleetError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return UpdateFleetError::InvalidAccountStatus(String::from(error_message))
+                    return UpdateFleetError::InvalidAccountStatus(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return UpdateFleetError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return UpdateFleetError::InvalidRole(String::from(error_message))
+                    return UpdateFleetError::InvalidRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateFleetError::LimitExceeded(String::from(error_message))
+                    return UpdateFleetError::LimitExceeded(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateFleetError::OperationNotPermitted(String::from(error_message))
+                    return UpdateFleetError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateFleetError::ResourceInUse(String::from(error_message))
+                    return UpdateFleetError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotAvailableException" => {
-                    return UpdateFleetError::ResourceNotAvailable(String::from(error_message))
+                    return UpdateFleetError::ResourceNotAvailable(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFleetError::ResourceNotFound(String::from(error_message))
+                    return UpdateFleetError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFleetError::Validation(error_message.to_string())
+                    return UpdateFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4758,20 +4758,20 @@ impl UpdateImagePermissionsError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return UpdateImagePermissionsError::LimitExceeded(String::from(error_message))
+                    return UpdateImagePermissionsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotAvailableException" => {
                     return UpdateImagePermissionsError::ResourceNotAvailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateImagePermissionsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateImagePermissionsError::Validation(error_message.to_string())
+                    return UpdateImagePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4866,33 +4866,33 @@ impl UpdateStackError {
 
             match *error_type {
                 "IncompatibleImageException" => {
-                    return UpdateStackError::IncompatibleImage(String::from(error_message))
+                    return UpdateStackError::IncompatibleImage(String::from(error_message));
                 }
                 "InvalidAccountStatusException" => {
-                    return UpdateStackError::InvalidAccountStatus(String::from(error_message))
+                    return UpdateStackError::InvalidAccountStatus(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return UpdateStackError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return UpdateStackError::InvalidRole(String::from(error_message))
+                    return UpdateStackError::InvalidRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateStackError::LimitExceeded(String::from(error_message))
+                    return UpdateStackError::LimitExceeded(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateStackError::OperationNotPermitted(String::from(error_message))
+                    return UpdateStackError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateStackError::ResourceInUse(String::from(error_message))
+                    return UpdateStackError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateStackError::ResourceNotFound(String::from(error_message))
+                    return UpdateStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateStackError::Validation(error_message.to_string())
+                    return UpdateStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

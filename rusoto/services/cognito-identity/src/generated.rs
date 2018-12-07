@@ -625,25 +625,25 @@ impl CreateIdentityPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateIdentityPoolError::InternalError(String::from(error_message))
+                    return CreateIdentityPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateIdentityPoolError::InvalidParameter(String::from(error_message))
+                    return CreateIdentityPoolError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateIdentityPoolError::LimitExceeded(String::from(error_message))
+                    return CreateIdentityPoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return CreateIdentityPoolError::NotAuthorized(String::from(error_message))
+                    return CreateIdentityPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return CreateIdentityPoolError::ResourceConflict(String::from(error_message))
+                    return CreateIdentityPoolError::ResourceConflict(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateIdentityPoolError::TooManyRequests(String::from(error_message))
+                    return CreateIdentityPoolError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIdentityPoolError::Validation(error_message.to_string())
+                    return CreateIdentityPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -731,16 +731,16 @@ impl DeleteIdentitiesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteIdentitiesError::InternalError(String::from(error_message))
+                    return DeleteIdentitiesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteIdentitiesError::InvalidParameter(String::from(error_message))
+                    return DeleteIdentitiesError::InvalidParameter(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIdentitiesError::TooManyRequests(String::from(error_message))
+                    return DeleteIdentitiesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIdentitiesError::Validation(error_message.to_string())
+                    return DeleteIdentitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -827,22 +827,22 @@ impl DeleteIdentityPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteIdentityPoolError::InternalError(String::from(error_message))
+                    return DeleteIdentityPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteIdentityPoolError::InvalidParameter(String::from(error_message))
+                    return DeleteIdentityPoolError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteIdentityPoolError::NotAuthorized(String::from(error_message))
+                    return DeleteIdentityPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteIdentityPoolError::ResourceNotFound(String::from(error_message))
+                    return DeleteIdentityPoolError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIdentityPoolError::TooManyRequests(String::from(error_message))
+                    return DeleteIdentityPoolError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIdentityPoolError::Validation(error_message.to_string())
+                    return DeleteIdentityPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -933,22 +933,22 @@ impl DescribeIdentityError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeIdentityError::InternalError(String::from(error_message))
+                    return DescribeIdentityError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeIdentityError::InvalidParameter(String::from(error_message))
+                    return DescribeIdentityError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeIdentityError::NotAuthorized(String::from(error_message))
+                    return DescribeIdentityError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeIdentityError::ResourceNotFound(String::from(error_message))
+                    return DescribeIdentityError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeIdentityError::TooManyRequests(String::from(error_message))
+                    return DescribeIdentityError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeIdentityError::Validation(error_message.to_string())
+                    return DescribeIdentityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1037,22 +1037,22 @@ impl DescribeIdentityPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeIdentityPoolError::InternalError(String::from(error_message))
+                    return DescribeIdentityPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeIdentityPoolError::InvalidParameter(String::from(error_message))
+                    return DescribeIdentityPoolError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeIdentityPoolError::NotAuthorized(String::from(error_message))
+                    return DescribeIdentityPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeIdentityPoolError::ResourceNotFound(String::from(error_message))
+                    return DescribeIdentityPoolError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeIdentityPoolError::TooManyRequests(String::from(error_message))
+                    return DescribeIdentityPoolError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeIdentityPoolError::Validation(error_message.to_string())
+                    return DescribeIdentityPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1151,45 +1151,45 @@ impl GetCredentialsForIdentityError {
                 "ExternalServiceException" => {
                     return GetCredentialsForIdentityError::ExternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
                     return GetCredentialsForIdentityError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidIdentityPoolConfigurationException" => {
                     return GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterException" => {
                     return GetCredentialsForIdentityError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return GetCredentialsForIdentityError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceConflictException" => {
                     return GetCredentialsForIdentityError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetCredentialsForIdentityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return GetCredentialsForIdentityError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetCredentialsForIdentityError::Validation(error_message.to_string())
+                    return GetCredentialsForIdentityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1289,28 +1289,28 @@ impl GetIdError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return GetIdError::ExternalService(String::from(error_message))
+                    return GetIdError::ExternalService(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return GetIdError::InternalError(String::from(error_message))
+                    return GetIdError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetIdError::InvalidParameter(String::from(error_message))
+                    return GetIdError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetIdError::LimitExceeded(String::from(error_message))
+                    return GetIdError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetIdError::NotAuthorized(String::from(error_message))
+                    return GetIdError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return GetIdError::ResourceConflict(String::from(error_message))
+                    return GetIdError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetIdError::ResourceNotFound(String::from(error_message))
+                    return GetIdError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetIdError::TooManyRequests(String::from(error_message))
+                    return GetIdError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => return GetIdError::Validation(error_message.to_string()),
                 _ => {}
@@ -1405,25 +1405,25 @@ impl GetIdentityPoolRolesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetIdentityPoolRolesError::InternalError(String::from(error_message))
+                    return GetIdentityPoolRolesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetIdentityPoolRolesError::InvalidParameter(String::from(error_message))
+                    return GetIdentityPoolRolesError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetIdentityPoolRolesError::NotAuthorized(String::from(error_message))
+                    return GetIdentityPoolRolesError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return GetIdentityPoolRolesError::ResourceConflict(String::from(error_message))
+                    return GetIdentityPoolRolesError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message))
+                    return GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetIdentityPoolRolesError::TooManyRequests(String::from(error_message))
+                    return GetIdentityPoolRolesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIdentityPoolRolesError::Validation(error_message.to_string())
+                    return GetIdentityPoolRolesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1519,28 +1519,28 @@ impl GetOpenIdTokenError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return GetOpenIdTokenError::ExternalService(String::from(error_message))
+                    return GetOpenIdTokenError::ExternalService(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return GetOpenIdTokenError::InternalError(String::from(error_message))
+                    return GetOpenIdTokenError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetOpenIdTokenError::InvalidParameter(String::from(error_message))
+                    return GetOpenIdTokenError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetOpenIdTokenError::NotAuthorized(String::from(error_message))
+                    return GetOpenIdTokenError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return GetOpenIdTokenError::ResourceConflict(String::from(error_message))
+                    return GetOpenIdTokenError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetOpenIdTokenError::ResourceNotFound(String::from(error_message))
+                    return GetOpenIdTokenError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetOpenIdTokenError::TooManyRequests(String::from(error_message))
+                    return GetOpenIdTokenError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetOpenIdTokenError::Validation(error_message.to_string())
+                    return GetOpenIdTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1637,42 +1637,42 @@ impl GetOpenIdTokenForDeveloperIdentityError {
                 "DeveloperUserAlreadyRegisteredException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalErrorException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceConflictException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetOpenIdTokenForDeveloperIdentityError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1767,22 +1767,22 @@ impl ListIdentitiesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListIdentitiesError::InternalError(String::from(error_message))
+                    return ListIdentitiesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListIdentitiesError::InvalidParameter(String::from(error_message))
+                    return ListIdentitiesError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListIdentitiesError::NotAuthorized(String::from(error_message))
+                    return ListIdentitiesError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListIdentitiesError::ResourceNotFound(String::from(error_message))
+                    return ListIdentitiesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListIdentitiesError::TooManyRequests(String::from(error_message))
+                    return ListIdentitiesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIdentitiesError::Validation(error_message.to_string())
+                    return ListIdentitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1869,19 +1869,19 @@ impl ListIdentityPoolsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListIdentityPoolsError::InternalError(String::from(error_message))
+                    return ListIdentityPoolsError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListIdentityPoolsError::InvalidParameter(String::from(error_message))
+                    return ListIdentityPoolsError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListIdentityPoolsError::NotAuthorized(String::from(error_message))
+                    return ListIdentityPoolsError::NotAuthorized(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListIdentityPoolsError::TooManyRequests(String::from(error_message))
+                    return ListIdentityPoolsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIdentityPoolsError::Validation(error_message.to_string())
+                    return ListIdentityPoolsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1973,33 +1973,33 @@ impl LookupDeveloperIdentityError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return LookupDeveloperIdentityError::InternalError(String::from(error_message))
+                    return LookupDeveloperIdentityError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return LookupDeveloperIdentityError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return LookupDeveloperIdentityError::NotAuthorized(String::from(error_message))
+                    return LookupDeveloperIdentityError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
                     return LookupDeveloperIdentityError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return LookupDeveloperIdentityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return LookupDeveloperIdentityError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return LookupDeveloperIdentityError::Validation(error_message.to_string())
+                    return LookupDeveloperIdentityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2093,33 +2093,33 @@ impl MergeDeveloperIdentitiesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return MergeDeveloperIdentitiesError::InternalError(String::from(error_message))
+                    return MergeDeveloperIdentitiesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return MergeDeveloperIdentitiesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message))
+                    return MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
                     return MergeDeveloperIdentitiesError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return MergeDeveloperIdentitiesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return MergeDeveloperIdentitiesError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return MergeDeveloperIdentitiesError::Validation(error_message.to_string())
+                    return MergeDeveloperIdentitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2217,28 +2217,28 @@ impl SetIdentityPoolRolesError {
                 "ConcurrentModificationException" => {
                     return SetIdentityPoolRolesError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return SetIdentityPoolRolesError::InternalError(String::from(error_message))
+                    return SetIdentityPoolRolesError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SetIdentityPoolRolesError::InvalidParameter(String::from(error_message))
+                    return SetIdentityPoolRolesError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return SetIdentityPoolRolesError::NotAuthorized(String::from(error_message))
+                    return SetIdentityPoolRolesError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return SetIdentityPoolRolesError::ResourceConflict(String::from(error_message))
+                    return SetIdentityPoolRolesError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message))
+                    return SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return SetIdentityPoolRolesError::TooManyRequests(String::from(error_message))
+                    return SetIdentityPoolRolesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetIdentityPoolRolesError::Validation(error_message.to_string())
+                    return SetIdentityPoolRolesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2333,33 +2333,33 @@ impl UnlinkDeveloperIdentityError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UnlinkDeveloperIdentityError::InternalError(String::from(error_message))
+                    return UnlinkDeveloperIdentityError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return UnlinkDeveloperIdentityError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message))
+                    return UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
                     return UnlinkDeveloperIdentityError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UnlinkDeveloperIdentityError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return UnlinkDeveloperIdentityError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UnlinkDeveloperIdentityError::Validation(error_message.to_string())
+                    return UnlinkDeveloperIdentityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2455,28 +2455,28 @@ impl UnlinkIdentityError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return UnlinkIdentityError::ExternalService(String::from(error_message))
+                    return UnlinkIdentityError::ExternalService(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return UnlinkIdentityError::InternalError(String::from(error_message))
+                    return UnlinkIdentityError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UnlinkIdentityError::InvalidParameter(String::from(error_message))
+                    return UnlinkIdentityError::InvalidParameter(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UnlinkIdentityError::NotAuthorized(String::from(error_message))
+                    return UnlinkIdentityError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return UnlinkIdentityError::ResourceConflict(String::from(error_message))
+                    return UnlinkIdentityError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UnlinkIdentityError::ResourceNotFound(String::from(error_message))
+                    return UnlinkIdentityError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UnlinkIdentityError::TooManyRequests(String::from(error_message))
+                    return UnlinkIdentityError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UnlinkIdentityError::Validation(error_message.to_string())
+                    return UnlinkIdentityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2575,31 +2575,31 @@ impl UpdateIdentityPoolError {
                 "ConcurrentModificationException" => {
                     return UpdateIdentityPoolError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return UpdateIdentityPoolError::InternalError(String::from(error_message))
+                    return UpdateIdentityPoolError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateIdentityPoolError::InvalidParameter(String::from(error_message))
+                    return UpdateIdentityPoolError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateIdentityPoolError::LimitExceeded(String::from(error_message))
+                    return UpdateIdentityPoolError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateIdentityPoolError::NotAuthorized(String::from(error_message))
+                    return UpdateIdentityPoolError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return UpdateIdentityPoolError::ResourceConflict(String::from(error_message))
+                    return UpdateIdentityPoolError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateIdentityPoolError::ResourceNotFound(String::from(error_message))
+                    return UpdateIdentityPoolError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateIdentityPoolError::TooManyRequests(String::from(error_message))
+                    return UpdateIdentityPoolError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateIdentityPoolError::Validation(error_message.to_string())
+                    return UpdateIdentityPoolError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
