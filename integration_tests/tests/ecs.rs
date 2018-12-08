@@ -4,11 +4,19 @@ extern crate rusoto_core;
 extern crate rusoto_ecs;
 
 use rusoto_ecs::{Ecs, EcsClient, ListClustersRequest, ListClustersError};
-use rusoto_core::Region;
+use rusoto_core::{Region, DefaultCredentialsProvider};
+use rusoto_core::request::{HttpClient, HttpConfig};
 
 #[test]
 fn main() {
-    let ecs = EcsClient::new(Region::UsEast1);
+    // EcsClient configuration demonstrates setting the hyper read_buf_size option
+    // to 2MB:
+    let cred_provider =  DefaultCredentialsProvider::new().unwrap();
+    let mut http_config_with_bigger_buffer = HttpConfig::new();
+    http_config_with_bigger_buffer.read_buf_size(1024 * 1024 * 2);
+    let http_provider = HttpClient::new_with_config(http_config_with_bigger_buffer).unwrap();
+
+    let ecs = EcsClient::new_with(http_provider, cred_provider, Region::UsEast1);
 
     // http://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ListClusters.html
     match ecs.list_clusters(ListClustersRequest::default()).sync() {
