@@ -5942,7 +5942,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<AssociateContactWithAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5977,7 +5978,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<AssociateDeviceWithRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6013,7 +6015,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<AssociateSkillGroupWithRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6046,7 +6049,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6082,7 +6086,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6118,7 +6123,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6154,7 +6160,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6190,7 +6197,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6226,7 +6234,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6262,7 +6271,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6298,7 +6308,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6334,7 +6345,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6370,7 +6382,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6406,7 +6419,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteRoomSkillParameterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6439,7 +6453,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6475,7 +6490,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6517,7 +6533,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DisassociateContactFromAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6555,7 +6572,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DisassociateDeviceFromRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6592,7 +6610,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DisassociateSkillGroupFromRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6625,7 +6644,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6661,7 +6681,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6697,7 +6718,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6733,7 +6755,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6766,7 +6789,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6802,7 +6826,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetRoomSkillParameterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6837,7 +6862,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6873,7 +6899,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ListDeviceEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6909,7 +6936,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ListSkillsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6942,7 +6970,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6978,7 +7007,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<PutRoomSkillParameterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7013,7 +7043,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ResolveRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7049,7 +7080,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<RevokeInvitationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7085,7 +7117,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchAddressBooksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7121,7 +7154,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchContactsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7157,7 +7191,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchDevicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7193,7 +7228,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchProfilesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7229,7 +7265,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchRoomsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7265,7 +7302,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchSkillGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7301,7 +7339,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchUsersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7337,7 +7376,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SendInvitationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7373,7 +7413,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<StartDeviceSyncResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7409,7 +7450,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<TagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7445,7 +7487,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UntagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7481,7 +7524,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7517,7 +7561,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7553,7 +7598,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7589,7 +7635,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7625,7 +7672,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7661,7 +7709,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

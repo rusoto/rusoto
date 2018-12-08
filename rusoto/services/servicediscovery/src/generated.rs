@@ -2632,7 +2632,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<CreatePrivateDnsNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2668,7 +2669,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<CreatePublicDnsNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2701,7 +2703,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<CreateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2740,7 +2743,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<DeleteNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2776,7 +2780,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<DeleteServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2815,7 +2820,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<DeregisterInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2851,7 +2857,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2890,7 +2897,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetInstancesHealthStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2923,7 +2931,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2959,7 +2968,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetOperationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2995,7 +3005,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3031,7 +3042,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3067,7 +3079,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListNamespacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3103,7 +3116,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListOperationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3139,7 +3153,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListServicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3178,7 +3193,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<RegisterInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3241,7 +3257,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<UpdateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

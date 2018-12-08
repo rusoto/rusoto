@@ -4530,7 +4530,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<CreateExportTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4795,7 +4796,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeDestinationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4830,7 +4832,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeExportTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4865,7 +4868,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeLogGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4901,7 +4905,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeLogStreamsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4937,7 +4942,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeMetricFiltersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4972,7 +4978,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeResourcePoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5005,7 +5012,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<DescribeSubscriptionFiltersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5064,7 +5072,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<FilterLogEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5100,7 +5109,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<GetLogEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5136,7 +5146,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<ListTagsLogGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5172,7 +5183,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<PutDestinationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5233,7 +5245,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<PutLogEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5295,7 +5308,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<PutResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5405,7 +5419,8 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
                     serde_json::from_str::<TestMetricFilterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

@@ -101,7 +101,7 @@ pub struct Certificate {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_wallet: Option<Vec<u8>>,
@@ -1269,7 +1269,7 @@ pub struct ImportCertificateMessage {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_wallet: Option<Vec<u8>>,
@@ -6766,7 +6766,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<AddTagsToResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6802,7 +6803,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<CreateEndpointResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6838,7 +6840,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<CreateEventSubscriptionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6874,7 +6877,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<CreateReplicationInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6910,7 +6914,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<CreateReplicationSubnetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6943,7 +6948,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<CreateReplicationTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6978,7 +6984,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DeleteCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7014,7 +7021,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DeleteEndpointResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7050,7 +7058,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DeleteEventSubscriptionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7086,7 +7095,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DeleteReplicationInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7122,7 +7132,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DeleteReplicationSubnetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7155,7 +7166,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DeleteReplicationTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7191,7 +7203,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeAccountAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7224,7 +7237,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeCertificatesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7259,7 +7273,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeConnectionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7294,7 +7309,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeEndpointTypesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7329,7 +7345,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeEndpointsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7365,7 +7382,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeEventCategoriesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7401,7 +7419,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeEventSubscriptionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7434,7 +7453,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7476,7 +7496,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeOrderableReplicationInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7514,7 +7535,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeRefreshSchemasStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7553,7 +7575,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeReplicationInstanceTaskLogsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7591,7 +7614,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeReplicationInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7628,7 +7652,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeReplicationSubnetGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7669,7 +7694,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeReplicationTaskAssessmentResultsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7705,7 +7731,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeReplicationTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7738,7 +7765,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeSchemasResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7774,7 +7802,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<DescribeTableStatisticsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7807,7 +7836,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ImportCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7843,7 +7873,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ListTagsForResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7878,7 +7909,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ModifyEndpointResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7914,7 +7946,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ModifyEventSubscriptionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7950,7 +7983,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ModifyReplicationInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7986,7 +8020,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ModifyReplicationSubnetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8019,7 +8054,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ModifyReplicationTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8057,7 +8093,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<RebootReplicationInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8090,7 +8127,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<RefreshSchemasResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8126,7 +8164,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<ReloadTablesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8162,7 +8201,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<RemoveTagsFromResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8197,7 +8237,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<StartReplicationTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8236,7 +8277,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<StartReplicationTaskAssessmentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8269,7 +8311,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<StopReplicationTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8304,7 +8347,8 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
                     serde_json::from_str::<TestConnectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

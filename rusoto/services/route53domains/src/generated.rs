@@ -3407,7 +3407,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<CheckDomainAvailabilityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3443,7 +3444,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<CheckDomainTransferabilityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3479,7 +3481,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<DeleteTagsForDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3517,7 +3520,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<DisableDomainAutoRenewResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3555,7 +3559,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<DisableDomainTransferLockResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3591,7 +3596,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<EnableDomainAutoRenewResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3629,7 +3635,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<EnableDomainTransferLockResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3665,7 +3672,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetContactReachabilityStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3698,7 +3706,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetDomainDetailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3737,7 +3746,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetDomainSuggestionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3775,7 +3785,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetOperationDetailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3811,7 +3822,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ListDomainsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3847,7 +3859,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ListOperationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3883,7 +3896,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ListTagsForDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3919,7 +3933,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<RegisterDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3955,7 +3970,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<RenewDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3995,7 +4011,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ResendContactReachabilityEmailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4031,7 +4048,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<RetrieveDomainAuthCodeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4066,7 +4084,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<TransferDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4105,7 +4124,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateDomainContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4143,7 +4163,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateDomainContactPrivacyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4179,7 +4200,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateDomainNameserversResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4215,7 +4237,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateTagsForDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4250,7 +4273,8 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ViewBillingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

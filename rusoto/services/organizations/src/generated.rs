@@ -6665,7 +6665,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<AcceptHandshakeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6724,7 +6725,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<CancelHandshakeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6760,7 +6762,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<CreateAccountResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6799,7 +6802,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<CreateOrganizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6838,7 +6842,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<CreateOrganizationalUnitResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6871,7 +6876,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<CreatePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6907,7 +6913,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DeclineHandshakeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7017,7 +7024,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DescribeAccountResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7056,7 +7064,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DescribeCreateAccountStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7092,7 +7101,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DescribeHandshakeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7129,7 +7139,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DescribeOrganizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7167,7 +7178,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DescribeOrganizationalUnitResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7200,7 +7212,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DescribePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7288,7 +7301,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<DisablePolicyTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7353,7 +7367,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<EnableAllFeaturesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7389,7 +7404,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<EnablePolicyTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7428,7 +7444,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<InviteAccountToOrganizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7492,7 +7509,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListAWSServiceAccessForOrganizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7527,7 +7545,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListAccountsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7566,7 +7585,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListAccountsForParentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7601,7 +7621,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListChildrenResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7640,7 +7661,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListCreateAccountStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7676,7 +7698,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListHandshakesForAccountResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7713,7 +7736,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListHandshakesForOrganizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7750,7 +7774,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListOrganizationalUnitsForParentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7785,7 +7810,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListParentsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7821,7 +7847,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7860,7 +7887,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListPoliciesForTargetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7895,7 +7923,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListRootsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7934,7 +7963,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<ListTargetsForPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -8021,7 +8051,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<UpdateOrganizationalUnitResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8054,7 +8085,8 @@ impl Organizations for OrganizationsClient {
 
                     serde_json::from_str::<UpdatePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

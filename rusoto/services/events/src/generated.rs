@@ -2074,7 +2074,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<DescribeEventBusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2110,7 +2111,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<DescribeRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2192,7 +2194,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<ListRuleNamesByTargetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2227,7 +2230,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<ListRulesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2263,7 +2267,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<ListTargetsByRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2299,7 +2304,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<PutEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2355,7 +2361,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<PutRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2391,7 +2398,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<PutTargetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2453,7 +2461,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<RemoveTargetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2489,7 +2498,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
                     serde_json::from_str::<TestEventPatternResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

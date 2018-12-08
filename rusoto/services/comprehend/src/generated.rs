@@ -4539,7 +4539,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectDominantLanguageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4572,7 +4573,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectEntitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4607,7 +4609,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectKeyPhrasesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4642,7 +4645,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectSentimentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4677,7 +4681,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectSyntaxResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4719,7 +4724,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeDominantLanguageDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4757,7 +4763,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeEntitiesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4794,7 +4801,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeKeyPhrasesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4831,7 +4839,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeSentimentDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4867,7 +4876,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeTopicsDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4900,7 +4910,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectDominantLanguageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4935,7 +4946,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectEntitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -4971,7 +4983,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectKeyPhrasesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5007,7 +5020,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectSentimentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5043,7 +5057,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectSyntaxResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5085,7 +5100,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListDominantLanguageDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5123,7 +5139,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListEntitiesDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5159,7 +5176,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListKeyPhrasesDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5195,7 +5213,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListSentimentDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5231,7 +5250,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListTopicsDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5270,7 +5290,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartDominantLanguageDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5308,7 +5329,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartEntitiesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5344,7 +5366,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartKeyPhrasesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5380,7 +5403,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartSentimentDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5416,7 +5440,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartTopicsDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5453,7 +5478,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopDominantLanguageDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5491,7 +5517,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopEntitiesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5527,7 +5554,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopKeyPhrasesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5563,7 +5591,8 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopSentimentDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

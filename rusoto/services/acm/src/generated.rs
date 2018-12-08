@@ -244,7 +244,7 @@ pub struct ExportCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub passphrase: Vec<u8>,
 }
@@ -324,7 +324,7 @@ pub struct ImportCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub certificate: Vec<u8>,
     /// <p>The <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of an imported certificate to replace. To import a new certificate, omit this field. </p>
@@ -336,7 +336,7 @@ pub struct ImportCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_chain: Option<Vec<u8>>,
@@ -345,7 +345,7 @@ pub struct ImportCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub private_key: Vec<u8>,
 }
@@ -1830,7 +1830,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<DescribeCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1865,7 +1866,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<ExportCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1901,7 +1903,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<GetCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1937,7 +1940,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<ImportCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1973,7 +1977,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<ListCertificatesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2009,7 +2014,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<ListTagsForCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2070,7 +2076,8 @@ impl Acm for AcmClient {
 
                     serde_json::from_str::<RequestCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

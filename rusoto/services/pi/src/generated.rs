@@ -517,7 +517,8 @@ impl PerformanceInsights for PerformanceInsightsClient {
 
                     serde_json::from_str::<DescribeDimensionKeysResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -555,7 +556,8 @@ impl PerformanceInsights for PerformanceInsightsClient {
 
                     serde_json::from_str::<GetResourceMetricsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
