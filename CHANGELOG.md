@@ -6,6 +6,7 @@
 - Add ByteStream struct to core
 - Skip serializing blobs when they are `Option::None`
 - Fix typo in `service_crategen` README.md
+- Switch from `try!` to `?` operator
 
 ## [0.35.0] - 2018-10-31
 
