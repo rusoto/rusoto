@@ -319,6 +319,25 @@ impl HttpClient {
 
         Ok(Self::from_connector(connector))
     }
+
+    /// Create a tls-enabled http client.
+    pub fn new_with_config(config: HttpConfig) -> Result<Self, TlsError> {
+        #[cfg(feature="native-tls")]
+        let connector = match HttpsConnector::new(4) {
+            Ok(connector) => connector,
+            Err(tls_error) => {
+                return Err(TlsError {
+                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+                })
+            }
+        };
+
+        #[cfg(feature="rustls")]
+        let connector = HttpsConnector::new(4);
+
+        Ok(Self::from_connector_with_config(connector, config))
+    }
+
 }
 
 impl<C> HttpClient<C>
@@ -327,13 +346,42 @@ where
     C::Future: 'static
 {
     /// Allows for a custom connector to be used with the HttpClient
-    pub fn from_connector(connector: C) -> Self {
-        let inner = HyperClient::builder()
-            .build(connector);
+    pub fn from_connector(connector:C) -> Self {
+        let inner = HyperClient::builder().build(connector);
+        HttpClient {
+            inner
+        }
+    }
+
+    /// Allows for a custom connector to be used with the HttpClient
+    /// with extra configuration options
+    pub fn from_connector_with_config(connector: C, config: HttpConfig) -> Self {
+        let mut builder = HyperClient::builder();
+        config.read_buf_size.map(|sz| builder.http1_read_buf_exact_size(sz));
+        let inner = builder.build(connector);
 
         HttpClient {
             inner
         }
+    }
+}
+
+/// Configuration options for the HTTP Client
+pub struct HttpConfig {
+    read_buf_size: Option<usize>,
+}
+
+impl HttpConfig {
+
+    /// Create a new HttpConfig
+    pub fn new() -> HttpConfig {
+        HttpConfig { read_buf_size: None }
+    }
+    /// Sets the size of the read buffer for inbound data
+    /// A larger buffer size might result in better performance
+    /// by requiring fewer copies out of the socket buffer. 
+    pub fn read_buf_size(&mut self, sz: usize) {
+        self.read_buf_size = Some(sz);
     }
 }
 
