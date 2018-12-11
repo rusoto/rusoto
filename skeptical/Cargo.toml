@@ -5,11 +5,11 @@ authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 build = "build.rs"
 
 [dependencies]
-rusoto_core = "0.35"
-rusoto_dynamodb = "0.35"
-rusoto_s3 = "0.35"
-rusoto_ec2 = "0.35"
-rusoto_sts = "0.35"
+rusoto_core = "0.36"
+rusoto_dynamodb = "0.36"
+rusoto_s3 = "0.36"
+rusoto_ec2 = "0.36"
+rusoto_sts = "0.36"
 env_logger = "0.5"
 
 [build-dependencies]

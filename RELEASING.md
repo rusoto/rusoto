@@ -22,11 +22,11 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
 ### Publishing walkthrough:
 
-1. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential` and `rusoto_mock` if needed and each service that changed since previous release.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project.  Make sure the root Rusoto README example gets updated with the new version. The `skeptical` package will also need to be set to use the new version of Rusoto.
+1. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential` and `rusoto_mock` if needed and each service that changed since previous release.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project.  Make sure the root Rusoto README example gets updated with the new version. The `skeptical` package will also need to be set to use the new version of Rusoto - do this in a PR after the release and publish has been completed.
 2. Merge release PR.
 3. Publish new version of `rusoto_credential` if changes have been made to it.
-4. Publish new version of `rusoto_mock` if changes have been made to it.
-5. Publish new version of `rusoto_core` if it changes have been made to it.
+4. Publish new version of `rusoto_core` if changes have been made to it.
+5. Publish new version of `rusoto_mock` if it changes have been made to it.
 6. Run `publish-services.sh` in the `rusoto/services` dir. *Warning*: takes >2 hours on a low end Macbook. The script can be run again if an issue comes up without problems - crates.io prevents republishing.
 7. Tag master branch with the new version.  Example: `git tag -a rusoto-v0.21.0 -m "Rusoto 0.21.0 release."` then `git push --tags origin`.
 
