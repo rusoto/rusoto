@@ -23,7 +23,7 @@ To use `rusoto_translate` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_translate = "0.35.0"
+rusoto_translate = "0.36.0"
 ```
 
 ## Contributing

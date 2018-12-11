@@ -23,7 +23,7 @@ To use `rusoto_shield` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_shield = "0.35.0"
+rusoto_shield = "0.36.0"
 ```
 
 ## Contributing

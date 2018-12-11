@@ -23,7 +23,7 @@ To use `rusoto_swf` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_swf = "0.35.0"
+rusoto_swf = "0.36.0"
 ```
 
 ## Contributing
