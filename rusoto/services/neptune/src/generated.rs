@@ -108,7 +108,7 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddSourceIdentifierToSubscriptionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = AddSourceIdentifierToSubscriptionResult::default();
 
@@ -124,9 +124,10 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventSubscription" => {
-                        obj.event_subscription = Some(try!(
-                            EventSubscriptionDeserializer::deserialize("EventSubscription", stack)
-                        ));
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -137,7 +138,7 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -172,9 +173,9 @@ impl ApplyMethodDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -220,7 +221,7 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ApplyPendingMaintenanceActionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ApplyPendingMaintenanceActionResult::default();
 
@@ -236,12 +237,11 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ResourcePendingMaintenanceActions" => {
-                        obj.resource_pending_maintenance_actions = Some(try!(
-                            ResourcePendingMaintenanceActionsDeserializer::deserialize(
+                        obj.resource_pending_maintenance_actions =
+                            Some(ResourcePendingMaintenanceActionsDeserializer::deserialize(
                                 "ResourcePendingMaintenanceActions",
-                                stack
-                            )
-                        ));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -252,7 +252,7 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -265,7 +265,7 @@ impl AttributeValueListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -279,16 +279,13 @@ impl AttributeValueListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "AttributeValue" {
-                        obj.push(try!(StringDeserializer::deserialize(
-                            "AttributeValue",
-                            stack
-                        )));
+                        obj.push(StringDeserializer::deserialize("AttributeValue", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -326,7 +323,7 @@ impl AvailabilityZoneDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZone, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = AvailabilityZone::default();
 
@@ -342,7 +339,7 @@ impl AvailabilityZoneDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Name" => {
-                        obj.name = Some(try!(StringDeserializer::deserialize("Name", stack)));
+                        obj.name = Some(StringDeserializer::deserialize("Name", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -353,7 +350,7 @@ impl AvailabilityZoneDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -366,7 +363,7 @@ impl AvailabilityZoneListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<AvailabilityZone>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -380,16 +377,16 @@ impl AvailabilityZoneListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "AvailabilityZone" {
-                        obj.push(try!(AvailabilityZoneDeserializer::deserialize(
+                        obj.push(AvailabilityZoneDeserializer::deserialize(
                             "AvailabilityZone",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -409,7 +406,7 @@ impl AvailabilityZonesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -423,16 +420,13 @@ impl AvailabilityZonesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "AvailabilityZone" {
-                        obj.push(try!(StringDeserializer::deserialize(
-                            "AvailabilityZone",
-                            stack
-                        )));
+                        obj.push(StringDeserializer::deserialize("AvailabilityZone", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -463,9 +457,9 @@ impl BooleanDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -477,9 +471,9 @@ impl BooleanOptionalDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -500,7 +494,7 @@ impl CharacterSetDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CharacterSet, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CharacterSet::default();
 
@@ -516,15 +510,14 @@ impl CharacterSetDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CharacterSetDescription" => {
-                        obj.character_set_description = Some(try!(
-                            StringDeserializer::deserialize("CharacterSetDescription", stack)
-                        ));
+                        obj.character_set_description = Some(StringDeserializer::deserialize(
+                            "CharacterSetDescription",
+                            stack,
+                        )?);
                     }
                     "CharacterSetName" => {
-                        obj.character_set_name = Some(try!(StringDeserializer::deserialize(
-                            "CharacterSetName",
-                            stack
-                        )));
+                        obj.character_set_name =
+                            Some(StringDeserializer::deserialize("CharacterSetName", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -535,7 +528,7 @@ impl CharacterSetDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -625,7 +618,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBClusterParameterGroupResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CopyDBClusterParameterGroupResult::default();
 
@@ -642,10 +635,10 @@ impl CopyDBClusterParameterGroupResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterParameterGroup" => {
                         obj.db_cluster_parameter_group =
-                            Some(try!(DBClusterParameterGroupDeserializer::deserialize(
+                            Some(DBClusterParameterGroupDeserializer::deserialize(
                                 "DBClusterParameterGroup",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -656,7 +649,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -724,7 +717,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBClusterSnapshotResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CopyDBClusterSnapshotResult::default();
 
@@ -740,9 +733,10 @@ impl CopyDBClusterSnapshotResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshot" => {
-                        obj.db_cluster_snapshot = Some(try!(
-                            DBClusterSnapshotDeserializer::deserialize("DBClusterSnapshot", stack)
-                        ));
+                        obj.db_cluster_snapshot = Some(DBClusterSnapshotDeserializer::deserialize(
+                            "DBClusterSnapshot",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -753,7 +747,7 @@ impl CopyDBClusterSnapshotResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -809,7 +803,7 @@ impl CopyDBParameterGroupResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBParameterGroupResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CopyDBParameterGroupResult::default();
 
@@ -825,9 +819,10 @@ impl CopyDBParameterGroupResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBParameterGroup" => {
-                        obj.db_parameter_group = Some(try!(
-                            DBParameterGroupDeserializer::deserialize("DBParameterGroup", stack)
-                        ));
+                        obj.db_parameter_group = Some(DBParameterGroupDeserializer::deserialize(
+                            "DBParameterGroup",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -838,7 +833,7 @@ impl CopyDBParameterGroupResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1045,7 +1040,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterParameterGroupResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateDBClusterParameterGroupResult::default();
 
@@ -1062,10 +1057,10 @@ impl CreateDBClusterParameterGroupResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterParameterGroup" => {
                         obj.db_cluster_parameter_group =
-                            Some(try!(DBClusterParameterGroupDeserializer::deserialize(
+                            Some(DBClusterParameterGroupDeserializer::deserialize(
                                 "DBClusterParameterGroup",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1076,7 +1071,7 @@ impl CreateDBClusterParameterGroupResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1093,7 +1088,7 @@ impl CreateDBClusterResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateDBClusterResult::default();
 
@@ -1110,7 +1105,7 @@ impl CreateDBClusterResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1121,7 +1116,7 @@ impl CreateDBClusterResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1172,7 +1167,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterSnapshotResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateDBClusterSnapshotResult::default();
 
@@ -1188,9 +1183,10 @@ impl CreateDBClusterSnapshotResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshot" => {
-                        obj.db_cluster_snapshot = Some(try!(
-                            DBClusterSnapshotDeserializer::deserialize("DBClusterSnapshot", stack)
-                        ));
+                        obj.db_cluster_snapshot = Some(DBClusterSnapshotDeserializer::deserialize(
+                            "DBClusterSnapshot",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1201,7 +1197,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1500,7 +1496,7 @@ impl CreateDBInstanceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBInstanceResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateDBInstanceResult::default();
 
@@ -1516,10 +1512,8 @@ impl CreateDBInstanceResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBInstance" => {
-                        obj.db_instance = Some(try!(DBInstanceDeserializer::deserialize(
-                            "DBInstance",
-                            stack
-                        )));
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1530,7 +1524,7 @@ impl CreateDBInstanceResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1583,7 +1577,7 @@ impl CreateDBParameterGroupResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBParameterGroupResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateDBParameterGroupResult::default();
 
@@ -1599,9 +1593,10 @@ impl CreateDBParameterGroupResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBParameterGroup" => {
-                        obj.db_parameter_group = Some(try!(
-                            DBParameterGroupDeserializer::deserialize("DBParameterGroup", stack)
-                        ));
+                        obj.db_parameter_group = Some(DBParameterGroupDeserializer::deserialize(
+                            "DBParameterGroup",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1612,7 +1607,7 @@ impl CreateDBParameterGroupResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1669,7 +1664,7 @@ impl CreateDBSubnetGroupResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBSubnetGroupResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateDBSubnetGroupResult::default();
 
@@ -1685,10 +1680,10 @@ impl CreateDBSubnetGroupResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBSubnetGroup" => {
-                        obj.db_subnet_group = Some(try!(DBSubnetGroupDeserializer::deserialize(
+                        obj.db_subnet_group = Some(DBSubnetGroupDeserializer::deserialize(
                             "DBSubnetGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1699,7 +1694,7 @@ impl CreateDBSubnetGroupResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1777,7 +1772,7 @@ impl CreateEventSubscriptionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateEventSubscriptionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateEventSubscriptionResult::default();
 
@@ -1793,9 +1788,10 @@ impl CreateEventSubscriptionResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventSubscription" => {
-                        obj.event_subscription = Some(try!(
-                            EventSubscriptionDeserializer::deserialize("EventSubscription", stack)
-                        ));
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1806,7 +1802,7 @@ impl CreateEventSubscriptionResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1893,7 +1889,7 @@ impl DBClusterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBCluster, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBCluster::default();
 
@@ -1909,257 +1905,235 @@ impl DBClusterDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllocatedStorage" => {
-                        obj.allocated_storage = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("AllocatedStorage", stack)
-                        ));
+                        obj.allocated_storage = Some(IntegerOptionalDeserializer::deserialize(
+                            "AllocatedStorage",
+                            stack,
+                        )?);
                     }
                     "AssociatedRoles" => {
                         obj.associated_roles = match obj.associated_roles {
                             Some(ref mut existing) => {
-                                existing.extend(try!(DBClusterRolesDeserializer::deserialize(
+                                existing.extend(DBClusterRolesDeserializer::deserialize(
                                     "AssociatedRoles",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBClusterRolesDeserializer::deserialize(
+                            None => Some(DBClusterRolesDeserializer::deserialize(
                                 "AssociatedRoles",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
+                                existing.extend(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AvailabilityZonesDeserializer::deserialize(
+                            None => Some(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "BackupRetentionPeriod" => {
                         obj.backup_retention_period =
-                            Some(try!(IntegerOptionalDeserializer::deserialize(
+                            Some(IntegerOptionalDeserializer::deserialize(
                                 "BackupRetentionPeriod",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "CharacterSetName" => {
-                        obj.character_set_name = Some(try!(StringDeserializer::deserialize(
-                            "CharacterSetName",
-                            stack
-                        )));
+                        obj.character_set_name =
+                            Some(StringDeserializer::deserialize("CharacterSetName", stack)?);
                     }
                     "CloneGroupId" => {
                         obj.clone_group_id =
-                            Some(try!(StringDeserializer::deserialize("CloneGroupId", stack)));
+                            Some(StringDeserializer::deserialize("CloneGroupId", stack)?);
                     }
                     "ClusterCreateTime" => {
-                        obj.cluster_create_time = Some(try!(TStampDeserializer::deserialize(
-                            "ClusterCreateTime",
-                            stack
-                        )));
+                        obj.cluster_create_time =
+                            Some(TStampDeserializer::deserialize("ClusterCreateTime", stack)?);
                     }
                     "DBClusterArn" => {
                         obj.db_cluster_arn =
-                            Some(try!(StringDeserializer::deserialize("DBClusterArn", stack)));
+                            Some(StringDeserializer::deserialize("DBClusterArn", stack)?);
                     }
                     "DBClusterIdentifier" => {
-                        obj.db_cluster_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
                             "DBClusterIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBClusterMembers" => {
                         obj.db_cluster_members = match obj.db_cluster_members {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    DBClusterMemberListDeserializer::deserialize(
-                                        "DBClusterMembers",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(DBClusterMemberListDeserializer::deserialize(
+                                    "DBClusterMembers",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBClusterMemberListDeserializer::deserialize(
+                            None => Some(DBClusterMemberListDeserializer::deserialize(
                                 "DBClusterMembers",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "DBClusterOptionGroupMemberships" => {
-                        obj.db_cluster_option_group_memberships =
-                            match obj.db_cluster_option_group_memberships {
-                                Some(ref mut existing) => {
-                                    existing.extend(try!(
-                                        DBClusterOptionGroupMembershipsDeserializer::deserialize(
-                                            "DBClusterOptionGroupMemberships",
-                                            stack
-                                        )
-                                    ));
-                                    Some(existing.to_vec())
-                                }
-                                None => Some(try!(
+                        obj.db_cluster_option_group_memberships = match obj
+                            .db_cluster_option_group_memberships
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(
                                     DBClusterOptionGroupMembershipsDeserializer::deserialize(
                                         "DBClusterOptionGroupMemberships",
-                                        stack
-                                    )
-                                )),
-                            };
+                                        stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(DBClusterOptionGroupMembershipsDeserializer::deserialize(
+                                "DBClusterOptionGroupMemberships",
+                                stack,
+                            )?),
+                        };
                     }
                     "DBClusterParameterGroup" => {
-                        obj.db_cluster_parameter_group = Some(try!(
-                            StringDeserializer::deserialize("DBClusterParameterGroup", stack)
-                        ));
+                        obj.db_cluster_parameter_group = Some(StringDeserializer::deserialize(
+                            "DBClusterParameterGroup",
+                            stack,
+                        )?);
                     }
                     "DBSubnetGroup" => {
-                        obj.db_subnet_group = Some(try!(StringDeserializer::deserialize(
-                            "DBSubnetGroup",
-                            stack
-                        )));
+                        obj.db_subnet_group =
+                            Some(StringDeserializer::deserialize("DBSubnetGroup", stack)?);
                     }
                     "DatabaseName" => {
                         obj.database_name =
-                            Some(try!(StringDeserializer::deserialize("DatabaseName", stack)));
+                            Some(StringDeserializer::deserialize("DatabaseName", stack)?);
                     }
                     "DbClusterResourceId" => {
-                        obj.db_cluster_resource_id = Some(try!(StringDeserializer::deserialize(
+                        obj.db_cluster_resource_id = Some(StringDeserializer::deserialize(
                             "DbClusterResourceId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "EarliestRestorableTime" => {
-                        obj.earliest_restorable_time = Some(try!(TStampDeserializer::deserialize(
+                        obj.earliest_restorable_time = Some(TStampDeserializer::deserialize(
                             "EarliestRestorableTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Endpoint" => {
-                        obj.endpoint =
-                            Some(try!(StringDeserializer::deserialize("Endpoint", stack)));
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
                     }
                     "Engine" => {
-                        obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
+                        obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "HostedZoneId" => {
                         obj.hosted_zone_id =
-                            Some(try!(StringDeserializer::deserialize("HostedZoneId", stack)));
+                            Some(StringDeserializer::deserialize("HostedZoneId", stack)?);
                     }
                     "IAMDatabaseAuthenticationEnabled" => {
                         obj.iam_database_authentication_enabled =
-                            Some(try!(BooleanDeserializer::deserialize(
+                            Some(BooleanDeserializer::deserialize(
                                 "IAMDatabaseAuthenticationEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "KmsKeyId" => {
-                        obj.kms_key_id =
-                            Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                     }
                     "LatestRestorableTime" => {
-                        obj.latest_restorable_time = Some(try!(TStampDeserializer::deserialize(
+                        obj.latest_restorable_time = Some(TStampDeserializer::deserialize(
                             "LatestRestorableTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "MasterUsername" => {
-                        obj.master_username = Some(try!(StringDeserializer::deserialize(
-                            "MasterUsername",
-                            stack
-                        )));
+                        obj.master_username =
+                            Some(StringDeserializer::deserialize("MasterUsername", stack)?);
                     }
                     "MultiAZ" => {
-                        obj.multi_az =
-                            Some(try!(BooleanDeserializer::deserialize("MultiAZ", stack)));
+                        obj.multi_az = Some(BooleanDeserializer::deserialize("MultiAZ", stack)?);
                     }
                     "PercentProgress" => {
-                        obj.percent_progress = Some(try!(StringDeserializer::deserialize(
-                            "PercentProgress",
-                            stack
-                        )));
+                        obj.percent_progress =
+                            Some(StringDeserializer::deserialize("PercentProgress", stack)?);
                     }
                     "Port" => {
-                        obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Port", stack
-                        )));
+                        obj.port = Some(IntegerOptionalDeserializer::deserialize("Port", stack)?);
                     }
                     "PreferredBackupWindow" => {
-                        obj.preferred_backup_window = Some(try!(StringDeserializer::deserialize(
+                        obj.preferred_backup_window = Some(StringDeserializer::deserialize(
                             "PreferredBackupWindow",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "PreferredMaintenanceWindow" => {
-                        obj.preferred_maintenance_window = Some(try!(
-                            StringDeserializer::deserialize("PreferredMaintenanceWindow", stack)
-                        ));
+                        obj.preferred_maintenance_window = Some(StringDeserializer::deserialize(
+                            "PreferredMaintenanceWindow",
+                            stack,
+                        )?);
                     }
                     "ReadReplicaIdentifiers" => {
                         obj.read_replica_identifiers = match obj.read_replica_identifiers {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     ReadReplicaIdentifierListDeserializer::deserialize(
                                         "ReadReplicaIdentifiers",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ReadReplicaIdentifierListDeserializer::deserialize(
+                            None => Some(ReadReplicaIdentifierListDeserializer::deserialize(
                                 "ReadReplicaIdentifiers",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ReaderEndpoint" => {
-                        obj.reader_endpoint = Some(try!(StringDeserializer::deserialize(
-                            "ReaderEndpoint",
-                            stack
-                        )));
+                        obj.reader_endpoint =
+                            Some(StringDeserializer::deserialize("ReaderEndpoint", stack)?);
                     }
                     "ReplicationSourceIdentifier" => {
-                        obj.replication_source_identifier = Some(try!(
-                            StringDeserializer::deserialize("ReplicationSourceIdentifier", stack)
-                        ));
+                        obj.replication_source_identifier = Some(StringDeserializer::deserialize(
+                            "ReplicationSourceIdentifier",
+                            stack,
+                        )?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     "StorageEncrypted" => {
-                        obj.storage_encrypted = Some(try!(BooleanDeserializer::deserialize(
-                            "StorageEncrypted",
-                            stack
-                        )));
+                        obj.storage_encrypted =
+                            Some(BooleanDeserializer::deserialize("StorageEncrypted", stack)?);
                     }
                     "VpcSecurityGroups" => {
                         obj.vpc_security_groups = match obj.vpc_security_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     VpcSecurityGroupMembershipListDeserializer::deserialize(
                                         "VpcSecurityGroups",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(
-                                VpcSecurityGroupMembershipListDeserializer::deserialize(
-                                    "VpcSecurityGroups",
-                                    stack
-                                )
-                            )),
+                            None => Some(VpcSecurityGroupMembershipListDeserializer::deserialize(
+                                "VpcSecurityGroups",
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -2171,7 +2145,7 @@ impl DBClusterDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2184,7 +2158,7 @@ impl DBClusterListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBCluster>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2198,13 +2172,13 @@ impl DBClusterListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBCluster" {
-                        obj.push(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                        obj.push(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2236,7 +2210,7 @@ impl DBClusterMemberDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterMember, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterMember::default();
 
@@ -2252,27 +2226,27 @@ impl DBClusterMemberDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterParameterGroupStatus" => {
-                        obj.db_cluster_parameter_group_status = Some(try!(
-                            StringDeserializer::deserialize("DBClusterParameterGroupStatus", stack)
-                        ));
+                        obj.db_cluster_parameter_group_status =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterParameterGroupStatus",
+                                stack,
+                            )?);
                     }
                     "DBInstanceIdentifier" => {
-                        obj.db_instance_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.db_instance_identifier = Some(StringDeserializer::deserialize(
                             "DBInstanceIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "IsClusterWriter" => {
-                        obj.is_cluster_writer = Some(try!(BooleanDeserializer::deserialize(
-                            "IsClusterWriter",
-                            stack
-                        )));
+                        obj.is_cluster_writer =
+                            Some(BooleanDeserializer::deserialize("IsClusterWriter", stack)?);
                     }
                     "PromotionTier" => {
-                        obj.promotion_tier = Some(try!(IntegerOptionalDeserializer::deserialize(
+                        obj.promotion_tier = Some(IntegerOptionalDeserializer::deserialize(
                             "PromotionTier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2283,7 +2257,7 @@ impl DBClusterMemberDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2296,7 +2270,7 @@ impl DBClusterMemberListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBClusterMember>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2310,16 +2284,16 @@ impl DBClusterMemberListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBClusterMember" {
-                        obj.push(try!(DBClusterMemberDeserializer::deserialize(
+                        obj.push(DBClusterMemberDeserializer::deserialize(
                             "DBClusterMember",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2347,7 +2321,7 @@ impl DBClusterMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterMessage::default();
 
@@ -2365,20 +2339,19 @@ impl DBClusterMessageDeserializer {
                     "DBClusters" => {
                         obj.db_clusters = match obj.db_clusters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(DBClusterListDeserializer::deserialize(
+                                existing.extend(DBClusterListDeserializer::deserialize(
                                     "DBClusters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBClusterListDeserializer::deserialize(
-                                "DBClusters",
-                                stack
-                            ))),
+                            None => {
+                                Some(DBClusterListDeserializer::deserialize("DBClusters", stack)?)
+                            }
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2389,7 +2362,7 @@ impl DBClusterMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2402,7 +2375,7 @@ impl DBClusterOptionGroupMembershipsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBClusterOptionGroupStatus>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2416,16 +2389,16 @@ impl DBClusterOptionGroupMembershipsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBClusterOptionGroup" {
-                        obj.push(try!(DBClusterOptionGroupStatusDeserializer::deserialize(
+                        obj.push(DBClusterOptionGroupStatusDeserializer::deserialize(
                             "DBClusterOptionGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2453,7 +2426,7 @@ impl DBClusterOptionGroupStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterOptionGroupStatus, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterOptionGroupStatus::default();
 
@@ -2469,12 +2442,13 @@ impl DBClusterOptionGroupStatusDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterOptionGroupName" => {
-                        obj.db_cluster_option_group_name = Some(try!(
-                            StringDeserializer::deserialize("DBClusterOptionGroupName", stack)
-                        ));
+                        obj.db_cluster_option_group_name = Some(StringDeserializer::deserialize(
+                            "DBClusterOptionGroupName",
+                            stack,
+                        )?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2485,7 +2459,7 @@ impl DBClusterOptionGroupStatusDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2510,7 +2484,7 @@ impl DBClusterParameterGroupDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroup, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterParameterGroup::default();
 
@@ -2526,23 +2500,25 @@ impl DBClusterParameterGroupDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterParameterGroupArn" => {
-                        obj.db_cluster_parameter_group_arn = Some(try!(
-                            StringDeserializer::deserialize("DBClusterParameterGroupArn", stack)
-                        ));
+                        obj.db_cluster_parameter_group_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterParameterGroupArn",
+                            stack,
+                        )?);
                     }
                     "DBClusterParameterGroupName" => {
-                        obj.db_cluster_parameter_group_name = Some(try!(
-                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)
-                        ));
+                        obj.db_cluster_parameter_group_name = Some(
+                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
+                        );
                     }
                     "DBParameterGroupFamily" => {
-                        obj.db_parameter_group_family = Some(try!(
-                            StringDeserializer::deserialize("DBParameterGroupFamily", stack)
-                        ));
+                        obj.db_parameter_group_family = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupFamily",
+                            stack,
+                        )?);
                     }
                     "Description" => {
                         obj.description =
-                            Some(try!(StringDeserializer::deserialize("Description", stack)));
+                            Some(StringDeserializer::deserialize("Description", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2553,7 +2529,7 @@ impl DBClusterParameterGroupDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2574,7 +2550,7 @@ impl DBClusterParameterGroupDetailsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupDetails, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterParameterGroupDetails::default();
 
@@ -2590,21 +2566,21 @@ impl DBClusterParameterGroupDetailsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersListDeserializer::deserialize(
+                                existing.extend(ParametersListDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersListDeserializer::deserialize(
+                            None => Some(ParametersListDeserializer::deserialize(
                                 "Parameters",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -2616,7 +2592,7 @@ impl DBClusterParameterGroupDetailsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2629,7 +2605,7 @@ impl DBClusterParameterGroupListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBClusterParameterGroup>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2643,16 +2619,16 @@ impl DBClusterParameterGroupListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBClusterParameterGroup" {
-                        obj.push(try!(DBClusterParameterGroupDeserializer::deserialize(
+                        obj.push(DBClusterParameterGroupDeserializer::deserialize(
                             "DBClusterParameterGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2678,7 +2654,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupNameMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterParameterGroupNameMessage::default();
 
@@ -2694,9 +2670,9 @@ impl DBClusterParameterGroupNameMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterParameterGroupName" => {
-                        obj.db_cluster_parameter_group_name = Some(try!(
-                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)
-                        ));
+                        obj.db_cluster_parameter_group_name = Some(
+                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
                 },
@@ -2707,7 +2683,7 @@ impl DBClusterParameterGroupNameMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2728,7 +2704,7 @@ impl DBClusterParameterGroupsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterParameterGroupsMessage::default();
 
@@ -2746,24 +2722,22 @@ impl DBClusterParameterGroupsMessageDeserializer {
                     "DBClusterParameterGroups" => {
                         obj.db_cluster_parameter_groups = match obj.db_cluster_parameter_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     DBClusterParameterGroupListDeserializer::deserialize(
                                         "DBClusterParameterGroups",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => {
-                                Some(try!(DBClusterParameterGroupListDeserializer::deserialize(
-                                    "DBClusterParameterGroups",
-                                    stack
-                                )))
-                            }
+                            None => Some(DBClusterParameterGroupListDeserializer::deserialize(
+                                "DBClusterParameterGroups",
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2774,7 +2748,7 @@ impl DBClusterParameterGroupsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2795,7 +2769,7 @@ impl DBClusterRoleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterRole, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterRole::default();
 
@@ -2811,11 +2785,10 @@ impl DBClusterRoleDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "RoleArn" => {
-                        obj.role_arn =
-                            Some(try!(StringDeserializer::deserialize("RoleArn", stack)));
+                        obj.role_arn = Some(StringDeserializer::deserialize("RoleArn", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2826,7 +2799,7 @@ impl DBClusterRoleDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2839,7 +2812,7 @@ impl DBClusterRolesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBClusterRole>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2853,16 +2826,16 @@ impl DBClusterRolesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBClusterRole" {
-                        obj.push(try!(DBClusterRoleDeserializer::deserialize(
+                        obj.push(DBClusterRoleDeserializer::deserialize(
                             "DBClusterRole",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2926,7 +2899,7 @@ impl DBClusterSnapshotDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshot, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterSnapshot::default();
 
@@ -2942,114 +2915,103 @@ impl DBClusterSnapshotDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllocatedStorage" => {
-                        obj.allocated_storage = Some(try!(IntegerDeserializer::deserialize(
-                            "AllocatedStorage",
-                            stack
-                        )));
+                        obj.allocated_storage =
+                            Some(IntegerDeserializer::deserialize("AllocatedStorage", stack)?);
                     }
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AvailabilityZonesDeserializer::deserialize(
+                                existing.extend(AvailabilityZonesDeserializer::deserialize(
                                     "AvailabilityZones",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AvailabilityZonesDeserializer::deserialize(
+                            None => Some(AvailabilityZonesDeserializer::deserialize(
                                 "AvailabilityZones",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ClusterCreateTime" => {
-                        obj.cluster_create_time = Some(try!(TStampDeserializer::deserialize(
-                            "ClusterCreateTime",
-                            stack
-                        )));
+                        obj.cluster_create_time =
+                            Some(TStampDeserializer::deserialize("ClusterCreateTime", stack)?);
                     }
                     "DBClusterIdentifier" => {
-                        obj.db_cluster_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
                             "DBClusterIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBClusterSnapshotArn" => {
-                        obj.db_cluster_snapshot_arn = Some(try!(StringDeserializer::deserialize(
+                        obj.db_cluster_snapshot_arn = Some(StringDeserializer::deserialize(
                             "DBClusterSnapshotArn",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBClusterSnapshotIdentifier" => {
-                        obj.db_cluster_snapshot_identifier = Some(try!(
-                            StringDeserializer::deserialize("DBClusterSnapshotIdentifier", stack)
-                        ));
+                        obj.db_cluster_snapshot_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterSnapshotIdentifier",
+                            stack,
+                        )?);
                     }
                     "Engine" => {
-                        obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
+                        obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "IAMDatabaseAuthenticationEnabled" => {
                         obj.iam_database_authentication_enabled =
-                            Some(try!(BooleanDeserializer::deserialize(
+                            Some(BooleanDeserializer::deserialize(
                                 "IAMDatabaseAuthenticationEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "KmsKeyId" => {
-                        obj.kms_key_id =
-                            Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                     }
                     "LicenseModel" => {
                         obj.license_model =
-                            Some(try!(StringDeserializer::deserialize("LicenseModel", stack)));
+                            Some(StringDeserializer::deserialize("LicenseModel", stack)?);
                     }
                     "MasterUsername" => {
-                        obj.master_username = Some(try!(StringDeserializer::deserialize(
-                            "MasterUsername",
-                            stack
-                        )));
+                        obj.master_username =
+                            Some(StringDeserializer::deserialize("MasterUsername", stack)?);
                     }
                     "PercentProgress" => {
-                        obj.percent_progress = Some(try!(IntegerDeserializer::deserialize(
-                            "PercentProgress",
-                            stack
-                        )));
+                        obj.percent_progress =
+                            Some(IntegerDeserializer::deserialize("PercentProgress", stack)?);
                     }
                     "Port" => {
-                        obj.port = Some(try!(IntegerDeserializer::deserialize("Port", stack)));
+                        obj.port = Some(IntegerDeserializer::deserialize("Port", stack)?);
                     }
                     "SnapshotCreateTime" => {
-                        obj.snapshot_create_time = Some(try!(TStampDeserializer::deserialize(
+                        obj.snapshot_create_time = Some(TStampDeserializer::deserialize(
                             "SnapshotCreateTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "SnapshotType" => {
                         obj.snapshot_type =
-                            Some(try!(StringDeserializer::deserialize("SnapshotType", stack)));
+                            Some(StringDeserializer::deserialize("SnapshotType", stack)?);
                     }
                     "SourceDBClusterSnapshotArn" => {
-                        obj.source_db_cluster_snapshot_arn = Some(try!(
-                            StringDeserializer::deserialize("SourceDBClusterSnapshotArn", stack)
-                        ));
+                        obj.source_db_cluster_snapshot_arn = Some(StringDeserializer::deserialize(
+                            "SourceDBClusterSnapshotArn",
+                            stack,
+                        )?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     "StorageEncrypted" => {
-                        obj.storage_encrypted = Some(try!(BooleanDeserializer::deserialize(
-                            "StorageEncrypted",
-                            stack
-                        )));
+                        obj.storage_encrypted =
+                            Some(BooleanDeserializer::deserialize("StorageEncrypted", stack)?);
                     }
                     "VpcId" => {
-                        obj.vpc_id = Some(try!(StringDeserializer::deserialize("VpcId", stack)));
+                        obj.vpc_id = Some(StringDeserializer::deserialize("VpcId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3060,7 +3022,7 @@ impl DBClusterSnapshotDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3081,7 +3043,7 @@ impl DBClusterSnapshotAttributeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotAttribute, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterSnapshotAttribute::default();
 
@@ -3097,24 +3059,22 @@ impl DBClusterSnapshotAttributeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AttributeName" => {
-                        obj.attribute_name = Some(try!(StringDeserializer::deserialize(
-                            "AttributeName",
-                            stack
-                        )));
+                        obj.attribute_name =
+                            Some(StringDeserializer::deserialize("AttributeName", stack)?);
                     }
                     "AttributeValues" => {
                         obj.attribute_values = match obj.attribute_values {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AttributeValueListDeserializer::deserialize(
+                                existing.extend(AttributeValueListDeserializer::deserialize(
                                     "AttributeValues",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AttributeValueListDeserializer::deserialize(
+                            None => Some(AttributeValueListDeserializer::deserialize(
                                 "AttributeValues",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -3126,7 +3086,7 @@ impl DBClusterSnapshotAttributeDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3139,7 +3099,7 @@ impl DBClusterSnapshotAttributeListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBClusterSnapshotAttribute>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -3153,16 +3113,16 @@ impl DBClusterSnapshotAttributeListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBClusterSnapshotAttribute" {
-                        obj.push(try!(DBClusterSnapshotAttributeDeserializer::deserialize(
+                        obj.push(DBClusterSnapshotAttributeDeserializer::deserialize(
                             "DBClusterSnapshotAttribute",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -3190,7 +3150,7 @@ impl DBClusterSnapshotAttributesResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotAttributesResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterSnapshotAttributesResult::default();
 
@@ -3206,29 +3166,29 @@ impl DBClusterSnapshotAttributesResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshotAttributes" => {
-                        obj.db_cluster_snapshot_attributes =
-                            match obj.db_cluster_snapshot_attributes {
-                                Some(ref mut existing) => {
-                                    existing.extend(try!(
-                                        DBClusterSnapshotAttributeListDeserializer::deserialize(
-                                            "DBClusterSnapshotAttributes",
-                                            stack
-                                        )
-                                    ));
-                                    Some(existing.to_vec())
-                                }
-                                None => Some(try!(
+                        obj.db_cluster_snapshot_attributes = match obj
+                            .db_cluster_snapshot_attributes
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(
                                     DBClusterSnapshotAttributeListDeserializer::deserialize(
                                         "DBClusterSnapshotAttributes",
-                                        stack
-                                    )
-                                )),
-                            };
+                                        stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(DBClusterSnapshotAttributeListDeserializer::deserialize(
+                                "DBClusterSnapshotAttributes",
+                                stack,
+                            )?),
+                        };
                     }
                     "DBClusterSnapshotIdentifier" => {
-                        obj.db_cluster_snapshot_identifier = Some(try!(
-                            StringDeserializer::deserialize("DBClusterSnapshotIdentifier", stack)
-                        ));
+                        obj.db_cluster_snapshot_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterSnapshotIdentifier",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3239,7 +3199,7 @@ impl DBClusterSnapshotAttributesResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3252,7 +3212,7 @@ impl DBClusterSnapshotListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBClusterSnapshot>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -3266,16 +3226,16 @@ impl DBClusterSnapshotListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBClusterSnapshot" {
-                        obj.push(try!(DBClusterSnapshotDeserializer::deserialize(
+                        obj.push(DBClusterSnapshotDeserializer::deserialize(
                             "DBClusterSnapshot",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -3303,7 +3263,7 @@ impl DBClusterSnapshotMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBClusterSnapshotMessage::default();
 
@@ -3321,22 +3281,20 @@ impl DBClusterSnapshotMessageDeserializer {
                     "DBClusterSnapshots" => {
                         obj.db_cluster_snapshots = match obj.db_cluster_snapshots {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    DBClusterSnapshotListDeserializer::deserialize(
-                                        "DBClusterSnapshots",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(DBClusterSnapshotListDeserializer::deserialize(
+                                    "DBClusterSnapshots",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBClusterSnapshotListDeserializer::deserialize(
+                            None => Some(DBClusterSnapshotListDeserializer::deserialize(
                                 "DBClusterSnapshots",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3347,7 +3305,7 @@ impl DBClusterSnapshotMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3388,7 +3346,7 @@ impl DBEngineVersionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBEngineVersion, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBEngineVersion::default();
 
@@ -3404,114 +3362,109 @@ impl DBEngineVersionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBEngineDescription" => {
-                        obj.db_engine_description = Some(try!(StringDeserializer::deserialize(
+                        obj.db_engine_description = Some(StringDeserializer::deserialize(
                             "DBEngineDescription",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBEngineVersionDescription" => {
-                        obj.db_engine_version_description = Some(try!(
-                            StringDeserializer::deserialize("DBEngineVersionDescription", stack)
-                        ));
+                        obj.db_engine_version_description = Some(StringDeserializer::deserialize(
+                            "DBEngineVersionDescription",
+                            stack,
+                        )?);
                     }
                     "DBParameterGroupFamily" => {
-                        obj.db_parameter_group_family = Some(try!(
-                            StringDeserializer::deserialize("DBParameterGroupFamily", stack)
-                        ));
+                        obj.db_parameter_group_family = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupFamily",
+                            stack,
+                        )?);
                     }
                     "DefaultCharacterSet" => {
-                        obj.default_character_set = Some(try!(
-                            CharacterSetDeserializer::deserialize("DefaultCharacterSet", stack)
-                        ));
+                        obj.default_character_set = Some(CharacterSetDeserializer::deserialize(
+                            "DefaultCharacterSet",
+                            stack,
+                        )?);
                     }
                     "Engine" => {
-                        obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
+                        obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "ExportableLogTypes" => {
                         obj.exportable_log_types = match obj.exportable_log_types {
                             Some(ref mut existing) => {
-                                existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                existing.extend(LogTypeListDeserializer::deserialize(
                                     "ExportableLogTypes",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(LogTypeListDeserializer::deserialize(
+                            None => Some(LogTypeListDeserializer::deserialize(
                                 "ExportableLogTypes",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "SupportedCharacterSets" => {
                         obj.supported_character_sets = match obj.supported_character_sets {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     SupportedCharacterSetsListDeserializer::deserialize(
                                         "SupportedCharacterSets",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => {
-                                Some(try!(SupportedCharacterSetsListDeserializer::deserialize(
-                                    "SupportedCharacterSets",
-                                    stack
-                                )))
-                            }
+                            None => Some(SupportedCharacterSetsListDeserializer::deserialize(
+                                "SupportedCharacterSets",
+                                stack,
+                            )?),
                         };
                     }
                     "SupportedTimezones" => {
                         obj.supported_timezones = match obj.supported_timezones {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    SupportedTimezonesListDeserializer::deserialize(
-                                        "SupportedTimezones",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(SupportedTimezonesListDeserializer::deserialize(
+                                    "SupportedTimezones",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(SupportedTimezonesListDeserializer::deserialize(
+                            None => Some(SupportedTimezonesListDeserializer::deserialize(
                                 "SupportedTimezones",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "SupportsLogExportsToCloudwatchLogs" => {
                         obj.supports_log_exports_to_cloudwatch_logs =
-                            Some(try!(BooleanDeserializer::deserialize(
+                            Some(BooleanDeserializer::deserialize(
                                 "SupportsLogExportsToCloudwatchLogs",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "SupportsReadReplica" => {
-                        obj.supports_read_replica = Some(try!(BooleanDeserializer::deserialize(
+                        obj.supports_read_replica = Some(BooleanDeserializer::deserialize(
                             "SupportsReadReplica",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ValidUpgradeTarget" => {
                         obj.valid_upgrade_target = match obj.valid_upgrade_target {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    ValidUpgradeTargetListDeserializer::deserialize(
-                                        "ValidUpgradeTarget",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(ValidUpgradeTargetListDeserializer::deserialize(
+                                    "ValidUpgradeTarget",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ValidUpgradeTargetListDeserializer::deserialize(
+                            None => Some(ValidUpgradeTargetListDeserializer::deserialize(
                                 "ValidUpgradeTarget",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -3523,7 +3476,7 @@ impl DBEngineVersionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3536,7 +3489,7 @@ impl DBEngineVersionListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBEngineVersion>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -3550,16 +3503,16 @@ impl DBEngineVersionListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBEngineVersion" {
-                        obj.push(try!(DBEngineVersionDeserializer::deserialize(
+                        obj.push(DBEngineVersionDeserializer::deserialize(
                             "DBEngineVersion",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -3587,7 +3540,7 @@ impl DBEngineVersionMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBEngineVersionMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBEngineVersionMessage::default();
 
@@ -3605,22 +3558,20 @@ impl DBEngineVersionMessageDeserializer {
                     "DBEngineVersions" => {
                         obj.db_engine_versions = match obj.db_engine_versions {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    DBEngineVersionListDeserializer::deserialize(
-                                        "DBEngineVersions",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(DBEngineVersionListDeserializer::deserialize(
+                                    "DBEngineVersions",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBEngineVersionListDeserializer::deserialize(
+                            None => Some(DBEngineVersionListDeserializer::deserialize(
                                 "DBEngineVersions",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3631,7 +3582,7 @@ impl DBEngineVersionMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3750,7 +3701,7 @@ impl DBInstanceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstance, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBInstance::default();
 
@@ -3766,398 +3717,364 @@ impl DBInstanceDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllocatedStorage" => {
-                        obj.allocated_storage = Some(try!(IntegerDeserializer::deserialize(
-                            "AllocatedStorage",
-                            stack
-                        )));
+                        obj.allocated_storage =
+                            Some(IntegerDeserializer::deserialize("AllocatedStorage", stack)?);
                     }
                     "AutoMinorVersionUpgrade" => {
-                        obj.auto_minor_version_upgrade = Some(try!(
-                            BooleanDeserializer::deserialize("AutoMinorVersionUpgrade", stack)
-                        ));
+                        obj.auto_minor_version_upgrade = Some(BooleanDeserializer::deserialize(
+                            "AutoMinorVersionUpgrade",
+                            stack,
+                        )?);
                     }
                     "AvailabilityZone" => {
-                        obj.availability_zone = Some(try!(StringDeserializer::deserialize(
-                            "AvailabilityZone",
-                            stack
-                        )));
+                        obj.availability_zone =
+                            Some(StringDeserializer::deserialize("AvailabilityZone", stack)?);
                     }
                     "BackupRetentionPeriod" => {
-                        obj.backup_retention_period = Some(try!(IntegerDeserializer::deserialize(
+                        obj.backup_retention_period = Some(IntegerDeserializer::deserialize(
                             "BackupRetentionPeriod",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "CACertificateIdentifier" => {
-                        obj.ca_certificate_identifier = Some(try!(
-                            StringDeserializer::deserialize("CACertificateIdentifier", stack)
-                        ));
+                        obj.ca_certificate_identifier = Some(StringDeserializer::deserialize(
+                            "CACertificateIdentifier",
+                            stack,
+                        )?);
                     }
                     "CharacterSetName" => {
-                        obj.character_set_name = Some(try!(StringDeserializer::deserialize(
-                            "CharacterSetName",
-                            stack
-                        )));
+                        obj.character_set_name =
+                            Some(StringDeserializer::deserialize("CharacterSetName", stack)?);
                     }
                     "CopyTagsToSnapshot" => {
-                        obj.copy_tags_to_snapshot = Some(try!(BooleanDeserializer::deserialize(
+                        obj.copy_tags_to_snapshot = Some(BooleanDeserializer::deserialize(
                             "CopyTagsToSnapshot",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBClusterIdentifier" => {
-                        obj.db_cluster_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
                             "DBClusterIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBInstanceArn" => {
-                        obj.db_instance_arn = Some(try!(StringDeserializer::deserialize(
-                            "DBInstanceArn",
-                            stack
-                        )));
+                        obj.db_instance_arn =
+                            Some(StringDeserializer::deserialize("DBInstanceArn", stack)?);
                     }
                     "DBInstanceClass" => {
-                        obj.db_instance_class = Some(try!(StringDeserializer::deserialize(
-                            "DBInstanceClass",
-                            stack
-                        )));
+                        obj.db_instance_class =
+                            Some(StringDeserializer::deserialize("DBInstanceClass", stack)?);
                     }
                     "DBInstanceIdentifier" => {
-                        obj.db_instance_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.db_instance_identifier = Some(StringDeserializer::deserialize(
                             "DBInstanceIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBInstanceStatus" => {
-                        obj.db_instance_status = Some(try!(StringDeserializer::deserialize(
-                            "DBInstanceStatus",
-                            stack
-                        )));
+                        obj.db_instance_status =
+                            Some(StringDeserializer::deserialize("DBInstanceStatus", stack)?);
                     }
                     "DBName" => {
-                        obj.db_name = Some(try!(StringDeserializer::deserialize("DBName", stack)));
+                        obj.db_name = Some(StringDeserializer::deserialize("DBName", stack)?);
                     }
                     "DBParameterGroups" => {
                         obj.db_parameter_groups = match obj.db_parameter_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     DBParameterGroupStatusListDeserializer::deserialize(
                                         "DBParameterGroups",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => {
-                                Some(try!(DBParameterGroupStatusListDeserializer::deserialize(
-                                    "DBParameterGroups",
-                                    stack
-                                )))
-                            }
+                            None => Some(DBParameterGroupStatusListDeserializer::deserialize(
+                                "DBParameterGroups",
+                                stack,
+                            )?),
                         };
                     }
                     "DBSecurityGroups" => {
                         obj.db_security_groups = match obj.db_security_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     DBSecurityGroupMembershipListDeserializer::deserialize(
                                         "DBSecurityGroups",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(
-                                DBSecurityGroupMembershipListDeserializer::deserialize(
-                                    "DBSecurityGroups",
-                                    stack
-                                )
-                            )),
+                            None => Some(DBSecurityGroupMembershipListDeserializer::deserialize(
+                                "DBSecurityGroups",
+                                stack,
+                            )?),
                         };
                     }
                     "DBSubnetGroup" => {
-                        obj.db_subnet_group = Some(try!(DBSubnetGroupDeserializer::deserialize(
+                        obj.db_subnet_group = Some(DBSubnetGroupDeserializer::deserialize(
                             "DBSubnetGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DbInstancePort" => {
-                        obj.db_instance_port = Some(try!(IntegerDeserializer::deserialize(
-                            "DbInstancePort",
-                            stack
-                        )));
+                        obj.db_instance_port =
+                            Some(IntegerDeserializer::deserialize("DbInstancePort", stack)?);
                     }
                     "DbiResourceId" => {
-                        obj.dbi_resource_id = Some(try!(StringDeserializer::deserialize(
-                            "DbiResourceId",
-                            stack
-                        )));
+                        obj.dbi_resource_id =
+                            Some(StringDeserializer::deserialize("DbiResourceId", stack)?);
                     }
                     "DomainMemberships" => {
                         obj.domain_memberships = match obj.domain_memberships {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    DomainMembershipListDeserializer::deserialize(
-                                        "DomainMemberships",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(DomainMembershipListDeserializer::deserialize(
+                                    "DomainMemberships",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DomainMembershipListDeserializer::deserialize(
+                            None => Some(DomainMembershipListDeserializer::deserialize(
                                 "DomainMemberships",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "EnabledCloudwatchLogsExports" => {
                         obj.enabled_cloudwatch_logs_exports =
                             match obj.enabled_cloudwatch_logs_exports {
                                 Some(ref mut existing) => {
-                                    existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                    existing.extend(LogTypeListDeserializer::deserialize(
                                         "EnabledCloudwatchLogsExports",
-                                        stack
-                                    )));
+                                        stack,
+                                    )?);
                                     Some(existing.to_vec())
                                 }
-                                None => Some(try!(LogTypeListDeserializer::deserialize(
+                                None => Some(LogTypeListDeserializer::deserialize(
                                     "EnabledCloudwatchLogsExports",
-                                    stack
-                                ))),
+                                    stack,
+                                )?),
                             };
                     }
                     "Endpoint" => {
-                        obj.endpoint =
-                            Some(try!(EndpointDeserializer::deserialize("Endpoint", stack)));
+                        obj.endpoint = Some(EndpointDeserializer::deserialize("Endpoint", stack)?);
                     }
                     "Engine" => {
-                        obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
+                        obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "EnhancedMonitoringResourceArn" => {
-                        obj.enhanced_monitoring_resource_arn = Some(try!(
-                            StringDeserializer::deserialize("EnhancedMonitoringResourceArn", stack)
-                        ));
+                        obj.enhanced_monitoring_resource_arn =
+                            Some(StringDeserializer::deserialize(
+                                "EnhancedMonitoringResourceArn",
+                                stack,
+                            )?);
                     }
                     "IAMDatabaseAuthenticationEnabled" => {
                         obj.iam_database_authentication_enabled =
-                            Some(try!(BooleanDeserializer::deserialize(
+                            Some(BooleanDeserializer::deserialize(
                                 "IAMDatabaseAuthenticationEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "InstanceCreateTime" => {
-                        obj.instance_create_time = Some(try!(TStampDeserializer::deserialize(
+                        obj.instance_create_time = Some(TStampDeserializer::deserialize(
                             "InstanceCreateTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Iops" => {
-                        obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Iops", stack
-                        )));
+                        obj.iops = Some(IntegerOptionalDeserializer::deserialize("Iops", stack)?);
                     }
                     "KmsKeyId" => {
-                        obj.kms_key_id =
-                            Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                     }
                     "LatestRestorableTime" => {
-                        obj.latest_restorable_time = Some(try!(TStampDeserializer::deserialize(
+                        obj.latest_restorable_time = Some(TStampDeserializer::deserialize(
                             "LatestRestorableTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "LicenseModel" => {
                         obj.license_model =
-                            Some(try!(StringDeserializer::deserialize("LicenseModel", stack)));
+                            Some(StringDeserializer::deserialize("LicenseModel", stack)?);
                     }
                     "MasterUsername" => {
-                        obj.master_username = Some(try!(StringDeserializer::deserialize(
-                            "MasterUsername",
-                            stack
-                        )));
+                        obj.master_username =
+                            Some(StringDeserializer::deserialize("MasterUsername", stack)?);
                     }
                     "MonitoringInterval" => {
-                        obj.monitoring_interval = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("MonitoringInterval", stack)
-                        ));
+                        obj.monitoring_interval = Some(IntegerOptionalDeserializer::deserialize(
+                            "MonitoringInterval",
+                            stack,
+                        )?);
                     }
                     "MonitoringRoleArn" => {
-                        obj.monitoring_role_arn = Some(try!(StringDeserializer::deserialize(
-                            "MonitoringRoleArn",
-                            stack
-                        )));
+                        obj.monitoring_role_arn =
+                            Some(StringDeserializer::deserialize("MonitoringRoleArn", stack)?);
                     }
                     "MultiAZ" => {
-                        obj.multi_az =
-                            Some(try!(BooleanDeserializer::deserialize("MultiAZ", stack)));
+                        obj.multi_az = Some(BooleanDeserializer::deserialize("MultiAZ", stack)?);
                     }
                     "OptionGroupMemberships" => {
                         obj.option_group_memberships = match obj.option_group_memberships {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     OptionGroupMembershipListDeserializer::deserialize(
                                         "OptionGroupMemberships",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(OptionGroupMembershipListDeserializer::deserialize(
+                            None => Some(OptionGroupMembershipListDeserializer::deserialize(
                                 "OptionGroupMemberships",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "PendingModifiedValues" => {
                         obj.pending_modified_values =
-                            Some(try!(PendingModifiedValuesDeserializer::deserialize(
+                            Some(PendingModifiedValuesDeserializer::deserialize(
                                 "PendingModifiedValues",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "PerformanceInsightsEnabled" => {
                         obj.performance_insights_enabled =
-                            Some(try!(BooleanOptionalDeserializer::deserialize(
+                            Some(BooleanOptionalDeserializer::deserialize(
                                 "PerformanceInsightsEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "PerformanceInsightsKMSKeyId" => {
-                        obj.performance_insights_kms_key_id = Some(try!(
-                            StringDeserializer::deserialize("PerformanceInsightsKMSKeyId", stack)
-                        ));
+                        obj.performance_insights_kms_key_id = Some(
+                            StringDeserializer::deserialize("PerformanceInsightsKMSKeyId", stack)?,
+                        );
                     }
                     "PreferredBackupWindow" => {
-                        obj.preferred_backup_window = Some(try!(StringDeserializer::deserialize(
+                        obj.preferred_backup_window = Some(StringDeserializer::deserialize(
                             "PreferredBackupWindow",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "PreferredMaintenanceWindow" => {
-                        obj.preferred_maintenance_window = Some(try!(
-                            StringDeserializer::deserialize("PreferredMaintenanceWindow", stack)
-                        ));
+                        obj.preferred_maintenance_window = Some(StringDeserializer::deserialize(
+                            "PreferredMaintenanceWindow",
+                            stack,
+                        )?);
                     }
                     "PromotionTier" => {
-                        obj.promotion_tier = Some(try!(IntegerOptionalDeserializer::deserialize(
+                        obj.promotion_tier = Some(IntegerOptionalDeserializer::deserialize(
                             "PromotionTier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ReadReplicaDBClusterIdentifiers" => {
-                        obj.read_replica_db_cluster_identifiers =
-                            match obj.read_replica_db_cluster_identifiers {
-                                Some(ref mut existing) => {
-                                    existing.extend(try!(
-                                        ReadReplicaDBClusterIdentifierListDeserializer::deserialize(
-                                            "ReadReplicaDBClusterIdentifiers",
-                                            stack
-                                        )
-                                    ));
-                                    Some(existing.to_vec())
-                                }
-                                None => Some(try!(
+                        obj.read_replica_db_cluster_identifiers = match obj
+                            .read_replica_db_cluster_identifiers
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(
                                     ReadReplicaDBClusterIdentifierListDeserializer::deserialize(
                                         "ReadReplicaDBClusterIdentifiers",
-                                        stack
-                                    )
-                                )),
-                            };
+                                        stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => {
+                                Some(ReadReplicaDBClusterIdentifierListDeserializer::deserialize(
+                                    "ReadReplicaDBClusterIdentifiers",
+                                    stack,
+                                )?)
+                            }
+                        };
                     }
                     "ReadReplicaDBInstanceIdentifiers" => {
                         obj.read_replica_db_instance_identifiers = match obj
                             .read_replica_db_instance_identifiers
                         {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     ReadReplicaDBInstanceIdentifierListDeserializer::deserialize(
                                         "ReadReplicaDBInstanceIdentifiers",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(
+                            None => Some(
                                 ReadReplicaDBInstanceIdentifierListDeserializer::deserialize(
                                     "ReadReplicaDBInstanceIdentifiers",
-                                    stack
-                                )
-                            )),
+                                    stack,
+                                )?,
+                            ),
                         };
                     }
                     "ReadReplicaSourceDBInstanceIdentifier" => {
                         obj.read_replica_source_db_instance_identifier =
-                            Some(try!(StringDeserializer::deserialize(
+                            Some(StringDeserializer::deserialize(
                                 "ReadReplicaSourceDBInstanceIdentifier",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "SecondaryAvailabilityZone" => {
-                        obj.secondary_availability_zone = Some(try!(
-                            StringDeserializer::deserialize("SecondaryAvailabilityZone", stack)
-                        ));
+                        obj.secondary_availability_zone = Some(StringDeserializer::deserialize(
+                            "SecondaryAvailabilityZone",
+                            stack,
+                        )?);
                     }
                     "StatusInfos" => {
                         obj.status_infos = match obj.status_infos {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    DBInstanceStatusInfoListDeserializer::deserialize(
-                                        "StatusInfos",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(DBInstanceStatusInfoListDeserializer::deserialize(
+                                    "StatusInfos",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBInstanceStatusInfoListDeserializer::deserialize(
+                            None => Some(DBInstanceStatusInfoListDeserializer::deserialize(
                                 "StatusInfos",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "StorageEncrypted" => {
-                        obj.storage_encrypted = Some(try!(BooleanDeserializer::deserialize(
-                            "StorageEncrypted",
-                            stack
-                        )));
+                        obj.storage_encrypted =
+                            Some(BooleanDeserializer::deserialize("StorageEncrypted", stack)?);
                     }
                     "StorageType" => {
                         obj.storage_type =
-                            Some(try!(StringDeserializer::deserialize("StorageType", stack)));
+                            Some(StringDeserializer::deserialize("StorageType", stack)?);
                     }
                     "TdeCredentialArn" => {
-                        obj.tde_credential_arn = Some(try!(StringDeserializer::deserialize(
-                            "TdeCredentialArn",
-                            stack
-                        )));
+                        obj.tde_credential_arn =
+                            Some(StringDeserializer::deserialize("TdeCredentialArn", stack)?);
                     }
                     "Timezone" => {
-                        obj.timezone =
-                            Some(try!(StringDeserializer::deserialize("Timezone", stack)));
+                        obj.timezone = Some(StringDeserializer::deserialize("Timezone", stack)?);
                     }
                     "VpcSecurityGroups" => {
                         obj.vpc_security_groups = match obj.vpc_security_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     VpcSecurityGroupMembershipListDeserializer::deserialize(
                                         "VpcSecurityGroups",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(
-                                VpcSecurityGroupMembershipListDeserializer::deserialize(
-                                    "VpcSecurityGroups",
-                                    stack
-                                )
-                            )),
+                            None => Some(VpcSecurityGroupMembershipListDeserializer::deserialize(
+                                "VpcSecurityGroups",
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4169,7 +4086,7 @@ impl DBInstanceDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4182,7 +4099,7 @@ impl DBInstanceListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBInstance>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4196,16 +4113,13 @@ impl DBInstanceListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBInstance" {
-                        obj.push(try!(DBInstanceDeserializer::deserialize(
-                            "DBInstance",
-                            stack
-                        )));
+                        obj.push(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4233,7 +4147,7 @@ impl DBInstanceMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBInstanceMessage::default();
 
@@ -4251,20 +4165,20 @@ impl DBInstanceMessageDeserializer {
                     "DBInstances" => {
                         obj.db_instances = match obj.db_instances {
                             Some(ref mut existing) => {
-                                existing.extend(try!(DBInstanceListDeserializer::deserialize(
+                                existing.extend(DBInstanceListDeserializer::deserialize(
                                     "DBInstances",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBInstanceListDeserializer::deserialize(
+                            None => Some(DBInstanceListDeserializer::deserialize(
                                 "DBInstances",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4275,7 +4189,7 @@ impl DBInstanceMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4300,7 +4214,7 @@ impl DBInstanceStatusInfoDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceStatusInfo, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBInstanceStatusInfo::default();
 
@@ -4316,17 +4230,17 @@ impl DBInstanceStatusInfoDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Message" => {
-                        obj.message = Some(try!(StringDeserializer::deserialize("Message", stack)));
+                        obj.message = Some(StringDeserializer::deserialize("Message", stack)?);
                     }
                     "Normal" => {
-                        obj.normal = Some(try!(BooleanDeserializer::deserialize("Normal", stack)));
+                        obj.normal = Some(BooleanDeserializer::deserialize("Normal", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     "StatusType" => {
                         obj.status_type =
-                            Some(try!(StringDeserializer::deserialize("StatusType", stack)));
+                            Some(StringDeserializer::deserialize("StatusType", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4337,7 +4251,7 @@ impl DBInstanceStatusInfoDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4350,7 +4264,7 @@ impl DBInstanceStatusInfoListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBInstanceStatusInfo>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4364,16 +4278,16 @@ impl DBInstanceStatusInfoListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBInstanceStatusInfo" {
-                        obj.push(try!(DBInstanceStatusInfoDeserializer::deserialize(
+                        obj.push(DBInstanceStatusInfoDeserializer::deserialize(
                             "DBInstanceStatusInfo",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4405,7 +4319,7 @@ impl DBParameterGroupDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroup, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBParameterGroup::default();
 
@@ -4419,30 +4333,31 @@ impl DBParameterGroupDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DBParameterGroupArn" => {
-                            obj.db_parameter_group_arn = Some(try!(
-                                StringDeserializer::deserialize("DBParameterGroupArn", stack)
-                            ));
-                        }
-                        "DBParameterGroupFamily" => {
-                            obj.db_parameter_group_family = Some(try!(
-                                StringDeserializer::deserialize("DBParameterGroupFamily", stack)
-                            ));
-                        }
-                        "DBParameterGroupName" => {
-                            obj.db_parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("DBParameterGroupName", stack)
-                            ));
-                        }
-                        "Description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("Description", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DBParameterGroupArn" => {
+                        obj.db_parameter_group_arn = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupArn",
+                            stack,
+                        )?);
                     }
-                }
+                    "DBParameterGroupFamily" => {
+                        obj.db_parameter_group_family = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupFamily",
+                            stack,
+                        )?);
+                    }
+                    "DBParameterGroupName" => {
+                        obj.db_parameter_group_name = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(StringDeserializer::deserialize("Description", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4450,7 +4365,7 @@ impl DBParameterGroupDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4471,7 +4386,7 @@ impl DBParameterGroupDetailsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupDetails, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBParameterGroupDetails::default();
 
@@ -4487,21 +4402,21 @@ impl DBParameterGroupDetailsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersListDeserializer::deserialize(
+                                existing.extend(ParametersListDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersListDeserializer::deserialize(
+                            None => Some(ParametersListDeserializer::deserialize(
                                 "Parameters",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4513,7 +4428,7 @@ impl DBParameterGroupDetailsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4526,7 +4441,7 @@ impl DBParameterGroupListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBParameterGroup>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4540,16 +4455,16 @@ impl DBParameterGroupListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBParameterGroup" {
-                        obj.push(try!(DBParameterGroupDeserializer::deserialize(
+                        obj.push(DBParameterGroupDeserializer::deserialize(
                             "DBParameterGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4575,7 +4490,7 @@ impl DBParameterGroupNameMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupNameMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBParameterGroupNameMessage::default();
 
@@ -4591,10 +4506,10 @@ impl DBParameterGroupNameMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBParameterGroupName" => {
-                        obj.db_parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                        obj.db_parameter_group_name = Some(StringDeserializer::deserialize(
                             "DBParameterGroupName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4605,7 +4520,7 @@ impl DBParameterGroupNameMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4626,7 +4541,7 @@ impl DBParameterGroupStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupStatus, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBParameterGroupStatus::default();
 
@@ -4640,21 +4555,21 @@ impl DBParameterGroupStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "DBParameterGroupName" => {
-                            obj.db_parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("DBParameterGroupName", stack)
-                            ));
-                        }
-                        "ParameterApplyStatus" => {
-                            obj.parameter_apply_status = Some(try!(
-                                StringDeserializer::deserialize("ParameterApplyStatus", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DBParameterGroupName" => {
+                        obj.db_parameter_group_name = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupName",
+                            stack,
+                        )?);
                     }
-                }
+                    "ParameterApplyStatus" => {
+                        obj.parameter_apply_status = Some(StringDeserializer::deserialize(
+                            "ParameterApplyStatus",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4662,7 +4577,7 @@ impl DBParameterGroupStatusDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4675,7 +4590,7 @@ impl DBParameterGroupStatusListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBParameterGroupStatus>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4689,16 +4604,16 @@ impl DBParameterGroupStatusListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBParameterGroup" {
-                        obj.push(try!(DBParameterGroupStatusDeserializer::deserialize(
+                        obj.push(DBParameterGroupStatusDeserializer::deserialize(
                             "DBParameterGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4726,7 +4641,7 @@ impl DBParameterGroupsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBParameterGroupsMessage::default();
 
@@ -4744,22 +4659,20 @@ impl DBParameterGroupsMessageDeserializer {
                     "DBParameterGroups" => {
                         obj.db_parameter_groups = match obj.db_parameter_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    DBParameterGroupListDeserializer::deserialize(
-                                        "DBParameterGroups",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(DBParameterGroupListDeserializer::deserialize(
+                                    "DBParameterGroups",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBParameterGroupListDeserializer::deserialize(
+                            None => Some(DBParameterGroupListDeserializer::deserialize(
                                 "DBParameterGroups",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4770,7 +4683,7 @@ impl DBParameterGroupsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4791,7 +4704,7 @@ impl DBSecurityGroupMembershipDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSecurityGroupMembership, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBSecurityGroupMembership::default();
 
@@ -4807,13 +4720,13 @@ impl DBSecurityGroupMembershipDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBSecurityGroupName" => {
-                        obj.db_security_group_name = Some(try!(StringDeserializer::deserialize(
+                        obj.db_security_group_name = Some(StringDeserializer::deserialize(
                             "DBSecurityGroupName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4824,7 +4737,7 @@ impl DBSecurityGroupMembershipDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4837,7 +4750,7 @@ impl DBSecurityGroupMembershipListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBSecurityGroupMembership>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4851,16 +4764,16 @@ impl DBSecurityGroupMembershipListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBSecurityGroup" {
-                        obj.push(try!(DBSecurityGroupMembershipDeserializer::deserialize(
+                        obj.push(DBSecurityGroupMembershipDeserializer::deserialize(
                             "DBSecurityGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4908,7 +4821,7 @@ impl DBSubnetGroupDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSubnetGroup, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBSubnetGroup::default();
 
@@ -4924,43 +4837,35 @@ impl DBSubnetGroupDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBSubnetGroupArn" => {
-                        obj.db_subnet_group_arn = Some(try!(StringDeserializer::deserialize(
-                            "DBSubnetGroupArn",
-                            stack
-                        )));
+                        obj.db_subnet_group_arn =
+                            Some(StringDeserializer::deserialize("DBSubnetGroupArn", stack)?);
                     }
                     "DBSubnetGroupDescription" => {
-                        obj.db_subnet_group_description = Some(try!(
-                            StringDeserializer::deserialize("DBSubnetGroupDescription", stack)
-                        ));
+                        obj.db_subnet_group_description = Some(StringDeserializer::deserialize(
+                            "DBSubnetGroupDescription",
+                            stack,
+                        )?);
                     }
                     "DBSubnetGroupName" => {
-                        obj.db_subnet_group_name = Some(try!(StringDeserializer::deserialize(
-                            "DBSubnetGroupName",
-                            stack
-                        )));
+                        obj.db_subnet_group_name =
+                            Some(StringDeserializer::deserialize("DBSubnetGroupName", stack)?);
                     }
                     "SubnetGroupStatus" => {
-                        obj.subnet_group_status = Some(try!(StringDeserializer::deserialize(
-                            "SubnetGroupStatus",
-                            stack
-                        )));
+                        obj.subnet_group_status =
+                            Some(StringDeserializer::deserialize("SubnetGroupStatus", stack)?);
                     }
                     "Subnets" => {
                         obj.subnets = match obj.subnets {
                             Some(ref mut existing) => {
-                                existing.extend(try!(SubnetListDeserializer::deserialize(
-                                    "Subnets", stack
-                                )));
+                                existing
+                                    .extend(SubnetListDeserializer::deserialize("Subnets", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => {
-                                Some(try!(SubnetListDeserializer::deserialize("Subnets", stack)))
-                            }
+                            None => Some(SubnetListDeserializer::deserialize("Subnets", stack)?),
                         };
                     }
                     "VpcId" => {
-                        obj.vpc_id = Some(try!(StringDeserializer::deserialize("VpcId", stack)));
+                        obj.vpc_id = Some(StringDeserializer::deserialize("VpcId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4971,7 +4876,7 @@ impl DBSubnetGroupDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4992,7 +4897,7 @@ impl DBSubnetGroupMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSubnetGroupMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DBSubnetGroupMessage::default();
 
@@ -5010,20 +4915,20 @@ impl DBSubnetGroupMessageDeserializer {
                     "DBSubnetGroups" => {
                         obj.db_subnet_groups = match obj.db_subnet_groups {
                             Some(ref mut existing) => {
-                                existing.extend(try!(DBSubnetGroupsDeserializer::deserialize(
+                                existing.extend(DBSubnetGroupsDeserializer::deserialize(
                                     "DBSubnetGroups",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DBSubnetGroupsDeserializer::deserialize(
+                            None => Some(DBSubnetGroupsDeserializer::deserialize(
                                 "DBSubnetGroups",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5034,7 +4939,7 @@ impl DBSubnetGroupMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5047,7 +4952,7 @@ impl DBSubnetGroupsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DBSubnetGroup>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5061,16 +4966,16 @@ impl DBSubnetGroupsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DBSubnetGroup" {
-                        obj.push(try!(DBSubnetGroupDeserializer::deserialize(
+                        obj.push(DBSubnetGroupDeserializer::deserialize(
                             "DBSubnetGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5156,7 +5061,7 @@ impl DeleteDBClusterResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBClusterResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DeleteDBClusterResult::default();
 
@@ -5173,7 +5078,7 @@ impl DeleteDBClusterResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5184,7 +5089,7 @@ impl DeleteDBClusterResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5224,7 +5129,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBClusterSnapshotResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DeleteDBClusterSnapshotResult::default();
 
@@ -5240,9 +5145,10 @@ impl DeleteDBClusterSnapshotResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshot" => {
-                        obj.db_cluster_snapshot = Some(try!(
-                            DBClusterSnapshotDeserializer::deserialize("DBClusterSnapshot", stack)
-                        ));
+                        obj.db_cluster_snapshot = Some(DBClusterSnapshotDeserializer::deserialize(
+                            "DBClusterSnapshot",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5253,7 +5159,7 @@ impl DeleteDBClusterSnapshotResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5309,7 +5215,7 @@ impl DeleteDBInstanceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBInstanceResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DeleteDBInstanceResult::default();
 
@@ -5325,10 +5231,8 @@ impl DeleteDBInstanceResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBInstance" => {
-                        obj.db_instance = Some(try!(DBInstanceDeserializer::deserialize(
-                            "DBInstance",
-                            stack
-                        )));
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5339,7 +5243,7 @@ impl DeleteDBInstanceResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5425,7 +5329,7 @@ impl DeleteEventSubscriptionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteEventSubscriptionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DeleteEventSubscriptionResult::default();
 
@@ -5441,9 +5345,10 @@ impl DeleteEventSubscriptionResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventSubscription" => {
-                        obj.event_subscription = Some(try!(
-                            EventSubscriptionDeserializer::deserialize("EventSubscription", stack)
-                        ));
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5454,7 +5359,7 @@ impl DeleteEventSubscriptionResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5595,7 +5500,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBClusterSnapshotAttributesResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeDBClusterSnapshotAttributesResult::default();
 
@@ -5611,12 +5516,11 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshotAttributesResult" => {
-                        obj.db_cluster_snapshot_attributes_result = Some(try!(
-                            DBClusterSnapshotAttributesResultDeserializer::deserialize(
+                        obj.db_cluster_snapshot_attributes_result =
+                            Some(DBClusterSnapshotAttributesResultDeserializer::deserialize(
                                 "DBClusterSnapshotAttributesResult",
-                                stack
-                            )
-                        ));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5627,7 +5531,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6083,7 +5987,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultClusterParametersResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeEngineDefaultClusterParametersResult::default();
 
@@ -6099,10 +6003,10 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EngineDefaults" => {
-                        obj.engine_defaults = Some(try!(EngineDefaultsDeserializer::deserialize(
+                        obj.engine_defaults = Some(EngineDefaultsDeserializer::deserialize(
                             "EngineDefaults",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6113,7 +6017,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6175,7 +6079,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeEngineDefaultParametersResult::default();
 
@@ -6191,10 +6095,10 @@ impl DescribeEngineDefaultParametersResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EngineDefaults" => {
-                        obj.engine_defaults = Some(try!(EngineDefaultsDeserializer::deserialize(
+                        obj.engine_defaults = Some(EngineDefaultsDeserializer::deserialize(
                             "EngineDefaults",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6205,7 +6109,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6506,7 +6410,7 @@ impl DescribeValidDBInstanceModificationsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeValidDBInstanceModificationsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeValidDBInstanceModificationsResult::default();
 
@@ -6522,12 +6426,12 @@ impl DescribeValidDBInstanceModificationsResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ValidDBInstanceModificationsMessage" => {
-                        obj.valid_db_instance_modifications_message = Some(try!(
+                        obj.valid_db_instance_modifications_message = Some(
                             ValidDBInstanceModificationsMessageDeserializer::deserialize(
                                 "ValidDBInstanceModificationsMessage",
-                                stack
-                            )
-                        ));
+                                stack,
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
                 },
@@ -6538,7 +6442,7 @@ impl DescribeValidDBInstanceModificationsResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6563,7 +6467,7 @@ impl DomainMembershipDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainMembership, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DomainMembership::default();
 
@@ -6579,17 +6483,17 @@ impl DomainMembershipDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Domain" => {
-                        obj.domain = Some(try!(StringDeserializer::deserialize("Domain", stack)));
+                        obj.domain = Some(StringDeserializer::deserialize("Domain", stack)?);
                     }
                     "FQDN" => {
-                        obj.fqdn = Some(try!(StringDeserializer::deserialize("FQDN", stack)));
+                        obj.fqdn = Some(StringDeserializer::deserialize("FQDN", stack)?);
                     }
                     "IAMRoleName" => {
                         obj.iam_role_name =
-                            Some(try!(StringDeserializer::deserialize("IAMRoleName", stack)));
+                            Some(StringDeserializer::deserialize("IAMRoleName", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6600,7 +6504,7 @@ impl DomainMembershipDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6613,7 +6517,7 @@ impl DomainMembershipListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DomainMembership>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6627,16 +6531,16 @@ impl DomainMembershipListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DomainMembership" {
-                        obj.push(try!(DomainMembershipDeserializer::deserialize(
+                        obj.push(DomainMembershipDeserializer::deserialize(
                             "DomainMembership",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6655,9 +6559,9 @@ impl DoubleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<f64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6669,9 +6573,9 @@ impl DoubleOptionalDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<f64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6692,7 +6596,7 @@ impl DoubleRangeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleRange, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DoubleRange::default();
 
@@ -6708,10 +6612,10 @@ impl DoubleRangeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "From" => {
-                        obj.from = Some(try!(DoubleDeserializer::deserialize("From", stack)));
+                        obj.from = Some(DoubleDeserializer::deserialize("From", stack)?);
                     }
                     "To" => {
-                        obj.to = Some(try!(DoubleDeserializer::deserialize("To", stack)));
+                        obj.to = Some(DoubleDeserializer::deserialize("To", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6722,7 +6626,7 @@ impl DoubleRangeDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6735,7 +6639,7 @@ impl DoubleRangeListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<DoubleRange>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6749,16 +6653,13 @@ impl DoubleRangeListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "DoubleRange" {
-                        obj.push(try!(DoubleRangeDeserializer::deserialize(
-                            "DoubleRange",
-                            stack
-                        )));
+                        obj.push(DoubleRangeDeserializer::deserialize("DoubleRange", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6788,7 +6689,7 @@ impl EndpointDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Endpoint, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Endpoint::default();
 
@@ -6804,14 +6705,14 @@ impl EndpointDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Address" => {
-                        obj.address = Some(try!(StringDeserializer::deserialize("Address", stack)));
+                        obj.address = Some(StringDeserializer::deserialize("Address", stack)?);
                     }
                     "HostedZoneId" => {
                         obj.hosted_zone_id =
-                            Some(try!(StringDeserializer::deserialize("HostedZoneId", stack)));
+                            Some(StringDeserializer::deserialize("HostedZoneId", stack)?);
                     }
                     "Port" => {
-                        obj.port = Some(try!(IntegerDeserializer::deserialize("Port", stack)));
+                        obj.port = Some(IntegerDeserializer::deserialize("Port", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6822,7 +6723,7 @@ impl EndpointDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6845,7 +6746,7 @@ impl EngineDefaultsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EngineDefaults, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EngineDefaults::default();
 
@@ -6861,26 +6762,27 @@ impl EngineDefaultsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBParameterGroupFamily" => {
-                        obj.db_parameter_group_family = Some(try!(
-                            StringDeserializer::deserialize("DBParameterGroupFamily", stack)
-                        ));
+                        obj.db_parameter_group_family = Some(StringDeserializer::deserialize(
+                            "DBParameterGroupFamily",
+                            stack,
+                        )?);
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersListDeserializer::deserialize(
+                                existing.extend(ParametersListDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersListDeserializer::deserialize(
+                            None => Some(ParametersListDeserializer::deserialize(
                                 "Parameters",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -6892,7 +6794,7 @@ impl EngineDefaultsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6921,7 +6823,7 @@ impl EventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Event, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Event::default();
 
@@ -6937,43 +6839,36 @@ impl EventDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Date" => {
-                        obj.date = Some(try!(TStampDeserializer::deserialize("Date", stack)));
+                        obj.date = Some(TStampDeserializer::deserialize("Date", stack)?);
                     }
                     "EventCategories" => {
                         obj.event_categories = match obj.event_categories {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    EventCategoriesListDeserializer::deserialize(
-                                        "EventCategories",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(EventCategoriesListDeserializer::deserialize(
+                                    "EventCategories",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventCategoriesListDeserializer::deserialize(
+                            None => Some(EventCategoriesListDeserializer::deserialize(
                                 "EventCategories",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Message" => {
-                        obj.message = Some(try!(StringDeserializer::deserialize("Message", stack)));
+                        obj.message = Some(StringDeserializer::deserialize("Message", stack)?);
                     }
                     "SourceArn" => {
-                        obj.source_arn =
-                            Some(try!(StringDeserializer::deserialize("SourceArn", stack)));
+                        obj.source_arn = Some(StringDeserializer::deserialize("SourceArn", stack)?);
                     }
                     "SourceIdentifier" => {
-                        obj.source_identifier = Some(try!(StringDeserializer::deserialize(
-                            "SourceIdentifier",
-                            stack
-                        )));
+                        obj.source_identifier =
+                            Some(StringDeserializer::deserialize("SourceIdentifier", stack)?);
                     }
                     "SourceType" => {
-                        obj.source_type = Some(try!(SourceTypeDeserializer::deserialize(
-                            "SourceType",
-                            stack
-                        )));
+                        obj.source_type =
+                            Some(SourceTypeDeserializer::deserialize("SourceType", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6984,7 +6879,7 @@ impl EventDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6997,7 +6892,7 @@ impl EventCategoriesListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7011,16 +6906,13 @@ impl EventCategoriesListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "EventCategory" {
-                        obj.push(try!(StringDeserializer::deserialize(
-                            "EventCategory",
-                            stack
-                        )));
+                        obj.push(StringDeserializer::deserialize("EventCategory", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7060,7 +6952,7 @@ impl EventCategoriesMapDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventCategoriesMap, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EventCategoriesMap::default();
 
@@ -7078,23 +6970,21 @@ impl EventCategoriesMapDeserializer {
                     "EventCategories" => {
                         obj.event_categories = match obj.event_categories {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    EventCategoriesListDeserializer::deserialize(
-                                        "EventCategories",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(EventCategoriesListDeserializer::deserialize(
+                                    "EventCategories",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventCategoriesListDeserializer::deserialize(
+                            None => Some(EventCategoriesListDeserializer::deserialize(
                                 "EventCategories",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "SourceType" => {
                         obj.source_type =
-                            Some(try!(StringDeserializer::deserialize("SourceType", stack)));
+                            Some(StringDeserializer::deserialize("SourceType", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7105,7 +6995,7 @@ impl EventCategoriesMapDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7118,7 +7008,7 @@ impl EventCategoriesMapListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<EventCategoriesMap>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7132,16 +7022,16 @@ impl EventCategoriesMapListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "EventCategoriesMap" {
-                        obj.push(try!(EventCategoriesMapDeserializer::deserialize(
+                        obj.push(EventCategoriesMapDeserializer::deserialize(
                             "EventCategoriesMap",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7167,7 +7057,7 @@ impl EventCategoriesMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventCategoriesMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EventCategoriesMessage::default();
 
@@ -7185,18 +7075,16 @@ impl EventCategoriesMessageDeserializer {
                     "EventCategoriesMapList" => {
                         obj.event_categories_map_list = match obj.event_categories_map_list {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    EventCategoriesMapListDeserializer::deserialize(
-                                        "EventCategoriesMapList",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(EventCategoriesMapListDeserializer::deserialize(
+                                    "EventCategoriesMapList",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventCategoriesMapListDeserializer::deserialize(
+                            None => Some(EventCategoriesMapListDeserializer::deserialize(
                                 "EventCategoriesMapList",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -7208,7 +7096,7 @@ impl EventCategoriesMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7221,7 +7109,7 @@ impl EventListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Event>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7235,13 +7123,13 @@ impl EventListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "Event" {
-                        obj.push(try!(EventDeserializer::deserialize("Event", stack)));
+                        obj.push(EventDeserializer::deserialize("Event", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7285,7 +7173,7 @@ impl EventSubscriptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventSubscription, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EventSubscription::default();
 
@@ -7301,74 +7189,70 @@ impl EventSubscriptionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CustSubscriptionId" => {
-                        obj.cust_subscription_id = Some(try!(StringDeserializer::deserialize(
+                        obj.cust_subscription_id = Some(StringDeserializer::deserialize(
                             "CustSubscriptionId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "CustomerAwsId" => {
-                        obj.customer_aws_id = Some(try!(StringDeserializer::deserialize(
-                            "CustomerAwsId",
-                            stack
-                        )));
+                        obj.customer_aws_id =
+                            Some(StringDeserializer::deserialize("CustomerAwsId", stack)?);
                     }
                     "Enabled" => {
-                        obj.enabled =
-                            Some(try!(BooleanDeserializer::deserialize("Enabled", stack)));
+                        obj.enabled = Some(BooleanDeserializer::deserialize("Enabled", stack)?);
                     }
                     "EventCategoriesList" => {
                         obj.event_categories_list = match obj.event_categories_list {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    EventCategoriesListDeserializer::deserialize(
-                                        "EventCategoriesList",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(EventCategoriesListDeserializer::deserialize(
+                                    "EventCategoriesList",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventCategoriesListDeserializer::deserialize(
+                            None => Some(EventCategoriesListDeserializer::deserialize(
                                 "EventCategoriesList",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "EventSubscriptionArn" => {
-                        obj.event_subscription_arn = Some(try!(StringDeserializer::deserialize(
+                        obj.event_subscription_arn = Some(StringDeserializer::deserialize(
                             "EventSubscriptionArn",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "SnsTopicArn" => {
                         obj.sns_topic_arn =
-                            Some(try!(StringDeserializer::deserialize("SnsTopicArn", stack)));
+                            Some(StringDeserializer::deserialize("SnsTopicArn", stack)?);
                     }
                     "SourceIdsList" => {
                         obj.source_ids_list = match obj.source_ids_list {
                             Some(ref mut existing) => {
-                                existing.extend(try!(SourceIdsListDeserializer::deserialize(
+                                existing.extend(SourceIdsListDeserializer::deserialize(
                                     "SourceIdsList",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(SourceIdsListDeserializer::deserialize(
+                            None => Some(SourceIdsListDeserializer::deserialize(
                                 "SourceIdsList",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "SourceType" => {
                         obj.source_type =
-                            Some(try!(StringDeserializer::deserialize("SourceType", stack)));
+                            Some(StringDeserializer::deserialize("SourceType", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     "SubscriptionCreationTime" => {
-                        obj.subscription_creation_time = Some(try!(
-                            StringDeserializer::deserialize("SubscriptionCreationTime", stack)
-                        ));
+                        obj.subscription_creation_time = Some(StringDeserializer::deserialize(
+                            "SubscriptionCreationTime",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7379,7 +7263,7 @@ impl EventSubscriptionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7392,7 +7276,7 @@ impl EventSubscriptionsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<EventSubscription>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7406,16 +7290,16 @@ impl EventSubscriptionsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "EventSubscription" {
-                        obj.push(try!(EventSubscriptionDeserializer::deserialize(
+                        obj.push(EventSubscriptionDeserializer::deserialize(
                             "EventSubscription",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7443,7 +7327,7 @@ impl EventSubscriptionsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventSubscriptionsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EventSubscriptionsMessage::default();
 
@@ -7461,22 +7345,20 @@ impl EventSubscriptionsMessageDeserializer {
                     "EventSubscriptionsList" => {
                         obj.event_subscriptions_list = match obj.event_subscriptions_list {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    EventSubscriptionsListDeserializer::deserialize(
-                                        "EventSubscriptionsList",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(EventSubscriptionsListDeserializer::deserialize(
+                                    "EventSubscriptionsList",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventSubscriptionsListDeserializer::deserialize(
+                            None => Some(EventSubscriptionsListDeserializer::deserialize(
                                 "EventSubscriptionsList",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7487,7 +7369,7 @@ impl EventSubscriptionsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7508,7 +7390,7 @@ impl EventsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EventsMessage::default();
 
@@ -7526,16 +7408,15 @@ impl EventsMessageDeserializer {
                     "Events" => {
                         obj.events = match obj.events {
                             Some(ref mut existing) => {
-                                existing.extend(try!(EventListDeserializer::deserialize(
-                                    "Events", stack
-                                )));
+                                existing
+                                    .extend(EventListDeserializer::deserialize("Events", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventListDeserializer::deserialize("Events", stack))),
+                            None => Some(EventListDeserializer::deserialize("Events", stack)?),
                         };
                     }
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7546,7 +7427,7 @@ impl EventsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7596,7 +7477,7 @@ impl FailoverDBClusterResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FailoverDBClusterResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = FailoverDBClusterResult::default();
 
@@ -7613,7 +7494,7 @@ impl FailoverDBClusterResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7624,7 +7505,7 @@ impl FailoverDBClusterResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7685,9 +7566,9 @@ impl IntegerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7699,9 +7580,9 @@ impl IntegerOptionalDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7755,7 +7636,7 @@ impl LogTypeListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7769,13 +7650,13 @@ impl LogTypeListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StringDeserializer::deserialize("member", stack)));
+                        obj.push(StringDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7949,7 +7830,7 @@ impl ModifyDBClusterResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBClusterResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ModifyDBClusterResult::default();
 
@@ -7966,7 +7847,7 @@ impl ModifyDBClusterResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7977,7 +7858,7 @@ impl ModifyDBClusterResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8041,7 +7922,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBClusterSnapshotAttributeResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ModifyDBClusterSnapshotAttributeResult::default();
 
@@ -8057,12 +7938,11 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBClusterSnapshotAttributesResult" => {
-                        obj.db_cluster_snapshot_attributes_result = Some(try!(
-                            DBClusterSnapshotAttributesResultDeserializer::deserialize(
+                        obj.db_cluster_snapshot_attributes_result =
+                            Some(DBClusterSnapshotAttributesResultDeserializer::deserialize(
                                 "DBClusterSnapshotAttributesResult",
-                                stack
-                            )
-                        ));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8073,7 +7953,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8353,7 +8233,7 @@ impl ModifyDBInstanceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBInstanceResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ModifyDBInstanceResult::default();
 
@@ -8369,10 +8249,8 @@ impl ModifyDBInstanceResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBInstance" => {
-                        obj.db_instance = Some(try!(DBInstanceDeserializer::deserialize(
-                            "DBInstance",
-                            stack
-                        )));
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8383,7 +8261,7 @@ impl ModifyDBInstanceResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8468,7 +8346,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBSubnetGroupResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ModifyDBSubnetGroupResult::default();
 
@@ -8484,10 +8362,10 @@ impl ModifyDBSubnetGroupResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBSubnetGroup" => {
-                        obj.db_subnet_group = Some(try!(DBSubnetGroupDeserializer::deserialize(
+                        obj.db_subnet_group = Some(DBSubnetGroupDeserializer::deserialize(
                             "DBSubnetGroup",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8498,7 +8376,7 @@ impl ModifyDBSubnetGroupResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8565,7 +8443,7 @@ impl ModifyEventSubscriptionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyEventSubscriptionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ModifyEventSubscriptionResult::default();
 
@@ -8581,9 +8459,10 @@ impl ModifyEventSubscriptionResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventSubscription" => {
-                        obj.event_subscription = Some(try!(
-                            EventSubscriptionDeserializer::deserialize("EventSubscription", stack)
-                        ));
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8594,7 +8473,7 @@ impl ModifyEventSubscriptionResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8615,7 +8494,7 @@ impl OptionGroupMembershipDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroupMembership, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = OptionGroupMembership::default();
 
@@ -8631,13 +8510,11 @@ impl OptionGroupMembershipDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OptionGroupName" => {
-                        obj.option_group_name = Some(try!(StringDeserializer::deserialize(
-                            "OptionGroupName",
-                            stack
-                        )));
+                        obj.option_group_name =
+                            Some(StringDeserializer::deserialize("OptionGroupName", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8648,7 +8525,7 @@ impl OptionGroupMembershipDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8661,7 +8538,7 @@ impl OptionGroupMembershipListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<OptionGroupMembership>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -8675,16 +8552,16 @@ impl OptionGroupMembershipListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "OptionGroupMembership" {
-                        obj.push(try!(OptionGroupMembershipDeserializer::deserialize(
+                        obj.push(OptionGroupMembershipDeserializer::deserialize(
                             "OptionGroupMembership",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8748,7 +8625,7 @@ impl OrderableDBInstanceOptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrderableDBInstanceOption, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = OrderableDBInstanceOption::default();
 
@@ -8766,117 +8643,116 @@ impl OrderableDBInstanceOptionDeserializer {
                     "AvailabilityZones" => {
                         obj.availability_zones = match obj.availability_zones {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    AvailabilityZoneListDeserializer::deserialize(
-                                        "AvailabilityZones",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(AvailabilityZoneListDeserializer::deserialize(
+                                    "AvailabilityZones",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AvailabilityZoneListDeserializer::deserialize(
+                            None => Some(AvailabilityZoneListDeserializer::deserialize(
                                 "AvailabilityZones",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "DBInstanceClass" => {
-                        obj.db_instance_class = Some(try!(StringDeserializer::deserialize(
-                            "DBInstanceClass",
-                            stack
-                        )));
+                        obj.db_instance_class =
+                            Some(StringDeserializer::deserialize("DBInstanceClass", stack)?);
                     }
                     "Engine" => {
-                        obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
+                        obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "LicenseModel" => {
                         obj.license_model =
-                            Some(try!(StringDeserializer::deserialize("LicenseModel", stack)));
+                            Some(StringDeserializer::deserialize("LicenseModel", stack)?);
                     }
                     "MaxIopsPerDbInstance" => {
-                        obj.max_iops_per_db_instance = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("MaxIopsPerDbInstance", stack)
-                        ));
+                        obj.max_iops_per_db_instance =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "MaxIopsPerDbInstance",
+                                stack,
+                            )?);
                     }
                     "MaxIopsPerGib" => {
-                        obj.max_iops_per_gib = Some(try!(DoubleOptionalDeserializer::deserialize(
+                        obj.max_iops_per_gib = Some(DoubleOptionalDeserializer::deserialize(
                             "MaxIopsPerGib",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "MaxStorageSize" => {
-                        obj.max_storage_size = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("MaxStorageSize", stack)
-                        ));
+                        obj.max_storage_size = Some(IntegerOptionalDeserializer::deserialize(
+                            "MaxStorageSize",
+                            stack,
+                        )?);
                     }
                     "MinIopsPerDbInstance" => {
-                        obj.min_iops_per_db_instance = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("MinIopsPerDbInstance", stack)
-                        ));
+                        obj.min_iops_per_db_instance =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "MinIopsPerDbInstance",
+                                stack,
+                            )?);
                     }
                     "MinIopsPerGib" => {
-                        obj.min_iops_per_gib = Some(try!(DoubleOptionalDeserializer::deserialize(
+                        obj.min_iops_per_gib = Some(DoubleOptionalDeserializer::deserialize(
                             "MinIopsPerGib",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "MinStorageSize" => {
-                        obj.min_storage_size = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("MinStorageSize", stack)
-                        ));
+                        obj.min_storage_size = Some(IntegerOptionalDeserializer::deserialize(
+                            "MinStorageSize",
+                            stack,
+                        )?);
                     }
                     "MultiAZCapable" => {
-                        obj.multi_az_capable = Some(try!(BooleanDeserializer::deserialize(
-                            "MultiAZCapable",
-                            stack
-                        )));
+                        obj.multi_az_capable =
+                            Some(BooleanDeserializer::deserialize("MultiAZCapable", stack)?);
                     }
                     "ReadReplicaCapable" => {
-                        obj.read_replica_capable = Some(try!(BooleanDeserializer::deserialize(
+                        obj.read_replica_capable = Some(BooleanDeserializer::deserialize(
                             "ReadReplicaCapable",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "StorageType" => {
                         obj.storage_type =
-                            Some(try!(StringDeserializer::deserialize("StorageType", stack)));
+                            Some(StringDeserializer::deserialize("StorageType", stack)?);
                     }
                     "SupportsEnhancedMonitoring" => {
-                        obj.supports_enhanced_monitoring = Some(try!(
-                            BooleanDeserializer::deserialize("SupportsEnhancedMonitoring", stack)
-                        ));
+                        obj.supports_enhanced_monitoring = Some(BooleanDeserializer::deserialize(
+                            "SupportsEnhancedMonitoring",
+                            stack,
+                        )?);
                     }
                     "SupportsIAMDatabaseAuthentication" => {
                         obj.supports_iam_database_authentication =
-                            Some(try!(BooleanDeserializer::deserialize(
+                            Some(BooleanDeserializer::deserialize(
                                 "SupportsIAMDatabaseAuthentication",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "SupportsIops" => {
-                        obj.supports_iops = Some(try!(BooleanDeserializer::deserialize(
-                            "SupportsIops",
-                            stack
-                        )));
+                        obj.supports_iops =
+                            Some(BooleanDeserializer::deserialize("SupportsIops", stack)?);
                     }
                     "SupportsPerformanceInsights" => {
-                        obj.supports_performance_insights = Some(try!(
-                            BooleanDeserializer::deserialize("SupportsPerformanceInsights", stack)
-                        ));
+                        obj.supports_performance_insights = Some(BooleanDeserializer::deserialize(
+                            "SupportsPerformanceInsights",
+                            stack,
+                        )?);
                     }
                     "SupportsStorageEncryption" => {
-                        obj.supports_storage_encryption = Some(try!(
-                            BooleanDeserializer::deserialize("SupportsStorageEncryption", stack)
-                        ));
+                        obj.supports_storage_encryption = Some(BooleanDeserializer::deserialize(
+                            "SupportsStorageEncryption",
+                            stack,
+                        )?);
                     }
                     "Vpc" => {
-                        obj.vpc = Some(try!(BooleanDeserializer::deserialize("Vpc", stack)));
+                        obj.vpc = Some(BooleanDeserializer::deserialize("Vpc", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8887,7 +8763,7 @@ impl OrderableDBInstanceOptionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8900,7 +8776,7 @@ impl OrderableDBInstanceOptionsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<OrderableDBInstanceOption>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -8914,16 +8790,16 @@ impl OrderableDBInstanceOptionsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "OrderableDBInstanceOption" {
-                        obj.push(try!(OrderableDBInstanceOptionDeserializer::deserialize(
+                        obj.push(OrderableDBInstanceOptionDeserializer::deserialize(
                             "OrderableDBInstanceOption",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8951,7 +8827,7 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrderableDBInstanceOptionsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = OrderableDBInstanceOptionsMessage::default();
 
@@ -8967,26 +8843,24 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     "OrderableDBInstanceOptions" => {
                         obj.orderable_db_instance_options = match obj.orderable_db_instance_options
                         {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     OrderableDBInstanceOptionsListDeserializer::deserialize(
                                         "OrderableDBInstanceOptions",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(
-                                OrderableDBInstanceOptionsListDeserializer::deserialize(
-                                    "OrderableDBInstanceOptions",
-                                    stack
-                                )
-                            )),
+                            None => Some(OrderableDBInstanceOptionsListDeserializer::deserialize(
+                                "OrderableDBInstanceOptions",
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -8998,7 +8872,7 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9035,7 +8909,7 @@ impl ParameterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Parameter::default();
 
@@ -9051,55 +8925,43 @@ impl ParameterDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllowedValues" => {
-                        obj.allowed_values = Some(try!(StringDeserializer::deserialize(
-                            "AllowedValues",
-                            stack
-                        )));
+                        obj.allowed_values =
+                            Some(StringDeserializer::deserialize("AllowedValues", stack)?);
                     }
                     "ApplyMethod" => {
-                        obj.apply_method = Some(try!(ApplyMethodDeserializer::deserialize(
-                            "ApplyMethod",
-                            stack
-                        )));
+                        obj.apply_method =
+                            Some(ApplyMethodDeserializer::deserialize("ApplyMethod", stack)?);
                     }
                     "ApplyType" => {
-                        obj.apply_type =
-                            Some(try!(StringDeserializer::deserialize("ApplyType", stack)));
+                        obj.apply_type = Some(StringDeserializer::deserialize("ApplyType", stack)?);
                     }
                     "DataType" => {
-                        obj.data_type =
-                            Some(try!(StringDeserializer::deserialize("DataType", stack)));
+                        obj.data_type = Some(StringDeserializer::deserialize("DataType", stack)?);
                     }
                     "Description" => {
                         obj.description =
-                            Some(try!(StringDeserializer::deserialize("Description", stack)));
+                            Some(StringDeserializer::deserialize("Description", stack)?);
                     }
                     "IsModifiable" => {
-                        obj.is_modifiable = Some(try!(BooleanDeserializer::deserialize(
-                            "IsModifiable",
-                            stack
-                        )));
+                        obj.is_modifiable =
+                            Some(BooleanDeserializer::deserialize("IsModifiable", stack)?);
                     }
                     "MinimumEngineVersion" => {
-                        obj.minimum_engine_version = Some(try!(StringDeserializer::deserialize(
+                        obj.minimum_engine_version = Some(StringDeserializer::deserialize(
                             "MinimumEngineVersion",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ParameterName" => {
-                        obj.parameter_name = Some(try!(StringDeserializer::deserialize(
-                            "ParameterName",
-                            stack
-                        )));
+                        obj.parameter_name =
+                            Some(StringDeserializer::deserialize("ParameterName", stack)?);
                     }
                     "ParameterValue" => {
-                        obj.parameter_value = Some(try!(StringDeserializer::deserialize(
-                            "ParameterValue",
-                            stack
-                        )));
+                        obj.parameter_value =
+                            Some(StringDeserializer::deserialize("ParameterValue", stack)?);
                     }
                     "Source" => {
-                        obj.source = Some(try!(StringDeserializer::deserialize("Source", stack)));
+                        obj.source = Some(StringDeserializer::deserialize("Source", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -9110,7 +8972,7 @@ impl ParameterDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9172,7 +9034,7 @@ impl ParametersListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9186,13 +9048,13 @@ impl ParametersListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "Parameter" {
-                        obj.push(try!(ParameterDeserializer::deserialize("Parameter", stack)));
+                        obj.push(ParameterDeserializer::deserialize("Parameter", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -9232,7 +9094,7 @@ impl PendingCloudwatchLogsExportsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingCloudwatchLogsExports, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = PendingCloudwatchLogsExports::default();
 
@@ -9250,31 +9112,31 @@ impl PendingCloudwatchLogsExportsDeserializer {
                     "LogTypesToDisable" => {
                         obj.log_types_to_disable = match obj.log_types_to_disable {
                             Some(ref mut existing) => {
-                                existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                existing.extend(LogTypeListDeserializer::deserialize(
                                     "LogTypesToDisable",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(LogTypeListDeserializer::deserialize(
+                            None => Some(LogTypeListDeserializer::deserialize(
                                 "LogTypesToDisable",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "LogTypesToEnable" => {
                         obj.log_types_to_enable = match obj.log_types_to_enable {
                             Some(ref mut existing) => {
-                                existing.extend(try!(LogTypeListDeserializer::deserialize(
+                                existing.extend(LogTypeListDeserializer::deserialize(
                                     "LogTypesToEnable",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(LogTypeListDeserializer::deserialize(
+                            None => Some(LogTypeListDeserializer::deserialize(
                                 "LogTypesToEnable",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -9286,7 +9148,7 @@ impl PendingCloudwatchLogsExportsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9315,7 +9177,7 @@ impl PendingMaintenanceActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingMaintenanceAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = PendingMaintenanceAction::default();
 
@@ -9331,33 +9193,29 @@ impl PendingMaintenanceActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Action" => {
-                        obj.action = Some(try!(StringDeserializer::deserialize("Action", stack)));
+                        obj.action = Some(StringDeserializer::deserialize("Action", stack)?);
                     }
                     "AutoAppliedAfterDate" => {
-                        obj.auto_applied_after_date = Some(try!(TStampDeserializer::deserialize(
+                        obj.auto_applied_after_date = Some(TStampDeserializer::deserialize(
                             "AutoAppliedAfterDate",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "CurrentApplyDate" => {
-                        obj.current_apply_date = Some(try!(TStampDeserializer::deserialize(
-                            "CurrentApplyDate",
-                            stack
-                        )));
+                        obj.current_apply_date =
+                            Some(TStampDeserializer::deserialize("CurrentApplyDate", stack)?);
                     }
                     "Description" => {
                         obj.description =
-                            Some(try!(StringDeserializer::deserialize("Description", stack)));
+                            Some(StringDeserializer::deserialize("Description", stack)?);
                     }
                     "ForcedApplyDate" => {
-                        obj.forced_apply_date = Some(try!(TStampDeserializer::deserialize(
-                            "ForcedApplyDate",
-                            stack
-                        )));
+                        obj.forced_apply_date =
+                            Some(TStampDeserializer::deserialize("ForcedApplyDate", stack)?);
                     }
                     "OptInStatus" => {
                         obj.opt_in_status =
-                            Some(try!(StringDeserializer::deserialize("OptInStatus", stack)));
+                            Some(StringDeserializer::deserialize("OptInStatus", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -9368,7 +9226,7 @@ impl PendingMaintenanceActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9381,7 +9239,7 @@ impl PendingMaintenanceActionDetailsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<PendingMaintenanceAction>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9395,16 +9253,16 @@ impl PendingMaintenanceActionDetailsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "PendingMaintenanceAction" {
-                        obj.push(try!(PendingMaintenanceActionDeserializer::deserialize(
+                        obj.push(PendingMaintenanceActionDeserializer::deserialize(
                             "PendingMaintenanceAction",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -9424,7 +9282,7 @@ impl PendingMaintenanceActionsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ResourcePendingMaintenanceActions>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9438,18 +9296,16 @@ impl PendingMaintenanceActionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "ResourcePendingMaintenanceActions" {
-                        obj.push(try!(
-                            ResourcePendingMaintenanceActionsDeserializer::deserialize(
-                                "ResourcePendingMaintenanceActions",
-                                stack
-                            )
-                        ));
+                        obj.push(ResourcePendingMaintenanceActionsDeserializer::deserialize(
+                            "ResourcePendingMaintenanceActions",
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -9477,7 +9333,7 @@ impl PendingMaintenanceActionsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingMaintenanceActionsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = PendingMaintenanceActionsMessage::default();
 
@@ -9493,23 +9349,23 @@ impl PendingMaintenanceActionsMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Marker" => {
-                        obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     "PendingMaintenanceActions" => {
                         obj.pending_maintenance_actions = match obj.pending_maintenance_actions {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     PendingMaintenanceActionsDeserializer::deserialize(
                                         "PendingMaintenanceActions",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(PendingMaintenanceActionsDeserializer::deserialize(
+                            None => Some(PendingMaintenanceActionsDeserializer::deserialize(
                                 "PendingMaintenanceActions",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -9521,7 +9377,7 @@ impl PendingMaintenanceActionsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9565,7 +9421,7 @@ impl PendingModifiedValuesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingModifiedValues, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = PendingModifiedValues::default();
 
@@ -9581,81 +9437,72 @@ impl PendingModifiedValuesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AllocatedStorage" => {
-                        obj.allocated_storage = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("AllocatedStorage", stack)
-                        ));
+                        obj.allocated_storage = Some(IntegerOptionalDeserializer::deserialize(
+                            "AllocatedStorage",
+                            stack,
+                        )?);
                     }
                     "BackupRetentionPeriod" => {
                         obj.backup_retention_period =
-                            Some(try!(IntegerOptionalDeserializer::deserialize(
+                            Some(IntegerOptionalDeserializer::deserialize(
                                 "BackupRetentionPeriod",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "CACertificateIdentifier" => {
-                        obj.ca_certificate_identifier = Some(try!(
-                            StringDeserializer::deserialize("CACertificateIdentifier", stack)
-                        ));
+                        obj.ca_certificate_identifier = Some(StringDeserializer::deserialize(
+                            "CACertificateIdentifier",
+                            stack,
+                        )?);
                     }
                     "DBInstanceClass" => {
-                        obj.db_instance_class = Some(try!(StringDeserializer::deserialize(
-                            "DBInstanceClass",
-                            stack
-                        )));
+                        obj.db_instance_class =
+                            Some(StringDeserializer::deserialize("DBInstanceClass", stack)?);
                     }
                     "DBInstanceIdentifier" => {
-                        obj.db_instance_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.db_instance_identifier = Some(StringDeserializer::deserialize(
                             "DBInstanceIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "DBSubnetGroupName" => {
-                        obj.db_subnet_group_name = Some(try!(StringDeserializer::deserialize(
-                            "DBSubnetGroupName",
-                            stack
-                        )));
+                        obj.db_subnet_group_name =
+                            Some(StringDeserializer::deserialize("DBSubnetGroupName", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "Iops" => {
-                        obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Iops", stack
-                        )));
+                        obj.iops = Some(IntegerOptionalDeserializer::deserialize("Iops", stack)?);
                     }
                     "LicenseModel" => {
                         obj.license_model =
-                            Some(try!(StringDeserializer::deserialize("LicenseModel", stack)));
+                            Some(StringDeserializer::deserialize("LicenseModel", stack)?);
                     }
                     "MasterUserPassword" => {
-                        obj.master_user_password = Some(try!(StringDeserializer::deserialize(
+                        obj.master_user_password = Some(StringDeserializer::deserialize(
                             "MasterUserPassword",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "MultiAZ" => {
-                        obj.multi_az = Some(try!(BooleanOptionalDeserializer::deserialize(
-                            "MultiAZ", stack
-                        )));
+                        obj.multi_az =
+                            Some(BooleanOptionalDeserializer::deserialize("MultiAZ", stack)?);
                     }
                     "PendingCloudwatchLogsExports" => {
                         obj.pending_cloudwatch_logs_exports =
-                            Some(try!(PendingCloudwatchLogsExportsDeserializer::deserialize(
+                            Some(PendingCloudwatchLogsExportsDeserializer::deserialize(
                                 "PendingCloudwatchLogsExports",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "Port" => {
-                        obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Port", stack
-                        )));
+                        obj.port = Some(IntegerOptionalDeserializer::deserialize("Port", stack)?);
                     }
                     "StorageType" => {
                         obj.storage_type =
-                            Some(try!(StringDeserializer::deserialize("StorageType", stack)));
+                            Some(StringDeserializer::deserialize("StorageType", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -9666,7 +9513,7 @@ impl PendingModifiedValuesDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9706,7 +9553,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PromoteReadReplicaDBClusterResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = PromoteReadReplicaDBClusterResult::default();
 
@@ -9723,7 +9570,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -9734,7 +9581,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9757,7 +9604,7 @@ impl RangeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Range, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Range::default();
 
@@ -9773,15 +9620,13 @@ impl RangeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "From" => {
-                        obj.from = Some(try!(IntegerDeserializer::deserialize("From", stack)));
+                        obj.from = Some(IntegerDeserializer::deserialize("From", stack)?);
                     }
                     "Step" => {
-                        obj.step = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Step", stack
-                        )));
+                        obj.step = Some(IntegerOptionalDeserializer::deserialize("Step", stack)?);
                     }
                     "To" => {
-                        obj.to = Some(try!(IntegerDeserializer::deserialize("To", stack)));
+                        obj.to = Some(IntegerDeserializer::deserialize("To", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -9792,7 +9637,7 @@ impl RangeDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9805,7 +9650,7 @@ impl RangeListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Range>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9819,13 +9664,13 @@ impl RangeListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "Range" {
-                        obj.push(try!(RangeDeserializer::deserialize("Range", stack)));
+                        obj.push(RangeDeserializer::deserialize("Range", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -9845,7 +9690,7 @@ impl ReadReplicaDBClusterIdentifierListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9859,16 +9704,16 @@ impl ReadReplicaDBClusterIdentifierListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "ReadReplicaDBClusterIdentifier" {
-                        obj.push(try!(StringDeserializer::deserialize(
+                        obj.push(StringDeserializer::deserialize(
                             "ReadReplicaDBClusterIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -9888,7 +9733,7 @@ impl ReadReplicaDBInstanceIdentifierListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9902,16 +9747,16 @@ impl ReadReplicaDBInstanceIdentifierListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "ReadReplicaDBInstanceIdentifier" {
-                        obj.push(try!(StringDeserializer::deserialize(
+                        obj.push(StringDeserializer::deserialize(
                             "ReadReplicaDBInstanceIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -9931,7 +9776,7 @@ impl ReadReplicaIdentifierListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -9945,16 +9790,16 @@ impl ReadReplicaIdentifierListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "ReadReplicaIdentifier" {
-                        obj.push(try!(StringDeserializer::deserialize(
+                        obj.push(StringDeserializer::deserialize(
                             "ReadReplicaIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -10009,7 +9854,7 @@ impl RebootDBInstanceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RebootDBInstanceResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = RebootDBInstanceResult::default();
 
@@ -10025,10 +9870,8 @@ impl RebootDBInstanceResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBInstance" => {
-                        obj.db_instance = Some(try!(DBInstanceDeserializer::deserialize(
-                            "DBInstance",
-                            stack
-                        )));
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10039,7 +9882,7 @@ impl RebootDBInstanceResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10114,7 +9957,7 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RemoveSourceIdentifierFromSubscriptionResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = RemoveSourceIdentifierFromSubscriptionResult::default();
 
@@ -10130,9 +9973,10 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EventSubscription" => {
-                        obj.event_subscription = Some(try!(
-                            EventSubscriptionDeserializer::deserialize("EventSubscription", stack)
-                        ));
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10143,7 +9987,7 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10267,7 +10111,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourcePendingMaintenanceActions, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ResourcePendingMaintenanceActions::default();
 
@@ -10283,30 +10127,29 @@ impl ResourcePendingMaintenanceActionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PendingMaintenanceActionDetails" => {
-                        obj.pending_maintenance_action_details =
-                            match obj.pending_maintenance_action_details {
-                                Some(ref mut existing) => {
-                                    existing.extend(try!(
-                                        PendingMaintenanceActionDetailsDeserializer::deserialize(
-                                            "PendingMaintenanceActionDetails",
-                                            stack
-                                        )
-                                    ));
-                                    Some(existing.to_vec())
-                                }
-                                None => Some(try!(
+                        obj.pending_maintenance_action_details = match obj
+                            .pending_maintenance_action_details
+                        {
+                            Some(ref mut existing) => {
+                                existing.extend(
                                     PendingMaintenanceActionDetailsDeserializer::deserialize(
                                         "PendingMaintenanceActionDetails",
-                                        stack
-                                    )
-                                )),
-                            };
+                                        stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(PendingMaintenanceActionDetailsDeserializer::deserialize(
+                                "PendingMaintenanceActionDetails",
+                                stack,
+                            )?),
+                        };
                     }
                     "ResourceIdentifier" => {
-                        obj.resource_identifier = Some(try!(StringDeserializer::deserialize(
+                        obj.resource_identifier = Some(StringDeserializer::deserialize(
                             "ResourceIdentifier",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10317,7 +10160,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10427,7 +10270,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterFromSnapshotResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = RestoreDBClusterFromSnapshotResult::default();
 
@@ -10444,7 +10287,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10455,7 +10298,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10560,7 +10403,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterToPointInTimeResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = RestoreDBClusterToPointInTimeResult::default();
 
@@ -10577,7 +10420,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBCluster" => {
                         obj.db_cluster =
-                            Some(try!(DBClusterDeserializer::deserialize("DBCluster", stack)));
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10588,7 +10431,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10601,7 +10444,7 @@ impl SourceIdsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -10615,13 +10458,13 @@ impl SourceIdsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "SourceId" {
-                        obj.push(try!(StringDeserializer::deserialize("SourceId", stack)));
+                        obj.push(StringDeserializer::deserialize("SourceId", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -10652,9 +10495,9 @@ impl SourceTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10666,9 +10509,9 @@ impl StringDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10690,7 +10533,7 @@ impl SubnetDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Subnet, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Subnet::default();
 
@@ -10707,20 +10550,18 @@ impl SubnetDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "SubnetAvailabilityZone" => {
                         obj.subnet_availability_zone =
-                            Some(try!(AvailabilityZoneDeserializer::deserialize(
+                            Some(AvailabilityZoneDeserializer::deserialize(
                                 "SubnetAvailabilityZone",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "SubnetIdentifier" => {
-                        obj.subnet_identifier = Some(try!(StringDeserializer::deserialize(
-                            "SubnetIdentifier",
-                            stack
-                        )));
+                        obj.subnet_identifier =
+                            Some(StringDeserializer::deserialize("SubnetIdentifier", stack)?);
                     }
                     "SubnetStatus" => {
                         obj.subnet_status =
-                            Some(try!(StringDeserializer::deserialize("SubnetStatus", stack)));
+                            Some(StringDeserializer::deserialize("SubnetStatus", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10731,7 +10572,7 @@ impl SubnetDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10756,7 +10597,7 @@ impl SubnetListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Subnet>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -10770,13 +10611,13 @@ impl SubnetListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "Subnet" {
-                        obj.push(try!(SubnetDeserializer::deserialize("Subnet", stack)));
+                        obj.push(SubnetDeserializer::deserialize("Subnet", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -10796,7 +10637,7 @@ impl SupportedCharacterSetsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<CharacterSet>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -10810,16 +10651,16 @@ impl SupportedCharacterSetsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "CharacterSet" {
-                        obj.push(try!(CharacterSetDeserializer::deserialize(
+                        obj.push(CharacterSetDeserializer::deserialize(
                             "CharacterSet",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -10839,7 +10680,7 @@ impl SupportedTimezonesListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Timezone>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -10853,13 +10694,13 @@ impl SupportedTimezonesListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "Timezone" {
-                        obj.push(try!(TimezoneDeserializer::deserialize("Timezone", stack)));
+                        obj.push(TimezoneDeserializer::deserialize("Timezone", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -10878,9 +10719,9 @@ impl TStampDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10901,7 +10742,7 @@ impl TagDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tag, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Tag::default();
 
@@ -10917,10 +10758,10 @@ impl TagDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Key" => {
-                        obj.key = Some(try!(StringDeserializer::deserialize("Key", stack)));
+                        obj.key = Some(StringDeserializer::deserialize("Key", stack)?);
                     }
                     "Value" => {
-                        obj.value = Some(try!(StringDeserializer::deserialize("Value", stack)));
+                        obj.value = Some(StringDeserializer::deserialize("Value", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -10931,7 +10772,7 @@ impl TagDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -10963,7 +10804,7 @@ impl TagListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -10977,13 +10818,13 @@ impl TagListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "Tag" {
-                        obj.push(try!(TagDeserializer::deserialize("Tag", stack)));
+                        obj.push(TagDeserializer::deserialize("Tag", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -11021,7 +10862,7 @@ impl TagListMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagListMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = TagListMessage::default();
 
@@ -11039,12 +10880,11 @@ impl TagListMessageDeserializer {
                     "TagList" => {
                         obj.tag_list = match obj.tag_list {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TagListDeserializer::deserialize(
-                                    "TagList", stack
-                                )));
+                                existing
+                                    .extend(TagListDeserializer::deserialize("TagList", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TagListDeserializer::deserialize("TagList", stack))),
+                            None => Some(TagListDeserializer::deserialize("TagList", stack)?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -11056,7 +10896,7 @@ impl TagListMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11075,7 +10915,7 @@ impl TimezoneDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Timezone, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Timezone::default();
 
@@ -11092,7 +10932,7 @@ impl TimezoneDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TimezoneName" => {
                         obj.timezone_name =
-                            Some(try!(StringDeserializer::deserialize("TimezoneName", stack)));
+                            Some(StringDeserializer::deserialize("TimezoneName", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -11103,7 +10943,7 @@ impl TimezoneDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11130,7 +10970,7 @@ impl UpgradeTargetDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpgradeTarget, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = UpgradeTarget::default();
 
@@ -11147,25 +10987,24 @@ impl UpgradeTargetDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AutoUpgrade" => {
                         obj.auto_upgrade =
-                            Some(try!(BooleanDeserializer::deserialize("AutoUpgrade", stack)));
+                            Some(BooleanDeserializer::deserialize("AutoUpgrade", stack)?);
                     }
                     "Description" => {
                         obj.description =
-                            Some(try!(StringDeserializer::deserialize("Description", stack)));
+                            Some(StringDeserializer::deserialize("Description", stack)?);
                     }
                     "Engine" => {
-                        obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
+                        obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
                     }
                     "EngineVersion" => {
-                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                            "EngineVersion",
-                            stack
-                        )));
+                        obj.engine_version =
+                            Some(StringDeserializer::deserialize("EngineVersion", stack)?);
                     }
                     "IsMajorVersionUpgrade" => {
-                        obj.is_major_version_upgrade = Some(try!(
-                            BooleanDeserializer::deserialize("IsMajorVersionUpgrade", stack)
-                        ));
+                        obj.is_major_version_upgrade = Some(BooleanDeserializer::deserialize(
+                            "IsMajorVersionUpgrade",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -11176,7 +11015,7 @@ impl UpgradeTargetDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11195,7 +11034,7 @@ impl ValidDBInstanceModificationsMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidDBInstanceModificationsMessage, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ValidDBInstanceModificationsMessage::default();
 
@@ -11213,16 +11052,14 @@ impl ValidDBInstanceModificationsMessageDeserializer {
                     "Storage" => {
                         obj.storage = match obj.storage {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    ValidStorageOptionsListDeserializer::deserialize(
-                                        "Storage", stack
-                                    )
-                                ));
+                                existing.extend(ValidStorageOptionsListDeserializer::deserialize(
+                                    "Storage", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ValidStorageOptionsListDeserializer::deserialize(
-                                "Storage", stack
-                            ))),
+                            None => Some(ValidStorageOptionsListDeserializer::deserialize(
+                                "Storage", stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -11234,7 +11071,7 @@ impl ValidDBInstanceModificationsMessageDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11259,7 +11096,7 @@ impl ValidStorageOptionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidStorageOptions, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ValidStorageOptions::default();
 
@@ -11277,51 +11114,48 @@ impl ValidStorageOptionsDeserializer {
                     "IopsToStorageRatio" => {
                         obj.iops_to_storage_ratio = match obj.iops_to_storage_ratio {
                             Some(ref mut existing) => {
-                                existing.extend(try!(DoubleRangeListDeserializer::deserialize(
+                                existing.extend(DoubleRangeListDeserializer::deserialize(
                                     "IopsToStorageRatio",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DoubleRangeListDeserializer::deserialize(
+                            None => Some(DoubleRangeListDeserializer::deserialize(
                                 "IopsToStorageRatio",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ProvisionedIops" => {
                         obj.provisioned_iops = match obj.provisioned_iops {
                             Some(ref mut existing) => {
-                                existing.extend(try!(RangeListDeserializer::deserialize(
+                                existing.extend(RangeListDeserializer::deserialize(
                                     "ProvisionedIops",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(RangeListDeserializer::deserialize(
+                            None => Some(RangeListDeserializer::deserialize(
                                 "ProvisionedIops",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "StorageSize" => {
                         obj.storage_size = match obj.storage_size {
                             Some(ref mut existing) => {
-                                existing.extend(try!(RangeListDeserializer::deserialize(
+                                existing.extend(RangeListDeserializer::deserialize(
                                     "StorageSize",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(RangeListDeserializer::deserialize(
-                                "StorageSize",
-                                stack
-                            ))),
+                            None => Some(RangeListDeserializer::deserialize("StorageSize", stack)?),
                         };
                     }
                     "StorageType" => {
                         obj.storage_type =
-                            Some(try!(StringDeserializer::deserialize("StorageType", stack)));
+                            Some(StringDeserializer::deserialize("StorageType", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -11332,7 +11166,7 @@ impl ValidStorageOptionsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11345,7 +11179,7 @@ impl ValidStorageOptionsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ValidStorageOptions>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -11359,16 +11193,16 @@ impl ValidStorageOptionsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "ValidStorageOptions" {
-                        obj.push(try!(ValidStorageOptionsDeserializer::deserialize(
+                        obj.push(ValidStorageOptionsDeserializer::deserialize(
                             "ValidStorageOptions",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -11388,7 +11222,7 @@ impl ValidUpgradeTargetListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<UpgradeTarget>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -11402,16 +11236,16 @@ impl ValidUpgradeTargetListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "UpgradeTarget" {
-                        obj.push(try!(UpgradeTargetDeserializer::deserialize(
+                        obj.push(UpgradeTargetDeserializer::deserialize(
                             "UpgradeTarget",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -11451,7 +11285,7 @@ impl VpcSecurityGroupMembershipDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcSecurityGroupMembership, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = VpcSecurityGroupMembership::default();
 
@@ -11467,13 +11301,13 @@ impl VpcSecurityGroupMembershipDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Status" => {
-                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
                     }
                     "VpcSecurityGroupId" => {
-                        obj.vpc_security_group_id = Some(try!(StringDeserializer::deserialize(
+                        obj.vpc_security_group_id = Some(StringDeserializer::deserialize(
                             "VpcSecurityGroupId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -11484,7 +11318,7 @@ impl VpcSecurityGroupMembershipDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -11497,7 +11331,7 @@ impl VpcSecurityGroupMembershipListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<VpcSecurityGroupMembership>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -11511,16 +11345,16 @@ impl VpcSecurityGroupMembershipListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "VpcSecurityGroupMembership" {
-                        obj.push(try!(VpcSecurityGroupMembershipDeserializer::deserialize(
+                        obj.push(VpcSecurityGroupMembershipDeserializer::deserialize(
                             "VpcSecurityGroupMembership",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -17915,16 +17749,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
-                            "AddSourceIdentifierToSubscriptionResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
+                        "AddSourceIdentifierToSubscriptionResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17997,16 +17829,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ApplyPendingMaintenanceActionResultDeserializer::deserialize(
-                            "ApplyPendingMaintenanceActionResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+                        "ApplyPendingMaintenanceActionResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18049,14 +17879,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CopyDBClusterParameterGroupResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
                         "CopyDBClusterParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18101,14 +17931,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CopyDBClusterSnapshotResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CopyDBClusterSnapshotResultDeserializer::deserialize(
                         "CopyDBClusterSnapshotResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18153,14 +17983,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CopyDBParameterGroupResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CopyDBParameterGroupResultDeserializer::deserialize(
                         "CopyDBParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18206,14 +18036,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDBClusterResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateDBClusterResultDeserializer::deserialize(
                         "CreateDBClusterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18256,16 +18086,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        CreateDBClusterParameterGroupResultDeserializer::deserialize(
-                            "CreateDBClusterParameterGroupResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+                        "CreateDBClusterParameterGroupResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18308,14 +18136,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDBClusterSnapshotResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateDBClusterSnapshotResultDeserializer::deserialize(
                         "CreateDBClusterSnapshotResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18361,14 +18189,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDBInstanceResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateDBInstanceResultDeserializer::deserialize(
                         "CreateDBInstanceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18411,14 +18239,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDBParameterGroupResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateDBParameterGroupResultDeserializer::deserialize(
                         "CreateDBParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18463,14 +18291,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateDBSubnetGroupResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateDBSubnetGroupResultDeserializer::deserialize(
                         "CreateDBSubnetGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18513,14 +18341,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateEventSubscriptionResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateEventSubscriptionResultDeserializer::deserialize(
                         "CreateEventSubscriptionResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18566,14 +18394,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteDBClusterResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteDBClusterResultDeserializer::deserialize(
                         "DeleteDBClusterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18643,14 +18471,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteDBClusterSnapshotResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
                         "DeleteDBClusterSnapshotResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18696,14 +18524,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteDBInstanceResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteDBInstanceResultDeserializer::deserialize(
                         "DeleteDBInstanceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18802,14 +18630,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteEventSubscriptionResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteEventSubscriptionResultDeserializer::deserialize(
                         "DeleteEventSubscriptionResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18854,14 +18682,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBClusterParameterGroupsMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBClusterParameterGroupsMessageDeserializer::deserialize(
                         "DescribeDBClusterParameterGroupsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18904,14 +18732,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBClusterParameterGroupDetailsDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBClusterParameterGroupDetailsDeserializer::deserialize(
                         "DescribeDBClusterParametersResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18959,16 +18787,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
-                            "DescribeDBClusterSnapshotAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+                        "DescribeDBClusterSnapshotAttributesResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19011,14 +18837,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBClusterSnapshotMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBClusterSnapshotMessageDeserializer::deserialize(
                         "DescribeDBClusterSnapshotsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19064,14 +18890,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBClusterMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBClusterMessageDeserializer::deserialize(
                         "DescribeDBClustersResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19114,14 +18940,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBEngineVersionMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBEngineVersionMessageDeserializer::deserialize(
                         "DescribeDBEngineVersionsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19166,14 +18992,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBInstanceMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBInstanceMessageDeserializer::deserialize(
                         "DescribeDBInstancesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19216,14 +19042,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBParameterGroupsMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBParameterGroupsMessageDeserializer::deserialize(
                         "DescribeDBParameterGroupsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19268,14 +19094,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBParameterGroupDetailsDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBParameterGroupDetailsDeserializer::deserialize(
                         "DescribeDBParametersResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19318,14 +19144,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBSubnetGroupMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBSubnetGroupMessageDeserializer::deserialize(
                         "DescribeDBSubnetGroupsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19373,16 +19199,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
-                            "DescribeEngineDefaultClusterParametersResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
+                        "DescribeEngineDefaultClusterParametersResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19428,16 +19252,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeEngineDefaultParametersResultDeserializer::deserialize(
-                            "DescribeEngineDefaultParametersResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+                        "DescribeEngineDefaultParametersResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19480,14 +19302,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EventCategoriesMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = EventCategoriesMessageDeserializer::deserialize(
                         "DescribeEventCategoriesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19530,14 +19352,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EventSubscriptionsMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = EventSubscriptionsMessageDeserializer::deserialize(
                         "DescribeEventSubscriptionsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19583,14 +19405,12 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EventsMessageDeserializer::deserialize(
-                        "DescribeEventsResult",
-                        &mut stack
-                    ));
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
+                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19636,14 +19456,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
                         "DescribeOrderableDBInstanceOptionsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19689,14 +19509,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(PendingMaintenanceActionsMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = PendingMaintenanceActionsMessageDeserializer::deserialize(
                         "DescribePendingMaintenanceActionsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19744,16 +19564,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
-                            "DescribeValidDBInstanceModificationsResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
+                        "DescribeValidDBInstanceModificationsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19799,14 +19617,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(FailoverDBClusterResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = FailoverDBClusterResultDeserializer::deserialize(
                         "FailoverDBClusterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19851,14 +19669,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(TagListMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = TagListMessageDeserializer::deserialize(
                         "ListTagsForResourceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19904,14 +19722,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyDBClusterResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyDBClusterResultDeserializer::deserialize(
                         "ModifyDBClusterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -19954,14 +19772,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
                         "ModifyDBClusterParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20007,16 +19825,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
-                            "ModifyDBClusterSnapshotAttributeResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+                        "ModifyDBClusterSnapshotAttributeResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20062,14 +19878,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyDBInstanceResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyDBInstanceResultDeserializer::deserialize(
                         "ModifyDBInstanceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20112,14 +19928,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBParameterGroupNameMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBParameterGroupNameMessageDeserializer::deserialize(
                         "ModifyDBParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20164,14 +19980,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyDBSubnetGroupResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyDBSubnetGroupResultDeserializer::deserialize(
                         "ModifyDBSubnetGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20214,14 +20030,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ModifyEventSubscriptionResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyEventSubscriptionResultDeserializer::deserialize(
                         "ModifyEventSubscriptionResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20264,14 +20080,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(PromoteReadReplicaDBClusterResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = PromoteReadReplicaDBClusterResultDeserializer::deserialize(
                         "PromoteReadReplicaDBClusterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20317,14 +20133,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RebootDBInstanceResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = RebootDBInstanceResultDeserializer::deserialize(
                         "RebootDBInstanceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20399,16 +20215,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
-                            "RemoveSourceIdentifierFromSubscriptionResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
+                        "RemoveSourceIdentifierFromSubscriptionResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20478,14 +20292,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
                         "ResetDBClusterParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20530,14 +20344,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DBParameterGroupNameMessageDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DBParameterGroupNameMessageDeserializer::deserialize(
                         "ResetDBParameterGroupResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20580,14 +20394,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
                         "RestoreDBClusterFromSnapshotResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -20630,16 +20444,14 @@ impl Neptune for NeptuneClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
-                            "RestoreDBClusterToPointInTimeResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+                        "RestoreDBClusterToPointInTimeResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)

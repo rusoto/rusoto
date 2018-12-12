@@ -58,7 +58,7 @@ impl AddHeaderActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddHeaderAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = AddHeaderAction::default();
 
@@ -74,12 +74,11 @@ impl AddHeaderActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "HeaderName" => {
-                        obj.header_name =
-                            try!(HeaderNameDeserializer::deserialize("HeaderName", stack));
+                        obj.header_name = HeaderNameDeserializer::deserialize("HeaderName", stack)?;
                     }
                     "HeaderValue" => {
                         obj.header_value =
-                            try!(HeaderValueDeserializer::deserialize("HeaderValue", stack));
+                            HeaderValueDeserializer::deserialize("HeaderValue", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -90,7 +89,7 @@ impl AddHeaderActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -117,9 +116,9 @@ impl AddressDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -132,7 +131,7 @@ impl AddressListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -146,13 +145,13 @@ impl AddressListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AddressDeserializer::deserialize("member", stack)));
+                        obj.push(AddressDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -183,9 +182,9 @@ impl AmazonResourceNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -197,9 +196,9 @@ impl BehaviorOnMXFailureDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -253,7 +252,7 @@ impl BounceActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BounceAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = BounceAction::default();
 
@@ -269,28 +268,25 @@ impl BounceActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Message" => {
-                        obj.message =
-                            try!(BounceMessageDeserializer::deserialize("Message", stack));
+                        obj.message = BounceMessageDeserializer::deserialize("Message", stack)?;
                     }
                     "Sender" => {
-                        obj.sender = try!(AddressDeserializer::deserialize("Sender", stack));
+                        obj.sender = AddressDeserializer::deserialize("Sender", stack)?;
                     }
                     "SmtpReplyCode" => {
-                        obj.smtp_reply_code = try!(BounceSmtpReplyCodeDeserializer::deserialize(
-                            "SmtpReplyCode",
-                            stack
-                        ));
+                        obj.smtp_reply_code =
+                            BounceSmtpReplyCodeDeserializer::deserialize("SmtpReplyCode", stack)?;
                     }
                     "StatusCode" => {
-                        obj.status_code = Some(try!(BounceStatusCodeDeserializer::deserialize(
+                        obj.status_code = Some(BounceStatusCodeDeserializer::deserialize(
                             "StatusCode",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "TopicArn" => {
-                        obj.topic_arn = Some(try!(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack
-                        )));
+                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                            "TopicArn", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -301,7 +297,7 @@ impl BounceActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -338,9 +334,9 @@ impl BounceMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -352,9 +348,9 @@ impl BounceSmtpReplyCodeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -366,9 +362,9 @@ impl BounceStatusCodeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -492,7 +488,7 @@ impl BulkEmailDestinationStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BulkEmailDestinationStatus, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = BulkEmailDestinationStatus::default();
 
@@ -508,16 +504,15 @@ impl BulkEmailDestinationStatusDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Error" => {
-                        obj.error = Some(try!(SesErrorDeserializer::deserialize("Error", stack)));
+                        obj.error = Some(SesErrorDeserializer::deserialize("Error", stack)?);
                     }
                     "MessageId" => {
                         obj.message_id =
-                            Some(try!(MessageIdDeserializer::deserialize("MessageId", stack)));
+                            Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(BulkEmailStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status =
+                            Some(BulkEmailStatusDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -528,7 +523,7 @@ impl BulkEmailDestinationStatusDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -541,7 +536,7 @@ impl BulkEmailDestinationStatusListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<BulkEmailDestinationStatus>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -555,15 +550,15 @@ impl BulkEmailDestinationStatusListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(BulkEmailDestinationStatusDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(BulkEmailDestinationStatusDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -582,9 +577,9 @@ impl BulkEmailStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -596,9 +591,9 @@ impl CidrDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -640,11 +635,11 @@ impl CloneReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloneReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CloneReceiptRuleSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -663,7 +658,7 @@ impl CloudWatchDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDestination, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CloudWatchDestination::default();
 
@@ -679,12 +674,12 @@ impl CloudWatchDestinationDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DimensionConfigurations" => {
-                        obj.dimension_configurations.extend(try!(
+                        obj.dimension_configurations.extend(
                             CloudWatchDimensionConfigurationsDeserializer::deserialize(
                                 "DimensionConfigurations",
-                                stack
-                            )
-                        ));
+                                stack,
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
                 },
@@ -695,7 +690,7 @@ impl CloudWatchDestinationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -736,7 +731,7 @@ impl CloudWatchDimensionConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDimensionConfiguration, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CloudWatchDimensionConfiguration::default();
 
@@ -753,23 +748,20 @@ impl CloudWatchDimensionConfigurationDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DefaultDimensionValue" => {
                         obj.default_dimension_value =
-                            try!(DefaultDimensionValueDeserializer::deserialize(
+                            DefaultDimensionValueDeserializer::deserialize(
                                 "DefaultDimensionValue",
-                                stack
-                            ));
+                                stack,
+                            )?;
                     }
                     "DimensionName" => {
-                        obj.dimension_name = try!(DimensionNameDeserializer::deserialize(
-                            "DimensionName",
-                            stack
-                        ));
+                        obj.dimension_name =
+                            DimensionNameDeserializer::deserialize("DimensionName", stack)?;
                     }
                     "DimensionValueSource" => {
-                        obj.dimension_value_source =
-                            try!(DimensionValueSourceDeserializer::deserialize(
-                                "DimensionValueSource",
-                                stack
-                            ));
+                        obj.dimension_value_source = DimensionValueSourceDeserializer::deserialize(
+                            "DimensionValueSource",
+                            stack,
+                        )?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -780,7 +772,7 @@ impl CloudWatchDimensionConfigurationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -818,7 +810,7 @@ impl CloudWatchDimensionConfigurationsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<CloudWatchDimensionConfiguration>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -832,17 +824,15 @@ impl CloudWatchDimensionConfigurationsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(
-                            CloudWatchDimensionConfigurationDeserializer::deserialize(
-                                "member", stack
-                            )
-                        ));
+                        obj.push(CloudWatchDimensionConfigurationDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -880,7 +870,7 @@ impl ConfigurationSetDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfigurationSet, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ConfigurationSet::default();
 
@@ -896,8 +886,7 @@ impl ConfigurationSetDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Name" => {
-                        obj.name =
-                            try!(ConfigurationSetNameDeserializer::deserialize("Name", stack));
+                        obj.name = ConfigurationSetNameDeserializer::deserialize("Name", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -908,7 +897,7 @@ impl ConfigurationSetDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -945,9 +934,9 @@ impl ConfigurationSetNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -960,7 +949,7 @@ impl ConfigurationSetsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ConfigurationSet>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -974,15 +963,13 @@ impl ConfigurationSetsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ConfigurationSetDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ConfigurationSetDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -1026,9 +1013,9 @@ impl CounterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1078,11 +1065,11 @@ impl CreateConfigurationSetEventDestinationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetEventDestinationResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetEventDestinationResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1122,11 +1109,11 @@ impl CreateConfigurationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1175,11 +1162,11 @@ impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetTrackingOptionsResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateConfigurationSetTrackingOptionsResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1269,11 +1256,11 @@ impl CreateReceiptFilterResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptFilterResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateReceiptFilterResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1317,11 +1304,11 @@ impl CreateReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateReceiptRuleResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1357,11 +1344,11 @@ impl CreateReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateReceiptRuleSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1396,11 +1383,11 @@ impl CreateTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTemplateResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = CreateTemplateResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1412,9 +1399,9 @@ impl CustomMailFromStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1426,9 +1413,9 @@ impl CustomRedirectDomainDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1455,7 +1442,7 @@ impl CustomVerificationEmailTemplateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomVerificationEmailTemplate, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CustomVerificationEmailTemplate::default();
 
@@ -1472,35 +1459,33 @@ impl CustomVerificationEmailTemplateDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "FailureRedirectionURL" => {
                         obj.failure_redirection_url =
-                            Some(try!(FailureRedirectionURLDeserializer::deserialize(
+                            Some(FailureRedirectionURLDeserializer::deserialize(
                                 "FailureRedirectionURL",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "FromEmailAddress" => {
-                        obj.from_email_address = Some(try!(FromAddressDeserializer::deserialize(
+                        obj.from_email_address = Some(FromAddressDeserializer::deserialize(
                             "FromEmailAddress",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "SuccessRedirectionURL" => {
                         obj.success_redirection_url =
-                            Some(try!(SuccessRedirectionURLDeserializer::deserialize(
+                            Some(SuccessRedirectionURLDeserializer::deserialize(
                                 "SuccessRedirectionURL",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "TemplateName" => {
-                        obj.template_name = Some(try!(TemplateNameDeserializer::deserialize(
+                        obj.template_name = Some(TemplateNameDeserializer::deserialize(
                             "TemplateName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "TemplateSubject" => {
-                        obj.template_subject = Some(try!(SubjectDeserializer::deserialize(
-                            "TemplateSubject",
-                            stack
-                        )));
+                        obj.template_subject =
+                            Some(SubjectDeserializer::deserialize("TemplateSubject", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1511,7 +1496,7 @@ impl CustomVerificationEmailTemplateDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1524,7 +1509,7 @@ impl CustomVerificationEmailTemplatesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<CustomVerificationEmailTemplate>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -1538,17 +1523,15 @@ impl CustomVerificationEmailTemplatesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(
-                            CustomVerificationEmailTemplateDeserializer::deserialize(
-                                "member", stack
-                            )
-                        ));
+                        obj.push(CustomVerificationEmailTemplateDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -1567,9 +1550,9 @@ impl DefaultDimensionValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1618,11 +1601,11 @@ impl DeleteConfigurationSetEventDestinationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetEventDestinationResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetEventDestinationResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1661,11 +1644,11 @@ impl DeleteConfigurationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1708,11 +1691,11 @@ impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetTrackingOptionsResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteConfigurationSetTrackingOptionsResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1775,11 +1758,11 @@ impl DeleteIdentityPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityPolicyResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteIdentityPolicyResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1815,11 +1798,11 @@ impl DeleteIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteIdentityResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1855,11 +1838,11 @@ impl DeleteReceiptFilterResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptFilterResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptFilterResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1898,11 +1881,11 @@ impl DeleteReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptRuleResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1938,11 +1921,11 @@ impl DeleteReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteReceiptRuleSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1977,11 +1960,11 @@ impl DeleteTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTemplateResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteTemplateResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2037,7 +2020,7 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeActiveReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeActiveReceiptRuleSetResponse::default();
 
@@ -2053,21 +2036,21 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Metadata" => {
-                        obj.metadata = Some(try!(ReceiptRuleSetMetadataDeserializer::deserialize(
-                            "Metadata", stack
-                        )));
+                        obj.metadata = Some(ReceiptRuleSetMetadataDeserializer::deserialize(
+                            "Metadata", stack,
+                        )?);
                     }
                     "Rules" => {
                         obj.rules = match obj.rules {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ReceiptRulesListDeserializer::deserialize(
-                                    "Rules", stack
-                                )));
+                                existing.extend(ReceiptRulesListDeserializer::deserialize(
+                                    "Rules", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ReceiptRulesListDeserializer::deserialize(
-                                "Rules", stack
-                            ))),
+                            None => {
+                                Some(ReceiptRulesListDeserializer::deserialize("Rules", stack)?)
+                            }
                         };
                     }
                     _ => skip_tree(stack),
@@ -2079,7 +2062,7 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2136,7 +2119,7 @@ impl DescribeConfigurationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeConfigurationSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeConfigurationSetResponse::default();
 
@@ -2152,34 +2135,37 @@ impl DescribeConfigurationSetResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ConfigurationSet" => {
-                        obj.configuration_set = Some(try!(
-                            ConfigurationSetDeserializer::deserialize("ConfigurationSet", stack)
-                        ));
+                        obj.configuration_set = Some(ConfigurationSetDeserializer::deserialize(
+                            "ConfigurationSet",
+                            stack,
+                        )?);
                     }
                     "EventDestinations" => {
                         obj.event_destinations = match obj.event_destinations {
                             Some(ref mut existing) => {
-                                existing.extend(try!(EventDestinationsDeserializer::deserialize(
+                                existing.extend(EventDestinationsDeserializer::deserialize(
                                     "EventDestinations",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(EventDestinationsDeserializer::deserialize(
+                            None => Some(EventDestinationsDeserializer::deserialize(
                                 "EventDestinations",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ReputationOptions" => {
-                        obj.reputation_options = Some(try!(
-                            ReputationOptionsDeserializer::deserialize("ReputationOptions", stack)
-                        ));
+                        obj.reputation_options = Some(ReputationOptionsDeserializer::deserialize(
+                            "ReputationOptions",
+                            stack,
+                        )?);
                     }
                     "TrackingOptions" => {
-                        obj.tracking_options = Some(try!(
-                            TrackingOptionsDeserializer::deserialize("TrackingOptions", stack)
-                        ));
+                        obj.tracking_options = Some(TrackingOptionsDeserializer::deserialize(
+                            "TrackingOptions",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2190,7 +2176,7 @@ impl DescribeConfigurationSetResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2232,7 +2218,7 @@ impl DescribeReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeReceiptRuleResponse::default();
 
@@ -2248,7 +2234,7 @@ impl DescribeReceiptRuleResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Rule" => {
-                        obj.rule = Some(try!(ReceiptRuleDeserializer::deserialize("Rule", stack)));
+                        obj.rule = Some(ReceiptRuleDeserializer::deserialize("Rule", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2259,7 +2245,7 @@ impl DescribeReceiptRuleResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2300,7 +2286,7 @@ impl DescribeReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeReceiptRuleSetResponse::default();
 
@@ -2316,21 +2302,21 @@ impl DescribeReceiptRuleSetResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Metadata" => {
-                        obj.metadata = Some(try!(ReceiptRuleSetMetadataDeserializer::deserialize(
-                            "Metadata", stack
-                        )));
+                        obj.metadata = Some(ReceiptRuleSetMetadataDeserializer::deserialize(
+                            "Metadata", stack,
+                        )?);
                     }
                     "Rules" => {
                         obj.rules = match obj.rules {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ReceiptRulesListDeserializer::deserialize(
-                                    "Rules", stack
-                                )));
+                                existing.extend(ReceiptRulesListDeserializer::deserialize(
+                                    "Rules", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ReceiptRulesListDeserializer::deserialize(
-                                "Rules", stack
-                            ))),
+                            None => {
+                                Some(ReceiptRulesListDeserializer::deserialize("Rules", stack)?)
+                            }
                         };
                     }
                     _ => skip_tree(stack),
@@ -2342,7 +2328,7 @@ impl DescribeReceiptRuleSetResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2398,9 +2384,9 @@ impl DimensionNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2412,9 +2398,9 @@ impl DimensionValueSourceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2426,21 +2412,19 @@ impl DkimAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityDkimAttributes>, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == "entry" {
-            try!(start_element("entry", stack));
-            let key = try!(IdentityDeserializer::deserialize("key", stack));
-            let value = try!(IdentityDkimAttributesDeserializer::deserialize(
-                "value", stack
-            ));
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
+            let key = IdentityDeserializer::deserialize("key", stack)?;
+            let value = IdentityDkimAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            try!(end_element("entry", stack));
+            end_element("entry", stack)?;
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -2451,9 +2435,9 @@ impl EnabledDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2465,9 +2449,9 @@ impl SesErrorDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2496,7 +2480,7 @@ impl EventDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventDestination, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EventDestination::default();
 
@@ -2510,43 +2494,42 @@ impl EventDestinationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CloudWatchDestination" => {
-                            obj.cloud_watch_destination =
-                                Some(try!(CloudWatchDestinationDeserializer::deserialize(
-                                    "CloudWatchDestination",
-                                    stack
-                                )));
-                        }
-                        "Enabled" => {
-                            obj.enabled =
-                                Some(try!(EnabledDeserializer::deserialize("Enabled", stack)));
-                        }
-                        "KinesisFirehoseDestination" => {
-                            obj.kinesis_firehose_destination =
-                                Some(try!(KinesisFirehoseDestinationDeserializer::deserialize(
-                                    "KinesisFirehoseDestination",
-                                    stack
-                                )));
-                        }
-                        "MatchingEventTypes" => {
-                            obj.matching_event_types.extend(try!(
-                                EventTypesDeserializer::deserialize("MatchingEventTypes", stack)
-                            ));
-                        }
-                        "Name" => {
-                            obj.name =
-                                try!(EventDestinationNameDeserializer::deserialize("Name", stack));
-                        }
-                        "SNSDestination" => {
-                            obj.sns_destination = Some(try!(
-                                SNSDestinationDeserializer::deserialize("SNSDestination", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudWatchDestination" => {
+                        obj.cloud_watch_destination =
+                            Some(CloudWatchDestinationDeserializer::deserialize(
+                                "CloudWatchDestination",
+                                stack,
+                            )?);
                     }
-                }
+                    "Enabled" => {
+                        obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
+                    }
+                    "KinesisFirehoseDestination" => {
+                        obj.kinesis_firehose_destination =
+                            Some(KinesisFirehoseDestinationDeserializer::deserialize(
+                                "KinesisFirehoseDestination",
+                                stack,
+                            )?);
+                    }
+                    "MatchingEventTypes" => {
+                        obj.matching_event_types
+                            .extend(EventTypesDeserializer::deserialize(
+                                "MatchingEventTypes",
+                                stack,
+                            )?);
+                    }
+                    "Name" => {
+                        obj.name = EventDestinationNameDeserializer::deserialize("Name", stack)?;
+                    }
+                    "SNSDestination" => {
+                        obj.sns_destination = Some(SNSDestinationDeserializer::deserialize(
+                            "SNSDestination",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2554,7 +2537,7 @@ impl EventDestinationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2612,9 +2595,9 @@ impl EventDestinationNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2627,7 +2610,7 @@ impl EventDestinationsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<EventDestination>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2641,15 +2624,13 @@ impl EventDestinationsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(EventDestinationDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(EventDestinationDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2668,9 +2649,9 @@ impl EventTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2683,7 +2664,7 @@ impl EventTypesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2697,13 +2678,13 @@ impl EventTypesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(EventTypeDeserializer::deserialize("member", stack)));
+                        obj.push(EventTypeDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2768,9 +2749,9 @@ impl FailureRedirectionURLDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2782,9 +2763,9 @@ impl FromAddressDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2803,7 +2784,7 @@ impl GetAccountSendingEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountSendingEnabledResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetAccountSendingEnabledResponse::default();
 
@@ -2819,8 +2800,7 @@ impl GetAccountSendingEnabledResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Enabled" => {
-                        obj.enabled =
-                            Some(try!(EnabledDeserializer::deserialize("Enabled", stack)));
+                        obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2831,7 +2811,7 @@ impl GetAccountSendingEnabledResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2880,7 +2860,7 @@ impl GetCustomVerificationEmailTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCustomVerificationEmailTemplateResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetCustomVerificationEmailTemplateResponse::default();
 
@@ -2897,40 +2877,39 @@ impl GetCustomVerificationEmailTemplateResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "FailureRedirectionURL" => {
                         obj.failure_redirection_url =
-                            Some(try!(FailureRedirectionURLDeserializer::deserialize(
+                            Some(FailureRedirectionURLDeserializer::deserialize(
                                 "FailureRedirectionURL",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "FromEmailAddress" => {
-                        obj.from_email_address = Some(try!(FromAddressDeserializer::deserialize(
+                        obj.from_email_address = Some(FromAddressDeserializer::deserialize(
                             "FromEmailAddress",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "SuccessRedirectionURL" => {
                         obj.success_redirection_url =
-                            Some(try!(SuccessRedirectionURLDeserializer::deserialize(
+                            Some(SuccessRedirectionURLDeserializer::deserialize(
                                 "SuccessRedirectionURL",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "TemplateContent" => {
-                        obj.template_content = Some(try!(
-                            TemplateContentDeserializer::deserialize("TemplateContent", stack)
-                        ));
+                        obj.template_content = Some(TemplateContentDeserializer::deserialize(
+                            "TemplateContent",
+                            stack,
+                        )?);
                     }
                     "TemplateName" => {
-                        obj.template_name = Some(try!(TemplateNameDeserializer::deserialize(
+                        obj.template_name = Some(TemplateNameDeserializer::deserialize(
                             "TemplateName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "TemplateSubject" => {
-                        obj.template_subject = Some(try!(SubjectDeserializer::deserialize(
-                            "TemplateSubject",
-                            stack
-                        )));
+                        obj.template_subject =
+                            Some(SubjectDeserializer::deserialize("TemplateSubject", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2941,7 +2920,7 @@ impl GetCustomVerificationEmailTemplateResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2984,7 +2963,7 @@ impl GetIdentityDkimAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityDkimAttributesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetIdentityDkimAttributesResponse::default();
 
@@ -3000,10 +2979,8 @@ impl GetIdentityDkimAttributesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DkimAttributes" => {
-                        obj.dkim_attributes = try!(DkimAttributesDeserializer::deserialize(
-                            "DkimAttributes",
-                            stack
-                        ));
+                        obj.dkim_attributes =
+                            DkimAttributesDeserializer::deserialize("DkimAttributes", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3014,7 +2991,7 @@ impl GetIdentityDkimAttributesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3062,7 +3039,7 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityMailFromDomainAttributesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetIdentityMailFromDomainAttributesResponse::default();
 
@@ -3079,10 +3056,10 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MailFromDomainAttributes" => {
                         obj.mail_from_domain_attributes =
-                            try!(MailFromDomainAttributesDeserializer::deserialize(
+                            MailFromDomainAttributesDeserializer::deserialize(
                                 "MailFromDomainAttributes",
-                                stack
-                            ));
+                                stack,
+                            )?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3093,7 +3070,7 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3137,7 +3114,7 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityNotificationAttributesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetIdentityNotificationAttributesResponse::default();
 
@@ -3154,10 +3131,10 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NotificationAttributes" => {
                         obj.notification_attributes =
-                            try!(NotificationAttributesDeserializer::deserialize(
+                            NotificationAttributesDeserializer::deserialize(
                                 "NotificationAttributes",
-                                stack
-                            ));
+                                stack,
+                            )?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3168,7 +3145,7 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3214,7 +3191,7 @@ impl GetIdentityPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityPoliciesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetIdentityPoliciesResponse::default();
 
@@ -3230,7 +3207,7 @@ impl GetIdentityPoliciesResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Policies" => {
-                        obj.policies = try!(PolicyMapDeserializer::deserialize("Policies", stack));
+                        obj.policies = PolicyMapDeserializer::deserialize("Policies", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3241,7 +3218,7 @@ impl GetIdentityPoliciesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3285,7 +3262,7 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityVerificationAttributesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetIdentityVerificationAttributesResponse::default();
 
@@ -3302,10 +3279,10 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "VerificationAttributes" => {
                         obj.verification_attributes =
-                            try!(VerificationAttributesDeserializer::deserialize(
+                            VerificationAttributesDeserializer::deserialize(
                                 "VerificationAttributes",
-                                stack
-                            ));
+                                stack,
+                            )?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3316,7 +3293,7 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3339,7 +3316,7 @@ impl GetSendQuotaResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendQuotaResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetSendQuotaResponse::default();
 
@@ -3355,21 +3332,20 @@ impl GetSendQuotaResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Max24HourSend" => {
-                        obj.max_24_hour_send = Some(try!(Max24HourSendDeserializer::deserialize(
+                        obj.max_24_hour_send = Some(Max24HourSendDeserializer::deserialize(
                             "Max24HourSend",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "MaxSendRate" => {
-                        obj.max_send_rate = Some(try!(MaxSendRateDeserializer::deserialize(
-                            "MaxSendRate",
-                            stack
-                        )));
+                        obj.max_send_rate =
+                            Some(MaxSendRateDeserializer::deserialize("MaxSendRate", stack)?);
                     }
                     "SentLast24Hours" => {
-                        obj.sent_last_24_hours = Some(try!(
-                            SentLast24HoursDeserializer::deserialize("SentLast24Hours", stack)
-                        ));
+                        obj.sent_last_24_hours = Some(SentLast24HoursDeserializer::deserialize(
+                            "SentLast24Hours",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3380,7 +3356,7 @@ impl GetSendQuotaResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3399,7 +3375,7 @@ impl GetSendStatisticsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendStatisticsResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetSendStatisticsResponse::default();
 
@@ -3417,16 +3393,16 @@ impl GetSendStatisticsResponseDeserializer {
                     "SendDataPoints" => {
                         obj.send_data_points = match obj.send_data_points {
                             Some(ref mut existing) => {
-                                existing.extend(try!(SendDataPointListDeserializer::deserialize(
+                                existing.extend(SendDataPointListDeserializer::deserialize(
                                     "SendDataPoints",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(SendDataPointListDeserializer::deserialize(
+                            None => Some(SendDataPointListDeserializer::deserialize(
                                 "SendDataPoints",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -3438,7 +3414,7 @@ impl GetSendStatisticsResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3474,7 +3450,7 @@ impl GetTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetTemplateResponse::default();
 
@@ -3490,8 +3466,7 @@ impl GetTemplateResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Template" => {
-                        obj.template =
-                            Some(try!(TemplateDeserializer::deserialize("Template", stack)));
+                        obj.template = Some(TemplateDeserializer::deserialize("Template", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3502,7 +3477,7 @@ impl GetTemplateResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3514,9 +3489,9 @@ impl HeaderNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3528,9 +3503,9 @@ impl HeaderValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3542,9 +3517,9 @@ impl HtmlPartDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3556,9 +3531,9 @@ impl IdentityDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3581,7 +3556,7 @@ impl IdentityDkimAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityDkimAttributes, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = IdentityDkimAttributes::default();
 
@@ -3597,32 +3572,28 @@ impl IdentityDkimAttributesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DkimEnabled" => {
-                        obj.dkim_enabled =
-                            try!(EnabledDeserializer::deserialize("DkimEnabled", stack));
+                        obj.dkim_enabled = EnabledDeserializer::deserialize("DkimEnabled", stack)?;
                     }
                     "DkimTokens" => {
                         obj.dkim_tokens = match obj.dkim_tokens {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    VerificationTokenListDeserializer::deserialize(
-                                        "DkimTokens",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(VerificationTokenListDeserializer::deserialize(
+                                    "DkimTokens",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(VerificationTokenListDeserializer::deserialize(
+                            None => Some(VerificationTokenListDeserializer::deserialize(
                                 "DkimTokens",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "DkimVerificationStatus" => {
-                        obj.dkim_verification_status =
-                            try!(VerificationStatusDeserializer::deserialize(
-                                "DkimVerificationStatus",
-                                stack
-                            ));
+                        obj.dkim_verification_status = VerificationStatusDeserializer::deserialize(
+                            "DkimVerificationStatus",
+                            stack,
+                        )?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3633,7 +3604,7 @@ impl IdentityDkimAttributesDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3646,7 +3617,7 @@ impl IdentityListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -3660,13 +3631,13 @@ impl IdentityListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(IdentityDeserializer::deserialize("member", stack)));
+                        obj.push(IdentityDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -3708,7 +3679,7 @@ impl IdentityMailFromDomainAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityMailFromDomainAttributes, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = IdentityMailFromDomainAttributes::default();
 
@@ -3724,24 +3695,21 @@ impl IdentityMailFromDomainAttributesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "BehaviorOnMXFailure" => {
-                        obj.behavior_on_mx_failure =
-                            try!(BehaviorOnMXFailureDeserializer::deserialize(
-                                "BehaviorOnMXFailure",
-                                stack
-                            ));
+                        obj.behavior_on_mx_failure = BehaviorOnMXFailureDeserializer::deserialize(
+                            "BehaviorOnMXFailure",
+                            stack,
+                        )?;
                     }
                     "MailFromDomain" => {
-                        obj.mail_from_domain = try!(MailFromDomainNameDeserializer::deserialize(
-                            "MailFromDomain",
-                            stack
-                        ));
+                        obj.mail_from_domain =
+                            MailFromDomainNameDeserializer::deserialize("MailFromDomain", stack)?;
                     }
                     "MailFromDomainStatus" => {
                         obj.mail_from_domain_status =
-                            try!(CustomMailFromStatusDeserializer::deserialize(
+                            CustomMailFromStatusDeserializer::deserialize(
                                 "MailFromDomainStatus",
-                                stack
-                            ));
+                                stack,
+                            )?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3752,7 +3720,7 @@ impl IdentityMailFromDomainAttributesDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3783,7 +3751,7 @@ impl IdentityNotificationAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityNotificationAttributes, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = IdentityNotificationAttributes::default();
 
@@ -3799,47 +3767,41 @@ impl IdentityNotificationAttributesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "BounceTopic" => {
-                        obj.bounce_topic = try!(NotificationTopicDeserializer::deserialize(
-                            "BounceTopic",
-                            stack
-                        ));
+                        obj.bounce_topic =
+                            NotificationTopicDeserializer::deserialize("BounceTopic", stack)?;
                     }
                     "ComplaintTopic" => {
-                        obj.complaint_topic = try!(NotificationTopicDeserializer::deserialize(
-                            "ComplaintTopic",
-                            stack
-                        ));
+                        obj.complaint_topic =
+                            NotificationTopicDeserializer::deserialize("ComplaintTopic", stack)?;
                     }
                     "DeliveryTopic" => {
-                        obj.delivery_topic = try!(NotificationTopicDeserializer::deserialize(
-                            "DeliveryTopic",
-                            stack
-                        ));
+                        obj.delivery_topic =
+                            NotificationTopicDeserializer::deserialize("DeliveryTopic", stack)?;
                     }
                     "ForwardingEnabled" => {
                         obj.forwarding_enabled =
-                            try!(EnabledDeserializer::deserialize("ForwardingEnabled", stack));
+                            EnabledDeserializer::deserialize("ForwardingEnabled", stack)?;
                     }
                     "HeadersInBounceNotificationsEnabled" => {
                         obj.headers_in_bounce_notifications_enabled =
-                            Some(try!(EnabledDeserializer::deserialize(
+                            Some(EnabledDeserializer::deserialize(
                                 "HeadersInBounceNotificationsEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "HeadersInComplaintNotificationsEnabled" => {
                         obj.headers_in_complaint_notifications_enabled =
-                            Some(try!(EnabledDeserializer::deserialize(
+                            Some(EnabledDeserializer::deserialize(
                                 "HeadersInComplaintNotificationsEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "HeadersInDeliveryNotificationsEnabled" => {
                         obj.headers_in_delivery_notifications_enabled =
-                            Some(try!(EnabledDeserializer::deserialize(
+                            Some(EnabledDeserializer::deserialize(
                                 "HeadersInDeliveryNotificationsEnabled",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3850,7 +3812,7 @@ impl IdentityNotificationAttributesDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3871,7 +3833,7 @@ impl IdentityVerificationAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityVerificationAttributes, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = IdentityVerificationAttributes::default();
 
@@ -3887,16 +3849,16 @@ impl IdentityVerificationAttributesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "VerificationStatus" => {
-                        obj.verification_status =
-                            try!(VerificationStatusDeserializer::deserialize(
-                                "VerificationStatus",
-                                stack
-                            ));
+                        obj.verification_status = VerificationStatusDeserializer::deserialize(
+                            "VerificationStatus",
+                            stack,
+                        )?;
                     }
                     "VerificationToken" => {
-                        obj.verification_token = Some(try!(
-                            VerificationTokenDeserializer::deserialize("VerificationToken", stack)
-                        ));
+                        obj.verification_token = Some(VerificationTokenDeserializer::deserialize(
+                            "VerificationToken",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3907,7 +3869,7 @@ impl IdentityVerificationAttributesDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3919,9 +3881,9 @@ impl InvocationTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3942,7 +3904,7 @@ impl KinesisFirehoseDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KinesisFirehoseDestination, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = KinesisFirehoseDestination::default();
 
@@ -3958,15 +3920,14 @@ impl KinesisFirehoseDestinationDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DeliveryStreamARN" => {
-                        obj.delivery_stream_arn = try!(
-                            AmazonResourceNameDeserializer::deserialize("DeliveryStreamARN", stack)
-                        );
+                        obj.delivery_stream_arn = AmazonResourceNameDeserializer::deserialize(
+                            "DeliveryStreamARN",
+                            stack,
+                        )?;
                     }
                     "IAMRoleARN" => {
-                        obj.iam_role_arn = try!(AmazonResourceNameDeserializer::deserialize(
-                            "IAMRoleARN",
-                            stack
-                        ));
+                        obj.iam_role_arn =
+                            AmazonResourceNameDeserializer::deserialize("IAMRoleARN", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -3977,7 +3938,7 @@ impl KinesisFirehoseDestinationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4018,7 +3979,7 @@ impl LambdaActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = LambdaAction::default();
 
@@ -4034,21 +3995,19 @@ impl LambdaActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "FunctionArn" => {
-                        obj.function_arn = try!(AmazonResourceNameDeserializer::deserialize(
-                            "FunctionArn",
-                            stack
-                        ));
+                        obj.function_arn =
+                            AmazonResourceNameDeserializer::deserialize("FunctionArn", stack)?;
                     }
                     "InvocationType" => {
-                        obj.invocation_type = Some(try!(InvocationTypeDeserializer::deserialize(
+                        obj.invocation_type = Some(InvocationTypeDeserializer::deserialize(
                             "InvocationType",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "TopicArn" => {
-                        obj.topic_arn = Some(try!(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack
-                        )));
+                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                            "TopicArn", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4059,7 +4018,7 @@ impl LambdaActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4091,9 +4050,9 @@ impl LastFreshStartDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4144,7 +4103,7 @@ impl ListConfigurationSetsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListConfigurationSetsResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListConfigurationSetsResponse::default();
 
@@ -4162,21 +4121,21 @@ impl ListConfigurationSetsResponseDeserializer {
                     "ConfigurationSets" => {
                         obj.configuration_sets = match obj.configuration_sets {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ConfigurationSetsDeserializer::deserialize(
+                                existing.extend(ConfigurationSetsDeserializer::deserialize(
                                     "ConfigurationSets",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ConfigurationSetsDeserializer::deserialize(
+                            None => Some(ConfigurationSetsDeserializer::deserialize(
                                 "ConfigurationSets",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4187,7 +4146,7 @@ impl ListConfigurationSetsResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4242,7 +4201,7 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCustomVerificationEmailTemplatesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListCustomVerificationEmailTemplatesResponse::default();
 
@@ -4261,25 +4220,25 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
                         obj.custom_verification_email_templates =
                             match obj.custom_verification_email_templates {
                                 Some(ref mut existing) => {
-                                    existing.extend(try!(
+                                    existing.extend(
                                         CustomVerificationEmailTemplatesDeserializer::deserialize(
                                             "CustomVerificationEmailTemplates",
-                                            stack
-                                        )
-                                    ));
+                                            stack,
+                                        )?,
+                                    );
                                     Some(existing.to_vec())
                                 }
-                                None => Some(try!(
-                                    CustomVerificationEmailTemplatesDeserializer::deserialize(
+                                None => {
+                                    Some(CustomVerificationEmailTemplatesDeserializer::deserialize(
                                         "CustomVerificationEmailTemplates",
-                                        stack
-                                    )
-                                )),
+                                        stack,
+                                    )?)
+                                }
                             };
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4290,7 +4249,7 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4346,7 +4305,7 @@ impl ListIdentitiesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentitiesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListIdentitiesResponse::default();
 
@@ -4363,14 +4322,11 @@ impl ListIdentitiesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Identities" => {
                         obj.identities
-                            .extend(try!(IdentityListDeserializer::deserialize(
-                                "Identities",
-                                stack
-                            )));
+                            .extend(IdentityListDeserializer::deserialize("Identities", stack)?);
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4381,7 +4337,7 @@ impl ListIdentitiesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4420,7 +4376,7 @@ impl ListIdentityPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentityPoliciesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListIdentityPoliciesResponse::default();
 
@@ -4437,10 +4393,10 @@ impl ListIdentityPoliciesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PolicyNames" => {
                         obj.policy_names
-                            .extend(try!(PolicyNameListDeserializer::deserialize(
+                            .extend(PolicyNameListDeserializer::deserialize(
                                 "PolicyNames",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4451,7 +4407,7 @@ impl ListIdentityPoliciesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4485,7 +4441,7 @@ impl ListReceiptFiltersResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptFiltersResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListReceiptFiltersResponse::default();
 
@@ -4503,14 +4459,14 @@ impl ListReceiptFiltersResponseDeserializer {
                     "Filters" => {
                         obj.filters = match obj.filters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ReceiptFilterListDeserializer::deserialize(
-                                    "Filters", stack
-                                )));
+                                existing.extend(ReceiptFilterListDeserializer::deserialize(
+                                    "Filters", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ReceiptFilterListDeserializer::deserialize(
-                                "Filters", stack
-                            ))),
+                            None => Some(ReceiptFilterListDeserializer::deserialize(
+                                "Filters", stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4522,7 +4478,7 @@ impl ListReceiptFiltersResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4565,7 +4521,7 @@ impl ListReceiptRuleSetsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptRuleSetsResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListReceiptRuleSetsResponse::default();
 
@@ -4582,21 +4538,19 @@ impl ListReceiptRuleSetsResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "RuleSets" => {
                         obj.rule_sets = match obj.rule_sets {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    ReceiptRuleSetsListsDeserializer::deserialize(
-                                        "RuleSets", stack
-                                    )
-                                ));
+                                existing.extend(ReceiptRuleSetsListsDeserializer::deserialize(
+                                    "RuleSets", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ReceiptRuleSetsListsDeserializer::deserialize(
-                                "RuleSets", stack
-                            ))),
+                            None => Some(ReceiptRuleSetsListsDeserializer::deserialize(
+                                "RuleSets", stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4608,7 +4562,7 @@ impl ListReceiptRuleSetsResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4657,7 +4611,7 @@ impl ListTemplatesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTemplatesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListTemplatesResponse::default();
 
@@ -4674,23 +4628,21 @@ impl ListTemplatesResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "TemplatesMetadata" => {
                         obj.templates_metadata = match obj.templates_metadata {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    TemplateMetadataListDeserializer::deserialize(
-                                        "TemplatesMetadata",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(TemplateMetadataListDeserializer::deserialize(
+                                    "TemplatesMetadata",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TemplateMetadataListDeserializer::deserialize(
+                            None => Some(TemplateMetadataListDeserializer::deserialize(
                                 "TemplatesMetadata",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4702,7 +4654,7 @@ impl ListTemplatesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4721,7 +4673,7 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVerifiedEmailAddressesResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListVerifiedEmailAddressesResponse::default();
 
@@ -4739,16 +4691,16 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
                     "VerifiedEmailAddresses" => {
                         obj.verified_email_addresses = match obj.verified_email_addresses {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AddressListDeserializer::deserialize(
+                                existing.extend(AddressListDeserializer::deserialize(
                                     "VerifiedEmailAddresses",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AddressListDeserializer::deserialize(
+                            None => Some(AddressListDeserializer::deserialize(
                                 "VerifiedEmailAddresses",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4760,7 +4712,7 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4773,21 +4725,19 @@ impl MailFromDomainAttributesDeserializer {
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityMailFromDomainAttributes>, XmlParseError>
     {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == "entry" {
-            try!(start_element("entry", stack));
-            let key = try!(IdentityDeserializer::deserialize("key", stack));
-            let value = try!(IdentityMailFromDomainAttributesDeserializer::deserialize(
-                "value", stack
-            ));
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
+            let key = IdentityDeserializer::deserialize("key", stack)?;
+            let value = IdentityMailFromDomainAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            try!(end_element("entry", stack));
+            end_element("entry", stack)?;
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -4798,9 +4748,9 @@ impl MailFromDomainNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4812,9 +4762,9 @@ impl Max24HourSendDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<f64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4826,9 +4776,9 @@ impl MaxSendRateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<f64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4897,9 +4847,9 @@ impl MessageIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4945,9 +4895,9 @@ impl NextTokenDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4960,21 +4910,19 @@ impl NotificationAttributesDeserializer {
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityNotificationAttributes>, XmlParseError>
     {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == "entry" {
-            try!(start_element("entry", stack));
-            let key = try!(IdentityDeserializer::deserialize("key", stack));
-            let value = try!(IdentityNotificationAttributesDeserializer::deserialize(
-                "value", stack
-            ));
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
+            let key = IdentityDeserializer::deserialize("key", stack)?;
+            let value = IdentityNotificationAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            try!(end_element("entry", stack));
+            end_element("entry", stack)?;
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -4985,9 +4933,9 @@ impl NotificationTopicDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4999,9 +4947,9 @@ impl PolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5013,19 +4961,19 @@ impl PolicyMapDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == "entry" {
-            try!(start_element("entry", stack));
-            let key = try!(PolicyNameDeserializer::deserialize("key", stack));
-            let value = try!(PolicyDeserializer::deserialize("value", stack));
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
+            let key = PolicyNameDeserializer::deserialize("key", stack)?;
+            let value = PolicyDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            try!(end_element("entry", stack));
+            end_element("entry", stack)?;
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -5036,9 +4984,9 @@ impl PolicyNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5051,7 +4999,7 @@ impl PolicyNameListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5065,13 +5013,13 @@ impl PolicyNameListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(PolicyNameDeserializer::deserialize("member", stack)));
+                        obj.push(PolicyNameDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5132,11 +5080,11 @@ impl PutIdentityPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutIdentityPolicyResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = PutIdentityPolicyResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5190,7 +5138,7 @@ impl ReceiptActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ReceiptAction::default();
 
@@ -5206,41 +5154,39 @@ impl ReceiptActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AddHeaderAction" => {
-                        obj.add_header_action = Some(try!(
-                            AddHeaderActionDeserializer::deserialize("AddHeaderAction", stack)
-                        ));
+                        obj.add_header_action = Some(AddHeaderActionDeserializer::deserialize(
+                            "AddHeaderAction",
+                            stack,
+                        )?);
                     }
                     "BounceAction" => {
-                        obj.bounce_action = Some(try!(BounceActionDeserializer::deserialize(
+                        obj.bounce_action = Some(BounceActionDeserializer::deserialize(
                             "BounceAction",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "LambdaAction" => {
-                        obj.lambda_action = Some(try!(LambdaActionDeserializer::deserialize(
+                        obj.lambda_action = Some(LambdaActionDeserializer::deserialize(
                             "LambdaAction",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "S3Action" => {
-                        obj.s3_action =
-                            Some(try!(S3ActionDeserializer::deserialize("S3Action", stack)));
+                        obj.s3_action = Some(S3ActionDeserializer::deserialize("S3Action", stack)?);
                     }
                     "SNSAction" => {
                         obj.sns_action =
-                            Some(try!(SNSActionDeserializer::deserialize("SNSAction", stack)));
+                            Some(SNSActionDeserializer::deserialize("SNSAction", stack)?);
                     }
                     "StopAction" => {
-                        obj.stop_action = Some(try!(StopActionDeserializer::deserialize(
-                            "StopAction",
-                            stack
-                        )));
+                        obj.stop_action =
+                            Some(StopActionDeserializer::deserialize("StopAction", stack)?);
                     }
                     "WorkmailAction" => {
-                        obj.workmail_action = Some(try!(WorkmailActionDeserializer::deserialize(
+                        obj.workmail_action = Some(WorkmailActionDeserializer::deserialize(
                             "WorkmailAction",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5251,7 +5197,7 @@ impl ReceiptActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5326,7 +5272,7 @@ impl ReceiptActionsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ReceiptAction>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5340,15 +5286,13 @@ impl ReceiptActionsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ReceiptActionDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ReceiptActionDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5388,7 +5332,7 @@ impl ReceiptFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptFilter, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ReceiptFilter::default();
 
@@ -5405,10 +5349,10 @@ impl ReceiptFilterDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "IpFilter" => {
                         obj.ip_filter =
-                            try!(ReceiptIpFilterDeserializer::deserialize("IpFilter", stack));
+                            ReceiptIpFilterDeserializer::deserialize("IpFilter", stack)?;
                     }
                     "Name" => {
-                        obj.name = try!(ReceiptFilterNameDeserializer::deserialize("Name", stack));
+                        obj.name = ReceiptFilterNameDeserializer::deserialize("Name", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -5419,7 +5363,7 @@ impl ReceiptFilterDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5451,7 +5395,7 @@ impl ReceiptFilterListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ReceiptFilter>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5465,15 +5409,13 @@ impl ReceiptFilterListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ReceiptFilterDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ReceiptFilterDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5492,9 +5434,9 @@ impl ReceiptFilterNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5506,9 +5448,9 @@ impl ReceiptFilterPolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5529,7 +5471,7 @@ impl ReceiptIpFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptIpFilter, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ReceiptIpFilter::default();
 
@@ -5545,12 +5487,10 @@ impl ReceiptIpFilterDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Cidr" => {
-                        obj.cidr = try!(CidrDeserializer::deserialize("Cidr", stack));
+                        obj.cidr = CidrDeserializer::deserialize("Cidr", stack)?;
                     }
                     "Policy" => {
-                        obj.policy = try!(ReceiptFilterPolicyDeserializer::deserialize(
-                            "Policy", stack
-                        ));
+                        obj.policy = ReceiptFilterPolicyDeserializer::deserialize("Policy", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -5561,7 +5501,7 @@ impl ReceiptIpFilterDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5605,7 +5545,7 @@ impl ReceiptRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRule, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ReceiptRule::default();
 
@@ -5623,45 +5563,44 @@ impl ReceiptRuleDeserializer {
                     "Actions" => {
                         obj.actions = match obj.actions {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ReceiptActionsListDeserializer::deserialize(
-                                    "Actions", stack
-                                )));
+                                existing.extend(ReceiptActionsListDeserializer::deserialize(
+                                    "Actions", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ReceiptActionsListDeserializer::deserialize(
-                                "Actions", stack
-                            ))),
+                            None => Some(ReceiptActionsListDeserializer::deserialize(
+                                "Actions", stack,
+                            )?),
                         };
                     }
                     "Enabled" => {
-                        obj.enabled =
-                            Some(try!(EnabledDeserializer::deserialize("Enabled", stack)));
+                        obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
                     }
                     "Name" => {
-                        obj.name = try!(ReceiptRuleNameDeserializer::deserialize("Name", stack));
+                        obj.name = ReceiptRuleNameDeserializer::deserialize("Name", stack)?;
                     }
                     "Recipients" => {
                         obj.recipients = match obj.recipients {
                             Some(ref mut existing) => {
-                                existing.extend(try!(RecipientsListDeserializer::deserialize(
+                                existing.extend(RecipientsListDeserializer::deserialize(
                                     "Recipients",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(RecipientsListDeserializer::deserialize(
+                            None => Some(RecipientsListDeserializer::deserialize(
                                 "Recipients",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ScanEnabled" => {
                         obj.scan_enabled =
-                            Some(try!(EnabledDeserializer::deserialize("ScanEnabled", stack)));
+                            Some(EnabledDeserializer::deserialize("ScanEnabled", stack)?);
                     }
                     "TlsPolicy" => {
                         obj.tls_policy =
-                            Some(try!(TlsPolicyDeserializer::deserialize("TlsPolicy", stack)));
+                            Some(TlsPolicyDeserializer::deserialize("TlsPolicy", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5672,7 +5611,7 @@ impl ReceiptRuleDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5727,9 +5666,9 @@ impl ReceiptRuleNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5762,7 +5701,7 @@ impl ReceiptRuleSetMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRuleSetMetadata, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ReceiptRuleSetMetadata::default();
 
@@ -5778,15 +5717,14 @@ impl ReceiptRuleSetMetadataDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CreatedTimestamp" => {
-                        obj.created_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                        obj.created_timestamp = Some(TimestampDeserializer::deserialize(
                             "CreatedTimestamp",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Name" => {
-                        obj.name = Some(try!(ReceiptRuleSetNameDeserializer::deserialize(
-                            "Name", stack
-                        )));
+                        obj.name =
+                            Some(ReceiptRuleSetNameDeserializer::deserialize("Name", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5797,7 +5735,7 @@ impl ReceiptRuleSetMetadataDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5809,9 +5747,9 @@ impl ReceiptRuleSetNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5824,7 +5762,7 @@ impl ReceiptRuleSetsListsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ReceiptRuleSetMetadata>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5838,15 +5776,15 @@ impl ReceiptRuleSetsListsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ReceiptRuleSetMetadataDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ReceiptRuleSetMetadataDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5866,7 +5804,7 @@ impl ReceiptRulesListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ReceiptRule>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5880,13 +5818,13 @@ impl ReceiptRulesListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ReceiptRuleDeserializer::deserialize("member", stack)));
+                        obj.push(ReceiptRuleDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5905,9 +5843,9 @@ impl RecipientDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5972,7 +5910,7 @@ impl RecipientsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5986,13 +5924,13 @@ impl RecipientsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(RecipientDeserializer::deserialize("member", stack)));
+                        obj.push(RecipientDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6023,9 +5961,9 @@ impl RenderedTemplateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6068,11 +6006,11 @@ impl ReorderReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReorderReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = ReorderReceiptRuleSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6095,7 +6033,7 @@ impl ReputationOptionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReputationOptions, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ReputationOptions::default();
 
@@ -6111,21 +6049,20 @@ impl ReputationOptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LastFreshStart" => {
-                        obj.last_fresh_start = Some(try!(LastFreshStartDeserializer::deserialize(
+                        obj.last_fresh_start = Some(LastFreshStartDeserializer::deserialize(
                             "LastFreshStart",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ReputationMetricsEnabled" => {
-                        obj.reputation_metrics_enabled = Some(try!(
-                            EnabledDeserializer::deserialize("ReputationMetricsEnabled", stack)
-                        ));
+                        obj.reputation_metrics_enabled = Some(EnabledDeserializer::deserialize(
+                            "ReputationMetricsEnabled",
+                            stack,
+                        )?);
                     }
                     "SendingEnabled" => {
-                        obj.sending_enabled = Some(try!(EnabledDeserializer::deserialize(
-                            "SendingEnabled",
-                            stack
-                        )));
+                        obj.sending_enabled =
+                            Some(EnabledDeserializer::deserialize("SendingEnabled", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6136,7 +6073,7 @@ impl ReputationOptionsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6161,7 +6098,7 @@ impl S3ActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Action, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = S3Action::default();
 
@@ -6175,30 +6112,30 @@ impl S3ActionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "BucketName" => {
-                            obj.bucket_name =
-                                try!(S3BucketNameDeserializer::deserialize("BucketName", stack));
-                        }
-                        "KmsKeyArn" => {
-                            obj.kms_key_arn = Some(try!(
-                                AmazonResourceNameDeserializer::deserialize("KmsKeyArn", stack)
-                            ));
-                        }
-                        "ObjectKeyPrefix" => {
-                            obj.object_key_prefix = Some(try!(
-                                S3KeyPrefixDeserializer::deserialize("ObjectKeyPrefix", stack)
-                            ));
-                        }
-                        "TopicArn" => {
-                            obj.topic_arn = Some(try!(
-                                AmazonResourceNameDeserializer::deserialize("TopicArn", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "BucketName" => {
+                        obj.bucket_name =
+                            S3BucketNameDeserializer::deserialize("BucketName", stack)?;
                     }
-                }
+                    "KmsKeyArn" => {
+                        obj.kms_key_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                            "KmsKeyArn",
+                            stack,
+                        )?);
+                    }
+                    "ObjectKeyPrefix" => {
+                        obj.object_key_prefix = Some(S3KeyPrefixDeserializer::deserialize(
+                            "ObjectKeyPrefix",
+                            stack,
+                        )?);
+                    }
+                    "TopicArn" => {
+                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                            "TopicArn", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6206,7 +6143,7 @@ impl S3ActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6241,9 +6178,9 @@ impl S3BucketNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6255,9 +6192,9 @@ impl S3KeyPrefixDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6278,7 +6215,7 @@ impl SNSActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SNSAction::default();
 
@@ -6294,14 +6231,13 @@ impl SNSActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Encoding" => {
-                        obj.encoding = Some(try!(SNSActionEncodingDeserializer::deserialize(
-                            "Encoding", stack
-                        )));
+                        obj.encoding = Some(SNSActionEncodingDeserializer::deserialize(
+                            "Encoding", stack,
+                        )?);
                     }
                     "TopicArn" => {
-                        obj.topic_arn = try!(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack
-                        ));
+                        obj.topic_arn =
+                            AmazonResourceNameDeserializer::deserialize("TopicArn", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -6312,7 +6248,7 @@ impl SNSActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6341,9 +6277,9 @@ impl SNSActionEncodingDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6362,7 +6298,7 @@ impl SNSDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSDestination, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SNSDestination::default();
 
@@ -6378,9 +6314,8 @@ impl SNSDestinationDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TopicARN" => {
-                        obj.topic_arn = try!(AmazonResourceNameDeserializer::deserialize(
-                            "TopicARN", stack
-                        ));
+                        obj.topic_arn =
+                            AmazonResourceNameDeserializer::deserialize("TopicARN", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -6391,7 +6326,7 @@ impl SNSDestinationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6476,7 +6411,7 @@ impl SendBounceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBounceResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendBounceResponse::default();
 
@@ -6493,7 +6428,7 @@ impl SendBounceResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MessageId" => {
                         obj.message_id =
-                            Some(try!(MessageIdDeserializer::deserialize("MessageId", stack)));
+                            Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6504,7 +6439,7 @@ impl SendBounceResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6606,7 +6541,7 @@ impl SendBulkTemplatedEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBulkTemplatedEmailResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendBulkTemplatedEmailResponse::default();
 
@@ -6622,11 +6557,10 @@ impl SendBulkTemplatedEmailResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Status" => {
-                        obj.status.extend(try!(
-                            BulkEmailDestinationStatusListDeserializer::deserialize(
-                                "Status", stack
-                            )
-                        ));
+                        obj.status
+                            .extend(BulkEmailDestinationStatusListDeserializer::deserialize(
+                                "Status", stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6637,7 +6571,7 @@ impl SendBulkTemplatedEmailResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6687,7 +6621,7 @@ impl SendCustomVerificationEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendCustomVerificationEmailResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendCustomVerificationEmailResponse::default();
 
@@ -6704,7 +6638,7 @@ impl SendCustomVerificationEmailResponseDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MessageId" => {
                         obj.message_id =
-                            Some(try!(MessageIdDeserializer::deserialize("MessageId", stack)));
+                            Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6715,7 +6649,7 @@ impl SendCustomVerificationEmailResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6742,7 +6676,7 @@ impl SendDataPointDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendDataPoint, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendDataPoint::default();
 
@@ -6758,26 +6692,22 @@ impl SendDataPointDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Bounces" => {
-                        obj.bounces =
-                            Some(try!(CounterDeserializer::deserialize("Bounces", stack)));
+                        obj.bounces = Some(CounterDeserializer::deserialize("Bounces", stack)?);
                     }
                     "Complaints" => {
                         obj.complaints =
-                            Some(try!(CounterDeserializer::deserialize("Complaints", stack)));
+                            Some(CounterDeserializer::deserialize("Complaints", stack)?);
                     }
                     "DeliveryAttempts" => {
-                        obj.delivery_attempts = Some(try!(CounterDeserializer::deserialize(
-                            "DeliveryAttempts",
-                            stack
-                        )));
+                        obj.delivery_attempts =
+                            Some(CounterDeserializer::deserialize("DeliveryAttempts", stack)?);
                     }
                     "Rejects" => {
-                        obj.rejects =
-                            Some(try!(CounterDeserializer::deserialize("Rejects", stack)));
+                        obj.rejects = Some(CounterDeserializer::deserialize("Rejects", stack)?);
                     }
                     "Timestamp" => {
                         obj.timestamp =
-                            Some(try!(TimestampDeserializer::deserialize("Timestamp", stack)));
+                            Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6788,7 +6718,7 @@ impl SendDataPointDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6801,7 +6731,7 @@ impl SendDataPointListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<SendDataPoint>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6815,15 +6745,13 @@ impl SendDataPointListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(SendDataPointDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(SendDataPointDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6920,7 +6848,7 @@ impl SendEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendEmailResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendEmailResponse::default();
 
@@ -6936,8 +6864,7 @@ impl SendEmailResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MessageId" => {
-                        obj.message_id =
-                            try!(MessageIdDeserializer::deserialize("MessageId", stack));
+                        obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -6948,7 +6875,7 @@ impl SendEmailResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7037,7 +6964,7 @@ impl SendRawEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendRawEmailResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendRawEmailResponse::default();
 
@@ -7053,8 +6980,7 @@ impl SendRawEmailResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MessageId" => {
-                        obj.message_id =
-                            try!(MessageIdDeserializer::deserialize("MessageId", stack));
+                        obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -7065,7 +6991,7 @@ impl SendRawEmailResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7162,7 +7088,7 @@ impl SendTemplatedEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendTemplatedEmailResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SendTemplatedEmailResponse::default();
 
@@ -7178,8 +7104,7 @@ impl SendTemplatedEmailResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MessageId" => {
-                        obj.message_id =
-                            try!(MessageIdDeserializer::deserialize("MessageId", stack));
+                        obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -7190,7 +7115,7 @@ impl SendTemplatedEmailResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7202,9 +7127,9 @@ impl SentLast24HoursDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<f64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = f64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7242,11 +7167,11 @@ impl SetActiveReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetActiveReceiptRuleSetResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetActiveReceiptRuleSetResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7288,11 +7213,11 @@ impl SetIdentityDkimEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityDkimEnabledResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetIdentityDkimEnabledResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7338,11 +7263,11 @@ impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityFeedbackForwardingEnabledResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetIdentityFeedbackForwardingEnabledResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7394,11 +7319,11 @@ impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityHeadersInNotificationsEnabledResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetIdentityHeadersInNotificationsEnabledResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7447,11 +7372,11 @@ impl SetIdentityMailFromDomainResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityMailFromDomainResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetIdentityMailFromDomainResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7498,11 +7423,11 @@ impl SetIdentityNotificationTopicResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityNotificationTopicResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetIdentityNotificationTopicResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7546,11 +7471,11 @@ impl SetReceiptRulePositionResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetReceiptRulePositionResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = SetReceiptRulePositionResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7571,7 +7496,7 @@ impl StopActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StopAction::default();
 
@@ -7587,12 +7512,12 @@ impl StopActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Scope" => {
-                        obj.scope = try!(StopScopeDeserializer::deserialize("Scope", stack));
+                        obj.scope = StopScopeDeserializer::deserialize("Scope", stack)?;
                     }
                     "TopicArn" => {
-                        obj.topic_arn = Some(try!(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack
-                        )));
+                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                            "TopicArn", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7603,7 +7528,7 @@ impl StopActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7632,9 +7557,9 @@ impl StopScopeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7646,9 +7571,9 @@ impl SubjectDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7660,9 +7585,9 @@ impl SubjectPartDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7674,9 +7599,9 @@ impl SuccessRedirectionURLDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7701,7 +7626,7 @@ impl TemplateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Template, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Template::default();
 
@@ -7717,22 +7642,18 @@ impl TemplateDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "HtmlPart" => {
-                        obj.html_part =
-                            Some(try!(HtmlPartDeserializer::deserialize("HtmlPart", stack)));
+                        obj.html_part = Some(HtmlPartDeserializer::deserialize("HtmlPart", stack)?);
                     }
                     "SubjectPart" => {
-                        obj.subject_part = Some(try!(SubjectPartDeserializer::deserialize(
-                            "SubjectPart",
-                            stack
-                        )));
+                        obj.subject_part =
+                            Some(SubjectPartDeserializer::deserialize("SubjectPart", stack)?);
                     }
                     "TemplateName" => {
                         obj.template_name =
-                            try!(TemplateNameDeserializer::deserialize("TemplateName", stack));
+                            TemplateNameDeserializer::deserialize("TemplateName", stack)?;
                     }
                     "TextPart" => {
-                        obj.text_part =
-                            Some(try!(TextPartDeserializer::deserialize("TextPart", stack)));
+                        obj.text_part = Some(TextPartDeserializer::deserialize("TextPart", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7743,7 +7664,7 @@ impl TemplateDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7778,9 +7699,9 @@ impl TemplateContentDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7801,7 +7722,7 @@ impl TemplateMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TemplateMetadata, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = TemplateMetadata::default();
 
@@ -7817,13 +7738,13 @@ impl TemplateMetadataDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CreatedTimestamp" => {
-                        obj.created_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                        obj.created_timestamp = Some(TimestampDeserializer::deserialize(
                             "CreatedTimestamp",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Name" => {
-                        obj.name = Some(try!(TemplateNameDeserializer::deserialize("Name", stack)));
+                        obj.name = Some(TemplateNameDeserializer::deserialize("Name", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7834,7 +7755,7 @@ impl TemplateMetadataDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7847,7 +7768,7 @@ impl TemplateMetadataListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<TemplateMetadata>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7861,15 +7782,13 @@ impl TemplateMetadataListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(TemplateMetadataDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(TemplateMetadataDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7888,9 +7807,9 @@ impl TemplateNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7930,7 +7849,7 @@ impl TestRenderTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestRenderTemplateResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = TestRenderTemplateResponse::default();
 
@@ -7946,9 +7865,10 @@ impl TestRenderTemplateResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "RenderedTemplate" => {
-                        obj.rendered_template = Some(try!(
-                            RenderedTemplateDeserializer::deserialize("RenderedTemplate", stack)
-                        ));
+                        obj.rendered_template = Some(RenderedTemplateDeserializer::deserialize(
+                            "RenderedTemplate",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7959,7 +7879,7 @@ impl TestRenderTemplateResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7971,9 +7891,9 @@ impl TextPartDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7985,9 +7905,9 @@ impl TimestampDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7999,9 +7919,9 @@ impl TlsPolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8020,7 +7940,7 @@ impl TrackingOptionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrackingOptions, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = TrackingOptions::default();
 
@@ -8037,10 +7957,10 @@ impl TrackingOptionsDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CustomRedirectDomain" => {
                         obj.custom_redirect_domain =
-                            Some(try!(CustomRedirectDomainDeserializer::deserialize(
+                            Some(CustomRedirectDomainDeserializer::deserialize(
                                 "CustomRedirectDomain",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8051,7 +7971,7 @@ impl TrackingOptionsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8145,11 +8065,11 @@ impl UpdateConfigurationSetEventDestinationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetEventDestinationResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = UpdateConfigurationSetEventDestinationResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8264,11 +8184,11 @@ impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetTrackingOptionsResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = UpdateConfigurationSetTrackingOptionsResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8362,11 +8282,11 @@ impl UpdateReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateReceiptRuleResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = UpdateReceiptRuleResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8399,11 +8319,11 @@ impl UpdateTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTemplateResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = UpdateTemplateResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8416,21 +8336,19 @@ impl VerificationAttributesDeserializer {
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityVerificationAttributes>, XmlParseError>
     {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == "entry" {
-            try!(start_element("entry", stack));
-            let key = try!(IdentityDeserializer::deserialize("key", stack));
-            let value = try!(IdentityVerificationAttributesDeserializer::deserialize(
-                "value", stack
-            ));
+        while peek_at_name(stack)? == "entry" {
+            start_element("entry", stack)?;
+            let key = IdentityDeserializer::deserialize("key", stack)?;
+            let value = IdentityVerificationAttributesDeserializer::deserialize("value", stack)?;
             obj.insert(key, value);
-            try!(end_element("entry", stack));
+            end_element("entry", stack)?;
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
         Ok(obj)
     }
 }
@@ -8441,9 +8359,9 @@ impl VerificationStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8455,9 +8373,9 @@ impl VerificationTokenDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8470,7 +8388,7 @@ impl VerificationTokenListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -8484,15 +8402,13 @@ impl VerificationTokenListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(VerificationTokenDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(VerificationTokenDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8538,7 +8454,7 @@ impl VerifyDomainDkimResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainDkimResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = VerifyDomainDkimResponse::default();
 
@@ -8554,9 +8470,11 @@ impl VerifyDomainDkimResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DkimTokens" => {
-                        obj.dkim_tokens.extend(try!(
-                            VerificationTokenListDeserializer::deserialize("DkimTokens", stack)
-                        ));
+                        obj.dkim_tokens
+                            .extend(VerificationTokenListDeserializer::deserialize(
+                                "DkimTokens",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8567,7 +8485,7 @@ impl VerifyDomainDkimResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8606,7 +8524,7 @@ impl VerifyDomainIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainIdentityResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = VerifyDomainIdentityResponse::default();
 
@@ -8622,10 +8540,8 @@ impl VerifyDomainIdentityResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "VerificationToken" => {
-                        obj.verification_token = try!(VerificationTokenDeserializer::deserialize(
-                            "VerificationToken",
-                            stack
-                        ));
+                        obj.verification_token =
+                            VerificationTokenDeserializer::deserialize("VerificationToken", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -8636,7 +8552,7 @@ impl VerifyDomainIdentityResponseDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8692,11 +8608,11 @@ impl VerifyEmailIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyEmailIdentityResponse, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = VerifyEmailIdentityResponse::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8717,7 +8633,7 @@ impl WorkmailActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<WorkmailAction, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = WorkmailAction::default();
 
@@ -8733,15 +8649,13 @@ impl WorkmailActionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OrganizationArn" => {
-                        obj.organization_arn = try!(AmazonResourceNameDeserializer::deserialize(
-                            "OrganizationArn",
-                            stack
-                        ));
+                        obj.organization_arn =
+                            AmazonResourceNameDeserializer::deserialize("OrganizationArn", stack)?;
                     }
                     "TopicArn" => {
-                        obj.topic_arn = Some(try!(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack
-                        )));
+                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                            "TopicArn", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8752,7 +8666,7 @@ impl WorkmailActionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -15431,14 +15345,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CloneReceiptRuleSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CloneReceiptRuleSetResponseDeserializer::deserialize(
                         "CloneReceiptRuleSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15481,14 +15395,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateConfigurationSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateConfigurationSetResponseDeserializer::deserialize(
                         "CreateConfigurationSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15536,16 +15450,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         CreateConfigurationSetEventDestinationResponseDeserializer::deserialize(
                             "CreateConfigurationSetEventDestinationResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15593,16 +15506,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         CreateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
                             "CreateConfigurationSetTrackingOptionsResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15676,14 +15588,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateReceiptFilterResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateReceiptFilterResponseDeserializer::deserialize(
                         "CreateReceiptFilterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15729,14 +15641,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateReceiptRuleResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateReceiptRuleResponseDeserializer::deserialize(
                         "CreateReceiptRuleResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15781,14 +15693,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateReceiptRuleSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateReceiptRuleSetResponseDeserializer::deserialize(
                         "CreateReceiptRuleSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15834,14 +15746,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateTemplateResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateTemplateResponseDeserializer::deserialize(
                         "CreateTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15884,14 +15796,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteConfigurationSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteConfigurationSetResponseDeserializer::deserialize(
                         "DeleteConfigurationSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15939,16 +15851,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         DeleteConfigurationSetEventDestinationResponseDeserializer::deserialize(
                             "DeleteConfigurationSetEventDestinationResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15996,16 +15907,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         DeleteConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
                             "DeleteConfigurationSetTrackingOptionsResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16080,14 +15990,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteIdentityResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteIdentityResponseDeserializer::deserialize(
                         "DeleteIdentityResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16132,14 +16042,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteIdentityPolicyResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteIdentityPolicyResponseDeserializer::deserialize(
                         "DeleteIdentityPolicyResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16184,14 +16094,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteReceiptFilterResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteReceiptFilterResponseDeserializer::deserialize(
                         "DeleteReceiptFilterResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16237,14 +16147,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteReceiptRuleResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteReceiptRuleResponseDeserializer::deserialize(
                         "DeleteReceiptRuleResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16289,14 +16199,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteReceiptRuleSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteReceiptRuleSetResponseDeserializer::deserialize(
                         "DeleteReceiptRuleSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16342,14 +16252,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteTemplateResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteTemplateResponseDeserializer::deserialize(
                         "DeleteTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16419,16 +16329,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
-                            "DescribeActiveReceiptRuleSetResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeActiveReceiptRuleSetResponseDeserializer::deserialize(
+                        "DescribeActiveReceiptRuleSetResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16471,14 +16379,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeConfigurationSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeConfigurationSetResponseDeserializer::deserialize(
                         "DescribeConfigurationSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16523,14 +16431,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeReceiptRuleResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeReceiptRuleResponseDeserializer::deserialize(
                         "DescribeReceiptRuleResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16573,14 +16481,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeReceiptRuleSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeReceiptRuleSetResponseDeserializer::deserialize(
                         "DescribeReceiptRuleSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16622,14 +16530,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetAccountSendingEnabledResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetAccountSendingEnabledResponseDeserializer::deserialize(
                         "GetAccountSendingEnabledResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16677,16 +16585,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
-                            "GetCustomVerificationEmailTemplateResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+                        "GetCustomVerificationEmailTemplateResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16729,14 +16635,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetIdentityDkimAttributesResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetIdentityDkimAttributesResponseDeserializer::deserialize(
                         "GetIdentityDkimAttributesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16784,16 +16690,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
-                            "GetIdentityMailFromDomainAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetIdentityMailFromDomainAttributesResponseDeserializer::deserialize(
+                        "GetIdentityMailFromDomainAttributesResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16841,16 +16745,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        GetIdentityNotificationAttributesResponseDeserializer::deserialize(
-                            "GetIdentityNotificationAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetIdentityNotificationAttributesResponseDeserializer::deserialize(
+                        "GetIdentityNotificationAttributesResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16895,14 +16797,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetIdentityPoliciesResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetIdentityPoliciesResponseDeserializer::deserialize(
                         "GetIdentityPoliciesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -16950,16 +16852,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        GetIdentityVerificationAttributesResponseDeserializer::deserialize(
-                            "GetIdentityVerificationAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetIdentityVerificationAttributesResponseDeserializer::deserialize(
+                        "GetIdentityVerificationAttributesResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17002,14 +16902,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetSendQuotaResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetSendQuotaResponseDeserializer::deserialize(
                         "GetSendQuotaResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17054,14 +16954,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetSendStatisticsResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetSendStatisticsResponseDeserializer::deserialize(
                         "GetSendStatisticsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17107,14 +17007,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetTemplateResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetTemplateResponseDeserializer::deserialize(
                         "GetTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17159,14 +17059,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListConfigurationSetsResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListConfigurationSetsResponseDeserializer::deserialize(
                         "ListConfigurationSetsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17214,16 +17114,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
-                            "ListCustomVerificationEmailTemplatesResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
+                        "ListCustomVerificationEmailTemplatesResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17269,14 +17167,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListIdentitiesResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListIdentitiesResponseDeserializer::deserialize(
                         "ListIdentitiesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17321,14 +17219,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListIdentityPoliciesResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListIdentityPoliciesResponseDeserializer::deserialize(
                         "ListIdentityPoliciesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17374,14 +17272,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListReceiptFiltersResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListReceiptFiltersResponseDeserializer::deserialize(
                         "ListReceiptFiltersResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17426,14 +17324,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListReceiptRuleSetsResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListReceiptRuleSetsResponseDeserializer::deserialize(
                         "ListReceiptRuleSetsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17479,14 +17377,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListTemplatesResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListTemplatesResponseDeserializer::deserialize(
                         "ListTemplatesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17528,14 +17426,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListVerifiedEmailAddressesResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListVerifiedEmailAddressesResponseDeserializer::deserialize(
                         "ListVerifiedEmailAddressesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17581,14 +17479,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(PutIdentityPolicyResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = PutIdentityPolicyResponseDeserializer::deserialize(
                         "PutIdentityPolicyResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17633,14 +17531,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ReorderReceiptRuleSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ReorderReceiptRuleSetResponseDeserializer::deserialize(
                         "ReorderReceiptRuleSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17686,14 +17584,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendBounceResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SendBounceResponseDeserializer::deserialize(
                         "SendBounceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17736,14 +17634,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendBulkTemplatedEmailResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SendBulkTemplatedEmailResponseDeserializer::deserialize(
                         "SendBulkTemplatedEmailResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17786,16 +17684,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        SendCustomVerificationEmailResponseDeserializer::deserialize(
-                            "SendCustomVerificationEmailResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SendCustomVerificationEmailResponseDeserializer::deserialize(
+                        "SendCustomVerificationEmailResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17841,14 +17737,12 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendEmailResponseDeserializer::deserialize(
-                        "SendEmailResult",
-                        &mut stack
-                    ));
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
+                        SendEmailResponseDeserializer::deserialize("SendEmailResult", &mut stack)?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17894,14 +17788,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendRawEmailResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SendRawEmailResponseDeserializer::deserialize(
                         "SendRawEmailResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17947,14 +17841,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SendTemplatedEmailResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SendTemplatedEmailResponseDeserializer::deserialize(
                         "SendTemplatedEmailResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -17997,14 +17891,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetActiveReceiptRuleSetResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SetActiveReceiptRuleSetResponseDeserializer::deserialize(
                         "SetActiveReceiptRuleSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18047,14 +17941,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetIdentityDkimEnabledResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SetIdentityDkimEnabledResponseDeserializer::deserialize(
                         "SetIdentityDkimEnabledResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18102,16 +17996,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        SetIdentityFeedbackForwardingEnabledResponseDeserializer::deserialize(
-                            "SetIdentityFeedbackForwardingEnabledResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SetIdentityFeedbackForwardingEnabledResponseDeserializer::deserialize(
+                        "SetIdentityFeedbackForwardingEnabledResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18161,16 +18053,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         SetIdentityHeadersInNotificationsEnabledResponseDeserializer::deserialize(
                             "SetIdentityHeadersInNotificationsEnabledResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18213,14 +18104,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetIdentityMailFromDomainResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SetIdentityMailFromDomainResponseDeserializer::deserialize(
                         "SetIdentityMailFromDomainResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18263,16 +18154,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        SetIdentityNotificationTopicResponseDeserializer::deserialize(
-                            "SetIdentityNotificationTopicResult",
-                            &mut stack
-                        )
-                    );
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SetIdentityNotificationTopicResponseDeserializer::deserialize(
+                        "SetIdentityNotificationTopicResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18315,14 +18204,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SetReceiptRulePositionResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SetReceiptRulePositionResponseDeserializer::deserialize(
                         "SetReceiptRulePositionResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18368,14 +18257,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(TestRenderTemplateResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = TestRenderTemplateResponseDeserializer::deserialize(
                         "TestRenderTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18450,16 +18339,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         UpdateConfigurationSetEventDestinationResponseDeserializer::deserialize(
                             "UpdateConfigurationSetEventDestinationResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18571,16 +18459,15 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
                         UpdateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
                             "UpdateConfigurationSetTrackingOptionsResult",
-                            &mut stack
-                        )
-                    );
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18655,14 +18542,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateReceiptRuleResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateReceiptRuleResponseDeserializer::deserialize(
                         "UpdateReceiptRuleResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18708,14 +18595,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateTemplateResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateTemplateResponseDeserializer::deserialize(
                         "UpdateTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18761,14 +18648,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(VerifyDomainDkimResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = VerifyDomainDkimResponseDeserializer::deserialize(
                         "VerifyDomainDkimResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18813,14 +18700,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(VerifyDomainIdentityResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = VerifyDomainIdentityResponseDeserializer::deserialize(
                         "VerifyDomainIdentityResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -18895,14 +18782,14 @@ impl Ses for SesClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(VerifyEmailIdentityResponseDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = VerifyEmailIdentityResponseDeserializer::deserialize(
                         "VerifyEmailIdentityResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)

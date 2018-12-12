@@ -49,9 +49,9 @@ impl AccountDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -72,7 +72,7 @@ impl AccountGateResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountGateResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = AccountGateResult::default();
 
@@ -88,14 +88,14 @@ impl AccountGateResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Status" => {
-                        obj.status = Some(try!(AccountGateStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status =
+                            Some(AccountGateStatusDeserializer::deserialize("Status", stack)?);
                     }
                     "StatusReason" => {
-                        obj.status_reason = Some(try!(
-                            AccountGateStatusReasonDeserializer::deserialize("StatusReason", stack)
-                        ));
+                        obj.status_reason = Some(AccountGateStatusReasonDeserializer::deserialize(
+                            "StatusReason",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -106,7 +106,7 @@ impl AccountGateResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -118,9 +118,9 @@ impl AccountGateStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -132,9 +132,9 @@ impl AccountGateStatusReasonDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -155,7 +155,7 @@ impl AccountLimitDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountLimit, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = AccountLimit::default();
 
@@ -171,10 +171,10 @@ impl AccountLimitDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Name" => {
-                        obj.name = Some(try!(LimitNameDeserializer::deserialize("Name", stack)));
+                        obj.name = Some(LimitNameDeserializer::deserialize("Name", stack)?);
                     }
                     "Value" => {
-                        obj.value = Some(try!(LimitValueDeserializer::deserialize("Value", stack)));
+                        obj.value = Some(LimitValueDeserializer::deserialize("Value", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -185,7 +185,7 @@ impl AccountLimitDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -198,7 +198,7 @@ impl AccountLimitListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<AccountLimit>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -212,13 +212,13 @@ impl AccountLimitListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AccountLimitDeserializer::deserialize("member", stack)));
+                        obj.push(AccountLimitDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -249,9 +249,9 @@ impl AllowedValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -264,7 +264,7 @@ impl AllowedValuesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -278,13 +278,13 @@ impl AllowedValuesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(AllowedValueDeserializer::deserialize("member", stack)));
+                        obj.push(AllowedValueDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -303,9 +303,9 @@ impl ArnDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -343,7 +343,7 @@ impl CapabilitiesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -357,13 +357,13 @@ impl CapabilitiesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(CapabilityDeserializer::deserialize("member", stack)));
+                        obj.push(CapabilityDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -394,9 +394,9 @@ impl CapabilitiesReasonDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -408,9 +408,9 @@ impl CapabilityDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -422,9 +422,9 @@ impl CausingEntityDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -445,7 +445,7 @@ impl ChangeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Change, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Change::default();
 
@@ -461,13 +461,13 @@ impl ChangeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ResourceChange" => {
-                        obj.resource_change = Some(try!(ResourceChangeDeserializer::deserialize(
+                        obj.resource_change = Some(ResourceChangeDeserializer::deserialize(
                             "ResourceChange",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Type" => {
-                        obj.type_ = Some(try!(ChangeTypeDeserializer::deserialize("Type", stack)));
+                        obj.type_ = Some(ChangeTypeDeserializer::deserialize("Type", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -478,7 +478,7 @@ impl ChangeDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -490,9 +490,9 @@ impl ChangeActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -504,9 +504,9 @@ impl ChangeSetIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -518,9 +518,9 @@ impl ChangeSetNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -532,9 +532,9 @@ impl ChangeSetStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -546,9 +546,9 @@ impl ChangeSetStatusReasonDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -561,7 +561,7 @@ impl ChangeSetSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ChangeSetSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -575,15 +575,13 @@ impl ChangeSetSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ChangeSetSummaryDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ChangeSetSummaryDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -625,7 +623,7 @@ impl ChangeSetSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeSetSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ChangeSetSummary::default();
 
@@ -641,51 +639,47 @@ impl ChangeSetSummaryDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ChangeSetId" => {
-                        obj.change_set_id = Some(try!(ChangeSetIdDeserializer::deserialize(
-                            "ChangeSetId",
-                            stack
-                        )));
+                        obj.change_set_id =
+                            Some(ChangeSetIdDeserializer::deserialize("ChangeSetId", stack)?);
                     }
                     "ChangeSetName" => {
-                        obj.change_set_name = Some(try!(ChangeSetNameDeserializer::deserialize(
+                        obj.change_set_name = Some(ChangeSetNameDeserializer::deserialize(
                             "ChangeSetName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "CreationTime" => {
-                        obj.creation_time = Some(try!(CreationTimeDeserializer::deserialize(
+                        obj.creation_time = Some(CreationTimeDeserializer::deserialize(
                             "CreationTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "ExecutionStatus" => {
-                        obj.execution_status = Some(try!(
-                            ExecutionStatusDeserializer::deserialize("ExecutionStatus", stack)
-                        ));
+                        obj.execution_status = Some(ExecutionStatusDeserializer::deserialize(
+                            "ExecutionStatus",
+                            stack,
+                        )?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackName" => {
                         obj.stack_name =
-                            Some(try!(StackNameDeserializer::deserialize("StackName", stack)));
+                            Some(StackNameDeserializer::deserialize("StackName", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(ChangeSetStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status =
+                            Some(ChangeSetStatusDeserializer::deserialize("Status", stack)?);
                     }
                     "StatusReason" => {
-                        obj.status_reason = Some(try!(
-                            ChangeSetStatusReasonDeserializer::deserialize("StatusReason", stack)
-                        ));
+                        obj.status_reason = Some(ChangeSetStatusReasonDeserializer::deserialize(
+                            "StatusReason",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -696,7 +690,7 @@ impl ChangeSetSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -708,9 +702,9 @@ impl ChangeSourceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -722,9 +716,9 @@ impl ChangeTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -737,7 +731,7 @@ impl ChangesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Change>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -751,13 +745,13 @@ impl ChangesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ChangeDeserializer::deserialize("member", stack)));
+                        obj.push(ChangeDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -776,9 +770,9 @@ impl ClientRequestTokenDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -833,11 +827,11 @@ impl ContinueUpdateRollbackOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinueUpdateRollbackOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = ContinueUpdateRollbackOutput::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -972,7 +966,7 @@ impl CreateChangeSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateChangeSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateChangeSetOutput::default();
 
@@ -988,11 +982,10 @@ impl CreateChangeSetOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Id" => {
-                        obj.id = Some(try!(ChangeSetIdDeserializer::deserialize("Id", stack)));
+                        obj.id = Some(ChangeSetIdDeserializer::deserialize("Id", stack)?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1003,7 +996,7 @@ impl CreateChangeSetOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1205,7 +1198,7 @@ impl CreateStackInstancesOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStackInstancesOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateStackInstancesOutput::default();
 
@@ -1221,10 +1214,10 @@ impl CreateStackInstancesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                        obj.operation_id = Some(ClientRequestTokenDeserializer::deserialize(
                             "OperationId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1235,7 +1228,7 @@ impl CreateStackInstancesOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1254,7 +1247,7 @@ impl CreateStackOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStackOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateStackOutput::default();
 
@@ -1270,8 +1263,7 @@ impl CreateStackOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1282,7 +1274,7 @@ impl CreateStackOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1378,7 +1370,7 @@ impl CreateStackSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStackSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = CreateStackSetOutput::default();
 
@@ -1394,10 +1386,8 @@ impl CreateStackSetOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
+                        obj.stack_set_id =
+                            Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1408,7 +1398,7 @@ impl CreateStackSetOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1420,9 +1410,9 @@ impl CreationTimeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1466,11 +1456,11 @@ impl DeleteChangeSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteChangeSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteChangeSetOutput::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1579,7 +1569,7 @@ impl DeleteStackInstancesOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteStackInstancesOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DeleteStackInstancesOutput::default();
 
@@ -1595,10 +1585,10 @@ impl DeleteStackInstancesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                        obj.operation_id = Some(ClientRequestTokenDeserializer::deserialize(
                             "OperationId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1609,7 +1599,7 @@ impl DeleteStackInstancesOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1646,11 +1636,11 @@ impl DeleteStackSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteStackSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = DeleteStackSetOutput::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1662,9 +1652,9 @@ impl DeletionTimeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1707,7 +1697,7 @@ impl DescribeAccountLimitsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAccountLimitsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeAccountLimitsOutput::default();
 
@@ -1725,21 +1715,21 @@ impl DescribeAccountLimitsOutputDeserializer {
                     "AccountLimits" => {
                         obj.account_limits = match obj.account_limits {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AccountLimitListDeserializer::deserialize(
+                                existing.extend(AccountLimitListDeserializer::deserialize(
                                     "AccountLimits",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AccountLimitListDeserializer::deserialize(
+                            None => Some(AccountLimitListDeserializer::deserialize(
                                 "AccountLimits",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -1750,7 +1740,7 @@ impl DescribeAccountLimitsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1832,7 +1822,7 @@ impl DescribeChangeSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeChangeSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeChangeSetOutput::default();
 
@@ -1850,124 +1840,116 @@ impl DescribeChangeSetOutputDeserializer {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
                             Some(ref mut existing) => {
-                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                existing.extend(CapabilitiesDeserializer::deserialize(
                                     "Capabilities",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                            None => Some(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ChangeSetId" => {
-                        obj.change_set_id = Some(try!(ChangeSetIdDeserializer::deserialize(
-                            "ChangeSetId",
-                            stack
-                        )));
+                        obj.change_set_id =
+                            Some(ChangeSetIdDeserializer::deserialize("ChangeSetId", stack)?);
                     }
                     "ChangeSetName" => {
-                        obj.change_set_name = Some(try!(ChangeSetNameDeserializer::deserialize(
+                        obj.change_set_name = Some(ChangeSetNameDeserializer::deserialize(
                             "ChangeSetName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Changes" => {
                         obj.changes = match obj.changes {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ChangesDeserializer::deserialize(
-                                    "Changes", stack
-                                )));
+                                existing
+                                    .extend(ChangesDeserializer::deserialize("Changes", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ChangesDeserializer::deserialize("Changes", stack))),
+                            None => Some(ChangesDeserializer::deserialize("Changes", stack)?),
                         };
                     }
                     "CreationTime" => {
-                        obj.creation_time = Some(try!(CreationTimeDeserializer::deserialize(
+                        obj.creation_time = Some(CreationTimeDeserializer::deserialize(
                             "CreationTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "ExecutionStatus" => {
-                        obj.execution_status = Some(try!(
-                            ExecutionStatusDeserializer::deserialize("ExecutionStatus", stack)
-                        ));
+                        obj.execution_status = Some(ExecutionStatusDeserializer::deserialize(
+                            "ExecutionStatus",
+                            stack,
+                        )?);
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "NotificationARNs" => {
                         obj.notification_ar_ns = match obj.notification_ar_ns {
                             Some(ref mut existing) => {
-                                existing.extend(try!(NotificationARNsDeserializer::deserialize(
+                                existing.extend(NotificationARNsDeserializer::deserialize(
                                     "NotificationARNs",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(NotificationARNsDeserializer::deserialize(
+                            None => Some(NotificationARNsDeserializer::deserialize(
                                 "NotificationARNs",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                existing.extend(ParametersDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersDeserializer::deserialize(
-                                "Parameters",
-                                stack
-                            ))),
+                            None => Some(ParametersDeserializer::deserialize("Parameters", stack)?),
                         };
                     }
                     "RollbackConfiguration" => {
                         obj.rollback_configuration =
-                            Some(try!(RollbackConfigurationDeserializer::deserialize(
+                            Some(RollbackConfigurationDeserializer::deserialize(
                                 "RollbackConfiguration",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackName" => {
                         obj.stack_name =
-                            Some(try!(StackNameDeserializer::deserialize("StackName", stack)));
+                            Some(StackNameDeserializer::deserialize("StackName", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(ChangeSetStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status =
+                            Some(ChangeSetStatusDeserializer::deserialize("Status", stack)?);
                     }
                     "StatusReason" => {
-                        obj.status_reason = Some(try!(
-                            ChangeSetStatusReasonDeserializer::deserialize("StatusReason", stack)
-                        ));
+                        obj.status_reason = Some(ChangeSetStatusReasonDeserializer::deserialize(
+                            "StatusReason",
+                            stack,
+                        )?);
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TagsDeserializer::deserialize("Tags", stack)));
+                                existing.extend(TagsDeserializer::deserialize("Tags", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
+                            None => Some(TagsDeserializer::deserialize("Tags", stack)?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -1979,7 +1961,7 @@ impl DescribeChangeSetOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2027,7 +2009,7 @@ impl DescribeStackEventsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackEventsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStackEventsOutput::default();
 
@@ -2044,21 +2026,20 @@ impl DescribeStackEventsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "StackEvents" => {
                         obj.stack_events = match obj.stack_events {
                             Some(ref mut existing) => {
-                                existing.extend(try!(StackEventsDeserializer::deserialize(
+                                existing.extend(StackEventsDeserializer::deserialize(
                                     "StackEvents",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StackEventsDeserializer::deserialize(
-                                "StackEvents",
-                                stack
-                            ))),
+                            None => {
+                                Some(StackEventsDeserializer::deserialize("StackEvents", stack)?)
+                            }
                         };
                     }
                     _ => skip_tree(stack),
@@ -2070,7 +2051,7 @@ impl DescribeStackEventsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2122,7 +2103,7 @@ impl DescribeStackInstanceOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackInstanceOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStackInstanceOutput::default();
 
@@ -2138,10 +2119,10 @@ impl DescribeStackInstanceOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackInstance" => {
-                        obj.stack_instance = Some(try!(StackInstanceDeserializer::deserialize(
+                        obj.stack_instance = Some(StackInstanceDeserializer::deserialize(
                             "StackInstance",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2152,7 +2133,7 @@ impl DescribeStackInstanceOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2197,7 +2178,7 @@ impl DescribeStackResourceOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackResourceOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStackResourceOutput::default();
 
@@ -2214,10 +2195,10 @@ impl DescribeStackResourceOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackResourceDetail" => {
                         obj.stack_resource_detail =
-                            Some(try!(StackResourceDetailDeserializer::deserialize(
+                            Some(StackResourceDetailDeserializer::deserialize(
                                 "StackResourceDetail",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2228,7 +2209,7 @@ impl DescribeStackResourceOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2279,7 +2260,7 @@ impl DescribeStackResourcesOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackResourcesOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStackResourcesOutput::default();
 
@@ -2297,16 +2278,16 @@ impl DescribeStackResourcesOutputDeserializer {
                     "StackResources" => {
                         obj.stack_resources = match obj.stack_resources {
                             Some(ref mut existing) => {
-                                existing.extend(try!(StackResourcesDeserializer::deserialize(
+                                existing.extend(StackResourcesDeserializer::deserialize(
                                     "StackResources",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StackResourcesDeserializer::deserialize(
+                            None => Some(StackResourcesDeserializer::deserialize(
                                 "StackResources",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -2318,7 +2299,7 @@ impl DescribeStackResourcesOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2383,7 +2364,7 @@ impl DescribeStackSetOperationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackSetOperationOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStackSetOperationOutput::default();
 
@@ -2399,9 +2380,10 @@ impl DescribeStackSetOperationOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackSetOperation" => {
-                        obj.stack_set_operation = Some(try!(
-                            StackSetOperationDeserializer::deserialize("StackSetOperation", stack)
-                        ));
+                        obj.stack_set_operation = Some(StackSetOperationDeserializer::deserialize(
+                            "StackSetOperation",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2412,7 +2394,7 @@ impl DescribeStackSetOperationOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2430,7 +2412,7 @@ impl DescribeStackSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStackSetOutput::default();
 
@@ -2446,8 +2428,7 @@ impl DescribeStackSetOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackSet" => {
-                        obj.stack_set =
-                            Some(try!(StackSetDeserializer::deserialize("StackSet", stack)));
+                        obj.stack_set = Some(StackSetDeserializer::deserialize("StackSet", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2458,7 +2439,7 @@ impl DescribeStackSetOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2506,7 +2487,7 @@ impl DescribeStacksOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStacksOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DescribeStacksOutput::default();
 
@@ -2523,16 +2504,15 @@ impl DescribeStacksOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Stacks" => {
                         obj.stacks = match obj.stacks {
                             Some(ref mut existing) => {
-                                existing
-                                    .extend(try!(StacksDeserializer::deserialize("Stacks", stack)));
+                                existing.extend(StacksDeserializer::deserialize("Stacks", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StacksDeserializer::deserialize("Stacks", stack))),
+                            None => Some(StacksDeserializer::deserialize("Stacks", stack)?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -2544,7 +2524,7 @@ impl DescribeStacksOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2556,9 +2536,9 @@ impl DescriptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2570,9 +2550,9 @@ impl DisableRollbackDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2584,9 +2564,9 @@ impl EnableTerminationProtectionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2641,7 +2621,7 @@ impl EstimateTemplateCostOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EstimateTemplateCostOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = EstimateTemplateCostOutput::default();
 
@@ -2657,7 +2637,7 @@ impl EstimateTemplateCostOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Url" => {
-                        obj.url = Some(try!(UrlDeserializer::deserialize("Url", stack)));
+                        obj.url = Some(UrlDeserializer::deserialize("Url", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2668,7 +2648,7 @@ impl EstimateTemplateCostOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2680,9 +2660,9 @@ impl EvaluationTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2694,9 +2674,9 @@ impl EventIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2745,11 +2725,11 @@ impl ExecuteChangeSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExecuteChangeSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = ExecuteChangeSetOutput::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2761,9 +2741,9 @@ impl ExecutionRoleNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2775,9 +2755,9 @@ impl ExecutionStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2800,7 +2780,7 @@ impl ExportDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Export, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Export::default();
 
@@ -2816,17 +2796,14 @@ impl ExportDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ExportingStackId" => {
-                        obj.exporting_stack_id = Some(try!(StackIdDeserializer::deserialize(
-                            "ExportingStackId",
-                            stack
-                        )));
+                        obj.exporting_stack_id =
+                            Some(StackIdDeserializer::deserialize("ExportingStackId", stack)?);
                     }
                     "Name" => {
-                        obj.name = Some(try!(ExportNameDeserializer::deserialize("Name", stack)));
+                        obj.name = Some(ExportNameDeserializer::deserialize("Name", stack)?);
                     }
                     "Value" => {
-                        obj.value =
-                            Some(try!(ExportValueDeserializer::deserialize("Value", stack)));
+                        obj.value = Some(ExportValueDeserializer::deserialize("Value", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2837,7 +2814,7 @@ impl ExportDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2849,9 +2826,9 @@ impl ExportNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2863,9 +2840,9 @@ impl ExportValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2878,7 +2855,7 @@ impl ExportsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Export>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -2892,13 +2869,13 @@ impl ExportsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ExportDeserializer::deserialize("member", stack)));
+                        obj.push(ExportDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -2917,9 +2894,9 @@ impl FailureToleranceCountDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2931,9 +2908,9 @@ impl FailureTolerancePercentageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2972,7 +2949,7 @@ impl GetStackPolicyOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStackPolicyOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetStackPolicyOutput::default();
 
@@ -2988,9 +2965,10 @@ impl GetStackPolicyOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackPolicyBody" => {
-                        obj.stack_policy_body = Some(try!(
-                            StackPolicyBodyDeserializer::deserialize("StackPolicyBody", stack)
-                        ));
+                        obj.stack_policy_body = Some(StackPolicyBodyDeserializer::deserialize(
+                            "StackPolicyBody",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3001,7 +2979,7 @@ impl GetStackPolicyOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3054,7 +3032,7 @@ impl GetTemplateOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetTemplateOutput::default();
 
@@ -3072,23 +3050,23 @@ impl GetTemplateOutputDeserializer {
                     "StagesAvailable" => {
                         obj.stages_available = match obj.stages_available {
                             Some(ref mut existing) => {
-                                existing.extend(try!(StageListDeserializer::deserialize(
+                                existing.extend(StageListDeserializer::deserialize(
                                     "StagesAvailable",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StageListDeserializer::deserialize(
+                            None => Some(StageListDeserializer::deserialize(
                                 "StagesAvailable",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "TemplateBody" => {
-                        obj.template_body = Some(try!(TemplateBodyDeserializer::deserialize(
+                        obj.template_body = Some(TemplateBodyDeserializer::deserialize(
                             "TemplateBody",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3099,7 +3077,7 @@ impl GetTemplateOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3169,7 +3147,7 @@ impl GetTemplateSummaryOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateSummaryOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetTemplateSummaryOutput::default();
 
@@ -3187,85 +3165,79 @@ impl GetTemplateSummaryOutputDeserializer {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
                             Some(ref mut existing) => {
-                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                existing.extend(CapabilitiesDeserializer::deserialize(
                                     "Capabilities",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                            None => Some(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "CapabilitiesReason" => {
                         obj.capabilities_reason =
-                            Some(try!(CapabilitiesReasonDeserializer::deserialize(
+                            Some(CapabilitiesReasonDeserializer::deserialize(
                                 "CapabilitiesReason",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "DeclaredTransforms" => {
                         obj.declared_transforms = match obj.declared_transforms {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TransformsListDeserializer::deserialize(
+                                existing.extend(TransformsListDeserializer::deserialize(
                                     "DeclaredTransforms",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TransformsListDeserializer::deserialize(
+                            None => Some(TransformsListDeserializer::deserialize(
                                 "DeclaredTransforms",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "Metadata" => {
-                        obj.metadata =
-                            Some(try!(MetadataDeserializer::deserialize("Metadata", stack)));
+                        obj.metadata = Some(MetadataDeserializer::deserialize("Metadata", stack)?);
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    ParameterDeclarationsDeserializer::deserialize(
-                                        "Parameters",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(ParameterDeclarationsDeserializer::deserialize(
+                                    "Parameters",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParameterDeclarationsDeserializer::deserialize(
+                            None => Some(ParameterDeclarationsDeserializer::deserialize(
                                 "Parameters",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ResourceTypes" => {
                         obj.resource_types = match obj.resource_types {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ResourceTypesDeserializer::deserialize(
+                                existing.extend(ResourceTypesDeserializer::deserialize(
                                     "ResourceTypes",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ResourceTypesDeserializer::deserialize(
+                            None => Some(ResourceTypesDeserializer::deserialize(
                                 "ResourceTypes",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Version" => {
-                        obj.version =
-                            Some(try!(VersionDeserializer::deserialize("Version", stack)));
+                        obj.version = Some(VersionDeserializer::deserialize("Version", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3276,7 +3248,7 @@ impl GetTemplateSummaryOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3289,7 +3261,7 @@ impl ImportsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -3303,13 +3275,13 @@ impl ImportsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackNameDeserializer::deserialize("member", stack)));
+                        obj.push(StackNameDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -3328,9 +3300,9 @@ impl LastUpdatedTimeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3342,9 +3314,9 @@ impl LimitNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3356,9 +3328,9 @@ impl LimitValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3404,7 +3376,7 @@ impl ListChangeSetsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListChangeSetsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListChangeSetsOutput::default();
 
@@ -3421,21 +3393,21 @@ impl ListChangeSetsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ChangeSetSummariesDeserializer::deserialize(
+                                existing.extend(ChangeSetSummariesDeserializer::deserialize(
                                     "Summaries",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ChangeSetSummariesDeserializer::deserialize(
+                            None => Some(ChangeSetSummariesDeserializer::deserialize(
                                 "Summaries",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -3447,7 +3419,7 @@ impl ListChangeSetsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3488,7 +3460,7 @@ impl ListExportsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListExportsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListExportsOutput::default();
 
@@ -3506,17 +3478,16 @@ impl ListExportsOutputDeserializer {
                     "Exports" => {
                         obj.exports = match obj.exports {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ExportsDeserializer::deserialize(
-                                    "Exports", stack
-                                )));
+                                existing
+                                    .extend(ExportsDeserializer::deserialize("Exports", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ExportsDeserializer::deserialize("Exports", stack))),
+                            None => Some(ExportsDeserializer::deserialize("Exports", stack)?),
                         };
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3527,7 +3498,7 @@ impl ListExportsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3571,7 +3542,7 @@ impl ListImportsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListImportsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListImportsOutput::default();
 
@@ -3589,17 +3560,16 @@ impl ListImportsOutputDeserializer {
                     "Imports" => {
                         obj.imports = match obj.imports {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ImportsDeserializer::deserialize(
-                                    "Imports", stack
-                                )));
+                                existing
+                                    .extend(ImportsDeserializer::deserialize("Imports", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ImportsDeserializer::deserialize("Imports", stack))),
+                            None => Some(ImportsDeserializer::deserialize("Imports", stack)?),
                         };
                     }
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -3610,7 +3580,7 @@ impl ListImportsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3681,7 +3651,7 @@ impl ListStackInstancesOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackInstancesOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListStackInstancesOutput::default();
 
@@ -3698,23 +3668,21 @@ impl ListStackInstancesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    StackInstanceSummariesDeserializer::deserialize(
-                                        "Summaries",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(StackInstanceSummariesDeserializer::deserialize(
+                                    "Summaries",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StackInstanceSummariesDeserializer::deserialize(
+                            None => Some(StackInstanceSummariesDeserializer::deserialize(
                                 "Summaries",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -3726,7 +3694,7 @@ impl ListStackInstancesOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3772,7 +3740,7 @@ impl ListStackResourcesOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackResourcesOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListStackResourcesOutput::default();
 
@@ -3789,23 +3757,21 @@ impl ListStackResourcesOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "StackResourceSummaries" => {
                         obj.stack_resource_summaries = match obj.stack_resource_summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    StackResourceSummariesDeserializer::deserialize(
-                                        "StackResourceSummaries",
-                                        stack
-                                    )
-                                ));
+                                existing.extend(StackResourceSummariesDeserializer::deserialize(
+                                    "StackResourceSummaries",
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StackResourceSummariesDeserializer::deserialize(
+                            None => Some(StackResourceSummariesDeserializer::deserialize(
                                 "StackResourceSummaries",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -3817,7 +3783,7 @@ impl ListStackResourcesOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3875,7 +3841,7 @@ impl ListStackSetOperationResultsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackSetOperationResultsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListStackSetOperationResultsOutput::default();
 
@@ -3892,25 +3858,25 @@ impl ListStackSetOperationResultsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     StackSetOperationResultSummariesDeserializer::deserialize(
                                         "Summaries",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(
-                                StackSetOperationResultSummariesDeserializer::deserialize(
+                            None => {
+                                Some(StackSetOperationResultSummariesDeserializer::deserialize(
                                     "Summaries",
-                                    stack
-                                )
-                            )),
+                                    stack,
+                                )?)
+                            }
                         };
                     }
                     _ => skip_tree(stack),
@@ -3922,7 +3888,7 @@ impl ListStackSetOperationResultsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -3977,7 +3943,7 @@ impl ListStackSetOperationsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackSetOperationsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListStackSetOperationsOutput::default();
 
@@ -3994,25 +3960,23 @@ impl ListStackSetOperationsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
+                                existing.extend(
                                     StackSetOperationSummariesDeserializer::deserialize(
                                         "Summaries",
-                                        stack
-                                    )
-                                ));
+                                        stack,
+                                    )?,
+                                );
                                 Some(existing.to_vec())
                             }
-                            None => {
-                                Some(try!(StackSetOperationSummariesDeserializer::deserialize(
-                                    "Summaries",
-                                    stack
-                                )))
-                            }
+                            None => Some(StackSetOperationSummariesDeserializer::deserialize(
+                                "Summaries",
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4024,7 +3988,7 @@ impl ListStackSetOperationsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4078,7 +4042,7 @@ impl ListStackSetsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackSetsOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListStackSetsOutput::default();
 
@@ -4095,21 +4059,21 @@ impl ListStackSetsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Summaries" => {
                         obj.summaries = match obj.summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(StackSetSummariesDeserializer::deserialize(
+                                existing.extend(StackSetSummariesDeserializer::deserialize(
                                     "Summaries",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StackSetSummariesDeserializer::deserialize(
+                            None => Some(StackSetSummariesDeserializer::deserialize(
                                 "Summaries",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4121,7 +4085,7 @@ impl ListStackSetsOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4173,7 +4137,7 @@ impl ListStacksOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStacksOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListStacksOutput::default();
 
@@ -4190,21 +4154,21 @@ impl ListStacksOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "NextToken" => {
                         obj.next_token =
-                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "StackSummaries" => {
                         obj.stack_summaries = match obj.stack_summaries {
                             Some(ref mut existing) => {
-                                existing.extend(try!(StackSummariesDeserializer::deserialize(
+                                existing.extend(StackSummariesDeserializer::deserialize(
                                     "StackSummaries",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(StackSummariesDeserializer::deserialize(
+                            None => Some(StackSummariesDeserializer::deserialize(
                                 "StackSummaries",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4216,7 +4180,7 @@ impl ListStacksOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4228,9 +4192,9 @@ impl LogicalResourceIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4242,9 +4206,9 @@ impl MaxConcurrentCountDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4256,9 +4220,9 @@ impl MaxConcurrentPercentageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4270,9 +4234,9 @@ impl MetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4284,9 +4248,9 @@ impl MonitoringTimeInMinutesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4298,9 +4262,9 @@ impl NextTokenDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4312,9 +4276,9 @@ impl NoEchoDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4326,9 +4290,9 @@ impl NotificationARNDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4341,7 +4305,7 @@ impl NotificationARNsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4355,15 +4319,13 @@ impl NotificationARNsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(NotificationARNDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(NotificationARNDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4407,7 +4369,7 @@ impl OutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Output, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Output::default();
 
@@ -4423,26 +4385,20 @@ impl OutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "ExportName" => {
-                        obj.export_name = Some(try!(ExportNameDeserializer::deserialize(
-                            "ExportName",
-                            stack
-                        )));
+                        obj.export_name =
+                            Some(ExportNameDeserializer::deserialize("ExportName", stack)?);
                     }
                     "OutputKey" => {
                         obj.output_key =
-                            Some(try!(OutputKeyDeserializer::deserialize("OutputKey", stack)));
+                            Some(OutputKeyDeserializer::deserialize("OutputKey", stack)?);
                     }
                     "OutputValue" => {
-                        obj.output_value = Some(try!(OutputValueDeserializer::deserialize(
-                            "OutputValue",
-                            stack
-                        )));
+                        obj.output_value =
+                            Some(OutputValueDeserializer::deserialize("OutputValue", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4453,7 +4409,7 @@ impl OutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4465,9 +4421,9 @@ impl OutputKeyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4479,9 +4435,9 @@ impl OutputValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4494,7 +4450,7 @@ impl OutputsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Output>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4508,13 +4464,13 @@ impl OutputsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(OutputDeserializer::deserialize("member", stack)));
+                        obj.push(OutputDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4546,7 +4502,7 @@ impl ParameterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Parameter::default();
 
@@ -4562,27 +4518,28 @@ impl ParameterDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ParameterKey" => {
-                        obj.parameter_key = Some(try!(ParameterKeyDeserializer::deserialize(
+                        obj.parameter_key = Some(ParameterKeyDeserializer::deserialize(
                             "ParameterKey",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ParameterValue" => {
-                        obj.parameter_value = Some(try!(ParameterValueDeserializer::deserialize(
+                        obj.parameter_value = Some(ParameterValueDeserializer::deserialize(
                             "ParameterValue",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ResolvedValue" => {
-                        obj.resolved_value = Some(try!(ParameterValueDeserializer::deserialize(
+                        obj.resolved_value = Some(ParameterValueDeserializer::deserialize(
                             "ResolvedValue",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "UsePreviousValue" => {
-                        obj.use_previous_value = Some(try!(
-                            UsePreviousValueDeserializer::deserialize("UsePreviousValue", stack)
-                        ));
+                        obj.use_previous_value = Some(UsePreviousValueDeserializer::deserialize(
+                            "UsePreviousValue",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4593,7 +4550,7 @@ impl ParameterDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4640,7 +4597,7 @@ impl ParameterConstraintsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ParameterConstraints, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ParameterConstraints::default();
 
@@ -4658,16 +4615,16 @@ impl ParameterConstraintsDeserializer {
                     "AllowedValues" => {
                         obj.allowed_values = match obj.allowed_values {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AllowedValuesDeserializer::deserialize(
+                                existing.extend(AllowedValuesDeserializer::deserialize(
                                     "AllowedValues",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AllowedValuesDeserializer::deserialize(
+                            None => Some(AllowedValuesDeserializer::deserialize(
                                 "AllowedValues",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -4679,7 +4636,7 @@ impl ParameterConstraintsDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4708,7 +4665,7 @@ impl ParameterDeclarationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ParameterDeclaration, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ParameterDeclaration::default();
 
@@ -4724,38 +4681,36 @@ impl ParameterDeclarationDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DefaultValue" => {
-                        obj.default_value = Some(try!(ParameterValueDeserializer::deserialize(
+                        obj.default_value = Some(ParameterValueDeserializer::deserialize(
                             "DefaultValue",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "NoEcho" => {
-                        obj.no_echo = Some(try!(NoEchoDeserializer::deserialize("NoEcho", stack)));
+                        obj.no_echo = Some(NoEchoDeserializer::deserialize("NoEcho", stack)?);
                     }
                     "ParameterConstraints" => {
                         obj.parameter_constraints =
-                            Some(try!(ParameterConstraintsDeserializer::deserialize(
+                            Some(ParameterConstraintsDeserializer::deserialize(
                                 "ParameterConstraints",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ParameterKey" => {
-                        obj.parameter_key = Some(try!(ParameterKeyDeserializer::deserialize(
+                        obj.parameter_key = Some(ParameterKeyDeserializer::deserialize(
                             "ParameterKey",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ParameterType" => {
-                        obj.parameter_type = Some(try!(ParameterTypeDeserializer::deserialize(
+                        obj.parameter_type = Some(ParameterTypeDeserializer::deserialize(
                             "ParameterType",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4766,7 +4721,7 @@ impl ParameterDeclarationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4779,7 +4734,7 @@ impl ParameterDeclarationsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ParameterDeclaration>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4793,15 +4748,15 @@ impl ParameterDeclarationsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ParameterDeclarationDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ParameterDeclarationDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4820,9 +4775,9 @@ impl ParameterKeyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4834,9 +4789,9 @@ impl ParameterTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4848,9 +4803,9 @@ impl ParameterValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4863,7 +4818,7 @@ impl ParametersDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4877,13 +4832,13 @@ impl ParametersDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ParameterDeserializer::deserialize("member", stack)));
+                        obj.push(ParameterDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -4914,9 +4869,9 @@ impl PhysicalResourceIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4928,9 +4883,9 @@ impl PropertyNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4942,9 +4897,9 @@ impl ReasonDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4956,9 +4911,9 @@ impl RegionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -4971,7 +4926,7 @@ impl RegionListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -4985,13 +4940,13 @@ impl RegionListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(RegionDeserializer::deserialize("member", stack)));
+                        obj.push(RegionDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5022,9 +4977,9 @@ impl ReplacementDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5036,9 +4991,9 @@ impl RequiresRecreationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5050,9 +5005,9 @@ impl ResourceAttributeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5083,7 +5038,7 @@ impl ResourceChangeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceChange, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ResourceChange::default();
 
@@ -5099,56 +5054,51 @@ impl ResourceChangeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Action" => {
-                        obj.action =
-                            Some(try!(ChangeActionDeserializer::deserialize("Action", stack)));
+                        obj.action = Some(ChangeActionDeserializer::deserialize("Action", stack)?);
                     }
                     "Details" => {
                         obj.details = match obj.details {
                             Some(ref mut existing) => {
-                                existing.extend(try!(
-                                    ResourceChangeDetailsDeserializer::deserialize(
-                                        "Details", stack
-                                    )
-                                ));
+                                existing.extend(ResourceChangeDetailsDeserializer::deserialize(
+                                    "Details", stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ResourceChangeDetailsDeserializer::deserialize(
-                                "Details", stack
-                            ))),
+                            None => Some(ResourceChangeDetailsDeserializer::deserialize(
+                                "Details", stack,
+                            )?),
                         };
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = Some(try!(
-                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)
-                        ));
+                        obj.logical_resource_id = Some(LogicalResourceIdDeserializer::deserialize(
+                            "LogicalResourceId",
+                            stack,
+                        )?);
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
-                            Some(try!(PhysicalResourceIdDeserializer::deserialize(
+                            Some(PhysicalResourceIdDeserializer::deserialize(
                                 "PhysicalResourceId",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "Replacement" => {
-                        obj.replacement = Some(try!(ReplacementDeserializer::deserialize(
-                            "Replacement",
-                            stack
-                        )));
+                        obj.replacement =
+                            Some(ReplacementDeserializer::deserialize("Replacement", stack)?);
                     }
                     "ResourceType" => {
-                        obj.resource_type = Some(try!(ResourceTypeDeserializer::deserialize(
+                        obj.resource_type = Some(ResourceTypeDeserializer::deserialize(
                             "ResourceType",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Scope" => {
                         obj.scope = match obj.scope {
                             Some(ref mut existing) => {
-                                existing
-                                    .extend(try!(ScopeDeserializer::deserialize("Scope", stack)));
+                                existing.extend(ScopeDeserializer::deserialize("Scope", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ScopeDeserializer::deserialize("Scope", stack))),
+                            None => Some(ScopeDeserializer::deserialize("Scope", stack)?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -5160,7 +5110,7 @@ impl ResourceChangeDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5185,7 +5135,7 @@ impl ResourceChangeDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceChangeDetail, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ResourceChangeDetail::default();
 
@@ -5201,27 +5151,27 @@ impl ResourceChangeDetailDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CausingEntity" => {
-                        obj.causing_entity = Some(try!(CausingEntityDeserializer::deserialize(
+                        obj.causing_entity = Some(CausingEntityDeserializer::deserialize(
                             "CausingEntity",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ChangeSource" => {
-                        obj.change_source = Some(try!(ChangeSourceDeserializer::deserialize(
+                        obj.change_source = Some(ChangeSourceDeserializer::deserialize(
                             "ChangeSource",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Evaluation" => {
-                        obj.evaluation = Some(try!(EvaluationTypeDeserializer::deserialize(
+                        obj.evaluation = Some(EvaluationTypeDeserializer::deserialize(
                             "Evaluation",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Target" => {
-                        obj.target = Some(try!(ResourceTargetDefinitionDeserializer::deserialize(
-                            "Target", stack
-                        )));
+                        obj.target = Some(ResourceTargetDefinitionDeserializer::deserialize(
+                            "Target", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5232,7 +5182,7 @@ impl ResourceChangeDetailDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5245,7 +5195,7 @@ impl ResourceChangeDetailsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<ResourceChangeDetail>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5259,15 +5209,15 @@ impl ResourceChangeDetailsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ResourceChangeDetailDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ResourceChangeDetailDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5286,9 +5236,9 @@ impl ResourcePropertiesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5300,9 +5250,9 @@ impl ResourceStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5314,9 +5264,9 @@ impl ResourceStatusReasonDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5339,7 +5289,7 @@ impl ResourceTargetDefinitionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceTargetDefinition, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ResourceTargetDefinition::default();
 
@@ -5355,20 +5305,20 @@ impl ResourceTargetDefinitionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Attribute" => {
-                        obj.attribute = Some(try!(ResourceAttributeDeserializer::deserialize(
+                        obj.attribute = Some(ResourceAttributeDeserializer::deserialize(
                             "Attribute",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Name" => {
-                        obj.name = Some(try!(PropertyNameDeserializer::deserialize("Name", stack)));
+                        obj.name = Some(PropertyNameDeserializer::deserialize("Name", stack)?);
                     }
                     "RequiresRecreation" => {
                         obj.requires_recreation =
-                            Some(try!(RequiresRecreationDeserializer::deserialize(
+                            Some(RequiresRecreationDeserializer::deserialize(
                                 "RequiresRecreation",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -5379,7 +5329,7 @@ impl ResourceTargetDefinitionDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5391,9 +5341,9 @@ impl ResourceTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5406,7 +5356,7 @@ impl ResourceTypesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5420,13 +5370,13 @@ impl ResourceTypesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ResourceTypeDeserializer::deserialize("member", stack)));
+                        obj.push(ResourceTypeDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5479,9 +5429,9 @@ impl RetainStacksNullableDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5493,9 +5443,9 @@ impl RoleARNDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5516,7 +5466,7 @@ impl RollbackConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RollbackConfiguration, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = RollbackConfiguration::default();
 
@@ -5533,24 +5483,24 @@ impl RollbackConfigurationDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MonitoringTimeInMinutes" => {
                         obj.monitoring_time_in_minutes =
-                            Some(try!(MonitoringTimeInMinutesDeserializer::deserialize(
+                            Some(MonitoringTimeInMinutesDeserializer::deserialize(
                                 "MonitoringTimeInMinutes",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "RollbackTriggers" => {
                         obj.rollback_triggers = match obj.rollback_triggers {
                             Some(ref mut existing) => {
-                                existing.extend(try!(RollbackTriggersDeserializer::deserialize(
+                                existing.extend(RollbackTriggersDeserializer::deserialize(
                                     "RollbackTriggers",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(RollbackTriggersDeserializer::deserialize(
+                            None => Some(RollbackTriggersDeserializer::deserialize(
                                 "RollbackTriggers",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -5562,7 +5512,7 @@ impl RollbackConfigurationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5609,7 +5559,7 @@ impl RollbackTriggerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RollbackTrigger, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = RollbackTrigger::default();
 
@@ -5625,10 +5575,10 @@ impl RollbackTriggerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Arn" => {
-                        obj.arn = try!(ArnDeserializer::deserialize("Arn", stack));
+                        obj.arn = ArnDeserializer::deserialize("Arn", stack)?;
                     }
                     "Type" => {
-                        obj.type_ = try!(TypeDeserializer::deserialize("Type", stack));
+                        obj.type_ = TypeDeserializer::deserialize("Type", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -5639,7 +5589,7 @@ impl RollbackTriggerDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -5667,7 +5617,7 @@ impl RollbackTriggersDeserializer {
         stack: &mut T,
     ) -> Result<Vec<RollbackTrigger>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5681,15 +5631,13 @@ impl RollbackTriggersDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(RollbackTriggerDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(RollbackTriggerDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5721,7 +5669,7 @@ impl ScopeDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -5735,15 +5683,13 @@ impl ScopeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(ResourceAttributeDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(ResourceAttributeDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -5871,7 +5817,7 @@ impl StackDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Stack, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Stack::default();
 
@@ -5889,146 +5835,138 @@ impl StackDeserializer {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
                             Some(ref mut existing) => {
-                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                existing.extend(CapabilitiesDeserializer::deserialize(
                                     "Capabilities",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                            None => Some(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "ChangeSetId" => {
-                        obj.change_set_id = Some(try!(ChangeSetIdDeserializer::deserialize(
-                            "ChangeSetId",
-                            stack
-                        )));
+                        obj.change_set_id =
+                            Some(ChangeSetIdDeserializer::deserialize("ChangeSetId", stack)?);
                     }
                     "CreationTime" => {
                         obj.creation_time =
-                            try!(CreationTimeDeserializer::deserialize("CreationTime", stack));
+                            CreationTimeDeserializer::deserialize("CreationTime", stack)?;
                     }
                     "DeletionTime" => {
-                        obj.deletion_time = Some(try!(DeletionTimeDeserializer::deserialize(
+                        obj.deletion_time = Some(DeletionTimeDeserializer::deserialize(
                             "DeletionTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "DisableRollback" => {
-                        obj.disable_rollback = Some(try!(
-                            DisableRollbackDeserializer::deserialize("DisableRollback", stack)
-                        ));
+                        obj.disable_rollback = Some(DisableRollbackDeserializer::deserialize(
+                            "DisableRollback",
+                            stack,
+                        )?);
                     }
                     "EnableTerminationProtection" => {
                         obj.enable_termination_protection =
-                            Some(try!(EnableTerminationProtectionDeserializer::deserialize(
+                            Some(EnableTerminationProtectionDeserializer::deserialize(
                                 "EnableTerminationProtection",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "LastUpdatedTime" => {
-                        obj.last_updated_time = Some(try!(
-                            LastUpdatedTimeDeserializer::deserialize("LastUpdatedTime", stack)
-                        ));
+                        obj.last_updated_time = Some(LastUpdatedTimeDeserializer::deserialize(
+                            "LastUpdatedTime",
+                            stack,
+                        )?);
                     }
                     "NotificationARNs" => {
                         obj.notification_ar_ns = match obj.notification_ar_ns {
                             Some(ref mut existing) => {
-                                existing.extend(try!(NotificationARNsDeserializer::deserialize(
+                                existing.extend(NotificationARNsDeserializer::deserialize(
                                     "NotificationARNs",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(NotificationARNsDeserializer::deserialize(
+                            None => Some(NotificationARNsDeserializer::deserialize(
                                 "NotificationARNs",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Outputs" => {
                         obj.outputs = match obj.outputs {
                             Some(ref mut existing) => {
-                                existing.extend(try!(OutputsDeserializer::deserialize(
-                                    "Outputs", stack
-                                )));
+                                existing
+                                    .extend(OutputsDeserializer::deserialize("Outputs", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(OutputsDeserializer::deserialize("Outputs", stack))),
+                            None => Some(OutputsDeserializer::deserialize("Outputs", stack)?),
                         };
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                existing.extend(ParametersDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersDeserializer::deserialize(
-                                "Parameters",
-                                stack
-                            ))),
+                            None => Some(ParametersDeserializer::deserialize("Parameters", stack)?),
                         };
                     }
                     "ParentId" => {
-                        obj.parent_id =
-                            Some(try!(StackIdDeserializer::deserialize("ParentId", stack)));
+                        obj.parent_id = Some(StackIdDeserializer::deserialize("ParentId", stack)?);
                     }
                     "RoleARN" => {
-                        obj.role_arn =
-                            Some(try!(RoleARNDeserializer::deserialize("RoleARN", stack)));
+                        obj.role_arn = Some(RoleARNDeserializer::deserialize("RoleARN", stack)?);
                     }
                     "RollbackConfiguration" => {
                         obj.rollback_configuration =
-                            Some(try!(RollbackConfigurationDeserializer::deserialize(
+                            Some(RollbackConfigurationDeserializer::deserialize(
                                 "RollbackConfiguration",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "RootId" => {
-                        obj.root_id = Some(try!(StackIdDeserializer::deserialize("RootId", stack)));
+                        obj.root_id = Some(StackIdDeserializer::deserialize("RootId", stack)?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackName" => {
-                        obj.stack_name =
-                            try!(StackNameDeserializer::deserialize("StackName", stack));
+                        obj.stack_name = StackNameDeserializer::deserialize("StackName", stack)?;
                     }
                     "StackStatus" => {
                         obj.stack_status =
-                            try!(StackStatusDeserializer::deserialize("StackStatus", stack));
+                            StackStatusDeserializer::deserialize("StackStatus", stack)?;
                     }
                     "StackStatusReason" => {
-                        obj.stack_status_reason = Some(try!(
-                            StackStatusReasonDeserializer::deserialize("StackStatusReason", stack)
-                        ));
+                        obj.stack_status_reason = Some(StackStatusReasonDeserializer::deserialize(
+                            "StackStatusReason",
+                            stack,
+                        )?);
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TagsDeserializer::deserialize("Tags", stack)));
+                                existing.extend(TagsDeserializer::deserialize("Tags", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
+                            None => Some(TagsDeserializer::deserialize("Tags", stack)?),
                         };
                     }
                     "TimeoutInMinutes" => {
-                        obj.timeout_in_minutes = Some(try!(
-                            TimeoutMinutesDeserializer::deserialize("TimeoutInMinutes", stack)
-                        ));
+                        obj.timeout_in_minutes = Some(TimeoutMinutesDeserializer::deserialize(
+                            "TimeoutInMinutes",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6039,7 +5977,7 @@ impl StackDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6078,7 +6016,7 @@ impl StackEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackEvent, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackEvent::default();
 
@@ -6095,62 +6033,61 @@ impl StackEventDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ClientRequestToken" => {
                         obj.client_request_token =
-                            Some(try!(ClientRequestTokenDeserializer::deserialize(
+                            Some(ClientRequestTokenDeserializer::deserialize(
                                 "ClientRequestToken",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "EventId" => {
-                        obj.event_id = try!(EventIdDeserializer::deserialize("EventId", stack));
+                        obj.event_id = EventIdDeserializer::deserialize("EventId", stack)?;
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = Some(try!(
-                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)
-                        ));
+                        obj.logical_resource_id = Some(LogicalResourceIdDeserializer::deserialize(
+                            "LogicalResourceId",
+                            stack,
+                        )?);
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
-                            Some(try!(PhysicalResourceIdDeserializer::deserialize(
+                            Some(PhysicalResourceIdDeserializer::deserialize(
                                 "PhysicalResourceId",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceProperties" => {
                         obj.resource_properties =
-                            Some(try!(ResourcePropertiesDeserializer::deserialize(
+                            Some(ResourcePropertiesDeserializer::deserialize(
                                 "ResourceProperties",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceStatus" => {
-                        obj.resource_status = Some(try!(ResourceStatusDeserializer::deserialize(
+                        obj.resource_status = Some(ResourceStatusDeserializer::deserialize(
                             "ResourceStatus",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "ResourceStatusReason" => {
                         obj.resource_status_reason =
-                            Some(try!(ResourceStatusReasonDeserializer::deserialize(
+                            Some(ResourceStatusReasonDeserializer::deserialize(
                                 "ResourceStatusReason",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceType" => {
-                        obj.resource_type = Some(try!(ResourceTypeDeserializer::deserialize(
+                        obj.resource_type = Some(ResourceTypeDeserializer::deserialize(
                             "ResourceType",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "StackId" => {
-                        obj.stack_id = try!(StackIdDeserializer::deserialize("StackId", stack));
+                        obj.stack_id = StackIdDeserializer::deserialize("StackId", stack)?;
                     }
                     "StackName" => {
-                        obj.stack_name =
-                            try!(StackNameDeserializer::deserialize("StackName", stack));
+                        obj.stack_name = StackNameDeserializer::deserialize("StackName", stack)?;
                     }
                     "Timestamp" => {
-                        obj.timestamp =
-                            try!(TimestampDeserializer::deserialize("Timestamp", stack));
+                        obj.timestamp = TimestampDeserializer::deserialize("Timestamp", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -6161,7 +6098,7 @@ impl StackEventDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6174,7 +6111,7 @@ impl StackEventsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackEvent>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6188,13 +6125,13 @@ impl StackEventsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackEventDeserializer::deserialize("member", stack)));
+                        obj.push(StackEventDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6213,9 +6150,9 @@ impl StackIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6246,7 +6183,7 @@ impl StackInstanceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackInstance, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackInstance::default();
 
@@ -6262,45 +6199,41 @@ impl StackInstanceDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Account" => {
-                        obj.account =
-                            Some(try!(AccountDeserializer::deserialize("Account", stack)));
+                        obj.account = Some(AccountDeserializer::deserialize("Account", stack)?);
                     }
                     "ParameterOverrides" => {
                         obj.parameter_overrides = match obj.parameter_overrides {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                existing.extend(ParametersDeserializer::deserialize(
                                     "ParameterOverrides",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersDeserializer::deserialize(
+                            None => Some(ParametersDeserializer::deserialize(
                                 "ParameterOverrides",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Region" => {
-                        obj.region = Some(try!(RegionDeserializer::deserialize("Region", stack)));
+                        obj.region = Some(RegionDeserializer::deserialize("Region", stack)?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
+                        obj.stack_set_id =
+                            Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StackInstanceStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status = Some(StackInstanceStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
                     }
                     "StatusReason" => {
                         obj.status_reason =
-                            Some(try!(ReasonDeserializer::deserialize("StatusReason", stack)));
+                            Some(ReasonDeserializer::deserialize("StatusReason", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6311,7 +6244,7 @@ impl StackInstanceDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6323,9 +6256,9 @@ impl StackInstanceStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6338,7 +6271,7 @@ impl StackInstanceSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackInstanceSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6352,15 +6285,15 @@ impl StackInstanceSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackInstanceSummaryDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(StackInstanceSummaryDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6396,7 +6329,7 @@ impl StackInstanceSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackInstanceSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackInstanceSummary::default();
 
@@ -6412,30 +6345,26 @@ impl StackInstanceSummaryDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Account" => {
-                        obj.account =
-                            Some(try!(AccountDeserializer::deserialize("Account", stack)));
+                        obj.account = Some(AccountDeserializer::deserialize("Account", stack)?);
                     }
                     "Region" => {
-                        obj.region = Some(try!(RegionDeserializer::deserialize("Region", stack)));
+                        obj.region = Some(RegionDeserializer::deserialize("Region", stack)?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
+                        obj.stack_set_id =
+                            Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StackInstanceStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status = Some(StackInstanceStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
                     }
                     "StatusReason" => {
                         obj.status_reason =
-                            Some(try!(ReasonDeserializer::deserialize("StatusReason", stack)));
+                            Some(ReasonDeserializer::deserialize("StatusReason", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6446,7 +6375,7 @@ impl StackInstanceSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6458,9 +6387,9 @@ impl StackNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6472,9 +6401,9 @@ impl StackPolicyBodyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6509,7 +6438,7 @@ impl StackResourceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResource, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackResource::default();
 
@@ -6525,52 +6454,44 @@ impl StackResourceDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = try!(LogicalResourceIdDeserializer::deserialize(
-                            "LogicalResourceId",
-                            stack
-                        ));
+                        obj.logical_resource_id =
+                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)?;
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
-                            Some(try!(PhysicalResourceIdDeserializer::deserialize(
+                            Some(PhysicalResourceIdDeserializer::deserialize(
                                 "PhysicalResourceId",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceStatus" => {
-                        obj.resource_status = try!(ResourceStatusDeserializer::deserialize(
-                            "ResourceStatus",
-                            stack
-                        ));
+                        obj.resource_status =
+                            ResourceStatusDeserializer::deserialize("ResourceStatus", stack)?;
                     }
                     "ResourceStatusReason" => {
                         obj.resource_status_reason =
-                            Some(try!(ResourceStatusReasonDeserializer::deserialize(
+                            Some(ResourceStatusReasonDeserializer::deserialize(
                                 "ResourceStatusReason",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceType" => {
                         obj.resource_type =
-                            try!(ResourceTypeDeserializer::deserialize("ResourceType", stack));
+                            ResourceTypeDeserializer::deserialize("ResourceType", stack)?;
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackName" => {
                         obj.stack_name =
-                            Some(try!(StackNameDeserializer::deserialize("StackName", stack)));
+                            Some(StackNameDeserializer::deserialize("StackName", stack)?);
                     }
                     "Timestamp" => {
-                        obj.timestamp =
-                            try!(TimestampDeserializer::deserialize("Timestamp", stack));
+                        obj.timestamp = TimestampDeserializer::deserialize("Timestamp", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -6581,7 +6502,7 @@ impl StackResourceDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6618,7 +6539,7 @@ impl StackResourceDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceDetail, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackResourceDetail::default();
 
@@ -6634,58 +6555,48 @@ impl StackResourceDetailDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "LastUpdatedTimestamp" => {
-                        obj.last_updated_timestamp = try!(TimestampDeserializer::deserialize(
-                            "LastUpdatedTimestamp",
-                            stack
-                        ));
+                        obj.last_updated_timestamp =
+                            TimestampDeserializer::deserialize("LastUpdatedTimestamp", stack)?;
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = try!(LogicalResourceIdDeserializer::deserialize(
-                            "LogicalResourceId",
-                            stack
-                        ));
+                        obj.logical_resource_id =
+                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)?;
                     }
                     "Metadata" => {
-                        obj.metadata =
-                            Some(try!(MetadataDeserializer::deserialize("Metadata", stack)));
+                        obj.metadata = Some(MetadataDeserializer::deserialize("Metadata", stack)?);
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
-                            Some(try!(PhysicalResourceIdDeserializer::deserialize(
+                            Some(PhysicalResourceIdDeserializer::deserialize(
                                 "PhysicalResourceId",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceStatus" => {
-                        obj.resource_status = try!(ResourceStatusDeserializer::deserialize(
-                            "ResourceStatus",
-                            stack
-                        ));
+                        obj.resource_status =
+                            ResourceStatusDeserializer::deserialize("ResourceStatus", stack)?;
                     }
                     "ResourceStatusReason" => {
                         obj.resource_status_reason =
-                            Some(try!(ResourceStatusReasonDeserializer::deserialize(
+                            Some(ResourceStatusReasonDeserializer::deserialize(
                                 "ResourceStatusReason",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceType" => {
                         obj.resource_type =
-                            try!(ResourceTypeDeserializer::deserialize("ResourceType", stack));
+                            ResourceTypeDeserializer::deserialize("ResourceType", stack)?;
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackName" => {
                         obj.stack_name =
-                            Some(try!(StackNameDeserializer::deserialize("StackName", stack)));
+                            Some(StackNameDeserializer::deserialize("StackName", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -6696,7 +6607,7 @@ impl StackResourceDetailDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6709,7 +6620,7 @@ impl StackResourceSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackResourceSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6723,15 +6634,15 @@ impl StackResourceSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackResourceSummaryDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(StackResourceSummaryDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6767,7 +6678,7 @@ impl StackResourceSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackResourceSummary::default();
 
@@ -6783,40 +6694,34 @@ impl StackResourceSummaryDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LastUpdatedTimestamp" => {
-                        obj.last_updated_timestamp = try!(TimestampDeserializer::deserialize(
-                            "LastUpdatedTimestamp",
-                            stack
-                        ));
+                        obj.last_updated_timestamp =
+                            TimestampDeserializer::deserialize("LastUpdatedTimestamp", stack)?;
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = try!(LogicalResourceIdDeserializer::deserialize(
-                            "LogicalResourceId",
-                            stack
-                        ));
+                        obj.logical_resource_id =
+                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)?;
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
-                            Some(try!(PhysicalResourceIdDeserializer::deserialize(
+                            Some(PhysicalResourceIdDeserializer::deserialize(
                                 "PhysicalResourceId",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceStatus" => {
-                        obj.resource_status = try!(ResourceStatusDeserializer::deserialize(
-                            "ResourceStatus",
-                            stack
-                        ));
+                        obj.resource_status =
+                            ResourceStatusDeserializer::deserialize("ResourceStatus", stack)?;
                     }
                     "ResourceStatusReason" => {
                         obj.resource_status_reason =
-                            Some(try!(ResourceStatusReasonDeserializer::deserialize(
+                            Some(ResourceStatusReasonDeserializer::deserialize(
                                 "ResourceStatusReason",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "ResourceType" => {
                         obj.resource_type =
-                            try!(ResourceTypeDeserializer::deserialize("ResourceType", stack));
+                            ResourceTypeDeserializer::deserialize("ResourceType", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -6827,7 +6732,7 @@ impl StackResourceSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -6840,7 +6745,7 @@ impl StackResourcesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackResource>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -6854,15 +6759,13 @@ impl StackResourcesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackResourceDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(StackResourceDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -6908,7 +6811,7 @@ impl StackSetDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSet, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSet::default();
 
@@ -6924,89 +6827,80 @@ impl StackSetDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AdministrationRoleARN" => {
-                        obj.administration_role_arn = Some(try!(RoleARNDeserializer::deserialize(
+                        obj.administration_role_arn = Some(RoleARNDeserializer::deserialize(
                             "AdministrationRoleARN",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
                             Some(ref mut existing) => {
-                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                existing.extend(CapabilitiesDeserializer::deserialize(
                                     "Capabilities",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                            None => Some(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "ExecutionRoleName" => {
-                        obj.execution_role_name = Some(try!(
-                            ExecutionRoleNameDeserializer::deserialize("ExecutionRoleName", stack)
-                        ));
+                        obj.execution_role_name = Some(ExecutionRoleNameDeserializer::deserialize(
+                            "ExecutionRoleName",
+                            stack,
+                        )?);
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(ParametersDeserializer::deserialize(
+                                existing.extend(ParametersDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ParametersDeserializer::deserialize(
-                                "Parameters",
-                                stack
-                            ))),
+                            None => Some(ParametersDeserializer::deserialize("Parameters", stack)?),
                         };
                     }
                     "StackSetARN" => {
-                        obj.stack_set_arn = Some(try!(StackSetARNDeserializer::deserialize(
-                            "StackSetARN",
-                            stack
-                        )));
+                        obj.stack_set_arn =
+                            Some(StackSetARNDeserializer::deserialize("StackSetARN", stack)?);
                     }
                     "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
+                        obj.stack_set_id =
+                            Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
                     }
                     "StackSetName" => {
-                        obj.stack_set_name = Some(try!(StackSetNameDeserializer::deserialize(
+                        obj.stack_set_name = Some(StackSetNameDeserializer::deserialize(
                             "StackSetName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StackSetStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status =
+                            Some(StackSetStatusDeserializer::deserialize("Status", stack)?);
                     }
                     "Tags" => {
                         obj.tags = match obj.tags {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TagsDeserializer::deserialize("Tags", stack)));
+                                existing.extend(TagsDeserializer::deserialize("Tags", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TagsDeserializer::deserialize("Tags", stack))),
+                            None => Some(TagsDeserializer::deserialize("Tags", stack)?),
                         };
                     }
                     "TemplateBody" => {
-                        obj.template_body = Some(try!(TemplateBodyDeserializer::deserialize(
+                        obj.template_body = Some(TemplateBodyDeserializer::deserialize(
                             "TemplateBody",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7017,7 +6911,7 @@ impl StackSetDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7029,9 +6923,9 @@ impl StackSetARNDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7043,9 +6937,9 @@ impl StackSetIdDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7057,9 +6951,9 @@ impl StackSetNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7096,7 +6990,7 @@ impl StackSetOperationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperation, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSetOperation::default();
 
@@ -7112,61 +7006,59 @@ impl StackSetOperationDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Action" => {
-                        obj.action = Some(try!(StackSetOperationActionDeserializer::deserialize(
-                            "Action", stack
-                        )));
+                        obj.action = Some(StackSetOperationActionDeserializer::deserialize(
+                            "Action", stack,
+                        )?);
                     }
                     "AdministrationRoleARN" => {
-                        obj.administration_role_arn = Some(try!(RoleARNDeserializer::deserialize(
+                        obj.administration_role_arn = Some(RoleARNDeserializer::deserialize(
                             "AdministrationRoleARN",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "CreationTimestamp" => {
-                        obj.creation_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                        obj.creation_timestamp = Some(TimestampDeserializer::deserialize(
                             "CreationTimestamp",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "EndTimestamp" => {
-                        obj.end_timestamp = Some(try!(TimestampDeserializer::deserialize(
-                            "EndTimestamp",
-                            stack
-                        )));
+                        obj.end_timestamp =
+                            Some(TimestampDeserializer::deserialize("EndTimestamp", stack)?);
                     }
                     "ExecutionRoleName" => {
-                        obj.execution_role_name = Some(try!(
-                            ExecutionRoleNameDeserializer::deserialize("ExecutionRoleName", stack)
-                        ));
+                        obj.execution_role_name = Some(ExecutionRoleNameDeserializer::deserialize(
+                            "ExecutionRoleName",
+                            stack,
+                        )?);
                     }
                     "OperationId" => {
-                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                        obj.operation_id = Some(ClientRequestTokenDeserializer::deserialize(
                             "OperationId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "OperationPreferences" => {
                         obj.operation_preferences =
-                            Some(try!(StackSetOperationPreferencesDeserializer::deserialize(
+                            Some(StackSetOperationPreferencesDeserializer::deserialize(
                                 "OperationPreferences",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "RetainStacks" => {
-                        obj.retain_stacks = Some(try!(
-                            RetainStacksNullableDeserializer::deserialize("RetainStacks", stack)
-                        ));
+                        obj.retain_stacks = Some(RetainStacksNullableDeserializer::deserialize(
+                            "RetainStacks",
+                            stack,
+                        )?);
                     }
                     "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
+                        obj.stack_set_id =
+                            Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StackSetOperationStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status = Some(StackSetOperationStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7177,7 +7069,7 @@ impl StackSetOperationDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7189,9 +7081,9 @@ impl StackSetOperationActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7218,7 +7110,7 @@ impl StackSetOperationPreferencesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperationPreferences, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSetOperationPreferences::default();
 
@@ -7235,45 +7127,44 @@ impl StackSetOperationPreferencesDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "FailureToleranceCount" => {
                         obj.failure_tolerance_count =
-                            Some(try!(FailureToleranceCountDeserializer::deserialize(
+                            Some(FailureToleranceCountDeserializer::deserialize(
                                 "FailureToleranceCount",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "FailureTolerancePercentage" => {
                         obj.failure_tolerance_percentage =
-                            Some(try!(FailureTolerancePercentageDeserializer::deserialize(
+                            Some(FailureTolerancePercentageDeserializer::deserialize(
                                 "FailureTolerancePercentage",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "MaxConcurrentCount" => {
                         obj.max_concurrent_count =
-                            Some(try!(MaxConcurrentCountDeserializer::deserialize(
+                            Some(MaxConcurrentCountDeserializer::deserialize(
                                 "MaxConcurrentCount",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "MaxConcurrentPercentage" => {
                         obj.max_concurrent_percentage =
-                            Some(try!(MaxConcurrentPercentageDeserializer::deserialize(
+                            Some(MaxConcurrentPercentageDeserializer::deserialize(
                                 "MaxConcurrentPercentage",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "RegionOrder" => {
                         obj.region_order = match obj.region_order {
                             Some(ref mut existing) => {
-                                existing.extend(try!(RegionListDeserializer::deserialize(
+                                existing.extend(RegionListDeserializer::deserialize(
                                     "RegionOrder",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(RegionListDeserializer::deserialize(
-                                "RegionOrder",
-                                stack
-                            ))),
+                            None => {
+                                Some(RegionListDeserializer::deserialize("RegionOrder", stack)?)
+                            }
                         };
                     }
                     _ => skip_tree(stack),
@@ -7285,7 +7176,7 @@ impl StackSetOperationPreferencesDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7341,9 +7232,9 @@ impl StackSetOperationResultStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7356,7 +7247,7 @@ impl StackSetOperationResultSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackSetOperationResultSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7370,17 +7261,15 @@ impl StackSetOperationResultSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(
-                            StackSetOperationResultSummaryDeserializer::deserialize(
-                                "member", stack
-                            )
-                        ));
+                        obj.push(StackSetOperationResultSummaryDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7414,7 +7303,7 @@ impl StackSetOperationResultSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperationResultSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSetOperationResultSummary::default();
 
@@ -7430,25 +7319,25 @@ impl StackSetOperationResultSummaryDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Account" => {
-                        obj.account =
-                            Some(try!(AccountDeserializer::deserialize("Account", stack)));
+                        obj.account = Some(AccountDeserializer::deserialize("Account", stack)?);
                     }
                     "AccountGateResult" => {
-                        obj.account_gate_result = Some(try!(
-                            AccountGateResultDeserializer::deserialize("AccountGateResult", stack)
-                        ));
+                        obj.account_gate_result = Some(AccountGateResultDeserializer::deserialize(
+                            "AccountGateResult",
+                            stack,
+                        )?);
                     }
                     "Region" => {
-                        obj.region = Some(try!(RegionDeserializer::deserialize("Region", stack)));
+                        obj.region = Some(RegionDeserializer::deserialize("Region", stack)?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(
-                            StackSetOperationResultStatusDeserializer::deserialize("Status", stack)
-                        ));
+                        obj.status = Some(StackSetOperationResultStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
                     }
                     "StatusReason" => {
                         obj.status_reason =
-                            Some(try!(ReasonDeserializer::deserialize("StatusReason", stack)));
+                            Some(ReasonDeserializer::deserialize("StatusReason", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7459,7 +7348,7 @@ impl StackSetOperationResultSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7471,9 +7360,9 @@ impl StackSetOperationStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7486,7 +7375,7 @@ impl StackSetOperationSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackSetOperationSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7500,15 +7389,15 @@ impl StackSetOperationSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackSetOperationSummaryDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(StackSetOperationSummaryDeserializer::deserialize(
+                            "member", stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7542,7 +7431,7 @@ impl StackSetOperationSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperationSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSetOperationSummary::default();
 
@@ -7556,37 +7445,35 @@ impl StackSetOperationSummaryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Action" => {
-                            obj.action = Some(try!(
-                                StackSetOperationActionDeserializer::deserialize("Action", stack)
-                            ));
-                        }
-                        "CreationTimestamp" => {
-                            obj.creation_timestamp = Some(try!(
-                                TimestampDeserializer::deserialize("CreationTimestamp", stack)
-                            ));
-                        }
-                        "EndTimestamp" => {
-                            obj.end_timestamp = Some(try!(TimestampDeserializer::deserialize(
-                                "EndTimestamp",
-                                stack
-                            )));
-                        }
-                        "OperationId" => {
-                            obj.operation_id = Some(try!(
-                                ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                            ));
-                        }
-                        "Status" => {
-                            obj.status = Some(try!(
-                                StackSetOperationStatusDeserializer::deserialize("Status", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Action" => {
+                        obj.action = Some(StackSetOperationActionDeserializer::deserialize(
+                            "Action", stack,
+                        )?);
                     }
-                }
+                    "CreationTimestamp" => {
+                        obj.creation_timestamp = Some(TimestampDeserializer::deserialize(
+                            "CreationTimestamp",
+                            stack,
+                        )?);
+                    }
+                    "EndTimestamp" => {
+                        obj.end_timestamp =
+                            Some(TimestampDeserializer::deserialize("EndTimestamp", stack)?);
+                    }
+                    "OperationId" => {
+                        obj.operation_id = Some(ClientRequestTokenDeserializer::deserialize(
+                            "OperationId",
+                            stack,
+                        )?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StackSetOperationStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7594,7 +7481,7 @@ impl StackSetOperationSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7606,9 +7493,9 @@ impl StackSetStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7621,7 +7508,7 @@ impl StackSetSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackSetSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7635,15 +7522,13 @@ impl StackSetSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackSetSummaryDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(StackSetSummaryDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7675,7 +7560,7 @@ impl StackSetSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSetSummary::default();
 
@@ -7691,27 +7576,22 @@ impl StackSetSummaryDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
+                        obj.stack_set_id =
+                            Some(StackSetIdDeserializer::deserialize("StackSetId", stack)?);
                     }
                     "StackSetName" => {
-                        obj.stack_set_name = Some(try!(StackSetNameDeserializer::deserialize(
+                        obj.stack_set_name = Some(StackSetNameDeserializer::deserialize(
                             "StackSetName",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Status" => {
-                        obj.status = Some(try!(StackSetStatusDeserializer::deserialize(
-                            "Status", stack
-                        )));
+                        obj.status =
+                            Some(StackSetStatusDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7722,7 +7602,7 @@ impl StackSetSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7734,9 +7614,9 @@ impl StackStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7760,9 +7640,9 @@ impl StackStatusReasonDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7775,7 +7655,7 @@ impl StackSummariesDeserializer {
         stack: &mut T,
     ) -> Result<Vec<StackSummary>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7789,13 +7669,13 @@ impl StackSummariesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackSummaryDeserializer::deserialize("member", stack)));
+                        obj.push(StackSummaryDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7839,7 +7719,7 @@ impl StackSummaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSummary, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = StackSummary::default();
 
@@ -7856,49 +7736,48 @@ impl StackSummaryDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CreationTime" => {
                         obj.creation_time =
-                            try!(CreationTimeDeserializer::deserialize("CreationTime", stack));
+                            CreationTimeDeserializer::deserialize("CreationTime", stack)?;
                     }
                     "DeletionTime" => {
-                        obj.deletion_time = Some(try!(DeletionTimeDeserializer::deserialize(
+                        obj.deletion_time = Some(DeletionTimeDeserializer::deserialize(
                             "DeletionTime",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "LastUpdatedTime" => {
-                        obj.last_updated_time = Some(try!(
-                            LastUpdatedTimeDeserializer::deserialize("LastUpdatedTime", stack)
-                        ));
+                        obj.last_updated_time = Some(LastUpdatedTimeDeserializer::deserialize(
+                            "LastUpdatedTime",
+                            stack,
+                        )?);
                     }
                     "ParentId" => {
-                        obj.parent_id =
-                            Some(try!(StackIdDeserializer::deserialize("ParentId", stack)));
+                        obj.parent_id = Some(StackIdDeserializer::deserialize("ParentId", stack)?);
                     }
                     "RootId" => {
-                        obj.root_id = Some(try!(StackIdDeserializer::deserialize("RootId", stack)));
+                        obj.root_id = Some(StackIdDeserializer::deserialize("RootId", stack)?);
                     }
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     "StackName" => {
-                        obj.stack_name =
-                            try!(StackNameDeserializer::deserialize("StackName", stack));
+                        obj.stack_name = StackNameDeserializer::deserialize("StackName", stack)?;
                     }
                     "StackStatus" => {
                         obj.stack_status =
-                            try!(StackStatusDeserializer::deserialize("StackStatus", stack));
+                            StackStatusDeserializer::deserialize("StackStatus", stack)?;
                     }
                     "StackStatusReason" => {
-                        obj.stack_status_reason = Some(try!(
-                            StackStatusReasonDeserializer::deserialize("StackStatusReason", stack)
-                        ));
+                        obj.stack_status_reason = Some(StackStatusReasonDeserializer::deserialize(
+                            "StackStatusReason",
+                            stack,
+                        )?);
                     }
                     "TemplateDescription" => {
                         obj.template_description =
-                            Some(try!(TemplateDescriptionDeserializer::deserialize(
+                            Some(TemplateDescriptionDeserializer::deserialize(
                                 "TemplateDescription",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -7909,7 +7788,7 @@ impl StackSummaryDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -7922,7 +7801,7 @@ impl StacksDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Stack>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7936,13 +7815,13 @@ impl StacksDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(StackDeserializer::deserialize("member", stack)));
+                        obj.push(StackDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -7962,7 +7841,7 @@ impl StageListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -7976,15 +7855,13 @@ impl StageListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(TemplateStageDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(TemplateStageDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8031,11 +7908,11 @@ impl StopStackSetOperationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopStackSetOperationOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let obj = StopStackSetOperationOutput::default();
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8056,7 +7933,7 @@ impl TagDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tag, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Tag::default();
 
@@ -8072,10 +7949,10 @@ impl TagDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Key" => {
-                        obj.key = try!(TagKeyDeserializer::deserialize("Key", stack));
+                        obj.key = TagKeyDeserializer::deserialize("Key", stack)?;
                     }
                     "Value" => {
-                        obj.value = try!(TagValueDeserializer::deserialize("Value", stack));
+                        obj.value = TagValueDeserializer::deserialize("Value", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -8086,7 +7963,7 @@ impl TagDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8113,9 +7990,9 @@ impl TagKeyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8127,9 +8004,9 @@ impl TagValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8142,7 +8019,7 @@ impl TagsDeserializer {
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -8156,13 +8033,13 @@ impl TagsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(TagDeserializer::deserialize("member", stack)));
+                        obj.push(TagDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8193,9 +8070,9 @@ impl TemplateBodyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8207,9 +8084,9 @@ impl TemplateDescriptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8234,7 +8111,7 @@ impl TemplateParameterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TemplateParameter, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = TemplateParameter::default();
 
@@ -8250,25 +8127,23 @@ impl TemplateParameterDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DefaultValue" => {
-                        obj.default_value = Some(try!(ParameterValueDeserializer::deserialize(
+                        obj.default_value = Some(ParameterValueDeserializer::deserialize(
                             "DefaultValue",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "NoEcho" => {
-                        obj.no_echo = Some(try!(NoEchoDeserializer::deserialize("NoEcho", stack)));
+                        obj.no_echo = Some(NoEchoDeserializer::deserialize("NoEcho", stack)?);
                     }
                     "ParameterKey" => {
-                        obj.parameter_key = Some(try!(ParameterKeyDeserializer::deserialize(
+                        obj.parameter_key = Some(ParameterKeyDeserializer::deserialize(
                             "ParameterKey",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8279,7 +8154,7 @@ impl TemplateParameterDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8292,7 +8167,7 @@ impl TemplateParametersDeserializer {
         stack: &mut T,
     ) -> Result<Vec<TemplateParameter>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -8306,15 +8181,13 @@ impl TemplateParametersDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(TemplateParameterDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(TemplateParameterDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8333,9 +8206,9 @@ impl TemplateStageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8347,9 +8220,9 @@ impl TimeoutMinutesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8361,9 +8234,9 @@ impl TimestampDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8375,9 +8248,9 @@ impl TransformNameDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8390,7 +8263,7 @@ impl TransformsListDeserializer {
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {
             let next_event = match stack.peek() {
@@ -8404,15 +8277,13 @@ impl TransformsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(TransformNameDeserializer::deserialize(
-                            "member", stack
-                        )));
+                        obj.push(TransformNameDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
                 }
                 DeserializerNext::Close => {
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }
                 DeserializerNext::Skip => {
@@ -8431,9 +8302,9 @@ impl TypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8630,7 +8501,7 @@ impl UpdateStackInstancesOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStackInstancesOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = UpdateStackInstancesOutput::default();
 
@@ -8646,10 +8517,10 @@ impl UpdateStackInstancesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                        obj.operation_id = Some(ClientRequestTokenDeserializer::deserialize(
                             "OperationId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8660,7 +8531,7 @@ impl UpdateStackInstancesOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8679,7 +8550,7 @@ impl UpdateStackOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStackOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = UpdateStackOutput::default();
 
@@ -8695,8 +8566,7 @@ impl UpdateStackOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8707,7 +8577,7 @@ impl UpdateStackOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8838,7 +8708,7 @@ impl UpdateStackSetOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStackSetOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = UpdateStackSetOutput::default();
 
@@ -8854,10 +8724,10 @@ impl UpdateStackSetOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                        obj.operation_id = Some(ClientRequestTokenDeserializer::deserialize(
                             "OperationId",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8868,7 +8738,7 @@ impl UpdateStackSetOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8911,7 +8781,7 @@ impl UpdateTerminationProtectionOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTerminationProtectionOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = UpdateTerminationProtectionOutput::default();
 
@@ -8927,8 +8797,7 @@ impl UpdateTerminationProtectionOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "StackId" => {
-                        obj.stack_id =
-                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
+                        obj.stack_id = Some(StackIdDeserializer::deserialize("StackId", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -8939,7 +8808,7 @@ impl UpdateTerminationProtectionOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8951,9 +8820,9 @@ impl UrlDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -8965,9 +8834,9 @@ impl UsePreviousValueDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bool, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9021,7 +8890,7 @@ impl ValidateTemplateOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidateTemplateOutput, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ValidateTemplateOutput::default();
 
@@ -9039,59 +8908,57 @@ impl ValidateTemplateOutputDeserializer {
                     "Capabilities" => {
                         obj.capabilities = match obj.capabilities {
                             Some(ref mut existing) => {
-                                existing.extend(try!(CapabilitiesDeserializer::deserialize(
+                                existing.extend(CapabilitiesDeserializer::deserialize(
                                     "Capabilities",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(CapabilitiesDeserializer::deserialize(
+                            None => Some(CapabilitiesDeserializer::deserialize(
                                 "Capabilities",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "CapabilitiesReason" => {
                         obj.capabilities_reason =
-                            Some(try!(CapabilitiesReasonDeserializer::deserialize(
+                            Some(CapabilitiesReasonDeserializer::deserialize(
                                 "CapabilitiesReason",
-                                stack
-                            )));
+                                stack,
+                            )?);
                     }
                     "DeclaredTransforms" => {
                         obj.declared_transforms = match obj.declared_transforms {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TransformsListDeserializer::deserialize(
+                                existing.extend(TransformsListDeserializer::deserialize(
                                     "DeclaredTransforms",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TransformsListDeserializer::deserialize(
+                            None => Some(TransformsListDeserializer::deserialize(
                                 "DeclaredTransforms",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "Description" => {
-                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                            "Description",
-                            stack
-                        )));
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
                     }
                     "Parameters" => {
                         obj.parameters = match obj.parameters {
                             Some(ref mut existing) => {
-                                existing.extend(try!(TemplateParametersDeserializer::deserialize(
+                                existing.extend(TemplateParametersDeserializer::deserialize(
                                     "Parameters",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(TemplateParametersDeserializer::deserialize(
+                            None => Some(TemplateParametersDeserializer::deserialize(
                                 "Parameters",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -9103,7 +8970,7 @@ impl ValidateTemplateOutputDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -9115,9 +8982,9 @@ impl VersionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -13093,14 +12960,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ContinueUpdateRollbackOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ContinueUpdateRollbackOutputDeserializer::deserialize(
                         "ContinueUpdateRollbackResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13146,14 +13013,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateChangeSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateChangeSetOutputDeserializer::deserialize(
                         "CreateChangeSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13199,14 +13066,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateStackOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateStackOutputDeserializer::deserialize(
                         "CreateStackResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13251,14 +13118,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateStackInstancesOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateStackInstancesOutputDeserializer::deserialize(
                         "CreateStackInstancesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13304,14 +13171,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(CreateStackSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CreateStackSetOutputDeserializer::deserialize(
                         "CreateStackSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13357,14 +13224,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteChangeSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteChangeSetOutputDeserializer::deserialize(
                         "DeleteChangeSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13436,14 +13303,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteStackInstancesOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteStackInstancesOutputDeserializer::deserialize(
                         "DeleteStackInstancesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13489,14 +13356,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DeleteStackSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DeleteStackSetOutputDeserializer::deserialize(
                         "DeleteStackSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13541,14 +13408,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeAccountLimitsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeAccountLimitsOutputDeserializer::deserialize(
                         "DescribeAccountLimitsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13594,14 +13461,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeChangeSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeChangeSetOutputDeserializer::deserialize(
                         "DescribeChangeSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13646,14 +13513,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackEventsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStackEventsOutputDeserializer::deserialize(
                         "DescribeStackEventsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13698,14 +13565,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackInstanceOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStackInstanceOutputDeserializer::deserialize(
                         "DescribeStackInstanceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13750,14 +13617,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackResourceOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStackResourceOutputDeserializer::deserialize(
                         "DescribeStackResourceResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13800,14 +13667,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackResourcesOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStackResourcesOutputDeserializer::deserialize(
                         "DescribeStackResourcesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13853,14 +13720,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStackSetOutputDeserializer::deserialize(
                         "DescribeStackSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13903,14 +13770,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStackSetOperationOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStackSetOperationOutputDeserializer::deserialize(
                         "DescribeStackSetOperationResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -13956,14 +13823,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DescribeStacksOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeStacksOutputDeserializer::deserialize(
                         "DescribeStacksResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14008,14 +13875,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(EstimateTemplateCostOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = EstimateTemplateCostOutputDeserializer::deserialize(
                         "EstimateTemplateCostResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14061,14 +13928,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ExecuteChangeSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ExecuteChangeSetOutputDeserializer::deserialize(
                         "ExecuteChangeSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14114,14 +13981,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetStackPolicyOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetStackPolicyOutputDeserializer::deserialize(
                         "GetStackPolicyResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14167,14 +14034,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetTemplateOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetTemplateOutputDeserializer::deserialize(
                         "GetTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14220,14 +14087,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetTemplateSummaryOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetTemplateSummaryOutputDeserializer::deserialize(
                         "GetTemplateSummaryResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14273,14 +14140,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListChangeSetsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListChangeSetsOutputDeserializer::deserialize(
                         "ListChangeSetsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14326,14 +14193,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListExportsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListExportsOutputDeserializer::deserialize(
                         "ListExportsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14379,14 +14246,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListImportsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListImportsOutputDeserializer::deserialize(
                         "ListImportsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14432,14 +14299,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStackInstancesOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListStackInstancesOutputDeserializer::deserialize(
                         "ListStackInstancesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14485,14 +14352,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStackResourcesOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListStackResourcesOutputDeserializer::deserialize(
                         "ListStackResourcesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14535,14 +14402,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStackSetOperationResultsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListStackSetOperationResultsOutputDeserializer::deserialize(
                         "ListStackSetOperationResultsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14585,14 +14452,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStackSetOperationsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListStackSetOperationsOutputDeserializer::deserialize(
                         "ListStackSetOperationsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14638,14 +14505,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStackSetsOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListStackSetsOutputDeserializer::deserialize(
                         "ListStackSetsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14691,14 +14558,12 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListStacksOutputDeserializer::deserialize(
-                        "ListStacksResult",
-                        &mut stack
-                    ));
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
+                        ListStacksOutputDeserializer::deserialize("ListStacksResult", &mut stack)?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14800,14 +14665,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(StopStackSetOperationOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = StopStackSetOperationOutputDeserializer::deserialize(
                         "StopStackSetOperationResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14853,14 +14718,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateStackOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateStackOutputDeserializer::deserialize(
                         "UpdateStackResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14905,14 +14770,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateStackInstancesOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateStackInstancesOutputDeserializer::deserialize(
                         "UpdateStackInstancesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -14958,14 +14823,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateStackSetOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateStackSetOutputDeserializer::deserialize(
                         "UpdateStackSetResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15008,14 +14873,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(UpdateTerminationProtectionOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = UpdateTerminationProtectionOutputDeserializer::deserialize(
                         "UpdateTerminationProtectionResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -15061,14 +14926,14 @@ impl CloudFormation for CloudFormationClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ValidateTemplateOutputDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ValidateTemplateOutputDeserializer::deserialize(
                         "ValidateTemplateResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)

@@ -1,6 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
+- Switch from `try!` to `?` operator
 
 ## [0.36.0] - 2018-12-04
 

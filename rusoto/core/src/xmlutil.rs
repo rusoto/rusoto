@@ -74,9 +74,9 @@ impl From<ParseIntError> for XmlParseError {
 
 /// return a string field with the right name or throw a parse error
 pub fn string_field<T: Peek + Next>(name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-    try!(start_element(name, stack));
-    let value = try!(characters(stack));
-    try!(end_element(name, stack));
+    start_element(name, stack)?;
+    let value = characters(stack)?;
+    end_element(name, stack)?;
     Ok(value)
 }
 

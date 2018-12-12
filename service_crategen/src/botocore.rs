@@ -55,7 +55,7 @@ impl ServiceDefinition {
                     .map(|e| e.path())
                     .filter(|p| p.is_dir())
                     .collect();
-                
+
                 version_dirs.sort();
 
                 version_dirs.last().cloned().map(|version_path| {
@@ -423,7 +423,7 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
     {
         let mut values = BTreeMap::new();
 
-        while let Some((key, value)) = try!(visitor.next_entry()) {
+        while let Some((key, value)) = visitor.next_entry()? {
             let key: String = key;
             values.insert(util::capitalize_first(key.as_str()), value);
         }
