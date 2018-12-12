@@ -12,7 +12,7 @@ You may be looking for:
 ## Requirements
 
 Rust stable or beta are required to use Rusoto. Nightly is tested, but not guaranteed to be supported. Older
-versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project
+versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project 
 [`travis.yml`](https://github.com/rusoto/rusoto/blob/master/.travis.yml).
 
 On Linux, OpenSSL is required.
@@ -42,4 +42,4 @@ See [LICENSE][license] for details.
 [rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"
 [rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"
 [supported-aws-services]: https://www.rusoto.org/supported-aws-services.html "List of AWS services supported by Rusoto"
-
+        

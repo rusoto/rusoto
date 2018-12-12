@@ -1,8 +1,6 @@
 mod credential;
 
 pub use self::credential::{
-    StsSessionCredentialsProvider,
-    StsAssumeRoleSessionCredentialsProvider,
+    NewAwsCredsForStsCreds, StsAssumeRoleSessionCredentialsProvider, StsSessionCredentialsProvider,
     StsWebIdentityFederationSessionCredentialsProvider,
-    NewAwsCredsForStsCreds,
 };
