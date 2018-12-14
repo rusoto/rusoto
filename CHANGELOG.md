@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Remove unneeded muts in Glacier codegen
 - Fix bug in SNS publish message action
 
 ## [0.36.0] - 2018-12-04
