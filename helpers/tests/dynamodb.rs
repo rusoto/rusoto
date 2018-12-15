@@ -126,7 +126,7 @@ fn main() {
 }
 
 fn dynamo_list_tables_tests <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>) -> AwsResult<()> {
-    let response = try!(dynamodb.list_tables());
+    let response = dynamodb.list_tables()?;
     println!("{:#?}", response);
     Ok(())
 }
@@ -143,7 +143,7 @@ fn dynamo_create_table_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbH
                         .with_attributes(attributes!("string" => "S", "number" => "N"))
                         .with_key_schema(key_schema!("string" => "HASH", "number" => "RANGE"));
 
-    let _result = try!(dynamodb.create_table(&input));
+    let _result = dynamodb.create_table(&input)?;
     Ok(())
 }
 
@@ -157,7 +157,7 @@ fn dynamo_put_item_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelpe
     input.item = item;
     input.table_name = table_name.to_string();
 
-    try!(dynamodb.put_item(&input));
+    dynamodb.put_item(&input)?;
 
     Ok(())
 }
@@ -180,7 +180,7 @@ fn dynamo_describe_wait_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDb
                              -> AwsResult<()> {
 
     loop {
-        let result = try!(dynamodb.describe_table(table_name));
+        let result = dynamodb.describe_table(table_name)?;
 
         if let Some(ref status) = result.get_status() {
             if status == "ACTIVE" {
@@ -198,6 +198,6 @@ fn dynamo_describe_wait_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDb
 fn dynamo_delete_table_test <P: ProvideAwsCredentials> (dynamodb: &mut DynamoDbHelper<P>,
                             table_name: &str)
                             -> AwsResult<()> {
-    let _result = try!(dynamodb.delete_table(table_name));
+    let _result = dynamodb.delete_table(table_name)?;
     Ok(())
 }

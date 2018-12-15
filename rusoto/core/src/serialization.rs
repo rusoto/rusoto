@@ -54,7 +54,7 @@ impl<'de> Visitor<'de> for OptionalBlobVisitor {
 
     fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
         where D: Deserializer<'de> {
-        Ok(Some(try!(SerdeBlob::deserialize_blob(deserializer))))
+        Ok(Some(SerdeBlob::deserialize_blob(deserializer)?))
     }
 }
 

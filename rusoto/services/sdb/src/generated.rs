@@ -62,7 +62,7 @@ impl AttributeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Attribute, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Attribute::default();
 
@@ -76,27 +76,27 @@ impl AttributeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AlternateNameEncoding" => {
-                            obj.alternate_name_encoding = Some(try!(
-                                StringDeserializer::deserialize("AlternateNameEncoding", stack)
-                            ));
-                        }
-                        "AlternateValueEncoding" => {
-                            obj.alternate_value_encoding = Some(try!(
-                                StringDeserializer::deserialize("AlternateValueEncoding", stack)
-                            ));
-                        }
-                        "Name" => {
-                            obj.name = try!(StringDeserializer::deserialize("Name", stack));
-                        }
-                        "Value" => {
-                            obj.value = try!(StringDeserializer::deserialize("Value", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AlternateNameEncoding" => {
+                        obj.alternate_name_encoding = Some(StringDeserializer::deserialize(
+                            "AlternateNameEncoding",
+                            stack,
+                        )?);
                     }
-                }
+                    "AlternateValueEncoding" => {
+                        obj.alternate_value_encoding = Some(StringDeserializer::deserialize(
+                            "AlternateValueEncoding",
+                            stack,
+                        )?);
+                    }
+                    "Name" => {
+                        obj.name = StringDeserializer::deserialize("Name", stack)?;
+                    }
+                    "Value" => {
+                        obj.value = StringDeserializer::deserialize("Value", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -104,7 +104,7 @@ impl AttributeDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -152,7 +152,7 @@ impl AttributeListDeserializer {
             };
 
             if consume_next_tag {
-                obj.push(try!(AttributeDeserializer::deserialize(tag_name, stack)));
+                obj.push(AttributeDeserializer::deserialize(tag_name, stack)?);
             } else {
                 break;
             }
@@ -395,7 +395,7 @@ impl DomainMetadataResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainMetadataResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = DomainMetadataResult::default();
 
@@ -409,45 +409,44 @@ impl DomainMetadataResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AttributeNameCount" => {
-                            obj.attribute_name_count = Some(try!(
-                                IntegerDeserializer::deserialize("AttributeNameCount", stack)
-                            ));
-                        }
-                        "AttributeNamesSizeBytes" => {
-                            obj.attribute_names_size_bytes = Some(try!(
-                                LongDeserializer::deserialize("AttributeNamesSizeBytes", stack)
-                            ));
-                        }
-                        "AttributeValueCount" => {
-                            obj.attribute_value_count = Some(try!(
-                                IntegerDeserializer::deserialize("AttributeValueCount", stack)
-                            ));
-                        }
-                        "AttributeValuesSizeBytes" => {
-                            obj.attribute_values_size_bytes = Some(try!(
-                                LongDeserializer::deserialize("AttributeValuesSizeBytes", stack)
-                            ));
-                        }
-                        "ItemCount" => {
-                            obj.item_count =
-                                Some(try!(IntegerDeserializer::deserialize("ItemCount", stack)));
-                        }
-                        "ItemNamesSizeBytes" => {
-                            obj.item_names_size_bytes = Some(try!(LongDeserializer::deserialize(
-                                "ItemNamesSizeBytes",
-                                stack
-                            )));
-                        }
-                        "Timestamp" => {
-                            obj.timestamp =
-                                Some(try!(IntegerDeserializer::deserialize("Timestamp", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AttributeNameCount" => {
+                        obj.attribute_name_count = Some(IntegerDeserializer::deserialize(
+                            "AttributeNameCount",
+                            stack,
+                        )?);
                     }
-                }
+                    "AttributeNamesSizeBytes" => {
+                        obj.attribute_names_size_bytes = Some(LongDeserializer::deserialize(
+                            "AttributeNamesSizeBytes",
+                            stack,
+                        )?);
+                    }
+                    "AttributeValueCount" => {
+                        obj.attribute_value_count = Some(IntegerDeserializer::deserialize(
+                            "AttributeValueCount",
+                            stack,
+                        )?);
+                    }
+                    "AttributeValuesSizeBytes" => {
+                        obj.attribute_values_size_bytes = Some(LongDeserializer::deserialize(
+                            "AttributeValuesSizeBytes",
+                            stack,
+                        )?);
+                    }
+                    "ItemCount" => {
+                        obj.item_count =
+                            Some(IntegerDeserializer::deserialize("ItemCount", stack)?);
+                    }
+                    "ItemNamesSizeBytes" => {
+                        obj.item_names_size_bytes =
+                            Some(LongDeserializer::deserialize("ItemNamesSizeBytes", stack)?);
+                    }
+                    "Timestamp" => {
+                        obj.timestamp = Some(IntegerDeserializer::deserialize("Timestamp", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -455,7 +454,7 @@ impl DomainMetadataResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -476,7 +475,7 @@ impl DomainNameListDeserializer {
             };
 
             if consume_next_tag {
-                obj.push(try!(StringDeserializer::deserialize(tag_name, stack)));
+                obj.push(StringDeserializer::deserialize(tag_name, stack)?);
             } else {
                 break;
             }
@@ -537,7 +536,7 @@ impl GetAttributesResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAttributesResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = GetAttributesResult::default();
 
@@ -555,16 +554,15 @@ impl GetAttributesResultDeserializer {
                     "Attribute" => {
                         obj.attributes = match obj.attributes {
                             Some(ref mut existing) => {
-                                existing.extend(try!(AttributeListDeserializer::deserialize(
+                                existing.extend(AttributeListDeserializer::deserialize(
                                     "Attribute",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(AttributeListDeserializer::deserialize(
-                                "Attribute",
-                                stack
-                            ))),
+                            None => {
+                                Some(AttributeListDeserializer::deserialize("Attribute", stack)?)
+                            }
                         };
                     }
                     _ => skip_tree(stack),
@@ -576,7 +574,7 @@ impl GetAttributesResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -588,9 +586,9 @@ impl IntegerDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -613,7 +611,7 @@ impl ItemDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Item, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = Item::default();
 
@@ -629,20 +627,17 @@ impl ItemDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AlternateNameEncoding" => {
-                        obj.alternate_name_encoding = Some(try!(StringDeserializer::deserialize(
+                        obj.alternate_name_encoding = Some(StringDeserializer::deserialize(
                             "AlternateNameEncoding",
-                            stack
-                        )));
+                            stack,
+                        )?);
                     }
                     "Attribute" => {
                         obj.attributes
-                            .extend(try!(AttributeListDeserializer::deserialize(
-                                "Attribute",
-                                stack
-                            )));
+                            .extend(AttributeListDeserializer::deserialize("Attribute", stack)?);
                     }
                     "Name" => {
-                        obj.name = try!(StringDeserializer::deserialize("Name", stack));
+                        obj.name = StringDeserializer::deserialize("Name", stack)?;
                     }
                     _ => skip_tree(stack),
                 },
@@ -653,7 +648,7 @@ impl ItemDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -674,7 +669,7 @@ impl ItemListDeserializer {
             };
 
             if consume_next_tag {
-                obj.push(try!(ItemDeserializer::deserialize(tag_name, stack)));
+                obj.push(ItemDeserializer::deserialize(tag_name, stack)?);
             } else {
                 break;
             }
@@ -727,7 +722,7 @@ impl ListDomainsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDomainsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = ListDomainsResult::default();
 
@@ -745,21 +740,20 @@ impl ListDomainsResultDeserializer {
                     "DomainName" => {
                         obj.domain_names = match obj.domain_names {
                             Some(ref mut existing) => {
-                                existing.extend(try!(DomainNameListDeserializer::deserialize(
+                                existing.extend(DomainNameListDeserializer::deserialize(
                                     "DomainName",
-                                    stack
-                                )));
+                                    stack,
+                                )?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(DomainNameListDeserializer::deserialize(
+                            None => Some(DomainNameListDeserializer::deserialize(
                                 "DomainName",
-                                stack
-                            ))),
+                                stack,
+                            )?),
                         };
                     }
                     "NextToken" => {
-                        obj.next_token =
-                            Some(try!(StringDeserializer::deserialize("NextToken", stack)));
+                        obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -770,7 +764,7 @@ impl ListDomainsResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -782,9 +776,9 @@ impl LongDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<i64, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -957,7 +951,7 @@ impl SelectResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SelectResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         let mut obj = SelectResult::default();
 
@@ -975,16 +969,14 @@ impl SelectResultDeserializer {
                     "Item" => {
                         obj.items = match obj.items {
                             Some(ref mut existing) => {
-                                existing
-                                    .extend(try!(ItemListDeserializer::deserialize("Item", stack)));
+                                existing.extend(ItemListDeserializer::deserialize("Item", stack)?);
                                 Some(existing.to_vec())
                             }
-                            None => Some(try!(ItemListDeserializer::deserialize("Item", stack))),
+                            None => Some(ItemListDeserializer::deserialize("Item", stack)?),
                         };
                     }
                     "NextToken" => {
-                        obj.next_token =
-                            Some(try!(StringDeserializer::deserialize("NextToken", stack)));
+                        obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -995,7 +987,7 @@ impl SelectResultDeserializer {
             }
         }
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -1007,9 +999,9 @@ impl StringDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
-        try!(start_element(tag_name, stack));
-        let obj = try!(characters(stack));
-        try!(end_element(tag_name, stack));
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -2383,14 +2375,14 @@ impl SimpleDb for SimpleDbClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(DomainMetadataResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DomainMetadataResultDeserializer::deserialize(
                         "DomainMetadataResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -2436,14 +2428,14 @@ impl SimpleDb for SimpleDbClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(GetAttributesResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetAttributesResultDeserializer::deserialize(
                         "GetAttributesResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -2489,14 +2481,14 @@ impl SimpleDb for SimpleDbClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(ListDomainsResultDeserializer::deserialize(
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListDomainsResultDeserializer::deserialize(
                         "ListDomainsResult",
-                        &mut stack
-                    ));
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)
@@ -2566,14 +2558,11 @@ impl SimpleDb for SimpleDbClient {
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
-                    let actual_tag_name = try!(peek_at_name(&mut stack));
-                    try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(SelectResultDeserializer::deserialize(
-                        "SelectResult",
-                        &mut stack
-                    ));
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SelectResultDeserializer::deserialize("SelectResult", &mut stack)?;
                     skip_tree(&mut stack);
-                    try!(end_element(&actual_tag_name, &mut stack));
+                    end_element(&actual_tag_name, &mut stack)?;
                 }
 
                 Ok(result)

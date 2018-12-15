@@ -1,6 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
+- Switch from `try!` to `?` operator
 
 - Add Eu-North-1 Region
 - Fix bug in SNS publish message action

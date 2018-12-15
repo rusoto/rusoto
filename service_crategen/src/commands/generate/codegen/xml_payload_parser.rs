@@ -131,15 +131,15 @@ fn xml_body_parser(output_shape: &str,
 
     let deserialize = match *result_wrapper {
         Some(ref tag_name) => {
-            format!("try!(start_element(&actual_tag_name, &mut stack));
-                     result = try!({output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack));
+            format!("start_element(&actual_tag_name, &mut stack)?;
+                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack)?;
                      skip_tree(&mut stack);
-                     try!(end_element(&actual_tag_name, &mut stack));",
+                     end_element(&actual_tag_name, &mut stack)?;",
                     output_shape = output_shape,
                     tag_name = tag_name)
         }
         None => {
-            format!("result = try!({output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack));",
+            format!("result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
                     output_shape = output_shape)
         }
     };
@@ -157,7 +157,7 @@ fn xml_body_parser(output_shape: &str,
                 );
                 let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 let _start_document = stack.next();
-                let actual_tag_name = try!(peek_at_name(&mut stack));
+                let actual_tag_name = peek_at_name(&mut stack)?;
                 {deserialize}
             }}
 
@@ -221,7 +221,7 @@ fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
 
     format!("
         let mut obj = vec![];
-        try!(start_element(tag_name, stack));
+        start_element(tag_name, stack)?;
 
         loop {{
             let next_event = match stack.peek() {{
@@ -233,13 +233,13 @@ fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
             match next_event {{
                 DeserializerNext::Element(name) => {{
                     if name == \"{location_name}\" {{
-                        obj.push(try!({member_name}Deserializer::deserialize(\"{location_name}\", stack)));
+                        obj.push({member_name}Deserializer::deserialize(\"{location_name}\", stack)?);
                     }} else {{
                         skip_tree(stack);
                     }}
                 }},
                 DeserializerNext::Close => {{
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     break;
                 }}
                 DeserializerNext::Skip => {{ stack.next(); }},
@@ -264,7 +264,7 @@ fn generate_flat_list_deserializer(shape: &Shape, service: &Service) -> String {
             }};
 
             if consume_next_tag {{
-                obj.push(try!({member_name}Deserializer::deserialize(tag_name, stack)));
+                obj.push({member_name}Deserializer::deserialize(tag_name, stack)?);
             }} else {{
                 break
             }}
@@ -289,12 +289,12 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     let entries_parser = format!("
         let mut obj = ::std::collections::HashMap::new();
 
-        while try!(peek_at_name(stack)) == \"{entry_location}\" {{
-            try!(start_element(\"{entry_location}\", stack));
-            let key = try!({key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack));
-            let value = try!({value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack));
+        while peek_at_name(stack)? == \"{entry_location}\" {{
+            start_element(\"{entry_location}\", stack)?;
+            let key = {key_type_name}Deserializer::deserialize(\"{key_tag_name}\", stack)?;
+            let value = {value_type_name}Deserializer::deserialize(\"{value_tag_name}\", stack)?;
             obj.insert(key, value);
-            try!(end_element(\"{entry_location}\", stack));
+            end_element(\"{entry_location}\", stack)?;
         }}
         ",
                                  key_tag_name = key.tag_name(),
@@ -312,9 +312,9 @@ fn generate_map_deserializer(shape: &Shape) -> String {
                     entries_parser = entries_parser)
         }
         _ => {
-            format!("try!(start_element(tag_name, stack));
+            format!("start_element(tag_name, stack)?;
                     {entries_parser}
-                    try!(end_element(tag_name, stack));
+                    end_element(tag_name, stack)?;
                     Ok(obj)
                     ",
                     entries_parser = entries_parser)
@@ -324,19 +324,19 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 
 fn generate_primitive_deserializer(shape: &Shape) -> String {
     let statement = match shape.shape_type {
-        ShapeType::String | ShapeType::Timestamp => "try!(characters(stack))",
-        ShapeType::Integer | ShapeType::Long => "i64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Double => "f64::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Float => "f32::from_str(try!(characters(stack)).as_ref()).unwrap()",
-        ShapeType::Blob => "try!(characters(stack)).into_bytes()",
-        ShapeType::Boolean => "bool::from_str(try!(characters(stack)).as_ref()).unwrap()",
+        ShapeType::String | ShapeType::Timestamp => "characters(stack)?",
+        ShapeType::Integer | ShapeType::Long => "i64::from_str(characters(stack)?.as_ref()).unwrap()",
+        ShapeType::Double => "f64::from_str(characters(stack)?.as_ref()).unwrap()",
+        ShapeType::Float => "f32::from_str(characters(stack)?.as_ref()).unwrap()",
+        ShapeType::Blob => "characters(stack)?.into_bytes()",
+        ShapeType::Boolean => "bool::from_str(characters(stack)?.as_ref()).unwrap()",
         _ => panic!("Unknown primitive shape type"),
     };
 
     format!(
-        "try!(start_element(tag_name, stack));
+        "start_element(tag_name, stack)?;
         let obj = {statement};
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
         ",
@@ -356,7 +356,7 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
             .get(payload_member_name)
             .expect("failed to get payload member");
 
-        let mut deserialize = format!("try!({payload_shape}Deserializer::deserialize(\"{payload_member_name}\", stack))",
+        let mut deserialize = format!("{payload_shape}Deserializer::deserialize(\"{payload_member_name}\", stack)?",
                                       payload_member_name = payload_member_name,
                                       payload_shape = payload_member.shape);
 
@@ -389,11 +389,11 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
 
     if !needs_xml_deserializer || shape.members.as_ref().unwrap().is_empty() {
         return format!(
-            "try!(start_element(tag_name, stack));
+            "start_element(tag_name, stack)?;
 
             let obj = {name}::default();
 
-            try!(end_element(tag_name, stack));
+            end_element(tag_name, stack)?;
 
             Ok(obj)
             ",
@@ -402,7 +402,7 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
     }
 
     format!(
-        "try!(start_element(tag_name, stack));
+        "start_element(tag_name, stack)?;
 
         let mut obj = {name}::default();
 
@@ -425,7 +425,7 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
             }}
         }}
 
-        try!(end_element(tag_name, stack));
+        end_element(tag_name, stack)?;
 
         Ok(obj)
         ",
@@ -516,7 +516,7 @@ fn generate_struct_field_parse_expression(shape: &Shape,
                                           ignore_some: bool)
                                           -> String {
     let expression = format!(
-        "try!({name}Deserializer::deserialize(\"{location_name}\", stack))",
+        "{name}Deserializer::deserialize(\"{location_name}\", stack)?",
         name = mutate_type_name(service, &member.shape),
         location_name = location_name,
     );
