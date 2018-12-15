@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add Eu-North-1 Region
 - Fix bug in SNS publish message action
 
 ## [0.36.0] - 2018-12-04
