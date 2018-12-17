@@ -321,7 +321,7 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
                                         mutable_result,
                                         payload_shape_required)
                 }
-                _ => json_body_parser(shape_name, mutable_result),
+                _ => json_body_parser(shape_name, false),
             }
         }
     }
