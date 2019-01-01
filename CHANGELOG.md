@@ -3,6 +3,7 @@
 ## [Unreleased]
 - Switch from `try!` to `?` operator
 
+- Remove unneeded muts in Glacier codegen
 - Add Eu-North-1 Region
 - Fix bug in SNS publish message action
 
