@@ -49,7 +49,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
-                    request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
+                    {default_headers}
                     {set_headers}
                     {modify_endpoint_prefix}
                     {load_payload}
@@ -92,6 +92,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 ).unwrap_or_else(|| "".to_string()),
                 load_payload = generate_payload(service, input_shape).unwrap_or_else(|| "".to_string()),
                 load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or_else(|| "".to_string()),
+                default_headers = generate_default_headers(service).unwrap_or_else(|| "".to_string()),
                 set_headers = generate_headers(service).unwrap_or_else(|| "".to_string()),
             )?
         }
@@ -142,6 +143,16 @@ fn generate_headers(service: &Service) -> Option<String> {
         return Some("request.add_header(\"x-amz-glacier-version\", \"2012-06-01\");".to_string());
     }
     None
+}
+
+// SageMaker Runtime allows to overwrite content-type
+fn generate_default_headers(service: &Service) -> Option<String> {
+    if service.full_name() == "Amazon SageMaker Runtime" {
+        return Some("if input.content_type.is_none() {
+                         request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
+                     }".to_string());
+    }
+    Some("request.set_content_type(\"application/x-amz-json-1.1\".to_owned());".to_string())
 }
 
 // IoT has an endpoint_prefix and a signing_name that differ
