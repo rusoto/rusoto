@@ -6,24 +6,24 @@
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
 
-use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
+use std::collections::BTreeMap;
 use std::fmt;
 use std::str;
 use std::time::Duration;
 
-use hmac::{Hmac, Mac};
-use sha2::{Digest, Sha256};
-use time::Tm;
-use time::now_utc;
-use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
-use hex;
-use md5;
 use base64;
+use hex;
+use hmac::{Hmac, Mac};
+use md5;
+use sha2::{Digest, Sha256};
+use time::now_utc;
+use time::Tm;
+use url::percent_encoding::{percent_decode, utf8_percent_encode, EncodeSet};
 
+use credential::AwsCredentials;
 use param::{Params, ServiceParams};
 use region::Region;
-use credential::AwsCredentials;
 use stream::ByteStream;
 
 /// Possible payloads included in a `SignedRequest`.
@@ -31,16 +31,20 @@ pub enum SignedRequestPayload {
     /// Transfer payload in a single chunk
     Buffer(Vec<u8>),
     /// Transfer payload in multiple chunks
-    Stream(ByteStream)
+    Stream(ByteStream),
 }
 
 impl fmt::Debug for SignedRequestPayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            &SignedRequestPayload::Buffer(ref buf) =>
-                write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len()),
-            &SignedRequestPayload::Stream(ref stream) =>
-                write!(f, "SignedRequestPayload::Stream(size_hint = {:?})", stream.size_hint()),
+            &SignedRequestPayload::Buffer(ref buf) => {
+                write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len())
+            }
+            &SignedRequestPayload::Stream(ref stream) => write!(
+                f,
+                "SignedRequestPayload::Stream(size_hint = {:?})",
+                stream.size_hint()
+            ),
         }
     }
 }
@@ -170,18 +174,16 @@ impl SignedRequest {
     pub fn scheme(&self) -> String {
         match self.scheme {
             Some(ref p) => p.to_string(),
-            None => {
-                match self.region {
-                    Region::Custom { ref endpoint, .. } => {
-                        if endpoint.starts_with("http://") {
-                            "http".to_owned()
-                        } else {
-                            "https".to_owned()
-                        }
-                    },
-                    _ => "https".to_owned()
+            None => match self.region {
+                Region::Custom { ref endpoint, .. } => {
+                    if endpoint.starts_with("http://") {
+                        "http".to_owned()
+                    } else {
+                        "https".to_owned()
+                    }
                 }
-            }
+                _ => "https".to_owned(),
+            },
         }
     }
 
@@ -220,7 +222,9 @@ impl SignedRequest {
 
     /// Adds parameter to the HTTP Request
     pub fn add_param<S>(&mut self, key: S, value: S)
-        where S: Into<String> {
+    where
+        S: Into<String>,
+    {
         self.params.insert(key.into(), Some(value.into()));
     }
 
@@ -229,9 +233,12 @@ impl SignedRequest {
         self.params = params;
     }
 
-
     /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
-    pub fn generate_presigned_url(&mut self, creds: &AwsCredentials, expires_in: &Duration) -> String {
+    pub fn generate_presigned_url(
+        &mut self,
+        creds: &AwsCredentials,
+        expires_in: &Duration,
+    ) -> String {
         debug!("Presigning request URL");
 
         self.sign(creds);
@@ -253,14 +260,24 @@ impl SignedRequest {
 
         if let Some(ref token) = *creds.token() {
             self.remove_header("x-amz-security-token");
-            self.params.put("x-amz-security-token", encode_uri_strict(token));
+            self.params
+                .put("x-amz-security-token", encode_uri_strict(token));
         }
 
         self.remove_header("X-Amz-Algorithm");
         self.params.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256");
 
         self.remove_header("X-Amz-Credential");
-        self.params.put("X-Amz-Credential", format!("{}/{}/{}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region.name(), self.service));
+        self.params.put(
+            "X-Amz-Credential",
+            format!(
+                "{}/{}/{}/{}/aws4_request",
+                &creds.aws_access_key_id(),
+                &current_date,
+                self.region.name(),
+                self.service
+            ),
+        );
 
         self.remove_header("X-Amz-Expires");
         let expiration_time = format!("{}", expires_in.as_secs());
@@ -281,13 +298,15 @@ impl SignedRequest {
         debug!("signed_headers: {:?}", signed_headers);
         debug!("canonical_query_string: {:?}", self.canonical_query_string);
 
-        let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                                        &self.method,
-                                        self.canonical_uri,
-                                        self.canonical_query_string,
-                                        canonical_headers,
-                                        &signed_headers,
-                                        "UNSIGNED-PAYLOAD");
+        let canonical_request = format!(
+            "{}\n{}\n{}\n{}\n{}\n{}",
+            &self.method,
+            self.canonical_uri,
+            self.canonical_query_string,
+            canonical_headers,
+            &signed_headers,
+            "UNSIGNED-PAYLOAD"
+        );
 
         debug!("canonical_request: {:?}", canonical_request);
 
@@ -296,10 +315,12 @@ impl SignedRequest {
 
         debug!("hashed_canonical_request: {:?}", hashed_canonical_request);
 
-        let scope = format!("{}/{}/{}/aws4_request",
-                            current_date,
-                            self.region.name(),
-                            &self.service);
+        let scope = format!(
+            "{}/{}/{}/aws4_request",
+            current_date,
+            self.region.name(),
+            &self.service
+        );
 
         debug!("scope: {}", scope);
 
@@ -307,14 +328,22 @@ impl SignedRequest {
 
         debug!("string_to_sign: {}", string_to_sign);
 
-        let signature = sign_string(&string_to_sign,
-                                    creds.aws_secret_access_key(),
-                                    current_time,
-                                    &self.region.name(),
-                                    &self.service);
+        let signature = sign_string(
+            &string_to_sign,
+            creds.aws_secret_access_key(),
+            current_time,
+            &self.region.name(),
+            &self.service,
+        );
         self.params.put("X-Amz-Signature", signature);
 
-        format!("{}://{}{}?{}", self.scheme(), hostname, self.canonical_uri, build_canonical_query_string(&self.params))
+        format!(
+            "{}://{}{}?{}",
+            self.scheme(),
+            hostname,
+            self.canonical_uri,
+            build_canonical_query_string(&self.params)
+        )
     }
 
     /// Signs the request using Amazon Signature version 4 to verify identity.
@@ -342,12 +371,15 @@ impl SignedRequest {
             self.add_header("X-Amz-Security-Token", token);
         }
 
-        self.canonical_query_string = build_canonical_query_string_with_plus(&self.params, should_treat_plus_literally);
+        self.canonical_query_string =
+            build_canonical_query_string_with_plus(&self.params, should_treat_plus_literally);
 
         let date = now_utc();
         self.remove_header("x-amz-date");
-        self.add_header("x-amz-date",
-                        &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string());
+        self.add_header(
+            "x-amz-date",
+            &date.strftime("%Y%m%dT%H%M%SZ").unwrap().to_string(),
+        );
 
         // if there's no content-type header set, set it to the default value
         if let Entry::Vacant(entry) = self.headers.entry("content-type".to_owned()) {
@@ -363,7 +395,7 @@ impl SignedRequest {
         // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
         let canonical_uri = if &self.service != "s3" {
             utf8_percent_encode(&self.canonical_uri, StrictPathEncodeSet).collect::<String>()
-        }else{
+        } else {
             self.canonical_uri.clone()
         };
         let canonical_headers = canonical_headers(&self.headers);
@@ -372,34 +404,40 @@ impl SignedRequest {
 
         let (digest, len) = match self.payload {
             None => {
-                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                                            &self.method,
-                                            canonical_uri,
-                                            self.canonical_query_string,
-                                            canonical_headers,
-                                            signed_headers,
-                                            &to_hexdigest(""));
+                canonical_request = format!(
+                    "{}\n{}\n{}\n{}\n{}\n{}",
+                    &self.method,
+                    canonical_uri,
+                    self.canonical_query_string,
+                    canonical_headers,
+                    signed_headers,
+                    &to_hexdigest("")
+                );
                 (Some(to_hexdigest("")), Some(0))
             }
             Some(SignedRequestPayload::Buffer(ref payload)) => {
                 let (digest, len) = digest_payload(&payload);
-                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                                            &self.method,
-                                            canonical_uri,
-                                            self.canonical_query_string,
-                                            canonical_headers,
-                                            signed_headers,
-                                            &digest);
+                canonical_request = format!(
+                    "{}\n{}\n{}\n{}\n{}\n{}",
+                    &self.method,
+                    canonical_uri,
+                    self.canonical_query_string,
+                    canonical_headers,
+                    signed_headers,
+                    &digest
+                );
                 (Some(digest), Some(len))
             }
             Some(SignedRequestPayload::Stream(ref stream)) => {
-                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                                            &self.method,
-                                            canonical_uri,
-                                            self.canonical_query_string,
-                                            canonical_headers,
-                                            signed_headers,
-                                            "UNSIGNED-PAYLOAD");
+                canonical_request = format!(
+                    "{}\n{}\n{}\n{}\n{}\n{}",
+                    &self.method,
+                    canonical_uri,
+                    self.canonical_query_string,
+                    canonical_headers,
+                    signed_headers,
+                    "UNSIGNED-PAYLOAD"
+                );
                 (Some("UNSIGNED-PAYLOAD".to_owned()), stream.size_hint())
             }
         };
@@ -416,25 +454,31 @@ impl SignedRequest {
 
         // use the hashed canonical request to build the string to sign
         let hashed_canonical_request = to_hexdigest(&canonical_request);
-        let scope = format!("{}/{}/{}/aws4_request",
-                            date.strftime("%Y%m%d").unwrap(),
-                            self.region.name(),
-                            &self.service);
+        let scope = format!(
+            "{}/{}/{}/aws4_request",
+            date.strftime("%Y%m%d").unwrap(),
+            self.region.name(),
+            &self.service
+        );
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
 
         // sign the string
-        let signature = sign_string(&string_to_sign,
-                                    creds.aws_secret_access_key(),
-                                    date,
-                                    &self.region.name(),
-                                    &self.service);
+        let signature = sign_string(
+            &string_to_sign,
+            creds.aws_secret_access_key(),
+            date,
+            &self.region.name(),
+            &self.service,
+        );
 
         // build the actual auth header
-        let auth_header = format!("AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
-                                  &creds.aws_access_key_id(),
-                                  scope,
-                                  signed_headers,
-                                  signature);
+        let auth_header = format!(
+            "AWS4-HMAC-SHA256 Credential={}/{}, SignedHeaders={}, Signature={}",
+            &creds.aws_access_key_id(),
+            scope,
+            signed_headers,
+            signature
+        );
         self.remove_header("authorization");
         self.add_header("authorization", &auth_header);
     }
@@ -455,38 +499,51 @@ fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
 }
 
 /// Takes a message and signs it using AWS secret, time, region keys and service keys.
-fn sign_string(string_to_sign: &str, secret: &str, date: Tm, region: &str, service: &str) -> String {
+fn sign_string(
+    string_to_sign: &str,
+    secret: &str,
+    date: Tm,
+    region: &str,
+    service: &str,
+) -> String {
     let date_str = date.strftime("%Y%m%d").unwrap().to_string();
     let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
-        .result().code();
-    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes())
-        .result().code();
+        .result()
+        .code();
+    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes()).result().code();
     let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes())
-        .result().code();
-    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request")
-        .result().code();
-    hex::encode(hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
-        .result().code().as_ref())
+        .result()
+        .code();
+    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request").result().code();
+    hex::encode(
+        hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
+            .result()
+            .code()
+            .as_ref(),
+    )
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
 pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> String {
-    format!("AWS4-HMAC-SHA256\n{}\n{}\n{}",
-            date.strftime("%Y%m%dT%H%M%SZ").unwrap(),
-            scope,
-            hashed_canonical_request)
+    format!(
+        "AWS4-HMAC-SHA256\n{}\n{}\n{}",
+        date.strftime("%Y%m%dT%H%M%SZ").unwrap(),
+        scope,
+        hashed_canonical_request
+    )
 }
 
 fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut signed = String::new();
-    headers.iter()
+    headers
+        .iter()
         .filter(|&(ref key, _)| !skipped_headers(&key))
         .for_each(|(key, _)| {
             if !signed.is_empty() {
                 signed.push(';');
             }
             signed.push_str(key);
-    });
+        });
     signed
 }
 
@@ -500,10 +557,7 @@ fn canonical_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
         if skipped_headers(key) {
             continue;
         }
-        canonical.push_str(format!("{}:{}\n",
-                                   key,
-                                   canonical_values(value))
-            .as_ref());
+        canonical.push_str(format!("{}:{}\n", key, canonical_values(value)).as_ref());
     }
     canonical
 }
@@ -549,7 +603,10 @@ fn build_canonical_query_string(params: &Params) -> String {
 /// Canonicalizes query while iterating through the given parameters.
 ///
 /// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
-fn build_canonical_query_string_with_plus(params: &Params, should_treat_plus_literally: bool) -> String {
+fn build_canonical_query_string_with_plus(
+    params: &Params,
+    should_treat_plus_literally: bool,
+) -> String {
     if params.is_empty() {
         return String::new();
     }
@@ -658,70 +715,53 @@ fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
 fn build_hostname(service: &str, region: &Region) -> String {
     //iam & cloudfront have only 1 endpoint, other services have region-based endpoints
     match service {
-        "iam" => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint)
-                }
-                Region::CnNorth1 | Region::CnNorthwest1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
-                _ => format!("{}.amazonaws.com", service),
+        "iam" => match *region {
+            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                format!("{}.{}.amazonaws.com.cn", service, region.name())
             }
-        }
-        "cloudfront" => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint).to_owned()
-                }
-                _ => format!("{}.amazonaws.com", service),
+            _ => format!("{}.amazonaws.com", service),
+        },
+        "cloudfront" => match *region {
+            Region::Custom { ref endpoint, .. } => {
+                remove_scheme_from_custom_hostname(endpoint).to_owned()
             }
-        }
-        "importexport" => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint).to_owned()
-                }
-                _ => "importexport.amazonaws.com".to_owned(),
+            _ => format!("{}.amazonaws.com", service),
+        },
+        "importexport" => match *region {
+            Region::Custom { ref endpoint, .. } => {
+                remove_scheme_from_custom_hostname(endpoint).to_owned()
             }
-        }
-        "s3" => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint)
-                }
-                Region::UsEast1 => "s3.amazonaws.com".to_string(),
-                Region::CnNorth1 | Region::CnNorthwest1 => format!("s3.{}.amazonaws.com.cn", region.name()),
-                _ => format!("s3-{}.amazonaws.com", region.name()),
+            _ => "importexport.amazonaws.com".to_owned(),
+        },
+        "s3" => match *region {
+            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::UsEast1 => "s3.amazonaws.com".to_string(),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                format!("s3.{}.amazonaws.com.cn", region.name())
             }
-        }
-        "route53" => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint)
-                }
-                _ => "route53.amazonaws.com".to_owned(),
+            _ => format!("s3-{}.amazonaws.com", region.name()),
+        },
+        "route53" => match *region {
+            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            _ => "route53.amazonaws.com".to_owned(),
+        },
+        "sdb" => match *region {
+            Region::Custom { ref endpoint, .. } => {
+                remove_scheme_from_custom_hostname(endpoint).to_owned()
             }
-        }
-        "sdb" => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint).to_owned()
-                }
-                Region::UsEast1 => "sdb.amazonaws.com".to_string(),
-                _ => format!("sdb.{}.amazonaws.com", region.name()),
+            Region::UsEast1 => "sdb.amazonaws.com".to_string(),
+            _ => format!("sdb.{}.amazonaws.com", region.name()),
+        },
+        _ => match *region {
+            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                format!("{}.{}.amazonaws.com.cn", service, region.name())
             }
-        }
-        _ => {
-            match *region {
-                Region::Custom { ref endpoint, .. } => {
-                    remove_scheme_from_custom_hostname(endpoint)
-                }
-                Region::CnNorth1 | Region::CnNorthwest1 => format!("{}.{}.amazonaws.com.cn", service, region.name()),
-                _ => format!("{}.{}.amazonaws.com", service, region.name()),
-            }
-        }
+            _ => format!("{}.{}.amazonaws.com", service, region.name()),
+        },
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -729,11 +769,11 @@ mod tests {
     use std::collections::BTreeMap;
     use time::empty_tm;
 
-    use credential::{ProvideAwsCredentials, ProfileProvider};
+    use credential::{ProfileProvider, ProvideAwsCredentials};
+    use param::Params;
     use Region;
-    use ::param::Params;
 
-    use super::{SignedRequest,build_canonical_query_string};
+    use super::{build_canonical_query_string, SignedRequest};
 
     #[test]
     fn get_hostname_none_present() {
@@ -743,15 +783,21 @@ mod tests {
 
     #[test]
     fn path_percent_encoded() {
-        let provider = ProfileProvider::with_configuration("test_resources/multiple_profile_credentials",
-                                                           "foo");
-        let mut request = SignedRequest::new("GET",
-                                             "s3",
-                                             &Region::UsEast1,
-                                             "/path with spaces: the sequel");
+        let provider = ProfileProvider::with_configuration(
+            "test_resources/multiple_profile_credentials",
+            "foo",
+        );
+        let mut request = SignedRequest::new(
+            "GET",
+            "s3",
+            &Region::UsEast1,
+            "/path with spaces: the sequel",
+        );
         request.sign(provider.credentials().wait().as_ref().unwrap());
-        assert_eq!("/path%20with%20spaces%3A%20the%20sequel",
-                   request.canonical_uri());
+        assert_eq!(
+            "/path%20with%20spaces%3A%20the%20sequel",
+            request.canonical_uri()
+        );
     }
     #[test]
     fn query_encoding_escaped_chars() {
@@ -778,37 +824,69 @@ mod tests {
     }
     #[test]
     fn query_string_encoding_outliers() {
-        let mut request = SignedRequest::new("GET",
-            "s3", &Region::UsEast1, "/pathwith%20already%20existing%20encoding and some not encoded values");
+        let mut request = SignedRequest::new(
+            "GET",
+            "s3",
+            &Region::UsEast1,
+            "/pathwith%20already%20existing%20encoding and some not encoded values",
+        );
         request.add_param("arg1%7B", "arg1%7B");
         request.add_param("arg2%7B+%2B", "+%2B");
-        assert_eq!(super::build_canonical_query_string(&request.params),
-            "arg1%7B=arg1%7B&arg2%7B%20%2B=%20%2B");
-        assert_eq!(super::canonical_uri(&request.path),
-            "/pathwith%20already%20existing%20encoding%20and%20some%20not%20encoded%20values");
+        assert_eq!(
+            super::build_canonical_query_string(&request.params),
+            "arg1%7B=arg1%7B&arg2%7B%20%2B=%20%2B"
+        );
+        assert_eq!(
+            super::canonical_uri(&request.path),
+            "/pathwith%20already%20existing%20encoding%20and%20some%20not%20encoded%20values"
+        );
     }
     #[test]
     fn query_percent_encoded() {
-        let mut request = SignedRequest::new("GET",
-                                             "s3",
-                                             &Region::UsEast1,
-                                             "/path with spaces: the sequel++");
-        request.add_param("key:with@funny&characters",
-                          "value with/funny%characters/Рускии");
+        let mut request = SignedRequest::new(
+            "GET",
+            "s3",
+            &Region::UsEast1,
+            "/path with spaces: the sequel++",
+        );
+        request.add_param(
+            "key:with@funny&characters",
+            "value with/funny%characters/Рускии",
+        );
         let canonical_query_string = super::build_canonical_query_string(&request.params);
         assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8",
                    canonical_query_string);
         let canonical_uri_string = super::canonical_uri(&request.path);
-        assert_eq!("/path%20with%20spaces%3A%20the%20sequel%2B%2B",
-                   canonical_uri_string);
+        assert_eq!(
+            "/path%20with%20spaces%3A%20the%20sequel%2B%2B",
+            canonical_uri_string
+        );
     }
 
     #[test]
     fn signature_generation() {
-        let signature_foo = super::sign_string("foo", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", empty_tm(), "us-west-1", "s3");
-        assert_eq!(signature_foo, "29673d1d856a7684ff6f0f53c542bae0bfbb1e564f531aff7568be9fd206383b".to_string());
-        let signature_bar = super::sign_string("bar", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", empty_tm(), "us-west-1", "s3");
-        assert_eq!(signature_bar, "2ba6879cd9e769d73df721dc90aafdaa843005d23f5b6c91d0744f804962e44f".to_string());
+        let signature_foo = super::sign_string(
+            "foo",
+            "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+            empty_tm(),
+            "us-west-1",
+            "s3",
+        );
+        assert_eq!(
+            signature_foo,
+            "29673d1d856a7684ff6f0f53c542bae0bfbb1e564f531aff7568be9fd206383b".to_string()
+        );
+        let signature_bar = super::sign_string(
+            "bar",
+            "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+            empty_tm(),
+            "us-west-1",
+            "s3",
+        );
+        assert_eq!(
+            signature_bar,
+            "2ba6879cd9e769d73df721dc90aafdaa843005d23f5b6c91d0744f804962e44f".to_string()
+        );
     }
 
     #[test]
@@ -835,7 +913,10 @@ mod tests {
         headers.insert("host".to_owned(), vec![vec![]]);
         headers.insert("x-amz-date".to_owned(), vec![vec![]]);
 
-        assert_eq!(super::signed_headers(&headers), "cache-control;content-type;host;x-amz-date");
+        assert_eq!(
+            super::signed_headers(&headers),
+            "cache-control;content-type;host;x-amz-date"
+        );
     }
 
     #[test]

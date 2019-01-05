@@ -1,12 +1,12 @@
 use std::time::Duration;
 
-use futures::{Future, IntoFuture, Poll, Async};
 use futures::sync::oneshot::spawn;
+use futures::{Async, Future, IntoFuture, Poll};
 use tokio::runtime::Runtime;
 
+use super::client::{SignAndDispatchError, TimeoutFuture};
 use super::credential::CredentialsError;
-use super::client::{TimeoutFuture, SignAndDispatchError};
-use super::request::{HttpResponse, HttpDispatchError};
+use super::request::{HttpDispatchError, HttpResponse};
 
 lazy_static! {
     static ref FALLBACK_RUNTIME: Runtime = Runtime::new().unwrap();
@@ -142,15 +142,16 @@ lazy_static! {
 /// }
 /// ```
 pub struct RusotoFuture<T, E> {
-    state: Option<RusotoFutureState<T, E>>
+    state: Option<RusotoFutureState<T, E>>,
 }
 
 pub fn new<T, E>(
-        future: Box<TimeoutFuture<Item=HttpResponse, Error=SignAndDispatchError> + Send>,
-        handler: fn(HttpResponse) -> Box<Future<Item=T, Error=E> + Send>
-    ) -> RusotoFuture<T, E>
-{
-    RusotoFuture { state: Some(RusotoFutureState::SignAndDispatch { future, handler }) }
+    future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
+    handler: fn(HttpResponse) -> Box<Future<Item = T, Error = E> + Send>,
+) -> RusotoFuture<T, E> {
+    RusotoFuture {
+        state: Some(RusotoFutureState::SignAndDispatch { future, handler }),
+    }
 }
 
 impl<T, E> RusotoFuture<T, E> {
@@ -206,8 +207,9 @@ impl<T, E> RusotoFuture<T, E> {
     /// This is meant to provide a simple way for non-async consumers
     /// to work with rusoto.
     pub fn sync(self) -> Result<T, E>
-        where T: Send + 'static,
-              E: From<CredentialsError> + From<HttpDispatchError> + Send + 'static
+    where
+        T: Send + 'static,
+        E: From<CredentialsError> + From<HttpDispatchError> + Send + 'static,
     {
         spawn(self, &FALLBACK_RUNTIME.executor()).wait()
     }
@@ -219,8 +221,9 @@ impl<T, E> RusotoFuture<T, E> {
     /// This is not intended to be used outside of the test case.
     /// In production, [`Box`] is recommended.
     pub fn from_future<F>(fut: F) -> Self
-        where F: IntoFuture<Item = T, Error = E>,
-              F::Future: Send + 'static,
+    where
+        F: IntoFuture<Item = T, Error = E>,
+        F::Future: Send + 'static,
     {
         let fut = fut.into_future();
         RusotoFuture {
@@ -230,46 +233,46 @@ impl<T, E> RusotoFuture<T, E> {
 }
 
 impl<T, E> Future for RusotoFuture<T, E>
-    where E: From<CredentialsError> + From<HttpDispatchError>
+where
+    E: From<CredentialsError> + From<HttpDispatchError>,
 {
     type Item = T;
     type Error = E;
 
     fn poll(&mut self) -> Poll<T, E> {
         match self.state.take().unwrap() {
-            RusotoFutureState::SignAndDispatch { mut future, handler } => {
-                match future.poll() {
-                    Err(SignAndDispatchError::Credentials(err)) => Err(err.into()),
-                    Err(SignAndDispatchError::Dispatch(err)) => Err(err.into()),
-                    Ok(Async::Ready(response)) => {
-                        self.state = Some(RusotoFutureState::RunningResponseHandler(handler(response)));
-                        self.poll()
-                    },
-                    Ok(Async::NotReady) => {
-                        self.state = Some(RusotoFutureState::SignAndDispatch { future, handler });
-                        Ok(Async::NotReady)
-                    }
+            RusotoFutureState::SignAndDispatch {
+                mut future,
+                handler,
+            } => match future.poll() {
+                Err(SignAndDispatchError::Credentials(err)) => Err(err.into()),
+                Err(SignAndDispatchError::Dispatch(err)) => Err(err.into()),
+                Ok(Async::Ready(response)) => {
+                    self.state = Some(RusotoFutureState::RunningResponseHandler(handler(response)));
+                    self.poll()
+                }
+                Ok(Async::NotReady) => {
+                    self.state = Some(RusotoFutureState::SignAndDispatch { future, handler });
+                    Ok(Async::NotReady)
                 }
             },
-            RusotoFutureState::RunningResponseHandler(mut future) => {
-                match future.poll()? {
-                    Async::Ready(value) => Ok(Async::Ready(value)),
-                    Async::NotReady => {
-                        self.state = Some(RusotoFutureState::RunningResponseHandler(future));
-                        Ok(Async::NotReady)
-                    }
+            RusotoFutureState::RunningResponseHandler(mut future) => match future.poll()? {
+                Async::Ready(value) => Ok(Async::Ready(value)),
+                Async::NotReady => {
+                    self.state = Some(RusotoFutureState::RunningResponseHandler(future));
+                    Ok(Async::NotReady)
                 }
-            }
+            },
         }
     }
 }
 
 enum RusotoFutureState<T, E> {
     SignAndDispatch {
-        future: Box<TimeoutFuture<Item=HttpResponse, Error=SignAndDispatchError> + Send>,
-        handler: fn(HttpResponse) -> Box<Future<Item=T, Error=E> + Send>
+        future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
+        handler: fn(HttpResponse) -> Box<Future<Item = T, Error = E> + Send>,
     },
-    RunningResponseHandler(Box<Future<Item=T, Error=E> + Send>)
+    RunningResponseHandler(Box<Future<Item = T, Error = E> + Send>),
 }
 
 impl<T: Send + 'static, E: Send + 'static> From<Result<T, E>> for RusotoFuture<T, E> {

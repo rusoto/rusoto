@@ -51,7 +51,10 @@ macro_rules! to_string_param {
 
 to_string_param!( u8 bool f32 f64 i64 );
 
-impl<'a, T> ToParam for &'a T where T: ToParam + ?Sized {
+impl<'a, T> ToParam for &'a T
+where
+    T: ToParam + ?Sized,
+{
     /// Converts a generic type to a paramater
     fn to_param(&self) -> String {
         ToParam::to_param(&**self)

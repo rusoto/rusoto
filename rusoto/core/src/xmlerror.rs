@@ -1,5 +1,5 @@
-use xmlutil::{XmlParseError, Peek, Next};
-use xmlutil::{characters, start_element, end_element, skip_tree, string_field, peek_at_name};
+use xmlutil::{characters, end_element, peek_at_name, skip_tree, start_element, string_field};
+use xmlutil::{Next, Peek, XmlParseError};
 
 #[derive(Default, Debug)]
 pub struct XmlError {
@@ -11,9 +11,10 @@ pub struct XmlError {
 
 pub struct XmlErrorDeserializer;
 impl XmlErrorDeserializer {
-    pub fn deserialize<T: Peek + Next>(tag_name: &str,
-                                       stack: &mut T)
-                                       -> Result<XmlError, XmlParseError> {
+    pub fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<XmlError, XmlParseError> {
         start_element(tag_name, stack)?;
 
         let mut obj = XmlError::default();
@@ -35,12 +36,13 @@ impl XmlErrorDeserializer {
                         obj.detail = Some(characters.to_string());
                         end_element("Detail", stack)?;
                     }
-                },
-                "" => {
-                    break
-                },
+                }
+                "" => break,
                 unknown => {
-                    debug!("Ignoring unknown XML element {:?} in error response.", unknown);
+                    debug!(
+                        "Ignoring unknown XML element {:?} in error response.",
+                        unknown
+                    );
                     skip_tree(stack);
                 }
             }

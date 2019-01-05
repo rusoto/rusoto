@@ -1,8 +1,8 @@
-use std::io;
 use std::fmt;
+use std::io;
 
+use futures::{future, stream, Async, Future, Poll, Stream};
 use tokio::io::AsyncRead;
-use futures::{Future, Stream, future, stream, Async, Poll};
 
 /// Stream of bytes.
 pub struct ByteStream {
@@ -88,11 +88,11 @@ impl io::Read for ImplAsyncRead {
             match self.stream.poll()? {
                 Async::NotReady => {
                     return Err(io::ErrorKind::WouldBlock.into());
-                },
+                }
                 Async::Ready(Some(buffer)) => {
                     self.buffer = io::Cursor::new(buffer);
                     continue;
-                },
+                }
                 Async::Ready(None) => {
                     return Ok(0);
                 }
@@ -104,12 +104,14 @@ impl io::Read for ImplAsyncRead {
 impl AsyncRead for ImplAsyncRead {}
 
 struct ImplBlockingRead {
-    inner: ImplAsyncRead
+    inner: ImplAsyncRead,
 }
 
 impl ImplBlockingRead {
     fn new(stream: Box<Stream<Item = Vec<u8>, Error = io::Error> + Send>) -> Self {
-        ImplBlockingRead { inner: ImplAsyncRead::new(stream) }
+        ImplBlockingRead {
+            inner: ImplAsyncRead::new(stream),
+        }
     }
 }
 
