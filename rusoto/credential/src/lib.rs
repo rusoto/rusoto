@@ -111,9 +111,11 @@ impl AwsCredentials {
     fn credentials_are_expired(&self) -> bool {
         match self.expires_at {
             Some(ref e) =>
-                // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
-                // before issuing the request:
-               *e < Utc::now() + ChronoDuration::seconds(20),
+            // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
+            // before issuing the request:
+            {
+                *e < Utc::now() + ChronoDuration::seconds(20)
+            }
             None => false,
         }
     }
@@ -323,7 +325,8 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
     type Future = AutoRefreshingProviderFuture<P>;
 
     fn credentials(&self) -> Self::Future {
-        let mut shared_future = self.shared_future
+        let mut shared_future = self
+            .shared_future
             .lock()
             .expect("Failed to lock the cached credentials Mutex");
         AutoRefreshingProviderFuture {
@@ -437,7 +440,8 @@ impl ProvideAwsCredentials for ChainProvider {
         let profile_provider = self.profile_provider.clone();
         let instance_metadata_provider = self.instance_metadata_provider.clone();
         let container_provider = self.container_provider.clone();
-        let future = self.environment_provider
+        let future = self
+            .environment_provider
             .credentials()
             .or_else(move |_| match profile_provider {
                 Some(ref provider) => Either::A(provider.credentials()),
@@ -482,11 +486,13 @@ impl ChainProvider {
 /// <https://github.com/rust-lang/rfcs/issues/2036> also affects the implementation of this.
 fn non_empty_env_var(name: &str) -> Option<String> {
     match env_var(name) {
-        Ok(value) => if value.is_empty() {
-            None
-        } else {
-            Some(value)
-        },
+        Ok(value) => {
+            if value.is_empty() {
+                None
+            } else {
+                Some(value)
+            }
+        }
         Err(_) => None,
     }
 }
@@ -581,8 +587,10 @@ mod tests {
             "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         );
 
-        assert_eq!(credentials.expires_at().expect(""),
-            DateTime::parse_from_rfc3339("2016-11-18T01:50:39Z").expect(""));
+        assert_eq!(
+            credentials.expires_at().expect(""),
+            DateTime::parse_from_rfc3339("2016-11-18T01:50:39Z").expect("")
+        );
     }
 
     #[test]

@@ -3,13 +3,15 @@
 use std::error::Error;
 use std::time::Duration;
 
+use futures::future::{err, FutureResult};
 use futures::{Async, Future, Poll};
-use futures::future::{FutureResult, err};
 use hyper::{Body, Request};
 
-use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
-     parse_credentials_from_aws_service, non_empty_env_var};
 use request::{HttpClient, HttpClientFuture};
+use {
+    non_empty_env_var, parse_credentials_from_aws_service, AwsCredentials, CredentialsError,
+    ProvideAwsCredentials,
+};
 
 // The following constants are documented in AWS' ECS developers guide,
 // see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html.
@@ -54,7 +56,7 @@ const AWS_CONTAINER_AUTHORIZATION_TOKEN: &str = "AWS_CONTAINER_AUTHORIZATION_TOK
 #[derive(Clone, Debug)]
 pub struct ContainerProvider {
     client: HttpClient,
-    timeout: Duration
+    timeout: Duration,
 }
 
 impl ContainerProvider {
@@ -62,7 +64,7 @@ impl ContainerProvider {
     pub fn new() -> Self {
         ContainerProvider {
             client: HttpClient::new(),
-            timeout: Duration::from_secs(30)
+            timeout: Duration::from_secs(30),
         }
     }
 
@@ -74,12 +76,12 @@ impl ContainerProvider {
 
 /// Future returned from `ContainerProvider`.
 pub struct ContainerProviderFuture {
-    inner: ContainerProviderFutureInner
+    inner: ContainerProviderFutureInner,
 }
 
 enum ContainerProviderFutureInner {
     Result(FutureResult<String, CredentialsError>),
-    Future(HttpClientFuture)
+    Future(HttpClientFuture),
 }
 
 impl Future for ContainerProviderFuture {
@@ -88,10 +90,8 @@ impl Future for ContainerProviderFuture {
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         let resp = match self.inner {
-            ContainerProviderFutureInner::Result(ref mut result) =>
-                try_ready!(result.poll()),
-            ContainerProviderFutureInner::Future(ref mut future) =>
-                try_ready!(future.poll())
+            ContainerProviderFutureInner::Result(ref mut result) => try_ready!(result.poll()),
+            ContainerProviderFutureInner::Future(ref mut future) => try_ready!(future.poll()),
         };
         let creds = parse_credentials_from_aws_service(&resp)?;
         Ok(Async::Ready(creds))
@@ -104,21 +104,23 @@ impl ProvideAwsCredentials for ContainerProvider {
     fn credentials(&self) -> Self::Future {
         let inner = match credentials_from_container(&self.client, self.timeout) {
             Ok(future) => ContainerProviderFutureInner::Future(future),
-            Err(e) => ContainerProviderFutureInner::Result(err(e))
+            Err(e) => ContainerProviderFutureInner::Result(err(e)),
         };
         ContainerProviderFuture { inner: inner }
     }
 }
 
 /// Grabs the Credentials from the AWS Container Credentials Provider. (169.254.170.2).
-fn credentials_from_container(client: &HttpClient, timeout: Duration) -> Result<HttpClientFuture, CredentialsError> {
+fn credentials_from_container(
+    client: &HttpClient,
+    timeout: Duration,
+) -> Result<HttpClientFuture, CredentialsError> {
     Ok(client.request(request_from_env_vars()?, timeout))
 }
 
 fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {
-    let relative_uri = non_empty_env_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI).map(
-        |path| format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, path)
-    );
+    let relative_uri = non_empty_env_var(AWS_CONTAINER_CREDENTIALS_RELATIVE_URI)
+        .map(|path| format!("http://{}{}", AWS_CREDENTIALS_PROVIDER_IP, path));
     match relative_uri {
         Some(ref uri) => new_request(uri, AWS_CONTAINER_CREDENTIALS_RELATIVE_URI),
         None => match non_empty_env_var(AWS_CONTAINER_CREDENTIALS_FULL_URI) {
@@ -130,34 +132,39 @@ fn request_from_env_vars() -> Result<Request<Body>, CredentialsError> {
                             request.headers_mut().insert("authorization", parsed_token);
                         }
                         Err(err) => {
-                            return Err(CredentialsError::new(format!("failed to parse token: {}", err)));
+                            return Err(CredentialsError::new(format!(
+                                "failed to parse token: {}",
+                                err
+                            )));
                         }
                     }
                 }
                 Ok(request)
-            },
-            None => Err(CredentialsError::new(
-                format!("Neither environment variable '{}' nor '{}' is set", AWS_CONTAINER_CREDENTIALS_FULL_URI, AWS_CONTAINER_CREDENTIALS_RELATIVE_URI),
-            ))
-        }
+            }
+            None => Err(CredentialsError::new(format!(
+                "Neither environment variable '{}' nor '{}' is set",
+                AWS_CONTAINER_CREDENTIALS_FULL_URI, AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+            ))),
+        },
     }
 }
 
 fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, CredentialsError> {
-    Request::get(uri).body(Body::empty())
-        .map_err(|error|
-             CredentialsError::new(
-                 format!("Error while parsing URI '{}' derived from environment variable '{}': {}",
-                         uri, env_var_name, error.description())
-             )
-        )
+    Request::get(uri).body(Body::empty()).map_err(|error| {
+        CredentialsError::new(format!(
+            "Error while parsing URI '{}' derived from environment variable '{}': {}",
+            uri,
+            env_var_name,
+            error.description()
+        ))
+    })
 }
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use std::env;
     use std::sync::{Mutex, MutexGuard};
-    use super::*;
 
     // cargo runs tests in parallel, which leads to race conditions when changing
     // environment variables. Therefore we use a global mutex for all tests which

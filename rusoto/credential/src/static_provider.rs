@@ -2,7 +2,7 @@
 //! For those who can't get them from an environment, or a file.
 
 use chrono::{Duration, Utc};
-use futures::future::{FutureResult, ok};
+use futures::future::{ok, FutureResult};
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -28,12 +28,7 @@ impl StaticProvider {
         valid_for: Option<i64>,
     ) -> StaticProvider {
         StaticProvider {
-            credentials: AwsCredentials::new(
-                access_key,
-                secret_access_key,
-                token,
-                None
-            ),
+            credentials: AwsCredentials::new(access_key, secret_access_key, token, None),
             valid_for: valid_for,
         }
     }
@@ -41,12 +36,7 @@ impl StaticProvider {
     /// Creates a new minimal Static Provider. This will set the token as optional none.
     pub fn new_minimal(access_key: String, secret_access_key: String) -> StaticProvider {
         StaticProvider {
-            credentials: AwsCredentials::new(
-                access_key,
-                secret_access_key,
-                None,
-                None
-            ),
+            credentials: AwsCredentials::new(access_key, secret_access_key, None, None),
             valid_for: None,
         }
     }
@@ -93,9 +83,9 @@ mod tests {
     use std::thread;
     use std::time;
 
+    use super::*;
     use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
     use ProvideAwsCredentials;
-    use super::*;
 
     #[test]
     fn test_static_provider_creation() {
@@ -104,7 +94,9 @@ mod tests {
             "fake-secret".to_owned(),
             Some("token".to_owned()),
             Some(300),
-        ).credentials().wait();
+        )
+        .credentials()
+        .wait();
         assert!(result.is_ok());
     }
 
@@ -112,7 +104,8 @@ mod tests {
     fn test_static_provider_minimal_creation() {
         let result =
             StaticProvider::new_minimal("fake-key-2".to_owned(), "fake-secret-2".to_owned())
-                .credentials().wait();
+                .credentials()
+                .wait();
         assert!(result.is_ok());
     }
 
@@ -124,7 +117,9 @@ mod tests {
             "fake-secret".to_owned(),
             None,
             Some(10000),
-        ).credentials().wait();
+        )
+        .credentials()
+        .wait();
         assert!(result.is_ok());
         let finalized = result.unwrap();
         let expires_at = finalized.expires_at().unwrap().clone();
