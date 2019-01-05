@@ -20,14 +20,14 @@ script:
         echo "Running Rusoto tests (phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
-         && cargo test --all -v
+         && make unit_test
       fi
   - |
       if [ "$JOB" = "unit_tests_B" ]; then
         echo "Running Rusoto tests (phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
-         && cargo test --all -v
+         && make unit_test
       fi
   - |
       if [ "$JOB" = "integration_tests_and_docs" ]; then
