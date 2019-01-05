@@ -112,17 +112,17 @@ impl InvokeEndpointError {
 
             match error_type {
                 "InternalFailure" => {
-                    return InvokeEndpointError::InternalFailure(String::from(error_message));
+                    return InvokeEndpointError::InternalFailure(String::from(error_message))
                 }
                 "ModelError" => return InvokeEndpointError::ModelError(String::from(error_message)),
                 "ServiceUnavailable" => {
-                    return InvokeEndpointError::ServiceUnavailable(String::from(error_message));
+                    return InvokeEndpointError::ServiceUnavailable(String::from(error_message))
                 }
                 "ValidationError" => {
-                    return InvokeEndpointError::ValidationError(String::from(error_message));
+                    return InvokeEndpointError::ValidationError(String::from(error_message))
                 }
                 "ValidationException" => {
-                    return InvokeEndpointError::Validation(error_message.to_string());
+                    return InvokeEndpointError::Validation(error_message.to_string())
                 }
                 _ => {}
             }
