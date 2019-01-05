@@ -2,13 +2,17 @@ use std::error::Error;
 use std::fmt::{Formatter, Result as FmtResult};
 
 use base64;
-use serde::{Deserializer, Serializer};
 use serde::de::{Error as SerdeError, Visitor};
+use serde::{Deserializer, Serializer};
 
 pub trait SerdeBlob<'de>: Sized {
-    fn deserialize_blob<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de>;
+    fn deserialize_blob<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>;
 
-    fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer;
+    fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer;
 }
 
 struct BlobVisitor;
@@ -21,19 +25,25 @@ impl<'de> Visitor<'de> for BlobVisitor {
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where E: SerdeError {
+    where
+        E: SerdeError,
+    {
         base64::decode(v).map_err(|err| SerdeError::custom(err.description()))
     }
 }
 
 impl<'de> SerdeBlob<'de> for Vec<u8> {
     fn deserialize_blob<D>(deserializer: D) -> Result<Vec<u8>, D::Error>
-        where D: Deserializer<'de> {
+    where
+        D: Deserializer<'de>,
+    {
         deserializer.deserialize_any(BlobVisitor)
     }
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where S: Serializer {
+    where
+        S: Serializer,
+    {
         serializer.serialize_str(&base64::encode(&self.as_slice()))
     }
 }
@@ -48,24 +58,32 @@ impl<'de> Visitor<'de> for OptionalBlobVisitor {
     }
 
     fn visit_none<E>(self) -> Result<Self::Value, E>
-        where E: SerdeError {
+    where
+        E: SerdeError,
+    {
         Ok(None)
     }
 
     fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
-        where D: Deserializer<'de> {
+    where
+        D: Deserializer<'de>,
+    {
         Ok(Some(SerdeBlob::deserialize_blob(deserializer)?))
     }
 }
 
 impl<'de> SerdeBlob<'de> for Option<Vec<u8>> {
     fn deserialize_blob<D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
-        where D: Deserializer<'de> {
+    where
+        D: Deserializer<'de>,
+    {
         deserializer.deserialize_option(OptionalBlobVisitor)
     }
 
     fn serialize_blob<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where S: Serializer {
+    where
+        S: Serializer,
+    {
         match *self {
             Some(ref vec) => SerdeBlob::serialize_blob(vec, serializer),
             None => serializer.serialize_none(),
@@ -120,7 +138,8 @@ mod tests {
 
     #[test]
     fn deserialize_optional_blob_when_has_content() {
-        let deserialized: Option<Vec<u8>> = deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
+        let deserialized: Option<Vec<u8>> =
+            deserialize_blob_helper("\"aGVsbG8gd29ybGQh\"").unwrap();
 
         assert_eq!(Some("hello world!".as_bytes().to_vec()), deserialized);
     }
@@ -171,7 +190,12 @@ mod tests {
         String::from_utf8_lossy(&serialized_data).into_owned()
     }
 
-    fn deserialize_blob_helper<'de, B: SerdeBlob<'de>>(s: &'de str) -> Result<B, <&mut serde_json::de::Deserializer<serde_json::de::StrRead> as serde::Deserializer>::Error> {
+    fn deserialize_blob_helper<'de, B: SerdeBlob<'de>>(
+        s: &'de str,
+    ) -> Result<
+        B,
+        <&mut serde_json::de::Deserializer<serde_json::de::StrRead> as serde::Deserializer>::Error,
+    > {
         let reader = serde_json::de::StrRead::new(s);
         let mut deserializer = serde_json::de::Deserializer::new(reader);
         B::deserialize_blob(&mut deserializer)

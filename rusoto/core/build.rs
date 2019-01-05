@@ -1,17 +1,16 @@
 extern crate rustc_version;
 
 use std::env;
-use std::path::Path;
-use std::io::Write;
 use std::fs::File;
+use std::io::Write;
+use std::path::Path;
 
 /// Parses and generates variables used to construct a User-Agent.
 ///
 /// This is used to create a User-Agent header string resembling
 /// `rusoto/x.y.z rust/x.y.z <os>`.
 fn generate_user_agent_vars(output_path: &Path) {
-    let rust_version = rustc_version::version()
-        .expect("Could not retrieve rustc version");
+    let rust_version = rustc_version::version().expect("Could not retrieve rustc version");
     let mut f = File::create(&output_path.join("user_agent_vars.rs"))
         .expect("Could not create user agent file");
     f.write_all(format!("static RUST_VERSION: &'static str = \"{}\";", rust_version).as_bytes())

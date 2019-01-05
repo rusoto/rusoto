@@ -4,13 +4,13 @@
 //!
 //! For example: `UsEast1` to "us-east-1"
 
+use credential::ProfileProvider;
+use serde::ser::SerializeTuple;
+use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use std;
 use std::error::Error;
-use std::str::FromStr;
 use std::fmt::{self, Display, Error as FmtError, Formatter};
-use credential::ProfileProvider;
-use serde::{de, Serialize, Serializer, Deserialize, Deserializer};
-use serde::ser::SerializeTuple;
+use std::str::FromStr;
 
 /// An AWS region.
 ///
@@ -144,7 +144,7 @@ impl Region {
 }
 
 /// An error produced when attempting to convert a `str` into a `Region` fails.
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct ParseRegionError {
     message: String,
 }
@@ -153,10 +153,15 @@ pub struct ParseRegionError {
 // Related: https://github.com/serde-rs/serde/issues/119
 impl Serialize for Region {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where S: Serializer
+    where
+        S: Serializer,
     {
         let mut seq = serializer.serialize_tuple(2)?;
-        if let Region::Custom { ref endpoint, ref name } = *self {
+        if let Region::Custom {
+            ref endpoint,
+            ref name,
+        } = *self
+        {
             seq.serialize_element(&name)?;
             seq.serialize_element(&Some(&endpoint))?;
         } else {
@@ -177,12 +182,14 @@ impl<'de> de::Visitor<'de> for RegionVisitor {
     }
 
     fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
-        where
-            A: de::SeqAccess<'de>,
+    where
+        A: de::SeqAccess<'de>,
     {
-        let name: String = seq.next_element()?
+        let name: String = seq
+            .next_element()?
             .ok_or_else(|| de::Error::custom("region is missing name"))?;
-        let endpoint: Option<String> = seq.next_element()?
+        let endpoint: Option<String> = seq
+            .next_element()?
             .ok_or_else(|| de::Error::custom("region is missing endpoint"))?;
         match (name, endpoint) {
             (name, Some(endpoint)) => Ok(Region::Custom { name, endpoint }),
@@ -195,7 +202,8 @@ impl<'de> de::Visitor<'de> for RegionVisitor {
 // Related: https://github.com/serde-rs/serde/issues/119
 impl<'de> Deserialize<'de> for Region {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where D: Deserializer<'de>
+    where
+        D: Deserializer<'de>,
     {
         deserializer.deserialize_tuple(2, RegionVisitor)
     }
@@ -205,7 +213,7 @@ impl FromStr for Region {
     type Err = ParseRegionError;
 
     fn from_str(s: &str) -> Result<Region, ParseRegionError> {
-        let v : &str = &s.to_lowercase();
+        let v: &str = &s.to_lowercase();
         match v {
             "ap-northeast-1" | "apnortheast1" => Ok(Region::ApNortheast1),
             "ap-northeast-2" | "apnortheast2" => Ok(Region::ApNortheast2),
@@ -234,7 +242,9 @@ impl FromStr for Region {
 impl ParseRegionError {
     /// Parses a region given as a string literal into a type `Region'
     pub fn new(input: &str) -> Self {
-        ParseRegionError { message: format!("Not a valid AWS region: {}", input) }
+        ParseRegionError {
+            message: format!("Not a valid AWS region: {}", input),
+        }
     }
 }
 
@@ -253,14 +263,11 @@ impl Display for ParseRegionError {
 impl Default for Region {
     fn default() -> Region {
         match std::env::var("AWS_DEFAULT_REGION").or_else(|_| std::env::var("AWS_REGION")) {
-            Ok(ref v) =>
-                Region::from_str(v).unwrap_or(Region::UsEast1),
-            Err(_) => {
-                match ProfileProvider::region() {
-                    Ok(Some(region)) => Region::from_str(&region).unwrap_or(Region::UsEast1),
-                    _ => Region::UsEast1,
-                }
-            }
+            Ok(ref v) => Region::from_str(v).unwrap_or(Region::UsEast1),
+            Err(_) => match ProfileProvider::region() {
+                Ok(Some(region)) => Region::from_str(&region).unwrap_or(Region::UsEast1),
+                _ => Region::UsEast1,
+            },
         }
     }
 }
@@ -268,17 +275,19 @@ impl Default for Region {
 #[cfg(test)]
 mod tests {
     extern crate serde_test;
-    use self::serde_test::{Token, assert_tokens};
+    use self::serde_test::{assert_tokens, Token};
     use super::*;
 
     #[test]
     fn from_str() {
-        assert_eq!("foo"
-                       .parse::<Region>()
-                       .err()
-                       .expect("Parsing foo as a Region was not an error")
-                       .to_string(),
-                   "Not a valid AWS region: foo".to_owned());
+        assert_eq!(
+            "foo"
+                .parse::<Region>()
+                .err()
+                .expect("Parsing foo as a Region was not an error")
+                .to_string(),
+            "Not a valid AWS region: foo".to_owned()
+        );
         assert_eq!("ap-northeast-1".parse(), Ok(Region::ApNortheast1));
         assert_eq!("ap-northeast-2".parse(), Ok(Region::ApNortheast2));
         assert_eq!("ap-south-1".parse(), Ok(Region::ApSouth1));

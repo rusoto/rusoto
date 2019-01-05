@@ -3,11 +3,11 @@
 //! Wraps an XML stack via traits.
 //! Also provides a method of supplying an XML stack from a file for testing purposes.
 
+use std::collections::HashMap;
 use std::iter::Peekable;
 use std::num::ParseIntError;
-use std::collections::HashMap;
-use xml::reader::{Events, XmlEvent};
 use xml;
+use xml::reader::{Events, XmlEvent};
 
 /// generic Error for XML parsing
 #[derive(Debug)]
@@ -109,12 +109,16 @@ pub fn peek_at_name<T: Peek + Next>(stack: &mut T) -> Result<String, XmlParseErr
 }
 
 /// consume a `StartElement` with a specific name or throw an `XmlParseError`
-pub fn start_element<T: Peek + Next>(element_name: &str,
-                                     stack: &mut T)
-                                     -> Result<HashMap<String, String>, XmlParseError> {
+pub fn start_element<T: Peek + Next>(
+    element_name: &str,
+    stack: &mut T,
+) -> Result<HashMap<String, String>, XmlParseError> {
     let next = stack.next();
 
-    if let Some(Ok(XmlEvent::StartElement { name, attributes, .. })) = next {
+    if let Some(Ok(XmlEvent::StartElement {
+        name, attributes, ..
+    })) = next
+    {
         if name.local_name == element_name {
             let mut attr_map = HashMap::new();
             for attr in attributes {
@@ -122,12 +126,16 @@ pub fn start_element<T: Peek + Next>(element_name: &str,
             }
             Ok(attr_map)
         } else {
-            Err(XmlParseError::new(&format!("START Expected {} got {}",
-                                            element_name,
-                                            name.local_name)))
+            Err(XmlParseError::new(&format!(
+                "START Expected {} got {}",
+                element_name, name.local_name
+            )))
         }
     } else {
-        Err(XmlParseError::new(&format!("Expected StartElement {} got {:#?}", element_name, next)))
+        Err(XmlParseError::new(&format!(
+            "Expected StartElement {} got {:#?}",
+            element_name, next
+        )))
     }
 }
 
@@ -138,18 +146,21 @@ pub fn end_element<T: Peek + Next>(element_name: &str, stack: &mut T) -> Result<
         if name.local_name == element_name {
             Ok(())
         } else {
-            Err(XmlParseError::new(&format!("END Expected {} got {}",
-                                            element_name,
-                                            name.local_name)))
+            Err(XmlParseError::new(&format!(
+                "END Expected {} got {}",
+                element_name, name.local_name
+            )))
         }
     } else {
-        Err(XmlParseError::new(&format!("Expected EndElement {} got {:?}", element_name, next)))
+        Err(XmlParseError::new(&format!(
+            "Expected EndElement {} got {:?}",
+            element_name, next
+        )))
     }
 }
 
 /// skip a tag and all its children
 pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
-
     let mut deep: usize = 0;
 
     loop {
@@ -166,7 +177,6 @@ pub fn skip_tree<T: Peek + Next>(stack: &mut T) {
             _ => (),
         }
     }
-
 }
 
 /// skip all elements until a start element is encountered
@@ -178,7 +188,7 @@ pub fn find_start_element<T: Peek + Next>(stack: &mut T) {
             Some(&Ok(XmlEvent::StartElement { .. })) => break,
             Some(&Ok(_)) => {
                 stack.next().unwrap().unwrap();
-            },
+            }
             Some(&Err(_)) => break,
             None => break,
         }
@@ -188,9 +198,9 @@ pub fn find_start_element<T: Peek + Next>(stack: &mut T) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use xml::reader::EventReader;
-    use std::io::Read;
     use std::fs::File;
+    use std::io::Read;
+    use xml::reader::EventReader;
 
     #[test]
     fn peek_at_name_happy_path() {
@@ -250,8 +260,10 @@ mod tests {
 
         // now we're set up to use string:
         let my_chars = string_field("QueueUrl", &mut reader).unwrap();
-        assert_eq!(my_chars,
-                   "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue")
+        assert_eq!(
+            my_chars,
+            "https://sqs.us-east-1.amazonaws.com/347452556413/testqueue"
+        )
     }
 
     #[test]
@@ -266,7 +278,6 @@ mod tests {
         // skip two leading fields since we ignore them (xml declaration, return type declaration)
         reader.next();
         reader.next();
-
 
         // TODO: this is fragile and not good: do some looping to find end element?
         // But need to do it without being dependent on peek_at_name.
