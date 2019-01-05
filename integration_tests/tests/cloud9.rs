@@ -1,7 +1,7 @@
 #![cfg(feature = "cloud9")]
 
-extern crate rusoto_core;
 extern crate rusoto_cloud9;
+extern crate rusoto_core;
 
 use rusoto_cloud9::{Cloud9, Cloud9Client, ListEnvironmentsRequest};
 use rusoto_core::Region;

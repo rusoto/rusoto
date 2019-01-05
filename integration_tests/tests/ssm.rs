@@ -3,9 +3,10 @@
 extern crate rusoto_core;
 extern crate rusoto_ssm;
 
-use rusoto_ssm::{Ssm, SsmClient, ListDocumentsRequest, ListCommandsRequest,
-                  ListCommandInvocationsRequest};
 use rusoto_core::Region;
+use rusoto_ssm::{
+    ListCommandInvocationsRequest, ListCommandsRequest, ListDocumentsRequest, Ssm, SsmClient,
+};
 
 #[test]
 fn should_list_documents() {

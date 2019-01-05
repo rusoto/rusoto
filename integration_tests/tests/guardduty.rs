@@ -1,17 +1,17 @@
 #![cfg(feature = "guardduty")]
 
+extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_guardduty;
-extern crate env_logger;
 
-use rusoto_guardduty::{GuardDuty, GuardDutyClient, ListInvitationsRequest};
 use rusoto_core::Region;
+use rusoto_guardduty::{GuardDuty, GuardDutyClient, ListInvitationsRequest};
 
 #[test]
 fn should_list_invitations() {
     let _ = env_logger::try_init();
     let client = GuardDutyClient::new(Region::UsWest2);
-    let request = ListInvitationsRequest{
+    let request = ListInvitationsRequest {
         ..Default::default()
     };
 

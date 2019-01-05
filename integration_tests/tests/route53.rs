@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_route53;
 
-use rusoto_route53::{Route53, Route53Client, ListHostedZonesRequest};
 use rusoto_core::Region;
+use rusoto_route53::{ListHostedZonesRequest, Route53, Route53Client};
 
 #[test]
 fn should_list_hosted_zones() {

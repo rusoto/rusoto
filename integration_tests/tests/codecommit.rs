@@ -1,7 +1,7 @@
 #![cfg(feature = "codecommit")]
 
-extern crate rusoto_core;
 extern crate rusoto_codecommit;
+extern crate rusoto_core;
 
 use rusoto_codecommit::{CodeCommit, CodeCommitClient, ListRepositoriesInput};
 use rusoto_core::Region;

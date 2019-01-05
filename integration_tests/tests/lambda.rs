@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_lambda;
 
-use rusoto_lambda::{Lambda, LambdaClient, ListFunctionsRequest, InvocationRequest, InvokeError};
 use rusoto_core::Region;
+use rusoto_lambda::{InvocationRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
 
 #[test]
 fn should_list_functions() {
@@ -19,7 +19,7 @@ fn should_list_functions() {
 fn should_function_not_found() {
     let client = LambdaClient::new(Region::UsEast1);
     {
-        let request = InvocationRequest{
+        let request = InvocationRequest {
             function_name: "no-such-a-function".to_string(),
             invocation_type: Some("RequestResponse".to_string()),
             ..Default::default()
@@ -31,12 +31,18 @@ fn should_function_not_found() {
         if let Err(InvokeError::ResourceNotFound(resp)) = result {
             assert!(resp.contains("Function not found:"));
         } else {
-            assert!(false, format!("expect Err(InvokeError::ResourceNotFound(_), found {:?}", result));
+            assert!(
+                false,
+                format!(
+                    "expect Err(InvokeError::ResourceNotFound(_), found {:?}",
+                    result
+                )
+            );
         }
     }
     {
         // ARN with colons
-        let request = InvocationRequest{
+        let request = InvocationRequest {
             function_name: "function:no-such-a-function".to_string(),
             ..Default::default()
         };
@@ -47,7 +53,13 @@ fn should_function_not_found() {
         if let Err(InvokeError::ResourceNotFound(resp)) = result {
             assert!(resp.contains("Function not found:"));
         } else {
-            assert!(false, format!("expect Err(InvokeError::ResourceNotFound(_), found {:?}", result));
+            assert!(
+                false,
+                format!(
+                    "expect Err(InvokeError::ResourceNotFound(_), found {:?}",
+                    result
+                )
+            );
         }
     }
 }

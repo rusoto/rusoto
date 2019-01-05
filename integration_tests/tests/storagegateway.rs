@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_storagegateway;
 
-use rusoto_storagegateway::{StorageGateway, StorageGatewayClient, ListGatewaysInput};
 use rusoto_core::Region;
+use rusoto_storagegateway::{ListGatewaysInput, StorageGateway, StorageGatewayClient};
 
 #[test]
 fn should_list_gateways() {

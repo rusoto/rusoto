@@ -3,9 +3,10 @@
 extern crate rusoto_core;
 extern crate rusoto_elasticbeanstalk;
 
-use rusoto_elasticbeanstalk::{ElasticBeanstalk, ElasticBeanstalkClient,
-                               DescribeApplicationsMessage};
 use rusoto_core::Region;
+use rusoto_elasticbeanstalk::{
+    DescribeApplicationsMessage, ElasticBeanstalk, ElasticBeanstalkClient,
+};
 
 #[test]
 fn should_describe_applications() {

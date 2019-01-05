@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_kms;
 
-use rusoto_kms::{Kms, KmsClient, ListKeysRequest};
 use rusoto_core::Region;
+use rusoto_kms::{Kms, KmsClient, ListKeysRequest};
 
 #[test]
 fn should_list_keys() {

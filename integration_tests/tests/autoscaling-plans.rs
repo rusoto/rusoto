@@ -1,9 +1,11 @@
 #![cfg(feature = "autoscaling-plans")]
 
-extern crate rusoto_core;
 extern crate rusoto_autoscaling_plans;
+extern crate rusoto_core;
 
-use rusoto_autoscaling_plans::{AutoscalingPlans, AutoscalingPlansClient, DescribeScalingPlansRequest};
+use rusoto_autoscaling_plans::{
+    AutoscalingPlans, AutoscalingPlansClient, DescribeScalingPlansRequest,
+};
 use rusoto_core::Region;
 
 #[test]

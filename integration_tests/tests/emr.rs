@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_emr;
 
-use rusoto_emr::{Emr, EmrClient, ListClustersInput, DescribeJobFlowsInput, DescribeJobFlowsError};
 use rusoto_core::Region;
+use rusoto_emr::{DescribeJobFlowsError, DescribeJobFlowsInput, Emr, EmrClient, ListClustersInput};
 
 #[test]
 fn should_list_clusters() {

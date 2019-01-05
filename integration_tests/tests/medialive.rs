@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_medialive;
 
-use rusoto_medialive::{MediaLive, MediaLiveClient, ListChannelsRequest};
 use rusoto_core::Region;
+use rusoto_medialive::{ListChannelsRequest, MediaLive, MediaLiveClient};
 
 #[test]
 fn should_list_channels() {

@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_kinesisvideo;
 
-use rusoto_kinesisvideo::{KinesisVideo, KinesisVideoClient, ListStreamsInput};
 use rusoto_core::Region;
+use rusoto_kinesisvideo::{KinesisVideo, KinesisVideoClient, ListStreamsInput};
 
 #[test]
 fn should_list_streams() {

@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_datapipeline;
 
-use rusoto_datapipeline::{DataPipeline, DataPipelineClient, ListPipelinesInput};
 use rusoto_core::Region;
+use rusoto_datapipeline::{DataPipeline, DataPipelineClient, ListPipelinesInput};
 
 #[test]
 fn should_list_pipelines() {

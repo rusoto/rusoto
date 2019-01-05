@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_opsworkscm;
 
-use rusoto_opsworkscm::{OpsWorksCM, OpsWorksCMClient, DescribeServersRequest};
 use rusoto_core::Region;
+use rusoto_opsworkscm::{DescribeServersRequest, OpsWorksCM, OpsWorksCMClient};
 
 #[test]
 fn should_describe_servers() {
@@ -12,5 +12,5 @@ fn should_describe_servers() {
     let request = DescribeServersRequest::default();
 
     let result = client.describe_servers(request).sync().unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }

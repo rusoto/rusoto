@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_events;
 
-use rusoto_events::{CloudWatchEvents, CloudWatchEventsClient, ListRulesRequest};
 use rusoto_core::Region;
+use rusoto_events::{CloudWatchEvents, CloudWatchEventsClient, ListRulesRequest};
 
 #[test]
 fn should_list_rules() {

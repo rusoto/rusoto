@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_mobile;
 
 use rusoto_core::Region;
-use rusoto_mobile::{Mobile, MobileClient, ListProjectsRequest};
+use rusoto_mobile::{ListProjectsRequest, Mobile, MobileClient};
 
 #[test]
 fn should_list_projects() {

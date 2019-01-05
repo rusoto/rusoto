@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_macie;
 
-use rusoto_macie::{Macie, MacieClient, ListS3ResourcesRequest};
 use rusoto_core::Region;
+use rusoto_macie::{ListS3ResourcesRequest, Macie, MacieClient};
 
 #[test]
 fn should_list_s3_resources() {

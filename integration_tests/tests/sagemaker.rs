@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_sagemaker;
 
-use rusoto_sagemaker::{SageMaker, SageMakerClient, ListModelsInput};
 use rusoto_core::Region;
+use rusoto_sagemaker::{ListModelsInput, SageMaker, SageMakerClient};
 
 #[test]
 fn main() {

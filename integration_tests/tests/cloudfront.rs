@@ -1,8 +1,8 @@
 #![cfg(feature = "cloudfront")]
 
-extern crate rusoto_core;
-extern crate rusoto_cloudfront;
 extern crate env_logger;
+extern crate rusoto_cloudfront;
+extern crate rusoto_core;
 
 use rusoto_cloudfront::{CloudFront, CloudFrontClient, ListDistributionsRequest};
 use rusoto_core::Region;
@@ -17,4 +17,3 @@ fn should_list_distributions() {
     println!("{:#?}", result);
     assert!(result.is_ok());
 }
-

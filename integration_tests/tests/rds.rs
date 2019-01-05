@@ -3,8 +3,11 @@ extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_rds;
 
-use rusoto_rds::{Rds, RdsClient, DescribeDBClustersMessage, CreateOptionGroupMessage, Tag, DeleteOptionGroupMessage};
 use rusoto_core::Region;
+use rusoto_rds::{
+    CreateOptionGroupMessage, DeleteOptionGroupMessage, DescribeDBClustersMessage, Rds, RdsClient,
+    Tag,
+};
 
 #[test]
 fn should_describe_db_clusters() {

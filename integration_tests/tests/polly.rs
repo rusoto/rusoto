@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_polly;
 
-use rusoto_polly::{Polly, PollyClient, DescribeVoicesInput};
 use rusoto_core::Region;
+use rusoto_polly::{DescribeVoicesInput, Polly, PollyClient};
 
 #[test]
 fn should_describe_voices() {

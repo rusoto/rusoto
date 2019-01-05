@@ -4,11 +4,10 @@ extern crate rusoto_core;
 extern crate rusoto_mgh;
 
 use rusoto_core::Region;
-use rusoto_mgh::{MigrationHub, MigrationHubClient, ListMigrationTasksRequest};
+use rusoto_mgh::{ListMigrationTasksRequest, MigrationHub, MigrationHubClient};
 
 #[test]
 fn should_list_migration_tasks() {
-    
     let client = MigrationHubClient::new(Region::UsWest2);
     let request = ListMigrationTasksRequest::default();
 

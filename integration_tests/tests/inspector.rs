@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_inspector;
 
-use rusoto_inspector::{Inspector, InspectorClient, ListAssessmentRunsRequest};
 use rusoto_core::Region;
+use rusoto_inspector::{Inspector, InspectorClient, ListAssessmentRunsRequest};
 
 #[test]
 fn should_list_assessment_runs() {

@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_mediaconvert;
 
-use rusoto_mediaconvert::{MediaConvert, MediaConvertClient, ListJobsRequest};
 use rusoto_core::Region;
+use rusoto_mediaconvert::{ListJobsRequest, MediaConvert, MediaConvertClient};
 
 #[test]
 fn should_list_jobs() {

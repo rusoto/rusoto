@@ -1,7 +1,7 @@
 #![cfg(feature = "acm-pca")]
 
-extern crate rusoto_core;
 extern crate rusoto_acm_pca;
+extern crate rusoto_core;
 
 use rusoto_acm_pca::{AcmPca, AcmPcaClient, ListCertificateAuthoritiesRequest};
 use rusoto_core::Region;

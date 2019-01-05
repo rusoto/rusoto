@@ -2,8 +2,8 @@
 extern crate rusoto_core;
 extern crate rusoto_shield;
 
-use rusoto_shield::{Shield, ShieldClient, ListAttacksRequest};
 use rusoto_core::Region;
+use rusoto_shield::{ListAttacksRequest, Shield, ShieldClient};
 
 #[test]
 fn should_list_attacks() {

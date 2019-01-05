@@ -1,10 +1,11 @@
 #![cfg(feature = "config")]
 
-extern crate rusoto_core;
 extern crate rusoto_config;
+extern crate rusoto_core;
 
-use rusoto_config::{ConfigService, ConfigServiceClient, DescribeConfigRulesRequest,
-                     DescribeDeliveryChannelsRequest};
+use rusoto_config::{
+    ConfigService, ConfigServiceClient, DescribeConfigRulesRequest, DescribeDeliveryChannelsRequest,
+};
 use rusoto_core::Region;
 
 #[test]

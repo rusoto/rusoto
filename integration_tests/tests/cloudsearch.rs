@@ -1,11 +1,10 @@
 #![cfg(feature = "cloudsearch")]
 
-extern crate rusoto_core;
 extern crate rusoto_cloudsearch;
+extern crate rusoto_core;
 
 use rusoto_cloudsearch::{CloudSearch, CloudSearchClient, DescribeDomainsRequest};
 use rusoto_core::Region;
-
 
 #[test]
 fn should_describe_domains() {

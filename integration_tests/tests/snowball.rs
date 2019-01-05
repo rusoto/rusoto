@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_snowball;
 
-use rusoto_snowball::{Snowball, SnowballClient, DescribeAddressesRequest};
 use rusoto_core::Region;
+use rusoto_snowball::{DescribeAddressesRequest, Snowball, SnowballClient};
 
 #[test]
 fn should_describe_addresses() {

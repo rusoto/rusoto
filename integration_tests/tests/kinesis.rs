@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_kinesis;
 
-use rusoto_kinesis::{Kinesis, KinesisClient, ListStreamsInput};
 use rusoto_core::Region;
+use rusoto_kinesis::{Kinesis, KinesisClient, ListStreamsInput};
 
 #[test]
 fn should_list_streams() {

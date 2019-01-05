@@ -1,9 +1,9 @@
 #![cfg(feature = "autoscaling")]
 
-extern crate rusoto_core;
 extern crate rusoto_autoscaling;
+extern crate rusoto_core;
 
-use rusoto_autoscaling::{Autoscaling, AutoscalingClient, AutoScalingGroupNamesType};
+use rusoto_autoscaling::{AutoScalingGroupNamesType, Autoscaling, AutoscalingClient};
 use rusoto_core::Region;
 
 #[test]

@@ -1,7 +1,7 @@
 #![cfg(feature = "codestar")]
 
-extern crate rusoto_core;
 extern crate rusoto_codestar;
+extern crate rusoto_core;
 
 use rusoto_codestar::{CodeStar, CodeStarClient, ListProjectsRequest};
 use rusoto_core::Region;

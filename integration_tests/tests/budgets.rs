@@ -1,7 +1,7 @@
 #![cfg(feature = "budgets")]
 
-extern crate rusoto_core;
 extern crate rusoto_budgets;
+extern crate rusoto_core;
 
 use rusoto_budgets::{Budgets, BudgetsClient, DescribeBudgetsRequest};
 use rusoto_core::Region;

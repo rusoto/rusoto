@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_dax;
 
-use rusoto_dax::{DynamodbAccelerator, DynamodbAcceleratorClient, DescribeClustersRequest};
 use rusoto_core::Region;
+use rusoto_dax::{DescribeClustersRequest, DynamodbAccelerator, DynamodbAcceleratorClient};
 
 #[test]
 fn should_describe_clusters() {

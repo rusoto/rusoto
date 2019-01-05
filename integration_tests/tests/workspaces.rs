@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_workspaces;
 
-use rusoto_workspaces::{Workspaces, WorkspacesClient, DescribeWorkspacesRequest};
 use rusoto_core::Region;
+use rusoto_workspaces::{DescribeWorkspacesRequest, Workspaces, WorkspacesClient};
 
 #[test]
 fn should_describe_workspaces() {

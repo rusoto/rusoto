@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_elasticache;
 
-use rusoto_elasticache::{ElastiCache, ElastiCacheClient, DescribeCacheClustersMessage};
 use rusoto_core::Region;
+use rusoto_elasticache::{DescribeCacheClustersMessage, ElastiCache, ElastiCacheClient};
 
 #[test]
 fn should_describe_cache_clusters() {

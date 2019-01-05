@@ -3,8 +3,10 @@
 extern crate rusoto_core;
 extern crate rusoto_dms;
 
-use rusoto_dms::{DatabaseMigrationService, DatabaseMigrationServiceClient, DescribeEndpointsMessage};
 use rusoto_core::Region;
+use rusoto_dms::{
+    DatabaseMigrationService, DatabaseMigrationServiceClient, DescribeEndpointsMessage,
+};
 
 #[test]
 fn should_describe_tags() {
@@ -12,5 +14,5 @@ fn should_describe_tags() {
     let request = DescribeEndpointsMessage::default();
 
     let result = client.describe_endpoints(request).sync().unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }

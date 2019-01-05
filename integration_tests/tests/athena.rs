@@ -1,7 +1,7 @@
 #![cfg(feature = "athena")]
 
-extern crate rusoto_core;
 extern crate rusoto_athena;
+extern crate rusoto_core;
 
 use rusoto_athena::{Athena, AthenaClient, ListNamedQueriesInput};
 use rusoto_core::Region;
@@ -12,5 +12,4 @@ fn should_list_named_queries() {
     let request = ListNamedQueriesInput::default();
 
     client.list_named_queries(request).sync().unwrap();
-
 }

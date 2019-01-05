@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_dynamodbstreams;
 
-use rusoto_dynamodbstreams::{DynamoDbStreams, DynamoDbStreamsClient, ListStreamsInput};
 use rusoto_core::Region;
+use rusoto_dynamodbstreams::{DynamoDbStreams, DynamoDbStreamsClient, ListStreamsInput};
 
 #[test]
 fn should_list_streams() {

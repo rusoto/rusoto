@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_mq;
 
 use rusoto_core::Region;
-use rusoto_mq::{MQ, MQClient, ListBrokersRequest};
+use rusoto_mq::{ListBrokersRequest, MQClient, MQ};
 
 #[test]
 fn should_list_brokers() {
