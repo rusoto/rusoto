@@ -1,10 +1,12 @@
 #![cfg(feature = "cognito-identity")]
 
-extern crate rusoto_core;
 extern crate rusoto_cognito_identity;
+extern crate rusoto_core;
 
-use rusoto_cognito_identity::{CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
-                              ListIdentitiesError, ListIdentityPoolsInput};
+use rusoto_cognito_identity::{
+    CognitoIdentity, CognitoIdentityClient, ListIdentitiesError, ListIdentitiesInput,
+    ListIdentityPoolsInput,
+};
 use rusoto_core::Region;
 
 #[test]

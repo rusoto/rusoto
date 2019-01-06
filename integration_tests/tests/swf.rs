@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_swf;
 
-use rusoto_swf::{Swf, SwfClient, ListDomainsInput};
 use rusoto_core::Region;
+use rusoto_swf::{ListDomainsInput, Swf, SwfClient};
 
 #[test]
 fn should_list_domains() {

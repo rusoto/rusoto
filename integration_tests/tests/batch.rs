@@ -1,7 +1,7 @@
 #![cfg(feature = "batch")]
 
-extern crate rusoto_core;
 extern crate rusoto_batch;
+extern crate rusoto_core;
 
 use rusoto_batch::{Batch, BatchClient, DescribeJobDefinitionsRequest};
 use rusoto_core::Region;
@@ -12,5 +12,4 @@ fn should_get_rest_apis() {
     let request = DescribeJobDefinitionsRequest::default();
 
     client.describe_job_definitions(request).sync().unwrap();
-
 }

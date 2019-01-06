@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_transcribe;
 
-use rusoto_transcribe::{Transcribe, TranscribeClient, ListVocabulariesRequest};
 use rusoto_core::Region;
+use rusoto_transcribe::{ListVocabulariesRequest, Transcribe, TranscribeClient};
 
 #[test]
 fn should_list_vocabs() {

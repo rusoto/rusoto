@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_sns;
 
-use rusoto_sns::{Sns, SnsClient, ListTopicsInput};
 use rusoto_core::Region;
+use rusoto_sns::{ListTopicsInput, Sns, SnsClient};
 
 #[test]
 fn should_list_topics() {

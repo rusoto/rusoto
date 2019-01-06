@@ -3,9 +3,10 @@
 extern crate rusoto_core;
 extern crate rusoto_directconnect;
 
-use rusoto_directconnect::{DirectConnect, DirectConnectClient, DescribeConnectionsRequest,
-                            DescribeConnectionsError};
 use rusoto_core::Region;
+use rusoto_directconnect::{
+    DescribeConnectionsError, DescribeConnectionsRequest, DirectConnect, DirectConnectClient,
+};
 
 #[test]
 fn should_describe_connections() {
@@ -19,7 +20,9 @@ fn should_describe_connections() {
 fn should_fail_gracefully() {
     let client = DirectConnectClient::new(Region::UsEast1);
 
-    let request = DescribeConnectionsRequest { connection_id: Some("invalid".to_string()) };
+    let request = DescribeConnectionsRequest {
+        connection_id: Some("invalid".to_string()),
+    };
 
     match client.describe_connections(request).sync() {
         Err(DescribeConnectionsError::DirectConnectClient(msg)) => {

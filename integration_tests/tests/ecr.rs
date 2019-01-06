@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_ecr;
 
-use rusoto_ecr::{Ecr, EcrClient, DescribeRepositoriesRequest};
 use rusoto_core::Region;
+use rusoto_ecr::{DescribeRepositoriesRequest, Ecr, EcrClient};
 
 #[test]
 fn should_describe_repositories() {

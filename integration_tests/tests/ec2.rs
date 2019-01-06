@@ -3,9 +3,11 @@
 extern crate rusoto_core;
 extern crate rusoto_ec2;
 
-use rusoto_ec2::{Ec2, Ec2Client, CreateSnapshotRequest, DescribeInstancesRequest, DescribeInstancesError};
-use rusoto_ec2::{CreateTagsRequest, Tag};
 use rusoto_core::Region;
+use rusoto_ec2::{
+    CreateSnapshotRequest, DescribeInstancesError, DescribeInstancesRequest, Ec2, Ec2Client,
+};
+use rusoto_ec2::{CreateTagsRequest, Tag};
 
 use std::str;
 
@@ -23,20 +25,21 @@ fn main() {
             match error {
                 DescribeInstancesError::Unknown(ref e) => {
                     assert!(str::from_utf8(&e.body).unwrap().contains("<Message>The instance IDs 'i-00000000, i-00000001' do not exist</Message>"), "Missing error message");
-                },
+                }
                 _ => {
                     panic!("Should have a typed error from EC2");
-                },
-            }            
+                }
+            }
         }
     }
-
 }
 
 // Issue 383
 #[test]
 #[ignore]
-#[should_panic(expected="<Message>Request would have succeeded, but DryRun flag is set.</Message>")]
+#[should_panic(
+    expected = "<Message>Request would have succeeded, but DryRun flag is set.</Message>"
+)]
 fn dry_run() {
     let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateSnapshotRequest {
@@ -50,16 +53,16 @@ fn dry_run() {
 // Issue 387
 #[test]
 #[ignore]
-#[should_panic(expected="<Code>InvalidID</Code>")]
+#[should_panic(expected = "<Code>InvalidID</Code>")]
 fn query_serialization_name() {
     let ec2 = Ec2Client::new(Region::UsEast1);
     let req = CreateTagsRequest {
         dry_run: None,
         resources: vec!["v-00000001".into()],
         tags: vec![Tag {
-                       key: Some("key".into()),
-                       value: Some("val".into()),
-                   }],
+            key: Some("key".into()),
+            value: Some("val".into()),
+        }],
     };
     let _ = ec2.create_tags(req).sync().unwrap();
 }

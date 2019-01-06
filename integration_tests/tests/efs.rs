@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_efs;
 
-use rusoto_efs::{Efs, EfsClient, DescribeFileSystemsRequest};
 use rusoto_core::Region;
+use rusoto_efs::{DescribeFileSystemsRequest, Efs, EfsClient};
 
 #[test]
 fn should_describe_filesystems() {

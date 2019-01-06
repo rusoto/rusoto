@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_route53domains;
 
-use rusoto_route53domains::{Route53Domains, Route53DomainsClient, ListOperationsRequest};
 use rusoto_core::Region;
+use rusoto_route53domains::{ListOperationsRequest, Route53Domains, Route53DomainsClient};
 
 #[test]
 fn should_list_operations() {

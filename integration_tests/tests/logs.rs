@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_logs;
 
-use rusoto_logs::{CloudWatchLogs, CloudWatchLogsClient, DescribeLogGroupsRequest};
 use rusoto_core::Region;
+use rusoto_logs::{CloudWatchLogs, CloudWatchLogsClient, DescribeLogGroupsRequest};
 
 #[test]
 fn should_describe_log_groups() {

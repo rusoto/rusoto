@@ -3,8 +3,8 @@ extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_importexport;
 
-use rusoto_importexport::{ImportExport, ImportExportClient, ListJobsInput};
 use rusoto_core::Region;
+use rusoto_importexport::{ImportExport, ImportExportClient, ListJobsInput};
 
 #[test]
 #[ignore]

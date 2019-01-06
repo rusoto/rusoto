@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_firehose;
 
-use rusoto_firehose::{KinesisFirehose, KinesisFirehoseClient, ListDeliveryStreamsInput};
 use rusoto_core::Region;
+use rusoto_firehose::{KinesisFirehose, KinesisFirehoseClient, ListDeliveryStreamsInput};
 
 #[test]
 fn should_list_delivery_streams() {

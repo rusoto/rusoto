@@ -1,7 +1,7 @@
 #![cfg(feature = "clouddirectory")]
 
-extern crate rusoto_core;
 extern crate rusoto_clouddirectory;
+extern crate rusoto_core;
 
 use rusoto_clouddirectory::{CloudDirectory, CloudDirectoryClient, ListDirectoriesRequest};
 use rusoto_core::Region;

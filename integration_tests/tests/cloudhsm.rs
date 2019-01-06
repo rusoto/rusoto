@@ -1,9 +1,11 @@
 #![cfg(feature = "cloudhsm")]
 
-extern crate rusoto_core;
 extern crate rusoto_cloudhsm;
+extern crate rusoto_core;
 
-use rusoto_cloudhsm::{CloudHsm, CloudHsmClient, ListHapgsRequest, ListHsmsRequest, ListLunaClientsRequest};
+use rusoto_cloudhsm::{
+    CloudHsm, CloudHsmClient, ListHapgsRequest, ListHsmsRequest, ListLunaClientsRequest,
+};
 use rusoto_core::Region;
 
 #[test]

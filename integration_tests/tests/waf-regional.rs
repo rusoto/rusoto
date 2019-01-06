@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_waf_regional;
 
-use rusoto_waf_regional::{WAFRegional, WAFRegionalClient, ListRulesRequest};
 use rusoto_core::Region;
+use rusoto_waf_regional::{ListRulesRequest, WAFRegional, WAFRegionalClient};
 
 #[test]
 fn should_list_rules() {

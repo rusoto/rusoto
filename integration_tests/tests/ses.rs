@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_ses;
 
-use rusoto_ses::{Ses, SesClient};
 use rusoto_core::Region;
+use rusoto_ses::{Ses, SesClient};
 
 #[test]
 fn should_list_verified_email_addresses() {

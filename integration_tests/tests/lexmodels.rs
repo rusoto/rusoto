@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_lex_models;
 
-use rusoto_lex_models::{LexModels, LexModelsClient, GetBotsRequest};
 use rusoto_core::Region;
+use rusoto_lex_models::{GetBotsRequest, LexModels, LexModelsClient};
 
 #[test]
 fn should_get_bots() {

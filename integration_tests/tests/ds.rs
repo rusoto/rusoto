@@ -3,9 +3,10 @@
 extern crate rusoto_core;
 extern crate rusoto_ds;
 
-use rusoto_ds::{DirectoryService, DirectoryServiceClient, DescribeTrustsRequest,
-                 DescribeDirectoriesRequest};
 use rusoto_core::Region;
+use rusoto_ds::{
+    DescribeDirectoriesRequest, DescribeTrustsRequest, DirectoryService, DirectoryServiceClient,
+};
 
 #[test]
 fn should_describe_trusts() {

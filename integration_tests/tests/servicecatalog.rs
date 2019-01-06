@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_servicecatalog;
 
-use rusoto_servicecatalog::{ServiceCatalog, ServiceCatalogClient, ListPortfoliosInput};
 use rusoto_core::Region;
+use rusoto_servicecatalog::{ListPortfoliosInput, ServiceCatalog, ServiceCatalogClient};
 
 #[test]
 fn should_list_portfolios() {
@@ -12,5 +12,5 @@ fn should_list_portfolios() {
     let request = ListPortfoliosInput::default();
 
     let result = client.list_portfolios(request).sync().unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }

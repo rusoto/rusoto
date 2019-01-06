@@ -3,8 +3,10 @@
 extern crate rusoto_core;
 extern crate rusoto_resourcegroupstaggingapi;
 
-use rusoto_resourcegroupstaggingapi::{ResourceGroupsTaggingApi, ResourceGroupsTaggingApiClient, GetResourcesInput};
 use rusoto_core::Region;
+use rusoto_resourcegroupstaggingapi::{
+    GetResourcesInput, ResourceGroupsTaggingApi, ResourceGroupsTaggingApiClient,
+};
 
 #[test]
 fn should_get_resources() {
@@ -12,5 +14,5 @@ fn should_get_resources() {
     let request = GetResourcesInput::default();
 
     let result = client.get_resources(request).sync().unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }

@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_stepfunctions;
 
-use rusoto_stepfunctions::{StepFunctions, StepFunctionsClient, ListStateMachinesInput};
 use rusoto_core::Region;
+use rusoto_stepfunctions::{ListStateMachinesInput, StepFunctions, StepFunctionsClient};
 
 #[test]
 fn should_list_state_machines() {

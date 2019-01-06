@@ -1,7 +1,7 @@
 #![cfg(feature = "acm")]
 
-extern crate rusoto_core;
 extern crate rusoto_acm;
+extern crate rusoto_core;
 
 use rusoto_acm::{Acm, AcmClient, ListCertificatesRequest};
 use rusoto_core::Region;

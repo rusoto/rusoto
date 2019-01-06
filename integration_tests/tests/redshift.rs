@@ -1,10 +1,10 @@
 #![cfg(feature = "redshift")]
+extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_redshift;
-extern crate env_logger;
 
-use rusoto_redshift::{Redshift, RedshiftClient, DescribeClustersMessage};
 use rusoto_core::Region;
+use rusoto_redshift::{DescribeClustersMessage, Redshift, RedshiftClient};
 
 #[test]
 fn should_describe_clusters() {

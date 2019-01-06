@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_translate;
 
-use rusoto_translate::{Translate, TranslateClient, TranslateTextRequest};
 use rusoto_core::Region;
+use rusoto_translate::{Translate, TranslateClient, TranslateTextRequest};
 
 #[test]
 fn should_translate_to_german() {

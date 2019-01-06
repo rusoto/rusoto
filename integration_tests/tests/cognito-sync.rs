@@ -1,7 +1,7 @@
 #![cfg(feature = "cognito-sync")]
 
-extern crate rusoto_core;
 extern crate rusoto_cognito_sync;
+extern crate rusoto_core;
 
 use rusoto_cognito_sync::{CognitoSync, CognitoSyncClient, ListIdentityPoolUsageRequest};
 use rusoto_core::Region;

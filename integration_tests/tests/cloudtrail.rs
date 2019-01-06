@@ -1,7 +1,7 @@
 #![cfg(feature = "cloudtrail")]
 
-extern crate rusoto_core;
 extern crate rusoto_cloudtrail;
+extern crate rusoto_core;
 
 use rusoto_cloudtrail::{CloudTrail, CloudTrailClient, DescribeTrailsRequest};
 use rusoto_core::Region;

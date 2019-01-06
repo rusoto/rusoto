@@ -1,11 +1,11 @@
 #![cfg(feature = "iot")]
 
+extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_iot;
-extern crate env_logger;
 
-use rusoto_iot::{Iot, IotClient, ListThingsRequest};
 use rusoto_core::Region;
+use rusoto_iot::{Iot, IotClient, ListThingsRequest};
 
 #[test]
 fn should_list_things() {

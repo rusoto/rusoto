@@ -14,7 +14,7 @@ use std::ops::{Deref, DerefMut};
 use rand::Rng;
 use rusoto_core::Region;
 use rusoto_elastictranscoder::{Ets, EtsClient};
-use rusoto_s3::{S3, S3Client, CreateBucketRequest, DeleteBucketRequest};
+use rusoto_s3::{CreateBucketRequest, DeleteBucketRequest, S3Client, S3};
 
 const AWS_ETS_WEB_PRESET_ID: &'static str = "1351620000001-100070";
 const AWS_ETS_WEB_PRESET_NAME: &'static str = "System preset: Web";
@@ -50,17 +50,19 @@ impl TestEtsClient {
     fn create_bucket(&mut self) -> String {
         let bucket_name = generate_unique_name("ets-bucket-1");
 
-        let create_bucket_req =
-            CreateBucketRequest { bucket: bucket_name.to_owned(), ..Default::default() };
+        let create_bucket_req = CreateBucketRequest {
+            bucket: bucket_name.to_owned(),
+            ..Default::default()
+        };
 
-        let result = self.s3_client
+        let result = self
+            .s3_client
             .as_ref()
             .unwrap()
-            .create_bucket(create_bucket_req).sync();
+            .create_bucket(create_bucket_req)
+            .sync();
 
-        let mut location = result.unwrap()
-            .location
-            .unwrap();
+        let mut location = result.unwrap().location.unwrap();
         // A `Location` is identical to a `BucketName` except that it has a
         // forward slash prepended to it, so we need to remove it.
         location.remove(0);
@@ -86,9 +88,10 @@ impl Drop for TestEtsClient {
     fn drop(&mut self) {
         self.s3_client.take().map(|s3_client| {
             self.input_bucket.take().map(|bucket| {
-
-                let delete_bucket_req =
-                    DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
+                let delete_bucket_req = DeleteBucketRequest {
+                    bucket: bucket.to_owned(),
+                    ..Default::default()
+                };
 
                 match s3_client.delete_bucket(delete_bucket_req).sync() {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
@@ -96,9 +99,10 @@ impl Drop for TestEtsClient {
                 };
             });
             self.output_bucket.take().map(|bucket| {
-
-                let delete_bucket_req =
-                    DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
+                let delete_bucket_req = DeleteBucketRequest {
+                    bucket: bucket.to_owned(),
+                    ..Default::default()
+                };
 
                 match s3_client.delete_bucket(delete_bucket_req).sync() {
                     Ok(_) => info!("Deleted S3 bucket: {}", bucket),
@@ -124,12 +128,14 @@ fn create_client() -> TestEtsClient {
 /// ASCII characters to the specified prefix.
 /// Keeps it lower case to work with S3 requirements as of 3/1/2018.
 fn generate_unique_name(prefix: &str) -> String {
-    format!("{}-{}",
-            prefix,
-            rand::thread_rng()
-                .gen_ascii_chars()
-                .take(AWS_SERVICE_RANDOM_SUFFIX_LENGTH)
-                .collect::<String>())
+    format!(
+        "{}-{}",
+        prefix,
+        rand::thread_rng()
+            .gen_ascii_chars()
+            .take(AWS_SERVICE_RANDOM_SUFFIX_LENGTH)
+            .collect::<String>()
+    )
     .to_lowercase()
 }
 
@@ -157,8 +163,9 @@ fn create_pipeline_without_arn() {
 
 #[test]
 fn create_preset() {
-    use rusoto_elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
-                                    DeletePresetRequest};
+    use rusoto_elastictranscoder::{
+        AudioCodecOptions, AudioParameters, CreatePresetRequest, DeletePresetRequest,
+    };
 
     initialize();
 
@@ -192,8 +199,10 @@ fn create_preset() {
     let preset = response.preset.unwrap();
 
     assert_eq!(preset.container, Some("flac".to_owned()));
-    assert_eq!(preset.description,
-               Some("This is an example FLAC preset".to_owned()));
+    assert_eq!(
+        preset.description,
+        Some("This is an example FLAC preset".to_owned())
+    );
     assert_eq!(preset.name, Some(name));
     assert!(preset.id.is_some());
 
@@ -209,8 +218,9 @@ fn create_preset() {
 
 #[test]
 fn delete_preset() {
-    use rusoto_elastictranscoder::{AudioCodecOptions, AudioParameters, CreatePresetRequest,
-                                    DeletePresetRequest};
+    use rusoto_elastictranscoder::{
+        AudioCodecOptions, AudioParameters, CreatePresetRequest, DeletePresetRequest,
+    };
 
     initialize();
 
@@ -253,17 +263,20 @@ fn list_jobs_by_status() {
     let client = create_client();
 
     let status = "Submitted".to_owned();
-    let request =
-        ListJobsByStatusRequest { status: status.clone(), ..ListJobsByStatusRequest::default() };
+    let request = ListJobsByStatusRequest {
+        status: status.clone(),
+        ..ListJobsByStatusRequest::default()
+    };
     let response = client.list_jobs_by_status(request).sync();
 
     assert!(response.is_ok());
 
     let response = response.unwrap();
 
-    info!("Got list of jobs with status \"{}\": {:?}",
-          &status,
-          response.jobs);
+    info!(
+        "Got list of jobs with status \"{}\": {:?}",
+        &status, response.jobs
+    );
 }
 
 #[test]
@@ -307,7 +320,8 @@ fn list_presets() {
         info!("Preset: {:?}", preset.name);
     }
 
-    let web_preset = presets.iter()
+    let web_preset = presets
+        .iter()
         .filter(|x| x.id == Some(AWS_ETS_WEB_PRESET_ID.to_owned()))
         .next();
 
@@ -327,7 +341,9 @@ fn read_preset() {
 
     let client = create_client();
 
-    let request = ReadPresetRequest { id: AWS_ETS_WEB_PRESET_ID.to_owned() };
+    let request = ReadPresetRequest {
+        id: AWS_ETS_WEB_PRESET_ID.to_owned(),
+    };
     let response = client.read_preset(request).sync();
 
     assert!(response.is_ok());

@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_eks;
 
-use rusoto_eks::{Eks, EksClient, ListClustersRequest};
 use rusoto_core::Region;
+use rusoto_eks::{Eks, EksClient, ListClustersRequest};
 
 #[test]
 fn should_list_clusters() {

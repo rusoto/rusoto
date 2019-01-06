@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_servicediscovery;
 
-use rusoto_servicediscovery::{ServiceDiscovery, ServiceDiscoveryClient, ListServicesRequest};
 use rusoto_core::Region;
+use rusoto_servicediscovery::{ListServicesRequest, ServiceDiscovery, ServiceDiscoveryClient};
 
 #[test]
 fn should_list_services() {

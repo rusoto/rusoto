@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_resource_groups;
 
-use rusoto_resource_groups::{ResourceGroups, ResourceGroupsClient, ListGroupsInput};
 use rusoto_core::Region;
+use rusoto_resource_groups::{ListGroupsInput, ResourceGroups, ResourceGroupsClient};
 
 #[test]
 fn should_list_groups() {
@@ -12,6 +12,6 @@ fn should_list_groups() {
     let request = ListGroupsInput::default();
 
     let result = client.list_groups(request).sync().unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
     assert!(result.groups.is_some());
 }

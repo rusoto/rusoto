@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_mediapackage;
 
-use rusoto_mediapackage::{MediaPackage, MediaPackageClient, ListOriginEndpointsRequest};
 use rusoto_core::Region;
+use rusoto_mediapackage::{ListOriginEndpointsRequest, MediaPackage, MediaPackageClient};
 
 #[test]
 fn should_list_origin_endpoints() {

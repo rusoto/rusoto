@@ -3,15 +3,15 @@
 extern crate rusoto_core;
 extern crate rusoto_ecs;
 
-use rusoto_ecs::{Ecs, EcsClient, ListClustersRequest, ListClustersError};
-use rusoto_core::{Region, DefaultCredentialsProvider};
 use rusoto_core::request::{HttpClient, HttpConfig};
+use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_ecs::{Ecs, EcsClient, ListClustersError, ListClustersRequest};
 
 #[test]
 fn main() {
     // EcsClient configuration demonstrates setting the hyper read_buf_size option
     // to 2MB:
-    let cred_provider =  DefaultCredentialsProvider::new().unwrap();
+    let cred_provider = DefaultCredentialsProvider::new().unwrap();
     let mut http_config_with_bigger_buffer = HttpConfig::new();
     http_config_with_bigger_buffer.read_buf_size(1024 * 1024 * 2);
     let http_provider = HttpClient::new_with_config(http_config_with_bigger_buffer).unwrap();
@@ -30,10 +30,13 @@ fn main() {
         }
     }
 
-    match ecs.list_clusters(ListClustersRequest {
-        next_token: Some("bogus".to_owned()),
-        ..Default::default()
-    }).sync() {
+    match ecs
+        .list_clusters(ListClustersRequest {
+            next_token: Some("bogus".to_owned()),
+            ..Default::default()
+        })
+        .sync()
+    {
         Err(ListClustersError::InvalidParameter(msg)) => {
             assert!(msg.contains("Invalid token bogus"))
         }

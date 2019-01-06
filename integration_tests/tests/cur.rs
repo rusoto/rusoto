@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_cur;
 
-use rusoto_cur::{CostAndUsageReport, CostAndUsageReportClient, DescribeReportDefinitionsRequest};
 use rusoto_core::Region;
+use rusoto_cur::{CostAndUsageReport, CostAndUsageReportClient, DescribeReportDefinitionsRequest};
 
 #[test]
 fn should_describe_report_definitions() {
@@ -12,5 +12,5 @@ fn should_describe_report_definitions() {
     let request = DescribeReportDefinitionsRequest::default();
 
     let result = client.describe_report_definitions(request).sync().unwrap();
-	println!("{:#?}", result);
+    println!("{:#?}", result);
 }

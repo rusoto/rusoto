@@ -1,7 +1,7 @@
 #![cfg(feature = "codedeploy")]
 
-extern crate rusoto_core;
 extern crate rusoto_codedeploy;
+extern crate rusoto_core;
 
 use rusoto_codedeploy::{CodeDeploy, CodeDeployClient, ListApplicationsInput};
 use rusoto_core::Region;

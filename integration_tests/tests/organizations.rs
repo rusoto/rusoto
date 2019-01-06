@@ -3,8 +3,8 @@ extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_organizations;
 
-use rusoto_organizations::{Organizations, OrganizationsClient };
 use rusoto_core::Region;
+use rusoto_organizations::{Organizations, OrganizationsClient};
 
 #[test]
 #[ignore]

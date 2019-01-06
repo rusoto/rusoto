@@ -3,8 +3,8 @@ extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_elb;
 
-use rusoto_elb::{Elb, ElbClient, DescribeAccessPointsInput};
 use rusoto_core::Region;
+use rusoto_elb::{DescribeAccessPointsInput, Elb, ElbClient};
 
 #[test]
 fn should_describe_load_balancers() {

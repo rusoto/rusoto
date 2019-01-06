@@ -1,13 +1,15 @@
 #![cfg(feature = "discovery")]
 
-extern crate rusoto_core;
-extern crate rusoto_discovery;
 extern crate env_logger;
 extern crate log;
+extern crate rusoto_core;
+extern crate rusoto_discovery;
 
-use rusoto_discovery::{Discovery, DiscoveryClient, DescribeTagsRequest, ListConfigurationsRequest,
-    DescribeTagsError, ListConfigurationsError};
 use rusoto_core::Region;
+use rusoto_discovery::{
+    DescribeTagsError, DescribeTagsRequest, Discovery, DiscoveryClient, ListConfigurationsError,
+    ListConfigurationsRequest,
+};
 
 use std::str;
 
@@ -17,7 +19,7 @@ use std::str;
 #[test]
 fn should_describe_tags() {
     let _ = env_logger::try_init();
-    
+
     let client = DiscoveryClient::new(Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
@@ -27,9 +29,11 @@ fn should_describe_tags() {
             println!("Got expected error of {}", e);
             match e {
                 DescribeTagsError::Unknown(ref e) => {
-                    assert!(str::from_utf8(&e.body).unwrap().contains("is not whitelisted to access"));
-                },
-                _ => panic!("Error from Discovery service should be typed.")
+                    assert!(str::from_utf8(&e.body)
+                        .unwrap()
+                        .contains("is not whitelisted to access"));
+                }
+                _ => panic!("Error from Discovery service should be typed."),
             }
         }
     }
@@ -40,20 +44,20 @@ fn should_list_configurations() {
     let _ = env_logger::try_init();
 
     let client = DiscoveryClient::new(Region::UsWest2);
-    let request = ListConfigurationsRequest{
+    let request = ListConfigurationsRequest {
         configuration_type: "SERVER".to_owned(),
         ..Default::default()
     };
 
     match client.list_configurations(request).sync() {
         Ok(response) => println!("Response: {:?}", response),
-        Err(e) => {
-            match e {
-                ListConfigurationsError::Unknown(ref e) => {
-                    assert!(str::from_utf8(&e.body).unwrap().contains("is not whitelisted to access"));
-                },
-                _ => panic!("Error from Discovery service should be typed.")
+        Err(e) => match e {
+            ListConfigurationsError::Unknown(ref e) => {
+                assert!(str::from_utf8(&e.body)
+                    .unwrap()
+                    .contains("is not whitelisted to access"));
             }
-        }
+            _ => panic!("Error from Discovery service should be typed."),
+        },
     }
 }

@@ -3,10 +3,11 @@
 extern crate rusoto_core;
 extern crate rusoto_machinelearning;
 
-use rusoto_machinelearning::{MachineLearning, MachineLearningClient,
-                              DescribeDataSourcesInput, DescribeBatchPredictionsInput,
-                              DescribeEvaluationsInput};
 use rusoto_core::Region;
+use rusoto_machinelearning::{
+    DescribeBatchPredictionsInput, DescribeDataSourcesInput, DescribeEvaluationsInput,
+    MachineLearning, MachineLearningClient,
+};
 
 #[test]
 fn should_describe_batch_predictions() {
