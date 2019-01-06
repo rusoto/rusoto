@@ -6,15 +6,15 @@ use std::collections::BTreeMap;
 pub struct Manifest {
     pub package: Metadata,
     pub badges: Option<BTreeMap<String, Badge>>,
-    #[serde(rename="build-dependencies")]
+    #[serde(rename = "build-dependencies")]
     #[serde(serialize_with = "toml::ser::tables_last")]
     pub build_dependencies: BTreeMap<String, Dependency>,
     #[serde(serialize_with = "toml::ser::tables_last")]
     pub dependencies: BTreeMap<String, Dependency>,
-    #[serde(rename="dev-dependencies")]
+    #[serde(rename = "dev-dependencies")]
     #[serde(serialize_with = "toml::ser::tables_last")]
     pub dev_dependencies: BTreeMap<String, Dependency>,
-    pub features: Option<BTreeMap<String, Vec<String>>>
+    pub features: Option<BTreeMap<String, Vec<String>>>,
 }
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
@@ -28,13 +28,13 @@ pub struct Metadata {
     pub readme: Option<String>,
     pub repository: Option<String>,
     pub version: String,
-    pub homepage: Option<String>
+    pub homepage: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Badge {
     pub repository: String,
-    pub branch: String
+    pub branch: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -45,8 +45,8 @@ pub enum Dependency {
         version: Option<String>,
         path: Option<String>,
         optional: Option<bool>,
-        #[serde(rename="default-features")]
+        #[serde(rename = "default-features")]
         default_features: Option<bool>,
         features: Option<Vec<String>>,
-    }
+    },
 }

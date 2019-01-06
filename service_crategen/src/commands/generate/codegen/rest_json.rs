@@ -2,10 +2,12 @@ use std::io::Write;
 
 use inflector::Inflector;
 
+use super::{
+    error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
+    GenerateProtocol, IoResult,
+};
 use botocore::{Operation, Shape, ShapeType};
-use ::Service;
-use super::{GenerateProtocol, error_type_name, FileWriter, IoResult, rest_response_parser,
-            rest_request_generator, generate_field_name};
+use Service;
 
 pub struct RestJsonGenerator;
 
@@ -18,16 +20,18 @@ impl GenerateProtocol for RestJsonGenerator {
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type).unwrap();
 
-            writeln!(writer,
-                     "
+            writeln!(
+                writer,
+                "
                 {documentation}
                 {method_signature} -> \
                       RusotoFuture<{output_type}, {error_type}>;
                 ",
-                     documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                     method_signature = generate_method_signature(operation, input_shape),
-                     error_type = error_type_name(service, operation_name),
-                     output_type = output_type)?
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
+                method_signature = generate_method_signature(operation, input_shape),
+                error_type = error_type_name(service, operation_name),
+                output_type = output_type
+            )?
         }
         Ok(())
     }
@@ -40,8 +44,8 @@ impl GenerateProtocol for RestJsonGenerator {
             // Retrieve the `Shape` for the input for this operation.
             let input_shape = &service.get_shape(input_type).unwrap();
 
-            let (request_uri, _) = rest_request_generator::parse_query_string(&operation.http
-                .request_uri);
+            let (request_uri, _) =
+                rest_request_generator::parse_query_string(&operation.http.request_uri);
 
             writeln!(writer,"
                 {documentation}
@@ -107,11 +111,12 @@ impl GenerateProtocol for RestJsonGenerator {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
 
-        writeln!(writer,
-                 "use rusoto_core::signature::SignedRequest;
+        writeln!(
+            writer,
+            "use rusoto_core::signature::SignedRequest;
                   use serde_json::from_slice;
-                  use serde_json::Value as SerdeJsonValue;")
-
+                  use serde_json::Value as SerdeJsonValue;"
+        )
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {
@@ -151,7 +156,7 @@ fn generate_default_headers(service: &Service) -> String {
         return "if input.content_type.is_none() {
                     request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
                 }"
-                .to_string();
+        .to_string();
     }
     "request.set_content_type(\"application/x-amz-json-1.1\".to_owned());".to_string()
 }
@@ -161,8 +166,10 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     if service.signing_name() == service.endpoint_prefix() {
         None
     } else {
-        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
-                     service.endpoint_prefix()))
+        Some(format!(
+            "request.set_endpoint_prefix(\"{}\".to_string());",
+            service.endpoint_prefix()
+        ))
     }
 }
 
@@ -170,19 +177,22 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 // don't clutter method signatures with them
 fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
     if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
-        format!("fn {method_name}(&self, input: {input_type})",
-                method_name = operation.name.to_snake_case(),
-                input_type = operation.input_shape())
+        format!(
+            "fn {method_name}(&self, input: {input_type})",
+            method_name = operation.name.to_snake_case(),
+            input_type = operation.input_shape()
+        )
     } else {
-        format!("fn {method_name}(&self)",
-                method_name = operation.name.to_snake_case())
+        format!(
+            "fn {method_name}(&self)",
+            method_name = operation.name.to_snake_case()
+        )
     }
 }
 
 // Figure out what, if anything, should be sent as the body of the http request
 fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
     let declare_payload = match input_shape.payload {
-
         // if the input shape explicitly specifies a payload field, use that
         Some(ref payload_member_name) => {
             Some(declared_payload(input_shape, payload_member_name, service))
@@ -192,11 +202,13 @@ fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
         None => {
             // only use the input_shape if it has non-query, non-header members
             // (i.e., location unspecified)
-            if input_shape.members
+            if input_shape
+                .members
                 .as_ref()
                 .unwrap()
                 .iter()
-                .any(|(_, member)| member.location.is_none()) {
+                .any(|(_, member)| member.location.is_none())
+            {
                 Some("let encoded = Some(serde_json::to_vec(&input).unwrap());".to_owned())
             } else {
                 None
@@ -213,7 +225,8 @@ fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
 
 fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Service) -> String {
     let payload_member_shape = &input_shape.members.as_ref().unwrap()[payload_member_name].shape;
-    let payload_shape = &service.get_shape(payload_member_shape)
+    let payload_shape = &service
+        .get_shape(payload_member_shape)
         .expect("Shape missing from service definition");
 
     let field_name = generate_field_name(payload_member_name);
@@ -224,26 +237,29 @@ fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Se
             if input_shape.required(payload_member_name) {
                 format!("let encoded = Some(input.{}.to_owned());", field_name)
             } else {
-                format!("let encoded = if let Some(ref payload) = input.{} {{
+                format!(
+                    "let encoded = if let Some(ref payload) = input.{} {{
                             Some(payload.to_owned())
                         }} else {{
                             None
                         }};",
-                        field_name)
+                    field_name
+                )
             }
         }
 
         // otherwise serialize the payload member as json and use that
-        _ => {
-            format!("let encoded = Some(serde_json::to_vec(&input.{}).unwrap());",
-                    field_name)
-        }
+        _ => format!(
+            "let encoded = Some(serde_json::to_vec(&input.{}).unwrap());",
+            field_name
+        ),
     }
 }
 
 // Do any input operations in the entire service use query parameters?
 fn service_has_query_parameters(service: &Service) -> bool {
-    service.operations()
+    service
+        .operations()
         .iter()
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
@@ -251,7 +267,8 @@ fn service_has_query_parameters(service: &Service) -> bool {
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
-    operation.documentation
+    operation
+        .documentation
         .as_ref()
         .map(|docs| ::doco::Item(docs).to_string())
 }
@@ -264,7 +281,8 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.get_shape(shape_name)
+    let output_shape = &service
+        .get_shape(shape_name)
         .expect("Shape missing from service definition");
 
     let mut status_code_parser = "".to_string();
@@ -273,11 +291,15 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
         if let Some(ref location) = member.location {
             if location == "statusCode" {
                 if output_shape.required(member_name) {
-                    status_code_parser += &format!("result.{} = Some(response.status.as_u16());",
-                                                   member_name.to_snake_case());
+                    status_code_parser += &format!(
+                        "result.{} = Some(response.status.as_u16());",
+                        member_name.to_snake_case()
+                    );
                 } else {
-                    status_code_parser += &format!("result.{} = Some(response.status.as_u16() as i64);",
-                                                   member_name.to_snake_case());
+                    status_code_parser += &format!(
+                        "result.{} = Some(response.status.as_u16() as i64);",
+                        member_name.to_snake_case()
+                    );
                 }
             }
         }
@@ -294,44 +316,50 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
 /// will be set later (e.g. from headers), so the compiler won't spit out
 /// warnings about unnecessary mutability
 fn generate_body_parser(operation: &Operation, service: &Service) -> String {
-
     if operation.output.is_none() {
         return "let result = ::std::mem::drop(response);".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
-    let output_shape = &service.get_shape(shape_name)
+    let output_shape = &service
+        .get_shape(shape_name)
         .expect("Shape missing from service definition");
 
-    let mutable_result = output_shape.members
+    let mutable_result = output_shape
+        .members
         .as_ref()
         .unwrap()
         .iter()
-        .any(|(_, member)| member.location.is_some()) || output_shape.payload.is_some();
+        .any(|(_, member)| member.location.is_some())
+        || output_shape.payload.is_some();
 
     match output_shape.payload {
         None => json_body_parser(shape_name, mutable_result),
         Some(ref payload_member_name) => {
-            let payload_member_shape = &output_shape.members.as_ref().unwrap()[payload_member_name]
-                .shape;
-            let payload_shape = &service.get_shape(payload_member_shape)
+            let payload_member_shape =
+                &output_shape.members.as_ref().unwrap()[payload_member_name].shape;
+            let payload_shape = &service
+                .get_shape(payload_member_shape)
                 .expect("Shape missing from service definition");
             // is the shape required?
             let payload_shape_required = match output_shape.required {
                 Some(ref s) => {
                     // if there's any required shape present the body payload parser will handle it
                     s.len() > 0
-                },
+                }
                 None => false,
             };
             match payload_shape.shape_type {
-                payload_type if payload_type == ShapeType::Blob ||
-                                payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type,
-                                        shape_name,
-                                        payload_member_name,
-                                        mutable_result,
-                                        payload_shape_required)
+                payload_type
+                    if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
+                {
+                    payload_body_parser(
+                        payload_type,
+                        shape_name,
+                        payload_member_name,
+                        mutable_result,
+                        payload_shape_required,
+                    )
                 }
                 _ => json_body_parser(shape_name, false),
             }
@@ -341,36 +369,34 @@ fn generate_body_parser(operation: &Operation, service: &Service) -> String {
 
 /// Take the raw http response body and assign it to the payload field
 /// on the result object
-fn payload_body_parser(payload_type: ShapeType,
-                       output_shape: &str,
-                       payload_member: &str,
-                       mutable_result: bool,
-                       payload_required: bool)
-                       -> String {
-
+fn payload_body_parser(
+    payload_type: ShapeType,
+    output_shape: &str,
+    payload_member: &str,
+    mutable_result: bool,
+    payload_required: bool,
+) -> String {
     let response_body = match payload_required {
-        true => {
-            match payload_type {
-                ShapeType::Blob => "response.body",
-                _ => "String::from_utf8_lossy(response.body.as_ref())",
-            }
+        true => match payload_type {
+            ShapeType::Blob => "response.body",
+            _ => "String::from_utf8_lossy(response.body.as_ref())",
         },
-        false => {
-            match payload_type {
-                ShapeType::Blob => "Some(response.body)",
-                _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
-            }
-        }
+        false => match payload_type {
+            ShapeType::Blob => "Some(response.body)",
+            _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
+        },
     };
 
-    format!("
+    format!(
+        "
         let {mutable} result = {output_shape}::default();
         result.{payload_member} = {response_body};
         ",
-            output_shape = output_shape,
-            payload_member = payload_member.to_snake_case(),
-            response_body = response_body,
-            mutable = if mutable_result { "mut" } else { "" })
+        output_shape = output_shape,
+        payload_member = payload_member.to_snake_case(),
+        response_body = response_body,
+        mutable = if mutable_result { "mut" } else { "" }
+    )
 }
 
 /// Parse the http response body as a JSON object with serde, and use that
@@ -379,7 +405,8 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
     // `serde-json` serializes field-less structs as "null", but AWS returns
     // "{{}}" for a field-less response, so we must check for this result
     // and convert it if necessary.
-    format!("
+    format!(
+        "
             let mut body = response.body;
 
             if body == b\"null\" || body.is_empty() {{
@@ -390,6 +417,7 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
             debug!(\"Response status: {{}}\", response.status);
             let {mutable} result = serde_json::from_slice::<{output_shape}>(&body).unwrap();
             ",
-            output_shape = output_shape,
-            mutable = if mutable_result { "mut" } else { "" })
+        output_shape = output_shape,
+        mutable = if mutable_result { "mut" } else { "" }
+    )
 }

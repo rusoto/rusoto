@@ -1,29 +1,29 @@
 use std::fs::File;
-use std::io::{Write, BufWriter};
+use std::io::{BufWriter, Write};
 
 use inflector::Inflector;
 
-use Service;
-use botocore::{Member, Shape, ShapeType};
+use self::error_types::{GenerateErrorTypes, JsonErrorTypes, RestJsonErrorTypes, XmlErrorTypes};
 use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
-use self::error_types::{GenerateErrorTypes, JsonErrorTypes, RestJsonErrorTypes, XmlErrorTypes};
 use self::tests::generate_tests;
 use self::type_filter::filter_types;
+use botocore::{Member, Shape, ShapeType};
 use util;
+use Service;
 
 mod error_types;
 mod json;
 mod query;
 mod rest_json;
-pub mod tests;
-mod rest_xml;
-mod xml_payload_parser;
-mod rest_response_parser;
 mod rest_request_generator;
+mod rest_response_parser;
+mod rest_xml;
+pub mod tests;
 mod type_filter;
+mod xml_payload_parser;
 
 type FileWriter = BufWriter<File>;
 type IoResult = ::std::io::Result<()>;
@@ -52,21 +52,23 @@ pub trait GenerateProtocol {
 
     /// If necessary, generate a serializer for the specified type
     /// This should be necessary only if `serialize_trait` returns `None`
-    fn generate_serializer(&self,
-                           _name: &str,
-                           _shape: &Shape,
-                           _service: &Service)
-                           -> Option<String> {
+    fn generate_serializer(
+        &self,
+        _name: &str,
+        _shape: &Shape,
+        _service: &Service,
+    ) -> Option<String> {
         None
     }
 
     /// If necessary, generate a deserializer for the specified type
     /// This should be necessary only if `deserialize_trait` returns `None`
-    fn generate_deserializer(&self,
-                             _name: &str,
-                             _shape: &Shape,
-                             _service: &Service)
-                             -> Option<String> {
+    fn generate_deserializer(
+        &self,
+        _name: &str,
+        _shape: &Shape,
+        _service: &Service,
+    ) -> Option<String> {
         None
     }
 
@@ -99,17 +101,19 @@ pub fn generate_field_name(member_name: &str) -> String {
 }
 
 /// The quick brown fox jumps over the lazy dog
-fn generate<P, E>(writer: &mut FileWriter,
-                  service: &Service,
-                  protocol_generator: P,
-                  error_type_generator: E)
-                  -> IoResult
-    where P: GenerateProtocol,
-          E: GenerateErrorTypes
+fn generate<P, E>(
+    writer: &mut FileWriter,
+    service: &Service,
+    protocol_generator: P,
+    error_type_generator: E,
+) -> IoResult
+where
+    P: GenerateProtocol,
+    E: GenerateErrorTypes,
 {
-
-    writeln!(writer,
-             "
+    writeln!(
+        writer,
+        "
         // =================================================================
         //
         //                           * WARNING *
@@ -135,24 +139,25 @@ fn generate<P, E>(writer: &mut FileWriter,
 
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
-    ")?;
+    "
+    )?;
 
     protocol_generator.generate_prelude(writer, service)?;
     generate_types(writer, service, &protocol_generator)?;
-    error_type_generator
-        .generate_error_types(writer, service)?;
+    error_type_generator.generate_error_types(writer, service)?;
     generate_client(writer, service, &protocol_generator)?;
     generate_tests(writer, service)?;
 
     Ok(())
-
 }
 
-fn generate_client<P>(writer: &mut FileWriter,
-                      service: &Service,
-                      protocol_generator: &P)
-                      -> IoResult
-    where P: GenerateProtocol
+fn generate_client<P>(
+    writer: &mut FileWriter,
+    service: &Service,
+    protocol_generator: &P,
+) -> IoResult
+where
+    P: GenerateProtocol,
 {
     // If the struct name is changed, the links in each service documentation should change.
     // See https://github.com/rusoto/rusoto/issues/519
@@ -163,8 +168,7 @@ fn generate_client<P>(writer: &mut FileWriter,
              trait_name = service.service_type_name(),
              service_name = service.name())?;
 
-    protocol_generator
-        .generate_method_signatures(writer, service)?;
+    protocol_generator.generate_method_signatures(writer, service)?;
 
     writeln!(writer, "}}")?;
 
@@ -205,17 +209,17 @@ fn generate_client<P>(writer: &mut FileWriter,
         type_name = service.client_type_name(),
         trait_name = service.service_type_name(),
     )?;
-    protocol_generator
-        .generate_method_impls(writer, service)?;
+    protocol_generator.generate_method_impls(writer, service)?;
     writeln!(writer, "}}")
 }
 
-pub fn get_rust_type(service: &Service,
-                     shape_name: &str,
-                     shape: &Shape,
-                     streaming: bool,
-                     for_timestamps: &str)
-                     -> String {
+pub fn get_rust_type(
+    service: &Service,
+    shape_name: &str,
+    shape: &Shape,
+    streaming: bool,
+    for_timestamps: &str,
+) -> String {
     if !streaming {
         match shape.shape_type {
             ShapeType::Blob => "Vec<u8>".into(),
@@ -225,21 +229,33 @@ pub fn get_rust_type(service: &Service,
             ShapeType::Integer | ShapeType::Long => "i64".into(),
             ShapeType::String => "String".into(),
             ShapeType::Timestamp => for_timestamps.into(),
-            ShapeType::List => {
-                format!("Vec<{}>",
-                        get_rust_type(service,
-                                      shape.member_type(),
-                                      service.get_shape(shape.member_type()).unwrap(),
-                                      false,
-                                      for_timestamps))
-            }
-            ShapeType::Map => {
-                format!(
-                    "::std::collections::HashMap<{}, {}>",
-                    get_rust_type(service, shape.key_type(), service.get_shape(shape.key_type()).unwrap(), false, for_timestamps),
-                    get_rust_type(service, shape.value_type(), service.get_shape(shape.value_type()).unwrap(), false, for_timestamps),
-                    )
-            }
+            ShapeType::List => format!(
+                "Vec<{}>",
+                get_rust_type(
+                    service,
+                    shape.member_type(),
+                    service.get_shape(shape.member_type()).unwrap(),
+                    false,
+                    for_timestamps
+                )
+            ),
+            ShapeType::Map => format!(
+                "::std::collections::HashMap<{}, {}>",
+                get_rust_type(
+                    service,
+                    shape.key_type(),
+                    service.get_shape(shape.key_type()).unwrap(),
+                    false,
+                    for_timestamps
+                ),
+                get_rust_type(
+                    service,
+                    shape.value_type(),
+                    service.get_shape(shape.value_type()).unwrap(),
+                    false,
+                    for_timestamps
+                ),
+            ),
             ShapeType::Structure => mutate_type_name(service, shape_name),
         }
     } else {
@@ -258,9 +274,10 @@ fn streaming_members<'a>(shape: &'a Shape) -> Box<Iterator<Item = &'a Member> + 
 }
 
 fn is_streaming_shape(service: &Service, name: &str) -> bool {
-    service.shapes()
-           .iter()
-           .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
+    service
+        .shapes()
+        .iter()
+        .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
 }
 
 // do any type name mutation needed to avoid collisions with Rust types
@@ -294,13 +311,12 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
 }
 
 fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_generator: &P) -> IoResult
-    where P: GenerateProtocol
+where
+    P: GenerateProtocol,
 {
-
     let (serialized_types, deserialized_types) = filter_types(service);
 
     for (name, shape) in service.shapes().iter() {
-
         // We generate enums for error types, so no need to create model objects for them
         if shape.exception() {
             continue;
@@ -320,26 +336,32 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
             // generate a rust type for the shape
             if type_name != "String" {
-                let generated = generate_struct(service,
-                                                &type_name,
-                                                shape,
-                                                streaming,
-                                                serialized,
-                                                deserialized,
-                                                protocol_generator);
+                let generated = generate_struct(
+                    service,
+                    &type_name,
+                    shape,
+                    streaming,
+                    serialized,
+                    deserialized,
+                    protocol_generator,
+                );
                 writeln!(writer, "{}", generated)?;
             }
         }
 
         if streaming {
             // Add a second type for streaming blobs, which are the only streaming type we can have
-            writeln!(writer, "pub type {} = ::rusoto_core::ByteStream;",
-                mutate_type_name_for_streaming(&type_name))?;
+            writeln!(
+                writer,
+                "pub type {} = ::rusoto_core::ByteStream;",
+                mutate_type_name_for_streaming(&type_name)
+            )?;
         }
 
         if deserialized {
             if let Some(deserializer) =
-                protocol_generator.generate_deserializer(&type_name, shape, service) {
+                protocol_generator.generate_deserializer(&type_name, shape, service)
+            {
                 assert!(protocol_generator.deserialize_trait().is_none());
                 writeln!(writer, "{}", deserializer)?;
             }
@@ -347,7 +369,8 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
         if serialized {
             if let Some(serializer) =
-                protocol_generator.generate_serializer(&type_name, shape, service) {
+                protocol_generator.generate_serializer(&type_name, shape, service)
+            {
                 assert!(protocol_generator.serialize_trait().is_none());
                 writeln!(writer, "{}", serializer)?;
             }
@@ -356,15 +379,17 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
     Ok(())
 }
 
-fn generate_struct<P>(service: &Service,
-                      name: &str,
-                      shape: &Shape,
-                      streaming: bool,
-                      serialized: bool,
-                      deserialized: bool,
-                      protocol_generator: &P)
-                      -> String
-    where P: GenerateProtocol
+fn generate_struct<P>(
+    service: &Service,
+    name: &str,
+    shape: &Shape,
+    streaming: bool,
+    serialized: bool,
+    deserialized: bool,
+    protocol_generator: &P,
+) -> String
+where
+    P: GenerateProtocol,
 {
     let mut derived = vec!["Default", "Debug"];
 
@@ -388,7 +413,9 @@ fn generate_struct<P>(service: &Service,
     }
 
     let attributes = format!("#[derive({})]", derived.join(","));
-    let test_attributes = if derived.iter().any(|&x| x == "Deserialize") && !derived.iter().any(|&x| x == "Serialize") {
+    let test_attributes = if derived.iter().any(|&x| x == "Deserialize")
+        && !derived.iter().any(|&x| x == "Serialize")
+    {
         "\n#[cfg_attr(test, derive(Serialize))]"
     } else {
         ""
@@ -405,7 +432,9 @@ fn generate_struct<P>(service: &Service,
         )
     } else {
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
-        let need_serde_attrs = derived.iter().any(|&x| x == "Serialize" || x == "Deserialize");
+        let need_serde_attrs = derived
+            .iter()
+            .any(|&x| x == "Serialize" || x == "Deserialize");
         format!(
             "{attributes}{test_attributes}
             pub struct {name} {{
@@ -415,17 +444,19 @@ fn generate_struct<P>(service: &Service,
             attributes = attributes,
             test_attributes = test_attributes,
             name = name,
-            struct_fields = generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
+            struct_fields =
+                generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
         )
     }
 }
 
-fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
-                                               shape: &Shape,
-                                               shape_name: &str,
-                                               serde_attrs: bool,
-                                               protocol_generator: &P)
-                                               -> String {
+fn generate_struct_fields<P: GenerateProtocol>(
+    service: &Service,
+    shape: &Shape,
+    shape_name: &str,
+    serde_attrs: bool,
+    protocol_generator: &P,
+) -> String {
     shape.members.as_ref().unwrap().iter().filter_map(|(member_name, member)| {
         if member.deprecated == Some(true) {
             return None;
