@@ -44,12 +44,12 @@ use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
-use rusoto_core::{DispatchSignedRequest, HttpDispatchError, ByteStream};
-use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
+use futures::future::{ok, FutureResult};
+use http::{HttpTryFrom, StatusCode};
+use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::{Headers, HttpResponse};
 use rusoto_core::signature::SignedRequest;
-use futures::future::{FutureResult, ok};
-use http::{HttpTryFrom, StatusCode};
+use rusoto_core::{ByteStream, DispatchSignedRequest, HttpDispatchError};
 use serde::Serialize;
 
 /// Provides a set of credentials that always resolve
@@ -99,7 +99,9 @@ impl MockRequestDispatcher {
     /// Mocks the json serialized response body what would be
     /// returned from AWS
     pub fn with_json_body<B>(mut self, body: B) -> MockRequestDispatcher
-        where B: Serialize {
+    where
+        B: Serialize,
+    {
         self.body = serde_json::to_vec(&body).expect("failed to deserialize into json");
         self
     }
