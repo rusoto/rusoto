@@ -7,11 +7,11 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
 use dirs::home_dir;
+use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
-use futures::future::{FutureResult, result};
 use regex::Regex;
 
-use {AwsCredentials, CredentialsError, ProvideAwsCredentials, non_empty_env_var};
+use {non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 const AWS_CONFIG_FILE: &str = "AWS_CONFIG_FILE";
 const AWS_PROFILE: &str = "AWS_PROFILE";
@@ -29,11 +29,12 @@ pub struct ProfileProvider {
 }
 
 impl ProfileProvider {
-
     /// Create a new `ProfileProvider` for the default credentials file path and profile name.
     pub fn new() -> Result<ProfileProvider, CredentialsError> {
         let profile_location = ProfileProvider::default_profile_location()?;
-        Ok(ProfileProvider::with_default_configuration(profile_location))
+        Ok(ProfileProvider::with_default_configuration(
+            profile_location,
+        ))
     }
 
     /// Create a new `ProfileProvider` for the credentials file at the given path, using
@@ -54,7 +55,7 @@ impl ProfileProvider {
     /// if ```AWS_PROFILE``` is not set.
     pub fn with_default_configuration<F>(file_path: F) -> ProfileProvider
     where
-        F: Into<PathBuf>
+        F: Into<PathBuf>,
     {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
     }
@@ -67,11 +68,12 @@ impl ProfileProvider {
     pub fn region() -> Result<Option<String>, CredentialsError> {
         let location = ProfileProvider::default_config_location();
         location.map(|location| {
-            parse_config_file(&location)
-                .and_then(|config| {
-                    config.get(& ProfileProvider::default_profile_name())
-                        .and_then(|props| props.get(REGION)).map(|value| value.to_owned())
-                })
+            parse_config_file(&location).and_then(|config| {
+                config
+                    .get(&ProfileProvider::default_profile_name())
+                    .and_then(|props| props.get(REGION))
+                    .map(|value| value.to_owned())
+            })
         })
     }
 
@@ -93,9 +95,7 @@ impl ProfileProvider {
                 home_path.push("config");
                 Ok(home_path)
             }
-            None => Err(CredentialsError::new(
-                "Failed to determine home directory.",
-            )),
+            None => Err(CredentialsError::new("Failed to determine home directory.")),
         }
     }
 
@@ -117,9 +117,7 @@ impl ProfileProvider {
                 home_path.push("credentials");
                 Ok(home_path)
             }
-            None => Err(CredentialsError::new(
-                "Failed to determine home directory.",
-            )),
+            None => Err(CredentialsError::new("Failed to determine home directory.")),
         }
     }
 
@@ -160,7 +158,7 @@ impl ProfileProvider {
 
 /// Provides AWS credentials from a profile in a credentials file as a Future.
 pub struct ProfileProviderFuture {
-    inner: FutureResult<AwsCredentials, CredentialsError>
+    inner: FutureResult<AwsCredentials, CredentialsError>,
 }
 
 impl Future for ProfileProviderFuture {
@@ -176,11 +174,13 @@ impl ProvideAwsCredentials for ProfileProvider {
     type Future = ProfileProviderFuture;
 
     fn credentials(&self) -> Self::Future {
-        let inner = result(parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-            profiles.remove(self.profile()).ok_or_else(|| {
-                CredentialsError::new("profile not found")
-            })
-        }));
+        let inner = result(
+            parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+                profiles
+                    .remove(self.profile())
+                    .ok_or_else(|| CredentialsError::new("profile not found"))
+            }),
+        );
 
         ProfileProviderFuture { inner: inner }
     }
@@ -193,46 +193,46 @@ fn new_profile_regex() -> Regex {
 
 fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String, String>>> {
     match fs::metadata(file_path) {
-        Err(_) => {
-            return None
-        }
+        Err(_) => return None,
         Ok(metadata) => {
             if !metadata.is_file() {
-                return None
+                return None;
             }
         }
     };
     let profile_regex = new_profile_regex();
     let file = File::open(file_path).expect("expected file");
     let file_lines = BufReader::new(&file);
-    let result: (HashMap<String, HashMap<String, String>>, Option<String>) =
-        file_lines.lines()
-            .filter_map(|line| {
-                line.ok()
-                    .map(|l| l.trim_matches(' ').to_owned())
-                    .into_iter().find(|l| !l.starts_with('#') || !l.is_empty())
-            })
-            .fold(
-                Default::default(), |(mut result, profile), line| {
-                    if profile_regex.is_match(&line) {
-                        let caps = profile_regex.captures(&line).unwrap();
-                        let next_profile = caps.get(2).map(|value| value.as_str().to_string());
-                        (result, next_profile)
-                    } else {
-                        match &line.splitn(2, '=').map(|value| value.trim_matches(' ')).collect::<Vec<&str>>()[..] {
-                            [key, value] if !key.is_empty() && !value.is_empty() => {
-                                if let Some(current) = profile.clone() {
-                                    let values = result.entry(current)
-                                        .or_insert_with(HashMap::new);
-                                    (*values).insert(key.to_string(), value.to_string());
-                                }
-                                (result, profile)
-                            }
-                            _ => (result, profile)
+    let result: (HashMap<String, HashMap<String, String>>, Option<String>) = file_lines
+        .lines()
+        .filter_map(|line| {
+            line.ok()
+                .map(|l| l.trim_matches(' ').to_owned())
+                .into_iter()
+                .find(|l| !l.starts_with('#') || !l.is_empty())
+        })
+        .fold(Default::default(), |(mut result, profile), line| {
+            if profile_regex.is_match(&line) {
+                let caps = profile_regex.captures(&line).unwrap();
+                let next_profile = caps.get(2).map(|value| value.as_str().to_string());
+                (result, next_profile)
+            } else {
+                match &line
+                    .splitn(2, '=')
+                    .map(|value| value.trim_matches(' '))
+                    .collect::<Vec<&str>>()[..]
+                {
+                    [key, value] if !key.is_empty() && !value.is_empty() => {
+                        if let Some(current) = profile.clone() {
+                            let values = result.entry(current).or_insert_with(HashMap::new);
+                            (*values).insert(key.to_string(), value.to_string());
                         }
+                        (result, profile)
                     }
+                    _ => (result, profile),
                 }
-            );
+            }
+        });
     Some(result.0)
 }
 
@@ -286,12 +286,8 @@ fn parse_credentials_file(
         // handle the opening of named profile blocks
         if profile_regex.is_match(&unwrapped_line) {
             if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-                let creds = AwsCredentials::new(
-                    access_key.unwrap(),
-                    secret_key.unwrap(),
-                    token,
-                    None,
-                );
+                let creds =
+                    AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, None);
                 profiles.insert(profile_name.unwrap(), creds);
             }
 
@@ -333,16 +329,10 @@ fn parse_credentials_file(
             // Ignore unrecognized fields
             continue;
         }
-
     }
 
     if profile_name.is_some() && access_key.is_some() && secret_key.is_some() {
-        let creds = AwsCredentials::new(
-            access_key.unwrap(),
-            secret_key.unwrap(),
-            token,
-            None,
-        );
+        let creds = AwsCredentials::new(access_key.unwrap(), secret_key.unwrap(), token, None);
         profiles.insert(profile_name.unwrap(), creds);
     }
 
@@ -359,9 +349,9 @@ mod tests {
     use std::env;
     use std::path::Path;
 
-    use {CredentialsError, ProvideAwsCredentials};
-    use std::sync::{Mutex, MutexGuard};
     use super::*;
+    use std::sync::{Mutex, MutexGuard};
+    use {CredentialsError, ProvideAwsCredentials};
 
     // cargo runs tests in parallel, which leads to race conditions when changing
     // environment variables. Therefore we use a global mutex for all tests which
@@ -372,7 +362,7 @@ mod tests {
 
     // As failed (panic) tests will poisen the global mutex, we use a helper which
     // recovers from poisoned mutex.
-    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a,T> {
+    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a, T> {
         match mutex.lock() {
             Ok(guard) => guard,
             Err(poisoned) => poisoned.into_inner(),
@@ -381,78 +371,75 @@ mod tests {
 
     #[test]
     fn parse_config_file_default_profile() {
-        let result = super::parse_config_file(
-            Path::new("tests/sample-data/default_config"),
-        );
+        let result = super::parse_config_file(Path::new("tests/sample-data/default_config"));
         assert!(result.is_some());
         let profiles = result.unwrap();
         assert_eq!(profiles.len(), 1);
-         let default_profile = profiles.get(DEFAULT).expect(
-            "No Default profile in default_profile_credentials",
-        );
+        let default_profile = profiles
+            .get(DEFAULT)
+            .expect("No Default profile in default_profile_credentials");
         assert_eq!(default_profile.get(REGION), Some(&"us-east-2".to_string()));
         assert_eq!(default_profile.get("output"), Some(&"json".to_string()));
     }
 
     #[test]
     fn parse_config_file_multiple_profiles() {
-        let result = super::parse_config_file(
-            Path::new("tests/sample-data/multiple_profile_config"),
-        );
+        let result =
+            super::parse_config_file(Path::new("tests/sample-data/multiple_profile_config"));
         assert!(result.is_some());
 
         let profiles = result.unwrap();
         assert_eq!(profiles.len(), 3);
 
-        let foo_profile = profiles.get("foo").expect(
-            "No foo profile in multiple_profile_credentials",
-        );
+        let foo_profile = profiles
+            .get("foo")
+            .expect("No foo profile in multiple_profile_credentials");
         assert_eq!(foo_profile.get(REGION), Some(&"us-east-3".to_string()));
         assert_eq!(foo_profile.get("output"), Some(&"json".to_string()));
 
-        let bar_profile = profiles.get("bar").expect(
-            "No bar profile in multiple_profile_credentials",
-        );
+        let bar_profile = profiles
+            .get("bar")
+            .expect("No bar profile in multiple_profile_credentials");
         assert_eq!(bar_profile.get(REGION), Some(&"us-east-4".to_string()));
         assert_eq!(bar_profile.get("output"), Some(&"json".to_string()));
     }
 
     #[test]
     fn parse_credentials_file_default_profile() {
-        let result = super::parse_credentials_file(
-            Path::new("tests/sample-data/default_profile_credentials"),
-        );
+        let result = super::parse_credentials_file(Path::new(
+            "tests/sample-data/default_profile_credentials",
+        ));
         assert!(result.is_ok());
 
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get(DEFAULT).expect(
-            "No Default profile in default_profile_credentials",
-        );
+        let default_profile = profiles
+            .get(DEFAULT)
+            .expect("No Default profile in default_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
 
     #[test]
     fn parse_credentials_file_multiple_profiles() {
-        let result = super::parse_credentials_file(
-            Path::new("tests/sample-data/multiple_profile_credentials"),
-        );
+        let result = super::parse_credentials_file(Path::new(
+            "tests/sample-data/multiple_profile_credentials",
+        ));
         assert!(result.is_ok());
 
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 2);
 
-        let foo_profile = profiles.get("foo").expect(
-            "No foo profile in multiple_profile_credentials",
-        );
+        let foo_profile = profiles
+            .get("foo")
+            .expect("No foo profile in multiple_profile_credentials");
         assert_eq!(foo_profile.aws_access_key_id(), "foo_access_key");
         assert_eq!(foo_profile.aws_secret_access_key(), "foo_secret_key");
 
-        let bar_profile = profiles.get("bar").expect(
-            "No bar profile in multiple_profile_credentials",
-        );
+        let bar_profile = profiles
+            .get("bar")
+            .expect("No bar profile in multiple_profile_credentials");
         assert_eq!(bar_profile.aws_access_key_id(), "bar_access_key");
         assert_eq!(bar_profile.aws_secret_access_key(), "bar_secret_key");
     }
@@ -466,9 +453,9 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get(DEFAULT).expect(
-            "No default profile in full_profile_credentials",
-        );
+        let default_profile = profiles
+            .get(DEFAULT)
+            .expect("No default profile in full_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
@@ -581,15 +568,15 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get(DEFAULT).expect(
-            "No default profile in full_profile_credentials",
-        );
+        let default_profile = profiles
+            .get(DEFAULT)
+            .expect("No default profile in full_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
 
     #[test]
-    fn default_profile_name_from_env_var(){
+    fn default_profile_name_from_env_var() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_PROFILE, "bar");
         assert_eq!("bar", ProfileProvider::default_profile_name());
@@ -597,7 +584,7 @@ mod tests {
     }
 
     #[test]
-    fn default_profile_name_from_empty_env_var(){
+    fn default_profile_name_from_empty_env_var() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_PROFILE, "");
         assert_eq!(DEFAULT, ProfileProvider::default_profile_name());
@@ -605,33 +592,42 @@ mod tests {
     }
 
     #[test]
-    fn default_profile_name(){
+    fn default_profile_name() {
         let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_PROFILE);
         assert_eq!(DEFAULT, ProfileProvider::default_profile_name());
     }
 
     #[test]
-    fn default_profile_location_from_env_var(){
+    fn default_profile_location_from_env_var() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, "bar");
-        assert_eq!(Ok(PathBuf::from("bar")), ProfileProvider::default_profile_location());
+        assert_eq!(
+            Ok(PathBuf::from("bar")),
+            ProfileProvider::default_profile_location()
+        );
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
     }
 
     #[test]
-    fn default_profile_location_from_empty_env_var(){
+    fn default_profile_location_from_empty_env_var() {
         let _guard = lock(&ENV_MUTEX);
         env::set_var(AWS_SHARED_CREDENTIALS_FILE, "");
-        assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
+        assert_eq!(
+            ProfileProvider::hardcoded_profile_location(),
+            ProfileProvider::default_profile_location()
+        );
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
     }
 
     #[test]
-    fn default_profile_location(){
+    fn default_profile_location() {
         let _guard = lock(&ENV_MUTEX);
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
-        assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
+        assert_eq!(
+            ProfileProvider::hardcoded_profile_location(),
+            ProfileProvider::default_profile_location()
+        );
     }
 
 }

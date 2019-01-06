@@ -167,14 +167,16 @@ fn credentials_from_environment(
     // Mimic botocore's behavior, see https://github.com/boto/botocore/pull/1187.
     let var_name = provider.credential_expiration_var();
     let expires_at = match non_empty_env_var(&var_name) {
-        Some(val) => Some(DateTime::<FixedOffset>::parse_from_rfc3339(&val)
-            .map(|dt| dt.with_timezone(&Utc))
-            .map_err(|e| {
-                CredentialsError::new(format!(
-                    "Invalid {} in environment '{}': {}",
-                    var_name, val, e
-                ))
-            })?),
+        Some(val) => Some(
+            DateTime::<FixedOffset>::parse_from_rfc3339(&val)
+                .map(|dt| dt.with_timezone(&Utc))
+                .map_err(|e| {
+                    CredentialsError::new(format!(
+                        "Invalid {} in environment '{}': {}",
+                        var_name, val, e
+                    ))
+                })?,
+        ),
         _ => None,
     };
     Ok(AwsCredentials::new(env_key, env_secret, token, expires_at))
