@@ -226,7 +226,9 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
         );
 
         let mut request = SignedRequest::new("POST", "sagemaker", &self.region, &request_uri);
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        if input.content_type.is_none() {
+            request.set_content_type("application/x-amz-json-1.1".to_owned());
+        }
 
         request.set_endpoint_prefix("runtime.sagemaker".to_string());
         let encoded = Some(input.body.to_owned());
