@@ -1,5 +1,5 @@
-extern crate stopwatch;
 extern crate env_logger;
+extern crate stopwatch;
 
 use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
@@ -14,7 +14,7 @@ use toml;
 mod codegen;
 
 use cargo;
-use ::{Service, ServiceConfig, ServiceDefinition};
+use {Service, ServiceConfig, ServiceDefinition};
 
 fn generate_examples(crate_dir_path: &Path) -> Option<String> {
     let examples_dir_path = crate_dir_path.join("examples");
@@ -29,8 +29,10 @@ fn generate_examples(crate_dir_path: &Path) -> Option<String> {
         let dir_entry = dir_entry_result.expect("failed to read examples dir");
         let mut contents = Vec::new();
         let mut file = fs::File::open(dir_entry.path()).expect("failed to open example");
-        file.read_to_end(&mut contents).expect("failed to read from example file");
-        let string_contents = String::from_utf8(contents).expect("example file has invalid encoding");
+        file.read_to_end(&mut contents)
+            .expect("failed to read from example file");
+        let string_contents =
+            String::from_utf8(contents).expect("example file has invalid encoding");
 
         output.push_str("//!\n");
 
@@ -56,7 +58,11 @@ fn generate_examples(crate_dir_path: &Path) -> Option<String> {
     Some(output)
 }
 
-pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &Path, service_to_generate: &Option<&Vec<&str>>) {
+pub fn generate_services(
+    services: &BTreeMap<String, ServiceConfig>,
+    out_dir: &Path,
+    service_to_generate: &Option<&Vec<&str>>,
+) {
     let _ = env_logger::try_init();
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
@@ -66,12 +72,11 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
         if !service_to_generate.map(|s| s.contains(&name.as_str())).unwrap_or(true) {
             return;
         }
-        
+
         let sw = Stopwatch::start_new();
-        let service = {
-            let service_definition = ServiceDefinition::load(name, &service_config.protocol_version)
-                .expect(&format!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name));
-            Service::new(service_config, service_definition)
+        let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
+            Ok(sd) => Service::new(service_config, sd),
+            Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
         };
 
         let crate_dir = out_dir.join(&name);

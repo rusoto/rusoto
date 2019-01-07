@@ -2,26 +2,32 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use super::{FileWriter, IoResult};
-use ::Service;
 use self::util::case_insensitive_btreemap_get;
+use super::{FileWriter, IoResult};
 use inflector::Inflector;
 use util;
+use Service;
 
-const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
-                                                 "/botocore/tests/unit/response_parsing/xml/errors/");
-const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"),
-                                                 "/botocore/tests/unit/response_parsing/xml/responses/");
+const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/botocore/tests/unit/response_parsing/xml/errors/"
+);
+const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/botocore/tests/unit/response_parsing/xml/responses/"
+);
 
 pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
-    writeln!(writer,
-             "
+    writeln!(
+        writer,
+        "
             #[cfg(test)]
             mod protocol_tests {{
                 {tests_body}
             }}
             ",
-             tests_body = generate_tests_body(service).unwrap_or_else(|| "".to_string()))
+        tests_body = generate_tests_body(service).unwrap_or_else(|| "".to_string())
+    )
 }
 
 fn generate_tests_body(service: &Service) -> Option<String> {
@@ -40,7 +46,8 @@ fn generate_tests_body(service: &Service) -> Option<String> {
     );
 
     if valid_tests.is_some() || error_tests.is_some() {
-        Some(format!("
+        Some(format!(
+            "
             extern crate rusoto_mock;
 
             use super::*;
@@ -50,7 +57,8 @@ fn generate_tests_body(service: &Service) -> Option<String> {
             {error_tests}
             {valid_tests}",
             error_tests = error_tests.unwrap_or_else(|| "".to_string()),
-            valid_tests = valid_tests.unwrap_or_else(|| "".to_string())))
+            valid_tests = valid_tests.unwrap_or_else(|| "".to_string())
+        ))
     } else {
         None
     }
@@ -62,17 +70,17 @@ fn generate_response_tests(
     status_code: i32,
     is_ok: bool,
 ) -> Option<String> {
-
     let our_responses: Vec<Response> = responses
         .into_iter()
         .filter(|r| r.service.to_lowercase() == service.service_type_name().to_lowercase())
         .map(|r| r.to_owned())
         .collect();
 
-    let test_bodies: Vec<String> = our_responses.into_iter()
+    let test_bodies: Vec<String> = our_responses
+        .into_iter()
         .flat_map(|response| generate_response_parse_test(service, &response, status_code, is_ok))
         .collect();
-    
+
     if !test_bodies.is_empty() {
         Some(test_bodies.join("\n\n"))
     } else {
@@ -96,8 +104,10 @@ fn generate_response_parse_test(
     let request_params;
     let request_constructor;
     if operation.input.is_some() {
-        request_constructor = format!("let request = {request_type}::default();",
-                                      request_type = operation.input_shape());
+        request_constructor = format!(
+            "let request = {request_type}::default();",
+            request_type = operation.input_shape()
+        );
         request_params = "request".to_string();
     } else {
         request_constructor = "".to_string();
@@ -130,7 +140,7 @@ pub struct Response {
     pub service: String,
     pub action: String,
     pub file_name: String,
-    pub full_path: PathBuf
+    pub full_path: PathBuf,
 }
 
 impl Response {
@@ -143,7 +153,13 @@ impl Response {
 
                 let service_name = file_name_parts.get(0).map(|s| util::capitalize_first(*s));
 
-                let action = Some(file_name_parts.into_iter().skip(1).map(util::capitalize_first).collect());
+                let action = Some(
+                    file_name_parts
+                        .into_iter()
+                        .skip(1)
+                        .map(util::capitalize_first)
+                        .collect(),
+                );
 
                 service_name.and_then(|s| {
                     action.and_then(|a| {
@@ -151,7 +167,7 @@ impl Response {
                             service: s,
                             action: a,
                             file_name: file_name.to_string_lossy().into_owned(),
-                            full_path: path.to_owned()
+                            full_path: path.to_owned(),
                         })
                     })
                 })
@@ -172,7 +188,7 @@ pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
         .filter(|d| d.path().extension().map(|ex| ex == "xml").unwrap_or(false))
         .filter_map(|d| Response::from_response_path(&d.path()))
         .collect::<Vec<_>>();
-    
+
     responses.sort_by_key(|e| e.full_path.clone());
 
     responses

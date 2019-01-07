@@ -1,7 +1,7 @@
 use std::fmt::{Display, Formatter, Result as FmtResult, Write};
 
+use hoedown::renderer::html::{Flags, Html};
 use hoedown::{Markdown, Render};
-use hoedown::renderer::html::{Html, Flags};
 
 pub struct Item<T>(pub T);
 
@@ -31,7 +31,7 @@ fn preprocess(input: &str, pre: &str, fmt: &mut Formatter) -> FmtResult {
     let rendered = buffer.to_str().unwrap();
 
     // prefix and write to formatter
-    prefix(&rendered, pre, fmt) 
+    prefix(&rendered, pre, fmt)
 }
 
 fn prefix(input: &str, pre: &str, fmt: &mut Formatter) -> FmtResult {

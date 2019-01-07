@@ -1,9 +1,9 @@
-use std::io::Write;
 use inflector::Inflector;
+use std::io::Write;
 
-use ::Service;
+use super::{error_type_name, FileWriter, GenerateProtocol, IoResult};
 use botocore::Operation;
-use super::{GenerateProtocol, error_type_name, IoResult, FileWriter};
+use Service;
 
 pub struct JsonGenerator;
 
@@ -12,7 +12,9 @@ impl GenerateProtocol for JsonGenerator {
         for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
-            writeln!(writer,"
+            writeln!(
+                writer,
+                "
                 {documentation}
                 {method_signature} -> RusotoFuture<{output_type}, {error_type}>;
                 ",
@@ -27,7 +29,6 @@ impl GenerateProtocol for JsonGenerator {
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
-
             let output_type = operation.output_shape_or("()");
 
             writeln!(writer,
@@ -70,11 +71,13 @@ impl GenerateProtocol for JsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
-        writeln!(writer,
-                 "use serde_json;
+        writeln!(
+            writer,
+            "use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_slice;")
+        use serde_json::from_slice;"
+        )
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {
@@ -94,38 +97,60 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     if service.signing_name() == service.endpoint_prefix() {
         None
     } else {
-        Some(format!("request.set_endpoint_prefix(\"{}\".to_string());",
-                     service.endpoint_prefix()))
+        Some(format!(
+            "request.set_endpoint_prefix(\"{}\".to_string());",
+            service.endpoint_prefix()
+        ))
     }
 }
 
 fn generate_method_signature(service: &Service, operation: &Operation) -> String {
-    if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| !m.is_empty()).unwrap_or(false) {
-        format!("fn {method_name}(&self, input: {input_type}) ",
-                input_type = operation.input_shape(),
-                method_name = operation.name.to_snake_case())
+    if operation.input.is_some()
+        && service
+            .get_shape(operation.input_shape())
+            .as_ref()
+            .and_then(|s| s.members.as_ref())
+            .map(|m| !m.is_empty())
+            .unwrap_or(false)
+    {
+        format!(
+            "fn {method_name}(&self, input: {input_type}) ",
+            input_type = operation.input_shape(),
+            method_name = operation.name.to_snake_case()
+        )
     } else {
-        format!("fn {method_name}(&self) ",
-                method_name = operation.name.to_snake_case())
+        format!(
+            "fn {method_name}(&self) ",
+            method_name = operation.name.to_snake_case()
+        )
     }
 }
 
 fn generate_payload(service: &Service, operation: &Operation) -> String {
-    if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| !m.is_empty()).unwrap_or(false) {
+    if operation.input.is_some()
+        && service
+            .get_shape(operation.input_shape())
+            .as_ref()
+            .and_then(|s| s.members.as_ref())
+            .map(|m| !m.is_empty())
+            .unwrap_or(false)
+    {
         "let encoded = serde_json::to_string(&input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          "
-            .to_owned()
+        .to_owned()
     } else {
         "request.set_payload(Some(b\"{}\".to_vec()));
-        ".to_owned()
+        "
+        .to_owned()
     }
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
-    operation.documentation.as_ref().map(|docs| {
-        ::doco::Item(docs).to_string()
-    })
+    operation
+        .documentation
+        .as_ref()
+        .map(|docs| ::doco::Item(docs).to_string())
 }
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {

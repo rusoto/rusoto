@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, BTreeMap};
+use std::collections::{BTreeMap, BTreeSet};
 use std::error;
 use std::fmt::{Formatter, Result as FmtResult};
 use std::fs::{self, File};
@@ -6,9 +6,9 @@ use std::io::BufReader;
 use std::marker::PhantomData;
 use std::path::Path;
 
-use serde_json;
+use serde::de::{Error as SerdeError, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
-use serde::de::{Error as SerdeError, Visitor, MapAccess};
+use serde_json;
 
 use util;
 
@@ -20,15 +20,15 @@ pub struct ServiceDefinition {
     pub examples: Option<BTreeMap<String, String>>,
     pub metadata: Metadata,
     pub operations: BTreeMap<String, Operation>,
-    #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
+    #[serde(deserialize_with = "ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
     pub version: Option<String>,
 }
 
 impl ServiceDefinition {
     pub fn load(name: &str, protocol_version: &str) -> Result<Self, Box<error::Error>> {
-        let input_path = Path::new(BOTOCORE_DIR)
-            .join(format!("{}/{}/service-2.json", name, protocol_version));
+        let input_path =
+            Path::new(BOTOCORE_DIR).join(format!("{}/{}/service-2.json", name, protocol_version));
 
         let input_file = BufReader::new(File::open(&input_path)?);
 
@@ -59,11 +59,15 @@ impl ServiceDefinition {
                 version_dirs.sort();
 
                 version_dirs.last().cloned().map(|version_path| {
-                    (path.file_name().unwrap().to_string_lossy().into_owned(), version_path.clone())
+                    (
+                        path.file_name().unwrap().to_string_lossy().into_owned(),
+                        version_path.clone(),
+                    )
                 })
             })
             .map(|(service_name, path)| {
-                let input_file = BufReader::new(File::open(&format!("{}/service-2.json", path.display()))?);
+                let input_file =
+                    BufReader::new(File::open(&format!("{}/service-2.json", path.display()))?);
 
                 let service: ServiceDefinition = serde_json::from_reader(input_file)?;
 
@@ -76,27 +80,27 @@ impl ServiceDefinition {
 #[derive(Debug, Deserialize)]
 pub struct HttpRequest {
     pub method: String,
-    #[serde(rename="requestUri")]
+    #[serde(rename = "requestUri")]
     pub request_uri: String,
-    #[serde(rename="responseCode")]
+    #[serde(rename = "responseCode")]
     pub response_code: Option<i32>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Input {
     pub documentation: Option<String>,
-    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
+    #[serde(deserialize_with = "ShapeName::deserialize_shape_name")]
     pub shape: String,
-    #[serde(rename="xmlNamespace")]
+    #[serde(rename = "xmlNamespace")]
     pub xml_namespace: Option<XmlNamespace>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Output {
     pub documentation: Option<String>,
-    #[serde(rename="resultWrapper")]
+    #[serde(rename = "resultWrapper")]
     pub result_wrapper: Option<String>,
-    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
+    #[serde(deserialize_with = "ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
@@ -114,9 +118,9 @@ impl Error {
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct HttpError {
     pub code: Option<String>,
-    #[serde(rename="httpStatusCode")]
+    #[serde(rename = "httpStatusCode")]
     pub http_status_code: i32,
-    #[serde(rename="senderFault")]
+    #[serde(rename = "senderFault")]
     pub sender_fault: Option<bool>,
 }
 
@@ -126,14 +130,14 @@ pub struct Member {
     pub documentation: Option<String>,
     pub flattened: Option<bool>,
     pub location: Option<String>,
-    #[serde(rename="locationName")]
+    #[serde(rename = "locationName")]
     pub location_name: Option<String>,
-    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
+    #[serde(deserialize_with = "ShapeName::deserialize_shape_name")]
     pub shape: String,
     pub streaming: Option<bool>,
-    #[serde(rename="xmlAttribute")]
+    #[serde(rename = "xmlAttribute")]
     pub xml_attribute: Option<bool>,
-    #[serde(rename="xmlNamespace")]
+    #[serde(rename = "xmlNamespace")]
     pub xml_namespace: Option<XmlNamespace>,
 }
 
@@ -156,37 +160,45 @@ pub struct XmlNamespace {
 #[derive(Debug, Deserialize)]
 pub struct Key {
     pub documentation: Option<String>,
-    #[serde(rename="locationName")]
+    #[serde(rename = "locationName")]
     pub location_name: Option<String>,
     pub required: Option<bool>,
-    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
+    #[serde(deserialize_with = "ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
 impl Key {
     pub fn tag_name(&self) -> String {
-        self.location_name.as_ref().map(String::as_ref).unwrap_or_else(|| "key").to_owned()
+        self.location_name
+            .as_ref()
+            .map(String::as_ref)
+            .unwrap_or_else(|| "key")
+            .to_owned()
     }
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Value {
     pub documentation: Option<String>,
-    #[serde(rename="locationName")]
+    #[serde(rename = "locationName")]
     pub location_name: Option<String>,
-    #[serde(deserialize_with="ShapeName::deserialize_shape_name")]
+    #[serde(deserialize_with = "ShapeName::deserialize_shape_name")]
     pub shape: String,
 }
 
 impl Value {
     pub fn tag_name(&self) -> String {
-        self.location_name.as_ref().map(String::as_ref).unwrap_or_else(|| "value").to_owned()
+        self.location_name
+            .as_ref()
+            .map(String::as_ref)
+            .unwrap_or_else(|| "value")
+            .to_owned()
     }
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Shape {
-    #[serde(rename="box")]
+    #[serde(rename = "box")]
     pub aws_box: Option<bool>,
     pub documentation: Option<String>,
     pub error: Option<HttpError>,
@@ -194,7 +206,7 @@ pub struct Shape {
     pub fault: Option<bool>,
     pub flattened: Option<bool>,
     pub key: Option<Key>,
-    #[serde(rename="locationName")]
+    #[serde(rename = "locationName")]
     pub location_name: Option<String>,
     pub max: Option<f64>,
     pub member: Option<Member>,
@@ -203,15 +215,15 @@ pub struct Shape {
     pub pattern: Option<String>,
     pub payload: Option<String>,
     pub required: Option<Vec<String>>,
-    #[serde(rename="enum")]
+    #[serde(rename = "enum")]
     pub shape_enum: Option<Vec<String>>,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub shape_type: ShapeType,
     pub sensitive: Option<bool>,
-    #[serde(rename="timestampFormat")]
+    #[serde(rename = "timestampFormat")]
     pub timestamp_format: Option<String>,
     pub value: Option<Value>,
-    #[serde(rename="xmlNamespace")]
+    #[serde(rename = "xmlNamespace")]
     pub xml_namespace: Option<XmlNamespace>,
 }
 
@@ -224,17 +236,13 @@ impl Shape {
     }
 
     pub fn has_query_parameters(&self) -> bool {
-        self.members
-            .as_ref()
-            .unwrap()
-            .iter()
-            .any(|(_, member)| {
-                if let Some(ref loc) = member.location {
-                    !member.deprecated() && loc == "querystring"
-                } else {
-                    false
-                }
-            })
+        self.members.as_ref().unwrap().iter().any(|(_, member)| {
+            if let Some(ref loc) = member.location {
+                !member.deprecated() && loc == "querystring"
+            } else {
+                false
+            }
+        })
     }
 }
 
@@ -252,7 +260,12 @@ impl<'a> Shape {
     }
 
     pub fn required(&self, field: &'a str) -> bool {
-        self.required.is_some() && self.required.as_ref().unwrap().contains(&String::from(field))
+        self.required.is_some()
+            && self
+                .required
+                .as_ref()
+                .unwrap()
+                .contains(&String::from(field))
     }
 
     pub fn exception(&self) -> bool {
@@ -263,27 +276,27 @@ impl<'a> Shape {
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub enum ShapeType {
-    #[serde(rename="blob")]
+    #[serde(rename = "blob")]
     Blob,
-    #[serde(rename="boolean")]
+    #[serde(rename = "boolean")]
     Boolean,
-    #[serde(rename="double")]
+    #[serde(rename = "double")]
     Double,
-    #[serde(rename="float")]
+    #[serde(rename = "float")]
     Float,
-    #[serde(rename="integer")]
+    #[serde(rename = "integer")]
     Integer,
-    #[serde(rename="list")]
+    #[serde(rename = "list")]
     List,
-    #[serde(rename="long")]
+    #[serde(rename = "long")]
     Long,
-    #[serde(rename="map")]
+    #[serde(rename = "map")]
     Map,
-    #[serde(rename="string")]
+    #[serde(rename = "string")]
     String,
-    #[serde(rename="structure")]
+    #[serde(rename = "structure")]
     Structure,
-    #[serde(rename="timestamp")]
+    #[serde(rename = "timestamp")]
     Timestamp,
 }
 
@@ -292,7 +305,7 @@ pub struct Operation {
     pub alias: Option<String>,
     pub deprecated: Option<bool>,
     pub documentation: Option<String>,
-    #[serde(rename="documentationUrl")]
+    #[serde(rename = "documentationUrl")]
     pub documentation_url: Option<String>,
     pub errors: Option<BTreeSet<Error>>,
     pub http: HttpRequest,
@@ -303,7 +316,11 @@ pub struct Operation {
 
 impl<'a> Operation {
     pub fn input_shape(&'a self) -> &'a str {
-        &self.input.as_ref().expect("Operation input undefined").shape
+        &self
+            .input
+            .as_ref()
+            .expect("Operation input undefined")
+            .shape
     }
 
     pub fn output_shape_or(&'a self, default: &'a str) -> &'a str {
@@ -322,32 +339,32 @@ impl<'a> Operation {
 
 #[derive(Debug, Deserialize)]
 pub struct Metadata {
-    #[serde(rename="apiVersion")]
+    #[serde(rename = "apiVersion")]
     pub api_version: String,
-    #[serde(rename="checksumFormat")]
+    #[serde(rename = "checksumFormat")]
     pub checksum_format: Option<String>,
-    #[serde(rename="endpointPrefix")]
+    #[serde(rename = "endpointPrefix")]
     pub endpoint_prefix: String,
-    #[serde(rename="globalEndpoint")]
+    #[serde(rename = "globalEndpoint")]
     pub global_endpoint: Option<String>,
-    #[serde(rename="jsonVersion")]
+    #[serde(rename = "jsonVersion")]
     pub json_version: Option<String>,
     pub protocol: String,
-    #[serde(rename="serviceAbbreviation")]
+    #[serde(rename = "serviceAbbreviation")]
     pub service_abbreviation: Option<String>,
-    #[serde(rename="serviceFullName")]
+    #[serde(rename = "serviceFullName")]
     pub service_full_name: String,
-    #[serde(rename="serviceId")]
+    #[serde(rename = "serviceId")]
     pub service_id: Option<String>,
-    #[serde(rename="signatureVersion")]
+    #[serde(rename = "signatureVersion")]
     pub signature_version: String,
-    #[serde(rename="signingName")]
+    #[serde(rename = "signingName")]
     pub signing_name: Option<String>,
-    #[serde(rename="targetPrefix")]
+    #[serde(rename = "targetPrefix")]
     pub target_prefix: Option<String>,
-    #[serde(rename="timestampFormat")]
+    #[serde(rename = "timestampFormat")]
     pub timestamp_format: Option<String>,
-    #[serde(rename="xmlNamespace")]
+    #[serde(rename = "xmlNamespace")]
     pub xml_namespace: Option<String>,
 }
 
@@ -361,7 +378,8 @@ pub struct Metadata {
 // "camelCase" instead of "CamelCase".
 pub trait ShapeName<'de>: Sized {
     fn deserialize_shape_name<D>(deserializer: D) -> Result<Self, D::Error>
-        where D: Deserializer<'de>;
+    where
+        D: Deserializer<'de>;
 }
 
 struct ShapeNameVisitor;
@@ -374,7 +392,8 @@ impl<'de> Visitor<'de> for ShapeNameVisitor {
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where E: SerdeError
+    where
+        E: SerdeError,
     {
         Ok(util::capitalize_first(v))
     }
@@ -382,7 +401,8 @@ impl<'de> Visitor<'de> for ShapeNameVisitor {
 
 impl<'de> ShapeName<'de> for String {
     fn deserialize_shape_name<D>(deserializer: D) -> Result<String, D::Error>
-        where D: Deserializer<'de>
+    where
+        D: Deserializer<'de>,
     {
         deserializer.deserialize_string(ShapeNameVisitor)
     }
@@ -390,7 +410,8 @@ impl<'de> ShapeName<'de> for String {
 
 pub trait ShapesMap<'de>: Sized {
     fn deserialize_shapes_map<D>(deserializer: D) -> Result<Self, D::Error>
-        where D: Deserializer<'de>;
+    where
+        D: Deserializer<'de>;
 }
 
 struct ShapesMapVisitor<V> {
@@ -399,12 +420,15 @@ struct ShapesMapVisitor<V> {
 
 impl<V> ShapesMapVisitor<V> {
     pub fn new() -> Self {
-        ShapesMapVisitor { marker: PhantomData }
+        ShapesMapVisitor {
+            marker: PhantomData,
+        }
     }
 }
 
 impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
-    where V: Deserialize<'de>
+where
+    V: Deserialize<'de>,
 {
     type Value = BTreeMap<String, V>;
 
@@ -413,13 +437,15 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
     }
 
     fn visit_unit<E>(self) -> Result<BTreeMap<String, V>, E>
-        where E: SerdeError
+    where
+        E: SerdeError,
     {
         Ok(BTreeMap::new())
     }
 
     fn visit_map<Visitor>(self, mut visitor: Visitor) -> Result<Self::Value, Visitor::Error>
-        where Visitor: MapAccess<'de>
+    where
+        Visitor: MapAccess<'de>,
     {
         let mut values = BTreeMap::new();
 
@@ -433,11 +459,13 @@ impl<'de, V> Visitor<'de> for ShapesMapVisitor<V>
 }
 
 impl<'de, V> ShapesMap<'de> for BTreeMap<String, V>
-    where String: Deserialize<'de>,
-          V: Deserialize<'de>
+where
+    String: Deserialize<'de>,
+    V: Deserialize<'de>,
 {
     fn deserialize_shapes_map<D>(deserializer: D) -> Result<BTreeMap<String, V>, D::Error>
-        where D: Deserializer<'de>
+    where
+        D: Deserializer<'de>,
     {
         deserializer.deserialize_map(ShapesMapVisitor::new())
     }

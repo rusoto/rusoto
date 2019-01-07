@@ -1,27 +1,27 @@
 use std::collections::BTreeMap;
 
+use botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value};
 use cargo;
 use config::ServiceConfig;
-use botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation};
 
 #[derive(Debug)]
 pub struct Service<'a> {
     config: &'a ::ServiceConfig,
-    definition: ServiceDefinition
+    definition: ServiceDefinition,
 }
 
-impl <'b> Service <'b> {
+impl<'b> Service<'b> {
     pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
         Service {
             config: config,
-            definition: definition
+            definition: definition,
         }
     }
 
     pub fn name(&self) -> &str {
         match self.definition.metadata.service_abbreviation {
             Some(ref service_abbreviation) => service_abbreviation.as_str(),
-            None => self.definition.metadata.service_full_name.as_ref()
+            None => self.definition.metadata.service_full_name.as_ref(),
         }
     }
 
@@ -30,7 +30,11 @@ impl <'b> Service <'b> {
     }
 
     pub fn service_id(&self) -> Option<&str> {
-        self.definition.metadata.service_id.as_ref().map(|service_id| service_id.as_str())
+        self.definition
+            .metadata
+            .service_id
+            .as_ref()
+            .map(|service_id| service_id.as_str())
     }
 
     pub fn documentation(&self) -> Option<&String> {
@@ -86,7 +90,10 @@ impl <'b> Service <'b> {
     }
 
     pub fn shape_type_for_member<'a>(&'a self, member: &Member) -> Option<ShapeType> {
-        self.definition.shapes.get(&member.shape).map(|shape| shape.shape_type)
+        self.definition
+            .shapes
+            .get(&member.shape)
+            .map(|shape| shape.shape_type)
     }
 
     pub fn signing_name(&self) -> String {
@@ -99,34 +106,61 @@ impl <'b> Service <'b> {
     pub fn get_dependencies(&self) -> BTreeMap<String, cargo::Dependency> {
         let mut dependencies = BTreeMap::new();
 
-        dependencies.insert("futures".to_owned(), cargo::Dependency::Simple("0.1.16".into()));
-        dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
-            path: Some("../../core".into()),
-            version: Some(self.config.core_version.clone()),
-            optional: None,
-            default_features: Some(false),
-            features: None
-        });
+        dependencies.insert(
+            "futures".to_owned(),
+            cargo::Dependency::Simple("0.1.16".into()),
+        );
+        dependencies.insert(
+            "rusoto_core".to_owned(),
+            cargo::Dependency::Extended {
+                path: Some("../../core".into()),
+                version: Some(self.config.core_version.clone()),
+                optional: None,
+                default_features: Some(false),
+                features: None,
+            },
+        );
 
         match self.protocol() {
             "json" => {
-                dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-                dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-                dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
-            },
+                dependencies.insert(
+                    "serde".to_owned(),
+                    cargo::Dependency::Simple("1.0.2".into()),
+                );
+                dependencies.insert(
+                    "serde_derive".to_owned(),
+                    cargo::Dependency::Simple("1.0.2".into()),
+                );
+                dependencies.insert(
+                    "serde_json".to_owned(),
+                    cargo::Dependency::Simple("1.0.1".into()),
+                );
+            }
             "query" | "ec2" => {
-                dependencies.insert("serde_urlencoded".to_owned(), cargo::Dependency::Simple("0.5".into()));
+                dependencies.insert(
+                    "serde_urlencoded".to_owned(),
+                    cargo::Dependency::Simple("0.5".into()),
+                );
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
-            },
+            }
             "rest-xml" => {
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
-            },
+            }
             "rest-json" => {
                 dependencies.insert("log".to_owned(), cargo::Dependency::Simple("0.4.1".into()));
-                dependencies.insert("serde".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-                dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
-                dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
-            },
+                dependencies.insert(
+                    "serde".to_owned(),
+                    cargo::Dependency::Simple("1.0.2".into()),
+                );
+                dependencies.insert(
+                    "serde_derive".to_owned(),
+                    cargo::Dependency::Simple("1.0.2".into()),
+                );
+                dependencies.insert(
+                    "serde_json".to_owned(),
+                    cargo::Dependency::Simple("1.0.1".into()),
+                );
+            }
             protocol => panic!("Unknown protocol {}", protocol),
         }
 
@@ -140,13 +174,16 @@ impl <'b> Service <'b> {
     pub fn get_dev_dependencies(&self) -> BTreeMap<String, cargo::Dependency> {
         let mut dev_dependencies = BTreeMap::new();
 
-        dev_dependencies.insert("rusoto_mock".to_owned(), cargo::Dependency::Extended {
-            path: Some("../../../mock".into()),
-            version: Some("0.30.0".into()),
-            optional: None,
-            default_features: None,
-            features: None
-        });
+        dev_dependencies.insert(
+            "rusoto_mock".to_owned(),
+            cargo::Dependency::Extended {
+                path: Some("../../../mock".into()),
+                version: Some("0.30.0".into()),
+                optional: None,
+                default_features: None,
+                features: None,
+            },
+        );
 
         if let Some(ref custom_dev_dependencies) = self.config.custom_dev_dependencies {
             dev_dependencies.extend(custom_dev_dependencies.clone());

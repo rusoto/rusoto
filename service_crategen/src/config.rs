@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 use std::error::Error;
-use std::io::{self, Read};
 use std::fmt;
 use std::fs::File;
+use std::io::{self, Read};
 use std::path::Path;
 
 use serde_json;
@@ -21,7 +21,7 @@ pub struct ServiceConfig {
     #[serde(rename = "customDevDependencies")]
     pub custom_dev_dependencies: Option<BTreeMap<String, cargo::Dependency>>,
     #[serde(rename = "baseTypeName")]
-    pub base_type_name: String
+    pub base_type_name: String,
 }
 
 impl ServiceConfig {
@@ -31,7 +31,8 @@ impl ServiceConfig {
             f.read_to_string(&mut contents).map(|_| contents)
         })?;
 
-        let parsed: BTreeMap<String, ServiceConfig> = serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
+        let parsed: BTreeMap<String, ServiceConfig> =
+            serde_json::from_str(&contents).expect("Unable to parse services configuration file.");
         Ok(parsed)
     }
 }
@@ -39,7 +40,7 @@ impl ServiceConfig {
 #[derive(Debug)]
 pub enum ConfigError {
     Io(io::Error),
-    Format(serde_json::Error)
+    Format(serde_json::Error),
 }
 
 impl From<io::Error> for ConfigError {
@@ -58,7 +59,7 @@ impl fmt::Display for ConfigError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ConfigError::Io(ref e) => e.fmt(f),
-            ConfigError::Format(ref e) => e.fmt(f)
+            ConfigError::Format(ref e) => e.fmt(f),
         }
     }
 }
@@ -67,14 +68,14 @@ impl Error for ConfigError {
     fn description(&self) -> &str {
         match *self {
             ConfigError::Io(ref e) => e.description(),
-            ConfigError::Format(ref e) => e.description()
+            ConfigError::Format(ref e) => e.description(),
         }
     }
 
     fn cause(&self) -> Option<&Error> {
         match *self {
             ConfigError::Io(ref e) => Some(e),
-            ConfigError::Format(ref e) => Some(e)
+            ConfigError::Format(ref e) => Some(e),
         }
     }
 }

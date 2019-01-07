@@ -1,9 +1,9 @@
 use std::collections::BTreeMap;
 use std::io::Write;
 
-use ::Service;
+use super::{error_type_name, FileWriter, IoResult};
 use botocore::Operation;
-use super::{IoResult, FileWriter, error_type_name};
+use Service;
 
 /// Examines the error types described in the botocore definition for an operation
 /// and generates a Rust enum of error types that can be used in a `Result` return
@@ -25,20 +25,28 @@ pub trait GenerateErrorTypes {
         }
 
         for (operation_name, operation) in service.operations().iter() {
-            self.generate_error_type(writer, operation_name, operation, service, &error_documentation)?;
+            self.generate_error_type(
+                writer,
+                operation_name,
+                operation,
+                service,
+                &error_documentation,
+            )?;
         }
         Ok(())
     }
 
-    fn generate_error_type(&self,
-                           writer: &mut FileWriter,
-                           operation_name: &str,
-                           operation: &Operation,
-                           service: &Service,
-                           error_documentation: &BTreeMap<&String, &String>)
-                           -> IoResult {
-        writeln!(writer,
-                 "/// Errors returned by {operation}
+    fn generate_error_type(
+        &self,
+        writer: &mut FileWriter,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+        error_documentation: &BTreeMap<&String, &String>,
+    ) -> IoResult {
+        writeln!(
+            writer,
+            "/// Errors returned by {operation}
                 #[derive(Debug, PartialEq)]
                 pub enum {type_name} {{
                     {error_types}
@@ -73,23 +81,26 @@ pub trait GenerateErrorTypes {
                         }}
                     }}
                  }}",
-                 operation = operation_name,
-                 type_name = error_type_name(service, operation_name),
-                 error_from_body_impl =
-                     self.generate_error_from_body_impl(operation_name, operation, service),
-                 error_from_type_impl = self.generate_error_from_type_impl(operation_name, service),
-                 error_types = self.generate_error_enum_types(operation, error_documentation)
-                     .unwrap_or_else(|| String::from("")),
-                 description_matchers =
-                     self.generate_error_description_matchers(operation_name, operation, service)
-                         .unwrap_or_else(|| String::from("")))
+            operation = operation_name,
+            type_name = error_type_name(service, operation_name),
+            error_from_body_impl =
+                self.generate_error_from_body_impl(operation_name, operation, service),
+            error_from_type_impl = self.generate_error_from_type_impl(operation_name, service),
+            error_types = self
+                .generate_error_enum_types(operation, error_documentation)
+                .unwrap_or_else(|| String::from("")),
+            description_matchers = self
+                .generate_error_description_matchers(operation_name, operation, service)
+                .unwrap_or_else(|| String::from(""))
+        )
     }
 
     /// generate an enum of all possible errors output by this operation
-    fn generate_error_enum_types(&self,
-                                 operation: &Operation,
-                                 error_documentation: &BTreeMap<&String, &String>)
-                                 -> Option<String> {
+    fn generate_error_enum_types(
+        &self,
+        operation: &Operation,
+        error_documentation: &BTreeMap<&String, &String>,
+    ) -> Option<String> {
         let mut enum_types: Vec<String> = Vec::new();
 
         if operation.errors.is_some() {
@@ -97,28 +108,45 @@ pub trait GenerateErrorTypes {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below
                 if error.idiomatic_error_name() != "Validation" {
-                    enum_types.push(format!("\n{}\n{}(String)",
-                                            ::doco::Item(error_documentation.get(&error.shape)
-                                                .unwrap_or(&&String::from(""))),
-                                            error.idiomatic_error_name()));
+                    enum_types.push(format!(
+                        "\n{}\n{}(String)",
+                        ::doco::Item(
+                            error_documentation
+                                .get(&error.shape)
+                                .unwrap_or(&&String::from(""))
+                        ),
+                        error.idiomatic_error_name()
+                    ));
                 }
             }
         }
 
-        enum_types.push("/// An error occurred dispatching the HTTP request\nHttpDispatch(HttpDispatchError)".to_string());
-        enum_types.push("/// An error was encountered with AWS credentials.\nCredentials(CredentialsError)".to_string());
-        enum_types.push("/// A validation error occurred.  Details from AWS are provided.\nValidation(String)".to_string());
-        enum_types.push("/// An error occurred parsing the response payload.\nParseError(String)".to_string());
+        enum_types.push(
+            "/// An error occurred dispatching the HTTP request\nHttpDispatch(HttpDispatchError)"
+                .to_string(),
+        );
+        enum_types.push(
+            "/// An error was encountered with AWS credentials.\nCredentials(CredentialsError)"
+                .to_string(),
+        );
+        enum_types.push(
+            "/// A validation error occurred.  Details from AWS are provided.\nValidation(String)"
+                .to_string(),
+        );
+        enum_types.push(
+            "/// An error occurred parsing the response payload.\nParseError(String)".to_string(),
+        );
         enum_types.push("/// An unknown error occurred.  The raw HTTP response is provided.\nUnknown(BufferedHttpResponse)".to_string());
         Some(enum_types.join(","))
     }
 
     /// generate the matcher arms for an error type's implementation of Error.description()
-    fn generate_error_description_matchers(&self,
-                                           operation_name: &str,
-                                           operation: &Operation,
-                                           service: &Service)
-                                           -> Option<String> {
+    fn generate_error_description_matchers(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> Option<String> {
         let mut type_matchers: Vec<String> = Vec::new();
         let error_type = error_type_name(service, operation_name);
 
@@ -128,26 +156,44 @@ pub trait GenerateErrorTypes {
                 // some botocore definitions include Validation in every errors list, some take it as assumed
                 // skip it if it's listed, as we implement it for all error types below
                 if error.idiomatic_error_name() != "Validation" {
-                    type_matchers.push(format!("{error_type}::{error_shape}(ref cause) => cause",
-                                               error_type = error_type_name(service, operation_name),
-                                               error_shape = error.idiomatic_error_name()))
+                    type_matchers.push(format!(
+                        "{error_type}::{error_shape}(ref cause) => cause",
+                        error_type = error_type_name(service, operation_name),
+                        error_shape = error.idiomatic_error_name()
+                    ))
                 }
             }
         }
 
-        type_matchers.push(format!("{error_type}::Validation(ref cause) => cause",
-                                   error_type = error_type));
-        type_matchers.push(format!("{error_type}::Credentials(ref err) => err.description()",
-                                   error_type = error_type));
-        type_matchers.push(format!("{error_type}::HttpDispatch(ref dispatch_error) => dispatch_error.description()", error_type = error_type));
-        type_matchers.push(format!("{error_type}::ParseError(ref cause) => cause",
-                                   error_type = error_type));
-        type_matchers.push(format!("{error_type}::Unknown(_) => \"unknown error\"",
-                                   error_type = error_type));
+        type_matchers.push(format!(
+            "{error_type}::Validation(ref cause) => cause",
+            error_type = error_type
+        ));
+        type_matchers.push(format!(
+            "{error_type}::Credentials(ref err) => err.description()",
+            error_type = error_type
+        ));
+        type_matchers.push(format!(
+            "{error_type}::HttpDispatch(ref dispatch_error) => dispatch_error.description()",
+            error_type = error_type
+        ));
+        type_matchers.push(format!(
+            "{error_type}::ParseError(ref cause) => cause",
+            error_type = error_type
+        ));
+        type_matchers.push(format!(
+            "{error_type}::Unknown(_) => \"unknown error\"",
+            error_type = error_type
+        ));
         Some(type_matchers.join(",\n"))
     }
 
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String;
+    fn generate_error_from_body_impl(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> String;
     fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String;
 }
 
@@ -156,7 +202,12 @@ pub struct JsonErrorTypes;
 pub struct XmlErrorTypes;
 
 impl GenerateErrorTypes for XmlErrorTypes {
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
+    fn generate_error_from_body_impl(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> String {
         format!("
                 impl {type_name} {{
                     pub fn from_response(res: BufferedHttpResponse) -> {type_name} {{
@@ -183,14 +234,16 @@ impl GenerateErrorTypes for XmlErrorTypes {
     }
 
     fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String {
-        format!("
+        format!(
+            "
                 impl From<XmlParseError> for {type_name} {{
                     fn from(err: XmlParseError) -> {type_name} {{
                         let XmlParseError(message) = err;
                         {type_name}::ParseError(message.to_string())
                     }}
                 }}",
-                type_name = error_type_name(service, operation_name))
+            type_name = error_type_name(service, operation_name)
+        )
     }
 }
 
@@ -202,7 +255,8 @@ impl XmlErrorTypes {
             start_element(\"Response\", stack)?;
             start_element(\"Errors\", stack)?;
             XmlErrorDeserializer::deserialize(\"Error\", stack)
-            ".to_owned()
+            "
+            .to_owned()
         } else if service.service_id() == Some("S3") {
             // https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
             "XmlErrorDeserializer::deserialize(\"Error\", stack)".to_owned()
@@ -210,20 +264,30 @@ impl XmlErrorTypes {
             "
             start_element(\"ErrorResponse\", stack)?;
             XmlErrorDeserializer::deserialize(\"Error\", stack)
-            ".to_owned()
+            "
+            .to_owned()
         }
     }
 
     /// generate the arms for a match expression that maps an error name string from the response XML
     /// to a concrete error type from this operation's errors enum
-    fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
+    fn generate_error_type_matchers(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> String {
         let mut type_matchers: Vec<String> = Vec::new();
         let error_type = error_type_name(service, operation_name);
 
         if operation.errors.is_some() {
             for error in operation.errors() {
                 let shape = service.get_shape(&error.shape).unwrap();
-                let error_code = shape.error.as_ref().and_then(|http_error| http_error.code.as_ref()).unwrap_or(&error.shape);
+                let error_code = shape
+                    .error
+                    .as_ref()
+                    .and_then(|http_error| http_error.code.as_ref())
+                    .unwrap_or(&error.shape);
                 type_matchers.push(format!("\"{error_code}\" => return {error_type}::{error_name}(String::from(parsed_error.message))",
                     error_code = error_code,
                     error_type = error_type,
@@ -237,7 +301,12 @@ impl XmlErrorTypes {
 }
 
 impl GenerateErrorTypes for JsonErrorTypes {
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
+    fn generate_error_from_body_impl(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> String {
         format!("
                 impl {type_name} {{
                     pub fn from_response(res: BufferedHttpResponse) -> {type_name} {{
@@ -260,20 +329,27 @@ impl GenerateErrorTypes for JsonErrorTypes {
     }
 
     fn generate_error_from_type_impl(&self, operation_name: &str, service: &Service) -> String {
-        format!("
+        format!(
+            "
                 impl From<serde_json::error::Error> for {type_name} {{
                     fn from(err: serde_json::error::Error) -> {type_name} {{
                         {type_name}::ParseError(err.description().to_string())
                     }}
                 }}",
-                type_name = error_type_name(service, operation_name))
+            type_name = error_type_name(service, operation_name)
+        )
     }
 }
 
 impl JsonErrorTypes {
     /// generate the arms for a match expression that maps an error name string from the response JSON
     /// to a concrete error type from this operation's errors enum
-    fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
+    fn generate_error_type_matchers(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> String {
         let mut type_matchers: Vec<String> = Vec::new();
         let error_type = error_type_name(service, operation_name);
 
@@ -287,15 +363,22 @@ impl JsonErrorTypes {
                 }
             }
         }
-        type_matchers.push(format!("\"ValidationException\" => return {error_type}::Validation(error_message.to_string())", error_type = error_type));
+        type_matchers.push(format!(
+            "\"ValidationException\" => return {error_type}::Validation(error_message.to_string())",
+            error_type = error_type
+        ));
         type_matchers.push(format!("_ => {{}}"));
         type_matchers.join(",\n")
     }
 }
 
-
 impl GenerateErrorTypes for RestJsonErrorTypes {
-    fn generate_error_from_body_impl(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
+    fn generate_error_from_body_impl(
+        &self,
+        operation_name: &str,
+        operation: &Operation,
+        service: &Service,
+    ) -> String {
         format!("
                 impl {type_name} {{
                     // see boto RestJSONParser impl for parsing errors

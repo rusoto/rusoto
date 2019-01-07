@@ -1,19 +1,23 @@
-use std::io::Write;
 use inflector::Inflector;
+use std::io::Write;
 
-use ::Service;
-use botocore::{Operation, Shape, ShapeType, Member};
+use botocore::{Member, Operation, Shape, ShapeType};
 use util;
+use Service;
 
 use super::xml_payload_parser;
-use super::{IoResult, FileWriter, GenerateProtocol, error_type_name, generate_field_name, get_rust_type};
+use super::{
+    error_type_name, generate_field_name, get_rust_type, FileWriter, GenerateProtocol, IoResult,
+};
 
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
-            writeln!(writer,"
+            writeln!(
+                writer,
+                "
                 {documentation}
                 {method_signature};
                 ",
@@ -91,7 +95,8 @@ impl GenerateProtocol for QueryGenerator {
         }
 
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
-        Some(format!("
+        Some(format!(
+            "
             /// Serialize `{name}` contents to a `SignedRequest`.
             struct {name}Serializer;
             impl {name}Serializer {{
@@ -100,18 +105,22 @@ impl GenerateProtocol for QueryGenerator {
                 }}
             }}
             ",
-                     name = name,
-                     serializer_signature = generate_serializer_signature(&ty, shape),
-                     serializer_body = generate_serializer_body(service, shape)))
+            name = name,
+            serializer_signature = generate_serializer_signature(&ty, shape),
+            serializer_body = generate_serializer_body(service, shape)
+        ))
     }
 
-    fn generate_deserializer(&self,
-                             name: &str,
-                             shape: &Shape,
-                             service: &Service)
-                             -> Option<String> {
+    fn generate_deserializer(
+        &self,
+        name: &str,
+        shape: &Shape,
+        service: &Service,
+    ) -> Option<String> {
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
-        Some(xml_payload_parser::generate_deserializer(name, &ty, shape, service))
+        Some(xml_payload_parser::generate_deserializer(
+            name, &ty, shape, service,
+        ))
     }
 
     fn timestamp_type(&self) -> &'static str {
@@ -135,7 +144,8 @@ fn generate_set_input_params(operation: &Operation) -> String {
         panic!("query protocol supports only POST method: {:?}", operation);
     }
     "request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap().into_bytes()));
-    request.set_content_type(\"application/x-www-form-urlencoded\".to_owned());".to_owned()
+    request.set_content_type(\"application/x-www-form-urlencoded\".to_owned());"
+        .to_owned()
 }
 
 fn generate_serializer_body(service: &Service, shape: &Shape) -> String {
@@ -149,16 +159,22 @@ fn generate_serializer_body(service: &Service, shape: &Shape) -> String {
 
 fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
     if shape.shape_type == ShapeType::Structure && shape.members.as_ref().unwrap().is_empty() {
-        format!("fn serialize(_params: &mut Params, name: &str, _obj: &{})",
-                name)
+        format!(
+            "fn serialize(_params: &mut Params, name: &str, _obj: &{})",
+            name
+        )
     } else {
-        format!("fn serialize(params: &mut Params, name: &str, obj: &{})",
-                name)
+        format!(
+            "fn serialize(params: &mut Params, name: &str, obj: &{})",
+            name
+        )
     }
 }
 
 fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
-    let member_shape = service.shape_for_member(shape.member.as_ref().unwrap()).unwrap();
+    let member_shape = service
+        .shape_for_member(shape.member.as_ref().unwrap())
+        .unwrap();
     let primitive = member_shape.is_primitive();
     let is_shape_flattened = match shape.flattened {
         None => false,
@@ -168,16 +184,22 @@ fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
 
     let lmf = list_member_format(service, is_shape_flattened);
 
-    parts.push(format!("for (index, obj) in obj.iter().enumerate() {{
+    parts.push(format!(
+        "for (index, obj) in obj.iter().enumerate() {{
                     let key = format!(\"{list_member_format}\", name, index+1);",
-                       list_member_format = lmf));
+        list_member_format = lmf
+    ));
 
     if primitive {
-        parts.push(format!("params.put(&key, {});",
-                           serialize_primitive_expression(&member_shape.shape_type, "obj")));
+        parts.push(format!(
+            "params.put(&key, {});",
+            serialize_primitive_expression(&member_shape.shape_type, "obj")
+        ));
     } else {
-        parts.push(format!("{}Serializer::serialize(params, &key, obj);",
-                           shape.member_type()));
+        parts.push(format!(
+            "{}Serializer::serialize(params, &key, obj);",
+            shape.member_type()
+        ));
     }
 
     parts.push("}".to_owned());
@@ -188,8 +210,12 @@ fn list_member_format(service: &Service, flattened: bool) -> String {
     match service.protocol() {
         "ec2" => "{}.{}".to_owned(),
         "query" => {
-            if flattened { "{}.{}".to_owned() } else { "{}.member.{}".to_owned() }
-        },
+            if flattened {
+                "{}.{}".to_owned()
+            } else {
+                "{}.member.{}".to_owned()
+            }
+        }
         _ => panic!("Unsupported protocol"),
     }
 }
@@ -198,33 +224,43 @@ fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
     let mut parts = Vec::new();
 
     let prefix_snip: String;
-    if service.service_id() == Some("SNS") && shape.value.is_some() && shape.value.as_ref().unwrap().shape == "MessageAttributeValue" {
+    if service.service_id() == Some("SNS")
+        && shape.value.is_some()
+        && shape.value.as_ref().unwrap().shape == "MessageAttributeValue"
+    {
         prefix_snip = "let prefix = format!(\"{}.entry.{}\", name, index+1);".to_string();
     } else {
         prefix_snip = "let prefix = format!(\"{}.{}\", name, index+1);".to_string();
     }
 
     // the key is always a string type
-    parts.push(format!("for (index, (key, value)) in obj.iter().enumerate() {{
+    parts.push(format!(
+        "for (index, (key, value)) in obj.iter().enumerate() {{
             {prefix_snip}
             params.put(&format!(\"{{}}.{{}}\", prefix, \"{key_name}\"), &key);",
-            prefix_snip = prefix_snip,
-            key_name = key_name(service, shape),
-        ));
+        prefix_snip = prefix_snip,
+        key_name = key_name(service, shape),
+    ));
 
-    let value_shape = service.shape_for_value(shape.value.as_ref().unwrap()).unwrap();
+    let value_shape = service
+        .shape_for_value(shape.value.as_ref().unwrap())
+        .unwrap();
     let primitive_value = value_shape.is_primitive();
 
     if primitive_value {
-        parts.push(format!("params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"));
+        parts.push(format!(
+            "params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"
+        ));
     } else {
-        parts.push(format!("{value_type}Serializer::serialize(
+        parts.push(format!(
+            "{value_type}Serializer::serialize(
                     params,
                     &format!(\"{{}}.{{}}\", prefix, \"{value_name}\"),
                     value,
                 );",
-                           value_type = shape.value_type(),
-                           value_name = value_name(service, shape)));
+            value_type = shape.value_type(),
+            value_name = value_name(service, shape)
+        ));
     }
 
     parts.push("}".to_owned());
@@ -232,7 +268,8 @@ fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
 }
 
 fn key_name(service: &Service, shape: &Shape) -> String {
-    let key_name = shape.key
+    let key_name = shape
+        .key
         .as_ref()
         .expect("Key undefined")
         .location_name
@@ -243,7 +280,8 @@ fn key_name(service: &Service, shape: &Shape) -> String {
 }
 
 fn value_name(service: &Service, shape: &Shape) -> String {
-    let value_name = shape.value
+    let value_name = shape
+        .value
         .as_ref()
         .expect("Value undefined")
         .location_name
@@ -255,7 +293,7 @@ fn value_name(service: &Service, shape: &Shape) -> String {
 
 fn member_location(service: &Service, member: &Member, default: &str) -> String {
     // Seems a bit hacky to avoid doing this just for EC2:
-    if let Some (ref shape) = service.shape_for_member(member) {
+    if let Some(ref shape) = service.shape_for_member(member) {
         if service.protocol() != "ec2" && !shape.is_primitive() {
             if let Some(ref shape_member) = shape.member {
                 let inner_name = member_location(service, shape_member, default);
@@ -263,7 +301,10 @@ fn member_location(service: &Service, member: &Member, default: &str) -> String 
             }
         }
     }
-    let member_location = member.location_name.clone().unwrap_or_else(|| default.to_owned());
+    let member_location = member
+        .location_name
+        .clone()
+        .unwrap_or_else(|| default.to_owned());
     capitalize_if_ec2(service, &member_location)
 }
 
@@ -288,7 +329,8 @@ fn generate_struct_serializer(service: &Service, shape: &Shape) -> String {
 }
 
 fn generate_struct_field_serializers(service: &Service, shape: &Shape) -> String {
-    shape.members
+    shape
+        .members
         .as_ref()
         .unwrap()
         .iter()
@@ -311,36 +353,43 @@ fn generate_struct_field_serializers(service: &Service, shape: &Shape) -> String
         .join("\n")
 }
 
-fn optional_primitive_field_serializer(service: &Service,
-                                       member_name: &str,
-                                       member: &Member)
-                                       -> String {
+fn optional_primitive_field_serializer(
+    service: &Service,
+    member_name: &str,
+    member: &Member,
+) -> String {
     if member.deprecated() {
         return "".to_owned();
     }
     let member_shape = service.shape_for_member(member).unwrap();
     let expression = serialize_primitive_expression(&member_shape.shape_type, "field_value");
 
-    format!("if let Some(ref field_value) = obj.{field_name} {{
+    format!(
+        "if let Some(ref field_value) = obj.{field_name} {{
                 params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});
             }}",
-            field_name = generate_field_name(member_name),
-            expression = expression,
-            tag_name = member_location(service, member, member_name))
+        field_name = generate_field_name(member_name),
+        expression = expression,
+        tag_name = member_location(service, member, member_name)
+    )
 }
 
-fn required_primitive_field_serializer(service: &Service,
-                                       member_name: &str,
-                                       member: &Member)
-                                       -> String {
+fn required_primitive_field_serializer(
+    service: &Service,
+    member_name: &str,
+    member: &Member,
+) -> String {
     let member_shape = service.shape_for_member(member).unwrap();
-    let expression = serialize_primitive_expression(&member_shape.shape_type,
-                                                    &format!("obj.{}",
-                                                             generate_field_name(member_name)));
+    let expression = serialize_primitive_expression(
+        &member_shape.shape_type,
+        &format!("obj.{}", generate_field_name(member_name)),
+    );
 
-    format!("params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});",
-            expression = expression,
-            tag_name = member_location(service, member, member_name))
+    format!(
+        "params.put(&format!(\"{{}}{{}}\", prefix, \"{tag_name}\"), {expression});",
+        expression = expression,
+        tag_name = member_location(service, member, member_name)
+    )
 }
 
 fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> String {
@@ -354,46 +403,54 @@ fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> Str
     }
 }
 
-fn required_complex_field_serializer(service: &Service,
-                                     member_name: &str,
-                                     member: &Member)
-                                     -> String {
-    format!("{member_shape}Serializer::serialize(
+fn required_complex_field_serializer(
+    service: &Service,
+    member_name: &str,
+    member: &Member,
+) -> String {
+    format!(
+        "{member_shape}Serializer::serialize(
                 params,
                 &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
                 &obj.{field_name},
             );",
-            field_name = generate_field_name(member_name),
-            member_shape = member.shape,
-            tag_name = member_location(service, member, member_name))
+        field_name = generate_field_name(member_name),
+        member_shape = member.shape,
+        tag_name = member_location(service, member, member_name)
+    )
 }
 
-fn optional_complex_field_serializer(service: &Service,
-                                     member_name: &str,
-                                     member: &Member)
-                                     -> String {
-    format!("if let Some(ref field_value) = obj.{field_name} {{
+fn optional_complex_field_serializer(
+    service: &Service,
+    member_name: &str,
+    member: &Member,
+) -> String {
+    format!(
+        "if let Some(ref field_value) = obj.{field_name} {{
                 {member_shape_name}Serializer::serialize(
                     params,
                     &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
                     field_value,
                 );
             }}",
-            field_name = generate_field_name(member_name),
-            member_shape_name = member.shape,
-            tag_name = member_location(service, member, member_name))
+        field_name = generate_field_name(member_name),
+        member_shape_name = member.shape,
+        tag_name = member_location(service, member, member_name)
+    )
 }
 
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
-        Some(ref docs) => {
-            ::doco::Item(docs).to_string()
-        }
+        Some(ref docs) => ::doco::Item(docs).to_string(),
         None => "".to_owned(),
     }
 }
 
-fn generate_method_signature(operation_name: &str, operation: &Operation, service: &Service) -> String {
+fn generate_method_signature(
+    operation_name: &str,
+    operation: &Operation,
+    service: &Service,
+) -> String {
     if operation.input.is_some() {
         format!(
             "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
