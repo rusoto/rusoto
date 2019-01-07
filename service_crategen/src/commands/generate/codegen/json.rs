@@ -70,6 +70,30 @@ impl GenerateProtocol for JsonGenerator {
         Ok(())
     }
 
+    fn generate_forwarding_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations().iter() {
+            let output_type = operation.output_shape_or("()");
+
+            writeln!(
+                writer,
+                "
+                {documentation}
+                {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
+                    {trait_name}::{method_name}(&(**self) {method_arg})
+                }}
+                ",
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
+                method_signature = generate_method_signature(service, operation),
+                error_type = error_type_name(service, operation_name),
+                output_type = output_type,
+                trait_name = service.service_type_name(),
+                method_name = operation_name.to_snake_case(),
+                method_arg = if method_has_args(service, operation) { ", input" } else { "" },
+            )?
+        }
+        Ok(())
+    }
+
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
         writeln!(
             writer,
@@ -104,15 +128,18 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     }
 }
 
-fn generate_method_signature(service: &Service, operation: &Operation) -> String {
-    if operation.input.is_some()
+fn method_has_args(service: &Service, operation: &Operation) -> bool {
+    operation.input.is_some()
         && service
             .get_shape(operation.input_shape())
             .as_ref()
             .and_then(|s| s.members.as_ref())
             .map(|m| !m.is_empty())
             .unwrap_or(false)
-    {
+}
+
+fn generate_method_signature(service: &Service, operation: &Operation) -> String {
+    if method_has_args(service, operation) {
         format!(
             "fn {method_name}(&self, input: {input_type}) ",
             input_type = operation.input_shape(),

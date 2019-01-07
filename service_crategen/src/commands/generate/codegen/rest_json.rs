@@ -103,6 +103,35 @@ impl GenerateProtocol for RestJsonGenerator {
         Ok(())
     }
 
+    fn generate_forwarding_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations().iter() {
+            let input_type = operation.input_shape();
+            let output_type = operation.output_shape_or("()");
+
+            // Retrieve the `Shape` for the input for this operation.
+            let input_shape = &service.get_shape(input_type).unwrap();
+
+            writeln!(
+                writer,
+                "
+                {documentation}
+                {method_signature} -> \
+                      RusotoFuture<{output_type}, {error_type}> {{
+                    {trait_name}::{method_name}(&(**self) {method_arg})
+                }}
+                ",
+                documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
+                method_signature = generate_method_signature(operation, input_shape),
+                error_type = error_type_name(service, operation_name),
+                output_type = output_type,
+                trait_name = service.service_type_name(),
+                method_name = operation_name.to_snake_case(),
+                method_arg = if method_has_args(input_shape) { ", input" } else { "" },
+            )?
+        }
+        Ok(())
+    }
+
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         writeln!(writer, "use serde_json;")?;
 
@@ -173,10 +202,14 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     }
 }
 
+fn method_has_args(shape: &Shape) -> bool {
+    shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty()
+}
+
 // IoT defines a lot of empty (and therefore unnecessary) request shapes
 // don't clutter method signatures with them
 fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
-    if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
+    if method_has_args(shape) {
         format!(
             "fn {method_name}(&self, input: {input_type})",
             method_name = operation.name.to_snake_case(),

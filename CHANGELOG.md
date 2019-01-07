@@ -1,6 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
+- Forward traits through wrappers like Rc.
 - Upgrade hyper-rustls library
 - Fix duplicated Content-Type header in SageMaker Runtime
 - Switch from `try!` to `?` operator

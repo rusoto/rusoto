@@ -69,6 +69,26 @@ impl GenerateProtocol for QueryGenerator {
         Ok(())
     }
 
+    fn generate_forwarding_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations().iter() {
+            writeln!(
+                writer,
+                "
+                {documentation}
+                {method_signature} {{
+                    {trait_name}::{method_name}(&(**self) {method_arg})
+                }}
+                ",
+                documentation = generate_documentation(operation),
+                method_signature = generate_method_signature(operation_name, operation, service),
+                trait_name = service.service_type_name(),
+                method_name = operation_name.to_snake_case(),
+                method_arg = if operation.input.is_some() { ", input" } else { "" },
+            )?
+        }
+        Ok(())
+    }
+
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
         writeln!(writer,
                  "use std::str::FromStr;
