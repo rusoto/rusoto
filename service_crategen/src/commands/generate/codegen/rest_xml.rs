@@ -21,7 +21,7 @@ impl GenerateProtocol for RestXmlGenerator {
                 {documentation}
                 {method_signature};
                 ",
-                documentation = generate_documentation(operation),
+                documentation = generate_documentation(operation, service),
                 method_signature = generate_method_signature(operation_name, operation, service),
             )?
         }
@@ -58,7 +58,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         }})
                     }}
                     ",
-                     documentation = generate_documentation(operation),
+                     documentation = generate_documentation(operation, service),
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
                      method_signature = generate_method_signature(operation_name, operation, service),
@@ -147,11 +147,24 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 }
 
-fn generate_documentation(operation: &Operation) -> String {
-    match operation.documentation {
+fn generate_documentation(operation: &Operation, service: &Service) -> String {
+    let mut docs = match operation.documentation {
         Some(ref docs) => ::doco::Item(docs).to_string(),
         None => "".to_owned(),
+    };
+
+    // Specialized docs for services:
+    match service.name().to_ascii_lowercase().as_ref() {
+        "route 53" => {
+            if operation.name == "ChangeResourceRecordSets" {
+                docs = format!("/// For TXT records, see <a href=\"./util/fn.quote_txt_record.html\">util::quote_txt_record</a>\n{}", docs);
+            }
+            ()
+        }
+        _ => (),
     }
+
+    docs
 }
 
 fn generate_payload_serialization(service: &Service, operation: &Operation) -> Option<String> {
@@ -376,12 +389,12 @@ fn generate_primitive_struct_field_serializer(
 ) -> String {
     if shape.required(member_name) {
         format!(
-            "writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
-             writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=obj.{field_name})))?;
-             writer.write(xml::writer::XmlEvent::end_element())?;",
-            field_name = generate_field_name(member_name),
-            location_name = location_name,
-        )
+        "writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=obj.{field_name})))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;",
+        field_name = generate_field_name(member_name),
+        location_name = location_name,
+    )
     } else {
         format!(
             "if let Some(ref value) = obj.{field_name} {{
