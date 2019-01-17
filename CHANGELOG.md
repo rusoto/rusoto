@@ -6,6 +6,7 @@
 - Remove unneeded muts in Glacier codegen
 - Add Eu-North-1 Region
 - Fix bug in SNS publish message action
+- Mock can simulate communications errors
 
 ## [0.36.0] - 2018-12-04
 

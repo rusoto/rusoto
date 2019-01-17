@@ -44,7 +44,7 @@ use std::fs::File;
 use std::io::Read;
 use std::time::Duration;
 
-use futures::future::{ok, FutureResult};
+use futures::future::{ok, err, FutureResult};
 use http::{HttpTryFrom, StatusCode};
 use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::{Headers, HttpResponse};
@@ -74,9 +74,20 @@ impl ProvideAwsCredentials for MockCredentialsProvider {
 #[derive(Default)]
 pub struct MockRequestDispatcher {
     status: StatusCode,
-    body: Vec<u8>,
+    body: DispatchResult,
     headers: HashMap<String, String>,
     request_checker: Option<Box<Fn(&SignedRequest) + Send + Sync>>,
+}
+
+enum DispatchResult {
+  Body(Vec<u8>),
+  Error(HttpDispatchError),
+}
+
+impl Default for DispatchResult {
+  fn default() -> DispatchResult {
+    DispatchResult::Body(Vec::<u8>::new())
+  }
 }
 
 impl MockRequestDispatcher {
@@ -92,7 +103,7 @@ impl MockRequestDispatcher {
     /// Mocks the service response body what would be
     /// returned from AWS
     pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
-        self.body = body.as_bytes().to_vec();
+        self.body = DispatchResult::Body(body.as_bytes().to_vec());
         self
     }
 
@@ -102,7 +113,7 @@ impl MockRequestDispatcher {
     where
         B: Serialize,
     {
-        self.body = serde_json::to_vec(&body).expect("failed to deserialize into json");
+        self.body = DispatchResult::Body(serde_json::to_vec(&body).expect("failed to deserialize into json"));
         self
     }
 
@@ -114,6 +125,12 @@ impl MockRequestDispatcher {
     {
         self.request_checker = Some(Box::new(checker));
         self
+    }
+
+    /// Mocks the service request failing with a communications error
+    pub fn with_dispatch_error(mut self, error: HttpDispatchError) -> MockRequestDispatcher {
+      self.body = DispatchResult::Error(error);
+      self
     }
 
     /// Mocks a single service header that would be returned from AWS
@@ -130,11 +147,14 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         if self.request_checker.is_some() {
             self.request_checker.as_ref().unwrap()(&request);
         }
-        ok(HttpResponse {
+        match self.body {
+          DispatchResult::Body(ref body) => ok(HttpResponse {
             status: self.status,
-            body: ByteStream::from(self.body.clone()),
+            body: ByteStream::from(body.clone()),
             headers: Headers::new(self.headers.iter().map(|(k, v)| (k.as_ref(), v.to_owned()))),
-        })
+          }),
+          DispatchResult::Error(ref error) => err(error.clone()),
+        }
     }
 }
 

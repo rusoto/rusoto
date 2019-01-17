@@ -163,10 +163,17 @@ impl HttpResponse {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 /// An error produced when invalid request types are sent.
 pub struct HttpDispatchError {
     message: String,
+}
+
+impl HttpDispatchError {
+  /// Construct a new HttpDispatchError for testing purposes
+  pub fn new(message: String) -> HttpDispatchError {
+    HttpDispatchError { message: message }
+  }
 }
 
 impl Error for HttpDispatchError {
