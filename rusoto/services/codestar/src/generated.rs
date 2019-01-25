@@ -643,29 +643,29 @@ impl AssociateTeamMemberError {
                 "ConcurrentModificationException" => {
                     return AssociateTeamMemberError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidServiceRoleException" => {
-                    return AssociateTeamMemberError::InvalidServiceRole(String::from(error_message))
+                    return AssociateTeamMemberError::InvalidServiceRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AssociateTeamMemberError::LimitExceeded(String::from(error_message))
+                    return AssociateTeamMemberError::LimitExceeded(String::from(error_message));
                 }
                 "ProjectConfigurationException" => {
                     return AssociateTeamMemberError::ProjectConfiguration(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProjectNotFoundException" => {
-                    return AssociateTeamMemberError::ProjectNotFound(String::from(error_message))
+                    return AssociateTeamMemberError::ProjectNotFound(String::from(error_message));
                 }
                 "TeamMemberAlreadyAssociatedException" => {
                     return AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateTeamMemberError::Validation(error_message.to_string())
+                    return AssociateTeamMemberError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -759,25 +759,25 @@ impl CreateProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateProjectError::ConcurrentModification(String::from(error_message))
+                    return CreateProjectError::ConcurrentModification(String::from(error_message));
                 }
                 "InvalidServiceRoleException" => {
-                    return CreateProjectError::InvalidServiceRole(String::from(error_message))
+                    return CreateProjectError::InvalidServiceRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateProjectError::LimitExceeded(String::from(error_message))
+                    return CreateProjectError::LimitExceeded(String::from(error_message));
                 }
                 "ProjectAlreadyExistsException" => {
-                    return CreateProjectError::ProjectAlreadyExists(String::from(error_message))
+                    return CreateProjectError::ProjectAlreadyExists(String::from(error_message));
                 }
                 "ProjectConfigurationException" => {
-                    return CreateProjectError::ProjectConfiguration(String::from(error_message))
+                    return CreateProjectError::ProjectConfiguration(String::from(error_message));
                 }
                 "ProjectCreationFailedException" => {
-                    return CreateProjectError::ProjectCreationFailed(String::from(error_message))
+                    return CreateProjectError::ProjectCreationFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string())
+                    return CreateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -861,10 +861,10 @@ impl CreateUserProfileError {
                 "UserProfileAlreadyExistsException" => {
                     return CreateUserProfileError::UserProfileAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateUserProfileError::Validation(error_message.to_string())
+                    return CreateUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -945,13 +945,13 @@ impl DeleteProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteProjectError::ConcurrentModification(String::from(error_message))
+                    return DeleteProjectError::ConcurrentModification(String::from(error_message));
                 }
                 "InvalidServiceRoleException" => {
-                    return DeleteProjectError::InvalidServiceRole(String::from(error_message))
+                    return DeleteProjectError::InvalidServiceRole(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string())
+                    return DeleteProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1027,7 +1027,7 @@ impl DeleteUserProfileError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteUserProfileError::Validation(error_message.to_string())
+                    return DeleteUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1111,19 +1111,19 @@ impl DescribeProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DescribeProjectError::ConcurrentModification(String::from(error_message))
+                    return DescribeProjectError::ConcurrentModification(String::from(error_message));
                 }
                 "InvalidServiceRoleException" => {
-                    return DescribeProjectError::InvalidServiceRole(String::from(error_message))
+                    return DescribeProjectError::InvalidServiceRole(String::from(error_message));
                 }
                 "ProjectConfigurationException" => {
-                    return DescribeProjectError::ProjectConfiguration(String::from(error_message))
+                    return DescribeProjectError::ProjectConfiguration(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return DescribeProjectError::ProjectNotFound(String::from(error_message))
+                    return DescribeProjectError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeProjectError::Validation(error_message.to_string())
+                    return DescribeProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1205,10 +1205,10 @@ impl DescribeUserProfileError {
                 "UserProfileNotFoundException" => {
                     return DescribeUserProfileError::UserProfileNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeUserProfileError::Validation(error_message.to_string())
+                    return DescribeUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1293,18 +1293,18 @@ impl DisassociateTeamMemberError {
                 "ConcurrentModificationException" => {
                     return DisassociateTeamMemberError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidServiceRoleException" => {
                     return DisassociateTeamMemberError::InvalidServiceRole(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProjectNotFoundException" => {
-                    return DisassociateTeamMemberError::ProjectNotFound(String::from(error_message))
+                    return DisassociateTeamMemberError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateTeamMemberError::Validation(error_message.to_string())
+                    return DisassociateTeamMemberError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1385,10 +1385,10 @@ impl ListProjectsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListProjectsError::InvalidNextToken(String::from(error_message))
+                    return ListProjectsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string())
+                    return ListProjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1467,13 +1467,13 @@ impl ListResourcesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListResourcesError::InvalidNextToken(String::from(error_message))
+                    return ListResourcesError::InvalidNextToken(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return ListResourcesError::ProjectNotFound(String::from(error_message))
+                    return ListResourcesError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListResourcesError::Validation(error_message.to_string())
+                    return ListResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1553,13 +1553,13 @@ impl ListTagsForProjectError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListTagsForProjectError::InvalidNextToken(String::from(error_message))
+                    return ListTagsForProjectError::InvalidNextToken(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return ListTagsForProjectError::ProjectNotFound(String::from(error_message))
+                    return ListTagsForProjectError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForProjectError::Validation(error_message.to_string())
+                    return ListTagsForProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1641,13 +1641,13 @@ impl ListTeamMembersError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListTeamMembersError::InvalidNextToken(String::from(error_message))
+                    return ListTeamMembersError::InvalidNextToken(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return ListTeamMembersError::ProjectNotFound(String::from(error_message))
+                    return ListTeamMembersError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTeamMembersError::Validation(error_message.to_string())
+                    return ListTeamMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1725,10 +1725,10 @@ impl ListUserProfilesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListUserProfilesError::InvalidNextToken(String::from(error_message))
+                    return ListUserProfilesError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUserProfilesError::Validation(error_message.to_string())
+                    return ListUserProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1809,16 +1809,16 @@ impl TagProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return TagProjectError::ConcurrentModification(String::from(error_message))
+                    return TagProjectError::ConcurrentModification(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagProjectError::LimitExceeded(String::from(error_message))
+                    return TagProjectError::LimitExceeded(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return TagProjectError::ProjectNotFound(String::from(error_message))
+                    return TagProjectError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagProjectError::Validation(error_message.to_string())
+                    return TagProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1901,16 +1901,16 @@ impl UntagProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UntagProjectError::ConcurrentModification(String::from(error_message))
+                    return UntagProjectError::ConcurrentModification(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UntagProjectError::LimitExceeded(String::from(error_message))
+                    return UntagProjectError::LimitExceeded(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return UntagProjectError::ProjectNotFound(String::from(error_message))
+                    return UntagProjectError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagProjectError::Validation(error_message.to_string())
+                    return UntagProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1989,10 +1989,10 @@ impl UpdateProjectError {
 
             match *error_type {
                 "ProjectNotFoundException" => {
-                    return UpdateProjectError::ProjectNotFound(String::from(error_message))
+                    return UpdateProjectError::ProjectNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string())
+                    return UpdateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2081,25 +2081,25 @@ impl UpdateTeamMemberError {
                 "ConcurrentModificationException" => {
                     return UpdateTeamMemberError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidServiceRoleException" => {
-                    return UpdateTeamMemberError::InvalidServiceRole(String::from(error_message))
+                    return UpdateTeamMemberError::InvalidServiceRole(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateTeamMemberError::LimitExceeded(String::from(error_message))
+                    return UpdateTeamMemberError::LimitExceeded(String::from(error_message));
                 }
                 "ProjectConfigurationException" => {
-                    return UpdateTeamMemberError::ProjectConfiguration(String::from(error_message))
+                    return UpdateTeamMemberError::ProjectConfiguration(String::from(error_message));
                 }
                 "ProjectNotFoundException" => {
-                    return UpdateTeamMemberError::ProjectNotFound(String::from(error_message))
+                    return UpdateTeamMemberError::ProjectNotFound(String::from(error_message));
                 }
                 "TeamMemberNotFoundException" => {
-                    return UpdateTeamMemberError::TeamMemberNotFound(String::from(error_message))
+                    return UpdateTeamMemberError::TeamMemberNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTeamMemberError::Validation(error_message.to_string())
+                    return UpdateTeamMemberError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2181,10 +2181,10 @@ impl UpdateUserProfileError {
 
             match *error_type {
                 "UserProfileNotFoundException" => {
-                    return UpdateUserProfileError::UserProfileNotFound(String::from(error_message))
+                    return UpdateUserProfileError::UserProfileNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserProfileError::Validation(error_message.to_string())
+                    return UpdateUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -442,13 +442,13 @@ impl DeleteLexiconError {
 
             match error_type {
                 "LexiconNotFoundException" => {
-                    return DeleteLexiconError::LexiconNotFound(String::from(error_message))
+                    return DeleteLexiconError::LexiconNotFound(String::from(error_message));
                 }
                 "ServiceFailureException" => {
-                    return DeleteLexiconError::ServiceFailure(String::from(error_message))
+                    return DeleteLexiconError::ServiceFailure(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLexiconError::Validation(error_message.to_string())
+                    return DeleteLexiconError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -542,13 +542,13 @@ impl DescribeVoicesError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeVoicesError::InvalidNextToken(String::from(error_message))
+                    return DescribeVoicesError::InvalidNextToken(String::from(error_message));
                 }
                 "ServiceFailureException" => {
-                    return DescribeVoicesError::ServiceFailure(String::from(error_message))
+                    return DescribeVoicesError::ServiceFailure(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeVoicesError::Validation(error_message.to_string())
+                    return DescribeVoicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -642,13 +642,13 @@ impl GetLexiconError {
 
             match error_type {
                 "LexiconNotFoundException" => {
-                    return GetLexiconError::LexiconNotFound(String::from(error_message))
+                    return GetLexiconError::LexiconNotFound(String::from(error_message));
                 }
                 "ServiceFailureException" => {
-                    return GetLexiconError::ServiceFailure(String::from(error_message))
+                    return GetLexiconError::ServiceFailure(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLexiconError::Validation(error_message.to_string())
+                    return GetLexiconError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -744,18 +744,18 @@ impl GetSpeechSynthesisTaskError {
 
             match error_type {
                 "InvalidTaskIdException" => {
-                    return GetSpeechSynthesisTaskError::InvalidTaskId(String::from(error_message))
+                    return GetSpeechSynthesisTaskError::InvalidTaskId(String::from(error_message));
                 }
                 "ServiceFailureException" => {
-                    return GetSpeechSynthesisTaskError::ServiceFailure(String::from(error_message))
+                    return GetSpeechSynthesisTaskError::ServiceFailure(String::from(error_message));
                 }
                 "SynthesisTaskNotFoundException" => {
                     return GetSpeechSynthesisTaskError::SynthesisTaskNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetSpeechSynthesisTaskError::Validation(error_message.to_string())
+                    return GetSpeechSynthesisTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -852,13 +852,13 @@ impl ListLexiconsError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return ListLexiconsError::InvalidNextToken(String::from(error_message))
+                    return ListLexiconsError::InvalidNextToken(String::from(error_message));
                 }
                 "ServiceFailureException" => {
-                    return ListLexiconsError::ServiceFailure(String::from(error_message))
+                    return ListLexiconsError::ServiceFailure(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListLexiconsError::Validation(error_message.to_string())
+                    return ListLexiconsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -954,15 +954,15 @@ impl ListSpeechSynthesisTasksError {
                 "InvalidNextTokenException" => {
                     return ListSpeechSynthesisTasksError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFailureException" => {
                     return ListSpeechSynthesisTasksError::ServiceFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListSpeechSynthesisTasksError::Validation(error_message.to_string())
+                    return ListSpeechSynthesisTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1068,28 +1068,28 @@ impl PutLexiconError {
 
             match error_type {
                 "InvalidLexiconException" => {
-                    return PutLexiconError::InvalidLexicon(String::from(error_message))
+                    return PutLexiconError::InvalidLexicon(String::from(error_message));
                 }
                 "LexiconSizeExceededException" => {
-                    return PutLexiconError::LexiconSizeExceeded(String::from(error_message))
+                    return PutLexiconError::LexiconSizeExceeded(String::from(error_message));
                 }
                 "MaxLexemeLengthExceededException" => {
-                    return PutLexiconError::MaxLexemeLengthExceeded(String::from(error_message))
+                    return PutLexiconError::MaxLexemeLengthExceeded(String::from(error_message));
                 }
                 "MaxLexiconsNumberExceededException" => {
-                    return PutLexiconError::MaxLexiconsNumberExceeded(String::from(error_message))
+                    return PutLexiconError::MaxLexiconsNumberExceeded(String::from(error_message));
                 }
                 "ServiceFailureException" => {
-                    return PutLexiconError::ServiceFailure(String::from(error_message))
+                    return PutLexiconError::ServiceFailure(String::from(error_message));
                 }
                 "UnsupportedPlsAlphabetException" => {
-                    return PutLexiconError::UnsupportedPlsAlphabet(String::from(error_message))
+                    return PutLexiconError::UnsupportedPlsAlphabet(String::from(error_message));
                 }
                 "UnsupportedPlsLanguageException" => {
-                    return PutLexiconError::UnsupportedPlsLanguage(String::from(error_message))
+                    return PutLexiconError::UnsupportedPlsLanguage(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutLexiconError::Validation(error_message.to_string())
+                    return PutLexiconError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1206,51 +1206,51 @@ impl StartSpeechSynthesisTaskError {
                 "InvalidS3BucketException" => {
                     return StartSpeechSynthesisTaskError::InvalidS3Bucket(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3KeyException" => {
-                    return StartSpeechSynthesisTaskError::InvalidS3Key(String::from(error_message))
+                    return StartSpeechSynthesisTaskError::InvalidS3Key(String::from(error_message));
                 }
                 "InvalidSampleRateException" => {
                     return StartSpeechSynthesisTaskError::InvalidSampleRate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSnsTopicArnException" => {
                     return StartSpeechSynthesisTaskError::InvalidSnsTopicArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSsmlException" => {
-                    return StartSpeechSynthesisTaskError::InvalidSsml(String::from(error_message))
+                    return StartSpeechSynthesisTaskError::InvalidSsml(String::from(error_message));
                 }
                 "LexiconNotFoundException" => {
                     return StartSpeechSynthesisTaskError::LexiconNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MarksNotSupportedForFormatException" => {
                     return StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFailureException" => {
                     return StartSpeechSynthesisTaskError::ServiceFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SsmlMarksNotSupportedForTextTypeException" => {
                     return StartSpeechSynthesisTaskError::SsmlMarksNotSupportedForTextType(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "TextLengthExceededException" => {
                     return StartSpeechSynthesisTaskError::TextLengthExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartSpeechSynthesisTaskError::Validation(error_message.to_string())
+                    return StartSpeechSynthesisTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1364,32 +1364,32 @@ impl SynthesizeSpeechError {
 
             match error_type {
                 "InvalidSampleRateException" => {
-                    return SynthesizeSpeechError::InvalidSampleRate(String::from(error_message))
+                    return SynthesizeSpeechError::InvalidSampleRate(String::from(error_message));
                 }
                 "InvalidSsmlException" => {
-                    return SynthesizeSpeechError::InvalidSsml(String::from(error_message))
+                    return SynthesizeSpeechError::InvalidSsml(String::from(error_message));
                 }
                 "LexiconNotFoundException" => {
-                    return SynthesizeSpeechError::LexiconNotFound(String::from(error_message))
+                    return SynthesizeSpeechError::LexiconNotFound(String::from(error_message));
                 }
                 "MarksNotSupportedForFormatException" => {
                     return SynthesizeSpeechError::MarksNotSupportedForFormat(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFailureException" => {
-                    return SynthesizeSpeechError::ServiceFailure(String::from(error_message))
+                    return SynthesizeSpeechError::ServiceFailure(String::from(error_message));
                 }
                 "SsmlMarksNotSupportedForTextTypeException" => {
                     return SynthesizeSpeechError::SsmlMarksNotSupportedForTextType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TextLengthExceededException" => {
-                    return SynthesizeSpeechError::TextLengthExceeded(String::from(error_message))
+                    return SynthesizeSpeechError::TextLengthExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SynthesizeSpeechError::Validation(error_message.to_string())
+                    return SynthesizeSpeechError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

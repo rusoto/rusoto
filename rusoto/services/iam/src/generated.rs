@@ -12936,22 +12936,22 @@ impl AddClientIDToOpenIDConnectProviderError {
                     "InvalidInput" => {
                         return AddClientIDToOpenIDConnectProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return AddClientIDToOpenIDConnectProviderError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return AddClientIDToOpenIDConnectProviderError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return AddClientIDToOpenIDConnectProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13048,27 +13048,27 @@ impl AddRoleToInstanceProfileError {
                     "EntityAlreadyExists" => {
                         return AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return AddRoleToInstanceProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return AddRoleToInstanceProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return AddRoleToInstanceProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return AddRoleToInstanceProfileError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13162,15 +13162,15 @@ impl AddUserToGroupError {
                     "LimitExceeded" => {
                         return AddUserToGroupError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
-                        return AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message))
+                        return AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return AddUserToGroupError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13264,27 +13264,27 @@ impl AttachGroupPolicyError {
                     "InvalidInput" => {
                         return AttachGroupPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return AttachGroupPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return AttachGroupPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyNotAttachable" => {
                         return AttachGroupPolicyError::PolicyNotAttachable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return AttachGroupPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13384,32 +13384,32 @@ impl AttachRolePolicyError {
                     "InvalidInput" => {
                         return AttachRolePolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return AttachRolePolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return AttachRolePolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyNotAttachable" => {
                         return AttachRolePolicyError::PolicyNotAttachable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return AttachRolePolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return AttachRolePolicyError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13506,27 +13506,27 @@ impl AttachUserPolicyError {
                     "InvalidInput" => {
                         return AttachUserPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return AttachUserPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return AttachUserPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyNotAttachable" => {
                         return AttachUserPolicyError::PolicyNotAttachable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return AttachUserPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13624,30 +13624,30 @@ impl ChangePasswordError {
                     "EntityTemporarilyUnmodifiable" => {
                         return ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidUserType" => {
                         return ChangePasswordError::InvalidUserType(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return ChangePasswordError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
-                        return ChangePasswordError::NoSuchEntity(String::from(parsed_error.message))
+                        return ChangePasswordError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "PasswordPolicyViolation" => {
                         return ChangePasswordError::PasswordPolicyViolation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ChangePasswordError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13740,17 +13740,17 @@ impl CreateAccessKeyError {
                     "LimitExceeded" => {
                         return CreateAccessKeyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return CreateAccessKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateAccessKeyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13840,17 +13840,17 @@ impl CreateAccountAliasError {
                     "EntityAlreadyExists" => {
                         return CreateAccountAliasError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateAccountAliasError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateAccountAliasError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13944,16 +13944,16 @@ impl CreateGroupError {
                     "EntityAlreadyExists" => {
                         return CreateGroupError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
-                        return CreateGroupError::LimitExceeded(String::from(parsed_error.message))
+                        return CreateGroupError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return CreateGroupError::NoSuchEntity(String::from(parsed_error.message))
+                        return CreateGroupError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return CreateGroupError::ServiceFailure(String::from(parsed_error.message))
+                        return CreateGroupError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -14044,17 +14044,17 @@ impl CreateInstanceProfileError {
                     "EntityAlreadyExists" => {
                         return CreateInstanceProfileError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateInstanceProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateInstanceProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14150,27 +14150,27 @@ impl CreateLoginProfileError {
                     "EntityAlreadyExists" => {
                         return CreateLoginProfileError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateLoginProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return CreateLoginProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PasswordPolicyViolation" => {
                         return CreateLoginProfileError::PasswordPolicyViolation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateLoginProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14266,22 +14266,22 @@ impl CreateOpenIDConnectProviderError {
                     "EntityAlreadyExists" => {
                         return CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return CreateOpenIDConnectProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateOpenIDConnectProviderError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateOpenIDConnectProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14378,21 +14378,21 @@ impl CreatePolicyError {
                     "EntityAlreadyExists" => {
                         return CreatePolicyError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
-                        return CreatePolicyError::InvalidInput(String::from(parsed_error.message))
+                        return CreatePolicyError::InvalidInput(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return CreatePolicyError::LimitExceeded(String::from(parsed_error.message))
+                        return CreatePolicyError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "MalformedPolicyDocument" => {
                         return CreatePolicyError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
-                        return CreatePolicyError::ServiceFailure(String::from(parsed_error.message))
+                        return CreatePolicyError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -14488,27 +14488,27 @@ impl CreatePolicyVersionError {
                     "InvalidInput" => {
                         return CreatePolicyVersionError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreatePolicyVersionError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedPolicyDocument" => {
                         return CreatePolicyVersionError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return CreatePolicyVersionError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreatePolicyVersionError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14606,21 +14606,21 @@ impl CreateRoleError {
                     "EntityAlreadyExists" => {
                         return CreateRoleError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
-                        return CreateRoleError::InvalidInput(String::from(parsed_error.message))
+                        return CreateRoleError::InvalidInput(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return CreateRoleError::LimitExceeded(String::from(parsed_error.message))
+                        return CreateRoleError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "MalformedPolicyDocument" => {
                         return CreateRoleError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
-                        return CreateRoleError::ServiceFailure(String::from(parsed_error.message))
+                        return CreateRoleError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -14714,22 +14714,22 @@ impl CreateSAMLProviderError {
                     "EntityAlreadyExists" => {
                         return CreateSAMLProviderError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return CreateSAMLProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateSAMLProviderError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateSAMLProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14824,22 +14824,22 @@ impl CreateServiceLinkedRoleError {
                     "InvalidInput" => {
                         return CreateServiceLinkedRoleError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateServiceLinkedRoleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return CreateServiceLinkedRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateServiceLinkedRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14932,17 +14932,17 @@ impl CreateServiceSpecificCredentialError {
                     "LimitExceeded" => {
                         return CreateServiceSpecificCredentialError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotSupportedService" => {
                         return CreateServiceSpecificCredentialError::ServiceNotSupported(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15036,16 +15036,16 @@ impl CreateUserError {
                     "EntityAlreadyExists" => {
                         return CreateUserError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
-                        return CreateUserError::LimitExceeded(String::from(parsed_error.message))
+                        return CreateUserError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return CreateUserError::NoSuchEntity(String::from(parsed_error.message))
+                        return CreateUserError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return CreateUserError::ServiceFailure(String::from(parsed_error.message))
+                        return CreateUserError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -15136,17 +15136,17 @@ impl CreateVirtualMFADeviceError {
                     "EntityAlreadyExists" => {
                         return CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return CreateVirtualMFADeviceError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return CreateVirtualMFADeviceError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15240,22 +15240,22 @@ impl DeactivateMFADeviceError {
                     "EntityTemporarilyUnmodifiable" => {
                         return DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "LimitExceeded" => {
                         return DeactivateMFADeviceError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeactivateMFADeviceError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeactivateMFADeviceError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15348,17 +15348,17 @@ impl DeleteAccessKeyError {
                     "LimitExceeded" => {
                         return DeleteAccessKeyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteAccessKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteAccessKeyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15448,17 +15448,17 @@ impl DeleteAccountAliasError {
                     "LimitExceeded" => {
                         return DeleteAccountAliasError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteAccountAliasError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteAccountAliasError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15550,17 +15550,17 @@ impl DeleteAccountPasswordPolicyError {
                     "LimitExceeded" => {
                         return DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15652,16 +15652,16 @@ impl DeleteGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteGroupError::DeleteConflict(String::from(parsed_error.message))
+                        return DeleteGroupError::DeleteConflict(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return DeleteGroupError::LimitExceeded(String::from(parsed_error.message))
+                        return DeleteGroupError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return DeleteGroupError::NoSuchEntity(String::from(parsed_error.message))
+                        return DeleteGroupError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return DeleteGroupError::ServiceFailure(String::from(parsed_error.message))
+                        return DeleteGroupError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -15752,17 +15752,17 @@ impl DeleteGroupPolicyError {
                     "LimitExceeded" => {
                         return DeleteGroupPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteGroupPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteGroupPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15856,22 +15856,22 @@ impl DeleteInstanceProfileError {
                     "DeleteConflict" => {
                         return DeleteInstanceProfileError::DeleteConflict(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DeleteInstanceProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteInstanceProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteInstanceProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15966,22 +15966,22 @@ impl DeleteLoginProfileError {
                     "EntityTemporarilyUnmodifiable" => {
                         return DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DeleteLoginProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteLoginProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteLoginProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16074,17 +16074,17 @@ impl DeleteOpenIDConnectProviderError {
                     "InvalidInput" => {
                         return DeleteOpenIDConnectProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16178,19 +16178,19 @@ impl DeletePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeletePolicyError::DeleteConflict(String::from(parsed_error.message))
+                        return DeletePolicyError::DeleteConflict(String::from(parsed_error.message));
                     }
                     "InvalidInput" => {
-                        return DeletePolicyError::InvalidInput(String::from(parsed_error.message))
+                        return DeletePolicyError::InvalidInput(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return DeletePolicyError::LimitExceeded(String::from(parsed_error.message))
+                        return DeletePolicyError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return DeletePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return DeletePolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return DeletePolicyError::ServiceFailure(String::from(parsed_error.message))
+                        return DeletePolicyError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -16286,27 +16286,27 @@ impl DeletePolicyVersionError {
                     "DeleteConflict" => {
                         return DeletePolicyVersionError::DeleteConflict(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return DeletePolicyVersionError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DeletePolicyVersionError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeletePolicyVersionError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeletePolicyVersionError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16402,21 +16402,21 @@ impl DeleteRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteRoleError::DeleteConflict(String::from(parsed_error.message))
+                        return DeleteRoleError::DeleteConflict(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return DeleteRoleError::LimitExceeded(String::from(parsed_error.message))
+                        return DeleteRoleError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return DeleteRoleError::NoSuchEntity(String::from(parsed_error.message))
+                        return DeleteRoleError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return DeleteRoleError::ServiceFailure(String::from(parsed_error.message))
+                        return DeleteRoleError::ServiceFailure(String::from(parsed_error.message));
                     }
                     "UnmodifiableEntity" => {
                         return DeleteRoleError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16508,17 +16508,17 @@ impl DeleteRolePermissionsBoundaryError {
                     "NoSuchEntity" => {
                         return DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteRolePermissionsBoundaryError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return DeleteRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16612,22 +16612,22 @@ impl DeleteRolePolicyError {
                     "LimitExceeded" => {
                         return DeleteRolePolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteRolePolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteRolePolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return DeleteRolePolicyError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16720,22 +16720,22 @@ impl DeleteSAMLProviderError {
                     "InvalidInput" => {
                         return DeleteSAMLProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DeleteSAMLProviderError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteSAMLProviderError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteSAMLProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16824,7 +16824,7 @@ impl DeleteSSHPublicKeyError {
                     "NoSuchEntity" => {
                         return DeleteSSHPublicKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16916,22 +16916,22 @@ impl DeleteServerCertificateError {
                     "DeleteConflict" => {
                         return DeleteServerCertificateError::DeleteConflict(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DeleteServerCertificateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteServerCertificateError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteServerCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17024,17 +17024,17 @@ impl DeleteServiceLinkedRoleError {
                     "LimitExceeded" => {
                         return DeleteServiceLinkedRoleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteServiceLinkedRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteServiceLinkedRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17122,7 +17122,7 @@ impl DeleteServiceSpecificCredentialError {
                     "NoSuchEntity" => {
                         return DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17212,17 +17212,17 @@ impl DeleteSigningCertificateError {
                     "LimitExceeded" => {
                         return DeleteSigningCertificateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteSigningCertificateError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteSigningCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17314,16 +17314,16 @@ impl DeleteUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteUserError::DeleteConflict(String::from(parsed_error.message))
+                        return DeleteUserError::DeleteConflict(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
-                        return DeleteUserError::LimitExceeded(String::from(parsed_error.message))
+                        return DeleteUserError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return DeleteUserError::NoSuchEntity(String::from(parsed_error.message))
+                        return DeleteUserError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return DeleteUserError::ServiceFailure(String::from(parsed_error.message))
+                        return DeleteUserError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -17412,12 +17412,12 @@ impl DeleteUserPermissionsBoundaryError {
                     "NoSuchEntity" => {
                         return DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteUserPermissionsBoundaryError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17508,17 +17508,17 @@ impl DeleteUserPolicyError {
                     "LimitExceeded" => {
                         return DeleteUserPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteUserPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteUserPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17610,22 +17610,22 @@ impl DeleteVirtualMFADeviceError {
                     "DeleteConflict" => {
                         return DeleteVirtualMFADeviceError::DeleteConflict(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DeleteVirtualMFADeviceError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DeleteVirtualMFADeviceError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DeleteVirtualMFADeviceError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17720,22 +17720,22 @@ impl DetachGroupPolicyError {
                     "InvalidInput" => {
                         return DetachGroupPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DetachGroupPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DetachGroupPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DetachGroupPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17832,27 +17832,27 @@ impl DetachRolePolicyError {
                     "InvalidInput" => {
                         return DetachRolePolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DetachRolePolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DetachRolePolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DetachRolePolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return DetachRolePolicyError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17946,22 +17946,22 @@ impl DetachUserPolicyError {
                     "InvalidInput" => {
                         return DetachUserPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return DetachUserPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return DetachUserPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return DetachUserPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18058,32 +18058,32 @@ impl EnableMFADeviceError {
                     "EntityAlreadyExists" => {
                         return EnableMFADeviceError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "EntityTemporarilyUnmodifiable" => {
                         return EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidAuthenticationCode" => {
                         return EnableMFADeviceError::InvalidAuthenticationCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return EnableMFADeviceError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return EnableMFADeviceError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return EnableMFADeviceError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18174,12 +18174,12 @@ impl GenerateCredentialReportError {
                     "LimitExceeded" => {
                         return GenerateCredentialReportError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GenerateCredentialReportError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18266,7 +18266,7 @@ impl GetAccessKeyLastUsedError {
                     "NoSuchEntity" => {
                         return GetAccessKeyLastUsedError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18352,7 +18352,7 @@ impl GetAccountAuthorizationDetailsError {
                     "ServiceFailure" => {
                         return GetAccountAuthorizationDetailsError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18440,12 +18440,12 @@ impl GetAccountPasswordPolicyError {
                     "NoSuchEntity" => {
                         return GetAccountPasswordPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetAccountPasswordPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18532,7 +18532,7 @@ impl GetAccountSummaryError {
                     "ServiceFailure" => {
                         return GetAccountSummaryError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18618,7 +18618,7 @@ impl GetContextKeysForCustomPolicyError {
                     "InvalidInput" => {
                         return GetContextKeysForCustomPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18706,12 +18706,12 @@ impl GetContextKeysForPrincipalPolicyError {
                     "InvalidInput" => {
                         return GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18804,22 +18804,22 @@ impl GetCredentialReportError {
                     "ReportExpired" => {
                         return GetCredentialReportError::CredentialReportExpired(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReportNotPresent" => {
                         return GetCredentialReportError::CredentialReportNotPresent(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReportInProgress" => {
                         return GetCredentialReportError::CredentialReportNotReady(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetCredentialReportError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18908,10 +18908,10 @@ impl GetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetGroupError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetGroupError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return GetGroupError::ServiceFailure(String::from(parsed_error.message))
+                        return GetGroupError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -18996,12 +18996,12 @@ impl GetGroupPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return GetGroupPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19088,12 +19088,12 @@ impl GetInstanceProfileError {
                     "NoSuchEntity" => {
                         return GetInstanceProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetInstanceProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19182,12 +19182,12 @@ impl GetLoginProfileError {
                     "NoSuchEntity" => {
                         return GetLoginProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetLoginProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19276,17 +19276,17 @@ impl GetOpenIDConnectProviderError {
                     "InvalidInput" => {
                         return GetOpenIDConnectProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return GetOpenIDConnectProviderError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetOpenIDConnectProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19376,13 +19376,13 @@ impl GetPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetPolicyError::InvalidInput(String::from(parsed_error.message))
+                        return GetPolicyError::InvalidInput(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return GetPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetPolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return GetPolicyError::ServiceFailure(String::from(parsed_error.message))
+                        return GetPolicyError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -19472,17 +19472,17 @@ impl GetPolicyVersionError {
                     "InvalidInput" => {
                         return GetPolicyVersionError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return GetPolicyVersionError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetPolicyVersionError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19568,10 +19568,10 @@ impl GetRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetRoleError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetRoleError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return GetRoleError::ServiceFailure(String::from(parsed_error.message))
+                        return GetRoleError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -19656,12 +19656,12 @@ impl GetRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return GetRolePolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19750,17 +19750,17 @@ impl GetSAMLProviderError {
                     "InvalidInput" => {
                         return GetSAMLProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return GetSAMLProviderError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetSAMLProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19848,12 +19848,12 @@ impl GetSSHPublicKeyError {
                     "NoSuchEntity" => {
                         return GetSSHPublicKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnrecognizedPublicKeyEncoding" => {
                         return GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19940,12 +19940,12 @@ impl GetServerCertificateError {
                     "NoSuchEntity" => {
                         return GetServerCertificateError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetServerCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20036,17 +20036,17 @@ impl GetServiceLinkedRoleDeletionStatusError {
                     "InvalidInput" => {
                         return GetServiceLinkedRoleDeletionStatusError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -20134,10 +20134,10 @@ impl GetUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetUserError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetUserError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return GetUserError::ServiceFailure(String::from(parsed_error.message))
+                        return GetUserError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -20222,12 +20222,12 @@ impl GetUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return GetUserPolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return GetUserPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20312,12 +20312,12 @@ impl ListAccessKeysError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListAccessKeysError::NoSuchEntity(String::from(parsed_error.message))
+                        return ListAccessKeysError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return ListAccessKeysError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20402,7 +20402,7 @@ impl ListAccountAliasesError {
                     "ServiceFailure" => {
                         return ListAccountAliasesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20492,17 +20492,17 @@ impl ListAttachedGroupPoliciesError {
                     "InvalidInput" => {
                         return ListAttachedGroupPoliciesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return ListAttachedGroupPoliciesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListAttachedGroupPoliciesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20594,17 +20594,17 @@ impl ListAttachedRolePoliciesError {
                     "InvalidInput" => {
                         return ListAttachedRolePoliciesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return ListAttachedRolePoliciesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListAttachedRolePoliciesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20696,17 +20696,17 @@ impl ListAttachedUserPoliciesError {
                     "InvalidInput" => {
                         return ListAttachedUserPoliciesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return ListAttachedUserPoliciesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListAttachedUserPoliciesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20798,17 +20798,17 @@ impl ListEntitiesForPolicyError {
                     "InvalidInput" => {
                         return ListEntitiesForPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return ListEntitiesForPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListEntitiesForPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20898,12 +20898,12 @@ impl ListGroupPoliciesError {
                     "NoSuchEntity" => {
                         return ListGroupPoliciesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListGroupPoliciesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -20988,7 +20988,7 @@ impl ListGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListGroupsError::ServiceFailure(String::from(parsed_error.message))
+                        return ListGroupsError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -21074,12 +21074,12 @@ impl ListGroupsForUserError {
                     "NoSuchEntity" => {
                         return ListGroupsForUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListGroupsForUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21166,7 +21166,7 @@ impl ListInstanceProfilesError {
                     "ServiceFailure" => {
                         return ListInstanceProfilesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21254,12 +21254,12 @@ impl ListInstanceProfilesForRoleError {
                     "NoSuchEntity" => {
                         return ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListInstanceProfilesForRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21346,12 +21346,12 @@ impl ListMFADevicesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message))
+                        return ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return ListMFADevicesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21436,7 +21436,7 @@ impl ListOpenIDConnectProvidersError {
                     "ServiceFailure" => {
                         return ListOpenIDConnectProvidersError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21520,7 +21520,7 @@ impl ListPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListPoliciesError::ServiceFailure(String::from(parsed_error.message))
+                        return ListPoliciesError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -21608,17 +21608,17 @@ impl ListPolicyVersionsError {
                     "InvalidInput" => {
                         return ListPolicyVersionsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return ListPolicyVersionsError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListPolicyVersionsError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21708,12 +21708,12 @@ impl ListRolePoliciesError {
                     "NoSuchEntity" => {
                         return ListRolePoliciesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListRolePoliciesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21796,7 +21796,7 @@ impl ListRolesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListRolesError::ServiceFailure(String::from(parsed_error.message))
+                        return ListRolesError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -21880,7 +21880,7 @@ impl ListSAMLProvidersError {
                     "ServiceFailure" => {
                         return ListSAMLProvidersError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -21966,7 +21966,7 @@ impl ListSSHPublicKeysError {
                     "NoSuchEntity" => {
                         return ListSSHPublicKeysError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22052,7 +22052,7 @@ impl ListServerCertificatesError {
                     "ServiceFailure" => {
                         return ListServerCertificatesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22140,12 +22140,12 @@ impl ListServiceSpecificCredentialsError {
                     "NoSuchEntity" => {
                         return ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotSupportedService" => {
                         return ListServiceSpecificCredentialsError::ServiceNotSupported(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -22234,12 +22234,12 @@ impl ListSigningCertificatesError {
                     "NoSuchEntity" => {
                         return ListSigningCertificatesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListSigningCertificatesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22328,12 +22328,12 @@ impl ListUserPoliciesError {
                     "NoSuchEntity" => {
                         return ListUserPoliciesError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ListUserPoliciesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22416,7 +22416,7 @@ impl ListUsersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListUsersError::ServiceFailure(String::from(parsed_error.message))
+                        return ListUsersError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -22584,20 +22584,20 @@ impl PutGroupPolicyError {
                     "LimitExceeded" => {
                         return PutGroupPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedPolicyDocument" => {
                         return PutGroupPolicyError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
-                        return PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return PutGroupPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22692,27 +22692,27 @@ impl PutRolePermissionsBoundaryError {
                     "InvalidInput" => {
                         return PutRolePermissionsBoundaryError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return PutRolePermissionsBoundaryError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyNotAttachable" => {
                         return PutRolePermissionsBoundaryError::PolicyNotAttachable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return PutRolePermissionsBoundaryError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return PutRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22808,25 +22808,25 @@ impl PutRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return PutRolePolicyError::LimitExceeded(String::from(parsed_error.message))
+                        return PutRolePolicyError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "MalformedPolicyDocument" => {
                         return PutRolePolicyError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
-                        return PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return PutRolePolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return PutRolePolicyError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -22920,22 +22920,22 @@ impl PutUserPermissionsBoundaryError {
                     "InvalidInput" => {
                         return PutUserPermissionsBoundaryError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return PutUserPermissionsBoundaryError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyNotAttachable" => {
                         return PutUserPermissionsBoundaryError::PolicyNotAttachable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return PutUserPermissionsBoundaryError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23028,20 +23028,20 @@ impl PutUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return PutUserPolicyError::LimitExceeded(String::from(parsed_error.message))
+                        return PutUserPolicyError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "MalformedPolicyDocument" => {
                         return PutUserPolicyError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
-                        return PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                        return PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
                         return PutUserPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23134,17 +23134,17 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
                     "InvalidInput" => {
                         return RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NoSuchEntity" => {
                         return RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ServiceFailure" => {
                         return RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -23238,22 +23238,22 @@ impl RemoveRoleFromInstanceProfileError {
                     "LimitExceeded" => {
                         return RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return RemoveRoleFromInstanceProfileError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23346,17 +23346,17 @@ impl RemoveUserFromGroupError {
                     "LimitExceeded" => {
                         return RemoveUserFromGroupError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return RemoveUserFromGroupError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return RemoveUserFromGroupError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23444,7 +23444,7 @@ impl ResetServiceSpecificCredentialError {
                     "NoSuchEntity" => {
                         return ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23536,22 +23536,22 @@ impl ResyncMFADeviceError {
                     "InvalidAuthenticationCode" => {
                         return ResyncMFADeviceError::InvalidAuthenticationCode(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return ResyncMFADeviceError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return ResyncMFADeviceError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return ResyncMFADeviceError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23644,22 +23644,22 @@ impl SetDefaultPolicyVersionError {
                     "InvalidInput" => {
                         return SetDefaultPolicyVersionError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return SetDefaultPolicyVersionError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return SetDefaultPolicyVersionError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return SetDefaultPolicyVersionError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23750,12 +23750,12 @@ impl SimulateCustomPolicyError {
                     "InvalidInput" => {
                         return SimulateCustomPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyEvaluation" => {
                         return SimulateCustomPolicyError::PolicyEvaluation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23846,17 +23846,17 @@ impl SimulatePrincipalPolicyError {
                     "InvalidInput" => {
                         return SimulatePrincipalPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return SimulatePrincipalPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyEvaluation" => {
                         return SimulatePrincipalPolicyError::PolicyEvaluation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -23948,17 +23948,17 @@ impl UpdateAccessKeyError {
                     "LimitExceeded" => {
                         return UpdateAccessKeyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UpdateAccessKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateAccessKeyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24050,22 +24050,22 @@ impl UpdateAccountPasswordPolicyError {
                     "LimitExceeded" => {
                         return UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedPolicyDocument" => {
                         return UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NoSuchEntity" => {
                         return UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24162,27 +24162,27 @@ impl UpdateAssumeRolePolicyError {
                     "LimitExceeded" => {
                         return UpdateAssumeRolePolicyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedPolicyDocument" => {
                         return UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UpdateAssumeRolePolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateAssumeRolePolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return UpdateAssumeRolePolicyError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24278,16 +24278,16 @@ impl UpdateGroupError {
                     "EntityAlreadyExists" => {
                         return UpdateGroupError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
-                        return UpdateGroupError::LimitExceeded(String::from(parsed_error.message))
+                        return UpdateGroupError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return UpdateGroupError::NoSuchEntity(String::from(parsed_error.message))
+                        return UpdateGroupError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return UpdateGroupError::ServiceFailure(String::from(parsed_error.message))
+                        return UpdateGroupError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -24382,27 +24382,27 @@ impl UpdateLoginProfileError {
                     "EntityTemporarilyUnmodifiable" => {
                         return UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateLoginProfileError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UpdateLoginProfileError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PasswordPolicyViolation" => {
                         return UpdateLoginProfileError::PasswordPolicyViolation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateLoginProfileError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24496,17 +24496,17 @@ impl UpdateOpenIDConnectProviderThumbprintError {
                     "InvalidInput" => {
                         return UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NoSuchEntity" => {
                         return UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ServiceFailure" => {
                         return UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -24596,15 +24596,15 @@ impl UpdateRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return UpdateRoleError::NoSuchEntity(String::from(parsed_error.message))
+                        return UpdateRoleError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return UpdateRoleError::ServiceFailure(String::from(parsed_error.message))
+                        return UpdateRoleError::ServiceFailure(String::from(parsed_error.message));
                     }
                     "UnmodifiableEntity" => {
                         return UpdateRoleError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24694,17 +24694,17 @@ impl UpdateRoleDescriptionError {
                     "NoSuchEntity" => {
                         return UpdateRoleDescriptionError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateRoleDescriptionError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnmodifiableEntity" => {
                         return UpdateRoleDescriptionError::UnmodifiableEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24798,22 +24798,22 @@ impl UpdateSAMLProviderError {
                     "InvalidInput" => {
                         return UpdateSAMLProviderError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateSAMLProviderError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UpdateSAMLProviderError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateSAMLProviderError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24902,7 +24902,7 @@ impl UpdateSSHPublicKeyError {
                     "NoSuchEntity" => {
                         return UpdateSSHPublicKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -24994,22 +24994,22 @@ impl UpdateServerCertificateError {
                     "EntityAlreadyExists" => {
                         return UpdateServerCertificateError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UpdateServerCertificateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UpdateServerCertificateError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateServerCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -25098,7 +25098,7 @@ impl UpdateServiceSpecificCredentialError {
                     "NoSuchEntity" => {
                         return UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -25188,17 +25188,17 @@ impl UpdateSigningCertificateError {
                     "LimitExceeded" => {
                         return UpdateSigningCertificateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UpdateSigningCertificateError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UpdateSigningCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -25294,21 +25294,21 @@ impl UpdateUserError {
                     "EntityAlreadyExists" => {
                         return UpdateUserError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "EntityTemporarilyUnmodifiable" => {
                         return UpdateUserError::EntityTemporarilyUnmodifiable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
-                        return UpdateUserError::LimitExceeded(String::from(parsed_error.message))
+                        return UpdateUserError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "NoSuchEntity" => {
-                        return UpdateUserError::NoSuchEntity(String::from(parsed_error.message))
+                        return UpdateUserError::NoSuchEntity(String::from(parsed_error.message));
                     }
                     "ServiceFailure" => {
-                        return UpdateUserError::ServiceFailure(String::from(parsed_error.message))
+                        return UpdateUserError::ServiceFailure(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -25404,27 +25404,27 @@ impl UploadSSHPublicKeyError {
                     "DuplicateSSHPublicKey" => {
                         return UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidPublicKey" => {
                         return UploadSSHPublicKeyError::InvalidPublicKey(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UploadSSHPublicKeyError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UploadSSHPublicKeyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnrecognizedPublicKeyEncoding" => {
                         return UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -25522,27 +25522,27 @@ impl UploadServerCertificateError {
                     "EntityAlreadyExists" => {
                         return UploadServerCertificateError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "KeyPairMismatch" => {
                         return UploadServerCertificateError::KeyPairMismatch(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UploadServerCertificateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedCertificate" => {
                         return UploadServerCertificateError::MalformedCertificate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UploadServerCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -25644,37 +25644,37 @@ impl UploadSigningCertificateError {
                     "DuplicateCertificate" => {
                         return UploadSigningCertificateError::DuplicateCertificate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "EntityAlreadyExists" => {
                         return UploadSigningCertificateError::EntityAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidCertificate" => {
                         return UploadSigningCertificateError::InvalidCertificate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceeded" => {
                         return UploadSigningCertificateError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedCertificate" => {
                         return UploadSigningCertificateError::MalformedCertificate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchEntity" => {
                         return UploadSigningCertificateError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ServiceFailure" => {
                         return UploadSigningCertificateError::ServiceFailure(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

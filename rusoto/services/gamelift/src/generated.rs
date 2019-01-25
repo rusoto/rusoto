@@ -2972,19 +2972,19 @@ impl AcceptMatchError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return AcceptMatchError::InternalService(String::from(error_message))
+                    return AcceptMatchError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return AcceptMatchError::InvalidRequest(String::from(error_message))
+                    return AcceptMatchError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return AcceptMatchError::NotFound(String::from(error_message))
+                    return AcceptMatchError::NotFound(String::from(error_message));
                 }
                 "UnsupportedRegionException" => {
-                    return AcceptMatchError::UnsupportedRegion(String::from(error_message))
+                    return AcceptMatchError::UnsupportedRegion(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AcceptMatchError::Validation(error_message.to_string())
+                    return AcceptMatchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3072,22 +3072,22 @@ impl CreateAliasError {
 
             match *error_type {
                 "ConflictException" => {
-                    return CreateAliasError::Conflict(String::from(error_message))
+                    return CreateAliasError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateAliasError::InternalService(String::from(error_message))
+                    return CreateAliasError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateAliasError::InvalidRequest(String::from(error_message))
+                    return CreateAliasError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateAliasError::LimitExceeded(String::from(error_message))
+                    return CreateAliasError::LimitExceeded(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateAliasError::Unauthorized(String::from(error_message))
+                    return CreateAliasError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string())
+                    return CreateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3174,19 +3174,19 @@ impl CreateBuildError {
 
             match *error_type {
                 "ConflictException" => {
-                    return CreateBuildError::Conflict(String::from(error_message))
+                    return CreateBuildError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateBuildError::InternalService(String::from(error_message))
+                    return CreateBuildError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateBuildError::InvalidRequest(String::from(error_message))
+                    return CreateBuildError::InvalidRequest(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateBuildError::Unauthorized(String::from(error_message))
+                    return CreateBuildError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBuildError::Validation(error_message.to_string())
+                    return CreateBuildError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3276,25 +3276,25 @@ impl CreateFleetError {
 
             match *error_type {
                 "ConflictException" => {
-                    return CreateFleetError::Conflict(String::from(error_message))
+                    return CreateFleetError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateFleetError::InternalService(String::from(error_message))
+                    return CreateFleetError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateFleetError::InvalidRequest(String::from(error_message))
+                    return CreateFleetError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateFleetError::LimitExceeded(String::from(error_message))
+                    return CreateFleetError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateFleetError::NotFound(String::from(error_message))
+                    return CreateFleetError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateFleetError::Unauthorized(String::from(error_message))
+                    return CreateFleetError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateFleetError::Validation(error_message.to_string())
+                    return CreateFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3394,43 +3394,43 @@ impl CreateGameSessionError {
 
             match *error_type {
                 "ConflictException" => {
-                    return CreateGameSessionError::Conflict(String::from(error_message))
+                    return CreateGameSessionError::Conflict(String::from(error_message));
                 }
                 "FleetCapacityExceededException" => {
                     return CreateGameSessionError::FleetCapacityExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IdempotentParameterMismatchException" => {
                     return CreateGameSessionError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateGameSessionError::InternalService(String::from(error_message))
+                    return CreateGameSessionError::InternalService(String::from(error_message));
                 }
                 "InvalidFleetStatusException" => {
-                    return CreateGameSessionError::InvalidFleetStatus(String::from(error_message))
+                    return CreateGameSessionError::InvalidFleetStatus(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateGameSessionError::InvalidRequest(String::from(error_message))
+                    return CreateGameSessionError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateGameSessionError::LimitExceeded(String::from(error_message))
+                    return CreateGameSessionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateGameSessionError::NotFound(String::from(error_message))
+                    return CreateGameSessionError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
                     return CreateGameSessionError::TerminalRoutingStrategy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return CreateGameSessionError::Unauthorized(String::from(error_message))
+                    return CreateGameSessionError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGameSessionError::Validation(error_message.to_string())
+                    return CreateGameSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3524,19 +3524,19 @@ impl CreateGameSessionQueueError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return CreateGameSessionQueueError::InternalService(String::from(error_message))
+                    return CreateGameSessionQueueError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateGameSessionQueueError::InvalidRequest(String::from(error_message))
+                    return CreateGameSessionQueueError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateGameSessionQueueError::LimitExceeded(String::from(error_message))
+                    return CreateGameSessionQueueError::LimitExceeded(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateGameSessionQueueError::Unauthorized(String::from(error_message))
+                    return CreateGameSessionQueueError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGameSessionQueueError::Validation(error_message.to_string())
+                    return CreateGameSessionQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3628,32 +3628,32 @@ impl CreateMatchmakingConfigurationError {
                 "InternalServiceException" => {
                     return CreateMatchmakingConfigurationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return CreateMatchmakingConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return CreateMatchmakingConfigurationError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return CreateMatchmakingConfigurationError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedRegionException" => {
                     return CreateMatchmakingConfigurationError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateMatchmakingConfigurationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3742,20 +3742,20 @@ impl CreateMatchmakingRuleSetError {
                 "InternalServiceException" => {
                     return CreateMatchmakingRuleSetError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return CreateMatchmakingRuleSetError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedRegionException" => {
                     return CreateMatchmakingRuleSetError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateMatchmakingRuleSetError::Validation(error_message.to_string())
+                    return CreateMatchmakingRuleSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3848,32 +3848,32 @@ impl CreatePlayerSessionError {
 
             match *error_type {
                 "GameSessionFullException" => {
-                    return CreatePlayerSessionError::GameSessionFull(String::from(error_message))
+                    return CreatePlayerSessionError::GameSessionFull(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreatePlayerSessionError::InternalService(String::from(error_message))
+                    return CreatePlayerSessionError::InternalService(String::from(error_message));
                 }
                 "InvalidGameSessionStatusException" => {
                     return CreatePlayerSessionError::InvalidGameSessionStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreatePlayerSessionError::InvalidRequest(String::from(error_message))
+                    return CreatePlayerSessionError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreatePlayerSessionError::NotFound(String::from(error_message))
+                    return CreatePlayerSessionError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
                     return CreatePlayerSessionError::TerminalRoutingStrategy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return CreatePlayerSessionError::Unauthorized(String::from(error_message))
+                    return CreatePlayerSessionError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePlayerSessionError::Validation(error_message.to_string())
+                    return CreatePlayerSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3970,32 +3970,32 @@ impl CreatePlayerSessionsError {
 
             match *error_type {
                 "GameSessionFullException" => {
-                    return CreatePlayerSessionsError::GameSessionFull(String::from(error_message))
+                    return CreatePlayerSessionsError::GameSessionFull(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreatePlayerSessionsError::InternalService(String::from(error_message))
+                    return CreatePlayerSessionsError::InternalService(String::from(error_message));
                 }
                 "InvalidGameSessionStatusException" => {
                     return CreatePlayerSessionsError::InvalidGameSessionStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreatePlayerSessionsError::InvalidRequest(String::from(error_message))
+                    return CreatePlayerSessionsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreatePlayerSessionsError::NotFound(String::from(error_message))
+                    return CreatePlayerSessionsError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
                     return CreatePlayerSessionsError::TerminalRoutingStrategy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return CreatePlayerSessionsError::Unauthorized(String::from(error_message))
+                    return CreatePlayerSessionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePlayerSessionsError::Validation(error_message.to_string())
+                    return CreatePlayerSessionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4088,23 +4088,23 @@ impl CreateVpcPeeringAuthorizationError {
                 "InternalServiceException" => {
                     return CreateVpcPeeringAuthorizationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return CreateVpcPeeringAuthorizationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateVpcPeeringAuthorizationError::NotFound(String::from(error_message))
+                    return CreateVpcPeeringAuthorizationError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return CreateVpcPeeringAuthorizationError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateVpcPeeringAuthorizationError::Validation(error_message.to_string())
+                    return CreateVpcPeeringAuthorizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4194,23 +4194,23 @@ impl CreateVpcPeeringConnectionError {
                 "InternalServiceException" => {
                     return CreateVpcPeeringConnectionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return CreateVpcPeeringConnectionError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateVpcPeeringConnectionError::NotFound(String::from(error_message))
+                    return CreateVpcPeeringConnectionError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return CreateVpcPeeringConnectionError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateVpcPeeringConnectionError::Validation(error_message.to_string())
+                    return CreateVpcPeeringConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4298,19 +4298,19 @@ impl DeleteAliasError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteAliasError::InternalService(String::from(error_message))
+                    return DeleteAliasError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteAliasError::InvalidRequest(String::from(error_message))
+                    return DeleteAliasError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteAliasError::NotFound(String::from(error_message))
+                    return DeleteAliasError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteAliasError::Unauthorized(String::from(error_message))
+                    return DeleteAliasError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string())
+                    return DeleteAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4396,19 +4396,19 @@ impl DeleteBuildError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteBuildError::InternalService(String::from(error_message))
+                    return DeleteBuildError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteBuildError::InvalidRequest(String::from(error_message))
+                    return DeleteBuildError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteBuildError::NotFound(String::from(error_message))
+                    return DeleteBuildError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteBuildError::Unauthorized(String::from(error_message))
+                    return DeleteBuildError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBuildError::Validation(error_message.to_string())
+                    return DeleteBuildError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4496,22 +4496,22 @@ impl DeleteFleetError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteFleetError::InternalService(String::from(error_message))
+                    return DeleteFleetError::InternalService(String::from(error_message));
                 }
                 "InvalidFleetStatusException" => {
-                    return DeleteFleetError::InvalidFleetStatus(String::from(error_message))
+                    return DeleteFleetError::InvalidFleetStatus(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteFleetError::InvalidRequest(String::from(error_message))
+                    return DeleteFleetError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteFleetError::NotFound(String::from(error_message))
+                    return DeleteFleetError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteFleetError::Unauthorized(String::from(error_message))
+                    return DeleteFleetError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFleetError::Validation(error_message.to_string())
+                    return DeleteFleetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4598,19 +4598,19 @@ impl DeleteGameSessionQueueError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteGameSessionQueueError::InternalService(String::from(error_message))
+                    return DeleteGameSessionQueueError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteGameSessionQueueError::InvalidRequest(String::from(error_message))
+                    return DeleteGameSessionQueueError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteGameSessionQueueError::NotFound(String::from(error_message))
+                    return DeleteGameSessionQueueError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteGameSessionQueueError::Unauthorized(String::from(error_message))
+                    return DeleteGameSessionQueueError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGameSessionQueueError::Validation(error_message.to_string())
+                    return DeleteGameSessionQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4700,27 +4700,27 @@ impl DeleteMatchmakingConfigurationError {
                 "InternalServiceException" => {
                     return DeleteMatchmakingConfigurationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DeleteMatchmakingConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return DeleteMatchmakingConfigurationError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedRegionException" => {
                     return DeleteMatchmakingConfigurationError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DeleteMatchmakingConfigurationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4808,19 +4808,19 @@ impl DeleteScalingPolicyError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteScalingPolicyError::InternalService(String::from(error_message))
+                    return DeleteScalingPolicyError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteScalingPolicyError::InvalidRequest(String::from(error_message))
+                    return DeleteScalingPolicyError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteScalingPolicyError::NotFound(String::from(error_message))
+                    return DeleteScalingPolicyError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteScalingPolicyError::Unauthorized(String::from(error_message))
+                    return DeleteScalingPolicyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteScalingPolicyError::Validation(error_message.to_string())
+                    return DeleteScalingPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4910,23 +4910,23 @@ impl DeleteVpcPeeringAuthorizationError {
                 "InternalServiceException" => {
                     return DeleteVpcPeeringAuthorizationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DeleteVpcPeeringAuthorizationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteVpcPeeringAuthorizationError::NotFound(String::from(error_message))
+                    return DeleteVpcPeeringAuthorizationError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return DeleteVpcPeeringAuthorizationError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteVpcPeeringAuthorizationError::Validation(error_message.to_string())
+                    return DeleteVpcPeeringAuthorizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5016,23 +5016,23 @@ impl DeleteVpcPeeringConnectionError {
                 "InternalServiceException" => {
                     return DeleteVpcPeeringConnectionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DeleteVpcPeeringConnectionError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteVpcPeeringConnectionError::NotFound(String::from(error_message))
+                    return DeleteVpcPeeringConnectionError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return DeleteVpcPeeringConnectionError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteVpcPeeringConnectionError::Validation(error_message.to_string())
+                    return DeleteVpcPeeringConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5120,19 +5120,19 @@ impl DescribeAliasError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeAliasError::InternalService(String::from(error_message))
+                    return DescribeAliasError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeAliasError::InvalidRequest(String::from(error_message))
+                    return DescribeAliasError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeAliasError::NotFound(String::from(error_message))
+                    return DescribeAliasError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeAliasError::Unauthorized(String::from(error_message))
+                    return DescribeAliasError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAliasError::Validation(error_message.to_string())
+                    return DescribeAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5218,19 +5218,19 @@ impl DescribeBuildError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeBuildError::InternalService(String::from(error_message))
+                    return DescribeBuildError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeBuildError::InvalidRequest(String::from(error_message))
+                    return DescribeBuildError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeBuildError::NotFound(String::from(error_message))
+                    return DescribeBuildError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeBuildError::Unauthorized(String::from(error_message))
+                    return DescribeBuildError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBuildError::Validation(error_message.to_string())
+                    return DescribeBuildError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5316,18 +5316,18 @@ impl DescribeEC2InstanceLimitsError {
                 "InternalServiceException" => {
                     return DescribeEC2InstanceLimitsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeEC2InstanceLimitsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return DescribeEC2InstanceLimitsError::Unauthorized(String::from(error_message))
+                    return DescribeEC2InstanceLimitsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEC2InstanceLimitsError::Validation(error_message.to_string())
+                    return DescribeEC2InstanceLimitsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5416,19 +5416,19 @@ impl DescribeFleetAttributesError {
                 "InternalServiceException" => {
                     return DescribeFleetAttributesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeFleetAttributesError::InvalidRequest(String::from(error_message))
+                    return DescribeFleetAttributesError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeFleetAttributesError::NotFound(String::from(error_message))
+                    return DescribeFleetAttributesError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeFleetAttributesError::Unauthorized(String::from(error_message))
+                    return DescribeFleetAttributesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFleetAttributesError::Validation(error_message.to_string())
+                    return DescribeFleetAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5516,19 +5516,19 @@ impl DescribeFleetCapacityError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeFleetCapacityError::InternalService(String::from(error_message))
+                    return DescribeFleetCapacityError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeFleetCapacityError::InvalidRequest(String::from(error_message))
+                    return DescribeFleetCapacityError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeFleetCapacityError::NotFound(String::from(error_message))
+                    return DescribeFleetCapacityError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeFleetCapacityError::Unauthorized(String::from(error_message))
+                    return DescribeFleetCapacityError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFleetCapacityError::Validation(error_message.to_string())
+                    return DescribeFleetCapacityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5616,19 +5616,19 @@ impl DescribeFleetEventsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeFleetEventsError::InternalService(String::from(error_message))
+                    return DescribeFleetEventsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeFleetEventsError::InvalidRequest(String::from(error_message))
+                    return DescribeFleetEventsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeFleetEventsError::NotFound(String::from(error_message))
+                    return DescribeFleetEventsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeFleetEventsError::Unauthorized(String::from(error_message))
+                    return DescribeFleetEventsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFleetEventsError::Validation(error_message.to_string())
+                    return DescribeFleetEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5718,21 +5718,21 @@ impl DescribeFleetPortSettingsError {
                 "InternalServiceException" => {
                     return DescribeFleetPortSettingsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeFleetPortSettingsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeFleetPortSettingsError::NotFound(String::from(error_message))
+                    return DescribeFleetPortSettingsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeFleetPortSettingsError::Unauthorized(String::from(error_message))
+                    return DescribeFleetPortSettingsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFleetPortSettingsError::Validation(error_message.to_string())
+                    return DescribeFleetPortSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5822,21 +5822,21 @@ impl DescribeFleetUtilizationError {
                 "InternalServiceException" => {
                     return DescribeFleetUtilizationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeFleetUtilizationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeFleetUtilizationError::NotFound(String::from(error_message))
+                    return DescribeFleetUtilizationError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeFleetUtilizationError::Unauthorized(String::from(error_message))
+                    return DescribeFleetUtilizationError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFleetUtilizationError::Validation(error_message.to_string())
+                    return DescribeFleetUtilizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5928,28 +5928,28 @@ impl DescribeGameSessionDetailsError {
                 "InternalServiceException" => {
                     return DescribeGameSessionDetailsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeGameSessionDetailsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeGameSessionDetailsError::NotFound(String::from(error_message))
+                    return DescribeGameSessionDetailsError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
                     return DescribeGameSessionDetailsError::TerminalRoutingStrategy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
                     return DescribeGameSessionDetailsError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeGameSessionDetailsError::Validation(error_message.to_string())
+                    return DescribeGameSessionDetailsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6040,23 +6040,23 @@ impl DescribeGameSessionPlacementError {
                 "InternalServiceException" => {
                     return DescribeGameSessionPlacementError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeGameSessionPlacementError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeGameSessionPlacementError::NotFound(String::from(error_message))
+                    return DescribeGameSessionPlacementError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return DescribeGameSessionPlacementError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeGameSessionPlacementError::Validation(error_message.to_string())
+                    return DescribeGameSessionPlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6146,21 +6146,21 @@ impl DescribeGameSessionQueuesError {
                 "InternalServiceException" => {
                     return DescribeGameSessionQueuesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeGameSessionQueuesError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeGameSessionQueuesError::NotFound(String::from(error_message))
+                    return DescribeGameSessionQueuesError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeGameSessionQueuesError::Unauthorized(String::from(error_message))
+                    return DescribeGameSessionQueuesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeGameSessionQueuesError::Validation(error_message.to_string())
+                    return DescribeGameSessionQueuesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6250,24 +6250,24 @@ impl DescribeGameSessionsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeGameSessionsError::InternalService(String::from(error_message))
+                    return DescribeGameSessionsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeGameSessionsError::InvalidRequest(String::from(error_message))
+                    return DescribeGameSessionsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeGameSessionsError::NotFound(String::from(error_message))
+                    return DescribeGameSessionsError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
                     return DescribeGameSessionsError::TerminalRoutingStrategy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return DescribeGameSessionsError::Unauthorized(String::from(error_message))
+                    return DescribeGameSessionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeGameSessionsError::Validation(error_message.to_string())
+                    return DescribeGameSessionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6356,19 +6356,19 @@ impl DescribeInstancesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeInstancesError::InternalService(String::from(error_message))
+                    return DescribeInstancesError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeInstancesError::InvalidRequest(String::from(error_message))
+                    return DescribeInstancesError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeInstancesError::NotFound(String::from(error_message))
+                    return DescribeInstancesError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeInstancesError::Unauthorized(String::from(error_message))
+                    return DescribeInstancesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeInstancesError::Validation(error_message.to_string())
+                    return DescribeInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6454,16 +6454,16 @@ impl DescribeMatchmakingError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribeMatchmakingError::InternalService(String::from(error_message))
+                    return DescribeMatchmakingError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeMatchmakingError::InvalidRequest(String::from(error_message))
+                    return DescribeMatchmakingError::InvalidRequest(String::from(error_message));
                 }
                 "UnsupportedRegionException" => {
-                    return DescribeMatchmakingError::UnsupportedRegion(String::from(error_message))
+                    return DescribeMatchmakingError::UnsupportedRegion(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeMatchmakingError::Validation(error_message.to_string())
+                    return DescribeMatchmakingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6550,22 +6550,22 @@ impl DescribeMatchmakingConfigurationsError {
                 "InternalServiceException" => {
                     return DescribeMatchmakingConfigurationsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeMatchmakingConfigurationsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedRegionException" => {
                     return DescribeMatchmakingConfigurationsError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeMatchmakingConfigurationsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -6654,23 +6654,23 @@ impl DescribeMatchmakingRuleSetsError {
                 "InternalServiceException" => {
                     return DescribeMatchmakingRuleSetsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeMatchmakingRuleSetsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeMatchmakingRuleSetsError::NotFound(String::from(error_message))
+                    return DescribeMatchmakingRuleSetsError::NotFound(String::from(error_message));
                 }
                 "UnsupportedRegionException" => {
                     return DescribeMatchmakingRuleSetsError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeMatchmakingRuleSetsError::Validation(error_message.to_string())
+                    return DescribeMatchmakingRuleSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6758,19 +6758,19 @@ impl DescribePlayerSessionsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DescribePlayerSessionsError::InternalService(String::from(error_message))
+                    return DescribePlayerSessionsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribePlayerSessionsError::InvalidRequest(String::from(error_message))
+                    return DescribePlayerSessionsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribePlayerSessionsError::NotFound(String::from(error_message))
+                    return DescribePlayerSessionsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribePlayerSessionsError::Unauthorized(String::from(error_message))
+                    return DescribePlayerSessionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePlayerSessionsError::Validation(error_message.to_string())
+                    return DescribePlayerSessionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6860,23 +6860,23 @@ impl DescribeRuntimeConfigurationError {
                 "InternalServiceException" => {
                     return DescribeRuntimeConfigurationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeRuntimeConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeRuntimeConfigurationError::NotFound(String::from(error_message))
+                    return DescribeRuntimeConfigurationError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return DescribeRuntimeConfigurationError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeRuntimeConfigurationError::Validation(error_message.to_string())
+                    return DescribeRuntimeConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6966,19 +6966,19 @@ impl DescribeScalingPoliciesError {
                 "InternalServiceException" => {
                     return DescribeScalingPoliciesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeScalingPoliciesError::InvalidRequest(String::from(error_message))
+                    return DescribeScalingPoliciesError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeScalingPoliciesError::NotFound(String::from(error_message))
+                    return DescribeScalingPoliciesError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeScalingPoliciesError::Unauthorized(String::from(error_message))
+                    return DescribeScalingPoliciesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeScalingPoliciesError::Validation(error_message.to_string())
+                    return DescribeScalingPoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7066,22 +7066,22 @@ impl DescribeVpcPeeringAuthorizationsError {
                 "InternalServiceException" => {
                     return DescribeVpcPeeringAuthorizationsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeVpcPeeringAuthorizationsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
                     return DescribeVpcPeeringAuthorizationsError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeVpcPeeringAuthorizationsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -7170,23 +7170,23 @@ impl DescribeVpcPeeringConnectionsError {
                 "InternalServiceException" => {
                     return DescribeVpcPeeringConnectionsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeVpcPeeringConnectionsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeVpcPeeringConnectionsError::NotFound(String::from(error_message))
+                    return DescribeVpcPeeringConnectionsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return DescribeVpcPeeringConnectionsError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeVpcPeeringConnectionsError::Validation(error_message.to_string())
+                    return DescribeVpcPeeringConnectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7274,19 +7274,19 @@ impl GetGameSessionLogUrlError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetGameSessionLogUrlError::InternalService(String::from(error_message))
+                    return GetGameSessionLogUrlError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetGameSessionLogUrlError::InvalidRequest(String::from(error_message))
+                    return GetGameSessionLogUrlError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetGameSessionLogUrlError::NotFound(String::from(error_message))
+                    return GetGameSessionLogUrlError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetGameSessionLogUrlError::Unauthorized(String::from(error_message))
+                    return GetGameSessionLogUrlError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGameSessionLogUrlError::Validation(error_message.to_string())
+                    return GetGameSessionLogUrlError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7374,19 +7374,19 @@ impl GetInstanceAccessError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetInstanceAccessError::InternalService(String::from(error_message))
+                    return GetInstanceAccessError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetInstanceAccessError::InvalidRequest(String::from(error_message))
+                    return GetInstanceAccessError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetInstanceAccessError::NotFound(String::from(error_message))
+                    return GetInstanceAccessError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetInstanceAccessError::Unauthorized(String::from(error_message))
+                    return GetInstanceAccessError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceAccessError::Validation(error_message.to_string())
+                    return GetInstanceAccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7472,16 +7472,16 @@ impl ListAliasesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return ListAliasesError::InternalService(String::from(error_message))
+                    return ListAliasesError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListAliasesError::InvalidRequest(String::from(error_message))
+                    return ListAliasesError::InvalidRequest(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListAliasesError::Unauthorized(String::from(error_message))
+                    return ListAliasesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string())
+                    return ListAliasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7564,16 +7564,16 @@ impl ListBuildsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return ListBuildsError::InternalService(String::from(error_message))
+                    return ListBuildsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListBuildsError::InvalidRequest(String::from(error_message))
+                    return ListBuildsError::InvalidRequest(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListBuildsError::Unauthorized(String::from(error_message))
+                    return ListBuildsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBuildsError::Validation(error_message.to_string())
+                    return ListBuildsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7658,19 +7658,19 @@ impl ListFleetsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return ListFleetsError::InternalService(String::from(error_message))
+                    return ListFleetsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListFleetsError::InvalidRequest(String::from(error_message))
+                    return ListFleetsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListFleetsError::NotFound(String::from(error_message))
+                    return ListFleetsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListFleetsError::Unauthorized(String::from(error_message))
+                    return ListFleetsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFleetsError::Validation(error_message.to_string())
+                    return ListFleetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7756,19 +7756,19 @@ impl PutScalingPolicyError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return PutScalingPolicyError::InternalService(String::from(error_message))
+                    return PutScalingPolicyError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return PutScalingPolicyError::InvalidRequest(String::from(error_message))
+                    return PutScalingPolicyError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutScalingPolicyError::NotFound(String::from(error_message))
+                    return PutScalingPolicyError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutScalingPolicyError::Unauthorized(String::from(error_message))
+                    return PutScalingPolicyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutScalingPolicyError::Validation(error_message.to_string())
+                    return PutScalingPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7856,21 +7856,21 @@ impl RequestUploadCredentialsError {
                 "InternalServiceException" => {
                     return RequestUploadCredentialsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return RequestUploadCredentialsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return RequestUploadCredentialsError::NotFound(String::from(error_message))
+                    return RequestUploadCredentialsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return RequestUploadCredentialsError::Unauthorized(String::from(error_message))
+                    return RequestUploadCredentialsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RequestUploadCredentialsError::Validation(error_message.to_string())
+                    return RequestUploadCredentialsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7960,22 +7960,22 @@ impl ResolveAliasError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return ResolveAliasError::InternalService(String::from(error_message))
+                    return ResolveAliasError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ResolveAliasError::InvalidRequest(String::from(error_message))
+                    return ResolveAliasError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ResolveAliasError::NotFound(String::from(error_message))
+                    return ResolveAliasError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
-                    return ResolveAliasError::TerminalRoutingStrategy(String::from(error_message))
+                    return ResolveAliasError::TerminalRoutingStrategy(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ResolveAliasError::Unauthorized(String::from(error_message))
+                    return ResolveAliasError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResolveAliasError::Validation(error_message.to_string())
+                    return ResolveAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8064,24 +8064,24 @@ impl SearchGameSessionsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return SearchGameSessionsError::InternalService(String::from(error_message))
+                    return SearchGameSessionsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return SearchGameSessionsError::InvalidRequest(String::from(error_message))
+                    return SearchGameSessionsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return SearchGameSessionsError::NotFound(String::from(error_message))
+                    return SearchGameSessionsError::NotFound(String::from(error_message));
                 }
                 "TerminalRoutingStrategyException" => {
                     return SearchGameSessionsError::TerminalRoutingStrategy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return SearchGameSessionsError::Unauthorized(String::from(error_message))
+                    return SearchGameSessionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SearchGameSessionsError::Validation(error_message.to_string())
+                    return SearchGameSessionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8170,19 +8170,19 @@ impl StartFleetActionsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return StartFleetActionsError::InternalService(String::from(error_message))
+                    return StartFleetActionsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StartFleetActionsError::InvalidRequest(String::from(error_message))
+                    return StartFleetActionsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StartFleetActionsError::NotFound(String::from(error_message))
+                    return StartFleetActionsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return StartFleetActionsError::Unauthorized(String::from(error_message))
+                    return StartFleetActionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartFleetActionsError::Validation(error_message.to_string())
+                    return StartFleetActionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8272,21 +8272,21 @@ impl StartGameSessionPlacementError {
                 "InternalServiceException" => {
                     return StartGameSessionPlacementError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartGameSessionPlacementError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return StartGameSessionPlacementError::NotFound(String::from(error_message))
+                    return StartGameSessionPlacementError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return StartGameSessionPlacementError::Unauthorized(String::from(error_message))
+                    return StartGameSessionPlacementError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartGameSessionPlacementError::Validation(error_message.to_string())
+                    return StartGameSessionPlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8374,19 +8374,19 @@ impl StartMatchBackfillError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return StartMatchBackfillError::InternalService(String::from(error_message))
+                    return StartMatchBackfillError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StartMatchBackfillError::InvalidRequest(String::from(error_message))
+                    return StartMatchBackfillError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StartMatchBackfillError::NotFound(String::from(error_message))
+                    return StartMatchBackfillError::NotFound(String::from(error_message));
                 }
                 "UnsupportedRegionException" => {
-                    return StartMatchBackfillError::UnsupportedRegion(String::from(error_message))
+                    return StartMatchBackfillError::UnsupportedRegion(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartMatchBackfillError::Validation(error_message.to_string())
+                    return StartMatchBackfillError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8474,19 +8474,19 @@ impl StartMatchmakingError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return StartMatchmakingError::InternalService(String::from(error_message))
+                    return StartMatchmakingError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StartMatchmakingError::InvalidRequest(String::from(error_message))
+                    return StartMatchmakingError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StartMatchmakingError::NotFound(String::from(error_message))
+                    return StartMatchmakingError::NotFound(String::from(error_message));
                 }
                 "UnsupportedRegionException" => {
-                    return StartMatchmakingError::UnsupportedRegion(String::from(error_message))
+                    return StartMatchmakingError::UnsupportedRegion(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartMatchmakingError::Validation(error_message.to_string())
+                    return StartMatchmakingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8572,19 +8572,19 @@ impl StopFleetActionsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return StopFleetActionsError::InternalService(String::from(error_message))
+                    return StopFleetActionsError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StopFleetActionsError::InvalidRequest(String::from(error_message))
+                    return StopFleetActionsError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StopFleetActionsError::NotFound(String::from(error_message))
+                    return StopFleetActionsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return StopFleetActionsError::Unauthorized(String::from(error_message))
+                    return StopFleetActionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopFleetActionsError::Validation(error_message.to_string())
+                    return StopFleetActionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8672,21 +8672,21 @@ impl StopGameSessionPlacementError {
                 "InternalServiceException" => {
                     return StopGameSessionPlacementError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StopGameSessionPlacementError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return StopGameSessionPlacementError::NotFound(String::from(error_message))
+                    return StopGameSessionPlacementError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return StopGameSessionPlacementError::Unauthorized(String::from(error_message))
+                    return StopGameSessionPlacementError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopGameSessionPlacementError::Validation(error_message.to_string())
+                    return StopGameSessionPlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8774,19 +8774,19 @@ impl StopMatchmakingError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return StopMatchmakingError::InternalService(String::from(error_message))
+                    return StopMatchmakingError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StopMatchmakingError::InvalidRequest(String::from(error_message))
+                    return StopMatchmakingError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StopMatchmakingError::NotFound(String::from(error_message))
+                    return StopMatchmakingError::NotFound(String::from(error_message));
                 }
                 "UnsupportedRegionException" => {
-                    return StopMatchmakingError::UnsupportedRegion(String::from(error_message))
+                    return StopMatchmakingError::UnsupportedRegion(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopMatchmakingError::Validation(error_message.to_string())
+                    return StopMatchmakingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8872,19 +8872,19 @@ impl UpdateAliasError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return UpdateAliasError::InternalService(String::from(error_message))
+                    return UpdateAliasError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateAliasError::InvalidRequest(String::from(error_message))
+                    return UpdateAliasError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateAliasError::NotFound(String::from(error_message))
+                    return UpdateAliasError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateAliasError::Unauthorized(String::from(error_message))
+                    return UpdateAliasError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAliasError::Validation(error_message.to_string())
+                    return UpdateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8970,19 +8970,19 @@ impl UpdateBuildError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return UpdateBuildError::InternalService(String::from(error_message))
+                    return UpdateBuildError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateBuildError::InvalidRequest(String::from(error_message))
+                    return UpdateBuildError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateBuildError::NotFound(String::from(error_message))
+                    return UpdateBuildError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateBuildError::Unauthorized(String::from(error_message))
+                    return UpdateBuildError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateBuildError::Validation(error_message.to_string())
+                    return UpdateBuildError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9074,30 +9074,30 @@ impl UpdateFleetAttributesError {
 
             match *error_type {
                 "ConflictException" => {
-                    return UpdateFleetAttributesError::Conflict(String::from(error_message))
+                    return UpdateFleetAttributesError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateFleetAttributesError::InternalService(String::from(error_message))
+                    return UpdateFleetAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidFleetStatusException" => {
                     return UpdateFleetAttributesError::InvalidFleetStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateFleetAttributesError::InvalidRequest(String::from(error_message))
+                    return UpdateFleetAttributesError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateFleetAttributesError::LimitExceeded(String::from(error_message))
+                    return UpdateFleetAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateFleetAttributesError::NotFound(String::from(error_message))
+                    return UpdateFleetAttributesError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateFleetAttributesError::Unauthorized(String::from(error_message))
+                    return UpdateFleetAttributesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFleetAttributesError::Validation(error_message.to_string())
+                    return UpdateFleetAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9194,28 +9194,28 @@ impl UpdateFleetCapacityError {
 
             match *error_type {
                 "ConflictException" => {
-                    return UpdateFleetCapacityError::Conflict(String::from(error_message))
+                    return UpdateFleetCapacityError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateFleetCapacityError::InternalService(String::from(error_message))
+                    return UpdateFleetCapacityError::InternalService(String::from(error_message));
                 }
                 "InvalidFleetStatusException" => {
-                    return UpdateFleetCapacityError::InvalidFleetStatus(String::from(error_message))
+                    return UpdateFleetCapacityError::InvalidFleetStatus(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateFleetCapacityError::InvalidRequest(String::from(error_message))
+                    return UpdateFleetCapacityError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateFleetCapacityError::LimitExceeded(String::from(error_message))
+                    return UpdateFleetCapacityError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateFleetCapacityError::NotFound(String::from(error_message))
+                    return UpdateFleetCapacityError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateFleetCapacityError::Unauthorized(String::from(error_message))
+                    return UpdateFleetCapacityError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFleetCapacityError::Validation(error_message.to_string())
+                    return UpdateFleetCapacityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9312,32 +9312,32 @@ impl UpdateFleetPortSettingsError {
 
             match *error_type {
                 "ConflictException" => {
-                    return UpdateFleetPortSettingsError::Conflict(String::from(error_message))
+                    return UpdateFleetPortSettingsError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return UpdateFleetPortSettingsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFleetStatusException" => {
                     return UpdateFleetPortSettingsError::InvalidFleetStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateFleetPortSettingsError::InvalidRequest(String::from(error_message))
+                    return UpdateFleetPortSettingsError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateFleetPortSettingsError::LimitExceeded(String::from(error_message))
+                    return UpdateFleetPortSettingsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateFleetPortSettingsError::NotFound(String::from(error_message))
+                    return UpdateFleetPortSettingsError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateFleetPortSettingsError::Unauthorized(String::from(error_message))
+                    return UpdateFleetPortSettingsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFleetPortSettingsError::Validation(error_message.to_string())
+                    return UpdateFleetPortSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9432,27 +9432,27 @@ impl UpdateGameSessionError {
 
             match *error_type {
                 "ConflictException" => {
-                    return UpdateGameSessionError::Conflict(String::from(error_message))
+                    return UpdateGameSessionError::Conflict(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateGameSessionError::InternalService(String::from(error_message))
+                    return UpdateGameSessionError::InternalService(String::from(error_message));
                 }
                 "InvalidGameSessionStatusException" => {
                     return UpdateGameSessionError::InvalidGameSessionStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateGameSessionError::InvalidRequest(String::from(error_message))
+                    return UpdateGameSessionError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateGameSessionError::NotFound(String::from(error_message))
+                    return UpdateGameSessionError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateGameSessionError::Unauthorized(String::from(error_message))
+                    return UpdateGameSessionError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGameSessionError::Validation(error_message.to_string())
+                    return UpdateGameSessionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9542,19 +9542,19 @@ impl UpdateGameSessionQueueError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return UpdateGameSessionQueueError::InternalService(String::from(error_message))
+                    return UpdateGameSessionQueueError::InternalService(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateGameSessionQueueError::InvalidRequest(String::from(error_message))
+                    return UpdateGameSessionQueueError::InvalidRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateGameSessionQueueError::NotFound(String::from(error_message))
+                    return UpdateGameSessionQueueError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateGameSessionQueueError::Unauthorized(String::from(error_message))
+                    return UpdateGameSessionQueueError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGameSessionQueueError::Validation(error_message.to_string())
+                    return UpdateGameSessionQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9644,27 +9644,27 @@ impl UpdateMatchmakingConfigurationError {
                 "InternalServiceException" => {
                     return UpdateMatchmakingConfigurationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return UpdateMatchmakingConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return UpdateMatchmakingConfigurationError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedRegionException" => {
                     return UpdateMatchmakingConfigurationError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return UpdateMatchmakingConfigurationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -9756,28 +9756,28 @@ impl UpdateRuntimeConfigurationError {
                 "InternalServiceException" => {
                     return UpdateRuntimeConfigurationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFleetStatusException" => {
                     return UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return UpdateRuntimeConfigurationError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateRuntimeConfigurationError::NotFound(String::from(error_message))
+                    return UpdateRuntimeConfigurationError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
                     return UpdateRuntimeConfigurationError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateRuntimeConfigurationError::Validation(error_message.to_string())
+                    return UpdateRuntimeConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9866,20 +9866,20 @@ impl ValidateMatchmakingRuleSetError {
                 "InternalServiceException" => {
                     return ValidateMatchmakingRuleSetError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ValidateMatchmakingRuleSetError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedRegionException" => {
                     return ValidateMatchmakingRuleSetError::UnsupportedRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ValidateMatchmakingRuleSetError::Validation(error_message.to_string())
+                    return ValidateMatchmakingRuleSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

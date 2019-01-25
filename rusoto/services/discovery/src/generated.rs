@@ -770,27 +770,27 @@ impl AssociateConfigurationItemsToApplicationError {
                 "AuthorizationErrorException" => {
                     return AssociateConfigurationItemsToApplicationError::AuthorizationError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterException" => {
                     return AssociateConfigurationItemsToApplicationError::InvalidParameter(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterValueException" => {
                     return AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServerInternalErrorException" => {
                     return AssociateConfigurationItemsToApplicationError::ServerInternalError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return AssociateConfigurationItemsToApplicationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -882,21 +882,21 @@ impl CreateApplicationError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return CreateApplicationError::AuthorizationError(String::from(error_message))
+                    return CreateApplicationError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateApplicationError::InvalidParameter(String::from(error_message))
+                    return CreateApplicationError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return CreateApplicationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
-                    return CreateApplicationError::ServerInternalError(String::from(error_message))
+                    return CreateApplicationError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string())
+                    return CreateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -986,22 +986,22 @@ impl CreateTagsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return CreateTagsError::AuthorizationError(String::from(error_message))
+                    return CreateTagsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateTagsError::InvalidParameter(String::from(error_message))
+                    return CreateTagsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return CreateTagsError::InvalidParameterValue(String::from(error_message))
+                    return CreateTagsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateTagsError::ResourceNotFound(String::from(error_message))
+                    return CreateTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServerInternalErrorException" => {
-                    return CreateTagsError::ServerInternalError(String::from(error_message))
+                    return CreateTagsError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTagsError::Validation(error_message.to_string())
+                    return CreateTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1088,21 +1088,21 @@ impl DeleteApplicationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DeleteApplicationsError::AuthorizationError(String::from(error_message))
+                    return DeleteApplicationsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteApplicationsError::InvalidParameter(String::from(error_message))
+                    return DeleteApplicationsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return DeleteApplicationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
-                    return DeleteApplicationsError::ServerInternalError(String::from(error_message))
+                    return DeleteApplicationsError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteApplicationsError::Validation(error_message.to_string())
+                    return DeleteApplicationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1192,22 +1192,22 @@ impl DeleteTagsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DeleteTagsError::AuthorizationError(String::from(error_message))
+                    return DeleteTagsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteTagsError::InvalidParameter(String::from(error_message))
+                    return DeleteTagsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return DeleteTagsError::InvalidParameterValue(String::from(error_message))
+                    return DeleteTagsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTagsError::ResourceNotFound(String::from(error_message))
+                    return DeleteTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServerInternalErrorException" => {
-                    return DeleteTagsError::ServerInternalError(String::from(error_message))
+                    return DeleteTagsError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string())
+                    return DeleteTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1294,19 +1294,19 @@ impl DescribeAgentsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeAgentsError::AuthorizationError(String::from(error_message))
+                    return DescribeAgentsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeAgentsError::InvalidParameter(String::from(error_message))
+                    return DescribeAgentsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeAgentsError::InvalidParameterValue(String::from(error_message))
+                    return DescribeAgentsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeAgentsError::ServerInternalError(String::from(error_message))
+                    return DescribeAgentsError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAgentsError::Validation(error_message.to_string())
+                    return DescribeAgentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1394,25 +1394,25 @@ impl DescribeConfigurationsError {
                 "AuthorizationErrorException" => {
                     return DescribeConfigurationsError::AuthorizationError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeConfigurationsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeConfigurationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return DescribeConfigurationsError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeConfigurationsError::Validation(error_message.to_string())
+                    return DescribeConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1504,30 +1504,30 @@ impl DescribeExportConfigurationsError {
                 "AuthorizationErrorException" => {
                     return DescribeExportConfigurationsError::AuthorizationError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeExportConfigurationsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeExportConfigurationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeExportConfigurationsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return DescribeExportConfigurationsError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeExportConfigurationsError::Validation(error_message.to_string())
+                    return DescribeExportConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1616,23 +1616,23 @@ impl DescribeExportTasksError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeExportTasksError::AuthorizationError(String::from(error_message))
+                    return DescribeExportTasksError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeExportTasksError::InvalidParameter(String::from(error_message))
+                    return DescribeExportTasksError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return DescribeExportTasksError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return DescribeExportTasksError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeExportTasksError::Validation(error_message.to_string())
+                    return DescribeExportTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1722,22 +1722,22 @@ impl DescribeTagsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeTagsError::AuthorizationError(String::from(error_message))
+                    return DescribeTagsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeTagsError::InvalidParameter(String::from(error_message))
+                    return DescribeTagsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeTagsError::InvalidParameterValue(String::from(error_message))
+                    return DescribeTagsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTagsError::ResourceNotFound(String::from(error_message))
+                    return DescribeTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeTagsError::ServerInternalError(String::from(error_message))
+                    return DescribeTagsError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string())
+                    return DescribeTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1828,27 +1828,27 @@ impl DisassociateConfigurationItemsFromApplicationError {
                 "AuthorizationErrorException" => {
                     return DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterException" => {
                     return DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidParameterValueException" => {
                     return DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServerInternalErrorException" => {
                     return DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DisassociateConfigurationItemsFromApplicationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1954,28 +1954,28 @@ impl ExportConfigurationsError {
                 "AuthorizationErrorException" => {
                     return ExportConfigurationsError::AuthorizationError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ExportConfigurationsError::InvalidParameter(String::from(error_message))
+                    return ExportConfigurationsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return ExportConfigurationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return ExportConfigurationsError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return ExportConfigurationsError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ExportConfigurationsError::Validation(error_message.to_string())
+                    return ExportConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2064,23 +2064,23 @@ impl GetDiscoverySummaryError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return GetDiscoverySummaryError::AuthorizationError(String::from(error_message))
+                    return GetDiscoverySummaryError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetDiscoverySummaryError::InvalidParameter(String::from(error_message))
+                    return GetDiscoverySummaryError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return GetDiscoverySummaryError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return GetDiscoverySummaryError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDiscoverySummaryError::Validation(error_message.to_string())
+                    return GetDiscoverySummaryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2170,24 +2170,24 @@ impl ListConfigurationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return ListConfigurationsError::AuthorizationError(String::from(error_message))
+                    return ListConfigurationsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListConfigurationsError::InvalidParameter(String::from(error_message))
+                    return ListConfigurationsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return ListConfigurationsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListConfigurationsError::ResourceNotFound(String::from(error_message))
+                    return ListConfigurationsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServerInternalErrorException" => {
-                    return ListConfigurationsError::ServerInternalError(String::from(error_message))
+                    return ListConfigurationsError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListConfigurationsError::Validation(error_message.to_string())
+                    return ListConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2276,23 +2276,23 @@ impl ListServerNeighborsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return ListServerNeighborsError::AuthorizationError(String::from(error_message))
+                    return ListServerNeighborsError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListServerNeighborsError::InvalidParameter(String::from(error_message))
+                    return ListServerNeighborsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return ListServerNeighborsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return ListServerNeighborsError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListServerNeighborsError::Validation(error_message.to_string())
+                    return ListServerNeighborsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2382,25 +2382,25 @@ impl StartDataCollectionByAgentIdsError {
                 "AuthorizationErrorException" => {
                     return StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartDataCollectionByAgentIdsError::Validation(error_message.to_string())
+                    return StartDataCollectionByAgentIdsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2490,22 +2490,22 @@ impl StartExportTaskError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StartExportTaskError::AuthorizationError(String::from(error_message))
+                    return StartExportTaskError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StartExportTaskError::InvalidParameter(String::from(error_message))
+                    return StartExportTaskError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return StartExportTaskError::InvalidParameterValue(String::from(error_message))
+                    return StartExportTaskError::InvalidParameterValue(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return StartExportTaskError::OperationNotPermitted(String::from(error_message))
+                    return StartExportTaskError::OperationNotPermitted(String::from(error_message));
                 }
                 "ServerInternalErrorException" => {
-                    return StartExportTaskError::ServerInternalError(String::from(error_message))
+                    return StartExportTaskError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartExportTaskError::Validation(error_message.to_string())
+                    return StartExportTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2594,25 +2594,25 @@ impl StopDataCollectionByAgentIdsError {
                 "AuthorizationErrorException" => {
                     return StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterValueException" => {
                     return StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
                     return StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StopDataCollectionByAgentIdsError::Validation(error_message.to_string())
+                    return StopDataCollectionByAgentIdsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2700,21 +2700,21 @@ impl UpdateApplicationError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return UpdateApplicationError::AuthorizationError(String::from(error_message))
+                    return UpdateApplicationError::AuthorizationError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateApplicationError::InvalidParameter(String::from(error_message))
+                    return UpdateApplicationError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return UpdateApplicationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerInternalErrorException" => {
-                    return UpdateApplicationError::ServerInternalError(String::from(error_message))
+                    return UpdateApplicationError::ServerInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string())
+                    return UpdateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -1081,25 +1081,25 @@ impl CreateChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return CreateChannelError::Forbidden(String::from(error_message))
+                    return CreateChannelError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateChannelError::InternalServerError(String::from(error_message))
+                    return CreateChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateChannelError::NotFound(String::from(error_message))
+                    return CreateChannelError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateChannelError::ServiceUnavailable(String::from(error_message))
+                    return CreateChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateChannelError::TooManyRequests(String::from(error_message))
+                    return CreateChannelError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return CreateChannelError::UnprocessableEntity(String::from(error_message))
+                    return CreateChannelError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateChannelError::Validation(error_message.to_string())
+                    return CreateChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1205,31 +1205,31 @@ impl CreateOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return CreateOriginEndpointError::Forbidden(String::from(error_message))
+                    return CreateOriginEndpointError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateOriginEndpointError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateOriginEndpointError::NotFound(String::from(error_message))
+                    return CreateOriginEndpointError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return CreateOriginEndpointError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateOriginEndpointError::TooManyRequests(String::from(error_message))
+                    return CreateOriginEndpointError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
                     return CreateOriginEndpointError::UnprocessableEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateOriginEndpointError::Validation(error_message.to_string())
+                    return CreateOriginEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1337,25 +1337,25 @@ impl DeleteChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DeleteChannelError::Forbidden(String::from(error_message))
+                    return DeleteChannelError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteChannelError::InternalServerError(String::from(error_message))
+                    return DeleteChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteChannelError::NotFound(String::from(error_message))
+                    return DeleteChannelError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteChannelError::ServiceUnavailable(String::from(error_message))
+                    return DeleteChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteChannelError::TooManyRequests(String::from(error_message))
+                    return DeleteChannelError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return DeleteChannelError::UnprocessableEntity(String::from(error_message))
+                    return DeleteChannelError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteChannelError::Validation(error_message.to_string())
+                    return DeleteChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1461,31 +1461,31 @@ impl DeleteOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DeleteOriginEndpointError::Forbidden(String::from(error_message))
+                    return DeleteOriginEndpointError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DeleteOriginEndpointError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteOriginEndpointError::NotFound(String::from(error_message))
+                    return DeleteOriginEndpointError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteOriginEndpointError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteOriginEndpointError::TooManyRequests(String::from(error_message))
+                    return DeleteOriginEndpointError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
                     return DeleteOriginEndpointError::UnprocessableEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteOriginEndpointError::Validation(error_message.to_string())
+                    return DeleteOriginEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1593,25 +1593,25 @@ impl DescribeChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DescribeChannelError::Forbidden(String::from(error_message))
+                    return DescribeChannelError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeChannelError::InternalServerError(String::from(error_message))
+                    return DescribeChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeChannelError::NotFound(String::from(error_message))
+                    return DescribeChannelError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeChannelError::ServiceUnavailable(String::from(error_message))
+                    return DescribeChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeChannelError::TooManyRequests(String::from(error_message))
+                    return DescribeChannelError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return DescribeChannelError::UnprocessableEntity(String::from(error_message))
+                    return DescribeChannelError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeChannelError::Validation(error_message.to_string())
+                    return DescribeChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1717,31 +1717,31 @@ impl DescribeOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DescribeOriginEndpointError::Forbidden(String::from(error_message))
+                    return DescribeOriginEndpointError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DescribeOriginEndpointError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeOriginEndpointError::NotFound(String::from(error_message))
+                    return DescribeOriginEndpointError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeOriginEndpointError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeOriginEndpointError::TooManyRequests(String::from(error_message))
+                    return DescribeOriginEndpointError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
                     return DescribeOriginEndpointError::UnprocessableEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeOriginEndpointError::Validation(error_message.to_string())
+                    return DescribeOriginEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1849,25 +1849,25 @@ impl ListChannelsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return ListChannelsError::Forbidden(String::from(error_message))
+                    return ListChannelsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListChannelsError::InternalServerError(String::from(error_message))
+                    return ListChannelsError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListChannelsError::NotFound(String::from(error_message))
+                    return ListChannelsError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListChannelsError::ServiceUnavailable(String::from(error_message))
+                    return ListChannelsError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListChannelsError::TooManyRequests(String::from(error_message))
+                    return ListChannelsError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return ListChannelsError::UnprocessableEntity(String::from(error_message))
+                    return ListChannelsError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListChannelsError::Validation(error_message.to_string())
+                    return ListChannelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1973,29 +1973,29 @@ impl ListOriginEndpointsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return ListOriginEndpointsError::Forbidden(String::from(error_message))
+                    return ListOriginEndpointsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return ListOriginEndpointsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListOriginEndpointsError::NotFound(String::from(error_message))
+                    return ListOriginEndpointsError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListOriginEndpointsError::ServiceUnavailable(String::from(error_message))
+                    return ListOriginEndpointsError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListOriginEndpointsError::TooManyRequests(String::from(error_message))
+                    return ListOriginEndpointsError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
                     return ListOriginEndpointsError::UnprocessableEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListOriginEndpointsError::Validation(error_message.to_string())
+                    return ListOriginEndpointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2103,33 +2103,33 @@ impl RotateChannelCredentialsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return RotateChannelCredentialsError::Forbidden(String::from(error_message))
+                    return RotateChannelCredentialsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return RotateChannelCredentialsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return RotateChannelCredentialsError::NotFound(String::from(error_message))
+                    return RotateChannelCredentialsError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return RotateChannelCredentialsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return RotateChannelCredentialsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnprocessableEntityException" => {
                     return RotateChannelCredentialsError::UnprocessableEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RotateChannelCredentialsError::Validation(error_message.to_string())
+                    return RotateChannelCredentialsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2237,25 +2237,25 @@ impl UpdateChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return UpdateChannelError::Forbidden(String::from(error_message))
+                    return UpdateChannelError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateChannelError::InternalServerError(String::from(error_message))
+                    return UpdateChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateChannelError::NotFound(String::from(error_message))
+                    return UpdateChannelError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateChannelError::ServiceUnavailable(String::from(error_message))
+                    return UpdateChannelError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateChannelError::TooManyRequests(String::from(error_message))
+                    return UpdateChannelError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return UpdateChannelError::UnprocessableEntity(String::from(error_message))
+                    return UpdateChannelError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateChannelError::Validation(error_message.to_string())
+                    return UpdateChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2361,31 +2361,31 @@ impl UpdateOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return UpdateOriginEndpointError::Forbidden(String::from(error_message))
+                    return UpdateOriginEndpointError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return UpdateOriginEndpointError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateOriginEndpointError::NotFound(String::from(error_message))
+                    return UpdateOriginEndpointError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return UpdateOriginEndpointError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateOriginEndpointError::TooManyRequests(String::from(error_message))
+                    return UpdateOriginEndpointError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
                     return UpdateOriginEndpointError::UnprocessableEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateOriginEndpointError::Validation(error_message.to_string())
+                    return UpdateOriginEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

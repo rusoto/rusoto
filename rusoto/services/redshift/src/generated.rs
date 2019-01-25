@@ -12165,37 +12165,37 @@ impl AcceptReservedNodeExchangeError {
                     "DependentServiceUnavailableFault" => {
                         return AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidReservedNodeState" => {
                         return AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeAlreadyExists" => {
                         return AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeAlreadyMigrated" => {
                         return AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeNotFound" => {
                         return AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeOfferingNotFound" => {
                         return AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnsupportedOperation" => {
                         return AcceptReservedNodeExchangeError::UnsupportedOperationFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12395,32 +12395,32 @@ impl AuthorizeSnapshotAccessError {
                     "AuthorizationAlreadyExists" => {
                         return AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "AuthorizationQuotaExceeded" => {
                         return AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ClusterSnapshotNotFound" => {
                         return AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterSnapshotState" => {
                         return AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "LimitExceededFault" => {
                         return AuthorizeSnapshotAccessError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12519,22 +12519,22 @@ impl CopyClusterSnapshotError {
                     "ClusterSnapshotAlreadyExists" => {
                         return CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ClusterSnapshotNotFound" => {
                         return CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSnapshotQuotaExceeded" => {
                         return CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterSnapshotState" => {
                         return CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12661,100 +12661,100 @@ impl CreateClusterError {
                     "ClusterAlreadyExists" => {
                         return CreateClusterError::ClusterAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterParameterGroupNotFound" => {
                         return CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterQuotaExceeded" => {
                         return CreateClusterError::ClusterQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSecurityGroupNotFound" => {
                         return CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSubnetGroupNotFoundFault" => {
                         return CreateClusterError::ClusterSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return CreateClusterError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "HsmClientCertificateNotFoundFault" => {
                         return CreateClusterError::HsmClientCertificateNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "HsmConfigurationNotFoundFault" => {
                         return CreateClusterError::HsmConfigurationNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientClusterCapacity" => {
                         return CreateClusterError::InsufficientClusterCapacityFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
                         return CreateClusterError::InvalidClusterSubnetGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterTrack" => {
                         return CreateClusterError::InvalidClusterTrackFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidElasticIpFault" => {
                         return CreateClusterError::InvalidElasticIpFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
-                        return CreateClusterError::InvalidSubnet(String::from(parsed_error.message))
+                        return CreateClusterError::InvalidSubnet(String::from(parsed_error.message));
                     }
                     "InvalidTagFault" => {
                         return CreateClusterError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return CreateClusterError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededFault" => {
                         return CreateClusterError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
                         return CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NumberOfNodesQuotaExceeded" => {
                         return CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagLimitExceededFault" => {
                         return CreateClusterError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnauthorizedOperation" => {
                         return CreateClusterError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13055,32 +13055,32 @@ impl CreateClusterSnapshotError {
                     "ClusterNotFound" => {
                         return CreateClusterSnapshotError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSnapshotAlreadyExists" => {
                         return CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ClusterSnapshotQuotaExceeded" => {
                         return CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterState" => {
                         return CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTagFault" => {
                         return CreateClusterSnapshotError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagLimitExceededFault" => {
                         return CreateClusterSnapshotError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13185,42 +13185,42 @@ impl CreateClusterSubnetGroupError {
                     "ClusterSubnetGroupAlreadyExists" => {
                         return CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ClusterSubnetGroupQuotaExceeded" => {
                         return CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ClusterSubnetQuotaExceededFault" => {
                         return CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidSubnet" => {
                         return CreateClusterSubnetGroupError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTagFault" => {
                         return CreateClusterSubnetGroupError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagLimitExceededFault" => {
                         return CreateClusterSubnetGroupError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnauthorizedOperation" => {
                         return CreateClusterSubnetGroupError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13335,57 +13335,57 @@ impl CreateEventSubscriptionError {
                     "EventSubscriptionQuotaExceeded" => {
                         return CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return CreateEventSubscriptionError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSInvalidTopic" => {
                         return CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSNoAuthorization" => {
                         return CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSTopicArnNotFound" => {
                         return CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SourceNotFound" => {
                         return CreateEventSubscriptionError::SourceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubscriptionAlreadyExist" => {
                         return CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionCategoryNotFound" => {
                         return CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionEventIdNotFound" => {
                         return CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionSeverityNotFound" => {
                         return CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TagLimitExceededFault" => {
                         return CreateEventSubscriptionError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13581,22 +13581,22 @@ impl CreateHsmConfigurationError {
                     "HsmConfigurationAlreadyExistsFault" => {
                         return CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "HsmConfigurationQuotaExceededFault" => {
                         return CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return CreateHsmConfigurationError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagLimitExceededFault" => {
                         return CreateHsmConfigurationError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13695,32 +13695,32 @@ impl CreateSnapshotCopyGrantError {
                     "DependentServiceRequestThrottlingFault" => {
                         return CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return CreateSnapshotCopyGrantError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededFault" => {
                         return CreateSnapshotCopyGrantError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotCopyGrantAlreadyExistsFault" => {
                         return CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotCopyGrantQuotaExceededFault" => {
                         return CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TagLimitExceededFault" => {
                         return CreateSnapshotCopyGrantError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13815,17 +13815,17 @@ impl CreateTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return CreateTagsError::InvalidTagFault(String::from(parsed_error.message))
+                        return CreateTagsError::InvalidTagFault(String::from(parsed_error.message));
                     }
                     "ResourceNotFoundFault" => {
                         return CreateTagsError::ResourceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagLimitExceededFault" => {
                         return CreateTagsError::TagLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13917,22 +13917,22 @@ impl DeleteClusterError {
                     "ClusterNotFound" => {
                         return DeleteClusterError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSnapshotAlreadyExists" => {
                         return DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSnapshotQuotaExceeded" => {
                         return DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterState" => {
                         return DeleteClusterError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14195,12 +14195,12 @@ impl DeleteClusterSnapshotError {
                     "ClusterSnapshotNotFound" => {
                         return DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterSnapshotState" => {
                         return DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14291,17 +14291,17 @@ impl DeleteClusterSubnetGroupError {
                     "ClusterSubnetGroupNotFoundFault" => {
                         return DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
                         return DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterSubnetStateFault" => {
                         return DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14391,12 +14391,12 @@ impl DeleteEventSubscriptionError {
                     "InvalidSubscriptionStateFault" => {
                         return DeleteEventSubscriptionError::InvalidSubscriptionStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionNotFound" => {
                         return DeleteEventSubscriptionError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14571,12 +14571,12 @@ impl DeleteHsmConfigurationError {
                     "HsmConfigurationNotFoundFault" => {
                         return DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidHsmConfigurationStateFault" => {
                         return DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14665,12 +14665,12 @@ impl DeleteSnapshotCopyGrantError {
                     "InvalidSnapshotCopyGrantStateFault" => {
                         return DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
                         return DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14757,12 +14757,12 @@ impl DeleteTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return DeleteTagsError::InvalidTagFault(String::from(parsed_error.message))
+                        return DeleteTagsError::InvalidTagFault(String::from(parsed_error.message));
                     }
                     "ResourceNotFoundFault" => {
                         return DeleteTagsError::ResourceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14847,7 +14847,7 @@ impl DescribeClusterDbRevisionsError {
                     "ClusterNotFound" => {
                         return DescribeClusterDbRevisionsError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15019,7 +15019,7 @@ impl DescribeClusterParametersError {
                     "ClusterParameterGroupNotFound" => {
                         return DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15107,12 +15107,12 @@ impl DescribeClusterSecurityGroupsError {
                     "ClusterSecurityGroupNotFound" => {
                         return DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return DescribeClusterSecurityGroupsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15205,17 +15205,17 @@ impl DescribeClusterSnapshotsError {
                     "ClusterNotFound" => {
                         return DescribeClusterSnapshotsError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSnapshotNotFound" => {
                         return DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return DescribeClusterSnapshotsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15305,12 +15305,12 @@ impl DescribeClusterSubnetGroupsError {
                     "ClusterSubnetGroupNotFoundFault" => {
                         return DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return DescribeClusterSubnetGroupsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15399,12 +15399,12 @@ impl DescribeClusterTracksError {
                     "InvalidClusterTrack" => {
                         return DescribeClusterTracksError::InvalidClusterTrackFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnauthorizedOperation" => {
                         return DescribeClusterTracksError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15571,12 +15571,12 @@ impl DescribeClustersError {
                     "ClusterNotFound" => {
                         return DescribeClustersError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTagFault" => {
                         return DescribeClustersError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15819,12 +15819,12 @@ impl DescribeEventSubscriptionsError {
                     "InvalidTagFault" => {
                         return DescribeEventSubscriptionsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubscriptionNotFound" => {
                         return DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15989,12 +15989,12 @@ impl DescribeHsmClientCertificatesError {
                     "HsmClientCertificateNotFoundFault" => {
                         return DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return DescribeHsmClientCertificatesError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16085,12 +16085,12 @@ impl DescribeHsmConfigurationsError {
                     "HsmConfigurationNotFoundFault" => {
                         return DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidTagFault" => {
                         return DescribeHsmConfigurationsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16177,7 +16177,7 @@ impl DescribeLoggingStatusError {
                     "ClusterNotFound" => {
                         return DescribeLoggingStatusError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16345,17 +16345,17 @@ impl DescribeReservedNodeOfferingsError {
                     "DependentServiceUnavailableFault" => {
                         return DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeOfferingNotFound" => {
                         return DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnsupportedOperation" => {
                         return DescribeReservedNodeOfferingsError::UnsupportedOperationFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16449,12 +16449,12 @@ impl DescribeReservedNodesError {
                     "DependentServiceUnavailableFault" => {
                         return DescribeReservedNodesError::DependentServiceUnavailableFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeNotFound" => {
                         return DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16543,12 +16543,12 @@ impl DescribeResizeError {
                     "ClusterNotFound" => {
                         return DescribeResizeError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResizeNotFound" => {
                         return DescribeResizeError::ResizeNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16635,12 +16635,12 @@ impl DescribeSnapshotCopyGrantsError {
                     "InvalidTagFault" => {
                         return DescribeSnapshotCopyGrantsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
                         return DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16729,12 +16729,12 @@ impl DescribeTableRestoreStatusError {
                     "ClusterNotFound" => {
                         return DescribeTableRestoreStatusError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TableRestoreNotFoundFault" => {
                         return DescribeTableRestoreStatusError::TableRestoreNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -16823,12 +16823,12 @@ impl DescribeTagsError {
                     "InvalidTagFault" => {
                         return DescribeTagsError::InvalidTagFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceNotFoundFault" => {
                         return DescribeTagsError::ResourceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -16913,7 +16913,7 @@ impl DisableLoggingError {
                     "ClusterNotFound" => {
                         return DisableLoggingError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17003,22 +17003,22 @@ impl DisableSnapshotCopyError {
                     "ClusterNotFound" => {
                         return DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterState" => {
                         return DisableSnapshotCopyError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotCopyAlreadyDisabledFault" => {
                         return DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnauthorizedOperation" => {
                         return DisableSnapshotCopyError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17115,27 +17115,27 @@ impl EnableLoggingError {
                     "BucketNotFoundFault" => {
                         return EnableLoggingError::BucketNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterNotFound" => {
                         return EnableLoggingError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientS3BucketPolicyFault" => {
                         return EnableLoggingError::InsufficientS3BucketPolicyFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidS3BucketNameFault" => {
                         return EnableLoggingError::InvalidS3BucketNameFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidS3KeyPrefixFault" => {
                         return EnableLoggingError::InvalidS3KeyPrefixFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17241,52 +17241,52 @@ impl EnableSnapshotCopyError {
                     "ClusterNotFound" => {
                         return EnableSnapshotCopyError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CopyToRegionDisabledFault" => {
                         return EnableSnapshotCopyError::CopyToRegionDisabledFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "IncompatibleOrderableOptions" => {
                         return EnableSnapshotCopyError::IncompatibleOrderableOptions(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterState" => {
                         return EnableSnapshotCopyError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededFault" => {
                         return EnableSnapshotCopyError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotCopyAlreadyEnabledFault" => {
                         return EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
                         return EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnauthorizedOperation" => {
                         return EnableSnapshotCopyError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnknownSnapshotCopyRegionFault" => {
                         return EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -17383,12 +17383,12 @@ impl GetClusterCredentialsError {
                     "ClusterNotFound" => {
                         return GetClusterCredentialsError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnsupportedOperation" => {
                         return GetClusterCredentialsError::UnsupportedOperationFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17613,92 +17613,92 @@ impl ModifyClusterError {
                     "ClusterAlreadyExists" => {
                         return ModifyClusterError::ClusterAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterNotFound" => {
                         return ModifyClusterError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterParameterGroupNotFound" => {
                         return ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSecurityGroupNotFound" => {
                         return ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return ModifyClusterError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "HsmClientCertificateNotFoundFault" => {
                         return ModifyClusterError::HsmClientCertificateNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "HsmConfigurationNotFoundFault" => {
                         return ModifyClusterError::HsmConfigurationNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientClusterCapacity" => {
                         return ModifyClusterError::InsufficientClusterCapacityFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterSecurityGroupState" => {
                         return ModifyClusterError::InvalidClusterSecurityGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterState" => {
                         return ModifyClusterError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterTrack" => {
                         return ModifyClusterError::InvalidClusterTrackFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidElasticIpFault" => {
                         return ModifyClusterError::InvalidElasticIpFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededFault" => {
                         return ModifyClusterError::LimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
                         return ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NumberOfNodesQuotaExceeded" => {
                         return ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TableLimitExceeded" => {
                         return ModifyClusterError::TableLimitExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnauthorizedOperation" => {
                         return ModifyClusterError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnsupportedOptionFault" => {
                         return ModifyClusterError::UnsupportedOptionFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17803,17 +17803,17 @@ impl ModifyClusterDbRevisionError {
                     "ClusterNotFound" => {
                         return ModifyClusterDbRevisionError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterOnLatestRevision" => {
                         return ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterState" => {
                         return ModifyClusterDbRevisionError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -17903,12 +17903,12 @@ impl ModifyClusterIamRolesError {
                     "ClusterNotFound" => {
                         return ModifyClusterIamRolesError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterState" => {
                         return ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18093,32 +18093,32 @@ impl ModifyClusterSubnetGroupError {
                     "ClusterSubnetGroupNotFoundFault" => {
                         return ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ClusterSubnetQuotaExceededFault" => {
                         return ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidSubnet" => {
                         return ModifyClusterSubnetGroupError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetAlreadyInUse" => {
                         return ModifyClusterSubnetGroupError::SubnetAlreadyInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnauthorizedOperation" => {
                         return ModifyClusterSubnetGroupError::UnauthorizedOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -18227,47 +18227,47 @@ impl ModifyEventSubscriptionError {
                     "InvalidSubscriptionStateFault" => {
                         return ModifyEventSubscriptionError::InvalidSubscriptionStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SNSInvalidTopic" => {
                         return ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSNoAuthorization" => {
                         return ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SNSTopicArnNotFound" => {
                         return ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SourceNotFound" => {
                         return ModifyEventSubscriptionError::SourceNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubscriptionCategoryNotFound" => {
                         return ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionEventIdNotFound" => {
                         return ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionNotFound" => {
                         return ModifyEventSubscriptionError::SubscriptionNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SubscriptionSeverityNotFound" => {
                         return ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -18367,22 +18367,22 @@ impl ModifySnapshotCopyRetentionPeriodError {
                     "ClusterNotFound" => {
                         return ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterState" => {
                         return ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotCopyDisabledFault" => {
                         return ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnauthorizedOperation" => {
                         return ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -18477,22 +18477,22 @@ impl PurchaseReservedNodeOfferingError {
                     "ReservedNodeAlreadyExists" => {
                         return PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeOfferingNotFound" => {
                         return PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReservedNodeQuotaExceeded" => {
                         return PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnsupportedOperation" => {
                         return PurchaseReservedNodeOfferingError::UnsupportedOperationFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -18585,12 +18585,12 @@ impl RebootClusterError {
                     "ClusterNotFound" => {
                         return RebootClusterError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidClusterState" => {
                         return RebootClusterError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -19111,17 +19111,17 @@ impl RevokeSnapshotAccessError {
                     "AccessToSnapshotDenied" => {
                         return RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AuthorizationNotFound" => {
                         return RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterSnapshotNotFound" => {
                         return RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -19213,17 +19213,17 @@ impl RotateEncryptionKeyError {
                     "ClusterNotFound" => {
                         return RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DependentServiceRequestThrottlingFault" => {
                         return RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidClusterState" => {
                         return RotateEncryptionKeyError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

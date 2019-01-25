@@ -380,18 +380,18 @@ impl ClaimDevicesByClaimCodeError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return ClaimDevicesByClaimCodeError::Forbidden(String::from(error_message))
+                    return ClaimDevicesByClaimCodeError::Forbidden(String::from(error_message));
                 }
                 "InternalFailureException" => {
                     return ClaimDevicesByClaimCodeError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ClaimDevicesByClaimCodeError::InvalidRequest(String::from(error_message))
+                    return ClaimDevicesByClaimCodeError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ClaimDevicesByClaimCodeError::Validation(error_message.to_string())
+                    return ClaimDevicesByClaimCodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -489,16 +489,16 @@ impl DescribeDeviceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeDeviceError::InternalFailure(String::from(error_message))
+                    return DescribeDeviceError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeDeviceError::InvalidRequest(String::from(error_message))
+                    return DescribeDeviceError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeDeviceError::ResourceNotFound(String::from(error_message))
+                    return DescribeDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDeviceError::Validation(error_message.to_string())
+                    return DescribeDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -598,22 +598,22 @@ impl FinalizeDeviceClaimError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return FinalizeDeviceClaimError::InternalFailure(String::from(error_message))
+                    return FinalizeDeviceClaimError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return FinalizeDeviceClaimError::InvalidRequest(String::from(error_message))
+                    return FinalizeDeviceClaimError::InvalidRequest(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return FinalizeDeviceClaimError::PreconditionFailed(String::from(error_message))
+                    return FinalizeDeviceClaimError::PreconditionFailed(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return FinalizeDeviceClaimError::ResourceConflict(String::from(error_message))
+                    return FinalizeDeviceClaimError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return FinalizeDeviceClaimError::ResourceNotFound(String::from(error_message))
+                    return FinalizeDeviceClaimError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return FinalizeDeviceClaimError::Validation(error_message.to_string())
+                    return FinalizeDeviceClaimError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -713,16 +713,16 @@ impl GetDeviceMethodsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetDeviceMethodsError::InternalFailure(String::from(error_message))
+                    return GetDeviceMethodsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetDeviceMethodsError::InvalidRequest(String::from(error_message))
+                    return GetDeviceMethodsError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDeviceMethodsError::ResourceNotFound(String::from(error_message))
+                    return GetDeviceMethodsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeviceMethodsError::Validation(error_message.to_string())
+                    return GetDeviceMethodsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -820,19 +820,19 @@ impl InitiateDeviceClaimError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return InitiateDeviceClaimError::InternalFailure(String::from(error_message))
+                    return InitiateDeviceClaimError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return InitiateDeviceClaimError::InvalidRequest(String::from(error_message))
+                    return InitiateDeviceClaimError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return InitiateDeviceClaimError::ResourceConflict(String::from(error_message))
+                    return InitiateDeviceClaimError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateDeviceClaimError::ResourceNotFound(String::from(error_message))
+                    return InitiateDeviceClaimError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InitiateDeviceClaimError::Validation(error_message.to_string())
+                    return InitiateDeviceClaimError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -937,25 +937,25 @@ impl InvokeDeviceMethodError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return InvokeDeviceMethodError::InternalFailure(String::from(error_message))
+                    return InvokeDeviceMethodError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return InvokeDeviceMethodError::InvalidRequest(String::from(error_message))
+                    return InvokeDeviceMethodError::InvalidRequest(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return InvokeDeviceMethodError::PreconditionFailed(String::from(error_message))
+                    return InvokeDeviceMethodError::PreconditionFailed(String::from(error_message));
                 }
                 "RangeNotSatisfiableException" => {
-                    return InvokeDeviceMethodError::RangeNotSatisfiable(String::from(error_message))
+                    return InvokeDeviceMethodError::RangeNotSatisfiable(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return InvokeDeviceMethodError::ResourceConflict(String::from(error_message))
+                    return InvokeDeviceMethodError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return InvokeDeviceMethodError::ResourceNotFound(String::from(error_message))
+                    return InvokeDeviceMethodError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InvokeDeviceMethodError::Validation(error_message.to_string())
+                    return InvokeDeviceMethodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1058,19 +1058,19 @@ impl ListDeviceEventsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListDeviceEventsError::InternalFailure(String::from(error_message))
+                    return ListDeviceEventsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListDeviceEventsError::InvalidRequest(String::from(error_message))
+                    return ListDeviceEventsError::InvalidRequest(String::from(error_message));
                 }
                 "RangeNotSatisfiableException" => {
-                    return ListDeviceEventsError::RangeNotSatisfiable(String::from(error_message))
+                    return ListDeviceEventsError::RangeNotSatisfiable(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListDeviceEventsError::ResourceNotFound(String::from(error_message))
+                    return ListDeviceEventsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeviceEventsError::Validation(error_message.to_string())
+                    return ListDeviceEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1167,16 +1167,16 @@ impl ListDevicesError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListDevicesError::InternalFailure(String::from(error_message))
+                    return ListDevicesError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListDevicesError::InvalidRequest(String::from(error_message))
+                    return ListDevicesError::InvalidRequest(String::from(error_message));
                 }
                 "RangeNotSatisfiableException" => {
-                    return ListDevicesError::RangeNotSatisfiable(String::from(error_message))
+                    return ListDevicesError::RangeNotSatisfiable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDevicesError::Validation(error_message.to_string())
+                    return ListDevicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1272,16 +1272,16 @@ impl UnclaimDeviceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UnclaimDeviceError::InternalFailure(String::from(error_message))
+                    return UnclaimDeviceError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UnclaimDeviceError::InvalidRequest(String::from(error_message))
+                    return UnclaimDeviceError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UnclaimDeviceError::ResourceNotFound(String::from(error_message))
+                    return UnclaimDeviceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UnclaimDeviceError::Validation(error_message.to_string())
+                    return UnclaimDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1377,16 +1377,16 @@ impl UpdateDeviceStateError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateDeviceStateError::InternalFailure(String::from(error_message))
+                    return UpdateDeviceStateError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateDeviceStateError::InvalidRequest(String::from(error_message))
+                    return UpdateDeviceStateError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDeviceStateError::ResourceNotFound(String::from(error_message))
+                    return UpdateDeviceStateError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDeviceStateError::Validation(error_message.to_string())
+                    return UpdateDeviceStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

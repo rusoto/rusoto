@@ -3475,25 +3475,25 @@ impl CreateApiKeyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateApiKeyError::BadRequest(String::from(error_message))
+                    return CreateApiKeyError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateApiKeyError::Conflict(String::from(error_message))
+                    return CreateApiKeyError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateApiKeyError::LimitExceeded(String::from(error_message))
+                    return CreateApiKeyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateApiKeyError::NotFound(String::from(error_message))
+                    return CreateApiKeyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateApiKeyError::TooManyRequests(String::from(error_message))
+                    return CreateApiKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateApiKeyError::Unauthorized(String::from(error_message))
+                    return CreateApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateApiKeyError::Validation(error_message.to_string())
+                    return CreateApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3597,22 +3597,22 @@ impl CreateAuthorizerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateAuthorizerError::BadRequest(String::from(error_message))
+                    return CreateAuthorizerError::BadRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateAuthorizerError::LimitExceeded(String::from(error_message))
+                    return CreateAuthorizerError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateAuthorizerError::NotFound(String::from(error_message))
+                    return CreateAuthorizerError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateAuthorizerError::TooManyRequests(String::from(error_message))
+                    return CreateAuthorizerError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateAuthorizerError::Unauthorized(String::from(error_message))
+                    return CreateAuthorizerError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAuthorizerError::Validation(error_message.to_string())
+                    return CreateAuthorizerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3715,22 +3715,22 @@ impl CreateBasePathMappingError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateBasePathMappingError::BadRequest(String::from(error_message))
+                    return CreateBasePathMappingError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateBasePathMappingError::Conflict(String::from(error_message))
+                    return CreateBasePathMappingError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateBasePathMappingError::NotFound(String::from(error_message))
+                    return CreateBasePathMappingError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateBasePathMappingError::TooManyRequests(String::from(error_message))
+                    return CreateBasePathMappingError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateBasePathMappingError::Unauthorized(String::from(error_message))
+                    return CreateBasePathMappingError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBasePathMappingError::Validation(error_message.to_string())
+                    return CreateBasePathMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3839,28 +3839,28 @@ impl CreateDeploymentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDeploymentError::BadRequest(String::from(error_message))
+                    return CreateDeploymentError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateDeploymentError::Conflict(String::from(error_message))
+                    return CreateDeploymentError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDeploymentError::LimitExceeded(String::from(error_message))
+                    return CreateDeploymentError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDeploymentError::NotFound(String::from(error_message))
+                    return CreateDeploymentError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateDeploymentError::ServiceUnavailable(String::from(error_message))
+                    return CreateDeploymentError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateDeploymentError::TooManyRequests(String::from(error_message))
+                    return CreateDeploymentError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateDeploymentError::Unauthorized(String::from(error_message))
+                    return CreateDeploymentError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDeploymentError::Validation(error_message.to_string())
+                    return CreateDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3967,27 +3967,27 @@ impl CreateDocumentationPartError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDocumentationPartError::BadRequest(String::from(error_message))
+                    return CreateDocumentationPartError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateDocumentationPartError::Conflict(String::from(error_message))
+                    return CreateDocumentationPartError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDocumentationPartError::LimitExceeded(String::from(error_message))
+                    return CreateDocumentationPartError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDocumentationPartError::NotFound(String::from(error_message))
+                    return CreateDocumentationPartError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return CreateDocumentationPartError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return CreateDocumentationPartError::Unauthorized(String::from(error_message))
+                    return CreateDocumentationPartError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDocumentationPartError::Validation(error_message.to_string())
+                    return CreateDocumentationPartError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4095,31 +4095,31 @@ impl CreateDocumentationVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDocumentationVersionError::BadRequest(String::from(error_message))
+                    return CreateDocumentationVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateDocumentationVersionError::Conflict(String::from(error_message))
+                    return CreateDocumentationVersionError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return CreateDocumentationVersionError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateDocumentationVersionError::NotFound(String::from(error_message))
+                    return CreateDocumentationVersionError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return CreateDocumentationVersionError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
                     return CreateDocumentationVersionError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDocumentationVersionError::Validation(error_message.to_string())
+                    return CreateDocumentationVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4223,19 +4223,19 @@ impl CreateDomainNameError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDomainNameError::BadRequest(String::from(error_message))
+                    return CreateDomainNameError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateDomainNameError::Conflict(String::from(error_message))
+                    return CreateDomainNameError::Conflict(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateDomainNameError::TooManyRequests(String::from(error_message))
+                    return CreateDomainNameError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateDomainNameError::Unauthorized(String::from(error_message))
+                    return CreateDomainNameError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDomainNameError::Validation(error_message.to_string())
+                    return CreateDomainNameError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4339,25 +4339,25 @@ impl CreateModelError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateModelError::BadRequest(String::from(error_message))
+                    return CreateModelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateModelError::Conflict(String::from(error_message))
+                    return CreateModelError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateModelError::LimitExceeded(String::from(error_message))
+                    return CreateModelError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateModelError::NotFound(String::from(error_message))
+                    return CreateModelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateModelError::TooManyRequests(String::from(error_message))
+                    return CreateModelError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateModelError::Unauthorized(String::from(error_message))
+                    return CreateModelError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateModelError::Validation(error_message.to_string())
+                    return CreateModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4461,22 +4461,22 @@ impl CreateRequestValidatorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateRequestValidatorError::BadRequest(String::from(error_message))
+                    return CreateRequestValidatorError::BadRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateRequestValidatorError::LimitExceeded(String::from(error_message))
+                    return CreateRequestValidatorError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateRequestValidatorError::NotFound(String::from(error_message))
+                    return CreateRequestValidatorError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateRequestValidatorError::TooManyRequests(String::from(error_message))
+                    return CreateRequestValidatorError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateRequestValidatorError::Unauthorized(String::from(error_message))
+                    return CreateRequestValidatorError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRequestValidatorError::Validation(error_message.to_string())
+                    return CreateRequestValidatorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4583,25 +4583,25 @@ impl CreateResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateResourceError::BadRequest(String::from(error_message))
+                    return CreateResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateResourceError::Conflict(String::from(error_message))
+                    return CreateResourceError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateResourceError::LimitExceeded(String::from(error_message))
+                    return CreateResourceError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateResourceError::NotFound(String::from(error_message))
+                    return CreateResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateResourceError::TooManyRequests(String::from(error_message))
+                    return CreateResourceError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateResourceError::Unauthorized(String::from(error_message))
+                    return CreateResourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateResourceError::Validation(error_message.to_string())
+                    return CreateResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4703,19 +4703,19 @@ impl CreateRestApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateRestApiError::BadRequest(String::from(error_message))
+                    return CreateRestApiError::BadRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateRestApiError::LimitExceeded(String::from(error_message))
+                    return CreateRestApiError::LimitExceeded(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateRestApiError::TooManyRequests(String::from(error_message))
+                    return CreateRestApiError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateRestApiError::Unauthorized(String::from(error_message))
+                    return CreateRestApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRestApiError::Validation(error_message.to_string())
+                    return CreateRestApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4819,25 +4819,25 @@ impl CreateStageError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateStageError::BadRequest(String::from(error_message))
+                    return CreateStageError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateStageError::Conflict(String::from(error_message))
+                    return CreateStageError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateStageError::LimitExceeded(String::from(error_message))
+                    return CreateStageError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateStageError::NotFound(String::from(error_message))
+                    return CreateStageError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateStageError::TooManyRequests(String::from(error_message))
+                    return CreateStageError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateStageError::Unauthorized(String::from(error_message))
+                    return CreateStageError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateStageError::Validation(error_message.to_string())
+                    return CreateStageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4943,25 +4943,25 @@ impl CreateUsagePlanError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateUsagePlanError::BadRequest(String::from(error_message))
+                    return CreateUsagePlanError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateUsagePlanError::Conflict(String::from(error_message))
+                    return CreateUsagePlanError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateUsagePlanError::LimitExceeded(String::from(error_message))
+                    return CreateUsagePlanError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateUsagePlanError::NotFound(String::from(error_message))
+                    return CreateUsagePlanError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUsagePlanError::TooManyRequests(String::from(error_message))
+                    return CreateUsagePlanError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateUsagePlanError::Unauthorized(String::from(error_message))
+                    return CreateUsagePlanError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUsagePlanError::Validation(error_message.to_string())
+                    return CreateUsagePlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5065,22 +5065,22 @@ impl CreateUsagePlanKeyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateUsagePlanKeyError::BadRequest(String::from(error_message))
+                    return CreateUsagePlanKeyError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateUsagePlanKeyError::Conflict(String::from(error_message))
+                    return CreateUsagePlanKeyError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateUsagePlanKeyError::NotFound(String::from(error_message))
+                    return CreateUsagePlanKeyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUsagePlanKeyError::TooManyRequests(String::from(error_message))
+                    return CreateUsagePlanKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateUsagePlanKeyError::Unauthorized(String::from(error_message))
+                    return CreateUsagePlanKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUsagePlanKeyError::Validation(error_message.to_string())
+                    return CreateUsagePlanKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5181,16 +5181,16 @@ impl CreateVpcLinkError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateVpcLinkError::BadRequest(String::from(error_message))
+                    return CreateVpcLinkError::BadRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateVpcLinkError::TooManyRequests(String::from(error_message))
+                    return CreateVpcLinkError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateVpcLinkError::Unauthorized(String::from(error_message))
+                    return CreateVpcLinkError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateVpcLinkError::Validation(error_message.to_string())
+                    return CreateVpcLinkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5287,16 +5287,16 @@ impl DeleteApiKeyError {
 
             match error_type {
                 "NotFoundException" => {
-                    return DeleteApiKeyError::NotFound(String::from(error_message))
+                    return DeleteApiKeyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteApiKeyError::TooManyRequests(String::from(error_message))
+                    return DeleteApiKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteApiKeyError::Unauthorized(String::from(error_message))
+                    return DeleteApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteApiKeyError::Validation(error_message.to_string())
+                    return DeleteApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5397,22 +5397,22 @@ impl DeleteAuthorizerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteAuthorizerError::BadRequest(String::from(error_message))
+                    return DeleteAuthorizerError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteAuthorizerError::Conflict(String::from(error_message))
+                    return DeleteAuthorizerError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteAuthorizerError::NotFound(String::from(error_message))
+                    return DeleteAuthorizerError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteAuthorizerError::TooManyRequests(String::from(error_message))
+                    return DeleteAuthorizerError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteAuthorizerError::Unauthorized(String::from(error_message))
+                    return DeleteAuthorizerError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAuthorizerError::Validation(error_message.to_string())
+                    return DeleteAuthorizerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5515,22 +5515,22 @@ impl DeleteBasePathMappingError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBasePathMappingError::BadRequest(String::from(error_message))
+                    return DeleteBasePathMappingError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteBasePathMappingError::Conflict(String::from(error_message))
+                    return DeleteBasePathMappingError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteBasePathMappingError::NotFound(String::from(error_message))
+                    return DeleteBasePathMappingError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteBasePathMappingError::TooManyRequests(String::from(error_message))
+                    return DeleteBasePathMappingError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteBasePathMappingError::Unauthorized(String::from(error_message))
+                    return DeleteBasePathMappingError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBasePathMappingError::Validation(error_message.to_string())
+                    return DeleteBasePathMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5633,21 +5633,21 @@ impl DeleteClientCertificateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteClientCertificateError::BadRequest(String::from(error_message))
+                    return DeleteClientCertificateError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteClientCertificateError::NotFound(String::from(error_message))
+                    return DeleteClientCertificateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteClientCertificateError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return DeleteClientCertificateError::Unauthorized(String::from(error_message))
+                    return DeleteClientCertificateError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteClientCertificateError::Validation(error_message.to_string())
+                    return DeleteClientCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5749,19 +5749,19 @@ impl DeleteDeploymentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDeploymentError::BadRequest(String::from(error_message))
+                    return DeleteDeploymentError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDeploymentError::NotFound(String::from(error_message))
+                    return DeleteDeploymentError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteDeploymentError::TooManyRequests(String::from(error_message))
+                    return DeleteDeploymentError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteDeploymentError::Unauthorized(String::from(error_message))
+                    return DeleteDeploymentError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDeploymentError::Validation(error_message.to_string())
+                    return DeleteDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5863,24 +5863,24 @@ impl DeleteDocumentationPartError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDocumentationPartError::BadRequest(String::from(error_message))
+                    return DeleteDocumentationPartError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteDocumentationPartError::Conflict(String::from(error_message))
+                    return DeleteDocumentationPartError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDocumentationPartError::NotFound(String::from(error_message))
+                    return DeleteDocumentationPartError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteDocumentationPartError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return DeleteDocumentationPartError::Unauthorized(String::from(error_message))
+                    return DeleteDocumentationPartError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDocumentationPartError::Validation(error_message.to_string())
+                    return DeleteDocumentationPartError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5985,26 +5985,26 @@ impl DeleteDocumentationVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDocumentationVersionError::BadRequest(String::from(error_message))
+                    return DeleteDocumentationVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteDocumentationVersionError::Conflict(String::from(error_message))
+                    return DeleteDocumentationVersionError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDocumentationVersionError::NotFound(String::from(error_message))
+                    return DeleteDocumentationVersionError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteDocumentationVersionError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
                     return DeleteDocumentationVersionError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteDocumentationVersionError::Validation(error_message.to_string())
+                    return DeleteDocumentationVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6105,16 +6105,16 @@ impl DeleteDomainNameError {
 
             match error_type {
                 "NotFoundException" => {
-                    return DeleteDomainNameError::NotFound(String::from(error_message))
+                    return DeleteDomainNameError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteDomainNameError::TooManyRequests(String::from(error_message))
+                    return DeleteDomainNameError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteDomainNameError::Unauthorized(String::from(error_message))
+                    return DeleteDomainNameError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDomainNameError::Validation(error_message.to_string())
+                    return DeleteDomainNameError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6215,22 +6215,22 @@ impl DeleteGatewayResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteGatewayResponseError::BadRequest(String::from(error_message))
+                    return DeleteGatewayResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteGatewayResponseError::Conflict(String::from(error_message))
+                    return DeleteGatewayResponseError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteGatewayResponseError::NotFound(String::from(error_message))
+                    return DeleteGatewayResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteGatewayResponseError::TooManyRequests(String::from(error_message))
+                    return DeleteGatewayResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteGatewayResponseError::Unauthorized(String::from(error_message))
+                    return DeleteGatewayResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGatewayResponseError::Validation(error_message.to_string())
+                    return DeleteGatewayResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6333,19 +6333,19 @@ impl DeleteIntegrationError {
 
             match error_type {
                 "ConflictException" => {
-                    return DeleteIntegrationError::Conflict(String::from(error_message))
+                    return DeleteIntegrationError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteIntegrationError::NotFound(String::from(error_message))
+                    return DeleteIntegrationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIntegrationError::TooManyRequests(String::from(error_message))
+                    return DeleteIntegrationError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteIntegrationError::Unauthorized(String::from(error_message))
+                    return DeleteIntegrationError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIntegrationError::Validation(error_message.to_string())
+                    return DeleteIntegrationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6449,24 +6449,24 @@ impl DeleteIntegrationResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIntegrationResponseError::BadRequest(String::from(error_message))
+                    return DeleteIntegrationResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteIntegrationResponseError::Conflict(String::from(error_message))
+                    return DeleteIntegrationResponseError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteIntegrationResponseError::NotFound(String::from(error_message))
+                    return DeleteIntegrationResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteIntegrationResponseError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return DeleteIntegrationResponseError::Unauthorized(String::from(error_message))
+                    return DeleteIntegrationResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIntegrationResponseError::Validation(error_message.to_string())
+                    return DeleteIntegrationResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6569,19 +6569,19 @@ impl DeleteMethodError {
 
             match error_type {
                 "ConflictException" => {
-                    return DeleteMethodError::Conflict(String::from(error_message))
+                    return DeleteMethodError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteMethodError::NotFound(String::from(error_message))
+                    return DeleteMethodError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteMethodError::TooManyRequests(String::from(error_message))
+                    return DeleteMethodError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteMethodError::Unauthorized(String::from(error_message))
+                    return DeleteMethodError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteMethodError::Validation(error_message.to_string())
+                    return DeleteMethodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6683,22 +6683,22 @@ impl DeleteMethodResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteMethodResponseError::BadRequest(String::from(error_message))
+                    return DeleteMethodResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteMethodResponseError::Conflict(String::from(error_message))
+                    return DeleteMethodResponseError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteMethodResponseError::NotFound(String::from(error_message))
+                    return DeleteMethodResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteMethodResponseError::TooManyRequests(String::from(error_message))
+                    return DeleteMethodResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteMethodResponseError::Unauthorized(String::from(error_message))
+                    return DeleteMethodResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteMethodResponseError::Validation(error_message.to_string())
+                    return DeleteMethodResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6803,22 +6803,22 @@ impl DeleteModelError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteModelError::BadRequest(String::from(error_message))
+                    return DeleteModelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteModelError::Conflict(String::from(error_message))
+                    return DeleteModelError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteModelError::NotFound(String::from(error_message))
+                    return DeleteModelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteModelError::TooManyRequests(String::from(error_message))
+                    return DeleteModelError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteModelError::Unauthorized(String::from(error_message))
+                    return DeleteModelError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteModelError::Validation(error_message.to_string())
+                    return DeleteModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6921,22 +6921,22 @@ impl DeleteRequestValidatorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteRequestValidatorError::BadRequest(String::from(error_message))
+                    return DeleteRequestValidatorError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteRequestValidatorError::Conflict(String::from(error_message))
+                    return DeleteRequestValidatorError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteRequestValidatorError::NotFound(String::from(error_message))
+                    return DeleteRequestValidatorError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteRequestValidatorError::TooManyRequests(String::from(error_message))
+                    return DeleteRequestValidatorError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteRequestValidatorError::Unauthorized(String::from(error_message))
+                    return DeleteRequestValidatorError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRequestValidatorError::Validation(error_message.to_string())
+                    return DeleteRequestValidatorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7041,22 +7041,22 @@ impl DeleteResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteResourceError::BadRequest(String::from(error_message))
+                    return DeleteResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteResourceError::Conflict(String::from(error_message))
+                    return DeleteResourceError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteResourceError::NotFound(String::from(error_message))
+                    return DeleteResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteResourceError::TooManyRequests(String::from(error_message))
+                    return DeleteResourceError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteResourceError::Unauthorized(String::from(error_message))
+                    return DeleteResourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteResourceError::Validation(error_message.to_string())
+                    return DeleteResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7157,19 +7157,19 @@ impl DeleteRestApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteRestApiError::BadRequest(String::from(error_message))
+                    return DeleteRestApiError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteRestApiError::NotFound(String::from(error_message))
+                    return DeleteRestApiError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteRestApiError::TooManyRequests(String::from(error_message))
+                    return DeleteRestApiError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteRestApiError::Unauthorized(String::from(error_message))
+                    return DeleteRestApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRestApiError::Validation(error_message.to_string())
+                    return DeleteRestApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7269,19 +7269,19 @@ impl DeleteStageError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteStageError::BadRequest(String::from(error_message))
+                    return DeleteStageError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteStageError::NotFound(String::from(error_message))
+                    return DeleteStageError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteStageError::TooManyRequests(String::from(error_message))
+                    return DeleteStageError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteStageError::Unauthorized(String::from(error_message))
+                    return DeleteStageError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStageError::Validation(error_message.to_string())
+                    return DeleteStageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7381,19 +7381,19 @@ impl DeleteUsagePlanError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteUsagePlanError::BadRequest(String::from(error_message))
+                    return DeleteUsagePlanError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteUsagePlanError::NotFound(String::from(error_message))
+                    return DeleteUsagePlanError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUsagePlanError::TooManyRequests(String::from(error_message))
+                    return DeleteUsagePlanError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteUsagePlanError::Unauthorized(String::from(error_message))
+                    return DeleteUsagePlanError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUsagePlanError::Validation(error_message.to_string())
+                    return DeleteUsagePlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7495,22 +7495,22 @@ impl DeleteUsagePlanKeyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteUsagePlanKeyError::BadRequest(String::from(error_message))
+                    return DeleteUsagePlanKeyError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteUsagePlanKeyError::Conflict(String::from(error_message))
+                    return DeleteUsagePlanKeyError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteUsagePlanKeyError::NotFound(String::from(error_message))
+                    return DeleteUsagePlanKeyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUsagePlanKeyError::TooManyRequests(String::from(error_message))
+                    return DeleteUsagePlanKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteUsagePlanKeyError::Unauthorized(String::from(error_message))
+                    return DeleteUsagePlanKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUsagePlanKeyError::Validation(error_message.to_string())
+                    return DeleteUsagePlanKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7613,19 +7613,19 @@ impl DeleteVpcLinkError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteVpcLinkError::BadRequest(String::from(error_message))
+                    return DeleteVpcLinkError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteVpcLinkError::NotFound(String::from(error_message))
+                    return DeleteVpcLinkError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteVpcLinkError::TooManyRequests(String::from(error_message))
+                    return DeleteVpcLinkError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteVpcLinkError::Unauthorized(String::from(error_message))
+                    return DeleteVpcLinkError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteVpcLinkError::Validation(error_message.to_string())
+                    return DeleteVpcLinkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7725,23 +7725,23 @@ impl FlushStageAuthorizersCacheError {
 
             match error_type {
                 "BadRequestException" => {
-                    return FlushStageAuthorizersCacheError::BadRequest(String::from(error_message))
+                    return FlushStageAuthorizersCacheError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return FlushStageAuthorizersCacheError::NotFound(String::from(error_message))
+                    return FlushStageAuthorizersCacheError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return FlushStageAuthorizersCacheError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
                     return FlushStageAuthorizersCacheError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return FlushStageAuthorizersCacheError::Validation(error_message.to_string())
+                    return FlushStageAuthorizersCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7843,19 +7843,19 @@ impl FlushStageCacheError {
 
             match error_type {
                 "BadRequestException" => {
-                    return FlushStageCacheError::BadRequest(String::from(error_message))
+                    return FlushStageCacheError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return FlushStageCacheError::NotFound(String::from(error_message))
+                    return FlushStageCacheError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return FlushStageCacheError::TooManyRequests(String::from(error_message))
+                    return FlushStageCacheError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return FlushStageCacheError::Unauthorized(String::from(error_message))
+                    return FlushStageCacheError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return FlushStageCacheError::Validation(error_message.to_string())
+                    return FlushStageCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7955,18 +7955,18 @@ impl GenerateClientCertificateError {
                 "LimitExceededException" => {
                     return GenerateClientCertificateError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return GenerateClientCertificateError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return GenerateClientCertificateError::Unauthorized(String::from(error_message))
+                    return GenerateClientCertificateError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GenerateClientCertificateError::Validation(error_message.to_string())
+                    return GenerateClientCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8065,16 +8065,16 @@ impl GetAccountError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetAccountError::NotFound(String::from(error_message))
+                    return GetAccountError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetAccountError::TooManyRequests(String::from(error_message))
+                    return GetAccountError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetAccountError::Unauthorized(String::from(error_message))
+                    return GetAccountError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAccountError::Validation(error_message.to_string())
+                    return GetAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8172,13 +8172,13 @@ impl GetApiKeyError {
             match error_type {
                 "NotFoundException" => return GetApiKeyError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetApiKeyError::TooManyRequests(String::from(error_message))
+                    return GetApiKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetApiKeyError::Unauthorized(String::from(error_message))
+                    return GetApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetApiKeyError::Validation(error_message.to_string())
+                    return GetApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8275,16 +8275,16 @@ impl GetApiKeysError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetApiKeysError::BadRequest(String::from(error_message))
+                    return GetApiKeysError::BadRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetApiKeysError::TooManyRequests(String::from(error_message))
+                    return GetApiKeysError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetApiKeysError::Unauthorized(String::from(error_message))
+                    return GetApiKeysError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetApiKeysError::Validation(error_message.to_string())
+                    return GetApiKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8381,16 +8381,16 @@ impl GetAuthorizerError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetAuthorizerError::NotFound(String::from(error_message))
+                    return GetAuthorizerError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetAuthorizerError::TooManyRequests(String::from(error_message))
+                    return GetAuthorizerError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetAuthorizerError::Unauthorized(String::from(error_message))
+                    return GetAuthorizerError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAuthorizerError::Validation(error_message.to_string())
+                    return GetAuthorizerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8489,19 +8489,19 @@ impl GetAuthorizersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetAuthorizersError::BadRequest(String::from(error_message))
+                    return GetAuthorizersError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetAuthorizersError::NotFound(String::from(error_message))
+                    return GetAuthorizersError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetAuthorizersError::TooManyRequests(String::from(error_message))
+                    return GetAuthorizersError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetAuthorizersError::Unauthorized(String::from(error_message))
+                    return GetAuthorizersError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAuthorizersError::Validation(error_message.to_string())
+                    return GetAuthorizersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8599,16 +8599,16 @@ impl GetBasePathMappingError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetBasePathMappingError::NotFound(String::from(error_message))
+                    return GetBasePathMappingError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetBasePathMappingError::TooManyRequests(String::from(error_message))
+                    return GetBasePathMappingError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetBasePathMappingError::Unauthorized(String::from(error_message))
+                    return GetBasePathMappingError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBasePathMappingError::Validation(error_message.to_string())
+                    return GetBasePathMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8707,16 +8707,16 @@ impl GetBasePathMappingsError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetBasePathMappingsError::NotFound(String::from(error_message))
+                    return GetBasePathMappingsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetBasePathMappingsError::TooManyRequests(String::from(error_message))
+                    return GetBasePathMappingsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetBasePathMappingsError::Unauthorized(String::from(error_message))
+                    return GetBasePathMappingsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBasePathMappingsError::Validation(error_message.to_string())
+                    return GetBasePathMappingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8815,16 +8815,16 @@ impl GetClientCertificateError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetClientCertificateError::NotFound(String::from(error_message))
+                    return GetClientCertificateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetClientCertificateError::TooManyRequests(String::from(error_message))
+                    return GetClientCertificateError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetClientCertificateError::Unauthorized(String::from(error_message))
+                    return GetClientCertificateError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetClientCertificateError::Validation(error_message.to_string())
+                    return GetClientCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8923,16 +8923,16 @@ impl GetClientCertificatesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetClientCertificatesError::BadRequest(String::from(error_message))
+                    return GetClientCertificatesError::BadRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetClientCertificatesError::TooManyRequests(String::from(error_message))
+                    return GetClientCertificatesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetClientCertificatesError::Unauthorized(String::from(error_message))
+                    return GetClientCertificatesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetClientCertificatesError::Validation(error_message.to_string())
+                    return GetClientCertificatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9033,19 +9033,19 @@ impl GetDeploymentError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetDeploymentError::NotFound(String::from(error_message))
+                    return GetDeploymentError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDeploymentError::ServiceUnavailable(String::from(error_message))
+                    return GetDeploymentError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDeploymentError::TooManyRequests(String::from(error_message))
+                    return GetDeploymentError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDeploymentError::Unauthorized(String::from(error_message))
+                    return GetDeploymentError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeploymentError::Validation(error_message.to_string())
+                    return GetDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9145,19 +9145,19 @@ impl GetDeploymentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDeploymentsError::BadRequest(String::from(error_message))
+                    return GetDeploymentsError::BadRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDeploymentsError::ServiceUnavailable(String::from(error_message))
+                    return GetDeploymentsError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDeploymentsError::TooManyRequests(String::from(error_message))
+                    return GetDeploymentsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDeploymentsError::Unauthorized(String::from(error_message))
+                    return GetDeploymentsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeploymentsError::Validation(error_message.to_string())
+                    return GetDeploymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9255,16 +9255,16 @@ impl GetDocumentationPartError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetDocumentationPartError::NotFound(String::from(error_message))
+                    return GetDocumentationPartError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDocumentationPartError::TooManyRequests(String::from(error_message))
+                    return GetDocumentationPartError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDocumentationPartError::Unauthorized(String::from(error_message))
+                    return GetDocumentationPartError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDocumentationPartError::Validation(error_message.to_string())
+                    return GetDocumentationPartError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9365,19 +9365,19 @@ impl GetDocumentationPartsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDocumentationPartsError::BadRequest(String::from(error_message))
+                    return GetDocumentationPartsError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDocumentationPartsError::NotFound(String::from(error_message))
+                    return GetDocumentationPartsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDocumentationPartsError::TooManyRequests(String::from(error_message))
+                    return GetDocumentationPartsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDocumentationPartsError::Unauthorized(String::from(error_message))
+                    return GetDocumentationPartsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDocumentationPartsError::Validation(error_message.to_string())
+                    return GetDocumentationPartsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9477,18 +9477,18 @@ impl GetDocumentationVersionError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetDocumentationVersionError::NotFound(String::from(error_message))
+                    return GetDocumentationVersionError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return GetDocumentationVersionError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return GetDocumentationVersionError::Unauthorized(String::from(error_message))
+                    return GetDocumentationVersionError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDocumentationVersionError::Validation(error_message.to_string())
+                    return GetDocumentationVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9589,21 +9589,21 @@ impl GetDocumentationVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDocumentationVersionsError::BadRequest(String::from(error_message))
+                    return GetDocumentationVersionsError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDocumentationVersionsError::NotFound(String::from(error_message))
+                    return GetDocumentationVersionsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return GetDocumentationVersionsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return GetDocumentationVersionsError::Unauthorized(String::from(error_message))
+                    return GetDocumentationVersionsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDocumentationVersionsError::Validation(error_message.to_string())
+                    return GetDocumentationVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9705,19 +9705,19 @@ impl GetDomainNameError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetDomainNameError::NotFound(String::from(error_message))
+                    return GetDomainNameError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDomainNameError::ServiceUnavailable(String::from(error_message))
+                    return GetDomainNameError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDomainNameError::TooManyRequests(String::from(error_message))
+                    return GetDomainNameError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDomainNameError::Unauthorized(String::from(error_message))
+                    return GetDomainNameError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDomainNameError::Validation(error_message.to_string())
+                    return GetDomainNameError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9815,16 +9815,16 @@ impl GetDomainNamesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDomainNamesError::BadRequest(String::from(error_message))
+                    return GetDomainNamesError::BadRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetDomainNamesError::TooManyRequests(String::from(error_message))
+                    return GetDomainNamesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDomainNamesError::Unauthorized(String::from(error_message))
+                    return GetDomainNamesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDomainNamesError::Validation(error_message.to_string())
+                    return GetDomainNamesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9925,18 +9925,18 @@ impl GetExportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetExportError::BadRequest(String::from(error_message))
+                    return GetExportError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return GetExportError::Conflict(String::from(error_message)),
                 "NotFoundException" => return GetExportError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetExportError::TooManyRequests(String::from(error_message))
+                    return GetExportError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetExportError::Unauthorized(String::from(error_message))
+                    return GetExportError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetExportError::Validation(error_message.to_string())
+                    return GetExportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10035,16 +10035,16 @@ impl GetGatewayResponseError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetGatewayResponseError::NotFound(String::from(error_message))
+                    return GetGatewayResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetGatewayResponseError::TooManyRequests(String::from(error_message))
+                    return GetGatewayResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetGatewayResponseError::Unauthorized(String::from(error_message))
+                    return GetGatewayResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGatewayResponseError::Validation(error_message.to_string())
+                    return GetGatewayResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10145,19 +10145,19 @@ impl GetGatewayResponsesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGatewayResponsesError::BadRequest(String::from(error_message))
+                    return GetGatewayResponsesError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetGatewayResponsesError::NotFound(String::from(error_message))
+                    return GetGatewayResponsesError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetGatewayResponsesError::TooManyRequests(String::from(error_message))
+                    return GetGatewayResponsesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetGatewayResponsesError::Unauthorized(String::from(error_message))
+                    return GetGatewayResponsesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGatewayResponsesError::Validation(error_message.to_string())
+                    return GetGatewayResponsesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10257,16 +10257,16 @@ impl GetIntegrationError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetIntegrationError::NotFound(String::from(error_message))
+                    return GetIntegrationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetIntegrationError::TooManyRequests(String::from(error_message))
+                    return GetIntegrationError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetIntegrationError::Unauthorized(String::from(error_message))
+                    return GetIntegrationError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIntegrationError::Validation(error_message.to_string())
+                    return GetIntegrationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10363,16 +10363,16 @@ impl GetIntegrationResponseError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetIntegrationResponseError::NotFound(String::from(error_message))
+                    return GetIntegrationResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetIntegrationResponseError::TooManyRequests(String::from(error_message))
+                    return GetIntegrationResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetIntegrationResponseError::Unauthorized(String::from(error_message))
+                    return GetIntegrationResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIntegrationResponseError::Validation(error_message.to_string())
+                    return GetIntegrationResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10472,13 +10472,13 @@ impl GetMethodError {
             match error_type {
                 "NotFoundException" => return GetMethodError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetMethodError::TooManyRequests(String::from(error_message))
+                    return GetMethodError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetMethodError::Unauthorized(String::from(error_message))
+                    return GetMethodError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMethodError::Validation(error_message.to_string())
+                    return GetMethodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10575,16 +10575,16 @@ impl GetMethodResponseError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetMethodResponseError::NotFound(String::from(error_message))
+                    return GetMethodResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetMethodResponseError::TooManyRequests(String::from(error_message))
+                    return GetMethodResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetMethodResponseError::Unauthorized(String::from(error_message))
+                    return GetMethodResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMethodResponseError::Validation(error_message.to_string())
+                    return GetMethodResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10684,13 +10684,13 @@ impl GetModelError {
             match error_type {
                 "NotFoundException" => return GetModelError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetModelError::TooManyRequests(String::from(error_message))
+                    return GetModelError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetModelError::Unauthorized(String::from(error_message))
+                    return GetModelError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetModelError::Validation(error_message.to_string())
+                    return GetModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10789,19 +10789,19 @@ impl GetModelTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetModelTemplateError::BadRequest(String::from(error_message))
+                    return GetModelTemplateError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetModelTemplateError::NotFound(String::from(error_message))
+                    return GetModelTemplateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetModelTemplateError::TooManyRequests(String::from(error_message))
+                    return GetModelTemplateError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetModelTemplateError::Unauthorized(String::from(error_message))
+                    return GetModelTemplateError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetModelTemplateError::Validation(error_message.to_string())
+                    return GetModelTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10901,17 +10901,17 @@ impl GetModelsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetModelsError::BadRequest(String::from(error_message))
+                    return GetModelsError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => return GetModelsError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetModelsError::TooManyRequests(String::from(error_message))
+                    return GetModelsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetModelsError::Unauthorized(String::from(error_message))
+                    return GetModelsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetModelsError::Validation(error_message.to_string())
+                    return GetModelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11009,16 +11009,16 @@ impl GetRequestValidatorError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetRequestValidatorError::NotFound(String::from(error_message))
+                    return GetRequestValidatorError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetRequestValidatorError::TooManyRequests(String::from(error_message))
+                    return GetRequestValidatorError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetRequestValidatorError::Unauthorized(String::from(error_message))
+                    return GetRequestValidatorError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRequestValidatorError::Validation(error_message.to_string())
+                    return GetRequestValidatorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11119,19 +11119,19 @@ impl GetRequestValidatorsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetRequestValidatorsError::BadRequest(String::from(error_message))
+                    return GetRequestValidatorsError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetRequestValidatorsError::NotFound(String::from(error_message))
+                    return GetRequestValidatorsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetRequestValidatorsError::TooManyRequests(String::from(error_message))
+                    return GetRequestValidatorsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetRequestValidatorsError::Unauthorized(String::from(error_message))
+                    return GetRequestValidatorsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRequestValidatorsError::Validation(error_message.to_string())
+                    return GetRequestValidatorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11231,16 +11231,16 @@ impl GetResourceError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetResourceError::NotFound(String::from(error_message))
+                    return GetResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetResourceError::TooManyRequests(String::from(error_message))
+                    return GetResourceError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetResourceError::Unauthorized(String::from(error_message))
+                    return GetResourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResourceError::Validation(error_message.to_string())
+                    return GetResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11339,19 +11339,19 @@ impl GetResourcesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetResourcesError::BadRequest(String::from(error_message))
+                    return GetResourcesError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetResourcesError::NotFound(String::from(error_message))
+                    return GetResourcesError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetResourcesError::TooManyRequests(String::from(error_message))
+                    return GetResourcesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetResourcesError::Unauthorized(String::from(error_message))
+                    return GetResourcesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResourcesError::Validation(error_message.to_string())
+                    return GetResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11449,16 +11449,16 @@ impl GetRestApiError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetRestApiError::NotFound(String::from(error_message))
+                    return GetRestApiError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetRestApiError::TooManyRequests(String::from(error_message))
+                    return GetRestApiError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetRestApiError::Unauthorized(String::from(error_message))
+                    return GetRestApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRestApiError::Validation(error_message.to_string())
+                    return GetRestApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11555,16 +11555,16 @@ impl GetRestApisError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetRestApisError::BadRequest(String::from(error_message))
+                    return GetRestApisError::BadRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetRestApisError::TooManyRequests(String::from(error_message))
+                    return GetRestApisError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetRestApisError::Unauthorized(String::from(error_message))
+                    return GetRestApisError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRestApisError::Validation(error_message.to_string())
+                    return GetRestApisError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11665,15 +11665,15 @@ impl GetSdkError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSdkError::BadRequest(String::from(error_message))
+                    return GetSdkError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return GetSdkError::Conflict(String::from(error_message)),
                 "NotFoundException" => return GetSdkError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetSdkError::TooManyRequests(String::from(error_message))
+                    return GetSdkError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetSdkError::Unauthorized(String::from(error_message))
+                    return GetSdkError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => return GetSdkError::Validation(error_message.to_string()),
                 _ => {}
@@ -11773,16 +11773,16 @@ impl GetSdkTypeError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetSdkTypeError::NotFound(String::from(error_message))
+                    return GetSdkTypeError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetSdkTypeError::TooManyRequests(String::from(error_message))
+                    return GetSdkTypeError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetSdkTypeError::Unauthorized(String::from(error_message))
+                    return GetSdkTypeError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSdkTypeError::Validation(error_message.to_string())
+                    return GetSdkTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11877,13 +11877,13 @@ impl GetSdkTypesError {
 
             match error_type {
                 "TooManyRequestsException" => {
-                    return GetSdkTypesError::TooManyRequests(String::from(error_message))
+                    return GetSdkTypesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetSdkTypesError::Unauthorized(String::from(error_message))
+                    return GetSdkTypesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSdkTypesError::Validation(error_message.to_string())
+                    return GetSdkTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11980,13 +11980,13 @@ impl GetStageError {
             match error_type {
                 "NotFoundException" => return GetStageError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetStageError::TooManyRequests(String::from(error_message))
+                    return GetStageError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetStageError::Unauthorized(String::from(error_message))
+                    return GetStageError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetStageError::Validation(error_message.to_string())
+                    return GetStageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12084,13 +12084,13 @@ impl GetStagesError {
             match error_type {
                 "NotFoundException" => return GetStagesError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetStagesError::TooManyRequests(String::from(error_message))
+                    return GetStagesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetStagesError::Unauthorized(String::from(error_message))
+                    return GetStagesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetStagesError::Validation(error_message.to_string())
+                    return GetStagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12191,17 +12191,17 @@ impl GetTagsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetTagsError::BadRequest(String::from(error_message))
+                    return GetTagsError::BadRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetTagsError::LimitExceeded(String::from(error_message))
+                    return GetTagsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetTagsError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetTagsError::TooManyRequests(String::from(error_message))
+                    return GetTagsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetTagsError::Unauthorized(String::from(error_message))
+                    return GetTagsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => return GetTagsError::Validation(error_message.to_string()),
                 _ => {}
@@ -12303,17 +12303,17 @@ impl GetUsageError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUsageError::BadRequest(String::from(error_message))
+                    return GetUsageError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => return GetUsageError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetUsageError::TooManyRequests(String::from(error_message))
+                    return GetUsageError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetUsageError::Unauthorized(String::from(error_message))
+                    return GetUsageError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUsageError::Validation(error_message.to_string())
+                    return GetUsageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12413,19 +12413,19 @@ impl GetUsagePlanError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUsagePlanError::BadRequest(String::from(error_message))
+                    return GetUsagePlanError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetUsagePlanError::NotFound(String::from(error_message))
+                    return GetUsagePlanError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUsagePlanError::TooManyRequests(String::from(error_message))
+                    return GetUsagePlanError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetUsagePlanError::Unauthorized(String::from(error_message))
+                    return GetUsagePlanError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUsagePlanError::Validation(error_message.to_string())
+                    return GetUsagePlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12525,19 +12525,19 @@ impl GetUsagePlanKeyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUsagePlanKeyError::BadRequest(String::from(error_message))
+                    return GetUsagePlanKeyError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetUsagePlanKeyError::NotFound(String::from(error_message))
+                    return GetUsagePlanKeyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUsagePlanKeyError::TooManyRequests(String::from(error_message))
+                    return GetUsagePlanKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetUsagePlanKeyError::Unauthorized(String::from(error_message))
+                    return GetUsagePlanKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUsagePlanKeyError::Validation(error_message.to_string())
+                    return GetUsagePlanKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12637,19 +12637,19 @@ impl GetUsagePlanKeysError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUsagePlanKeysError::BadRequest(String::from(error_message))
+                    return GetUsagePlanKeysError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetUsagePlanKeysError::NotFound(String::from(error_message))
+                    return GetUsagePlanKeysError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUsagePlanKeysError::TooManyRequests(String::from(error_message))
+                    return GetUsagePlanKeysError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetUsagePlanKeysError::Unauthorized(String::from(error_message))
+                    return GetUsagePlanKeysError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUsagePlanKeysError::Validation(error_message.to_string())
+                    return GetUsagePlanKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12751,22 +12751,22 @@ impl GetUsagePlansError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUsagePlansError::BadRequest(String::from(error_message))
+                    return GetUsagePlansError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return GetUsagePlansError::Conflict(String::from(error_message))
+                    return GetUsagePlansError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetUsagePlansError::NotFound(String::from(error_message))
+                    return GetUsagePlansError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetUsagePlansError::TooManyRequests(String::from(error_message))
+                    return GetUsagePlansError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetUsagePlansError::Unauthorized(String::from(error_message))
+                    return GetUsagePlansError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUsagePlansError::Validation(error_message.to_string())
+                    return GetUsagePlansError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12865,16 +12865,16 @@ impl GetVpcLinkError {
 
             match error_type {
                 "NotFoundException" => {
-                    return GetVpcLinkError::NotFound(String::from(error_message))
+                    return GetVpcLinkError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetVpcLinkError::TooManyRequests(String::from(error_message))
+                    return GetVpcLinkError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetVpcLinkError::Unauthorized(String::from(error_message))
+                    return GetVpcLinkError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetVpcLinkError::Validation(error_message.to_string())
+                    return GetVpcLinkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12971,16 +12971,16 @@ impl GetVpcLinksError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetVpcLinksError::BadRequest(String::from(error_message))
+                    return GetVpcLinksError::BadRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetVpcLinksError::TooManyRequests(String::from(error_message))
+                    return GetVpcLinksError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetVpcLinksError::Unauthorized(String::from(error_message))
+                    return GetVpcLinksError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetVpcLinksError::Validation(error_message.to_string())
+                    return GetVpcLinksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13083,25 +13083,25 @@ impl ImportApiKeysError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ImportApiKeysError::BadRequest(String::from(error_message))
+                    return ImportApiKeysError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ImportApiKeysError::Conflict(String::from(error_message))
+                    return ImportApiKeysError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ImportApiKeysError::LimitExceeded(String::from(error_message))
+                    return ImportApiKeysError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ImportApiKeysError::NotFound(String::from(error_message))
+                    return ImportApiKeysError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ImportApiKeysError::TooManyRequests(String::from(error_message))
+                    return ImportApiKeysError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ImportApiKeysError::Unauthorized(String::from(error_message))
+                    return ImportApiKeysError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ImportApiKeysError::Validation(error_message.to_string())
+                    return ImportApiKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13205,24 +13205,24 @@ impl ImportDocumentationPartsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ImportDocumentationPartsError::BadRequest(String::from(error_message))
+                    return ImportDocumentationPartsError::BadRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ImportDocumentationPartsError::LimitExceeded(String::from(error_message))
+                    return ImportDocumentationPartsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ImportDocumentationPartsError::NotFound(String::from(error_message))
+                    return ImportDocumentationPartsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ImportDocumentationPartsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return ImportDocumentationPartsError::Unauthorized(String::from(error_message))
+                    return ImportDocumentationPartsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ImportDocumentationPartsError::Validation(error_message.to_string())
+                    return ImportDocumentationPartsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13327,22 +13327,22 @@ impl ImportRestApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ImportRestApiError::BadRequest(String::from(error_message))
+                    return ImportRestApiError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ImportRestApiError::Conflict(String::from(error_message))
+                    return ImportRestApiError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ImportRestApiError::LimitExceeded(String::from(error_message))
+                    return ImportRestApiError::LimitExceeded(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ImportRestApiError::TooManyRequests(String::from(error_message))
+                    return ImportRestApiError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ImportRestApiError::Unauthorized(String::from(error_message))
+                    return ImportRestApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ImportRestApiError::Validation(error_message.to_string())
+                    return ImportRestApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13445,22 +13445,22 @@ impl PutGatewayResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutGatewayResponseError::BadRequest(String::from(error_message))
+                    return PutGatewayResponseError::BadRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutGatewayResponseError::LimitExceeded(String::from(error_message))
+                    return PutGatewayResponseError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutGatewayResponseError::NotFound(String::from(error_message))
+                    return PutGatewayResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutGatewayResponseError::TooManyRequests(String::from(error_message))
+                    return PutGatewayResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutGatewayResponseError::Unauthorized(String::from(error_message))
+                    return PutGatewayResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutGatewayResponseError::Validation(error_message.to_string())
+                    return PutGatewayResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13565,22 +13565,22 @@ impl PutIntegrationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutIntegrationError::BadRequest(String::from(error_message))
+                    return PutIntegrationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PutIntegrationError::Conflict(String::from(error_message))
+                    return PutIntegrationError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutIntegrationError::NotFound(String::from(error_message))
+                    return PutIntegrationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutIntegrationError::TooManyRequests(String::from(error_message))
+                    return PutIntegrationError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutIntegrationError::Unauthorized(String::from(error_message))
+                    return PutIntegrationError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutIntegrationError::Validation(error_message.to_string())
+                    return PutIntegrationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13685,25 +13685,25 @@ impl PutIntegrationResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutIntegrationResponseError::BadRequest(String::from(error_message))
+                    return PutIntegrationResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PutIntegrationResponseError::Conflict(String::from(error_message))
+                    return PutIntegrationResponseError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutIntegrationResponseError::LimitExceeded(String::from(error_message))
+                    return PutIntegrationResponseError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutIntegrationResponseError::NotFound(String::from(error_message))
+                    return PutIntegrationResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutIntegrationResponseError::TooManyRequests(String::from(error_message))
+                    return PutIntegrationResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutIntegrationResponseError::Unauthorized(String::from(error_message))
+                    return PutIntegrationResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutIntegrationResponseError::Validation(error_message.to_string())
+                    return PutIntegrationResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13811,21 +13811,21 @@ impl PutMethodError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutMethodError::BadRequest(String::from(error_message))
+                    return PutMethodError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return PutMethodError::Conflict(String::from(error_message)),
                 "LimitExceededException" => {
-                    return PutMethodError::LimitExceeded(String::from(error_message))
+                    return PutMethodError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return PutMethodError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return PutMethodError::TooManyRequests(String::from(error_message))
+                    return PutMethodError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutMethodError::Unauthorized(String::from(error_message))
+                    return PutMethodError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutMethodError::Validation(error_message.to_string())
+                    return PutMethodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13931,25 +13931,25 @@ impl PutMethodResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutMethodResponseError::BadRequest(String::from(error_message))
+                    return PutMethodResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PutMethodResponseError::Conflict(String::from(error_message))
+                    return PutMethodResponseError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutMethodResponseError::LimitExceeded(String::from(error_message))
+                    return PutMethodResponseError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutMethodResponseError::NotFound(String::from(error_message))
+                    return PutMethodResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutMethodResponseError::TooManyRequests(String::from(error_message))
+                    return PutMethodResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutMethodResponseError::Unauthorized(String::from(error_message))
+                    return PutMethodResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutMethodResponseError::Validation(error_message.to_string())
+                    return PutMethodResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14057,25 +14057,25 @@ impl PutRestApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutRestApiError::BadRequest(String::from(error_message))
+                    return PutRestApiError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PutRestApiError::Conflict(String::from(error_message))
+                    return PutRestApiError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutRestApiError::LimitExceeded(String::from(error_message))
+                    return PutRestApiError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutRestApiError::NotFound(String::from(error_message))
+                    return PutRestApiError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutRestApiError::TooManyRequests(String::from(error_message))
+                    return PutRestApiError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return PutRestApiError::Unauthorized(String::from(error_message))
+                    return PutRestApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutRestApiError::Validation(error_message.to_string())
+                    return PutRestApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14181,25 +14181,25 @@ impl TagResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return TagResourceError::BadRequest(String::from(error_message))
+                    return TagResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return TagResourceError::Conflict(String::from(error_message))
+                    return TagResourceError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message))
+                    return TagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return TagResourceError::NotFound(String::from(error_message))
+                    return TagResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return TagResourceError::TooManyRequests(String::from(error_message))
+                    return TagResourceError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return TagResourceError::Unauthorized(String::from(error_message))
+                    return TagResourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14301,19 +14301,19 @@ impl TestInvokeAuthorizerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return TestInvokeAuthorizerError::BadRequest(String::from(error_message))
+                    return TestInvokeAuthorizerError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return TestInvokeAuthorizerError::NotFound(String::from(error_message))
+                    return TestInvokeAuthorizerError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return TestInvokeAuthorizerError::TooManyRequests(String::from(error_message))
+                    return TestInvokeAuthorizerError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return TestInvokeAuthorizerError::Unauthorized(String::from(error_message))
+                    return TestInvokeAuthorizerError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TestInvokeAuthorizerError::Validation(error_message.to_string())
+                    return TestInvokeAuthorizerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14415,19 +14415,19 @@ impl TestInvokeMethodError {
 
             match error_type {
                 "BadRequestException" => {
-                    return TestInvokeMethodError::BadRequest(String::from(error_message))
+                    return TestInvokeMethodError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return TestInvokeMethodError::NotFound(String::from(error_message))
+                    return TestInvokeMethodError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return TestInvokeMethodError::TooManyRequests(String::from(error_message))
+                    return TestInvokeMethodError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return TestInvokeMethodError::Unauthorized(String::from(error_message))
+                    return TestInvokeMethodError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TestInvokeMethodError::Validation(error_message.to_string())
+                    return TestInvokeMethodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14529,22 +14529,22 @@ impl UntagResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UntagResourceError::BadRequest(String::from(error_message))
+                    return UntagResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UntagResourceError::Conflict(String::from(error_message))
+                    return UntagResourceError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UntagResourceError::NotFound(String::from(error_message))
+                    return UntagResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UntagResourceError::TooManyRequests(String::from(error_message))
+                    return UntagResourceError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UntagResourceError::Unauthorized(String::from(error_message))
+                    return UntagResourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14645,19 +14645,19 @@ impl UpdateAccountError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateAccountError::BadRequest(String::from(error_message))
+                    return UpdateAccountError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateAccountError::NotFound(String::from(error_message))
+                    return UpdateAccountError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateAccountError::TooManyRequests(String::from(error_message))
+                    return UpdateAccountError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateAccountError::Unauthorized(String::from(error_message))
+                    return UpdateAccountError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAccountError::Validation(error_message.to_string())
+                    return UpdateAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14759,22 +14759,22 @@ impl UpdateApiKeyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateApiKeyError::BadRequest(String::from(error_message))
+                    return UpdateApiKeyError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateApiKeyError::Conflict(String::from(error_message))
+                    return UpdateApiKeyError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateApiKeyError::NotFound(String::from(error_message))
+                    return UpdateApiKeyError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateApiKeyError::TooManyRequests(String::from(error_message))
+                    return UpdateApiKeyError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateApiKeyError::Unauthorized(String::from(error_message))
+                    return UpdateApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateApiKeyError::Validation(error_message.to_string())
+                    return UpdateApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14875,19 +14875,19 @@ impl UpdateAuthorizerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateAuthorizerError::BadRequest(String::from(error_message))
+                    return UpdateAuthorizerError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateAuthorizerError::NotFound(String::from(error_message))
+                    return UpdateAuthorizerError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateAuthorizerError::TooManyRequests(String::from(error_message))
+                    return UpdateAuthorizerError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateAuthorizerError::Unauthorized(String::from(error_message))
+                    return UpdateAuthorizerError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAuthorizerError::Validation(error_message.to_string())
+                    return UpdateAuthorizerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14989,22 +14989,22 @@ impl UpdateBasePathMappingError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateBasePathMappingError::BadRequest(String::from(error_message))
+                    return UpdateBasePathMappingError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateBasePathMappingError::Conflict(String::from(error_message))
+                    return UpdateBasePathMappingError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateBasePathMappingError::NotFound(String::from(error_message))
+                    return UpdateBasePathMappingError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateBasePathMappingError::TooManyRequests(String::from(error_message))
+                    return UpdateBasePathMappingError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateBasePathMappingError::Unauthorized(String::from(error_message))
+                    return UpdateBasePathMappingError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateBasePathMappingError::Validation(error_message.to_string())
+                    return UpdateBasePathMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15107,21 +15107,21 @@ impl UpdateClientCertificateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateClientCertificateError::BadRequest(String::from(error_message))
+                    return UpdateClientCertificateError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateClientCertificateError::NotFound(String::from(error_message))
+                    return UpdateClientCertificateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateClientCertificateError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return UpdateClientCertificateError::Unauthorized(String::from(error_message))
+                    return UpdateClientCertificateError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateClientCertificateError::Validation(error_message.to_string())
+                    return UpdateClientCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15225,22 +15225,22 @@ impl UpdateDeploymentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDeploymentError::BadRequest(String::from(error_message))
+                    return UpdateDeploymentError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDeploymentError::NotFound(String::from(error_message))
+                    return UpdateDeploymentError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateDeploymentError::ServiceUnavailable(String::from(error_message))
+                    return UpdateDeploymentError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateDeploymentError::TooManyRequests(String::from(error_message))
+                    return UpdateDeploymentError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateDeploymentError::Unauthorized(String::from(error_message))
+                    return UpdateDeploymentError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDeploymentError::Validation(error_message.to_string())
+                    return UpdateDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15345,27 +15345,27 @@ impl UpdateDocumentationPartError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDocumentationPartError::BadRequest(String::from(error_message))
+                    return UpdateDocumentationPartError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateDocumentationPartError::Conflict(String::from(error_message))
+                    return UpdateDocumentationPartError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateDocumentationPartError::LimitExceeded(String::from(error_message))
+                    return UpdateDocumentationPartError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDocumentationPartError::NotFound(String::from(error_message))
+                    return UpdateDocumentationPartError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateDocumentationPartError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return UpdateDocumentationPartError::Unauthorized(String::from(error_message))
+                    return UpdateDocumentationPartError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDocumentationPartError::Validation(error_message.to_string())
+                    return UpdateDocumentationPartError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15471,26 +15471,26 @@ impl UpdateDocumentationVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDocumentationVersionError::BadRequest(String::from(error_message))
+                    return UpdateDocumentationVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateDocumentationVersionError::Conflict(String::from(error_message))
+                    return UpdateDocumentationVersionError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDocumentationVersionError::NotFound(String::from(error_message))
+                    return UpdateDocumentationVersionError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateDocumentationVersionError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
                     return UpdateDocumentationVersionError::Unauthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDocumentationVersionError::Validation(error_message.to_string())
+                    return UpdateDocumentationVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15595,22 +15595,22 @@ impl UpdateDomainNameError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDomainNameError::BadRequest(String::from(error_message))
+                    return UpdateDomainNameError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateDomainNameError::Conflict(String::from(error_message))
+                    return UpdateDomainNameError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDomainNameError::NotFound(String::from(error_message))
+                    return UpdateDomainNameError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateDomainNameError::TooManyRequests(String::from(error_message))
+                    return UpdateDomainNameError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateDomainNameError::Unauthorized(String::from(error_message))
+                    return UpdateDomainNameError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDomainNameError::Validation(error_message.to_string())
+                    return UpdateDomainNameError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15711,19 +15711,19 @@ impl UpdateGatewayResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGatewayResponseError::BadRequest(String::from(error_message))
+                    return UpdateGatewayResponseError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateGatewayResponseError::NotFound(String::from(error_message))
+                    return UpdateGatewayResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGatewayResponseError::TooManyRequests(String::from(error_message))
+                    return UpdateGatewayResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateGatewayResponseError::Unauthorized(String::from(error_message))
+                    return UpdateGatewayResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGatewayResponseError::Validation(error_message.to_string())
+                    return UpdateGatewayResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15827,22 +15827,22 @@ impl UpdateIntegrationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateIntegrationError::BadRequest(String::from(error_message))
+                    return UpdateIntegrationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateIntegrationError::Conflict(String::from(error_message))
+                    return UpdateIntegrationError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateIntegrationError::NotFound(String::from(error_message))
+                    return UpdateIntegrationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateIntegrationError::TooManyRequests(String::from(error_message))
+                    return UpdateIntegrationError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateIntegrationError::Unauthorized(String::from(error_message))
+                    return UpdateIntegrationError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateIntegrationError::Validation(error_message.to_string())
+                    return UpdateIntegrationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15947,24 +15947,24 @@ impl UpdateIntegrationResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateIntegrationResponseError::BadRequest(String::from(error_message))
+                    return UpdateIntegrationResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateIntegrationResponseError::Conflict(String::from(error_message))
+                    return UpdateIntegrationResponseError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateIntegrationResponseError::NotFound(String::from(error_message))
+                    return UpdateIntegrationResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateIntegrationResponseError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return UpdateIntegrationResponseError::Unauthorized(String::from(error_message))
+                    return UpdateIntegrationResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateIntegrationResponseError::Validation(error_message.to_string())
+                    return UpdateIntegrationResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16069,22 +16069,22 @@ impl UpdateMethodError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateMethodError::BadRequest(String::from(error_message))
+                    return UpdateMethodError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateMethodError::Conflict(String::from(error_message))
+                    return UpdateMethodError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateMethodError::NotFound(String::from(error_message))
+                    return UpdateMethodError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateMethodError::TooManyRequests(String::from(error_message))
+                    return UpdateMethodError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateMethodError::Unauthorized(String::from(error_message))
+                    return UpdateMethodError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateMethodError::Validation(error_message.to_string())
+                    return UpdateMethodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16189,25 +16189,25 @@ impl UpdateMethodResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateMethodResponseError::BadRequest(String::from(error_message))
+                    return UpdateMethodResponseError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateMethodResponseError::Conflict(String::from(error_message))
+                    return UpdateMethodResponseError::Conflict(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateMethodResponseError::LimitExceeded(String::from(error_message))
+                    return UpdateMethodResponseError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateMethodResponseError::NotFound(String::from(error_message))
+                    return UpdateMethodResponseError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateMethodResponseError::TooManyRequests(String::from(error_message))
+                    return UpdateMethodResponseError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateMethodResponseError::Unauthorized(String::from(error_message))
+                    return UpdateMethodResponseError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateMethodResponseError::Validation(error_message.to_string())
+                    return UpdateMethodResponseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16313,22 +16313,22 @@ impl UpdateModelError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateModelError::BadRequest(String::from(error_message))
+                    return UpdateModelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateModelError::Conflict(String::from(error_message))
+                    return UpdateModelError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateModelError::NotFound(String::from(error_message))
+                    return UpdateModelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateModelError::TooManyRequests(String::from(error_message))
+                    return UpdateModelError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateModelError::Unauthorized(String::from(error_message))
+                    return UpdateModelError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateModelError::Validation(error_message.to_string())
+                    return UpdateModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16429,19 +16429,19 @@ impl UpdateRequestValidatorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateRequestValidatorError::BadRequest(String::from(error_message))
+                    return UpdateRequestValidatorError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateRequestValidatorError::NotFound(String::from(error_message))
+                    return UpdateRequestValidatorError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateRequestValidatorError::TooManyRequests(String::from(error_message))
+                    return UpdateRequestValidatorError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateRequestValidatorError::Unauthorized(String::from(error_message))
+                    return UpdateRequestValidatorError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRequestValidatorError::Validation(error_message.to_string())
+                    return UpdateRequestValidatorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16545,22 +16545,22 @@ impl UpdateResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateResourceError::BadRequest(String::from(error_message))
+                    return UpdateResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateResourceError::Conflict(String::from(error_message))
+                    return UpdateResourceError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateResourceError::NotFound(String::from(error_message))
+                    return UpdateResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateResourceError::TooManyRequests(String::from(error_message))
+                    return UpdateResourceError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateResourceError::Unauthorized(String::from(error_message))
+                    return UpdateResourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateResourceError::Validation(error_message.to_string())
+                    return UpdateResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16663,22 +16663,22 @@ impl UpdateRestApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateRestApiError::BadRequest(String::from(error_message))
+                    return UpdateRestApiError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateRestApiError::Conflict(String::from(error_message))
+                    return UpdateRestApiError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateRestApiError::NotFound(String::from(error_message))
+                    return UpdateRestApiError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateRestApiError::TooManyRequests(String::from(error_message))
+                    return UpdateRestApiError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateRestApiError::Unauthorized(String::from(error_message))
+                    return UpdateRestApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRestApiError::Validation(error_message.to_string())
+                    return UpdateRestApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16781,22 +16781,22 @@ impl UpdateStageError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateStageError::BadRequest(String::from(error_message))
+                    return UpdateStageError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateStageError::Conflict(String::from(error_message))
+                    return UpdateStageError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateStageError::NotFound(String::from(error_message))
+                    return UpdateStageError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateStageError::TooManyRequests(String::from(error_message))
+                    return UpdateStageError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateStageError::Unauthorized(String::from(error_message))
+                    return UpdateStageError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateStageError::Validation(error_message.to_string())
+                    return UpdateStageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16897,19 +16897,19 @@ impl UpdateUsageError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateUsageError::BadRequest(String::from(error_message))
+                    return UpdateUsageError::BadRequest(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateUsageError::NotFound(String::from(error_message))
+                    return UpdateUsageError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUsageError::TooManyRequests(String::from(error_message))
+                    return UpdateUsageError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateUsageError::Unauthorized(String::from(error_message))
+                    return UpdateUsageError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUsageError::Validation(error_message.to_string())
+                    return UpdateUsageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -17011,22 +17011,22 @@ impl UpdateUsagePlanError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateUsagePlanError::BadRequest(String::from(error_message))
+                    return UpdateUsagePlanError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateUsagePlanError::Conflict(String::from(error_message))
+                    return UpdateUsagePlanError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateUsagePlanError::NotFound(String::from(error_message))
+                    return UpdateUsagePlanError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUsagePlanError::TooManyRequests(String::from(error_message))
+                    return UpdateUsagePlanError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateUsagePlanError::Unauthorized(String::from(error_message))
+                    return UpdateUsagePlanError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUsagePlanError::Validation(error_message.to_string())
+                    return UpdateUsagePlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -17129,22 +17129,22 @@ impl UpdateVpcLinkError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateVpcLinkError::BadRequest(String::from(error_message))
+                    return UpdateVpcLinkError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateVpcLinkError::Conflict(String::from(error_message))
+                    return UpdateVpcLinkError::Conflict(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateVpcLinkError::NotFound(String::from(error_message))
+                    return UpdateVpcLinkError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateVpcLinkError::TooManyRequests(String::from(error_message))
+                    return UpdateVpcLinkError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateVpcLinkError::Unauthorized(String::from(error_message))
+                    return UpdateVpcLinkError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateVpcLinkError::Validation(error_message.to_string())
+                    return UpdateVpcLinkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

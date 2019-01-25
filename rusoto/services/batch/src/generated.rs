@@ -1132,7 +1132,7 @@ impl CancelJobError {
                 "ClientException" => return CancelJobError::Client(String::from(error_message)),
                 "ServerException" => return CancelJobError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string())
+                    return CancelJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1226,13 +1226,13 @@ impl CreateComputeEnvironmentError {
 
             match error_type {
                 "ClientException" => {
-                    return CreateComputeEnvironmentError::Client(String::from(error_message))
+                    return CreateComputeEnvironmentError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return CreateComputeEnvironmentError::Server(String::from(error_message))
+                    return CreateComputeEnvironmentError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateComputeEnvironmentError::Validation(error_message.to_string())
+                    return CreateComputeEnvironmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1328,13 +1328,13 @@ impl CreateJobQueueError {
 
             match error_type {
                 "ClientException" => {
-                    return CreateJobQueueError::Client(String::from(error_message))
+                    return CreateJobQueueError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return CreateJobQueueError::Server(String::from(error_message))
+                    return CreateJobQueueError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateJobQueueError::Validation(error_message.to_string())
+                    return CreateJobQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1428,13 +1428,13 @@ impl DeleteComputeEnvironmentError {
 
             match error_type {
                 "ClientException" => {
-                    return DeleteComputeEnvironmentError::Client(String::from(error_message))
+                    return DeleteComputeEnvironmentError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DeleteComputeEnvironmentError::Server(String::from(error_message))
+                    return DeleteComputeEnvironmentError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteComputeEnvironmentError::Validation(error_message.to_string())
+                    return DeleteComputeEnvironmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1530,13 +1530,13 @@ impl DeleteJobQueueError {
 
             match error_type {
                 "ClientException" => {
-                    return DeleteJobQueueError::Client(String::from(error_message))
+                    return DeleteJobQueueError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DeleteJobQueueError::Server(String::from(error_message))
+                    return DeleteJobQueueError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteJobQueueError::Validation(error_message.to_string())
+                    return DeleteJobQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1630,13 +1630,13 @@ impl DeregisterJobDefinitionError {
 
             match error_type {
                 "ClientException" => {
-                    return DeregisterJobDefinitionError::Client(String::from(error_message))
+                    return DeregisterJobDefinitionError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DeregisterJobDefinitionError::Server(String::from(error_message))
+                    return DeregisterJobDefinitionError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterJobDefinitionError::Validation(error_message.to_string())
+                    return DeregisterJobDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1732,13 +1732,13 @@ impl DescribeComputeEnvironmentsError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeComputeEnvironmentsError::Client(String::from(error_message))
+                    return DescribeComputeEnvironmentsError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeComputeEnvironmentsError::Server(String::from(error_message))
+                    return DescribeComputeEnvironmentsError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeComputeEnvironmentsError::Validation(error_message.to_string())
+                    return DescribeComputeEnvironmentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1834,13 +1834,13 @@ impl DescribeJobDefinitionsError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeJobDefinitionsError::Client(String::from(error_message))
+                    return DescribeJobDefinitionsError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeJobDefinitionsError::Server(String::from(error_message))
+                    return DescribeJobDefinitionsError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeJobDefinitionsError::Validation(error_message.to_string())
+                    return DescribeJobDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1936,13 +1936,13 @@ impl DescribeJobQueuesError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeJobQueuesError::Client(String::from(error_message))
+                    return DescribeJobQueuesError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeJobQueuesError::Server(String::from(error_message))
+                    return DescribeJobQueuesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeJobQueuesError::Validation(error_message.to_string())
+                    return DescribeJobQueuesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2040,7 +2040,7 @@ impl DescribeJobsError {
                 "ClientException" => return DescribeJobsError::Client(String::from(error_message)),
                 "ServerException" => return DescribeJobsError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return DescribeJobsError::Validation(error_message.to_string())
+                    return DescribeJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2136,7 +2136,7 @@ impl ListJobsError {
                 "ClientException" => return ListJobsError::Client(String::from(error_message)),
                 "ServerException" => return ListJobsError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string())
+                    return ListJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2230,13 +2230,13 @@ impl RegisterJobDefinitionError {
 
             match error_type {
                 "ClientException" => {
-                    return RegisterJobDefinitionError::Client(String::from(error_message))
+                    return RegisterJobDefinitionError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return RegisterJobDefinitionError::Server(String::from(error_message))
+                    return RegisterJobDefinitionError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterJobDefinitionError::Validation(error_message.to_string())
+                    return RegisterJobDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2334,7 +2334,7 @@ impl SubmitJobError {
                 "ClientException" => return SubmitJobError::Client(String::from(error_message)),
                 "ServerException" => return SubmitJobError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return SubmitJobError::Validation(error_message.to_string())
+                    return SubmitJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2430,7 +2430,7 @@ impl TerminateJobError {
                 "ClientException" => return TerminateJobError::Client(String::from(error_message)),
                 "ServerException" => return TerminateJobError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return TerminateJobError::Validation(error_message.to_string())
+                    return TerminateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2524,13 +2524,13 @@ impl UpdateComputeEnvironmentError {
 
             match error_type {
                 "ClientException" => {
-                    return UpdateComputeEnvironmentError::Client(String::from(error_message))
+                    return UpdateComputeEnvironmentError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return UpdateComputeEnvironmentError::Server(String::from(error_message))
+                    return UpdateComputeEnvironmentError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateComputeEnvironmentError::Validation(error_message.to_string())
+                    return UpdateComputeEnvironmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2626,13 +2626,13 @@ impl UpdateJobQueueError {
 
             match error_type {
                 "ClientException" => {
-                    return UpdateJobQueueError::Client(String::from(error_message))
+                    return UpdateJobQueueError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return UpdateJobQueueError::Server(String::from(error_message))
+                    return UpdateJobQueueError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateJobQueueError::Validation(error_message.to_string())
+                    return UpdateJobQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

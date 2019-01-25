@@ -145,16 +145,16 @@ impl GetEntitlementsError {
 
             match *error_type {
                 "InternalServiceErrorException" => {
-                    return GetEntitlementsError::InternalServiceError(String::from(error_message))
+                    return GetEntitlementsError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetEntitlementsError::InvalidParameter(String::from(error_message))
+                    return GetEntitlementsError::InvalidParameter(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetEntitlementsError::Throttling(String::from(error_message))
+                    return GetEntitlementsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetEntitlementsError::Validation(error_message.to_string())
+                    return GetEntitlementsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

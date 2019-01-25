@@ -742,19 +742,19 @@ impl AddTagsToStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return AddTagsToStreamError::InvalidArgument(String::from(error_message))
+                    return AddTagsToStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AddTagsToStreamError::LimitExceeded(String::from(error_message))
+                    return AddTagsToStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return AddTagsToStreamError::ResourceInUse(String::from(error_message))
+                    return AddTagsToStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddTagsToStreamError::ResourceNotFound(String::from(error_message))
+                    return AddTagsToStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddTagsToStreamError::Validation(error_message.to_string())
+                    return AddTagsToStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -838,16 +838,16 @@ impl CreateStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return CreateStreamError::InvalidArgument(String::from(error_message))
+                    return CreateStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateStreamError::LimitExceeded(String::from(error_message))
+                    return CreateStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateStreamError::ResourceInUse(String::from(error_message))
+                    return CreateStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateStreamError::Validation(error_message.to_string())
+                    return CreateStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -934,25 +934,25 @@ impl DecreaseStreamRetentionPeriodError {
                 "InvalidArgumentException" => {
                     return DecreaseStreamRetentionPeriodError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return DecreaseStreamRetentionPeriodError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return DecreaseStreamRetentionPeriodError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DecreaseStreamRetentionPeriodError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DecreaseStreamRetentionPeriodError::Validation(error_message.to_string())
+                    return DecreaseStreamRetentionPeriodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1036,13 +1036,13 @@ impl DeleteStreamError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return DeleteStreamError::LimitExceeded(String::from(error_message))
+                    return DeleteStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStreamError::ResourceNotFound(String::from(error_message))
+                    return DeleteStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStreamError::Validation(error_message.to_string())
+                    return DeleteStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1120,10 +1120,10 @@ impl DescribeLimitsError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return DescribeLimitsError::LimitExceeded(String::from(error_message))
+                    return DescribeLimitsError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLimitsError::Validation(error_message.to_string())
+                    return DescribeLimitsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1202,13 +1202,13 @@ impl DescribeStreamError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return DescribeStreamError::LimitExceeded(String::from(error_message))
+                    return DescribeStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamError::ResourceNotFound(String::from(error_message))
+                    return DescribeStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStreamError::Validation(error_message.to_string())
+                    return DescribeStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1288,13 +1288,13 @@ impl DescribeStreamSummaryError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return DescribeStreamSummaryError::LimitExceeded(String::from(error_message))
+                    return DescribeStreamSummaryError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamSummaryError::ResourceNotFound(String::from(error_message))
+                    return DescribeStreamSummaryError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStreamSummaryError::Validation(error_message.to_string())
+                    return DescribeStreamSummaryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1382,25 +1382,25 @@ impl DisableEnhancedMonitoringError {
                 "InvalidArgumentException" => {
                     return DisableEnhancedMonitoringError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return DisableEnhancedMonitoringError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return DisableEnhancedMonitoringError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisableEnhancedMonitoringError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisableEnhancedMonitoringError::Validation(error_message.to_string())
+                    return DisableEnhancedMonitoringError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1490,21 +1490,21 @@ impl EnableEnhancedMonitoringError {
                 "InvalidArgumentException" => {
                     return EnableEnhancedMonitoringError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return EnableEnhancedMonitoringError::LimitExceeded(String::from(error_message))
+                    return EnableEnhancedMonitoringError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return EnableEnhancedMonitoringError::ResourceInUse(String::from(error_message))
+                    return EnableEnhancedMonitoringError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return EnableEnhancedMonitoringError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return EnableEnhancedMonitoringError::Validation(error_message.to_string())
+                    return EnableEnhancedMonitoringError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1604,39 +1604,39 @@ impl GetRecordsError {
 
             match *error_type {
                 "ExpiredIteratorException" => {
-                    return GetRecordsError::ExpiredIterator(String::from(error_message))
+                    return GetRecordsError::ExpiredIterator(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return GetRecordsError::InvalidArgument(String::from(error_message))
+                    return GetRecordsError::InvalidArgument(String::from(error_message));
                 }
                 "KMSAccessDeniedException" => {
-                    return GetRecordsError::KMSAccessDenied(String::from(error_message))
+                    return GetRecordsError::KMSAccessDenied(String::from(error_message));
                 }
                 "KMSDisabledException" => {
-                    return GetRecordsError::KMSDisabled(String::from(error_message))
+                    return GetRecordsError::KMSDisabled(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return GetRecordsError::KMSInvalidState(String::from(error_message))
+                    return GetRecordsError::KMSInvalidState(String::from(error_message));
                 }
                 "KMSNotFoundException" => {
-                    return GetRecordsError::KMSNotFound(String::from(error_message))
+                    return GetRecordsError::KMSNotFound(String::from(error_message));
                 }
                 "KMSOptInRequired" => {
-                    return GetRecordsError::KMSOptInRequired(String::from(error_message))
+                    return GetRecordsError::KMSOptInRequired(String::from(error_message));
                 }
                 "KMSThrottlingException" => {
-                    return GetRecordsError::KMSThrottling(String::from(error_message))
+                    return GetRecordsError::KMSThrottling(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetRecordsError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetRecordsError::ResourceNotFound(String::from(error_message))
+                    return GetRecordsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRecordsError::Validation(error_message.to_string())
+                    return GetRecordsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1726,18 +1726,18 @@ impl GetShardIteratorError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return GetShardIteratorError::InvalidArgument(String::from(error_message))
+                    return GetShardIteratorError::InvalidArgument(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetShardIteratorError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetShardIteratorError::ResourceNotFound(String::from(error_message))
+                    return GetShardIteratorError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetShardIteratorError::Validation(error_message.to_string())
+                    return GetShardIteratorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1824,25 +1824,25 @@ impl IncreaseStreamRetentionPeriodError {
                 "InvalidArgumentException" => {
                     return IncreaseStreamRetentionPeriodError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return IncreaseStreamRetentionPeriodError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return IncreaseStreamRetentionPeriodError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return IncreaseStreamRetentionPeriodError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return IncreaseStreamRetentionPeriodError::Validation(error_message.to_string())
+                    return IncreaseStreamRetentionPeriodError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1932,22 +1932,22 @@ impl ListShardsError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return ListShardsError::ExpiredNextToken(String::from(error_message))
+                    return ListShardsError::ExpiredNextToken(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return ListShardsError::InvalidArgument(String::from(error_message))
+                    return ListShardsError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListShardsError::LimitExceeded(String::from(error_message))
+                    return ListShardsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return ListShardsError::ResourceInUse(String::from(error_message))
+                    return ListShardsError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListShardsError::ResourceNotFound(String::from(error_message))
+                    return ListShardsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListShardsError::Validation(error_message.to_string())
+                    return ListShardsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2028,10 +2028,10 @@ impl ListStreamsError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return ListStreamsError::LimitExceeded(String::from(error_message))
+                    return ListStreamsError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListStreamsError::Validation(error_message.to_string())
+                    return ListStreamsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2112,16 +2112,16 @@ impl ListTagsForStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return ListTagsForStreamError::InvalidArgument(String::from(error_message))
+                    return ListTagsForStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListTagsForStreamError::LimitExceeded(String::from(error_message))
+                    return ListTagsForStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForStreamError::ResourceNotFound(String::from(error_message))
+                    return ListTagsForStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForStreamError::Validation(error_message.to_string())
+                    return ListTagsForStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2208,19 +2208,19 @@ impl MergeShardsError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return MergeShardsError::InvalidArgument(String::from(error_message))
+                    return MergeShardsError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return MergeShardsError::LimitExceeded(String::from(error_message))
+                    return MergeShardsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return MergeShardsError::ResourceInUse(String::from(error_message))
+                    return MergeShardsError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return MergeShardsError::ResourceNotFound(String::from(error_message))
+                    return MergeShardsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return MergeShardsError::Validation(error_message.to_string())
+                    return MergeShardsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2316,36 +2316,36 @@ impl PutRecordError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return PutRecordError::InvalidArgument(String::from(error_message))
+                    return PutRecordError::InvalidArgument(String::from(error_message));
                 }
                 "KMSAccessDeniedException" => {
-                    return PutRecordError::KMSAccessDenied(String::from(error_message))
+                    return PutRecordError::KMSAccessDenied(String::from(error_message));
                 }
                 "KMSDisabledException" => {
-                    return PutRecordError::KMSDisabled(String::from(error_message))
+                    return PutRecordError::KMSDisabled(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return PutRecordError::KMSInvalidState(String::from(error_message))
+                    return PutRecordError::KMSInvalidState(String::from(error_message));
                 }
                 "KMSNotFoundException" => {
-                    return PutRecordError::KMSNotFound(String::from(error_message))
+                    return PutRecordError::KMSNotFound(String::from(error_message));
                 }
                 "KMSOptInRequired" => {
-                    return PutRecordError::KMSOptInRequired(String::from(error_message))
+                    return PutRecordError::KMSOptInRequired(String::from(error_message));
                 }
                 "KMSThrottlingException" => {
-                    return PutRecordError::KMSThrottling(String::from(error_message))
+                    return PutRecordError::KMSThrottling(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return PutRecordError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutRecordError::ResourceNotFound(String::from(error_message))
+                    return PutRecordError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutRecordError::Validation(error_message.to_string())
+                    return PutRecordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2446,36 +2446,36 @@ impl PutRecordsError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return PutRecordsError::InvalidArgument(String::from(error_message))
+                    return PutRecordsError::InvalidArgument(String::from(error_message));
                 }
                 "KMSAccessDeniedException" => {
-                    return PutRecordsError::KMSAccessDenied(String::from(error_message))
+                    return PutRecordsError::KMSAccessDenied(String::from(error_message));
                 }
                 "KMSDisabledException" => {
-                    return PutRecordsError::KMSDisabled(String::from(error_message))
+                    return PutRecordsError::KMSDisabled(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return PutRecordsError::KMSInvalidState(String::from(error_message))
+                    return PutRecordsError::KMSInvalidState(String::from(error_message));
                 }
                 "KMSNotFoundException" => {
-                    return PutRecordsError::KMSNotFound(String::from(error_message))
+                    return PutRecordsError::KMSNotFound(String::from(error_message));
                 }
                 "KMSOptInRequired" => {
-                    return PutRecordsError::KMSOptInRequired(String::from(error_message))
+                    return PutRecordsError::KMSOptInRequired(String::from(error_message));
                 }
                 "KMSThrottlingException" => {
-                    return PutRecordsError::KMSThrottling(String::from(error_message))
+                    return PutRecordsError::KMSThrottling(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return PutRecordsError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutRecordsError::ResourceNotFound(String::from(error_message))
+                    return PutRecordsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutRecordsError::Validation(error_message.to_string())
+                    return PutRecordsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2566,19 +2566,19 @@ impl RemoveTagsFromStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return RemoveTagsFromStreamError::InvalidArgument(String::from(error_message))
+                    return RemoveTagsFromStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return RemoveTagsFromStreamError::LimitExceeded(String::from(error_message))
+                    return RemoveTagsFromStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return RemoveTagsFromStreamError::ResourceInUse(String::from(error_message))
+                    return RemoveTagsFromStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveTagsFromStreamError::ResourceNotFound(String::from(error_message))
+                    return RemoveTagsFromStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromStreamError::Validation(error_message.to_string())
+                    return RemoveTagsFromStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2666,19 +2666,19 @@ impl SplitShardError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return SplitShardError::InvalidArgument(String::from(error_message))
+                    return SplitShardError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return SplitShardError::LimitExceeded(String::from(error_message))
+                    return SplitShardError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return SplitShardError::ResourceInUse(String::from(error_message))
+                    return SplitShardError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return SplitShardError::ResourceNotFound(String::from(error_message))
+                    return SplitShardError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SplitShardError::Validation(error_message.to_string())
+                    return SplitShardError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2776,37 +2776,37 @@ impl StartStreamEncryptionError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return StartStreamEncryptionError::InvalidArgument(String::from(error_message))
+                    return StartStreamEncryptionError::InvalidArgument(String::from(error_message));
                 }
                 "KMSAccessDeniedException" => {
-                    return StartStreamEncryptionError::KMSAccessDenied(String::from(error_message))
+                    return StartStreamEncryptionError::KMSAccessDenied(String::from(error_message));
                 }
                 "KMSDisabledException" => {
-                    return StartStreamEncryptionError::KMSDisabled(String::from(error_message))
+                    return StartStreamEncryptionError::KMSDisabled(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return StartStreamEncryptionError::KMSInvalidState(String::from(error_message))
+                    return StartStreamEncryptionError::KMSInvalidState(String::from(error_message));
                 }
                 "KMSNotFoundException" => {
-                    return StartStreamEncryptionError::KMSNotFound(String::from(error_message))
+                    return StartStreamEncryptionError::KMSNotFound(String::from(error_message));
                 }
                 "KMSOptInRequired" => {
-                    return StartStreamEncryptionError::KMSOptInRequired(String::from(error_message))
+                    return StartStreamEncryptionError::KMSOptInRequired(String::from(error_message));
                 }
                 "KMSThrottlingException" => {
-                    return StartStreamEncryptionError::KMSThrottling(String::from(error_message))
+                    return StartStreamEncryptionError::KMSThrottling(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartStreamEncryptionError::LimitExceeded(String::from(error_message))
+                    return StartStreamEncryptionError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return StartStreamEncryptionError::ResourceInUse(String::from(error_message))
+                    return StartStreamEncryptionError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartStreamEncryptionError::ResourceNotFound(String::from(error_message))
+                    return StartStreamEncryptionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartStreamEncryptionError::Validation(error_message.to_string())
+                    return StartStreamEncryptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2900,19 +2900,19 @@ impl StopStreamEncryptionError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return StopStreamEncryptionError::InvalidArgument(String::from(error_message))
+                    return StopStreamEncryptionError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StopStreamEncryptionError::LimitExceeded(String::from(error_message))
+                    return StopStreamEncryptionError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return StopStreamEncryptionError::ResourceInUse(String::from(error_message))
+                    return StopStreamEncryptionError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopStreamEncryptionError::ResourceNotFound(String::from(error_message))
+                    return StopStreamEncryptionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopStreamEncryptionError::Validation(error_message.to_string())
+                    return StopStreamEncryptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3000,19 +3000,19 @@ impl UpdateShardCountError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return UpdateShardCountError::InvalidArgument(String::from(error_message))
+                    return UpdateShardCountError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateShardCountError::LimitExceeded(String::from(error_message))
+                    return UpdateShardCountError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateShardCountError::ResourceInUse(String::from(error_message))
+                    return UpdateShardCountError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateShardCountError::ResourceNotFound(String::from(error_message))
+                    return UpdateShardCountError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateShardCountError::Validation(error_message.to_string())
+                    return UpdateShardCountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

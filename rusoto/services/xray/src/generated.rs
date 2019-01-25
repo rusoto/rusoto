@@ -749,13 +749,13 @@ impl BatchGetTracesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return BatchGetTracesError::InvalidRequest(String::from(error_message))
+                    return BatchGetTracesError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return BatchGetTracesError::Throttled(String::from(error_message))
+                    return BatchGetTracesError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetTracesError::Validation(error_message.to_string())
+                    return BatchGetTracesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -849,13 +849,13 @@ impl GetEncryptionConfigError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetEncryptionConfigError::InvalidRequest(String::from(error_message))
+                    return GetEncryptionConfigError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetEncryptionConfigError::Throttled(String::from(error_message))
+                    return GetEncryptionConfigError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetEncryptionConfigError::Validation(error_message.to_string())
+                    return GetEncryptionConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -951,13 +951,13 @@ impl GetServiceGraphError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetServiceGraphError::InvalidRequest(String::from(error_message))
+                    return GetServiceGraphError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetServiceGraphError::Throttled(String::from(error_message))
+                    return GetServiceGraphError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetServiceGraphError::Validation(error_message.to_string())
+                    return GetServiceGraphError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1051,13 +1051,13 @@ impl GetTraceGraphError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetTraceGraphError::InvalidRequest(String::from(error_message))
+                    return GetTraceGraphError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetTraceGraphError::Throttled(String::from(error_message))
+                    return GetTraceGraphError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTraceGraphError::Validation(error_message.to_string())
+                    return GetTraceGraphError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1151,13 +1151,13 @@ impl GetTraceSummariesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetTraceSummariesError::InvalidRequest(String::from(error_message))
+                    return GetTraceSummariesError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return GetTraceSummariesError::Throttled(String::from(error_message))
+                    return GetTraceSummariesError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTraceSummariesError::Validation(error_message.to_string())
+                    return GetTraceSummariesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1253,13 +1253,13 @@ impl PutEncryptionConfigError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return PutEncryptionConfigError::InvalidRequest(String::from(error_message))
+                    return PutEncryptionConfigError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return PutEncryptionConfigError::Throttled(String::from(error_message))
+                    return PutEncryptionConfigError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutEncryptionConfigError::Validation(error_message.to_string())
+                    return PutEncryptionConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1355,13 +1355,13 @@ impl PutTelemetryRecordsError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return PutTelemetryRecordsError::InvalidRequest(String::from(error_message))
+                    return PutTelemetryRecordsError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return PutTelemetryRecordsError::Throttled(String::from(error_message))
+                    return PutTelemetryRecordsError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutTelemetryRecordsError::Validation(error_message.to_string())
+                    return PutTelemetryRecordsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1457,13 +1457,13 @@ impl PutTraceSegmentsError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return PutTraceSegmentsError::InvalidRequest(String::from(error_message))
+                    return PutTraceSegmentsError::InvalidRequest(String::from(error_message));
                 }
                 "ThrottledException" => {
-                    return PutTraceSegmentsError::Throttled(String::from(error_message))
+                    return PutTraceSegmentsError::Throttled(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutTraceSegmentsError::Validation(error_message.to_string())
+                    return PutTraceSegmentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

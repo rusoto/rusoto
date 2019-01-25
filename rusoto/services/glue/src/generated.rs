@@ -3568,27 +3568,27 @@ impl BatchCreatePartitionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return BatchCreatePartitionError::AlreadyExists(String::from(error_message))
+                    return BatchCreatePartitionError::AlreadyExists(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return BatchCreatePartitionError::EntityNotFound(String::from(error_message))
+                    return BatchCreatePartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return BatchCreatePartitionError::InternalService(String::from(error_message))
+                    return BatchCreatePartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return BatchCreatePartitionError::InvalidInput(String::from(error_message))
+                    return BatchCreatePartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return BatchCreatePartitionError::OperationTimeout(String::from(error_message))
+                    return BatchCreatePartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchCreatePartitionError::Validation(error_message.to_string())
+                    return BatchCreatePartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3674,13 +3674,13 @@ impl BatchDeleteConnectionError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return BatchDeleteConnectionError::InternalService(String::from(error_message))
+                    return BatchDeleteConnectionError::InternalService(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return BatchDeleteConnectionError::OperationTimeout(String::from(error_message))
+                    return BatchDeleteConnectionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchDeleteConnectionError::Validation(error_message.to_string())
+                    return BatchDeleteConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3766,19 +3766,19 @@ impl BatchDeletePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchDeletePartitionError::EntityNotFound(String::from(error_message))
+                    return BatchDeletePartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return BatchDeletePartitionError::InternalService(String::from(error_message))
+                    return BatchDeletePartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return BatchDeletePartitionError::InvalidInput(String::from(error_message))
+                    return BatchDeletePartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return BatchDeletePartitionError::OperationTimeout(String::from(error_message))
+                    return BatchDeletePartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchDeletePartitionError::Validation(error_message.to_string())
+                    return BatchDeletePartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3866,19 +3866,19 @@ impl BatchDeleteTableError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchDeleteTableError::EntityNotFound(String::from(error_message))
+                    return BatchDeleteTableError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return BatchDeleteTableError::InternalService(String::from(error_message))
+                    return BatchDeleteTableError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return BatchDeleteTableError::InvalidInput(String::from(error_message))
+                    return BatchDeleteTableError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return BatchDeleteTableError::OperationTimeout(String::from(error_message))
+                    return BatchDeleteTableError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchDeleteTableError::Validation(error_message.to_string())
+                    return BatchDeleteTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3964,23 +3964,23 @@ impl BatchDeleteTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchDeleteTableVersionError::EntityNotFound(String::from(error_message))
+                    return BatchDeleteTableVersionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return BatchDeleteTableVersionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return BatchDeleteTableVersionError::InvalidInput(String::from(error_message))
+                    return BatchDeleteTableVersionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return BatchDeleteTableVersionError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchDeleteTableVersionError::Validation(error_message.to_string())
+                    return BatchDeleteTableVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4068,19 +4068,19 @@ impl BatchGetPartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchGetPartitionError::EntityNotFound(String::from(error_message))
+                    return BatchGetPartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return BatchGetPartitionError::InternalService(String::from(error_message))
+                    return BatchGetPartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return BatchGetPartitionError::InvalidInput(String::from(error_message))
+                    return BatchGetPartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return BatchGetPartitionError::OperationTimeout(String::from(error_message))
+                    return BatchGetPartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetPartitionError::Validation(error_message.to_string())
+                    return BatchGetPartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4166,16 +4166,16 @@ impl GlueBatchStopJobRunError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GlueBatchStopJobRunError::InternalService(String::from(error_message))
+                    return GlueBatchStopJobRunError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GlueBatchStopJobRunError::InvalidInput(String::from(error_message))
+                    return GlueBatchStopJobRunError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GlueBatchStopJobRunError::OperationTimeout(String::from(error_message))
+                    return GlueBatchStopJobRunError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GlueBatchStopJobRunError::Validation(error_message.to_string())
+                    return GlueBatchStopJobRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4260,16 +4260,16 @@ impl CreateClassifierError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateClassifierError::AlreadyExists(String::from(error_message))
+                    return CreateClassifierError::AlreadyExists(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateClassifierError::InvalidInput(String::from(error_message))
+                    return CreateClassifierError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateClassifierError::OperationTimeout(String::from(error_message))
+                    return CreateClassifierError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateClassifierError::Validation(error_message.to_string())
+                    return CreateClassifierError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4354,21 +4354,21 @@ impl CreateConnectionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateConnectionError::AlreadyExists(String::from(error_message))
+                    return CreateConnectionError::AlreadyExists(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateConnectionError::InvalidInput(String::from(error_message))
+                    return CreateConnectionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateConnectionError::OperationTimeout(String::from(error_message))
+                    return CreateConnectionError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateConnectionError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateConnectionError::Validation(error_message.to_string())
+                    return CreateConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4454,21 +4454,21 @@ impl CreateCrawlerError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateCrawlerError::AlreadyExists(String::from(error_message))
+                    return CreateCrawlerError::AlreadyExists(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateCrawlerError::InvalidInput(String::from(error_message))
+                    return CreateCrawlerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateCrawlerError::OperationTimeout(String::from(error_message))
+                    return CreateCrawlerError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateCrawlerError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateCrawlerError::Validation(error_message.to_string())
+                    return CreateCrawlerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4556,24 +4556,24 @@ impl CreateDatabaseError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateDatabaseError::AlreadyExists(String::from(error_message))
+                    return CreateDatabaseError::AlreadyExists(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateDatabaseError::InternalService(String::from(error_message))
+                    return CreateDatabaseError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDatabaseError::InvalidInput(String::from(error_message))
+                    return CreateDatabaseError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateDatabaseError::OperationTimeout(String::from(error_message))
+                    return CreateDatabaseError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateDatabaseError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDatabaseError::Validation(error_message.to_string())
+                    return CreateDatabaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4666,32 +4666,32 @@ impl CreateDevEndpointError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDevEndpointError::AccessDenied(String::from(error_message))
+                    return CreateDevEndpointError::AccessDenied(String::from(error_message));
                 }
                 "AlreadyExistsException" => {
-                    return CreateDevEndpointError::AlreadyExists(String::from(error_message))
+                    return CreateDevEndpointError::AlreadyExists(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return CreateDevEndpointError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateDevEndpointError::InternalService(String::from(error_message))
+                    return CreateDevEndpointError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDevEndpointError::InvalidInput(String::from(error_message))
+                    return CreateDevEndpointError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateDevEndpointError::OperationTimeout(String::from(error_message))
+                    return CreateDevEndpointError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDevEndpointError::Validation(error_message.to_string())
+                    return CreateDevEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4788,28 +4788,28 @@ impl CreateJobError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateJobError::AlreadyExists(String::from(error_message))
+                    return CreateJobError::AlreadyExists(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateJobError::ConcurrentModification(String::from(error_message))
+                    return CreateJobError::ConcurrentModification(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return CreateJobError::IdempotentParameterMismatch(String::from(error_message))
+                    return CreateJobError::IdempotentParameterMismatch(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateJobError::InternalService(String::from(error_message))
+                    return CreateJobError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateJobError::InvalidInput(String::from(error_message))
+                    return CreateJobError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateJobError::OperationTimeout(String::from(error_message))
+                    return CreateJobError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateJobError::ResourceNumberLimitExceeded(String::from(error_message))
+                    return CreateJobError::ResourceNumberLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string())
+                    return CreateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4902,27 +4902,27 @@ impl CreatePartitionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreatePartitionError::AlreadyExists(String::from(error_message))
+                    return CreatePartitionError::AlreadyExists(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return CreatePartitionError::EntityNotFound(String::from(error_message))
+                    return CreatePartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreatePartitionError::InternalService(String::from(error_message))
+                    return CreatePartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreatePartitionError::InvalidInput(String::from(error_message))
+                    return CreatePartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreatePartitionError::OperationTimeout(String::from(error_message))
+                    return CreatePartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreatePartitionError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreatePartitionError::Validation(error_message.to_string())
+                    return CreatePartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5008,16 +5008,16 @@ impl CreateScriptError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return CreateScriptError::InternalService(String::from(error_message))
+                    return CreateScriptError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateScriptError::InvalidInput(String::from(error_message))
+                    return CreateScriptError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateScriptError::OperationTimeout(String::from(error_message))
+                    return CreateScriptError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateScriptError::Validation(error_message.to_string())
+                    return CreateScriptError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5106,27 +5106,27 @@ impl CreateTableError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateTableError::AlreadyExists(String::from(error_message))
+                    return CreateTableError::AlreadyExists(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return CreateTableError::EntityNotFound(String::from(error_message))
+                    return CreateTableError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateTableError::InternalService(String::from(error_message))
+                    return CreateTableError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateTableError::InvalidInput(String::from(error_message))
+                    return CreateTableError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateTableError::OperationTimeout(String::from(error_message))
+                    return CreateTableError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateTableError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateTableError::Validation(error_message.to_string())
+                    return CreateTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5220,32 +5220,32 @@ impl CreateTriggerError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateTriggerError::AlreadyExists(String::from(error_message))
+                    return CreateTriggerError::AlreadyExists(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateTriggerError::ConcurrentModification(String::from(error_message))
+                    return CreateTriggerError::ConcurrentModification(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return CreateTriggerError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateTriggerError::InternalService(String::from(error_message))
+                    return CreateTriggerError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateTriggerError::InvalidInput(String::from(error_message))
+                    return CreateTriggerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return CreateTriggerError::OperationTimeout(String::from(error_message))
+                    return CreateTriggerError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateTriggerError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateTriggerError::Validation(error_message.to_string())
+                    return CreateTriggerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5340,33 +5340,33 @@ impl CreateUserDefinedFunctionError {
                 "AlreadyExistsException" => {
                     return CreateUserDefinedFunctionError::AlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotFoundException" => {
                     return CreateUserDefinedFunctionError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return CreateUserDefinedFunctionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateUserDefinedFunctionError::InvalidInput(String::from(error_message))
+                    return CreateUserDefinedFunctionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return CreateUserDefinedFunctionError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return CreateUserDefinedFunctionError::Validation(error_message.to_string())
+                    return CreateUserDefinedFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5452,13 +5452,13 @@ impl DeleteClassifierError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteClassifierError::EntityNotFound(String::from(error_message))
+                    return DeleteClassifierError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteClassifierError::OperationTimeout(String::from(error_message))
+                    return DeleteClassifierError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteClassifierError::Validation(error_message.to_string())
+                    return DeleteClassifierError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5538,13 +5538,13 @@ impl DeleteConnectionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteConnectionError::EntityNotFound(String::from(error_message))
+                    return DeleteConnectionError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteConnectionError::OperationTimeout(String::from(error_message))
+                    return DeleteConnectionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteConnectionError::Validation(error_message.to_string())
+                    return DeleteConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5628,19 +5628,19 @@ impl DeleteCrawlerError {
 
             match *error_type {
                 "CrawlerRunningException" => {
-                    return DeleteCrawlerError::CrawlerRunning(String::from(error_message))
+                    return DeleteCrawlerError::CrawlerRunning(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return DeleteCrawlerError::EntityNotFound(String::from(error_message))
+                    return DeleteCrawlerError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteCrawlerError::OperationTimeout(String::from(error_message))
+                    return DeleteCrawlerError::OperationTimeout(String::from(error_message));
                 }
                 "SchedulerTransitioningException" => {
-                    return DeleteCrawlerError::SchedulerTransitioning(String::from(error_message))
+                    return DeleteCrawlerError::SchedulerTransitioning(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteCrawlerError::Validation(error_message.to_string())
+                    return DeleteCrawlerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5726,19 +5726,19 @@ impl DeleteDatabaseError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteDatabaseError::EntityNotFound(String::from(error_message))
+                    return DeleteDatabaseError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteDatabaseError::InternalService(String::from(error_message))
+                    return DeleteDatabaseError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteDatabaseError::InvalidInput(String::from(error_message))
+                    return DeleteDatabaseError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteDatabaseError::OperationTimeout(String::from(error_message))
+                    return DeleteDatabaseError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDatabaseError::Validation(error_message.to_string())
+                    return DeleteDatabaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5824,19 +5824,19 @@ impl DeleteDevEndpointError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteDevEndpointError::EntityNotFound(String::from(error_message))
+                    return DeleteDevEndpointError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteDevEndpointError::InternalService(String::from(error_message))
+                    return DeleteDevEndpointError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteDevEndpointError::InvalidInput(String::from(error_message))
+                    return DeleteDevEndpointError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteDevEndpointError::OperationTimeout(String::from(error_message))
+                    return DeleteDevEndpointError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDevEndpointError::Validation(error_message.to_string())
+                    return DeleteDevEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5922,16 +5922,16 @@ impl DeleteJobError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteJobError::InternalService(String::from(error_message))
+                    return DeleteJobError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteJobError::InvalidInput(String::from(error_message))
+                    return DeleteJobError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteJobError::OperationTimeout(String::from(error_message))
+                    return DeleteJobError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteJobError::Validation(error_message.to_string())
+                    return DeleteJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6016,19 +6016,19 @@ impl DeletePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeletePartitionError::EntityNotFound(String::from(error_message))
+                    return DeletePartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeletePartitionError::InternalService(String::from(error_message))
+                    return DeletePartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeletePartitionError::InvalidInput(String::from(error_message))
+                    return DeletePartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeletePartitionError::OperationTimeout(String::from(error_message))
+                    return DeletePartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePartitionError::Validation(error_message.to_string())
+                    return DeletePartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6114,19 +6114,19 @@ impl DeleteTableError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteTableError::EntityNotFound(String::from(error_message))
+                    return DeleteTableError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteTableError::InternalService(String::from(error_message))
+                    return DeleteTableError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteTableError::InvalidInput(String::from(error_message))
+                    return DeleteTableError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteTableError::OperationTimeout(String::from(error_message))
+                    return DeleteTableError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTableError::Validation(error_message.to_string())
+                    return DeleteTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6212,19 +6212,19 @@ impl DeleteTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteTableVersionError::EntityNotFound(String::from(error_message))
+                    return DeleteTableVersionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteTableVersionError::InternalService(String::from(error_message))
+                    return DeleteTableVersionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteTableVersionError::InvalidInput(String::from(error_message))
+                    return DeleteTableVersionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteTableVersionError::OperationTimeout(String::from(error_message))
+                    return DeleteTableVersionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTableVersionError::Validation(error_message.to_string())
+                    return DeleteTableVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6312,19 +6312,19 @@ impl DeleteTriggerError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteTriggerError::ConcurrentModification(String::from(error_message))
+                    return DeleteTriggerError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteTriggerError::InternalService(String::from(error_message))
+                    return DeleteTriggerError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteTriggerError::InvalidInput(String::from(error_message))
+                    return DeleteTriggerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteTriggerError::OperationTimeout(String::from(error_message))
+                    return DeleteTriggerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTriggerError::Validation(error_message.to_string())
+                    return DeleteTriggerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6412,23 +6412,23 @@ impl DeleteUserDefinedFunctionError {
                 "EntityNotFoundException" => {
                     return DeleteUserDefinedFunctionError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return DeleteUserDefinedFunctionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteUserDefinedFunctionError::InvalidInput(String::from(error_message))
+                    return DeleteUserDefinedFunctionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return DeleteUserDefinedFunctionError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteUserDefinedFunctionError::Validation(error_message.to_string())
+                    return DeleteUserDefinedFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6512,15 +6512,15 @@ impl GetCatalogImportStatusError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetCatalogImportStatusError::InternalService(String::from(error_message))
+                    return GetCatalogImportStatusError::InternalService(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return GetCatalogImportStatusError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetCatalogImportStatusError::Validation(error_message.to_string())
+                    return GetCatalogImportStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6602,13 +6602,13 @@ impl GetClassifierError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetClassifierError::EntityNotFound(String::from(error_message))
+                    return GetClassifierError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetClassifierError::OperationTimeout(String::from(error_message))
+                    return GetClassifierError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetClassifierError::Validation(error_message.to_string())
+                    return GetClassifierError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6686,10 +6686,10 @@ impl GetClassifiersError {
 
             match *error_type {
                 "OperationTimeoutException" => {
-                    return GetClassifiersError::OperationTimeout(String::from(error_message))
+                    return GetClassifiersError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetClassifiersError::Validation(error_message.to_string())
+                    return GetClassifiersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6768,13 +6768,13 @@ impl GetConnectionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetConnectionError::EntityNotFound(String::from(error_message))
+                    return GetConnectionError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetConnectionError::OperationTimeout(String::from(error_message))
+                    return GetConnectionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetConnectionError::Validation(error_message.to_string())
+                    return GetConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6854,13 +6854,13 @@ impl GetConnectionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetConnectionsError::EntityNotFound(String::from(error_message))
+                    return GetConnectionsError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetConnectionsError::OperationTimeout(String::from(error_message))
+                    return GetConnectionsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetConnectionsError::Validation(error_message.to_string())
+                    return GetConnectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6940,13 +6940,13 @@ impl GetCrawlerError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetCrawlerError::EntityNotFound(String::from(error_message))
+                    return GetCrawlerError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetCrawlerError::OperationTimeout(String::from(error_message))
+                    return GetCrawlerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCrawlerError::Validation(error_message.to_string())
+                    return GetCrawlerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7024,10 +7024,10 @@ impl GetCrawlerMetricsError {
 
             match *error_type {
                 "OperationTimeoutException" => {
-                    return GetCrawlerMetricsError::OperationTimeout(String::from(error_message))
+                    return GetCrawlerMetricsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCrawlerMetricsError::Validation(error_message.to_string())
+                    return GetCrawlerMetricsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7106,10 +7106,10 @@ impl GetCrawlersError {
 
             match *error_type {
                 "OperationTimeoutException" => {
-                    return GetCrawlersError::OperationTimeout(String::from(error_message))
+                    return GetCrawlersError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCrawlersError::Validation(error_message.to_string())
+                    return GetCrawlersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7192,19 +7192,19 @@ impl GetDatabaseError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetDatabaseError::EntityNotFound(String::from(error_message))
+                    return GetDatabaseError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetDatabaseError::InternalService(String::from(error_message))
+                    return GetDatabaseError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDatabaseError::InvalidInput(String::from(error_message))
+                    return GetDatabaseError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetDatabaseError::OperationTimeout(String::from(error_message))
+                    return GetDatabaseError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDatabaseError::Validation(error_message.to_string())
+                    return GetDatabaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7288,16 +7288,16 @@ impl GetDatabasesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetDatabasesError::InternalService(String::from(error_message))
+                    return GetDatabasesError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDatabasesError::InvalidInput(String::from(error_message))
+                    return GetDatabasesError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetDatabasesError::OperationTimeout(String::from(error_message))
+                    return GetDatabasesError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDatabasesError::Validation(error_message.to_string())
+                    return GetDatabasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7380,16 +7380,16 @@ impl GetDataflowGraphError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetDataflowGraphError::InternalService(String::from(error_message))
+                    return GetDataflowGraphError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDataflowGraphError::InvalidInput(String::from(error_message))
+                    return GetDataflowGraphError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetDataflowGraphError::OperationTimeout(String::from(error_message))
+                    return GetDataflowGraphError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDataflowGraphError::Validation(error_message.to_string())
+                    return GetDataflowGraphError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7474,19 +7474,19 @@ impl GetDevEndpointError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetDevEndpointError::EntityNotFound(String::from(error_message))
+                    return GetDevEndpointError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetDevEndpointError::InternalService(String::from(error_message))
+                    return GetDevEndpointError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDevEndpointError::InvalidInput(String::from(error_message))
+                    return GetDevEndpointError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetDevEndpointError::OperationTimeout(String::from(error_message))
+                    return GetDevEndpointError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDevEndpointError::Validation(error_message.to_string())
+                    return GetDevEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7572,19 +7572,19 @@ impl GetDevEndpointsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetDevEndpointsError::EntityNotFound(String::from(error_message))
+                    return GetDevEndpointsError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetDevEndpointsError::InternalService(String::from(error_message))
+                    return GetDevEndpointsError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDevEndpointsError::InvalidInput(String::from(error_message))
+                    return GetDevEndpointsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetDevEndpointsError::OperationTimeout(String::from(error_message))
+                    return GetDevEndpointsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDevEndpointsError::Validation(error_message.to_string())
+                    return GetDevEndpointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7670,16 +7670,16 @@ impl GetJobError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobError::EntityNotFound(String::from(error_message))
+                    return GetJobError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetJobError::InternalService(String::from(error_message))
+                    return GetJobError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetJobError::InvalidInput(String::from(error_message))
+                    return GetJobError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobError::OperationTimeout(String::from(error_message))
+                    return GetJobError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => return GetJobError::Validation(error_message.to_string()),
                 _ => {}
@@ -7766,19 +7766,19 @@ impl GetJobRunError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobRunError::EntityNotFound(String::from(error_message))
+                    return GetJobRunError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetJobRunError::InternalService(String::from(error_message))
+                    return GetJobRunError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetJobRunError::InvalidInput(String::from(error_message))
+                    return GetJobRunError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobRunError::OperationTimeout(String::from(error_message))
+                    return GetJobRunError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobRunError::Validation(error_message.to_string())
+                    return GetJobRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7864,19 +7864,19 @@ impl GetJobRunsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobRunsError::EntityNotFound(String::from(error_message))
+                    return GetJobRunsError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetJobRunsError::InternalService(String::from(error_message))
+                    return GetJobRunsError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetJobRunsError::InvalidInput(String::from(error_message))
+                    return GetJobRunsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobRunsError::OperationTimeout(String::from(error_message))
+                    return GetJobRunsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobRunsError::Validation(error_message.to_string())
+                    return GetJobRunsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7962,16 +7962,16 @@ impl GetJobsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobsError::EntityNotFound(String::from(error_message))
+                    return GetJobsError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetJobsError::InternalService(String::from(error_message))
+                    return GetJobsError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetJobsError::InvalidInput(String::from(error_message))
+                    return GetJobsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobsError::OperationTimeout(String::from(error_message))
+                    return GetJobsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => return GetJobsError::Validation(error_message.to_string()),
                 _ => {}
@@ -8058,19 +8058,19 @@ impl GetMappingError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetMappingError::EntityNotFound(String::from(error_message))
+                    return GetMappingError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetMappingError::InternalService(String::from(error_message))
+                    return GetMappingError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetMappingError::InvalidInput(String::from(error_message))
+                    return GetMappingError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetMappingError::OperationTimeout(String::from(error_message))
+                    return GetMappingError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMappingError::Validation(error_message.to_string())
+                    return GetMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8156,19 +8156,19 @@ impl GetPartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetPartitionError::EntityNotFound(String::from(error_message))
+                    return GetPartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetPartitionError::InternalService(String::from(error_message))
+                    return GetPartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetPartitionError::InvalidInput(String::from(error_message))
+                    return GetPartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetPartitionError::OperationTimeout(String::from(error_message))
+                    return GetPartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPartitionError::Validation(error_message.to_string())
+                    return GetPartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8254,19 +8254,19 @@ impl GetPartitionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetPartitionsError::EntityNotFound(String::from(error_message))
+                    return GetPartitionsError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetPartitionsError::InternalService(String::from(error_message))
+                    return GetPartitionsError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetPartitionsError::InvalidInput(String::from(error_message))
+                    return GetPartitionsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetPartitionsError::OperationTimeout(String::from(error_message))
+                    return GetPartitionsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPartitionsError::Validation(error_message.to_string())
+                    return GetPartitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8350,13 +8350,13 @@ impl GetPlanError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetPlanError::InternalService(String::from(error_message))
+                    return GetPlanError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetPlanError::InvalidInput(String::from(error_message))
+                    return GetPlanError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetPlanError::OperationTimeout(String::from(error_message))
+                    return GetPlanError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => return GetPlanError::Validation(error_message.to_string()),
                 _ => {}
@@ -8442,19 +8442,19 @@ impl GetTableError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTableError::EntityNotFound(String::from(error_message))
+                    return GetTableError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetTableError::InternalService(String::from(error_message))
+                    return GetTableError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTableError::InvalidInput(String::from(error_message))
+                    return GetTableError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetTableError::OperationTimeout(String::from(error_message))
+                    return GetTableError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTableError::Validation(error_message.to_string())
+                    return GetTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8540,19 +8540,19 @@ impl GetTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTableVersionError::EntityNotFound(String::from(error_message))
+                    return GetTableVersionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetTableVersionError::InternalService(String::from(error_message))
+                    return GetTableVersionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTableVersionError::InvalidInput(String::from(error_message))
+                    return GetTableVersionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetTableVersionError::OperationTimeout(String::from(error_message))
+                    return GetTableVersionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTableVersionError::Validation(error_message.to_string())
+                    return GetTableVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8638,19 +8638,19 @@ impl GetTableVersionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTableVersionsError::EntityNotFound(String::from(error_message))
+                    return GetTableVersionsError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetTableVersionsError::InternalService(String::from(error_message))
+                    return GetTableVersionsError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTableVersionsError::InvalidInput(String::from(error_message))
+                    return GetTableVersionsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetTableVersionsError::OperationTimeout(String::from(error_message))
+                    return GetTableVersionsError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTableVersionsError::Validation(error_message.to_string())
+                    return GetTableVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8736,19 +8736,19 @@ impl GetTablesError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTablesError::EntityNotFound(String::from(error_message))
+                    return GetTablesError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetTablesError::InternalService(String::from(error_message))
+                    return GetTablesError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTablesError::InvalidInput(String::from(error_message))
+                    return GetTablesError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetTablesError::OperationTimeout(String::from(error_message))
+                    return GetTablesError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTablesError::Validation(error_message.to_string())
+                    return GetTablesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8834,19 +8834,19 @@ impl GetTriggerError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTriggerError::EntityNotFound(String::from(error_message))
+                    return GetTriggerError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetTriggerError::InternalService(String::from(error_message))
+                    return GetTriggerError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTriggerError::InvalidInput(String::from(error_message))
+                    return GetTriggerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetTriggerError::OperationTimeout(String::from(error_message))
+                    return GetTriggerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTriggerError::Validation(error_message.to_string())
+                    return GetTriggerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8932,19 +8932,19 @@ impl GetTriggersError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTriggersError::EntityNotFound(String::from(error_message))
+                    return GetTriggersError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetTriggersError::InternalService(String::from(error_message))
+                    return GetTriggersError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTriggersError::InvalidInput(String::from(error_message))
+                    return GetTriggersError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return GetTriggersError::OperationTimeout(String::from(error_message))
+                    return GetTriggersError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTriggersError::Validation(error_message.to_string())
+                    return GetTriggersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9030,21 +9030,21 @@ impl GetUserDefinedFunctionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetUserDefinedFunctionError::EntityNotFound(String::from(error_message))
+                    return GetUserDefinedFunctionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetUserDefinedFunctionError::InternalService(String::from(error_message))
+                    return GetUserDefinedFunctionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetUserDefinedFunctionError::InvalidInput(String::from(error_message))
+                    return GetUserDefinedFunctionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return GetUserDefinedFunctionError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetUserDefinedFunctionError::Validation(error_message.to_string())
+                    return GetUserDefinedFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9132,23 +9132,23 @@ impl GetUserDefinedFunctionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetUserDefinedFunctionsError::EntityNotFound(String::from(error_message))
+                    return GetUserDefinedFunctionsError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetUserDefinedFunctionsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetUserDefinedFunctionsError::InvalidInput(String::from(error_message))
+                    return GetUserDefinedFunctionsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return GetUserDefinedFunctionsError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetUserDefinedFunctionsError::Validation(error_message.to_string())
+                    return GetUserDefinedFunctionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9232,13 +9232,13 @@ impl ImportCatalogToGlueError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return ImportCatalogToGlueError::InternalService(String::from(error_message))
+                    return ImportCatalogToGlueError::InternalService(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return ImportCatalogToGlueError::OperationTimeout(String::from(error_message))
+                    return ImportCatalogToGlueError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ImportCatalogToGlueError::Validation(error_message.to_string())
+                    return ImportCatalogToGlueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9324,19 +9324,19 @@ impl ResetJobBookmarkError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ResetJobBookmarkError::EntityNotFound(String::from(error_message))
+                    return ResetJobBookmarkError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ResetJobBookmarkError::InternalService(String::from(error_message))
+                    return ResetJobBookmarkError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ResetJobBookmarkError::InvalidInput(String::from(error_message))
+                    return ResetJobBookmarkError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return ResetJobBookmarkError::OperationTimeout(String::from(error_message))
+                    return ResetJobBookmarkError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResetJobBookmarkError::Validation(error_message.to_string())
+                    return ResetJobBookmarkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9420,16 +9420,16 @@ impl StartCrawlerError {
 
             match *error_type {
                 "CrawlerRunningException" => {
-                    return StartCrawlerError::CrawlerRunning(String::from(error_message))
+                    return StartCrawlerError::CrawlerRunning(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return StartCrawlerError::EntityNotFound(String::from(error_message))
+                    return StartCrawlerError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StartCrawlerError::OperationTimeout(String::from(error_message))
+                    return StartCrawlerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartCrawlerError::Validation(error_message.to_string())
+                    return StartCrawlerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9516,24 +9516,24 @@ impl StartCrawlerScheduleError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return StartCrawlerScheduleError::EntityNotFound(String::from(error_message))
+                    return StartCrawlerScheduleError::EntityNotFound(String::from(error_message));
                 }
                 "NoScheduleException" => {
-                    return StartCrawlerScheduleError::NoSchedule(String::from(error_message))
+                    return StartCrawlerScheduleError::NoSchedule(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StartCrawlerScheduleError::OperationTimeout(String::from(error_message))
+                    return StartCrawlerScheduleError::OperationTimeout(String::from(error_message));
                 }
                 "SchedulerRunningException" => {
-                    return StartCrawlerScheduleError::SchedulerRunning(String::from(error_message))
+                    return StartCrawlerScheduleError::SchedulerRunning(String::from(error_message));
                 }
                 "SchedulerTransitioningException" => {
                     return StartCrawlerScheduleError::SchedulerTransitioning(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartCrawlerScheduleError::Validation(error_message.to_string())
+                    return StartCrawlerScheduleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9626,27 +9626,27 @@ impl StartJobRunError {
 
             match *error_type {
                 "ConcurrentRunsExceededException" => {
-                    return StartJobRunError::ConcurrentRunsExceeded(String::from(error_message))
+                    return StartJobRunError::ConcurrentRunsExceeded(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return StartJobRunError::EntityNotFound(String::from(error_message))
+                    return StartJobRunError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return StartJobRunError::InternalService(String::from(error_message))
+                    return StartJobRunError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StartJobRunError::InvalidInput(String::from(error_message))
+                    return StartJobRunError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StartJobRunError::OperationTimeout(String::from(error_message))
+                    return StartJobRunError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return StartJobRunError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartJobRunError::Validation(error_message.to_string())
+                    return StartJobRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9738,27 +9738,27 @@ impl StartTriggerError {
 
             match *error_type {
                 "ConcurrentRunsExceededException" => {
-                    return StartTriggerError::ConcurrentRunsExceeded(String::from(error_message))
+                    return StartTriggerError::ConcurrentRunsExceeded(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return StartTriggerError::EntityNotFound(String::from(error_message))
+                    return StartTriggerError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return StartTriggerError::InternalService(String::from(error_message))
+                    return StartTriggerError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StartTriggerError::InvalidInput(String::from(error_message))
+                    return StartTriggerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StartTriggerError::OperationTimeout(String::from(error_message))
+                    return StartTriggerError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return StartTriggerError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartTriggerError::Validation(error_message.to_string())
+                    return StartTriggerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9846,19 +9846,19 @@ impl StopCrawlerError {
 
             match *error_type {
                 "CrawlerNotRunningException" => {
-                    return StopCrawlerError::CrawlerNotRunning(String::from(error_message))
+                    return StopCrawlerError::CrawlerNotRunning(String::from(error_message));
                 }
                 "CrawlerStoppingException" => {
-                    return StopCrawlerError::CrawlerStopping(String::from(error_message))
+                    return StopCrawlerError::CrawlerStopping(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return StopCrawlerError::EntityNotFound(String::from(error_message))
+                    return StopCrawlerError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StopCrawlerError::OperationTimeout(String::from(error_message))
+                    return StopCrawlerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopCrawlerError::Validation(error_message.to_string())
+                    return StopCrawlerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9944,23 +9944,23 @@ impl StopCrawlerScheduleError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return StopCrawlerScheduleError::EntityNotFound(String::from(error_message))
+                    return StopCrawlerScheduleError::EntityNotFound(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StopCrawlerScheduleError::OperationTimeout(String::from(error_message))
+                    return StopCrawlerScheduleError::OperationTimeout(String::from(error_message));
                 }
                 "SchedulerNotRunningException" => {
                     return StopCrawlerScheduleError::SchedulerNotRunning(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SchedulerTransitioningException" => {
                     return StopCrawlerScheduleError::SchedulerTransitioning(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StopCrawlerScheduleError::Validation(error_message.to_string())
+                    return StopCrawlerScheduleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10050,22 +10050,22 @@ impl StopTriggerError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StopTriggerError::ConcurrentModification(String::from(error_message))
+                    return StopTriggerError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return StopTriggerError::EntityNotFound(String::from(error_message))
+                    return StopTriggerError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return StopTriggerError::InternalService(String::from(error_message))
+                    return StopTriggerError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StopTriggerError::InvalidInput(String::from(error_message))
+                    return StopTriggerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return StopTriggerError::OperationTimeout(String::from(error_message))
+                    return StopTriggerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopTriggerError::Validation(error_message.to_string())
+                    return StopTriggerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10152,19 +10152,19 @@ impl UpdateClassifierError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateClassifierError::EntityNotFound(String::from(error_message))
+                    return UpdateClassifierError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateClassifierError::InvalidInput(String::from(error_message))
+                    return UpdateClassifierError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateClassifierError::OperationTimeout(String::from(error_message))
+                    return UpdateClassifierError::OperationTimeout(String::from(error_message));
                 }
                 "VersionMismatchException" => {
-                    return UpdateClassifierError::VersionMismatch(String::from(error_message))
+                    return UpdateClassifierError::VersionMismatch(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateClassifierError::Validation(error_message.to_string())
+                    return UpdateClassifierError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10248,16 +10248,16 @@ impl UpdateConnectionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateConnectionError::EntityNotFound(String::from(error_message))
+                    return UpdateConnectionError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateConnectionError::InvalidInput(String::from(error_message))
+                    return UpdateConnectionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateConnectionError::OperationTimeout(String::from(error_message))
+                    return UpdateConnectionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateConnectionError::Validation(error_message.to_string())
+                    return UpdateConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10344,22 +10344,22 @@ impl UpdateCrawlerError {
 
             match *error_type {
                 "CrawlerRunningException" => {
-                    return UpdateCrawlerError::CrawlerRunning(String::from(error_message))
+                    return UpdateCrawlerError::CrawlerRunning(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateCrawlerError::EntityNotFound(String::from(error_message))
+                    return UpdateCrawlerError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateCrawlerError::InvalidInput(String::from(error_message))
+                    return UpdateCrawlerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateCrawlerError::OperationTimeout(String::from(error_message))
+                    return UpdateCrawlerError::OperationTimeout(String::from(error_message));
                 }
                 "VersionMismatchException" => {
-                    return UpdateCrawlerError::VersionMismatch(String::from(error_message))
+                    return UpdateCrawlerError::VersionMismatch(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateCrawlerError::Validation(error_message.to_string())
+                    return UpdateCrawlerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10448,24 +10448,24 @@ impl UpdateCrawlerScheduleError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateCrawlerScheduleError::EntityNotFound(String::from(error_message))
+                    return UpdateCrawlerScheduleError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateCrawlerScheduleError::InvalidInput(String::from(error_message))
+                    return UpdateCrawlerScheduleError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateCrawlerScheduleError::OperationTimeout(String::from(error_message))
+                    return UpdateCrawlerScheduleError::OperationTimeout(String::from(error_message));
                 }
                 "SchedulerTransitioningException" => {
                     return UpdateCrawlerScheduleError::SchedulerTransitioning(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "VersionMismatchException" => {
-                    return UpdateCrawlerScheduleError::VersionMismatch(String::from(error_message))
+                    return UpdateCrawlerScheduleError::VersionMismatch(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateCrawlerScheduleError::Validation(error_message.to_string())
+                    return UpdateCrawlerScheduleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10554,19 +10554,19 @@ impl UpdateDatabaseError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateDatabaseError::EntityNotFound(String::from(error_message))
+                    return UpdateDatabaseError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateDatabaseError::InternalService(String::from(error_message))
+                    return UpdateDatabaseError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateDatabaseError::InvalidInput(String::from(error_message))
+                    return UpdateDatabaseError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateDatabaseError::OperationTimeout(String::from(error_message))
+                    return UpdateDatabaseError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDatabaseError::Validation(error_message.to_string())
+                    return UpdateDatabaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10652,19 +10652,19 @@ impl UpdateDevEndpointError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateDevEndpointError::EntityNotFound(String::from(error_message))
+                    return UpdateDevEndpointError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateDevEndpointError::InternalService(String::from(error_message))
+                    return UpdateDevEndpointError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateDevEndpointError::InvalidInput(String::from(error_message))
+                    return UpdateDevEndpointError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateDevEndpointError::OperationTimeout(String::from(error_message))
+                    return UpdateDevEndpointError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDevEndpointError::Validation(error_message.to_string())
+                    return UpdateDevEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10754,22 +10754,22 @@ impl UpdateJobError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateJobError::ConcurrentModification(String::from(error_message))
+                    return UpdateJobError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateJobError::EntityNotFound(String::from(error_message))
+                    return UpdateJobError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateJobError::InternalService(String::from(error_message))
+                    return UpdateJobError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateJobError::InvalidInput(String::from(error_message))
+                    return UpdateJobError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateJobError::OperationTimeout(String::from(error_message))
+                    return UpdateJobError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateJobError::Validation(error_message.to_string())
+                    return UpdateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10856,19 +10856,19 @@ impl UpdatePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdatePartitionError::EntityNotFound(String::from(error_message))
+                    return UpdatePartitionError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdatePartitionError::InternalService(String::from(error_message))
+                    return UpdatePartitionError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdatePartitionError::InvalidInput(String::from(error_message))
+                    return UpdatePartitionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdatePartitionError::OperationTimeout(String::from(error_message))
+                    return UpdatePartitionError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePartitionError::Validation(error_message.to_string())
+                    return UpdatePartitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10958,27 +10958,27 @@ impl UpdateTableError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateTableError::ConcurrentModification(String::from(error_message))
+                    return UpdateTableError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateTableError::EntityNotFound(String::from(error_message))
+                    return UpdateTableError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateTableError::InternalService(String::from(error_message))
+                    return UpdateTableError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateTableError::InvalidInput(String::from(error_message))
+                    return UpdateTableError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateTableError::OperationTimeout(String::from(error_message))
+                    return UpdateTableError::OperationTimeout(String::from(error_message));
                 }
                 "ResourceNumberLimitExceededException" => {
                     return UpdateTableError::ResourceNumberLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateTableError::Validation(error_message.to_string())
+                    return UpdateTableError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11068,22 +11068,22 @@ impl UpdateTriggerError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateTriggerError::ConcurrentModification(String::from(error_message))
+                    return UpdateTriggerError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateTriggerError::EntityNotFound(String::from(error_message))
+                    return UpdateTriggerError::EntityNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateTriggerError::InternalService(String::from(error_message))
+                    return UpdateTriggerError::InternalService(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateTriggerError::InvalidInput(String::from(error_message))
+                    return UpdateTriggerError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateTriggerError::OperationTimeout(String::from(error_message))
+                    return UpdateTriggerError::OperationTimeout(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTriggerError::Validation(error_message.to_string())
+                    return UpdateTriggerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11172,23 +11172,23 @@ impl UpdateUserDefinedFunctionError {
                 "EntityNotFoundException" => {
                     return UpdateUserDefinedFunctionError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return UpdateUserDefinedFunctionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateUserDefinedFunctionError::InvalidInput(String::from(error_message))
+                    return UpdateUserDefinedFunctionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return UpdateUserDefinedFunctionError::OperationTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateUserDefinedFunctionError::Validation(error_message.to_string())
+                    return UpdateUserDefinedFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

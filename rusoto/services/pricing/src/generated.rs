@@ -214,22 +214,22 @@ impl DescribeServicesError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeServicesError::ExpiredNextToken(String::from(error_message))
+                    return DescribeServicesError::ExpiredNextToken(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return DescribeServicesError::InternalError(String::from(error_message))
+                    return DescribeServicesError::InternalError(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeServicesError::InvalidNextToken(String::from(error_message))
+                    return DescribeServicesError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeServicesError::InvalidParameter(String::from(error_message))
+                    return DescribeServicesError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeServicesError::NotFound(String::from(error_message))
+                    return DescribeServicesError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeServicesError::Validation(error_message.to_string())
+                    return DescribeServicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -318,22 +318,22 @@ impl GetAttributeValuesError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return GetAttributeValuesError::ExpiredNextToken(String::from(error_message))
+                    return GetAttributeValuesError::ExpiredNextToken(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return GetAttributeValuesError::InternalError(String::from(error_message))
+                    return GetAttributeValuesError::InternalError(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return GetAttributeValuesError::InvalidNextToken(String::from(error_message))
+                    return GetAttributeValuesError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetAttributeValuesError::InvalidParameter(String::from(error_message))
+                    return GetAttributeValuesError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetAttributeValuesError::NotFound(String::from(error_message))
+                    return GetAttributeValuesError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAttributeValuesError::Validation(error_message.to_string())
+                    return GetAttributeValuesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -424,22 +424,22 @@ impl GetProductsError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return GetProductsError::ExpiredNextToken(String::from(error_message))
+                    return GetProductsError::ExpiredNextToken(String::from(error_message));
                 }
                 "InternalErrorException" => {
-                    return GetProductsError::InternalError(String::from(error_message))
+                    return GetProductsError::InternalError(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return GetProductsError::InvalidNextToken(String::from(error_message))
+                    return GetProductsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetProductsError::InvalidParameter(String::from(error_message))
+                    return GetProductsError::InvalidParameter(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetProductsError::NotFound(String::from(error_message))
+                    return GetProductsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetProductsError::Validation(error_message.to_string())
+                    return GetProductsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

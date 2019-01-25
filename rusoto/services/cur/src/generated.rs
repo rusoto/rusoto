@@ -135,10 +135,10 @@ impl DeleteReportDefinitionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteReportDefinitionError::InternalError(String::from(error_message))
+                    return DeleteReportDefinitionError::InternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteReportDefinitionError::Validation(error_message.to_string())
+                    return DeleteReportDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -219,10 +219,10 @@ impl DescribeReportDefinitionsError {
                 "InternalErrorException" => {
                     return DescribeReportDefinitionsError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeReportDefinitionsError::Validation(error_message.to_string())
+                    return DescribeReportDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -307,16 +307,16 @@ impl PutReportDefinitionError {
                 "DuplicateReportNameException" => {
                     return PutReportDefinitionError::DuplicateReportName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return PutReportDefinitionError::InternalError(String::from(error_message))
+                    return PutReportDefinitionError::InternalError(String::from(error_message));
                 }
                 "ReportLimitReachedException" => {
-                    return PutReportDefinitionError::ReportLimitReached(String::from(error_message))
+                    return PutReportDefinitionError::ReportLimitReached(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutReportDefinitionError::Validation(error_message.to_string())
+                    return PutReportDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

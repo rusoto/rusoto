@@ -690,13 +690,13 @@ impl AssociateNodeError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return AssociateNodeError::InvalidState(String::from(error_message))
+                    return AssociateNodeError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateNodeError::ResourceNotFound(String::from(error_message))
+                    return AssociateNodeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateNodeError::Validation(error_message.to_string())
+                    return AssociateNodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -778,16 +778,16 @@ impl CreateBackupError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return CreateBackupError::InvalidState(String::from(error_message))
+                    return CreateBackupError::InvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateBackupError::LimitExceeded(String::from(error_message))
+                    return CreateBackupError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateBackupError::ResourceNotFound(String::from(error_message))
+                    return CreateBackupError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBackupError::Validation(error_message.to_string())
+                    return CreateBackupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -870,16 +870,16 @@ impl CreateServerError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return CreateServerError::LimitExceeded(String::from(error_message))
+                    return CreateServerError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateServerError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateServerError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateServerError::ResourceNotFound(String::from(error_message))
+                    return CreateServerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateServerError::Validation(error_message.to_string())
+                    return CreateServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -960,13 +960,13 @@ impl DeleteBackupError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return DeleteBackupError::InvalidState(String::from(error_message))
+                    return DeleteBackupError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteBackupError::ResourceNotFound(String::from(error_message))
+                    return DeleteBackupError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBackupError::Validation(error_message.to_string())
+                    return DeleteBackupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1046,13 +1046,13 @@ impl DeleteServerError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return DeleteServerError::InvalidState(String::from(error_message))
+                    return DeleteServerError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteServerError::ResourceNotFound(String::from(error_message))
+                    return DeleteServerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteServerError::Validation(error_message.to_string())
+                    return DeleteServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1128,7 +1128,7 @@ impl DescribeAccountAttributesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeAccountAttributesError::Validation(error_message.to_string())
+                    return DescribeAccountAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1208,13 +1208,13 @@ impl DescribeBackupsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeBackupsError::InvalidNextToken(String::from(error_message))
+                    return DescribeBackupsError::InvalidNextToken(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeBackupsError::ResourceNotFound(String::from(error_message))
+                    return DescribeBackupsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBackupsError::Validation(error_message.to_string())
+                    return DescribeBackupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1294,13 +1294,13 @@ impl DescribeEventsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeEventsError::InvalidNextToken(String::from(error_message))
+                    return DescribeEventsError::InvalidNextToken(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeEventsError::ResourceNotFound(String::from(error_message))
+                    return DescribeEventsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventsError::Validation(error_message.to_string())
+                    return DescribeEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1380,10 +1380,10 @@ impl DescribeNodeAssociationStatusError {
                 "ResourceNotFoundException" => {
                     return DescribeNodeAssociationStatusError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeNodeAssociationStatusError::Validation(error_message.to_string())
+                    return DescribeNodeAssociationStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1464,13 +1464,13 @@ impl DescribeServersError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeServersError::InvalidNextToken(String::from(error_message))
+                    return DescribeServersError::InvalidNextToken(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeServersError::ResourceNotFound(String::from(error_message))
+                    return DescribeServersError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeServersError::Validation(error_message.to_string())
+                    return DescribeServersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1550,13 +1550,13 @@ impl DisassociateNodeError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return DisassociateNodeError::InvalidState(String::from(error_message))
+                    return DisassociateNodeError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateNodeError::ResourceNotFound(String::from(error_message))
+                    return DisassociateNodeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateNodeError::Validation(error_message.to_string())
+                    return DisassociateNodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1636,13 +1636,13 @@ impl RestoreServerError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return RestoreServerError::InvalidState(String::from(error_message))
+                    return RestoreServerError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RestoreServerError::ResourceNotFound(String::from(error_message))
+                    return RestoreServerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RestoreServerError::Validation(error_message.to_string())
+                    return RestoreServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1722,13 +1722,13 @@ impl StartMaintenanceError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return StartMaintenanceError::InvalidState(String::from(error_message))
+                    return StartMaintenanceError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartMaintenanceError::ResourceNotFound(String::from(error_message))
+                    return StartMaintenanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartMaintenanceError::Validation(error_message.to_string())
+                    return StartMaintenanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1808,13 +1808,13 @@ impl UpdateServerError {
 
             match *error_type {
                 "InvalidStateException" => {
-                    return UpdateServerError::InvalidState(String::from(error_message))
+                    return UpdateServerError::InvalidState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateServerError::ResourceNotFound(String::from(error_message))
+                    return UpdateServerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateServerError::Validation(error_message.to_string())
+                    return UpdateServerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1896,15 +1896,15 @@ impl UpdateServerEngineAttributesError {
                 "InvalidStateException" => {
                     return UpdateServerEngineAttributesError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateServerEngineAttributesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateServerEngineAttributesError::Validation(error_message.to_string())
+                    return UpdateServerEngineAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

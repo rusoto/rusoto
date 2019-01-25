@@ -453,19 +453,19 @@ impl CreateVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return CreateVocabularyError::BadRequest(String::from(error_message))
+                    return CreateVocabularyError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateVocabularyError::Conflict(String::from(error_message))
+                    return CreateVocabularyError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateVocabularyError::InternalFailure(String::from(error_message))
+                    return CreateVocabularyError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateVocabularyError::LimitExceeded(String::from(error_message))
+                    return CreateVocabularyError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateVocabularyError::Validation(error_message.to_string())
+                    return CreateVocabularyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -551,19 +551,19 @@ impl DeleteVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteVocabularyError::BadRequest(String::from(error_message))
+                    return DeleteVocabularyError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteVocabularyError::InternalFailure(String::from(error_message))
+                    return DeleteVocabularyError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteVocabularyError::LimitExceeded(String::from(error_message))
+                    return DeleteVocabularyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteVocabularyError::NotFound(String::from(error_message))
+                    return DeleteVocabularyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteVocabularyError::Validation(error_message.to_string())
+                    return DeleteVocabularyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -649,19 +649,19 @@ impl GetTranscriptionJobError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return GetTranscriptionJobError::BadRequest(String::from(error_message))
+                    return GetTranscriptionJobError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetTranscriptionJobError::InternalFailure(String::from(error_message))
+                    return GetTranscriptionJobError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetTranscriptionJobError::LimitExceeded(String::from(error_message))
+                    return GetTranscriptionJobError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetTranscriptionJobError::NotFound(String::from(error_message))
+                    return GetTranscriptionJobError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTranscriptionJobError::Validation(error_message.to_string())
+                    return GetTranscriptionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -749,19 +749,19 @@ impl GetVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return GetVocabularyError::BadRequest(String::from(error_message))
+                    return GetVocabularyError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetVocabularyError::InternalFailure(String::from(error_message))
+                    return GetVocabularyError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetVocabularyError::LimitExceeded(String::from(error_message))
+                    return GetVocabularyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetVocabularyError::NotFound(String::from(error_message))
+                    return GetVocabularyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetVocabularyError::Validation(error_message.to_string())
+                    return GetVocabularyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -845,16 +845,16 @@ impl ListTranscriptionJobsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return ListTranscriptionJobsError::BadRequest(String::from(error_message))
+                    return ListTranscriptionJobsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListTranscriptionJobsError::InternalFailure(String::from(error_message))
+                    return ListTranscriptionJobsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListTranscriptionJobsError::LimitExceeded(String::from(error_message))
+                    return ListTranscriptionJobsError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTranscriptionJobsError::Validation(error_message.to_string())
+                    return ListTranscriptionJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -939,16 +939,16 @@ impl ListVocabulariesError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return ListVocabulariesError::BadRequest(String::from(error_message))
+                    return ListVocabulariesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListVocabulariesError::InternalFailure(String::from(error_message))
+                    return ListVocabulariesError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListVocabulariesError::LimitExceeded(String::from(error_message))
+                    return ListVocabulariesError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListVocabulariesError::Validation(error_message.to_string())
+                    return ListVocabulariesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1033,19 +1033,19 @@ impl StartTranscriptionJobError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return StartTranscriptionJobError::BadRequest(String::from(error_message))
+                    return StartTranscriptionJobError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return StartTranscriptionJobError::Conflict(String::from(error_message))
+                    return StartTranscriptionJobError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return StartTranscriptionJobError::InternalFailure(String::from(error_message))
+                    return StartTranscriptionJobError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartTranscriptionJobError::LimitExceeded(String::from(error_message))
+                    return StartTranscriptionJobError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartTranscriptionJobError::Validation(error_message.to_string())
+                    return StartTranscriptionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1135,22 +1135,22 @@ impl UpdateVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return UpdateVocabularyError::BadRequest(String::from(error_message))
+                    return UpdateVocabularyError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateVocabularyError::Conflict(String::from(error_message))
+                    return UpdateVocabularyError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return UpdateVocabularyError::InternalFailure(String::from(error_message))
+                    return UpdateVocabularyError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateVocabularyError::LimitExceeded(String::from(error_message))
+                    return UpdateVocabularyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateVocabularyError::NotFound(String::from(error_message))
+                    return UpdateVocabularyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateVocabularyError::Validation(error_message.to_string())
+                    return UpdateVocabularyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

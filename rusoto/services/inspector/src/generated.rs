@@ -1458,24 +1458,24 @@ impl AddAttributesToFindingsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AddAttributesToFindingsError::AccessDenied(String::from(error_message))
+                    return AddAttributesToFindingsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return AddAttributesToFindingsError::Internal(String::from(error_message))
+                    return AddAttributesToFindingsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AddAttributesToFindingsError::InvalidInput(String::from(error_message))
+                    return AddAttributesToFindingsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return AddAttributesToFindingsError::NoSuchEntity(String::from(error_message))
+                    return AddAttributesToFindingsError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return AddAttributesToFindingsError::ServiceTemporarilyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return AddAttributesToFindingsError::Validation(error_message.to_string())
+                    return AddAttributesToFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1570,32 +1570,32 @@ impl CreateAssessmentTargetError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateAssessmentTargetError::AccessDenied(String::from(error_message))
+                    return CreateAssessmentTargetError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return CreateAssessmentTargetError::Internal(String::from(error_message))
+                    return CreateAssessmentTargetError::Internal(String::from(error_message));
                 }
                 "InvalidCrossAccountRoleException" => {
                     return CreateAssessmentTargetError::InvalidCrossAccountRole(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateAssessmentTargetError::InvalidInput(String::from(error_message))
+                    return CreateAssessmentTargetError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateAssessmentTargetError::LimitExceeded(String::from(error_message))
+                    return CreateAssessmentTargetError::LimitExceeded(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return CreateAssessmentTargetError::NoSuchEntity(String::from(error_message))
+                    return CreateAssessmentTargetError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return CreateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateAssessmentTargetError::Validation(error_message.to_string())
+                    return CreateAssessmentTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1690,27 +1690,27 @@ impl CreateAssessmentTemplateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateAssessmentTemplateError::AccessDenied(String::from(error_message))
+                    return CreateAssessmentTemplateError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return CreateAssessmentTemplateError::Internal(String::from(error_message))
+                    return CreateAssessmentTemplateError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateAssessmentTemplateError::InvalidInput(String::from(error_message))
+                    return CreateAssessmentTemplateError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateAssessmentTemplateError::LimitExceeded(String::from(error_message))
+                    return CreateAssessmentTemplateError::LimitExceeded(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return CreateAssessmentTemplateError::NoSuchEntity(String::from(error_message))
+                    return CreateAssessmentTemplateError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return CreateAssessmentTemplateError::Validation(error_message.to_string())
+                    return CreateAssessmentTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1804,29 +1804,29 @@ impl CreateExclusionsPreviewError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateExclusionsPreviewError::AccessDenied(String::from(error_message))
+                    return CreateExclusionsPreviewError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return CreateExclusionsPreviewError::Internal(String::from(error_message))
+                    return CreateExclusionsPreviewError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateExclusionsPreviewError::InvalidInput(String::from(error_message))
+                    return CreateExclusionsPreviewError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return CreateExclusionsPreviewError::NoSuchEntity(String::from(error_message))
+                    return CreateExclusionsPreviewError::NoSuchEntity(String::from(error_message));
                 }
                 "PreviewGenerationInProgressException" => {
                     return CreateExclusionsPreviewError::PreviewGenerationInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return CreateExclusionsPreviewError::Validation(error_message.to_string())
+                    return CreateExclusionsPreviewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1918,24 +1918,24 @@ impl CreateResourceGroupError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateResourceGroupError::AccessDenied(String::from(error_message))
+                    return CreateResourceGroupError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return CreateResourceGroupError::Internal(String::from(error_message))
+                    return CreateResourceGroupError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateResourceGroupError::InvalidInput(String::from(error_message))
+                    return CreateResourceGroupError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateResourceGroupError::LimitExceeded(String::from(error_message))
+                    return CreateResourceGroupError::LimitExceeded(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return CreateResourceGroupError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateResourceGroupError::Validation(error_message.to_string())
+                    return CreateResourceGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2028,29 +2028,29 @@ impl DeleteAssessmentRunError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteAssessmentRunError::AccessDenied(String::from(error_message))
+                    return DeleteAssessmentRunError::AccessDenied(String::from(error_message));
                 }
                 "AssessmentRunInProgressException" => {
                     return DeleteAssessmentRunError::AssessmentRunInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return DeleteAssessmentRunError::Internal(String::from(error_message))
+                    return DeleteAssessmentRunError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteAssessmentRunError::InvalidInput(String::from(error_message))
+                    return DeleteAssessmentRunError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return DeleteAssessmentRunError::NoSuchEntity(String::from(error_message))
+                    return DeleteAssessmentRunError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return DeleteAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteAssessmentRunError::Validation(error_message.to_string())
+                    return DeleteAssessmentRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2144,29 +2144,29 @@ impl DeleteAssessmentTargetError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteAssessmentTargetError::AccessDenied(String::from(error_message))
+                    return DeleteAssessmentTargetError::AccessDenied(String::from(error_message));
                 }
                 "AssessmentRunInProgressException" => {
                     return DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return DeleteAssessmentTargetError::Internal(String::from(error_message))
+                    return DeleteAssessmentTargetError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteAssessmentTargetError::InvalidInput(String::from(error_message))
+                    return DeleteAssessmentTargetError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return DeleteAssessmentTargetError::NoSuchEntity(String::from(error_message))
+                    return DeleteAssessmentTargetError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteAssessmentTargetError::Validation(error_message.to_string())
+                    return DeleteAssessmentTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2260,29 +2260,29 @@ impl DeleteAssessmentTemplateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteAssessmentTemplateError::AccessDenied(String::from(error_message))
+                    return DeleteAssessmentTemplateError::AccessDenied(String::from(error_message));
                 }
                 "AssessmentRunInProgressException" => {
                     return DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return DeleteAssessmentTemplateError::Internal(String::from(error_message))
+                    return DeleteAssessmentTemplateError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteAssessmentTemplateError::InvalidInput(String::from(error_message))
+                    return DeleteAssessmentTemplateError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return DeleteAssessmentTemplateError::NoSuchEntity(String::from(error_message))
+                    return DeleteAssessmentTemplateError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return DeleteAssessmentTemplateError::Validation(error_message.to_string())
+                    return DeleteAssessmentTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2368,13 +2368,13 @@ impl DescribeAssessmentRunsError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeAssessmentRunsError::Internal(String::from(error_message))
+                    return DescribeAssessmentRunsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeAssessmentRunsError::InvalidInput(String::from(error_message))
+                    return DescribeAssessmentRunsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAssessmentRunsError::Validation(error_message.to_string())
+                    return DescribeAssessmentRunsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2456,13 +2456,13 @@ impl DescribeAssessmentTargetsError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeAssessmentTargetsError::Internal(String::from(error_message))
+                    return DescribeAssessmentTargetsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeAssessmentTargetsError::InvalidInput(String::from(error_message))
+                    return DescribeAssessmentTargetsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAssessmentTargetsError::Validation(error_message.to_string())
+                    return DescribeAssessmentTargetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2544,15 +2544,15 @@ impl DescribeAssessmentTemplatesError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeAssessmentTemplatesError::Internal(String::from(error_message))
+                    return DescribeAssessmentTemplatesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
                     return DescribeAssessmentTemplatesError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeAssessmentTemplatesError::Validation(error_message.to_string())
+                    return DescribeAssessmentTemplatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2634,12 +2634,12 @@ impl DescribeCrossAccountAccessRoleError {
                 "InternalException" => {
                     return DescribeCrossAccountAccessRoleError::Internal(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeCrossAccountAccessRoleError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2720,13 +2720,13 @@ impl DescribeExclusionsError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeExclusionsError::Internal(String::from(error_message))
+                    return DescribeExclusionsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeExclusionsError::InvalidInput(String::from(error_message))
+                    return DescribeExclusionsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeExclusionsError::Validation(error_message.to_string())
+                    return DescribeExclusionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2808,13 +2808,13 @@ impl DescribeFindingsError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeFindingsError::Internal(String::from(error_message))
+                    return DescribeFindingsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeFindingsError::InvalidInput(String::from(error_message))
+                    return DescribeFindingsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeFindingsError::Validation(error_message.to_string())
+                    return DescribeFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2894,13 +2894,13 @@ impl DescribeResourceGroupsError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeResourceGroupsError::Internal(String::from(error_message))
+                    return DescribeResourceGroupsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeResourceGroupsError::InvalidInput(String::from(error_message))
+                    return DescribeResourceGroupsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeResourceGroupsError::Validation(error_message.to_string())
+                    return DescribeResourceGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2982,13 +2982,13 @@ impl DescribeRulesPackagesError {
 
             match *error_type {
                 "InternalException" => {
-                    return DescribeRulesPackagesError::Internal(String::from(error_message))
+                    return DescribeRulesPackagesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeRulesPackagesError::InvalidInput(String::from(error_message))
+                    return DescribeRulesPackagesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeRulesPackagesError::Validation(error_message.to_string())
+                    return DescribeRulesPackagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3080,32 +3080,32 @@ impl GetAssessmentReportError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetAssessmentReportError::AccessDenied(String::from(error_message))
+                    return GetAssessmentReportError::AccessDenied(String::from(error_message));
                 }
                 "AssessmentRunInProgressException" => {
                     return GetAssessmentReportError::AssessmentRunInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return GetAssessmentReportError::Internal(String::from(error_message))
+                    return GetAssessmentReportError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetAssessmentReportError::InvalidInput(String::from(error_message))
+                    return GetAssessmentReportError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return GetAssessmentReportError::NoSuchEntity(String::from(error_message))
+                    return GetAssessmentReportError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return GetAssessmentReportError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedFeatureException" => {
-                    return GetAssessmentReportError::UnsupportedFeature(String::from(error_message))
+                    return GetAssessmentReportError::UnsupportedFeature(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAssessmentReportError::Validation(error_message.to_string())
+                    return GetAssessmentReportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3196,19 +3196,19 @@ impl GetExclusionsPreviewError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetExclusionsPreviewError::AccessDenied(String::from(error_message))
+                    return GetExclusionsPreviewError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return GetExclusionsPreviewError::Internal(String::from(error_message))
+                    return GetExclusionsPreviewError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetExclusionsPreviewError::InvalidInput(String::from(error_message))
+                    return GetExclusionsPreviewError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return GetExclusionsPreviewError::NoSuchEntity(String::from(error_message))
+                    return GetExclusionsPreviewError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetExclusionsPreviewError::Validation(error_message.to_string())
+                    return GetExclusionsPreviewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3296,19 +3296,19 @@ impl GetTelemetryMetadataError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetTelemetryMetadataError::AccessDenied(String::from(error_message))
+                    return GetTelemetryMetadataError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return GetTelemetryMetadataError::Internal(String::from(error_message))
+                    return GetTelemetryMetadataError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetTelemetryMetadataError::InvalidInput(String::from(error_message))
+                    return GetTelemetryMetadataError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return GetTelemetryMetadataError::NoSuchEntity(String::from(error_message))
+                    return GetTelemetryMetadataError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTelemetryMetadataError::Validation(error_message.to_string())
+                    return GetTelemetryMetadataError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3396,19 +3396,19 @@ impl ListAssessmentRunAgentsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListAssessmentRunAgentsError::AccessDenied(String::from(error_message))
+                    return ListAssessmentRunAgentsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListAssessmentRunAgentsError::Internal(String::from(error_message))
+                    return ListAssessmentRunAgentsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListAssessmentRunAgentsError::InvalidInput(String::from(error_message))
+                    return ListAssessmentRunAgentsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListAssessmentRunAgentsError::NoSuchEntity(String::from(error_message))
+                    return ListAssessmentRunAgentsError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAssessmentRunAgentsError::Validation(error_message.to_string())
+                    return ListAssessmentRunAgentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3496,19 +3496,19 @@ impl ListAssessmentRunsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListAssessmentRunsError::AccessDenied(String::from(error_message))
+                    return ListAssessmentRunsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListAssessmentRunsError::Internal(String::from(error_message))
+                    return ListAssessmentRunsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListAssessmentRunsError::InvalidInput(String::from(error_message))
+                    return ListAssessmentRunsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListAssessmentRunsError::NoSuchEntity(String::from(error_message))
+                    return ListAssessmentRunsError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAssessmentRunsError::Validation(error_message.to_string())
+                    return ListAssessmentRunsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3594,16 +3594,16 @@ impl ListAssessmentTargetsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListAssessmentTargetsError::AccessDenied(String::from(error_message))
+                    return ListAssessmentTargetsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListAssessmentTargetsError::Internal(String::from(error_message))
+                    return ListAssessmentTargetsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListAssessmentTargetsError::InvalidInput(String::from(error_message))
+                    return ListAssessmentTargetsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAssessmentTargetsError::Validation(error_message.to_string())
+                    return ListAssessmentTargetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3690,19 +3690,19 @@ impl ListAssessmentTemplatesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListAssessmentTemplatesError::AccessDenied(String::from(error_message))
+                    return ListAssessmentTemplatesError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListAssessmentTemplatesError::Internal(String::from(error_message))
+                    return ListAssessmentTemplatesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListAssessmentTemplatesError::InvalidInput(String::from(error_message))
+                    return ListAssessmentTemplatesError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListAssessmentTemplatesError::NoSuchEntity(String::from(error_message))
+                    return ListAssessmentTemplatesError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAssessmentTemplatesError::Validation(error_message.to_string())
+                    return ListAssessmentTemplatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3790,19 +3790,19 @@ impl ListEventSubscriptionsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListEventSubscriptionsError::AccessDenied(String::from(error_message))
+                    return ListEventSubscriptionsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListEventSubscriptionsError::Internal(String::from(error_message))
+                    return ListEventSubscriptionsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListEventSubscriptionsError::InvalidInput(String::from(error_message))
+                    return ListEventSubscriptionsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListEventSubscriptionsError::NoSuchEntity(String::from(error_message))
+                    return ListEventSubscriptionsError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListEventSubscriptionsError::Validation(error_message.to_string())
+                    return ListEventSubscriptionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3890,19 +3890,19 @@ impl ListExclusionsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListExclusionsError::AccessDenied(String::from(error_message))
+                    return ListExclusionsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListExclusionsError::Internal(String::from(error_message))
+                    return ListExclusionsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListExclusionsError::InvalidInput(String::from(error_message))
+                    return ListExclusionsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListExclusionsError::NoSuchEntity(String::from(error_message))
+                    return ListExclusionsError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListExclusionsError::Validation(error_message.to_string())
+                    return ListExclusionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3988,19 +3988,19 @@ impl ListFindingsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListFindingsError::AccessDenied(String::from(error_message))
+                    return ListFindingsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListFindingsError::Internal(String::from(error_message))
+                    return ListFindingsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListFindingsError::InvalidInput(String::from(error_message))
+                    return ListFindingsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListFindingsError::NoSuchEntity(String::from(error_message))
+                    return ListFindingsError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFindingsError::Validation(error_message.to_string())
+                    return ListFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4084,16 +4084,16 @@ impl ListRulesPackagesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListRulesPackagesError::AccessDenied(String::from(error_message))
+                    return ListRulesPackagesError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListRulesPackagesError::Internal(String::from(error_message))
+                    return ListRulesPackagesError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListRulesPackagesError::InvalidInput(String::from(error_message))
+                    return ListRulesPackagesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRulesPackagesError::Validation(error_message.to_string())
+                    return ListRulesPackagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4180,19 +4180,19 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListTagsForResourceError::AccessDenied(String::from(error_message))
+                    return ListTagsForResourceError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return ListTagsForResourceError::Internal(String::from(error_message))
+                    return ListTagsForResourceError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListTagsForResourceError::InvalidInput(String::from(error_message))
+                    return ListTagsForResourceError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return ListTagsForResourceError::NoSuchEntity(String::from(error_message))
+                    return ListTagsForResourceError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4282,22 +4282,22 @@ impl PreviewAgentsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return PreviewAgentsError::AccessDenied(String::from(error_message))
+                    return PreviewAgentsError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return PreviewAgentsError::Internal(String::from(error_message))
+                    return PreviewAgentsError::Internal(String::from(error_message));
                 }
                 "InvalidCrossAccountRoleException" => {
-                    return PreviewAgentsError::InvalidCrossAccountRole(String::from(error_message))
+                    return PreviewAgentsError::InvalidCrossAccountRole(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return PreviewAgentsError::InvalidInput(String::from(error_message))
+                    return PreviewAgentsError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return PreviewAgentsError::NoSuchEntity(String::from(error_message))
+                    return PreviewAgentsError::NoSuchEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PreviewAgentsError::Validation(error_message.to_string())
+                    return PreviewAgentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4388,32 +4388,32 @@ impl RegisterCrossAccountAccessRoleError {
                 "AccessDeniedException" => {
                     return RegisterCrossAccountAccessRoleError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
                     return RegisterCrossAccountAccessRoleError::Internal(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return RegisterCrossAccountAccessRoleError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return RegisterCrossAccountAccessRoleError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4506,28 +4506,28 @@ impl RemoveAttributesFromFindingsError {
                 "AccessDeniedException" => {
                     return RemoveAttributesFromFindingsError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return RemoveAttributesFromFindingsError::Internal(String::from(error_message))
+                    return RemoveAttributesFromFindingsError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
                     return RemoveAttributesFromFindingsError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoSuchEntityException" => {
                     return RemoveAttributesFromFindingsError::NoSuchEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return RemoveAttributesFromFindingsError::Validation(error_message.to_string())
+                    return RemoveAttributesFromFindingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4618,24 +4618,24 @@ impl SetTagsForResourceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SetTagsForResourceError::AccessDenied(String::from(error_message))
+                    return SetTagsForResourceError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return SetTagsForResourceError::Internal(String::from(error_message))
+                    return SetTagsForResourceError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return SetTagsForResourceError::InvalidInput(String::from(error_message))
+                    return SetTagsForResourceError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return SetTagsForResourceError::NoSuchEntity(String::from(error_message))
+                    return SetTagsForResourceError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return SetTagsForResourceError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetTagsForResourceError::Validation(error_message.to_string())
+                    return SetTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4732,37 +4732,37 @@ impl StartAssessmentRunError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartAssessmentRunError::AccessDenied(String::from(error_message))
+                    return StartAssessmentRunError::AccessDenied(String::from(error_message));
                 }
                 "AgentsAlreadyRunningAssessmentException" => {
                     return StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalException" => {
-                    return StartAssessmentRunError::Internal(String::from(error_message))
+                    return StartAssessmentRunError::Internal(String::from(error_message));
                 }
                 "InvalidCrossAccountRoleException" => {
                     return StartAssessmentRunError::InvalidCrossAccountRole(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return StartAssessmentRunError::InvalidInput(String::from(error_message))
+                    return StartAssessmentRunError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartAssessmentRunError::LimitExceeded(String::from(error_message))
+                    return StartAssessmentRunError::LimitExceeded(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return StartAssessmentRunError::NoSuchEntity(String::from(error_message))
+                    return StartAssessmentRunError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return StartAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartAssessmentRunError::Validation(error_message.to_string())
+                    return StartAssessmentRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4856,24 +4856,24 @@ impl StopAssessmentRunError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StopAssessmentRunError::AccessDenied(String::from(error_message))
+                    return StopAssessmentRunError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return StopAssessmentRunError::Internal(String::from(error_message))
+                    return StopAssessmentRunError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return StopAssessmentRunError::InvalidInput(String::from(error_message))
+                    return StopAssessmentRunError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return StopAssessmentRunError::NoSuchEntity(String::from(error_message))
+                    return StopAssessmentRunError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return StopAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StopAssessmentRunError::Validation(error_message.to_string())
+                    return StopAssessmentRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4966,27 +4966,27 @@ impl SubscribeToEventError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SubscribeToEventError::AccessDenied(String::from(error_message))
+                    return SubscribeToEventError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return SubscribeToEventError::Internal(String::from(error_message))
+                    return SubscribeToEventError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return SubscribeToEventError::InvalidInput(String::from(error_message))
+                    return SubscribeToEventError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return SubscribeToEventError::LimitExceeded(String::from(error_message))
+                    return SubscribeToEventError::LimitExceeded(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return SubscribeToEventError::NoSuchEntity(String::from(error_message))
+                    return SubscribeToEventError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return SubscribeToEventError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SubscribeToEventError::Validation(error_message.to_string())
+                    return SubscribeToEventError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5076,24 +5076,24 @@ impl UnsubscribeFromEventError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UnsubscribeFromEventError::AccessDenied(String::from(error_message))
+                    return UnsubscribeFromEventError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return UnsubscribeFromEventError::Internal(String::from(error_message))
+                    return UnsubscribeFromEventError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UnsubscribeFromEventError::InvalidInput(String::from(error_message))
+                    return UnsubscribeFromEventError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return UnsubscribeFromEventError::NoSuchEntity(String::from(error_message))
+                    return UnsubscribeFromEventError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return UnsubscribeFromEventError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UnsubscribeFromEventError::Validation(error_message.to_string())
+                    return UnsubscribeFromEventError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5184,24 +5184,24 @@ impl UpdateAssessmentTargetError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateAssessmentTargetError::AccessDenied(String::from(error_message))
+                    return UpdateAssessmentTargetError::AccessDenied(String::from(error_message));
                 }
                 "InternalException" => {
-                    return UpdateAssessmentTargetError::Internal(String::from(error_message))
+                    return UpdateAssessmentTargetError::Internal(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateAssessmentTargetError::InvalidInput(String::from(error_message))
+                    return UpdateAssessmentTargetError::InvalidInput(String::from(error_message));
                 }
                 "NoSuchEntityException" => {
-                    return UpdateAssessmentTargetError::NoSuchEntity(String::from(error_message))
+                    return UpdateAssessmentTargetError::NoSuchEntity(String::from(error_message));
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateAssessmentTargetError::Validation(error_message.to_string())
+                    return UpdateAssessmentTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

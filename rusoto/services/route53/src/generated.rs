@@ -9958,37 +9958,37 @@ impl AssociateVPCWithHostedZoneError {
                     "ConflictingDomainExists" => {
                         return AssociateVPCWithHostedZoneError::ConflictingDomainExists(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidInput" => {
                         return AssociateVPCWithHostedZoneError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCId" => {
                         return AssociateVPCWithHostedZoneError::InvalidVPCId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitsExceeded" => {
                         return AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NotAuthorizedException" => {
                         return AssociateVPCWithHostedZoneError::NotAuthorized(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PublicZoneVPCAssociation" => {
                         return AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10088,27 +10088,27 @@ impl ChangeResourceRecordSetsError {
                     "InvalidChangeBatch" => {
                         return ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return ChangeResourceRecordSetsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PriorRequestNotComplete" => {
                         return ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10206,27 +10206,27 @@ impl ChangeTagsForResourceError {
                     "InvalidInput" => {
                         return ChangeTagsForResourceError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return ChangeTagsForResourceError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return ChangeTagsForResourceError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PriorRequestNotComplete" => {
                         return ChangeTagsForResourceError::PriorRequestNotComplete(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ThrottlingException" => {
                         return ChangeTagsForResourceError::Throttling(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10320,17 +10320,17 @@ impl CreateHealthCheckError {
                     "HealthCheckAlreadyExists" => {
                         return CreateHealthCheckError::HealthCheckAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return CreateHealthCheckError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyHealthChecks" => {
                         return CreateHealthCheckError::TooManyHealthChecks(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10434,47 +10434,47 @@ impl CreateHostedZoneError {
                     "ConflictingDomainExists" => {
                         return CreateHostedZoneError::ConflictingDomainExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DelegationSetNotAvailable" => {
                         return CreateHostedZoneError::DelegationSetNotAvailable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DelegationSetNotReusable" => {
                         return CreateHostedZoneError::DelegationSetNotReusable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "HostedZoneAlreadyExists" => {
                         return CreateHostedZoneError::HostedZoneAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDomainName" => {
                         return CreateHostedZoneError::InvalidDomainName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return CreateHostedZoneError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCId" => {
                         return CreateHostedZoneError::InvalidVPCId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDelegationSet" => {
                         return CreateHostedZoneError::NoSuchDelegationSet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyHostedZones" => {
                         return CreateHostedZoneError::TooManyHostedZones(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10676,37 +10676,37 @@ impl CreateReusableDelegationSetError {
                     "DelegationSetAlreadyCreated" => {
                         return CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DelegationSetAlreadyReusable" => {
                         return CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DelegationSetNotAvailable" => {
                         return CreateReusableDelegationSetError::DelegationSetNotAvailable(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "HostedZoneNotFound" => {
                         return CreateReusableDelegationSetError::HostedZoneNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidArgument" => {
                         return CreateReusableDelegationSetError::InvalidArgument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return CreateReusableDelegationSetError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitsExceeded" => {
                         return CreateReusableDelegationSetError::LimitsExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10804,22 +10804,22 @@ impl CreateTrafficPolicyError {
                     "InvalidInput" => {
                         return CreateTrafficPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTrafficPolicyDocument" => {
                         return CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTrafficPolicies" => {
                         return CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TrafficPolicyAlreadyExists" => {
                         return CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10916,27 +10916,27 @@ impl CreateTrafficPolicyInstanceError {
                     "InvalidInput" => {
                         return CreateTrafficPolicyInstanceError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTrafficPolicyInstances" => {
                         return CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TrafficPolicyInstanceAlreadyExists" => {
                         return CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11222,17 +11222,17 @@ impl DeleteHealthCheckError {
                     "HealthCheckInUse" => {
                         return DeleteHealthCheckError::HealthCheckInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return DeleteHealthCheckError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return DeleteHealthCheckError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11328,27 +11328,27 @@ impl DeleteHostedZoneError {
                     "HostedZoneNotEmpty" => {
                         return DeleteHostedZoneError::HostedZoneNotEmpty(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidDomainName" => {
                         return DeleteHostedZoneError::InvalidDomainName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return DeleteHostedZoneError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return DeleteHostedZoneError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PriorRequestNotComplete" => {
                         return DeleteHostedZoneError::PriorRequestNotComplete(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11440,17 +11440,17 @@ impl DeleteQueryLoggingConfigError {
                     "ConcurrentModification" => {
                         return DeleteQueryLoggingConfigError::ConcurrentModification(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return DeleteQueryLoggingConfigError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchQueryLoggingConfig" => {
                         return DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11544,22 +11544,22 @@ impl DeleteReusableDelegationSetError {
                     "DelegationSetInUse" => {
                         return DeleteReusableDelegationSetError::DelegationSetInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DelegationSetNotReusable" => {
                         return DeleteReusableDelegationSetError::DelegationSetNotReusable(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidInput" => {
                         return DeleteReusableDelegationSetError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDelegationSet" => {
                         return DeleteReusableDelegationSetError::NoSuchDelegationSet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11654,22 +11654,22 @@ impl DeleteTrafficPolicyError {
                     "ConcurrentModification" => {
                         return DeleteTrafficPolicyError::ConcurrentModification(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return DeleteTrafficPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return DeleteTrafficPolicyError::NoSuchTrafficPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TrafficPolicyInUse" => {
                         return DeleteTrafficPolicyError::TrafficPolicyInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11762,17 +11762,17 @@ impl DeleteTrafficPolicyInstanceError {
                     "InvalidInput" => {
                         return DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PriorRequestNotComplete" => {
                         return DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11963,27 +11963,27 @@ impl DisassociateVPCFromHostedZoneError {
                     "InvalidInput" => {
                         return DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCId" => {
                         return DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LastVPCAssociation" => {
                         return DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "VPCAssociationNotFound" => {
                         return DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12073,7 +12073,7 @@ impl GetAccountLimitError {
                     "InvalidInput" => {
                         return GetAccountLimitError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12157,10 +12157,10 @@ impl GetChangeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetChangeError::InvalidInput(String::from(parsed_error.message))
+                        return GetChangeError::InvalidInput(String::from(parsed_error.message));
                     }
                     "NoSuchChange" => {
-                        return GetChangeError::NoSuchChange(String::from(parsed_error.message))
+                        return GetChangeError::NoSuchChange(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -12323,12 +12323,12 @@ impl GetGeoLocationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetGeoLocationError::InvalidInput(String::from(parsed_error.message))
+                        return GetGeoLocationError::InvalidInput(String::from(parsed_error.message));
                     }
                     "NoSuchGeoLocation" => {
                         return GetGeoLocationError::NoSuchGeoLocation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12417,15 +12417,15 @@ impl GetHealthCheckError {
                     "IncompatibleVersion" => {
                         return GetHealthCheckError::IncompatibleVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
-                        return GetHealthCheckError::InvalidInput(String::from(parsed_error.message))
+                        return GetHealthCheckError::InvalidInput(String::from(parsed_error.message));
                     }
                     "NoSuchHealthCheck" => {
                         return GetHealthCheckError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12591,12 +12591,12 @@ impl GetHealthCheckLastFailureReasonError {
                     "InvalidInput" => {
                         return GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12685,12 +12685,12 @@ impl GetHealthCheckStatusError {
                     "InvalidInput" => {
                         return GetHealthCheckStatusError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return GetHealthCheckStatusError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12777,12 +12777,12 @@ impl GetHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetHostedZoneError::InvalidInput(String::from(parsed_error.message))
+                        return GetHostedZoneError::InvalidInput(String::from(parsed_error.message));
                     }
                     "NoSuchHostedZone" => {
                         return GetHostedZoneError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12867,7 +12867,7 @@ impl GetHostedZoneCountError {
                     "InvalidInput" => {
                         return GetHostedZoneCountError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12957,17 +12957,17 @@ impl GetHostedZoneLimitError {
                     "HostedZoneNotPrivate" => {
                         return GetHostedZoneLimitError::HostedZoneNotPrivate(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return GetHostedZoneLimitError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return GetHostedZoneLimitError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13057,12 +13057,12 @@ impl GetQueryLoggingConfigError {
                     "InvalidInput" => {
                         return GetQueryLoggingConfigError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchQueryLoggingConfig" => {
                         return GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13153,17 +13153,17 @@ impl GetReusableDelegationSetError {
                     "DelegationSetNotReusable" => {
                         return GetReusableDelegationSetError::DelegationSetNotReusable(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidInput" => {
                         return GetReusableDelegationSetError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDelegationSet" => {
                         return GetReusableDelegationSetError::NoSuchDelegationSet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13253,12 +13253,12 @@ impl GetReusableDelegationSetLimitError {
                     "InvalidInput" => {
                         return GetReusableDelegationSetLimitError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDelegationSet" => {
                         return GetReusableDelegationSetLimitError::NoSuchDelegationSet(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13347,12 +13347,12 @@ impl GetTrafficPolicyError {
                     "InvalidInput" => {
                         return GetTrafficPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return GetTrafficPolicyError::NoSuchTrafficPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13439,12 +13439,12 @@ impl GetTrafficPolicyInstanceError {
                     "InvalidInput" => {
                         return GetTrafficPolicyInstanceError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -13609,7 +13609,7 @@ impl ListGeoLocationsError {
                     "InvalidInput" => {
                         return ListGeoLocationsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13695,12 +13695,12 @@ impl ListHealthChecksError {
                     "IncompatibleVersion" => {
                         return ListHealthChecksError::IncompatibleVersion(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return ListHealthChecksError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13789,17 +13789,17 @@ impl ListHostedZonesError {
                     "DelegationSetNotReusable" => {
                         return ListHostedZonesError::DelegationSetNotReusable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return ListHostedZonesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchDelegationSet" => {
                         return ListHostedZonesError::NoSuchDelegationSet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13887,12 +13887,12 @@ impl ListHostedZonesByNameError {
                     "InvalidDomainName" => {
                         return ListHostedZonesByNameError::InvalidDomainName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return ListHostedZonesByNameError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -13983,17 +13983,17 @@ impl ListQueryLoggingConfigsError {
                     "InvalidInput" => {
                         return ListQueryLoggingConfigsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidPaginationToken" => {
                         return ListQueryLoggingConfigsError::InvalidPaginationToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14083,12 +14083,12 @@ impl ListResourceRecordSetsError {
                     "InvalidInput" => {
                         return ListResourceRecordSetsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return ListResourceRecordSetsError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14175,7 +14175,7 @@ impl ListReusableDelegationSetsError {
                     "InvalidInput" => {
                         return ListReusableDelegationSetsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14269,27 +14269,27 @@ impl ListTagsForResourceError {
                     "InvalidInput" => {
                         return ListTagsForResourceError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return ListTagsForResourceError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return ListTagsForResourceError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PriorRequestNotComplete" => {
                         return ListTagsForResourceError::PriorRequestNotComplete(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ThrottlingException" => {
                         return ListTagsForResourceError::Throttling(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14387,27 +14387,27 @@ impl ListTagsForResourcesError {
                     "InvalidInput" => {
                         return ListTagsForResourcesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return ListTagsForResourcesError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return ListTagsForResourcesError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PriorRequestNotComplete" => {
                         return ListTagsForResourcesError::PriorRequestNotComplete(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ThrottlingException" => {
                         return ListTagsForResourcesError::Throttling(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14497,7 +14497,7 @@ impl ListTrafficPoliciesError {
                     "InvalidInput" => {
                         return ListTrafficPoliciesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14585,12 +14585,12 @@ impl ListTrafficPolicyInstancesError {
                     "InvalidInput" => {
                         return ListTrafficPolicyInstancesError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14770,17 +14770,17 @@ impl ListTrafficPolicyInstancesByPolicyError {
                     "InvalidInput" => {
                         return ListTrafficPolicyInstancesByPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -14872,12 +14872,12 @@ impl ListTrafficPolicyVersionsError {
                     "InvalidInput" => {
                         return ListTrafficPolicyVersionsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -14968,17 +14968,17 @@ impl ListVPCAssociationAuthorizationsError {
                     "InvalidInput" => {
                         return ListVPCAssociationAuthorizationsError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidPaginationToken" => {
                         return ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NoSuchHostedZone" => {
                         return ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -15066,12 +15066,12 @@ impl TestDNSAnswerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return TestDNSAnswerError::InvalidInput(String::from(parsed_error.message))
+                        return TestDNSAnswerError::InvalidInput(String::from(parsed_error.message));
                     }
                     "NoSuchHostedZone" => {
                         return TestDNSAnswerError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15160,17 +15160,17 @@ impl UpdateHealthCheckError {
                     "HealthCheckVersionMismatch" => {
                         return UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return UpdateHealthCheckError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHealthCheck" => {
                         return UpdateHealthCheckError::NoSuchHealthCheck(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15260,12 +15260,12 @@ impl UpdateHostedZoneCommentError {
                     "InvalidInput" => {
                         return UpdateHostedZoneCommentError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchHostedZone" => {
                         return UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15356,17 +15356,17 @@ impl UpdateTrafficPolicyCommentError {
                     "ConcurrentModification" => {
                         return UpdateTrafficPolicyCommentError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidInput" => {
                         return UpdateTrafficPolicyCommentError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -15462,27 +15462,27 @@ impl UpdateTrafficPolicyInstanceError {
                     "ConflictingTypes" => {
                         return UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInput" => {
                         return UpdateTrafficPolicyInstanceError::InvalidInput(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicy" => {
                         return UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PriorRequestNotComplete" => {
                         return UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }

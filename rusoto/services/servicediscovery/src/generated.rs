@@ -823,23 +823,23 @@ impl CreatePrivateDnsNamespaceError {
                 "DuplicateRequest" => {
                     return CreatePrivateDnsNamespaceError::DuplicateRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
-                    return CreatePrivateDnsNamespaceError::InvalidInput(String::from(error_message))
+                    return CreatePrivateDnsNamespaceError::InvalidInput(String::from(error_message));
                 }
                 "NamespaceAlreadyExists" => {
                     return CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceeded" => {
                     return CreatePrivateDnsNamespaceError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreatePrivateDnsNamespaceError::Validation(error_message.to_string())
+                    return CreatePrivateDnsNamespaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -929,23 +929,23 @@ impl CreatePublicDnsNamespaceError {
                 "DuplicateRequest" => {
                     return CreatePublicDnsNamespaceError::DuplicateRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
-                    return CreatePublicDnsNamespaceError::InvalidInput(String::from(error_message))
+                    return CreatePublicDnsNamespaceError::InvalidInput(String::from(error_message));
                 }
                 "NamespaceAlreadyExists" => {
                     return CreatePublicDnsNamespaceError::NamespaceAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceeded" => {
                     return CreatePublicDnsNamespaceError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreatePublicDnsNamespaceError::Validation(error_message.to_string())
+                    return CreatePublicDnsNamespaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1033,19 +1033,19 @@ impl CreateServiceError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return CreateServiceError::InvalidInput(String::from(error_message))
+                    return CreateServiceError::InvalidInput(String::from(error_message));
                 }
                 "NamespaceNotFound" => {
-                    return CreateServiceError::NamespaceNotFound(String::from(error_message))
+                    return CreateServiceError::NamespaceNotFound(String::from(error_message));
                 }
                 "ResourceLimitExceeded" => {
-                    return CreateServiceError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateServiceError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ServiceAlreadyExists" => {
-                    return CreateServiceError::ServiceAlreadyExists(String::from(error_message))
+                    return CreateServiceError::ServiceAlreadyExists(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateServiceError::Validation(error_message.to_string())
+                    return CreateServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1131,19 +1131,19 @@ impl DeleteNamespaceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return DeleteNamespaceError::DuplicateRequest(String::from(error_message))
+                    return DeleteNamespaceError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return DeleteNamespaceError::InvalidInput(String::from(error_message))
+                    return DeleteNamespaceError::InvalidInput(String::from(error_message));
                 }
                 "NamespaceNotFound" => {
-                    return DeleteNamespaceError::NamespaceNotFound(String::from(error_message))
+                    return DeleteNamespaceError::NamespaceNotFound(String::from(error_message));
                 }
                 "ResourceInUse" => {
-                    return DeleteNamespaceError::ResourceInUse(String::from(error_message))
+                    return DeleteNamespaceError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteNamespaceError::Validation(error_message.to_string())
+                    return DeleteNamespaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1227,16 +1227,16 @@ impl DeleteServiceError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DeleteServiceError::InvalidInput(String::from(error_message))
+                    return DeleteServiceError::InvalidInput(String::from(error_message));
                 }
                 "ResourceInUse" => {
-                    return DeleteServiceError::ResourceInUse(String::from(error_message))
+                    return DeleteServiceError::ResourceInUse(String::from(error_message));
                 }
                 "ServiceNotFound" => {
-                    return DeleteServiceError::ServiceNotFound(String::from(error_message))
+                    return DeleteServiceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteServiceError::Validation(error_message.to_string())
+                    return DeleteServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1323,22 +1323,22 @@ impl DeregisterInstanceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return DeregisterInstanceError::DuplicateRequest(String::from(error_message))
+                    return DeregisterInstanceError::DuplicateRequest(String::from(error_message));
                 }
                 "InstanceNotFound" => {
-                    return DeregisterInstanceError::InstanceNotFound(String::from(error_message))
+                    return DeregisterInstanceError::InstanceNotFound(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return DeregisterInstanceError::InvalidInput(String::from(error_message))
+                    return DeregisterInstanceError::InvalidInput(String::from(error_message));
                 }
                 "ResourceInUse" => {
-                    return DeregisterInstanceError::ResourceInUse(String::from(error_message))
+                    return DeregisterInstanceError::ResourceInUse(String::from(error_message));
                 }
                 "ServiceNotFound" => {
-                    return DeregisterInstanceError::ServiceNotFound(String::from(error_message))
+                    return DeregisterInstanceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterInstanceError::Validation(error_message.to_string())
+                    return DeregisterInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1425,16 +1425,16 @@ impl GetInstanceError {
 
             match *error_type {
                 "InstanceNotFound" => {
-                    return GetInstanceError::InstanceNotFound(String::from(error_message))
+                    return GetInstanceError::InstanceNotFound(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return GetInstanceError::InvalidInput(String::from(error_message))
+                    return GetInstanceError::InvalidInput(String::from(error_message));
                 }
                 "ServiceNotFound" => {
-                    return GetInstanceError::ServiceNotFound(String::from(error_message))
+                    return GetInstanceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInstanceError::Validation(error_message.to_string())
+                    return GetInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1519,18 +1519,18 @@ impl GetInstancesHealthStatusError {
                 "InstanceNotFound" => {
                     return GetInstancesHealthStatusError::InstanceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
-                    return GetInstancesHealthStatusError::InvalidInput(String::from(error_message))
+                    return GetInstancesHealthStatusError::InvalidInput(String::from(error_message));
                 }
                 "ServiceNotFound" => {
                     return GetInstancesHealthStatusError::ServiceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetInstancesHealthStatusError::Validation(error_message.to_string())
+                    return GetInstancesHealthStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1613,13 +1613,13 @@ impl GetNamespaceError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetNamespaceError::InvalidInput(String::from(error_message))
+                    return GetNamespaceError::InvalidInput(String::from(error_message));
                 }
                 "NamespaceNotFound" => {
-                    return GetNamespaceError::NamespaceNotFound(String::from(error_message))
+                    return GetNamespaceError::NamespaceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetNamespaceError::Validation(error_message.to_string())
+                    return GetNamespaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1697,10 +1697,10 @@ impl GetOperationError {
 
             match *error_type {
                 "OperationNotFound" => {
-                    return GetOperationError::OperationNotFound(String::from(error_message))
+                    return GetOperationError::OperationNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetOperationError::Validation(error_message.to_string())
+                    return GetOperationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1780,10 +1780,10 @@ impl GetServiceError {
             match *error_type {
                 "InvalidInput" => return GetServiceError::InvalidInput(String::from(error_message)),
                 "ServiceNotFound" => {
-                    return GetServiceError::ServiceNotFound(String::from(error_message))
+                    return GetServiceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetServiceError::Validation(error_message.to_string())
+                    return GetServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1863,13 +1863,13 @@ impl ListInstancesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListInstancesError::InvalidInput(String::from(error_message))
+                    return ListInstancesError::InvalidInput(String::from(error_message));
                 }
                 "ServiceNotFound" => {
-                    return ListInstancesError::ServiceNotFound(String::from(error_message))
+                    return ListInstancesError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInstancesError::Validation(error_message.to_string())
+                    return ListInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1947,10 +1947,10 @@ impl ListNamespacesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListNamespacesError::InvalidInput(String::from(error_message))
+                    return ListNamespacesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListNamespacesError::Validation(error_message.to_string())
+                    return ListNamespacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2027,10 +2027,10 @@ impl ListOperationsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListOperationsError::InvalidInput(String::from(error_message))
+                    return ListOperationsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListOperationsError::Validation(error_message.to_string())
+                    return ListOperationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2107,10 +2107,10 @@ impl ListServicesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListServicesError::InvalidInput(String::from(error_message))
+                    return ListServicesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListServicesError::Validation(error_message.to_string())
+                    return ListServicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2195,22 +2195,22 @@ impl RegisterInstanceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return RegisterInstanceError::DuplicateRequest(String::from(error_message))
+                    return RegisterInstanceError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return RegisterInstanceError::InvalidInput(String::from(error_message))
+                    return RegisterInstanceError::InvalidInput(String::from(error_message));
                 }
                 "ResourceInUse" => {
-                    return RegisterInstanceError::ResourceInUse(String::from(error_message))
+                    return RegisterInstanceError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceLimitExceeded" => {
-                    return RegisterInstanceError::ResourceLimitExceeded(String::from(error_message))
+                    return RegisterInstanceError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ServiceNotFound" => {
-                    return RegisterInstanceError::ServiceNotFound(String::from(error_message))
+                    return RegisterInstanceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterInstanceError::Validation(error_message.to_string())
+                    return RegisterInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2298,27 +2298,27 @@ impl UpdateInstanceCustomHealthStatusError {
                 "CustomHealthNotFound" => {
                     return UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InstanceNotFound" => {
                     return UpdateInstanceCustomHealthStatusError::InstanceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInput" => {
                     return UpdateInstanceCustomHealthStatusError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceNotFound" => {
                     return UpdateInstanceCustomHealthStatusError::ServiceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return UpdateInstanceCustomHealthStatusError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2404,16 +2404,16 @@ impl UpdateServiceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return UpdateServiceError::DuplicateRequest(String::from(error_message))
+                    return UpdateServiceError::DuplicateRequest(String::from(error_message));
                 }
                 "InvalidInput" => {
-                    return UpdateServiceError::InvalidInput(String::from(error_message))
+                    return UpdateServiceError::InvalidInput(String::from(error_message));
                 }
                 "ServiceNotFound" => {
-                    return UpdateServiceError::ServiceNotFound(String::from(error_message))
+                    return UpdateServiceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateServiceError::Validation(error_message.to_string())
+                    return UpdateServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

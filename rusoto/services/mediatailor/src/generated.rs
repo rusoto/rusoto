@@ -265,7 +265,7 @@ impl DeletePlaybackConfigurationError {
 
             match error_type {
                 "ValidationException" => {
-                    return DeletePlaybackConfigurationError::Validation(error_message.to_string())
+                    return DeletePlaybackConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -355,7 +355,7 @@ impl GetPlaybackConfigurationError {
 
             match error_type {
                 "ValidationException" => {
-                    return GetPlaybackConfigurationError::Validation(error_message.to_string())
+                    return GetPlaybackConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -445,7 +445,7 @@ impl ListPlaybackConfigurationsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListPlaybackConfigurationsError::Validation(error_message.to_string())
+                    return ListPlaybackConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -535,7 +535,7 @@ impl PutPlaybackConfigurationError {
 
             match error_type {
                 "ValidationException" => {
-                    return PutPlaybackConfigurationError::Validation(error_message.to_string())
+                    return PutPlaybackConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

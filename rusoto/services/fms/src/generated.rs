@@ -417,19 +417,19 @@ impl AssociateAdminAccountError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AssociateAdminAccountError::InternalError(String::from(error_message))
+                    return AssociateAdminAccountError::InternalError(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AssociateAdminAccountError::InvalidInput(String::from(error_message))
+                    return AssociateAdminAccountError::InvalidInput(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return AssociateAdminAccountError::InvalidOperation(String::from(error_message))
+                    return AssociateAdminAccountError::InvalidOperation(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateAdminAccountError::ResourceNotFound(String::from(error_message))
+                    return AssociateAdminAccountError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateAdminAccountError::Validation(error_message.to_string())
+                    return AssociateAdminAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -517,20 +517,20 @@ impl DeleteNotificationChannelError {
                 "InternalErrorException" => {
                     return DeleteNotificationChannelError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOperationException" => {
                     return DeleteNotificationChannelError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteNotificationChannelError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteNotificationChannelError::Validation(error_message.to_string())
+                    return DeleteNotificationChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -615,16 +615,16 @@ impl DeletePolicyError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeletePolicyError::InternalError(String::from(error_message))
+                    return DeletePolicyError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return DeletePolicyError::InvalidOperation(String::from(error_message))
+                    return DeletePolicyError::InvalidOperation(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePolicyError::ResourceNotFound(String::from(error_message))
+                    return DeletePolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePolicyError::Validation(error_message.to_string())
+                    return DeletePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -707,20 +707,20 @@ impl DisassociateAdminAccountError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DisassociateAdminAccountError::InternalError(String::from(error_message))
+                    return DisassociateAdminAccountError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
                     return DisassociateAdminAccountError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociateAdminAccountError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateAdminAccountError::Validation(error_message.to_string())
+                    return DisassociateAdminAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -805,16 +805,16 @@ impl GetAdminAccountError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetAdminAccountError::InternalError(String::from(error_message))
+                    return GetAdminAccountError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return GetAdminAccountError::InvalidOperation(String::from(error_message))
+                    return GetAdminAccountError::InvalidOperation(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetAdminAccountError::ResourceNotFound(String::from(error_message))
+                    return GetAdminAccountError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAdminAccountError::Validation(error_message.to_string())
+                    return GetAdminAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -895,13 +895,13 @@ impl GetComplianceDetailError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetComplianceDetailError::InternalError(String::from(error_message))
+                    return GetComplianceDetailError::InternalError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetComplianceDetailError::ResourceNotFound(String::from(error_message))
+                    return GetComplianceDetailError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetComplianceDetailError::Validation(error_message.to_string())
+                    return GetComplianceDetailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -985,20 +985,20 @@ impl GetNotificationChannelError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetNotificationChannelError::InternalError(String::from(error_message))
+                    return GetNotificationChannelError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
                     return GetNotificationChannelError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetNotificationChannelError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetNotificationChannelError::Validation(error_message.to_string())
+                    return GetNotificationChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1083,16 +1083,16 @@ impl GetPolicyError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetPolicyError::InternalError(String::from(error_message))
+                    return GetPolicyError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return GetPolicyError::InvalidOperation(String::from(error_message))
+                    return GetPolicyError::InvalidOperation(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetPolicyError::ResourceNotFound(String::from(error_message))
+                    return GetPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPolicyError::Validation(error_message.to_string())
+                    return GetPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1173,13 +1173,13 @@ impl ListComplianceStatusError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListComplianceStatusError::InternalError(String::from(error_message))
+                    return ListComplianceStatusError::InternalError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListComplianceStatusError::ResourceNotFound(String::from(error_message))
+                    return ListComplianceStatusError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListComplianceStatusError::Validation(error_message.to_string())
+                    return ListComplianceStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1265,19 +1265,19 @@ impl ListPoliciesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListPoliciesError::InternalError(String::from(error_message))
+                    return ListPoliciesError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return ListPoliciesError::InvalidOperation(String::from(error_message))
+                    return ListPoliciesError::InvalidOperation(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListPoliciesError::LimitExceeded(String::from(error_message))
+                    return ListPoliciesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPoliciesError::ResourceNotFound(String::from(error_message))
+                    return ListPoliciesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPoliciesError::Validation(error_message.to_string())
+                    return ListPoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1361,20 +1361,20 @@ impl PutNotificationChannelError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return PutNotificationChannelError::InternalError(String::from(error_message))
+                    return PutNotificationChannelError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
                     return PutNotificationChannelError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return PutNotificationChannelError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutNotificationChannelError::Validation(error_message.to_string())
+                    return PutNotificationChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1461,19 +1461,19 @@ impl PutPolicyError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return PutPolicyError::InternalError(String::from(error_message))
+                    return PutPolicyError::InternalError(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return PutPolicyError::InvalidInput(String::from(error_message))
+                    return PutPolicyError::InvalidInput(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return PutPolicyError::InvalidOperation(String::from(error_message))
+                    return PutPolicyError::InvalidOperation(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutPolicyError::ResourceNotFound(String::from(error_message))
+                    return PutPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutPolicyError::Validation(error_message.to_string())
+                    return PutPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

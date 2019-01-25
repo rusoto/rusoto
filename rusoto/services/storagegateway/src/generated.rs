@@ -2500,13 +2500,13 @@ impl ActivateGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ActivateGatewayError::InternalServerError(String::from(error_message))
+                    return ActivateGatewayError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ActivateGatewayError::InvalidGatewayRequest(String::from(error_message))
+                    return ActivateGatewayError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ActivateGatewayError::Validation(error_message.to_string())
+                    return ActivateGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2586,13 +2586,13 @@ impl AddCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddCacheError::InternalServerError(String::from(error_message))
+                    return AddCacheError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return AddCacheError::InvalidGatewayRequest(String::from(error_message))
+                    return AddCacheError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddCacheError::Validation(error_message.to_string())
+                    return AddCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2672,15 +2672,15 @@ impl AddTagsToResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddTagsToResourceError::InternalServerError(String::from(error_message))
+                    return AddTagsToResourceError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return AddTagsToResourceError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string())
+                    return AddTagsToResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2762,13 +2762,13 @@ impl AddUploadBufferError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddUploadBufferError::InternalServerError(String::from(error_message))
+                    return AddUploadBufferError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return AddUploadBufferError::InvalidGatewayRequest(String::from(error_message))
+                    return AddUploadBufferError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddUploadBufferError::Validation(error_message.to_string())
+                    return AddUploadBufferError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2848,15 +2848,15 @@ impl AddWorkingStorageError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddWorkingStorageError::InternalServerError(String::from(error_message))
+                    return AddWorkingStorageError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return AddWorkingStorageError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddWorkingStorageError::Validation(error_message.to_string())
+                    return AddWorkingStorageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2938,13 +2938,13 @@ impl CancelArchivalError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CancelArchivalError::InternalServerError(String::from(error_message))
+                    return CancelArchivalError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CancelArchivalError::InvalidGatewayRequest(String::from(error_message))
+                    return CancelArchivalError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelArchivalError::Validation(error_message.to_string())
+                    return CancelArchivalError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3024,13 +3024,13 @@ impl CancelRetrievalError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CancelRetrievalError::InternalServerError(String::from(error_message))
+                    return CancelRetrievalError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CancelRetrievalError::InvalidGatewayRequest(String::from(error_message))
+                    return CancelRetrievalError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelRetrievalError::Validation(error_message.to_string())
+                    return CancelRetrievalError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3112,15 +3112,15 @@ impl CreateCachediSCSIVolumeError {
                 "InternalServerError" => {
                     return CreateCachediSCSIVolumeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateCachediSCSIVolumeError::Validation(error_message.to_string())
+                    return CreateCachediSCSIVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3202,15 +3202,15 @@ impl CreateNFSFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateNFSFileShareError::InternalServerError(String::from(error_message))
+                    return CreateNFSFileShareError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return CreateNFSFileShareError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateNFSFileShareError::Validation(error_message.to_string())
+                    return CreateNFSFileShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3292,15 +3292,15 @@ impl CreateSMBFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateSMBFileShareError::InternalServerError(String::from(error_message))
+                    return CreateSMBFileShareError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return CreateSMBFileShareError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSMBFileShareError::Validation(error_message.to_string())
+                    return CreateSMBFileShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3384,16 +3384,16 @@ impl CreateSnapshotError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateSnapshotError::InternalServerError(String::from(error_message))
+                    return CreateSnapshotError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateSnapshotError::InvalidGatewayRequest(String::from(error_message))
+                    return CreateSnapshotError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ServiceUnavailableError" => {
-                    return CreateSnapshotError::ServiceUnavailableError(String::from(error_message))
+                    return CreateSnapshotError::ServiceUnavailableError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSnapshotError::Validation(error_message.to_string())
+                    return CreateSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3478,22 +3478,22 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
                 "InternalServerError" => {
                     return CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidGatewayRequestException" => {
                     return CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServiceUnavailableError" => {
                     return CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return CreateSnapshotFromVolumeRecoveryPointError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3578,15 +3578,15 @@ impl CreateStorediSCSIVolumeError {
                 "InternalServerError" => {
                     return CreateStorediSCSIVolumeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateStorediSCSIVolumeError::Validation(error_message.to_string())
+                    return CreateStorediSCSIVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3670,15 +3670,15 @@ impl CreateTapeWithBarcodeError {
                 "InternalServerError" => {
                     return CreateTapeWithBarcodeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return CreateTapeWithBarcodeError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateTapeWithBarcodeError::Validation(error_message.to_string())
+                    return CreateTapeWithBarcodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3760,13 +3760,13 @@ impl CreateTapesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateTapesError::InternalServerError(String::from(error_message))
+                    return CreateTapesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateTapesError::InvalidGatewayRequest(String::from(error_message))
+                    return CreateTapesError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTapesError::Validation(error_message.to_string())
+                    return CreateTapesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3848,15 +3848,15 @@ impl DeleteBandwidthRateLimitError {
                 "InternalServerError" => {
                     return DeleteBandwidthRateLimitError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteBandwidthRateLimitError::Validation(error_message.to_string())
+                    return DeleteBandwidthRateLimitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3940,15 +3940,15 @@ impl DeleteChapCredentialsError {
                 "InternalServerError" => {
                     return DeleteChapCredentialsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DeleteChapCredentialsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteChapCredentialsError::Validation(error_message.to_string())
+                    return DeleteChapCredentialsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4030,13 +4030,13 @@ impl DeleteFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteFileShareError::InternalServerError(String::from(error_message))
+                    return DeleteFileShareError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteFileShareError::InvalidGatewayRequest(String::from(error_message))
+                    return DeleteFileShareError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFileShareError::Validation(error_message.to_string())
+                    return DeleteFileShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4116,13 +4116,13 @@ impl DeleteGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteGatewayError::InternalServerError(String::from(error_message))
+                    return DeleteGatewayError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteGatewayError::InvalidGatewayRequest(String::from(error_message))
+                    return DeleteGatewayError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGatewayError::Validation(error_message.to_string())
+                    return DeleteGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4204,15 +4204,15 @@ impl DeleteSnapshotScheduleError {
                 "InternalServerError" => {
                     return DeleteSnapshotScheduleError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DeleteSnapshotScheduleError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteSnapshotScheduleError::Validation(error_message.to_string())
+                    return DeleteSnapshotScheduleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4294,13 +4294,13 @@ impl DeleteTapeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteTapeError::InternalServerError(String::from(error_message))
+                    return DeleteTapeError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteTapeError::InvalidGatewayRequest(String::from(error_message))
+                    return DeleteTapeError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTapeError::Validation(error_message.to_string())
+                    return DeleteTapeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4380,15 +4380,15 @@ impl DeleteTapeArchiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteTapeArchiveError::InternalServerError(String::from(error_message))
+                    return DeleteTapeArchiveError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return DeleteTapeArchiveError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteTapeArchiveError::Validation(error_message.to_string())
+                    return DeleteTapeArchiveError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4470,13 +4470,13 @@ impl DeleteVolumeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteVolumeError::InternalServerError(String::from(error_message))
+                    return DeleteVolumeError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteVolumeError::InvalidGatewayRequest(String::from(error_message))
+                    return DeleteVolumeError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteVolumeError::Validation(error_message.to_string())
+                    return DeleteVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4558,15 +4558,15 @@ impl DescribeBandwidthRateLimitError {
                 "InternalServerError" => {
                     return DescribeBandwidthRateLimitError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeBandwidthRateLimitError::Validation(error_message.to_string())
+                    return DescribeBandwidthRateLimitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4648,13 +4648,13 @@ impl DescribeCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeCacheError::InternalServerError(String::from(error_message))
+                    return DescribeCacheError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeCacheError::InvalidGatewayRequest(String::from(error_message))
+                    return DescribeCacheError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeCacheError::Validation(error_message.to_string())
+                    return DescribeCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4736,15 +4736,15 @@ impl DescribeCachediSCSIVolumesError {
                 "InternalServerError" => {
                     return DescribeCachediSCSIVolumesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCachediSCSIVolumesError::Validation(error_message.to_string())
+                    return DescribeCachediSCSIVolumesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4828,15 +4828,15 @@ impl DescribeChapCredentialsError {
                 "InternalServerError" => {
                     return DescribeChapCredentialsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeChapCredentialsError::Validation(error_message.to_string())
+                    return DescribeChapCredentialsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4920,15 +4920,15 @@ impl DescribeGatewayInformationError {
                 "InternalServerError" => {
                     return DescribeGatewayInformationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeGatewayInformationError::Validation(error_message.to_string())
+                    return DescribeGatewayInformationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5012,15 +5012,15 @@ impl DescribeMaintenanceStartTimeError {
                 "InternalServerError" => {
                     return DescribeMaintenanceStartTimeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeMaintenanceStartTimeError::Validation(error_message.to_string())
+                    return DescribeMaintenanceStartTimeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5104,15 +5104,15 @@ impl DescribeNFSFileSharesError {
                 "InternalServerError" => {
                     return DescribeNFSFileSharesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeNFSFileSharesError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeNFSFileSharesError::Validation(error_message.to_string())
+                    return DescribeNFSFileSharesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5196,15 +5196,15 @@ impl DescribeSMBFileSharesError {
                 "InternalServerError" => {
                     return DescribeSMBFileSharesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeSMBFileSharesError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSMBFileSharesError::Validation(error_message.to_string())
+                    return DescribeSMBFileSharesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5288,15 +5288,15 @@ impl DescribeSMBSettingsError {
                 "InternalServerError" => {
                     return DescribeSMBSettingsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeSMBSettingsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSMBSettingsError::Validation(error_message.to_string())
+                    return DescribeSMBSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5380,15 +5380,15 @@ impl DescribeSnapshotScheduleError {
                 "InternalServerError" => {
                     return DescribeSnapshotScheduleError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSnapshotScheduleError::Validation(error_message.to_string())
+                    return DescribeSnapshotScheduleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5472,15 +5472,15 @@ impl DescribeStorediSCSIVolumesError {
                 "InternalServerError" => {
                     return DescribeStorediSCSIVolumesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeStorediSCSIVolumesError::Validation(error_message.to_string())
+                    return DescribeStorediSCSIVolumesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5564,15 +5564,15 @@ impl DescribeTapeArchivesError {
                 "InternalServerError" => {
                     return DescribeTapeArchivesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeTapeArchivesError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeTapeArchivesError::Validation(error_message.to_string())
+                    return DescribeTapeArchivesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5656,15 +5656,15 @@ impl DescribeTapeRecoveryPointsError {
                 "InternalServerError" => {
                     return DescribeTapeRecoveryPointsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeTapeRecoveryPointsError::Validation(error_message.to_string())
+                    return DescribeTapeRecoveryPointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5746,13 +5746,13 @@ impl DescribeTapesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTapesError::InternalServerError(String::from(error_message))
+                    return DescribeTapesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeTapesError::InvalidGatewayRequest(String::from(error_message))
+                    return DescribeTapesError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTapesError::Validation(error_message.to_string())
+                    return DescribeTapesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5834,15 +5834,15 @@ impl DescribeUploadBufferError {
                 "InternalServerError" => {
                     return DescribeUploadBufferError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeUploadBufferError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeUploadBufferError::Validation(error_message.to_string())
+                    return DescribeUploadBufferError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5924,15 +5924,15 @@ impl DescribeVTLDevicesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeVTLDevicesError::InternalServerError(String::from(error_message))
+                    return DescribeVTLDevicesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeVTLDevicesError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeVTLDevicesError::Validation(error_message.to_string())
+                    return DescribeVTLDevicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6016,15 +6016,15 @@ impl DescribeWorkingStorageError {
                 "InternalServerError" => {
                     return DescribeWorkingStorageError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return DescribeWorkingStorageError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeWorkingStorageError::Validation(error_message.to_string())
+                    return DescribeWorkingStorageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6106,13 +6106,13 @@ impl DisableGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DisableGatewayError::InternalServerError(String::from(error_message))
+                    return DisableGatewayError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DisableGatewayError::InvalidGatewayRequest(String::from(error_message))
+                    return DisableGatewayError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableGatewayError::Validation(error_message.to_string())
+                    return DisableGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6192,13 +6192,13 @@ impl JoinDomainError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return JoinDomainError::InternalServerError(String::from(error_message))
+                    return JoinDomainError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return JoinDomainError::InvalidGatewayRequest(String::from(error_message))
+                    return JoinDomainError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return JoinDomainError::Validation(error_message.to_string())
+                    return JoinDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6278,13 +6278,13 @@ impl ListFileSharesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListFileSharesError::InternalServerError(String::from(error_message))
+                    return ListFileSharesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListFileSharesError::InvalidGatewayRequest(String::from(error_message))
+                    return ListFileSharesError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFileSharesError::Validation(error_message.to_string())
+                    return ListFileSharesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6364,13 +6364,13 @@ impl ListGatewaysError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListGatewaysError::InternalServerError(String::from(error_message))
+                    return ListGatewaysError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListGatewaysError::InvalidGatewayRequest(String::from(error_message))
+                    return ListGatewaysError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGatewaysError::Validation(error_message.to_string())
+                    return ListGatewaysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6450,13 +6450,13 @@ impl ListLocalDisksError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListLocalDisksError::InternalServerError(String::from(error_message))
+                    return ListLocalDisksError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListLocalDisksError::InvalidGatewayRequest(String::from(error_message))
+                    return ListLocalDisksError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListLocalDisksError::Validation(error_message.to_string())
+                    return ListLocalDisksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6538,15 +6538,15 @@ impl ListTagsForResourceError {
                 "InternalServerError" => {
                     return ListTagsForResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return ListTagsForResourceError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6628,13 +6628,13 @@ impl ListTapesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTapesError::InternalServerError(String::from(error_message))
+                    return ListTapesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListTapesError::InvalidGatewayRequest(String::from(error_message))
+                    return ListTapesError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTapesError::Validation(error_message.to_string())
+                    return ListTapesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6716,15 +6716,15 @@ impl ListVolumeInitiatorsError {
                 "InternalServerError" => {
                     return ListVolumeInitiatorsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return ListVolumeInitiatorsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListVolumeInitiatorsError::Validation(error_message.to_string())
+                    return ListVolumeInitiatorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6808,15 +6808,15 @@ impl ListVolumeRecoveryPointsError {
                 "InternalServerError" => {
                     return ListVolumeRecoveryPointsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListVolumeRecoveryPointsError::Validation(error_message.to_string())
+                    return ListVolumeRecoveryPointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6898,13 +6898,13 @@ impl ListVolumesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListVolumesError::InternalServerError(String::from(error_message))
+                    return ListVolumesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListVolumesError::InvalidGatewayRequest(String::from(error_message))
+                    return ListVolumesError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListVolumesError::Validation(error_message.to_string())
+                    return ListVolumesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6984,15 +6984,15 @@ impl NotifyWhenUploadedError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return NotifyWhenUploadedError::InternalServerError(String::from(error_message))
+                    return NotifyWhenUploadedError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return NotifyWhenUploadedError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return NotifyWhenUploadedError::Validation(error_message.to_string())
+                    return NotifyWhenUploadedError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7074,13 +7074,13 @@ impl RefreshCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RefreshCacheError::InternalServerError(String::from(error_message))
+                    return RefreshCacheError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return RefreshCacheError::InvalidGatewayRequest(String::from(error_message))
+                    return RefreshCacheError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RefreshCacheError::Validation(error_message.to_string())
+                    return RefreshCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7162,15 +7162,15 @@ impl RemoveTagsFromResourceError {
                 "InternalServerError" => {
                     return RemoveTagsFromResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return RemoveTagsFromResourceError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7252,13 +7252,13 @@ impl ResetCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ResetCacheError::InternalServerError(String::from(error_message))
+                    return ResetCacheError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ResetCacheError::InvalidGatewayRequest(String::from(error_message))
+                    return ResetCacheError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResetCacheError::Validation(error_message.to_string())
+                    return ResetCacheError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7340,15 +7340,15 @@ impl RetrieveTapeArchiveError {
                 "InternalServerError" => {
                     return RetrieveTapeArchiveError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return RetrieveTapeArchiveError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RetrieveTapeArchiveError::Validation(error_message.to_string())
+                    return RetrieveTapeArchiveError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7432,15 +7432,15 @@ impl RetrieveTapeRecoveryPointError {
                 "InternalServerError" => {
                     return RetrieveTapeRecoveryPointError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RetrieveTapeRecoveryPointError::Validation(error_message.to_string())
+                    return RetrieveTapeRecoveryPointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7524,15 +7524,15 @@ impl SetLocalConsolePasswordError {
                 "InternalServerError" => {
                     return SetLocalConsolePasswordError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetLocalConsolePasswordError::Validation(error_message.to_string())
+                    return SetLocalConsolePasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7616,15 +7616,15 @@ impl SetSMBGuestPasswordError {
                 "InternalServerError" => {
                     return SetSMBGuestPasswordError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return SetSMBGuestPasswordError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetSMBGuestPasswordError::Validation(error_message.to_string())
+                    return SetSMBGuestPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7706,13 +7706,13 @@ impl ShutdownGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ShutdownGatewayError::InternalServerError(String::from(error_message))
+                    return ShutdownGatewayError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ShutdownGatewayError::InvalidGatewayRequest(String::from(error_message))
+                    return ShutdownGatewayError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ShutdownGatewayError::Validation(error_message.to_string())
+                    return ShutdownGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7792,13 +7792,13 @@ impl StartGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return StartGatewayError::InternalServerError(String::from(error_message))
+                    return StartGatewayError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
-                    return StartGatewayError::InvalidGatewayRequest(String::from(error_message))
+                    return StartGatewayError::InvalidGatewayRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartGatewayError::Validation(error_message.to_string())
+                    return StartGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7880,15 +7880,15 @@ impl UpdateBandwidthRateLimitError {
                 "InternalServerError" => {
                     return UpdateBandwidthRateLimitError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateBandwidthRateLimitError::Validation(error_message.to_string())
+                    return UpdateBandwidthRateLimitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7972,15 +7972,15 @@ impl UpdateChapCredentialsError {
                 "InternalServerError" => {
                     return UpdateChapCredentialsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateChapCredentialsError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateChapCredentialsError::Validation(error_message.to_string())
+                    return UpdateChapCredentialsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8064,15 +8064,15 @@ impl UpdateGatewayInformationError {
                 "InternalServerError" => {
                     return UpdateGatewayInformationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateGatewayInformationError::Validation(error_message.to_string())
+                    return UpdateGatewayInformationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8156,15 +8156,15 @@ impl UpdateGatewaySoftwareNowError {
                 "InternalServerError" => {
                     return UpdateGatewaySoftwareNowError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateGatewaySoftwareNowError::Validation(error_message.to_string())
+                    return UpdateGatewaySoftwareNowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8248,15 +8248,15 @@ impl UpdateMaintenanceStartTimeError {
                 "InternalServerError" => {
                     return UpdateMaintenanceStartTimeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateMaintenanceStartTimeError::Validation(error_message.to_string())
+                    return UpdateMaintenanceStartTimeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8338,15 +8338,15 @@ impl UpdateNFSFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateNFSFileShareError::InternalServerError(String::from(error_message))
+                    return UpdateNFSFileShareError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateNFSFileShareError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateNFSFileShareError::Validation(error_message.to_string())
+                    return UpdateNFSFileShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8428,15 +8428,15 @@ impl UpdateSMBFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateSMBFileShareError::InternalServerError(String::from(error_message))
+                    return UpdateSMBFileShareError::InternalServerError(String::from(error_message));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateSMBFileShareError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateSMBFileShareError::Validation(error_message.to_string())
+                    return UpdateSMBFileShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8520,15 +8520,15 @@ impl UpdateSnapshotScheduleError {
                 "InternalServerError" => {
                     return UpdateSnapshotScheduleError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateSnapshotScheduleError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateSnapshotScheduleError::Validation(error_message.to_string())
+                    return UpdateSnapshotScheduleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8612,15 +8612,15 @@ impl UpdateVTLDeviceTypeError {
                 "InternalServerError" => {
                     return UpdateVTLDeviceTypeError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
                     return UpdateVTLDeviceTypeError::InvalidGatewayRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateVTLDeviceTypeError::Validation(error_message.to_string())
+                    return UpdateVTLDeviceTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

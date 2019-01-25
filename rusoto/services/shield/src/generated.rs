@@ -595,31 +595,31 @@ impl AssociateDRTLogBucketError {
                 "AccessDeniedForDependencyException" => {
                     return AssociateDRTLogBucketError::AccessDeniedForDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return AssociateDRTLogBucketError::InternalError(String::from(error_message))
+                    return AssociateDRTLogBucketError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return AssociateDRTLogBucketError::InvalidOperation(String::from(error_message))
+                    return AssociateDRTLogBucketError::InvalidOperation(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AssociateDRTLogBucketError::InvalidParameter(String::from(error_message))
+                    return AssociateDRTLogBucketError::InvalidParameter(String::from(error_message));
                 }
                 "LimitsExceededException" => {
-                    return AssociateDRTLogBucketError::LimitsExceeded(String::from(error_message))
+                    return AssociateDRTLogBucketError::LimitsExceeded(String::from(error_message));
                 }
                 "NoAssociatedRoleException" => {
-                    return AssociateDRTLogBucketError::NoAssociatedRole(String::from(error_message))
+                    return AssociateDRTLogBucketError::NoAssociatedRole(String::from(error_message));
                 }
                 "OptimisticLockException" => {
-                    return AssociateDRTLogBucketError::OptimisticLock(String::from(error_message))
+                    return AssociateDRTLogBucketError::OptimisticLock(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateDRTLogBucketError::ResourceNotFound(String::from(error_message))
+                    return AssociateDRTLogBucketError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateDRTLogBucketError::Validation(error_message.to_string())
+                    return AssociateDRTLogBucketError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -717,25 +717,25 @@ impl AssociateDRTRoleError {
                 "AccessDeniedForDependencyException" => {
                     return AssociateDRTRoleError::AccessDeniedForDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return AssociateDRTRoleError::InternalError(String::from(error_message))
+                    return AssociateDRTRoleError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return AssociateDRTRoleError::InvalidOperation(String::from(error_message))
+                    return AssociateDRTRoleError::InvalidOperation(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AssociateDRTRoleError::InvalidParameter(String::from(error_message))
+                    return AssociateDRTRoleError::InvalidParameter(String::from(error_message));
                 }
                 "OptimisticLockException" => {
-                    return AssociateDRTRoleError::OptimisticLock(String::from(error_message))
+                    return AssociateDRTRoleError::OptimisticLock(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateDRTRoleError::ResourceNotFound(String::from(error_message))
+                    return AssociateDRTRoleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateDRTRoleError::Validation(error_message.to_string())
+                    return AssociateDRTRoleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -829,28 +829,28 @@ impl CreateProtectionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateProtectionError::InternalError(String::from(error_message))
+                    return CreateProtectionError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return CreateProtectionError::InvalidOperation(String::from(error_message))
+                    return CreateProtectionError::InvalidOperation(String::from(error_message));
                 }
                 "InvalidResourceException" => {
-                    return CreateProtectionError::InvalidResource(String::from(error_message))
+                    return CreateProtectionError::InvalidResource(String::from(error_message));
                 }
                 "LimitsExceededException" => {
-                    return CreateProtectionError::LimitsExceeded(String::from(error_message))
+                    return CreateProtectionError::LimitsExceeded(String::from(error_message));
                 }
                 "OptimisticLockException" => {
-                    return CreateProtectionError::OptimisticLock(String::from(error_message))
+                    return CreateProtectionError::OptimisticLock(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateProtectionError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateProtectionError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateProtectionError::ResourceNotFound(String::from(error_message))
+                    return CreateProtectionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProtectionError::Validation(error_message.to_string())
+                    return CreateProtectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -935,15 +935,15 @@ impl CreateSubscriptionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateSubscriptionError::InternalError(String::from(error_message))
+                    return CreateSubscriptionError::InternalError(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
                     return CreateSubscriptionError::ResourceAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSubscriptionError::Validation(error_message.to_string())
+                    return CreateSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1027,16 +1027,16 @@ impl DeleteProtectionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteProtectionError::InternalError(String::from(error_message))
+                    return DeleteProtectionError::InternalError(String::from(error_message));
                 }
                 "OptimisticLockException" => {
-                    return DeleteProtectionError::OptimisticLock(String::from(error_message))
+                    return DeleteProtectionError::OptimisticLock(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteProtectionError::ResourceNotFound(String::from(error_message))
+                    return DeleteProtectionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProtectionError::Validation(error_message.to_string())
+                    return DeleteProtectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1119,16 +1119,16 @@ impl DeleteSubscriptionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteSubscriptionError::InternalError(String::from(error_message))
+                    return DeleteSubscriptionError::InternalError(String::from(error_message));
                 }
                 "LockedSubscriptionException" => {
-                    return DeleteSubscriptionError::LockedSubscription(String::from(error_message))
+                    return DeleteSubscriptionError::LockedSubscription(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteSubscriptionError::ResourceNotFound(String::from(error_message))
+                    return DeleteSubscriptionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSubscriptionError::Validation(error_message.to_string())
+                    return DeleteSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1211,13 +1211,13 @@ impl DescribeAttackError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeAttackError::InternalError(String::from(error_message))
+                    return DescribeAttackError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeAttackError::InvalidParameter(String::from(error_message))
+                    return DescribeAttackError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAttackError::Validation(error_message.to_string())
+                    return DescribeAttackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1297,13 +1297,13 @@ impl DescribeDRTAccessError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeDRTAccessError::InternalError(String::from(error_message))
+                    return DescribeDRTAccessError::InternalError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeDRTAccessError::ResourceNotFound(String::from(error_message))
+                    return DescribeDRTAccessError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDRTAccessError::Validation(error_message.to_string())
+                    return DescribeDRTAccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1387,17 +1387,17 @@ impl DescribeEmergencyContactSettingsError {
                 "InternalErrorException" => {
                     return DescribeEmergencyContactSettingsError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeEmergencyContactSettingsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeEmergencyContactSettingsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1479,13 +1479,13 @@ impl DescribeProtectionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeProtectionError::InternalError(String::from(error_message))
+                    return DescribeProtectionError::InternalError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeProtectionError::ResourceNotFound(String::from(error_message))
+                    return DescribeProtectionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeProtectionError::Validation(error_message.to_string())
+                    return DescribeProtectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1567,13 +1567,13 @@ impl DescribeSubscriptionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeSubscriptionError::InternalError(String::from(error_message))
+                    return DescribeSubscriptionError::InternalError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeSubscriptionError::ResourceNotFound(String::from(error_message))
+                    return DescribeSubscriptionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeSubscriptionError::Validation(error_message.to_string())
+                    return DescribeSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1665,33 +1665,33 @@ impl DisassociateDRTLogBucketError {
                 "AccessDeniedForDependencyException" => {
                     return DisassociateDRTLogBucketError::AccessDeniedForDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalErrorException" => {
-                    return DisassociateDRTLogBucketError::InternalError(String::from(error_message))
+                    return DisassociateDRTLogBucketError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
                     return DisassociateDRTLogBucketError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoAssociatedRoleException" => {
                     return DisassociateDRTLogBucketError::NoAssociatedRole(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OptimisticLockException" => {
                     return DisassociateDRTLogBucketError::OptimisticLock(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociateDRTLogBucketError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateDRTLogBucketError::Validation(error_message.to_string())
+                    return DisassociateDRTLogBucketError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1781,19 +1781,19 @@ impl DisassociateDRTRoleError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DisassociateDRTRoleError::InternalError(String::from(error_message))
+                    return DisassociateDRTRoleError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return DisassociateDRTRoleError::InvalidOperation(String::from(error_message))
+                    return DisassociateDRTRoleError::InvalidOperation(String::from(error_message));
                 }
                 "OptimisticLockException" => {
-                    return DisassociateDRTRoleError::OptimisticLock(String::from(error_message))
+                    return DisassociateDRTRoleError::OptimisticLock(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateDRTRoleError::ResourceNotFound(String::from(error_message))
+                    return DisassociateDRTRoleError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateDRTRoleError::Validation(error_message.to_string())
+                    return DisassociateDRTRoleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1875,10 +1875,10 @@ impl GetSubscriptionStateError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetSubscriptionStateError::InternalError(String::from(error_message))
+                    return GetSubscriptionStateError::InternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSubscriptionStateError::Validation(error_message.to_string())
+                    return GetSubscriptionStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1961,16 +1961,16 @@ impl ListAttacksError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListAttacksError::InternalError(String::from(error_message))
+                    return ListAttacksError::InternalError(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return ListAttacksError::InvalidOperation(String::from(error_message))
+                    return ListAttacksError::InvalidOperation(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListAttacksError::InvalidParameter(String::from(error_message))
+                    return ListAttacksError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAttacksError::Validation(error_message.to_string())
+                    return ListAttacksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2053,16 +2053,16 @@ impl ListProtectionsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListProtectionsError::InternalError(String::from(error_message))
+                    return ListProtectionsError::InternalError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
-                    return ListProtectionsError::InvalidPaginationToken(String::from(error_message))
+                    return ListProtectionsError::InvalidPaginationToken(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListProtectionsError::ResourceNotFound(String::from(error_message))
+                    return ListProtectionsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListProtectionsError::Validation(error_message.to_string())
+                    return ListProtectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2149,27 +2149,27 @@ impl UpdateEmergencyContactSettingsError {
                 "InternalErrorException" => {
                     return UpdateEmergencyContactSettingsError::InternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateEmergencyContactSettingsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OptimisticLockException" => {
                     return UpdateEmergencyContactSettingsError::OptimisticLock(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateEmergencyContactSettingsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return UpdateEmergencyContactSettingsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2259,22 +2259,22 @@ impl UpdateSubscriptionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateSubscriptionError::InternalError(String::from(error_message))
+                    return UpdateSubscriptionError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateSubscriptionError::InvalidParameter(String::from(error_message))
+                    return UpdateSubscriptionError::InvalidParameter(String::from(error_message));
                 }
                 "LockedSubscriptionException" => {
-                    return UpdateSubscriptionError::LockedSubscription(String::from(error_message))
+                    return UpdateSubscriptionError::LockedSubscription(String::from(error_message));
                 }
                 "OptimisticLockException" => {
-                    return UpdateSubscriptionError::OptimisticLock(String::from(error_message))
+                    return UpdateSubscriptionError::OptimisticLock(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateSubscriptionError::ResourceNotFound(String::from(error_message))
+                    return UpdateSubscriptionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateSubscriptionError::Validation(error_message.to_string())
+                    return UpdateSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

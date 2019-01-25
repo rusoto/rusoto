@@ -4020,31 +4020,31 @@ impl CreateChannelError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return CreateChannelError::BadGateway(String::from(error_message))
+                    return CreateChannelError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return CreateChannelError::BadRequest(String::from(error_message))
+                    return CreateChannelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateChannelError::Conflict(String::from(error_message))
+                    return CreateChannelError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateChannelError::Forbidden(String::from(error_message))
+                    return CreateChannelError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return CreateChannelError::GatewayTimeout(String::from(error_message))
+                    return CreateChannelError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateChannelError::InternalServerError(String::from(error_message))
+                    return CreateChannelError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateChannelError::TooManyRequests(String::from(error_message))
+                    return CreateChannelError::TooManyRequests(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return CreateChannelError::UnprocessableEntity(String::from(error_message))
+                    return CreateChannelError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateChannelError::Validation(error_message.to_string())
+                    return CreateChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4152,25 +4152,25 @@ impl CreateInputError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return CreateInputError::BadGateway(String::from(error_message))
+                    return CreateInputError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return CreateInputError::BadRequest(String::from(error_message))
+                    return CreateInputError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateInputError::Forbidden(String::from(error_message))
+                    return CreateInputError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return CreateInputError::GatewayTimeout(String::from(error_message))
+                    return CreateInputError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateInputError::InternalServerError(String::from(error_message))
+                    return CreateInputError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateInputError::TooManyRequests(String::from(error_message))
+                    return CreateInputError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateInputError::Validation(error_message.to_string())
+                    return CreateInputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4276,31 +4276,31 @@ impl CreateInputSecurityGroupError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return CreateInputSecurityGroupError::BadGateway(String::from(error_message))
+                    return CreateInputSecurityGroupError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return CreateInputSecurityGroupError::BadRequest(String::from(error_message))
+                    return CreateInputSecurityGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateInputSecurityGroupError::Forbidden(String::from(error_message))
+                    return CreateInputSecurityGroupError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
                     return CreateInputSecurityGroupError::GatewayTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return CreateInputSecurityGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return CreateInputSecurityGroupError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateInputSecurityGroupError::Validation(error_message.to_string())
+                    return CreateInputSecurityGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4412,31 +4412,31 @@ impl DeleteChannelError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DeleteChannelError::BadGateway(String::from(error_message))
+                    return DeleteChannelError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DeleteChannelError::BadRequest(String::from(error_message))
+                    return DeleteChannelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteChannelError::Conflict(String::from(error_message))
+                    return DeleteChannelError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteChannelError::Forbidden(String::from(error_message))
+                    return DeleteChannelError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DeleteChannelError::GatewayTimeout(String::from(error_message))
+                    return DeleteChannelError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteChannelError::InternalServerError(String::from(error_message))
+                    return DeleteChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteChannelError::NotFound(String::from(error_message))
+                    return DeleteChannelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteChannelError::TooManyRequests(String::from(error_message))
+                    return DeleteChannelError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteChannelError::Validation(error_message.to_string())
+                    return DeleteChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4548,31 +4548,31 @@ impl DeleteInputError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DeleteInputError::BadGateway(String::from(error_message))
+                    return DeleteInputError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DeleteInputError::BadRequest(String::from(error_message))
+                    return DeleteInputError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteInputError::Conflict(String::from(error_message))
+                    return DeleteInputError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteInputError::Forbidden(String::from(error_message))
+                    return DeleteInputError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DeleteInputError::GatewayTimeout(String::from(error_message))
+                    return DeleteInputError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteInputError::InternalServerError(String::from(error_message))
+                    return DeleteInputError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteInputError::NotFound(String::from(error_message))
+                    return DeleteInputError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteInputError::TooManyRequests(String::from(error_message))
+                    return DeleteInputError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInputError::Validation(error_message.to_string())
+                    return DeleteInputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4682,34 +4682,34 @@ impl DeleteInputSecurityGroupError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DeleteInputSecurityGroupError::BadGateway(String::from(error_message))
+                    return DeleteInputSecurityGroupError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DeleteInputSecurityGroupError::BadRequest(String::from(error_message))
+                    return DeleteInputSecurityGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteInputSecurityGroupError::Forbidden(String::from(error_message))
+                    return DeleteInputSecurityGroupError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
                     return DeleteInputSecurityGroupError::GatewayTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return DeleteInputSecurityGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteInputSecurityGroupError::NotFound(String::from(error_message))
+                    return DeleteInputSecurityGroupError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteInputSecurityGroupError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteInputSecurityGroupError::Validation(error_message.to_string())
+                    return DeleteInputSecurityGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4822,31 +4822,31 @@ impl DeleteReservationError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DeleteReservationError::BadGateway(String::from(error_message))
+                    return DeleteReservationError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DeleteReservationError::BadRequest(String::from(error_message))
+                    return DeleteReservationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteReservationError::Conflict(String::from(error_message))
+                    return DeleteReservationError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteReservationError::Forbidden(String::from(error_message))
+                    return DeleteReservationError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DeleteReservationError::GatewayTimeout(String::from(error_message))
+                    return DeleteReservationError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteReservationError::InternalServerError(String::from(error_message))
+                    return DeleteReservationError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteReservationError::NotFound(String::from(error_message))
+                    return DeleteReservationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteReservationError::TooManyRequests(String::from(error_message))
+                    return DeleteReservationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteReservationError::Validation(error_message.to_string())
+                    return DeleteReservationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4958,28 +4958,28 @@ impl DescribeChannelError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DescribeChannelError::BadGateway(String::from(error_message))
+                    return DescribeChannelError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DescribeChannelError::BadRequest(String::from(error_message))
+                    return DescribeChannelError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeChannelError::Forbidden(String::from(error_message))
+                    return DescribeChannelError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DescribeChannelError::GatewayTimeout(String::from(error_message))
+                    return DescribeChannelError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeChannelError::InternalServerError(String::from(error_message))
+                    return DescribeChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeChannelError::NotFound(String::from(error_message))
+                    return DescribeChannelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeChannelError::TooManyRequests(String::from(error_message))
+                    return DescribeChannelError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeChannelError::Validation(error_message.to_string())
+                    return DescribeChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5088,28 +5088,28 @@ impl DescribeInputError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DescribeInputError::BadGateway(String::from(error_message))
+                    return DescribeInputError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DescribeInputError::BadRequest(String::from(error_message))
+                    return DescribeInputError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeInputError::Forbidden(String::from(error_message))
+                    return DescribeInputError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DescribeInputError::GatewayTimeout(String::from(error_message))
+                    return DescribeInputError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeInputError::InternalServerError(String::from(error_message))
+                    return DescribeInputError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeInputError::NotFound(String::from(error_message))
+                    return DescribeInputError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeInputError::TooManyRequests(String::from(error_message))
+                    return DescribeInputError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeInputError::Validation(error_message.to_string())
+                    return DescribeInputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5218,34 +5218,34 @@ impl DescribeInputSecurityGroupError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DescribeInputSecurityGroupError::BadGateway(String::from(error_message))
+                    return DescribeInputSecurityGroupError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DescribeInputSecurityGroupError::BadRequest(String::from(error_message))
+                    return DescribeInputSecurityGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeInputSecurityGroupError::Forbidden(String::from(error_message))
+                    return DescribeInputSecurityGroupError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
                     return DescribeInputSecurityGroupError::GatewayTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return DescribeInputSecurityGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeInputSecurityGroupError::NotFound(String::from(error_message))
+                    return DescribeInputSecurityGroupError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DescribeInputSecurityGroupError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInputSecurityGroupError::Validation(error_message.to_string())
+                    return DescribeInputSecurityGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5356,28 +5356,28 @@ impl DescribeOfferingError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DescribeOfferingError::BadGateway(String::from(error_message))
+                    return DescribeOfferingError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DescribeOfferingError::BadRequest(String::from(error_message))
+                    return DescribeOfferingError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeOfferingError::Forbidden(String::from(error_message))
+                    return DescribeOfferingError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DescribeOfferingError::GatewayTimeout(String::from(error_message))
+                    return DescribeOfferingError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeOfferingError::InternalServerError(String::from(error_message))
+                    return DescribeOfferingError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeOfferingError::NotFound(String::from(error_message))
+                    return DescribeOfferingError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeOfferingError::TooManyRequests(String::from(error_message))
+                    return DescribeOfferingError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeOfferingError::Validation(error_message.to_string())
+                    return DescribeOfferingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5486,30 +5486,30 @@ impl DescribeReservationError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return DescribeReservationError::BadGateway(String::from(error_message))
+                    return DescribeReservationError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return DescribeReservationError::BadRequest(String::from(error_message))
+                    return DescribeReservationError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeReservationError::Forbidden(String::from(error_message))
+                    return DescribeReservationError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return DescribeReservationError::GatewayTimeout(String::from(error_message))
+                    return DescribeReservationError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DescribeReservationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeReservationError::NotFound(String::from(error_message))
+                    return DescribeReservationError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeReservationError::TooManyRequests(String::from(error_message))
+                    return DescribeReservationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeReservationError::Validation(error_message.to_string())
+                    return DescribeReservationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5618,25 +5618,25 @@ impl ListChannelsError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return ListChannelsError::BadGateway(String::from(error_message))
+                    return ListChannelsError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return ListChannelsError::BadRequest(String::from(error_message))
+                    return ListChannelsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListChannelsError::Forbidden(String::from(error_message))
+                    return ListChannelsError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return ListChannelsError::GatewayTimeout(String::from(error_message))
+                    return ListChannelsError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListChannelsError::InternalServerError(String::from(error_message))
+                    return ListChannelsError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListChannelsError::TooManyRequests(String::from(error_message))
+                    return ListChannelsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListChannelsError::Validation(error_message.to_string())
+                    return ListChannelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5742,29 +5742,29 @@ impl ListInputSecurityGroupsError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return ListInputSecurityGroupsError::BadGateway(String::from(error_message))
+                    return ListInputSecurityGroupsError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return ListInputSecurityGroupsError::BadRequest(String::from(error_message))
+                    return ListInputSecurityGroupsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListInputSecurityGroupsError::Forbidden(String::from(error_message))
+                    return ListInputSecurityGroupsError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return ListInputSecurityGroupsError::GatewayTimeout(String::from(error_message))
+                    return ListInputSecurityGroupsError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return ListInputSecurityGroupsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListInputSecurityGroupsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListInputSecurityGroupsError::Validation(error_message.to_string())
+                    return ListInputSecurityGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5872,25 +5872,25 @@ impl ListInputsError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return ListInputsError::BadGateway(String::from(error_message))
+                    return ListInputsError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return ListInputsError::BadRequest(String::from(error_message))
+                    return ListInputsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListInputsError::Forbidden(String::from(error_message))
+                    return ListInputsError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return ListInputsError::GatewayTimeout(String::from(error_message))
+                    return ListInputsError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListInputsError::InternalServerError(String::from(error_message))
+                    return ListInputsError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListInputsError::TooManyRequests(String::from(error_message))
+                    return ListInputsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInputsError::Validation(error_message.to_string())
+                    return ListInputsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5996,25 +5996,25 @@ impl ListOfferingsError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return ListOfferingsError::BadGateway(String::from(error_message))
+                    return ListOfferingsError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return ListOfferingsError::BadRequest(String::from(error_message))
+                    return ListOfferingsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListOfferingsError::Forbidden(String::from(error_message))
+                    return ListOfferingsError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return ListOfferingsError::GatewayTimeout(String::from(error_message))
+                    return ListOfferingsError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListOfferingsError::InternalServerError(String::from(error_message))
+                    return ListOfferingsError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListOfferingsError::TooManyRequests(String::from(error_message))
+                    return ListOfferingsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListOfferingsError::Validation(error_message.to_string())
+                    return ListOfferingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6120,25 +6120,25 @@ impl ListReservationsError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return ListReservationsError::BadGateway(String::from(error_message))
+                    return ListReservationsError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return ListReservationsError::BadRequest(String::from(error_message))
+                    return ListReservationsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListReservationsError::Forbidden(String::from(error_message))
+                    return ListReservationsError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return ListReservationsError::GatewayTimeout(String::from(error_message))
+                    return ListReservationsError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListReservationsError::InternalServerError(String::from(error_message))
+                    return ListReservationsError::InternalServerError(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListReservationsError::TooManyRequests(String::from(error_message))
+                    return ListReservationsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListReservationsError::Validation(error_message.to_string())
+                    return ListReservationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6248,31 +6248,31 @@ impl PurchaseOfferingError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return PurchaseOfferingError::BadGateway(String::from(error_message))
+                    return PurchaseOfferingError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return PurchaseOfferingError::BadRequest(String::from(error_message))
+                    return PurchaseOfferingError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PurchaseOfferingError::Conflict(String::from(error_message))
+                    return PurchaseOfferingError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return PurchaseOfferingError::Forbidden(String::from(error_message))
+                    return PurchaseOfferingError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return PurchaseOfferingError::GatewayTimeout(String::from(error_message))
+                    return PurchaseOfferingError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return PurchaseOfferingError::InternalServerError(String::from(error_message))
+                    return PurchaseOfferingError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PurchaseOfferingError::NotFound(String::from(error_message))
+                    return PurchaseOfferingError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PurchaseOfferingError::TooManyRequests(String::from(error_message))
+                    return PurchaseOfferingError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PurchaseOfferingError::Validation(error_message.to_string())
+                    return PurchaseOfferingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6384,31 +6384,31 @@ impl StartChannelError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return StartChannelError::BadGateway(String::from(error_message))
+                    return StartChannelError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return StartChannelError::BadRequest(String::from(error_message))
+                    return StartChannelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return StartChannelError::Conflict(String::from(error_message))
+                    return StartChannelError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return StartChannelError::Forbidden(String::from(error_message))
+                    return StartChannelError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return StartChannelError::GatewayTimeout(String::from(error_message))
+                    return StartChannelError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return StartChannelError::InternalServerError(String::from(error_message))
+                    return StartChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StartChannelError::NotFound(String::from(error_message))
+                    return StartChannelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return StartChannelError::TooManyRequests(String::from(error_message))
+                    return StartChannelError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartChannelError::Validation(error_message.to_string())
+                    return StartChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6520,31 +6520,31 @@ impl StopChannelError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return StopChannelError::BadGateway(String::from(error_message))
+                    return StopChannelError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return StopChannelError::BadRequest(String::from(error_message))
+                    return StopChannelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return StopChannelError::Conflict(String::from(error_message))
+                    return StopChannelError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return StopChannelError::Forbidden(String::from(error_message))
+                    return StopChannelError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return StopChannelError::GatewayTimeout(String::from(error_message))
+                    return StopChannelError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return StopChannelError::InternalServerError(String::from(error_message))
+                    return StopChannelError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StopChannelError::NotFound(String::from(error_message))
+                    return StopChannelError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return StopChannelError::TooManyRequests(String::from(error_message))
+                    return StopChannelError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopChannelError::Validation(error_message.to_string())
+                    return StopChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6654,28 +6654,28 @@ impl UpdateChannelError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return UpdateChannelError::BadGateway(String::from(error_message))
+                    return UpdateChannelError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return UpdateChannelError::BadRequest(String::from(error_message))
+                    return UpdateChannelError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateChannelError::Conflict(String::from(error_message))
+                    return UpdateChannelError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateChannelError::Forbidden(String::from(error_message))
+                    return UpdateChannelError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return UpdateChannelError::GatewayTimeout(String::from(error_message))
+                    return UpdateChannelError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateChannelError::InternalServerError(String::from(error_message))
+                    return UpdateChannelError::InternalServerError(String::from(error_message));
                 }
                 "UnprocessableEntityException" => {
-                    return UpdateChannelError::UnprocessableEntity(String::from(error_message))
+                    return UpdateChannelError::UnprocessableEntity(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateChannelError::Validation(error_message.to_string())
+                    return UpdateChannelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6784,28 +6784,28 @@ impl UpdateInputError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return UpdateInputError::BadGateway(String::from(error_message))
+                    return UpdateInputError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return UpdateInputError::BadRequest(String::from(error_message))
+                    return UpdateInputError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateInputError::Conflict(String::from(error_message))
+                    return UpdateInputError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateInputError::Forbidden(String::from(error_message))
+                    return UpdateInputError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
-                    return UpdateInputError::GatewayTimeout(String::from(error_message))
+                    return UpdateInputError::GatewayTimeout(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateInputError::InternalServerError(String::from(error_message))
+                    return UpdateInputError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateInputError::NotFound(String::from(error_message))
+                    return UpdateInputError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateInputError::Validation(error_message.to_string())
+                    return UpdateInputError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6914,32 +6914,32 @@ impl UpdateInputSecurityGroupError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return UpdateInputSecurityGroupError::BadGateway(String::from(error_message))
+                    return UpdateInputSecurityGroupError::BadGateway(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return UpdateInputSecurityGroupError::BadRequest(String::from(error_message))
+                    return UpdateInputSecurityGroupError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateInputSecurityGroupError::Conflict(String::from(error_message))
+                    return UpdateInputSecurityGroupError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateInputSecurityGroupError::Forbidden(String::from(error_message))
+                    return UpdateInputSecurityGroupError::Forbidden(String::from(error_message));
                 }
                 "GatewayTimeoutException" => {
                     return UpdateInputSecurityGroupError::GatewayTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return UpdateInputSecurityGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateInputSecurityGroupError::NotFound(String::from(error_message))
+                    return UpdateInputSecurityGroupError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateInputSecurityGroupError::Validation(error_message.to_string())
+                    return UpdateInputSecurityGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

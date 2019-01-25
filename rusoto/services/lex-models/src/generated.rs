@@ -1893,25 +1893,25 @@ impl CreateBotVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateBotVersionError::BadRequest(String::from(error_message))
+                    return CreateBotVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateBotVersionError::Conflict(String::from(error_message))
+                    return CreateBotVersionError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateBotVersionError::InternalFailure(String::from(error_message))
+                    return CreateBotVersionError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateBotVersionError::LimitExceeded(String::from(error_message))
+                    return CreateBotVersionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateBotVersionError::NotFound(String::from(error_message))
+                    return CreateBotVersionError::NotFound(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return CreateBotVersionError::PreconditionFailed(String::from(error_message))
+                    return CreateBotVersionError::PreconditionFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBotVersionError::Validation(error_message.to_string())
+                    return CreateBotVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2017,25 +2017,25 @@ impl CreateIntentVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateIntentVersionError::BadRequest(String::from(error_message))
+                    return CreateIntentVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateIntentVersionError::Conflict(String::from(error_message))
+                    return CreateIntentVersionError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateIntentVersionError::InternalFailure(String::from(error_message))
+                    return CreateIntentVersionError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateIntentVersionError::LimitExceeded(String::from(error_message))
+                    return CreateIntentVersionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateIntentVersionError::NotFound(String::from(error_message))
+                    return CreateIntentVersionError::NotFound(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return CreateIntentVersionError::PreconditionFailed(String::from(error_message))
+                    return CreateIntentVersionError::PreconditionFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIntentVersionError::Validation(error_message.to_string())
+                    return CreateIntentVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2143,27 +2143,27 @@ impl CreateSlotTypeVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateSlotTypeVersionError::BadRequest(String::from(error_message))
+                    return CreateSlotTypeVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateSlotTypeVersionError::Conflict(String::from(error_message))
+                    return CreateSlotTypeVersionError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateSlotTypeVersionError::InternalFailure(String::from(error_message))
+                    return CreateSlotTypeVersionError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateSlotTypeVersionError::LimitExceeded(String::from(error_message))
+                    return CreateSlotTypeVersionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateSlotTypeVersionError::NotFound(String::from(error_message))
+                    return CreateSlotTypeVersionError::NotFound(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
                     return CreateSlotTypeVersionError::PreconditionFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSlotTypeVersionError::Validation(error_message.to_string())
+                    return CreateSlotTypeVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2271,21 +2271,21 @@ impl DeleteBotError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotError::BadRequest(String::from(error_message))
+                    return DeleteBotError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return DeleteBotError::Conflict(String::from(error_message)),
                 "InternalFailureException" => {
-                    return DeleteBotError::InternalFailure(String::from(error_message))
+                    return DeleteBotError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotError::LimitExceeded(String::from(error_message))
+                    return DeleteBotError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return DeleteBotError::NotFound(String::from(error_message)),
                 "ResourceInUseException" => {
-                    return DeleteBotError::ResourceInUse(String::from(error_message))
+                    return DeleteBotError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBotError::Validation(error_message.to_string())
+                    return DeleteBotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2391,25 +2391,25 @@ impl DeleteBotAliasError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotAliasError::BadRequest(String::from(error_message))
+                    return DeleteBotAliasError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteBotAliasError::Conflict(String::from(error_message))
+                    return DeleteBotAliasError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteBotAliasError::InternalFailure(String::from(error_message))
+                    return DeleteBotAliasError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotAliasError::LimitExceeded(String::from(error_message))
+                    return DeleteBotAliasError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteBotAliasError::NotFound(String::from(error_message))
+                    return DeleteBotAliasError::NotFound(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteBotAliasError::ResourceInUse(String::from(error_message))
+                    return DeleteBotAliasError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBotAliasError::Validation(error_message.to_string())
+                    return DeleteBotAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2513,26 +2513,26 @@ impl DeleteBotChannelAssociationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotChannelAssociationError::BadRequest(String::from(error_message))
+                    return DeleteBotChannelAssociationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteBotChannelAssociationError::Conflict(String::from(error_message))
+                    return DeleteBotChannelAssociationError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
                     return DeleteBotChannelAssociationError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return DeleteBotChannelAssociationError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteBotChannelAssociationError::NotFound(String::from(error_message))
+                    return DeleteBotChannelAssociationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBotChannelAssociationError::Validation(error_message.to_string())
+                    return DeleteBotChannelAssociationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2639,25 +2639,25 @@ impl DeleteBotVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotVersionError::BadRequest(String::from(error_message))
+                    return DeleteBotVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteBotVersionError::Conflict(String::from(error_message))
+                    return DeleteBotVersionError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteBotVersionError::InternalFailure(String::from(error_message))
+                    return DeleteBotVersionError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotVersionError::LimitExceeded(String::from(error_message))
+                    return DeleteBotVersionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteBotVersionError::NotFound(String::from(error_message))
+                    return DeleteBotVersionError::NotFound(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteBotVersionError::ResourceInUse(String::from(error_message))
+                    return DeleteBotVersionError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBotVersionError::Validation(error_message.to_string())
+                    return DeleteBotVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2763,25 +2763,25 @@ impl DeleteIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIntentError::BadRequest(String::from(error_message))
+                    return DeleteIntentError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteIntentError::Conflict(String::from(error_message))
+                    return DeleteIntentError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteIntentError::InternalFailure(String::from(error_message))
+                    return DeleteIntentError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteIntentError::LimitExceeded(String::from(error_message))
+                    return DeleteIntentError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteIntentError::NotFound(String::from(error_message))
+                    return DeleteIntentError::NotFound(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteIntentError::ResourceInUse(String::from(error_message))
+                    return DeleteIntentError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIntentError::Validation(error_message.to_string())
+                    return DeleteIntentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2887,25 +2887,25 @@ impl DeleteIntentVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIntentVersionError::BadRequest(String::from(error_message))
+                    return DeleteIntentVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteIntentVersionError::Conflict(String::from(error_message))
+                    return DeleteIntentVersionError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteIntentVersionError::InternalFailure(String::from(error_message))
+                    return DeleteIntentVersionError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteIntentVersionError::LimitExceeded(String::from(error_message))
+                    return DeleteIntentVersionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteIntentVersionError::NotFound(String::from(error_message))
+                    return DeleteIntentVersionError::NotFound(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteIntentVersionError::ResourceInUse(String::from(error_message))
+                    return DeleteIntentVersionError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIntentVersionError::Validation(error_message.to_string())
+                    return DeleteIntentVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3013,25 +3013,25 @@ impl DeleteSlotTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteSlotTypeError::BadRequest(String::from(error_message))
+                    return DeleteSlotTypeError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteSlotTypeError::Conflict(String::from(error_message))
+                    return DeleteSlotTypeError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteSlotTypeError::InternalFailure(String::from(error_message))
+                    return DeleteSlotTypeError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteSlotTypeError::LimitExceeded(String::from(error_message))
+                    return DeleteSlotTypeError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteSlotTypeError::NotFound(String::from(error_message))
+                    return DeleteSlotTypeError::NotFound(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteSlotTypeError::ResourceInUse(String::from(error_message))
+                    return DeleteSlotTypeError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSlotTypeError::Validation(error_message.to_string())
+                    return DeleteSlotTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3137,25 +3137,25 @@ impl DeleteSlotTypeVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteSlotTypeVersionError::BadRequest(String::from(error_message))
+                    return DeleteSlotTypeVersionError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteSlotTypeVersionError::Conflict(String::from(error_message))
+                    return DeleteSlotTypeVersionError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteSlotTypeVersionError::InternalFailure(String::from(error_message))
+                    return DeleteSlotTypeVersionError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteSlotTypeVersionError::LimitExceeded(String::from(error_message))
+                    return DeleteSlotTypeVersionError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteSlotTypeVersionError::NotFound(String::from(error_message))
+                    return DeleteSlotTypeVersionError::NotFound(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteSlotTypeVersionError::ResourceInUse(String::from(error_message))
+                    return DeleteSlotTypeVersionError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSlotTypeVersionError::Validation(error_message.to_string())
+                    return DeleteSlotTypeVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3259,19 +3259,19 @@ impl DeleteUtterancesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteUtterancesError::BadRequest(String::from(error_message))
+                    return DeleteUtterancesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteUtterancesError::InternalFailure(String::from(error_message))
+                    return DeleteUtterancesError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteUtterancesError::LimitExceeded(String::from(error_message))
+                    return DeleteUtterancesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteUtterancesError::NotFound(String::from(error_message))
+                    return DeleteUtterancesError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUtterancesError::Validation(error_message.to_string())
+                    return DeleteUtterancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3371,13 +3371,13 @@ impl GetBotError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotError::BadRequest(String::from(error_message))
+                    return GetBotError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBotError::InternalFailure(String::from(error_message))
+                    return GetBotError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBotError::LimitExceeded(String::from(error_message))
+                    return GetBotError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetBotError::NotFound(String::from(error_message)),
                 "ValidationException" => return GetBotError::Validation(error_message.to_string()),
@@ -3479,19 +3479,19 @@ impl GetBotAliasError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotAliasError::BadRequest(String::from(error_message))
+                    return GetBotAliasError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBotAliasError::InternalFailure(String::from(error_message))
+                    return GetBotAliasError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBotAliasError::LimitExceeded(String::from(error_message))
+                    return GetBotAliasError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetBotAliasError::NotFound(String::from(error_message))
+                    return GetBotAliasError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBotAliasError::Validation(error_message.to_string())
+                    return GetBotAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3589,16 +3589,16 @@ impl GetBotAliasesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotAliasesError::BadRequest(String::from(error_message))
+                    return GetBotAliasesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBotAliasesError::InternalFailure(String::from(error_message))
+                    return GetBotAliasesError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBotAliasesError::LimitExceeded(String::from(error_message))
+                    return GetBotAliasesError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBotAliasesError::Validation(error_message.to_string())
+                    return GetBotAliasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3697,21 +3697,21 @@ impl GetBotChannelAssociationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotChannelAssociationError::BadRequest(String::from(error_message))
+                    return GetBotChannelAssociationError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
                     return GetBotChannelAssociationError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetBotChannelAssociationError::LimitExceeded(String::from(error_message))
+                    return GetBotChannelAssociationError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetBotChannelAssociationError::NotFound(String::from(error_message))
+                    return GetBotChannelAssociationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBotChannelAssociationError::Validation(error_message.to_string())
+                    return GetBotChannelAssociationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3811,20 +3811,20 @@ impl GetBotChannelAssociationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotChannelAssociationsError::BadRequest(String::from(error_message))
+                    return GetBotChannelAssociationsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
                     return GetBotChannelAssociationsError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return GetBotChannelAssociationsError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetBotChannelAssociationsError::Validation(error_message.to_string())
+                    return GetBotChannelAssociationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3925,19 +3925,19 @@ impl GetBotVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotVersionsError::BadRequest(String::from(error_message))
+                    return GetBotVersionsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBotVersionsError::InternalFailure(String::from(error_message))
+                    return GetBotVersionsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBotVersionsError::LimitExceeded(String::from(error_message))
+                    return GetBotVersionsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetBotVersionsError::NotFound(String::from(error_message))
+                    return GetBotVersionsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBotVersionsError::Validation(error_message.to_string())
+                    return GetBotVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4037,13 +4037,13 @@ impl GetBotsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotsError::BadRequest(String::from(error_message))
+                    return GetBotsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBotsError::InternalFailure(String::from(error_message))
+                    return GetBotsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBotsError::LimitExceeded(String::from(error_message))
+                    return GetBotsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetBotsError::NotFound(String::from(error_message)),
                 "ValidationException" => return GetBotsError::Validation(error_message.to_string()),
@@ -4145,19 +4145,19 @@ impl GetBuiltinIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBuiltinIntentError::BadRequest(String::from(error_message))
+                    return GetBuiltinIntentError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBuiltinIntentError::InternalFailure(String::from(error_message))
+                    return GetBuiltinIntentError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBuiltinIntentError::LimitExceeded(String::from(error_message))
+                    return GetBuiltinIntentError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetBuiltinIntentError::NotFound(String::from(error_message))
+                    return GetBuiltinIntentError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBuiltinIntentError::Validation(error_message.to_string())
+                    return GetBuiltinIntentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4255,16 +4255,16 @@ impl GetBuiltinIntentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBuiltinIntentsError::BadRequest(String::from(error_message))
+                    return GetBuiltinIntentsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBuiltinIntentsError::InternalFailure(String::from(error_message))
+                    return GetBuiltinIntentsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBuiltinIntentsError::LimitExceeded(String::from(error_message))
+                    return GetBuiltinIntentsError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBuiltinIntentsError::Validation(error_message.to_string())
+                    return GetBuiltinIntentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4363,16 +4363,16 @@ impl GetBuiltinSlotTypesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBuiltinSlotTypesError::BadRequest(String::from(error_message))
+                    return GetBuiltinSlotTypesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetBuiltinSlotTypesError::InternalFailure(String::from(error_message))
+                    return GetBuiltinSlotTypesError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetBuiltinSlotTypesError::LimitExceeded(String::from(error_message))
+                    return GetBuiltinSlotTypesError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBuiltinSlotTypesError::Validation(error_message.to_string())
+                    return GetBuiltinSlotTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4473,17 +4473,17 @@ impl GetExportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetExportError::BadRequest(String::from(error_message))
+                    return GetExportError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetExportError::InternalFailure(String::from(error_message))
+                    return GetExportError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetExportError::LimitExceeded(String::from(error_message))
+                    return GetExportError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetExportError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return GetExportError::Validation(error_message.to_string())
+                    return GetExportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4583,17 +4583,17 @@ impl GetImportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetImportError::BadRequest(String::from(error_message))
+                    return GetImportError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetImportError::InternalFailure(String::from(error_message))
+                    return GetImportError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetImportError::LimitExceeded(String::from(error_message))
+                    return GetImportError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetImportError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return GetImportError::Validation(error_message.to_string())
+                    return GetImportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4693,17 +4693,17 @@ impl GetIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIntentError::BadRequest(String::from(error_message))
+                    return GetIntentError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetIntentError::InternalFailure(String::from(error_message))
+                    return GetIntentError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetIntentError::LimitExceeded(String::from(error_message))
+                    return GetIntentError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return GetIntentError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return GetIntentError::Validation(error_message.to_string())
+                    return GetIntentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4803,19 +4803,19 @@ impl GetIntentVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIntentVersionsError::BadRequest(String::from(error_message))
+                    return GetIntentVersionsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetIntentVersionsError::InternalFailure(String::from(error_message))
+                    return GetIntentVersionsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetIntentVersionsError::LimitExceeded(String::from(error_message))
+                    return GetIntentVersionsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetIntentVersionsError::NotFound(String::from(error_message))
+                    return GetIntentVersionsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIntentVersionsError::Validation(error_message.to_string())
+                    return GetIntentVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4917,19 +4917,19 @@ impl GetIntentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIntentsError::BadRequest(String::from(error_message))
+                    return GetIntentsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetIntentsError::InternalFailure(String::from(error_message))
+                    return GetIntentsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetIntentsError::LimitExceeded(String::from(error_message))
+                    return GetIntentsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetIntentsError::NotFound(String::from(error_message))
+                    return GetIntentsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIntentsError::Validation(error_message.to_string())
+                    return GetIntentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5029,19 +5029,19 @@ impl GetSlotTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSlotTypeError::BadRequest(String::from(error_message))
+                    return GetSlotTypeError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetSlotTypeError::InternalFailure(String::from(error_message))
+                    return GetSlotTypeError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetSlotTypeError::LimitExceeded(String::from(error_message))
+                    return GetSlotTypeError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetSlotTypeError::NotFound(String::from(error_message))
+                    return GetSlotTypeError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSlotTypeError::Validation(error_message.to_string())
+                    return GetSlotTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5141,19 +5141,19 @@ impl GetSlotTypeVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSlotTypeVersionsError::BadRequest(String::from(error_message))
+                    return GetSlotTypeVersionsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetSlotTypeVersionsError::InternalFailure(String::from(error_message))
+                    return GetSlotTypeVersionsError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetSlotTypeVersionsError::LimitExceeded(String::from(error_message))
+                    return GetSlotTypeVersionsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetSlotTypeVersionsError::NotFound(String::from(error_message))
+                    return GetSlotTypeVersionsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSlotTypeVersionsError::Validation(error_message.to_string())
+                    return GetSlotTypeVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5255,19 +5255,19 @@ impl GetSlotTypesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSlotTypesError::BadRequest(String::from(error_message))
+                    return GetSlotTypesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetSlotTypesError::InternalFailure(String::from(error_message))
+                    return GetSlotTypesError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetSlotTypesError::LimitExceeded(String::from(error_message))
+                    return GetSlotTypesError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetSlotTypesError::NotFound(String::from(error_message))
+                    return GetSlotTypesError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSlotTypesError::Validation(error_message.to_string())
+                    return GetSlotTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5365,16 +5365,16 @@ impl GetUtterancesViewError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUtterancesViewError::BadRequest(String::from(error_message))
+                    return GetUtterancesViewError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetUtterancesViewError::InternalFailure(String::from(error_message))
+                    return GetUtterancesViewError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetUtterancesViewError::LimitExceeded(String::from(error_message))
+                    return GetUtterancesViewError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetUtterancesViewError::Validation(error_message.to_string())
+                    return GetUtterancesViewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5477,17 +5477,17 @@ impl PutBotError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutBotError::BadRequest(String::from(error_message))
+                    return PutBotError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return PutBotError::Conflict(String::from(error_message)),
                 "InternalFailureException" => {
-                    return PutBotError::InternalFailure(String::from(error_message))
+                    return PutBotError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutBotError::LimitExceeded(String::from(error_message))
+                    return PutBotError::LimitExceeded(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return PutBotError::PreconditionFailed(String::from(error_message))
+                    return PutBotError::PreconditionFailed(String::from(error_message));
                 }
                 "ValidationException" => return PutBotError::Validation(error_message.to_string()),
                 _ => {}
@@ -5591,22 +5591,22 @@ impl PutBotAliasError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutBotAliasError::BadRequest(String::from(error_message))
+                    return PutBotAliasError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PutBotAliasError::Conflict(String::from(error_message))
+                    return PutBotAliasError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return PutBotAliasError::InternalFailure(String::from(error_message))
+                    return PutBotAliasError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutBotAliasError::LimitExceeded(String::from(error_message))
+                    return PutBotAliasError::LimitExceeded(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return PutBotAliasError::PreconditionFailed(String::from(error_message))
+                    return PutBotAliasError::PreconditionFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutBotAliasError::Validation(error_message.to_string())
+                    return PutBotAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5709,20 +5709,20 @@ impl PutIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutIntentError::BadRequest(String::from(error_message))
+                    return PutIntentError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return PutIntentError::Conflict(String::from(error_message)),
                 "InternalFailureException" => {
-                    return PutIntentError::InternalFailure(String::from(error_message))
+                    return PutIntentError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutIntentError::LimitExceeded(String::from(error_message))
+                    return PutIntentError::LimitExceeded(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return PutIntentError::PreconditionFailed(String::from(error_message))
+                    return PutIntentError::PreconditionFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutIntentError::Validation(error_message.to_string())
+                    return PutIntentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5825,22 +5825,22 @@ impl PutSlotTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutSlotTypeError::BadRequest(String::from(error_message))
+                    return PutSlotTypeError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return PutSlotTypeError::Conflict(String::from(error_message))
+                    return PutSlotTypeError::Conflict(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return PutSlotTypeError::InternalFailure(String::from(error_message))
+                    return PutSlotTypeError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutSlotTypeError::LimitExceeded(String::from(error_message))
+                    return PutSlotTypeError::LimitExceeded(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return PutSlotTypeError::PreconditionFailed(String::from(error_message))
+                    return PutSlotTypeError::PreconditionFailed(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutSlotTypeError::Validation(error_message.to_string())
+                    return PutSlotTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5939,16 +5939,16 @@ impl StartImportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StartImportError::BadRequest(String::from(error_message))
+                    return StartImportError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return StartImportError::InternalFailure(String::from(error_message))
+                    return StartImportError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartImportError::LimitExceeded(String::from(error_message))
+                    return StartImportError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartImportError::Validation(error_message.to_string())
+                    return StartImportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

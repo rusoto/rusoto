@@ -1403,16 +1403,16 @@ impl CreateDeliveryStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return CreateDeliveryStreamError::InvalidArgument(String::from(error_message))
+                    return CreateDeliveryStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDeliveryStreamError::LimitExceeded(String::from(error_message))
+                    return CreateDeliveryStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateDeliveryStreamError::ResourceInUse(String::from(error_message))
+                    return CreateDeliveryStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDeliveryStreamError::Validation(error_message.to_string())
+                    return CreateDeliveryStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1495,13 +1495,13 @@ impl DeleteDeliveryStreamError {
 
             match *error_type {
                 "ResourceInUseException" => {
-                    return DeleteDeliveryStreamError::ResourceInUse(String::from(error_message))
+                    return DeleteDeliveryStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDeliveryStreamError::ResourceNotFound(String::from(error_message))
+                    return DeleteDeliveryStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDeliveryStreamError::Validation(error_message.to_string())
+                    return DeleteDeliveryStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1583,10 +1583,10 @@ impl DescribeDeliveryStreamError {
                 "ResourceNotFoundException" => {
                     return DescribeDeliveryStreamError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDeliveryStreamError::Validation(error_message.to_string())
+                    return DescribeDeliveryStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1663,7 +1663,7 @@ impl ListDeliveryStreamsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListDeliveryStreamsError::Validation(error_message.to_string())
+                    return ListDeliveryStreamsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1747,20 +1747,20 @@ impl ListTagsForDeliveryStreamError {
                 "InvalidArgumentException" => {
                     return ListTagsForDeliveryStreamError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return ListTagsForDeliveryStreamError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListTagsForDeliveryStreamError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTagsForDeliveryStreamError::Validation(error_message.to_string())
+                    return ListTagsForDeliveryStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1845,16 +1845,16 @@ impl PutRecordError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return PutRecordError::InvalidArgument(String::from(error_message))
+                    return PutRecordError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutRecordError::ResourceNotFound(String::from(error_message))
+                    return PutRecordError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutRecordError::ServiceUnavailable(String::from(error_message))
+                    return PutRecordError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutRecordError::Validation(error_message.to_string())
+                    return PutRecordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1937,16 +1937,16 @@ impl PutRecordBatchError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return PutRecordBatchError::InvalidArgument(String::from(error_message))
+                    return PutRecordBatchError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutRecordBatchError::ResourceNotFound(String::from(error_message))
+                    return PutRecordBatchError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutRecordBatchError::ServiceUnavailable(String::from(error_message))
+                    return PutRecordBatchError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutRecordBatchError::Validation(error_message.to_string())
+                    return PutRecordBatchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2031,19 +2031,19 @@ impl TagDeliveryStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return TagDeliveryStreamError::InvalidArgument(String::from(error_message))
+                    return TagDeliveryStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagDeliveryStreamError::LimitExceeded(String::from(error_message))
+                    return TagDeliveryStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return TagDeliveryStreamError::ResourceInUse(String::from(error_message))
+                    return TagDeliveryStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagDeliveryStreamError::ResourceNotFound(String::from(error_message))
+                    return TagDeliveryStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagDeliveryStreamError::Validation(error_message.to_string())
+                    return TagDeliveryStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2131,19 +2131,19 @@ impl UntagDeliveryStreamError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return UntagDeliveryStreamError::InvalidArgument(String::from(error_message))
+                    return UntagDeliveryStreamError::InvalidArgument(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UntagDeliveryStreamError::LimitExceeded(String::from(error_message))
+                    return UntagDeliveryStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UntagDeliveryStreamError::ResourceInUse(String::from(error_message))
+                    return UntagDeliveryStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagDeliveryStreamError::ResourceNotFound(String::from(error_message))
+                    return UntagDeliveryStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagDeliveryStreamError::Validation(error_message.to_string())
+                    return UntagDeliveryStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2233,19 +2233,19 @@ impl UpdateDestinationError {
                 "ConcurrentModificationException" => {
                     return UpdateDestinationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateDestinationError::InvalidArgument(String::from(error_message))
+                    return UpdateDestinationError::InvalidArgument(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return UpdateDestinationError::ResourceInUse(String::from(error_message))
+                    return UpdateDestinationError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDestinationError::ResourceNotFound(String::from(error_message))
+                    return UpdateDestinationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDestinationError::Validation(error_message.to_string())
+                    return UpdateDestinationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -757,30 +757,30 @@ impl AddAttachmentsToSetError {
                 "AttachmentLimitExceeded" => {
                     return AddAttachmentsToSetError::AttachmentLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AttachmentSetExpired" => {
                     return AddAttachmentsToSetError::AttachmentSetExpired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AttachmentSetIdNotFound" => {
                     return AddAttachmentsToSetError::AttachmentSetIdNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AttachmentSetSizeLimitExceeded" => {
                     return AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return AddAttachmentsToSetError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddAttachmentsToSetError::Validation(error_message.to_string())
+                    return AddAttachmentsToSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -871,23 +871,23 @@ impl AddCommunicationToCaseError {
                 "AttachmentSetExpired" => {
                     return AddCommunicationToCaseError::AttachmentSetExpired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AttachmentSetIdNotFound" => {
                     return AddCommunicationToCaseError::AttachmentSetIdNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CaseIdNotFound" => {
-                    return AddCommunicationToCaseError::CaseIdNotFound(String::from(error_message))
+                    return AddCommunicationToCaseError::CaseIdNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return AddCommunicationToCaseError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddCommunicationToCaseError::Validation(error_message.to_string())
+                    return AddCommunicationToCaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -975,19 +975,19 @@ impl CreateCaseError {
 
             match *error_type {
                 "AttachmentSetExpired" => {
-                    return CreateCaseError::AttachmentSetExpired(String::from(error_message))
+                    return CreateCaseError::AttachmentSetExpired(String::from(error_message));
                 }
                 "AttachmentSetIdNotFound" => {
-                    return CreateCaseError::AttachmentSetIdNotFound(String::from(error_message))
+                    return CreateCaseError::AttachmentSetIdNotFound(String::from(error_message));
                 }
                 "CaseCreationLimitExceeded" => {
-                    return CreateCaseError::CaseCreationLimitExceeded(String::from(error_message))
+                    return CreateCaseError::CaseCreationLimitExceeded(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CreateCaseError::InternalServerError(String::from(error_message))
+                    return CreateCaseError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateCaseError::Validation(error_message.to_string())
+                    return CreateCaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1073,18 +1073,18 @@ impl DescribeAttachmentError {
                 "AttachmentIdNotFound" => {
                     return DescribeAttachmentError::AttachmentIdNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DescribeAttachmentLimitExceeded" => {
                     return DescribeAttachmentError::DescribeAttachmentLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return DescribeAttachmentError::InternalServerError(String::from(error_message))
+                    return DescribeAttachmentError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAttachmentError::Validation(error_message.to_string())
+                    return DescribeAttachmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1167,13 +1167,13 @@ impl DescribeCasesError {
 
             match *error_type {
                 "CaseIdNotFound" => {
-                    return DescribeCasesError::CaseIdNotFound(String::from(error_message))
+                    return DescribeCasesError::CaseIdNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DescribeCasesError::InternalServerError(String::from(error_message))
+                    return DescribeCasesError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeCasesError::Validation(error_message.to_string())
+                    return DescribeCasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1253,15 +1253,15 @@ impl DescribeCommunicationsError {
 
             match *error_type {
                 "CaseIdNotFound" => {
-                    return DescribeCommunicationsError::CaseIdNotFound(String::from(error_message))
+                    return DescribeCommunicationsError::CaseIdNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DescribeCommunicationsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCommunicationsError::Validation(error_message.to_string())
+                    return DescribeCommunicationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1341,10 +1341,10 @@ impl DescribeServicesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeServicesError::InternalServerError(String::from(error_message))
+                    return DescribeServicesError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeServicesError::Validation(error_message.to_string())
+                    return DescribeServicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1423,10 +1423,10 @@ impl DescribeSeverityLevelsError {
                 "InternalServerError" => {
                     return DescribeSeverityLevelsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSeverityLevelsError::Validation(error_message.to_string())
+                    return DescribeSeverityLevelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1509,12 +1509,12 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
                 "InternalServerError" => {
                     return DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeTrustedAdvisorCheckRefreshStatusesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1599,12 +1599,12 @@ impl DescribeTrustedAdvisorCheckResultError {
                 "InternalServerError" => {
                     return DescribeTrustedAdvisorCheckResultError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeTrustedAdvisorCheckResultError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1685,12 +1685,12 @@ impl DescribeTrustedAdvisorCheckSummariesError {
                 "InternalServerError" => {
                     return DescribeTrustedAdvisorCheckSummariesError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeTrustedAdvisorCheckSummariesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1771,10 +1771,10 @@ impl DescribeTrustedAdvisorChecksError {
                 "InternalServerError" => {
                     return DescribeTrustedAdvisorChecksError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeTrustedAdvisorChecksError::Validation(error_message.to_string())
+                    return DescribeTrustedAdvisorChecksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1855,10 +1855,10 @@ impl RefreshTrustedAdvisorCheckError {
                 "InternalServerError" => {
                     return RefreshTrustedAdvisorCheckError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RefreshTrustedAdvisorCheckError::Validation(error_message.to_string())
+                    return RefreshTrustedAdvisorCheckError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1939,13 +1939,13 @@ impl ResolveCaseError {
 
             match *error_type {
                 "CaseIdNotFound" => {
-                    return ResolveCaseError::CaseIdNotFound(String::from(error_message))
+                    return ResolveCaseError::CaseIdNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return ResolveCaseError::InternalServerError(String::from(error_message))
+                    return ResolveCaseError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResolveCaseError::Validation(error_message.to_string())
+                    return ResolveCaseError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

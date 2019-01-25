@@ -1238,22 +1238,22 @@ impl CreateBrokerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateBrokerError::BadRequest(String::from(error_message))
+                    return CreateBrokerError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateBrokerError::Conflict(String::from(error_message))
+                    return CreateBrokerError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateBrokerError::Forbidden(String::from(error_message))
+                    return CreateBrokerError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateBrokerError::InternalServerError(String::from(error_message))
+                    return CreateBrokerError::InternalServerError(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateBrokerError::Unauthorized(String::from(error_message))
+                    return CreateBrokerError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBrokerError::Validation(error_message.to_string())
+                    return CreateBrokerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1354,21 +1354,21 @@ impl CreateConfigurationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateConfigurationError::BadRequest(String::from(error_message))
+                    return CreateConfigurationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateConfigurationError::Conflict(String::from(error_message))
+                    return CreateConfigurationError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateConfigurationError::Forbidden(String::from(error_message))
+                    return CreateConfigurationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateConfigurationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateConfigurationError::Validation(error_message.to_string())
+                    return CreateConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1472,22 +1472,22 @@ impl CreateUserError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateUserError::BadRequest(String::from(error_message))
+                    return CreateUserError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateUserError::Conflict(String::from(error_message))
+                    return CreateUserError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateUserError::Forbidden(String::from(error_message))
+                    return CreateUserError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateUserError::InternalServerError(String::from(error_message))
+                    return CreateUserError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateUserError::NotFound(String::from(error_message))
+                    return CreateUserError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string())
+                    return CreateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1588,19 +1588,19 @@ impl DeleteBrokerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBrokerError::BadRequest(String::from(error_message))
+                    return DeleteBrokerError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteBrokerError::Forbidden(String::from(error_message))
+                    return DeleteBrokerError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteBrokerError::InternalServerError(String::from(error_message))
+                    return DeleteBrokerError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteBrokerError::NotFound(String::from(error_message))
+                    return DeleteBrokerError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBrokerError::Validation(error_message.to_string())
+                    return DeleteBrokerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1700,19 +1700,19 @@ impl DeleteUserError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteUserError::BadRequest(String::from(error_message))
+                    return DeleteUserError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteUserError::Forbidden(String::from(error_message))
+                    return DeleteUserError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteUserError::InternalServerError(String::from(error_message))
+                    return DeleteUserError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteUserError::NotFound(String::from(error_message))
+                    return DeleteUserError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string())
+                    return DeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1812,19 +1812,19 @@ impl DescribeBrokerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeBrokerError::BadRequest(String::from(error_message))
+                    return DescribeBrokerError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeBrokerError::Forbidden(String::from(error_message))
+                    return DescribeBrokerError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeBrokerError::InternalServerError(String::from(error_message))
+                    return DescribeBrokerError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeBrokerError::NotFound(String::from(error_message))
+                    return DescribeBrokerError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBrokerError::Validation(error_message.to_string())
+                    return DescribeBrokerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1924,21 +1924,21 @@ impl DescribeConfigurationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeConfigurationError::BadRequest(String::from(error_message))
+                    return DescribeConfigurationError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeConfigurationError::Forbidden(String::from(error_message))
+                    return DescribeConfigurationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DescribeConfigurationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeConfigurationError::NotFound(String::from(error_message))
+                    return DescribeConfigurationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeConfigurationError::Validation(error_message.to_string())
+                    return DescribeConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2042,23 +2042,23 @@ impl DescribeConfigurationRevisionError {
                 "BadRequestException" => {
                     return DescribeConfigurationRevisionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ForbiddenException" => {
                     return DescribeConfigurationRevisionError::Forbidden(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return DescribeConfigurationRevisionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeConfigurationRevisionError::NotFound(String::from(error_message))
+                    return DescribeConfigurationRevisionError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeConfigurationRevisionError::Validation(error_message.to_string())
+                    return DescribeConfigurationRevisionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2160,19 +2160,19 @@ impl DescribeUserError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeUserError::BadRequest(String::from(error_message))
+                    return DescribeUserError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeUserError::Forbidden(String::from(error_message))
+                    return DescribeUserError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeUserError::InternalServerError(String::from(error_message))
+                    return DescribeUserError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeUserError::NotFound(String::from(error_message))
+                    return DescribeUserError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserError::Validation(error_message.to_string())
+                    return DescribeUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2270,16 +2270,16 @@ impl ListBrokersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListBrokersError::BadRequest(String::from(error_message))
+                    return ListBrokersError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListBrokersError::Forbidden(String::from(error_message))
+                    return ListBrokersError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListBrokersError::InternalServerError(String::from(error_message))
+                    return ListBrokersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBrokersError::Validation(error_message.to_string())
+                    return ListBrokersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2378,21 +2378,21 @@ impl ListConfigurationRevisionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListConfigurationRevisionsError::BadRequest(String::from(error_message))
+                    return ListConfigurationRevisionsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListConfigurationRevisionsError::Forbidden(String::from(error_message))
+                    return ListConfigurationRevisionsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return ListConfigurationRevisionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListConfigurationRevisionsError::NotFound(String::from(error_message))
+                    return ListConfigurationRevisionsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListConfigurationRevisionsError::Validation(error_message.to_string())
+                    return ListConfigurationRevisionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2492,16 +2492,16 @@ impl ListConfigurationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListConfigurationsError::BadRequest(String::from(error_message))
+                    return ListConfigurationsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListConfigurationsError::Forbidden(String::from(error_message))
+                    return ListConfigurationsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListConfigurationsError::InternalServerError(String::from(error_message))
+                    return ListConfigurationsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListConfigurationsError::Validation(error_message.to_string())
+                    return ListConfigurationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2602,17 +2602,17 @@ impl ListUsersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListUsersError::BadRequest(String::from(error_message))
+                    return ListUsersError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListUsersError::Forbidden(String::from(error_message))
+                    return ListUsersError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListUsersError::InternalServerError(String::from(error_message))
+                    return ListUsersError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return ListUsersError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return ListUsersError::Validation(error_message.to_string())
+                    return ListUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2712,19 +2712,19 @@ impl RebootBrokerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RebootBrokerError::BadRequest(String::from(error_message))
+                    return RebootBrokerError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return RebootBrokerError::Forbidden(String::from(error_message))
+                    return RebootBrokerError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return RebootBrokerError::InternalServerError(String::from(error_message))
+                    return RebootBrokerError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return RebootBrokerError::NotFound(String::from(error_message))
+                    return RebootBrokerError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RebootBrokerError::Validation(error_message.to_string())
+                    return RebootBrokerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2824,19 +2824,19 @@ impl UpdateBrokerError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateBrokerError::BadRequest(String::from(error_message))
+                    return UpdateBrokerError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateBrokerError::Forbidden(String::from(error_message))
+                    return UpdateBrokerError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateBrokerError::InternalServerError(String::from(error_message))
+                    return UpdateBrokerError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateBrokerError::NotFound(String::from(error_message))
+                    return UpdateBrokerError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateBrokerError::Validation(error_message.to_string())
+                    return UpdateBrokerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2938,24 +2938,24 @@ impl UpdateConfigurationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateConfigurationError::BadRequest(String::from(error_message))
+                    return UpdateConfigurationError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateConfigurationError::Conflict(String::from(error_message))
+                    return UpdateConfigurationError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateConfigurationError::Forbidden(String::from(error_message))
+                    return UpdateConfigurationError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return UpdateConfigurationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateConfigurationError::NotFound(String::from(error_message))
+                    return UpdateConfigurationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateConfigurationError::Validation(error_message.to_string())
+                    return UpdateConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3060,22 +3060,22 @@ impl UpdateUserError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateUserError::BadRequest(String::from(error_message))
+                    return UpdateUserError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateUserError::Conflict(String::from(error_message))
+                    return UpdateUserError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateUserError::Forbidden(String::from(error_message))
+                    return UpdateUserError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateUserError::InternalServerError(String::from(error_message))
+                    return UpdateUserError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateUserError::NotFound(String::from(error_message))
+                    return UpdateUserError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserError::Validation(error_message.to_string())
+                    return UpdateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

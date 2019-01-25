@@ -1512,45 +1512,45 @@ impl BatchGetRepositoriesError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return BatchGetRepositoriesError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return BatchGetRepositoriesError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return BatchGetRepositoriesError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return BatchGetRepositoriesError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return BatchGetRepositoriesError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MaximumRepositoryNamesExceededException" => {
                     return BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNamesRequiredException" => {
                     return BatchGetRepositoriesError::RepositoryNamesRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetRepositoriesError::Validation(error_message.to_string())
+                    return BatchGetRepositoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1662,51 +1662,51 @@ impl CreateBranchError {
 
             match *error_type {
                 "BranchNameExistsException" => {
-                    return CreateBranchError::BranchNameExists(String::from(error_message))
+                    return CreateBranchError::BranchNameExists(String::from(error_message));
                 }
                 "BranchNameRequiredException" => {
-                    return CreateBranchError::BranchNameRequired(String::from(error_message))
+                    return CreateBranchError::BranchNameRequired(String::from(error_message));
                 }
                 "CommitDoesNotExistException" => {
-                    return CreateBranchError::CommitDoesNotExist(String::from(error_message))
+                    return CreateBranchError::CommitDoesNotExist(String::from(error_message));
                 }
                 "CommitIdRequiredException" => {
-                    return CreateBranchError::CommitIdRequired(String::from(error_message))
+                    return CreateBranchError::CommitIdRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return CreateBranchError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return CreateBranchError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return CreateBranchError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return CreateBranchError::EncryptionKeyDisabled(String::from(error_message))
+                    return CreateBranchError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return CreateBranchError::EncryptionKeyNotFound(String::from(error_message))
+                    return CreateBranchError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return CreateBranchError::EncryptionKeyUnavailable(String::from(error_message))
+                    return CreateBranchError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "InvalidBranchNameException" => {
-                    return CreateBranchError::InvalidBranchName(String::from(error_message))
+                    return CreateBranchError::InvalidBranchName(String::from(error_message));
                 }
                 "InvalidCommitIdException" => {
-                    return CreateBranchError::InvalidCommitId(String::from(error_message))
+                    return CreateBranchError::InvalidCommitId(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return CreateBranchError::InvalidRepositoryName(String::from(error_message))
+                    return CreateBranchError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return CreateBranchError::RepositoryDoesNotExist(String::from(error_message))
+                    return CreateBranchError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return CreateBranchError::RepositoryNameRequired(String::from(error_message))
+                    return CreateBranchError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBranchError::Validation(error_message.to_string())
+                    return CreateBranchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1846,114 +1846,114 @@ impl CreatePullRequestError {
                 "ClientRequestTokenRequiredException" => {
                     return CreatePullRequestError::ClientRequestTokenRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return CreatePullRequestError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return CreatePullRequestError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return CreatePullRequestError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return CreatePullRequestError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return CreatePullRequestError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IdempotencyParameterMismatchException" => {
                     return CreatePullRequestError::IdempotencyParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidClientRequestTokenException" => {
                     return CreatePullRequestError::InvalidClientRequestToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDescriptionException" => {
-                    return CreatePullRequestError::InvalidDescription(String::from(error_message))
+                    return CreatePullRequestError::InvalidDescription(String::from(error_message));
                 }
                 "InvalidReferenceNameException" => {
-                    return CreatePullRequestError::InvalidReferenceName(String::from(error_message))
+                    return CreatePullRequestError::InvalidReferenceName(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
                     return CreatePullRequestError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidTargetException" => {
-                    return CreatePullRequestError::InvalidTarget(String::from(error_message))
+                    return CreatePullRequestError::InvalidTarget(String::from(error_message));
                 }
                 "InvalidTargetsException" => {
-                    return CreatePullRequestError::InvalidTargets(String::from(error_message))
+                    return CreatePullRequestError::InvalidTargets(String::from(error_message));
                 }
                 "InvalidTitleException" => {
-                    return CreatePullRequestError::InvalidTitle(String::from(error_message))
+                    return CreatePullRequestError::InvalidTitle(String::from(error_message));
                 }
                 "MaximumOpenPullRequestsExceededException" => {
                     return CreatePullRequestError::MaximumOpenPullRequestsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MultipleRepositoriesInPullRequestException" => {
                     return CreatePullRequestError::MultipleRepositoriesInPullRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReferenceDoesNotExistException" => {
                     return CreatePullRequestError::ReferenceDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReferenceNameRequiredException" => {
                     return CreatePullRequestError::ReferenceNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReferenceTypeNotSupportedException" => {
                     return CreatePullRequestError::ReferenceTypeNotSupported(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return CreatePullRequestError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return CreatePullRequestError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SourceAndDestinationAreSameException" => {
                     return CreatePullRequestError::SourceAndDestinationAreSame(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TargetRequiredException" => {
-                    return CreatePullRequestError::TargetRequired(String::from(error_message))
+                    return CreatePullRequestError::TargetRequired(String::from(error_message));
                 }
                 "TargetsRequiredException" => {
-                    return CreatePullRequestError::TargetsRequired(String::from(error_message))
+                    return CreatePullRequestError::TargetsRequired(String::from(error_message));
                 }
                 "TitleRequiredException" => {
-                    return CreatePullRequestError::TitleRequired(String::from(error_message))
+                    return CreatePullRequestError::TitleRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePullRequestError::Validation(error_message.to_string())
+                    return CreatePullRequestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2076,47 +2076,47 @@ impl CreateRepositoryError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return CreateRepositoryError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return CreateRepositoryError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return CreateRepositoryError::EncryptionKeyDisabled(String::from(error_message))
+                    return CreateRepositoryError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return CreateRepositoryError::EncryptionKeyNotFound(String::from(error_message))
+                    return CreateRepositoryError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return CreateRepositoryError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryDescriptionException" => {
                     return CreateRepositoryError::InvalidRepositoryDescription(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return CreateRepositoryError::InvalidRepositoryName(String::from(error_message))
+                    return CreateRepositoryError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryLimitExceededException" => {
                     return CreateRepositoryError::RepositoryLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameExistsException" => {
-                    return CreateRepositoryError::RepositoryNameExists(String::from(error_message))
+                    return CreateRepositoryError::RepositoryNameExists(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
                     return CreateRepositoryError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateRepositoryError::Validation(error_message.to_string())
+                    return CreateRepositoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2222,44 +2222,44 @@ impl DeleteBranchError {
 
             match *error_type {
                 "BranchNameRequiredException" => {
-                    return DeleteBranchError::BranchNameRequired(String::from(error_message))
+                    return DeleteBranchError::BranchNameRequired(String::from(error_message));
                 }
                 "DefaultBranchCannotBeDeletedException" => {
                     return DeleteBranchError::DefaultBranchCannotBeDeleted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return DeleteBranchError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return DeleteBranchError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return DeleteBranchError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return DeleteBranchError::EncryptionKeyDisabled(String::from(error_message))
+                    return DeleteBranchError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return DeleteBranchError::EncryptionKeyNotFound(String::from(error_message))
+                    return DeleteBranchError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return DeleteBranchError::EncryptionKeyUnavailable(String::from(error_message))
+                    return DeleteBranchError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "InvalidBranchNameException" => {
-                    return DeleteBranchError::InvalidBranchName(String::from(error_message))
+                    return DeleteBranchError::InvalidBranchName(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return DeleteBranchError::InvalidRepositoryName(String::from(error_message))
+                    return DeleteBranchError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return DeleteBranchError::RepositoryDoesNotExist(String::from(error_message))
+                    return DeleteBranchError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return DeleteBranchError::RepositoryNameRequired(String::from(error_message))
+                    return DeleteBranchError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBranchError::Validation(error_message.to_string())
+                    return DeleteBranchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2352,21 +2352,21 @@ impl DeleteCommentContentError {
 
             match *error_type {
                 "CommentDeletedException" => {
-                    return DeleteCommentContentError::CommentDeleted(String::from(error_message))
+                    return DeleteCommentContentError::CommentDeleted(String::from(error_message));
                 }
                 "CommentDoesNotExistException" => {
                     return DeleteCommentContentError::CommentDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentIdRequiredException" => {
-                    return DeleteCommentContentError::CommentIdRequired(String::from(error_message))
+                    return DeleteCommentContentError::CommentIdRequired(String::from(error_message));
                 }
                 "InvalidCommentIdException" => {
-                    return DeleteCommentContentError::InvalidCommentId(String::from(error_message))
+                    return DeleteCommentContentError::InvalidCommentId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteCommentContentError::Validation(error_message.to_string())
+                    return DeleteCommentContentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2462,34 +2462,34 @@ impl DeleteRepositoryError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return DeleteRepositoryError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return DeleteRepositoryError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return DeleteRepositoryError::EncryptionKeyDisabled(String::from(error_message))
+                    return DeleteRepositoryError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return DeleteRepositoryError::EncryptionKeyNotFound(String::from(error_message))
+                    return DeleteRepositoryError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return DeleteRepositoryError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return DeleteRepositoryError::InvalidRepositoryName(String::from(error_message))
+                    return DeleteRepositoryError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
                     return DeleteRepositoryError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteRepositoryError::Validation(error_message.to_string())
+                    return DeleteRepositoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2598,70 +2598,70 @@ impl DescribePullRequestEventsError {
                 "ActorDoesNotExistException" => {
                     return DescribePullRequestEventsError::ActorDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return DescribePullRequestEventsError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return DescribePullRequestEventsError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return DescribePullRequestEventsError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return DescribePullRequestEventsError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidActorArnException" => {
                     return DescribePullRequestEventsError::InvalidActorArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidContinuationTokenException" => {
                     return DescribePullRequestEventsError::InvalidContinuationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidMaxResultsException" => {
                     return DescribePullRequestEventsError::InvalidMaxResults(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestEventTypeException" => {
                     return DescribePullRequestEventsError::InvalidPullRequestEventType(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidPullRequestIdException" => {
                     return DescribePullRequestEventsError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestDoesNotExistException" => {
                     return DescribePullRequestEventsError::PullRequestDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
                     return DescribePullRequestEventsError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribePullRequestEventsError::Validation(error_message.to_string())
+                    return DescribePullRequestEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2774,42 +2774,42 @@ impl GetBlobError {
 
             match *error_type {
                 "BlobIdDoesNotExistException" => {
-                    return GetBlobError::BlobIdDoesNotExist(String::from(error_message))
+                    return GetBlobError::BlobIdDoesNotExist(String::from(error_message));
                 }
                 "BlobIdRequiredException" => {
-                    return GetBlobError::BlobIdRequired(String::from(error_message))
+                    return GetBlobError::BlobIdRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetBlobError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetBlobError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return GetBlobError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetBlobError::EncryptionKeyDisabled(String::from(error_message))
+                    return GetBlobError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetBlobError::EncryptionKeyNotFound(String::from(error_message))
+                    return GetBlobError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetBlobError::EncryptionKeyUnavailable(String::from(error_message))
+                    return GetBlobError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "FileTooLargeException" => {
-                    return GetBlobError::FileTooLarge(String::from(error_message))
+                    return GetBlobError::FileTooLarge(String::from(error_message));
                 }
                 "InvalidBlobIdException" => {
-                    return GetBlobError::InvalidBlobId(String::from(error_message))
+                    return GetBlobError::InvalidBlobId(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetBlobError::InvalidRepositoryName(String::from(error_message))
+                    return GetBlobError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetBlobError::RepositoryDoesNotExist(String::from(error_message))
+                    return GetBlobError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetBlobError::RepositoryNameRequired(String::from(error_message))
+                    return GetBlobError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => return GetBlobError::Validation(error_message.to_string()),
                 _ => {}
@@ -2918,42 +2918,42 @@ impl GetBranchError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return GetBranchError::BranchDoesNotExist(String::from(error_message))
+                    return GetBranchError::BranchDoesNotExist(String::from(error_message));
                 }
                 "BranchNameRequiredException" => {
-                    return GetBranchError::BranchNameRequired(String::from(error_message))
+                    return GetBranchError::BranchNameRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetBranchError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetBranchError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return GetBranchError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetBranchError::EncryptionKeyDisabled(String::from(error_message))
+                    return GetBranchError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetBranchError::EncryptionKeyNotFound(String::from(error_message))
+                    return GetBranchError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetBranchError::EncryptionKeyUnavailable(String::from(error_message))
+                    return GetBranchError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "InvalidBranchNameException" => {
-                    return GetBranchError::InvalidBranchName(String::from(error_message))
+                    return GetBranchError::InvalidBranchName(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetBranchError::InvalidRepositoryName(String::from(error_message))
+                    return GetBranchError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetBranchError::RepositoryDoesNotExist(String::from(error_message))
+                    return GetBranchError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetBranchError::RepositoryNameRequired(String::from(error_message))
+                    return GetBranchError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBranchError::Validation(error_message.to_string())
+                    return GetBranchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3046,19 +3046,19 @@ impl GetCommentError {
 
             match *error_type {
                 "CommentDeletedException" => {
-                    return GetCommentError::CommentDeleted(String::from(error_message))
+                    return GetCommentError::CommentDeleted(String::from(error_message));
                 }
                 "CommentDoesNotExistException" => {
-                    return GetCommentError::CommentDoesNotExist(String::from(error_message))
+                    return GetCommentError::CommentDoesNotExist(String::from(error_message));
                 }
                 "CommentIdRequiredException" => {
-                    return GetCommentError::CommentIdRequired(String::from(error_message))
+                    return GetCommentError::CommentIdRequired(String::from(error_message));
                 }
                 "InvalidCommentIdException" => {
-                    return GetCommentError::InvalidCommentId(String::from(error_message))
+                    return GetCommentError::InvalidCommentId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCommentError::Validation(error_message.to_string())
+                    return GetCommentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3164,70 +3164,70 @@ impl GetCommentsForComparedCommitError {
                 "CommitDoesNotExistException" => {
                     return GetCommentsForComparedCommitError::CommitDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommitIdRequiredException" => {
                     return GetCommentsForComparedCommitError::CommitIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
                     return GetCommentsForComparedCommitError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return GetCommentsForComparedCommitError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return GetCommentsForComparedCommitError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidCommitIdException" => {
                     return GetCommentsForComparedCommitError::InvalidCommitId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidContinuationTokenException" => {
                     return GetCommentsForComparedCommitError::InvalidContinuationToken(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidMaxResultsException" => {
                     return GetCommentsForComparedCommitError::InvalidMaxResults(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return GetCommentsForComparedCommitError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return GetCommentsForComparedCommitError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return GetCommentsForComparedCommitError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetCommentsForComparedCommitError::Validation(error_message.to_string())
+                    return GetCommentsForComparedCommitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3352,90 +3352,90 @@ impl GetCommentsForPullRequestError {
                 "CommitDoesNotExistException" => {
                     return GetCommentsForPullRequestError::CommitDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommitIdRequiredException" => {
                     return GetCommentsForPullRequestError::CommitIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetCommentsForPullRequestError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return GetCommentsForPullRequestError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return GetCommentsForPullRequestError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return GetCommentsForPullRequestError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommitIdException" => {
                     return GetCommentsForPullRequestError::InvalidCommitId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidContinuationTokenException" => {
                     return GetCommentsForPullRequestError::InvalidContinuationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidMaxResultsException" => {
                     return GetCommentsForPullRequestError::InvalidMaxResults(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestIdException" => {
                     return GetCommentsForPullRequestError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return GetCommentsForPullRequestError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestDoesNotExistException" => {
                     return GetCommentsForPullRequestError::PullRequestDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
                     return GetCommentsForPullRequestError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return GetCommentsForPullRequestError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return GetCommentsForPullRequestError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNotAssociatedWithPullRequestException" => {
                     return GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return GetCommentsForPullRequestError::Validation(error_message.to_string())
+                    return GetCommentsForPullRequestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3552,42 +3552,42 @@ impl GetCommitError {
 
             match *error_type {
                 "CommitIdDoesNotExistException" => {
-                    return GetCommitError::CommitIdDoesNotExist(String::from(error_message))
+                    return GetCommitError::CommitIdDoesNotExist(String::from(error_message));
                 }
                 "CommitIdRequiredException" => {
-                    return GetCommitError::CommitIdRequired(String::from(error_message))
+                    return GetCommitError::CommitIdRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetCommitError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetCommitError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return GetCommitError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetCommitError::EncryptionKeyDisabled(String::from(error_message))
+                    return GetCommitError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetCommitError::EncryptionKeyNotFound(String::from(error_message))
+                    return GetCommitError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetCommitError::EncryptionKeyUnavailable(String::from(error_message))
+                    return GetCommitError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "InvalidCommitIdException" => {
-                    return GetCommitError::InvalidCommitId(String::from(error_message))
+                    return GetCommitError::InvalidCommitId(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetCommitError::InvalidRepositoryName(String::from(error_message))
+                    return GetCommitError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetCommitError::RepositoryDoesNotExist(String::from(error_message))
+                    return GetCommitError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetCommitError::RepositoryNameRequired(String::from(error_message))
+                    return GetCommitError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCommitError::Validation(error_message.to_string())
+                    return GetCommitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3704,63 +3704,63 @@ impl GetDifferencesError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetDifferencesError::CommitDoesNotExist(String::from(error_message))
+                    return GetDifferencesError::CommitDoesNotExist(String::from(error_message));
                 }
                 "CommitRequiredException" => {
-                    return GetDifferencesError::CommitRequired(String::from(error_message))
+                    return GetDifferencesError::CommitRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetDifferencesError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetDifferencesError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetDifferencesError::EncryptionKeyDisabled(String::from(error_message))
+                    return GetDifferencesError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetDifferencesError::EncryptionKeyNotFound(String::from(error_message))
+                    return GetDifferencesError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return GetDifferencesError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommitException" => {
-                    return GetDifferencesError::InvalidCommit(String::from(error_message))
+                    return GetDifferencesError::InvalidCommit(String::from(error_message));
                 }
                 "InvalidCommitIdException" => {
-                    return GetDifferencesError::InvalidCommitId(String::from(error_message))
+                    return GetDifferencesError::InvalidCommitId(String::from(error_message));
                 }
                 "InvalidContinuationTokenException" => {
                     return GetDifferencesError::InvalidContinuationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidMaxResultsException" => {
-                    return GetDifferencesError::InvalidMaxResults(String::from(error_message))
+                    return GetDifferencesError::InvalidMaxResults(String::from(error_message));
                 }
                 "InvalidPathException" => {
-                    return GetDifferencesError::InvalidPath(String::from(error_message))
+                    return GetDifferencesError::InvalidPath(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetDifferencesError::InvalidRepositoryName(String::from(error_message))
+                    return GetDifferencesError::InvalidRepositoryName(String::from(error_message));
                 }
                 "PathDoesNotExistException" => {
-                    return GetDifferencesError::PathDoesNotExist(String::from(error_message))
+                    return GetDifferencesError::PathDoesNotExist(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetDifferencesError::RepositoryDoesNotExist(String::from(error_message))
+                    return GetDifferencesError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetDifferencesError::RepositoryNameRequired(String::from(error_message))
+                    return GetDifferencesError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDifferencesError::Validation(error_message.to_string())
+                    return GetDifferencesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3882,77 +3882,77 @@ impl GetMergeConflictsError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetMergeConflictsError::CommitDoesNotExist(String::from(error_message))
+                    return GetMergeConflictsError::CommitDoesNotExist(String::from(error_message));
                 }
                 "CommitRequiredException" => {
-                    return GetMergeConflictsError::CommitRequired(String::from(error_message))
+                    return GetMergeConflictsError::CommitRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetMergeConflictsError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetMergeConflictsError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return GetMergeConflictsError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return GetMergeConflictsError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return GetMergeConflictsError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommitException" => {
-                    return GetMergeConflictsError::InvalidCommit(String::from(error_message))
+                    return GetMergeConflictsError::InvalidCommit(String::from(error_message));
                 }
                 "InvalidDestinationCommitSpecifierException" => {
                     return GetMergeConflictsError::InvalidDestinationCommitSpecifier(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidMergeOptionException" => {
-                    return GetMergeConflictsError::InvalidMergeOption(String::from(error_message))
+                    return GetMergeConflictsError::InvalidMergeOption(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
                     return GetMergeConflictsError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSourceCommitSpecifierException" => {
                     return GetMergeConflictsError::InvalidSourceCommitSpecifier(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MergeOptionRequiredException" => {
-                    return GetMergeConflictsError::MergeOptionRequired(String::from(error_message))
+                    return GetMergeConflictsError::MergeOptionRequired(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
                     return GetMergeConflictsError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return GetMergeConflictsError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TipsDivergenceExceededException" => {
                     return GetMergeConflictsError::TipsDivergenceExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetMergeConflictsError::Validation(error_message.to_string())
+                    return GetMergeConflictsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4062,35 +4062,35 @@ impl GetPullRequestError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetPullRequestError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetPullRequestError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetPullRequestError::EncryptionKeyDisabled(String::from(error_message))
+                    return GetPullRequestError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetPullRequestError::EncryptionKeyNotFound(String::from(error_message))
+                    return GetPullRequestError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return GetPullRequestError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestIdException" => {
-                    return GetPullRequestError::InvalidPullRequestId(String::from(error_message))
+                    return GetPullRequestError::InvalidPullRequestId(String::from(error_message));
                 }
                 "PullRequestDoesNotExistException" => {
-                    return GetPullRequestError::PullRequestDoesNotExist(String::from(error_message))
+                    return GetPullRequestError::PullRequestDoesNotExist(String::from(error_message));
                 }
                 "PullRequestIdRequiredException" => {
-                    return GetPullRequestError::PullRequestIdRequired(String::from(error_message))
+                    return GetPullRequestError::PullRequestIdRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPullRequestError::Validation(error_message.to_string())
+                    return GetPullRequestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4190,33 +4190,33 @@ impl GetRepositoryError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetRepositoryError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetRepositoryError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetRepositoryError::EncryptionKeyDisabled(String::from(error_message))
+                    return GetRepositoryError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetRepositoryError::EncryptionKeyNotFound(String::from(error_message))
+                    return GetRepositoryError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetRepositoryError::EncryptionKeyUnavailable(String::from(error_message))
+                    return GetRepositoryError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetRepositoryError::InvalidRepositoryName(String::from(error_message))
+                    return GetRepositoryError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetRepositoryError::RepositoryDoesNotExist(String::from(error_message))
+                    return GetRepositoryError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetRepositoryError::RepositoryNameRequired(String::from(error_message))
+                    return GetRepositoryError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRepositoryError::Validation(error_message.to_string())
+                    return GetRepositoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4316,45 +4316,45 @@ impl GetRepositoryTriggersError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return GetRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return GetRepositoryTriggersError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return GetRepositoryTriggersError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return GetRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return GetRepositoryTriggersError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return GetRepositoryTriggersError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return GetRepositoryTriggersError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetRepositoryTriggersError::Validation(error_message.to_string())
+                    return GetRepositoryTriggersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4458,34 +4458,34 @@ impl ListBranchesError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return ListBranchesError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return ListBranchesError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return ListBranchesError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return ListBranchesError::EncryptionKeyDisabled(String::from(error_message))
+                    return ListBranchesError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return ListBranchesError::EncryptionKeyNotFound(String::from(error_message))
+                    return ListBranchesError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return ListBranchesError::EncryptionKeyUnavailable(String::from(error_message))
+                    return ListBranchesError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "InvalidContinuationTokenException" => {
-                    return ListBranchesError::InvalidContinuationToken(String::from(error_message))
+                    return ListBranchesError::InvalidContinuationToken(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return ListBranchesError::InvalidRepositoryName(String::from(error_message))
+                    return ListBranchesError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return ListBranchesError::RepositoryDoesNotExist(String::from(error_message))
+                    return ListBranchesError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return ListBranchesError::RepositoryNameRequired(String::from(error_message))
+                    return ListBranchesError::RepositoryNameRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBranchesError::Validation(error_message.to_string())
+                    return ListBranchesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4594,60 +4594,60 @@ impl ListPullRequestsError {
 
             match *error_type {
                 "AuthorDoesNotExistException" => {
-                    return ListPullRequestsError::AuthorDoesNotExist(String::from(error_message))
+                    return ListPullRequestsError::AuthorDoesNotExist(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return ListPullRequestsError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return ListPullRequestsError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return ListPullRequestsError::EncryptionKeyDisabled(String::from(error_message))
+                    return ListPullRequestsError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return ListPullRequestsError::EncryptionKeyNotFound(String::from(error_message))
+                    return ListPullRequestsError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return ListPullRequestsError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAuthorArnException" => {
-                    return ListPullRequestsError::InvalidAuthorArn(String::from(error_message))
+                    return ListPullRequestsError::InvalidAuthorArn(String::from(error_message));
                 }
                 "InvalidContinuationTokenException" => {
                     return ListPullRequestsError::InvalidContinuationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidMaxResultsException" => {
-                    return ListPullRequestsError::InvalidMaxResults(String::from(error_message))
+                    return ListPullRequestsError::InvalidMaxResults(String::from(error_message));
                 }
                 "InvalidPullRequestStatusException" => {
                     return ListPullRequestsError::InvalidPullRequestStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return ListPullRequestsError::InvalidRepositoryName(String::from(error_message))
+                    return ListPullRequestsError::InvalidRepositoryName(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
                     return ListPullRequestsError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return ListPullRequestsError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListPullRequestsError::Validation(error_message.to_string())
+                    return ListPullRequestsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4742,16 +4742,16 @@ impl ListRepositoriesError {
                 "InvalidContinuationTokenException" => {
                     return ListRepositoriesError::InvalidContinuationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOrderException" => {
-                    return ListRepositoriesError::InvalidOrder(String::from(error_message))
+                    return ListRepositoriesError::InvalidOrder(String::from(error_message));
                 }
                 "InvalidSortByException" => {
-                    return ListRepositoriesError::InvalidSortBy(String::from(error_message))
+                    return ListRepositoriesError::InvalidSortBy(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRepositoriesError::Validation(error_message.to_string())
+                    return ListRepositoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4862,85 +4862,85 @@ impl MergePullRequestByFastForwardError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
                     return MergePullRequestByFastForwardError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return MergePullRequestByFastForwardError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return MergePullRequestByFastForwardError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidCommitIdException" => {
                     return MergePullRequestByFastForwardError::InvalidCommitId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestIdException" => {
                     return MergePullRequestByFastForwardError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return MergePullRequestByFastForwardError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ManualMergeRequiredException" => {
                     return MergePullRequestByFastForwardError::ManualMergeRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestAlreadyClosedException" => {
                     return MergePullRequestByFastForwardError::PullRequestAlreadyClosed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "PullRequestDoesNotExistException" => {
                     return MergePullRequestByFastForwardError::PullRequestDoesNotExist(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "PullRequestIdRequiredException" => {
                     return MergePullRequestByFastForwardError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReferenceDoesNotExistException" => {
                     return MergePullRequestByFastForwardError::ReferenceDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return MergePullRequestByFastForwardError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return MergePullRequestByFastForwardError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TipOfSourceReferenceIsDifferentException" => {
                     return MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return MergePullRequestByFastForwardError::Validation(error_message.to_string())
+                    return MergePullRequestByFastForwardError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5080,120 +5080,120 @@ impl PostCommentForComparedCommitError {
                 "BeforeCommitIdAndAfterCommitIdAreSameException" => {
                     return PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ClientRequestTokenRequiredException" => {
                     return PostCommentForComparedCommitError::ClientRequestTokenRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "CommentContentRequiredException" => {
                     return PostCommentForComparedCommitError::CommentContentRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "CommitDoesNotExistException" => {
                     return PostCommentForComparedCommitError::CommitDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommitIdRequiredException" => {
                     return PostCommentForComparedCommitError::CommitIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return PostCommentForComparedCommitError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
                     return PostCommentForComparedCommitError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return PostCommentForComparedCommitError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return PostCommentForComparedCommitError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "IdempotencyParameterMismatchException" => {
                     return PostCommentForComparedCommitError::IdempotencyParameterMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidClientRequestTokenException" => {
                     return PostCommentForComparedCommitError::InvalidClientRequestToken(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidCommitIdException" => {
                     return PostCommentForComparedCommitError::InvalidCommitId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFileLocationException" => {
                     return PostCommentForComparedCommitError::InvalidFileLocation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilePositionException" => {
                     return PostCommentForComparedCommitError::InvalidFilePosition(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPathException" => {
                     return PostCommentForComparedCommitError::InvalidPath(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRelativeFileVersionEnumException" => {
                     return PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryNameException" => {
                     return PostCommentForComparedCommitError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PathDoesNotExistException" => {
                     return PostCommentForComparedCommitError::PathDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PathRequiredException" => {
                     return PostCommentForComparedCommitError::PathRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return PostCommentForComparedCommitError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return PostCommentForComparedCommitError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PostCommentForComparedCommitError::Validation(error_message.to_string())
+                    return PostCommentForComparedCommitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5350,136 +5350,136 @@ impl PostCommentForPullRequestError {
                 "BeforeCommitIdAndAfterCommitIdAreSameException" => {
                     return PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ClientRequestTokenRequiredException" => {
                     return PostCommentForPullRequestError::ClientRequestTokenRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentContentRequiredException" => {
                     return PostCommentForPullRequestError::CommentContentRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return PostCommentForPullRequestError::CommentContentSizeLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "CommitDoesNotExistException" => {
                     return PostCommentForPullRequestError::CommitDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommitIdRequiredException" => {
                     return PostCommentForPullRequestError::CommitIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return PostCommentForPullRequestError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return PostCommentForPullRequestError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return PostCommentForPullRequestError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return PostCommentForPullRequestError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IdempotencyParameterMismatchException" => {
                     return PostCommentForPullRequestError::IdempotencyParameterMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidClientRequestTokenException" => {
                     return PostCommentForPullRequestError::InvalidClientRequestToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommitIdException" => {
                     return PostCommentForPullRequestError::InvalidCommitId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFileLocationException" => {
                     return PostCommentForPullRequestError::InvalidFileLocation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilePositionException" => {
                     return PostCommentForPullRequestError::InvalidFilePosition(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPathException" => {
-                    return PostCommentForPullRequestError::InvalidPath(String::from(error_message))
+                    return PostCommentForPullRequestError::InvalidPath(String::from(error_message));
                 }
                 "InvalidPullRequestIdException" => {
                     return PostCommentForPullRequestError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRelativeFileVersionEnumException" => {
                     return PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryNameException" => {
                     return PostCommentForPullRequestError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PathDoesNotExistException" => {
                     return PostCommentForPullRequestError::PathDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PathRequiredException" => {
-                    return PostCommentForPullRequestError::PathRequired(String::from(error_message))
+                    return PostCommentForPullRequestError::PathRequired(String::from(error_message));
                 }
                 "PullRequestDoesNotExistException" => {
                     return PostCommentForPullRequestError::PullRequestDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
                     return PostCommentForPullRequestError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return PostCommentForPullRequestError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return PostCommentForPullRequestError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNotAssociatedWithPullRequestException" => {
                     return PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return PostCommentForPullRequestError::Validation(error_message.to_string())
+                    return PostCommentForPullRequestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5604,39 +5604,39 @@ impl PostCommentReplyError {
                 "ClientRequestTokenRequiredException" => {
                     return PostCommentReplyError::ClientRequestTokenRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentContentRequiredException" => {
                     return PostCommentReplyError::CommentContentRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return PostCommentReplyError::CommentContentSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentDoesNotExistException" => {
-                    return PostCommentReplyError::CommentDoesNotExist(String::from(error_message))
+                    return PostCommentReplyError::CommentDoesNotExist(String::from(error_message));
                 }
                 "CommentIdRequiredException" => {
-                    return PostCommentReplyError::CommentIdRequired(String::from(error_message))
+                    return PostCommentReplyError::CommentIdRequired(String::from(error_message));
                 }
                 "IdempotencyParameterMismatchException" => {
                     return PostCommentReplyError::IdempotencyParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidClientRequestTokenException" => {
                     return PostCommentReplyError::InvalidClientRequestToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommentIdException" => {
-                    return PostCommentReplyError::InvalidCommentId(String::from(error_message))
+                    return PostCommentReplyError::InvalidCommentId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PostCommentReplyError::Validation(error_message.to_string())
+                    return PostCommentReplyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5772,91 +5772,91 @@ impl PutFileError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return PutFileError::BranchDoesNotExist(String::from(error_message))
+                    return PutFileError::BranchDoesNotExist(String::from(error_message));
                 }
                 "BranchNameIsTagNameException" => {
-                    return PutFileError::BranchNameIsTagName(String::from(error_message))
+                    return PutFileError::BranchNameIsTagName(String::from(error_message));
                 }
                 "BranchNameRequiredException" => {
-                    return PutFileError::BranchNameRequired(String::from(error_message))
+                    return PutFileError::BranchNameRequired(String::from(error_message));
                 }
                 "CommitMessageLengthExceededException" => {
-                    return PutFileError::CommitMessageLengthExceeded(String::from(error_message))
+                    return PutFileError::CommitMessageLengthExceeded(String::from(error_message));
                 }
                 "DirectoryNameConflictsWithFileNameException" => {
                     return PutFileError::DirectoryNameConflictsWithFileName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return PutFileError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return PutFileError::EncryptionKeyAccessDenied(String::from(error_message))
+                    return PutFileError::EncryptionKeyAccessDenied(String::from(error_message));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return PutFileError::EncryptionKeyDisabled(String::from(error_message))
+                    return PutFileError::EncryptionKeyDisabled(String::from(error_message));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return PutFileError::EncryptionKeyNotFound(String::from(error_message))
+                    return PutFileError::EncryptionKeyNotFound(String::from(error_message));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return PutFileError::EncryptionKeyUnavailable(String::from(error_message))
+                    return PutFileError::EncryptionKeyUnavailable(String::from(error_message));
                 }
                 "FileContentRequiredException" => {
-                    return PutFileError::FileContentRequired(String::from(error_message))
+                    return PutFileError::FileContentRequired(String::from(error_message));
                 }
                 "FileContentSizeLimitExceededException" => {
-                    return PutFileError::FileContentSizeLimitExceeded(String::from(error_message))
+                    return PutFileError::FileContentSizeLimitExceeded(String::from(error_message));
                 }
                 "FileNameConflictsWithDirectoryNameException" => {
                     return PutFileError::FileNameConflictsWithDirectoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBranchNameException" => {
-                    return PutFileError::InvalidBranchName(String::from(error_message))
+                    return PutFileError::InvalidBranchName(String::from(error_message));
                 }
                 "InvalidEmailException" => {
-                    return PutFileError::InvalidEmail(String::from(error_message))
+                    return PutFileError::InvalidEmail(String::from(error_message));
                 }
                 "InvalidFileModeException" => {
-                    return PutFileError::InvalidFileMode(String::from(error_message))
+                    return PutFileError::InvalidFileMode(String::from(error_message));
                 }
                 "InvalidParentCommitIdException" => {
-                    return PutFileError::InvalidParentCommitId(String::from(error_message))
+                    return PutFileError::InvalidParentCommitId(String::from(error_message));
                 }
                 "InvalidPathException" => {
-                    return PutFileError::InvalidPath(String::from(error_message))
+                    return PutFileError::InvalidPath(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
-                    return PutFileError::InvalidRepositoryName(String::from(error_message))
+                    return PutFileError::InvalidRepositoryName(String::from(error_message));
                 }
                 "NameLengthExceededException" => {
-                    return PutFileError::NameLengthExceeded(String::from(error_message))
+                    return PutFileError::NameLengthExceeded(String::from(error_message));
                 }
                 "ParentCommitDoesNotExistException" => {
-                    return PutFileError::ParentCommitDoesNotExist(String::from(error_message))
+                    return PutFileError::ParentCommitDoesNotExist(String::from(error_message));
                 }
                 "ParentCommitIdOutdatedException" => {
-                    return PutFileError::ParentCommitIdOutdated(String::from(error_message))
+                    return PutFileError::ParentCommitIdOutdated(String::from(error_message));
                 }
                 "ParentCommitIdRequiredException" => {
-                    return PutFileError::ParentCommitIdRequired(String::from(error_message))
+                    return PutFileError::ParentCommitIdRequired(String::from(error_message));
                 }
                 "PathRequiredException" => {
-                    return PutFileError::PathRequired(String::from(error_message))
+                    return PutFileError::PathRequired(String::from(error_message));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return PutFileError::RepositoryDoesNotExist(String::from(error_message))
+                    return PutFileError::RepositoryDoesNotExist(String::from(error_message));
                 }
                 "RepositoryNameRequiredException" => {
-                    return PutFileError::RepositoryNameRequired(String::from(error_message))
+                    return PutFileError::RepositoryNameRequired(String::from(error_message));
                 }
                 "SameFileContentException" => {
-                    return PutFileError::SameFileContent(String::from(error_message))
+                    return PutFileError::SameFileContent(String::from(error_message));
                 }
                 "ValidationException" => return PutFileError::Validation(error_message.to_string()),
                 _ => {}
@@ -6002,110 +6002,110 @@ impl PutRepositoryTriggersError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return PutRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return PutRepositoryTriggersError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return PutRepositoryTriggersError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return PutRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryTriggerBranchNameException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerCustomDataException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerDestinationArnException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerEventsException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryTriggerNameException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryTriggerRegionException" => {
                     return PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MaximumBranchesExceededException" => {
                     return PutRepositoryTriggersError::MaximumBranchesExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MaximumRepositoryTriggersExceededException" => {
                     return PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryDoesNotExistException" => {
                     return PutRepositoryTriggersError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return PutRepositoryTriggersError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryTriggerBranchNameListRequiredException" => {
                     return PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryTriggerDestinationArnRequiredException" => {
                     return PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryTriggerEventsListRequiredException" => {
                     return PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryTriggerNameRequiredException" => {
                     return PutRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryTriggersListRequiredException" => {
                     return PutRepositoryTriggersError::RepositoryTriggersListRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutRepositoryTriggersError::Validation(error_message.to_string())
+                    return PutRepositoryTriggersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6246,110 +6246,110 @@ impl TestRepositoryTriggersError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return TestRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return TestRepositoryTriggersError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return TestRepositoryTriggersError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return TestRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryTriggerBranchNameException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerCustomDataException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerDestinationArnException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerEventsException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryTriggerNameException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryTriggerRegionException" => {
                     return TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "MaximumBranchesExceededException" => {
                     return TestRepositoryTriggersError::MaximumBranchesExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MaximumRepositoryTriggersExceededException" => {
                     return TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryDoesNotExistException" => {
                     return TestRepositoryTriggersError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return TestRepositoryTriggersError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryTriggerBranchNameListRequiredException" => {
                     return TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryTriggerDestinationArnRequiredException" => {
                     return TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryTriggerEventsListRequiredException" => {
                     return TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryTriggerNameRequiredException" => {
                     return TestRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryTriggersListRequiredException" => {
                     return TestRepositoryTriggersError::RepositoryTriggersListRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return TestRepositoryTriggersError::Validation(error_message.to_string())
+                    return TestRepositoryTriggersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6464,32 +6464,32 @@ impl UpdateCommentError {
 
             match *error_type {
                 "CommentContentRequiredException" => {
-                    return UpdateCommentError::CommentContentRequired(String::from(error_message))
+                    return UpdateCommentError::CommentContentRequired(String::from(error_message));
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return UpdateCommentError::CommentContentSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CommentDeletedException" => {
-                    return UpdateCommentError::CommentDeleted(String::from(error_message))
+                    return UpdateCommentError::CommentDeleted(String::from(error_message));
                 }
                 "CommentDoesNotExistException" => {
-                    return UpdateCommentError::CommentDoesNotExist(String::from(error_message))
+                    return UpdateCommentError::CommentDoesNotExist(String::from(error_message));
                 }
                 "CommentIdRequiredException" => {
-                    return UpdateCommentError::CommentIdRequired(String::from(error_message))
+                    return UpdateCommentError::CommentIdRequired(String::from(error_message));
                 }
                 "CommentNotCreatedByCallerException" => {
                     return UpdateCommentError::CommentNotCreatedByCaller(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommentIdException" => {
-                    return UpdateCommentError::InvalidCommentId(String::from(error_message))
+                    return UpdateCommentError::InvalidCommentId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateCommentError::Validation(error_message.to_string())
+                    return UpdateCommentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6592,56 +6592,56 @@ impl UpdateDefaultBranchError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return UpdateDefaultBranchError::BranchDoesNotExist(String::from(error_message))
+                    return UpdateDefaultBranchError::BranchDoesNotExist(String::from(error_message));
                 }
                 "BranchNameRequiredException" => {
-                    return UpdateDefaultBranchError::BranchNameRequired(String::from(error_message))
+                    return UpdateDefaultBranchError::BranchNameRequired(String::from(error_message));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return UpdateDefaultBranchError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return UpdateDefaultBranchError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return UpdateDefaultBranchError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return UpdateDefaultBranchError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBranchNameException" => {
-                    return UpdateDefaultBranchError::InvalidBranchName(String::from(error_message))
+                    return UpdateDefaultBranchError::InvalidBranchName(String::from(error_message));
                 }
                 "InvalidRepositoryNameException" => {
                     return UpdateDefaultBranchError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return UpdateDefaultBranchError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return UpdateDefaultBranchError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDefaultBranchError::Validation(error_message.to_string())
+                    return UpdateDefaultBranchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6740,30 +6740,30 @@ impl UpdatePullRequestDescriptionError {
                 "InvalidDescriptionException" => {
                     return UpdatePullRequestDescriptionError::InvalidDescription(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestIdException" => {
                     return UpdatePullRequestDescriptionError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestAlreadyClosedException" => {
                     return UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "PullRequestDoesNotExistException" => {
                     return UpdatePullRequestDescriptionError::PullRequestDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
                     return UpdatePullRequestDescriptionError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdatePullRequestDescriptionError::Validation(error_message.to_string())
+                    return UpdatePullRequestDescriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6868,60 +6868,60 @@ impl UpdatePullRequestStatusError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return UpdatePullRequestStatusError::EncryptionKeyAccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
                     return UpdatePullRequestStatusError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return UpdatePullRequestStatusError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return UpdatePullRequestStatusError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestIdException" => {
                     return UpdatePullRequestStatusError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestStatusException" => {
                     return UpdatePullRequestStatusError::InvalidPullRequestStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPullRequestStatusUpdateException" => {
                     return UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "PullRequestDoesNotExistException" => {
                     return UpdatePullRequestStatusError::PullRequestDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
                     return UpdatePullRequestStatusError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestStatusRequiredException" => {
                     return UpdatePullRequestStatusError::PullRequestStatusRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdatePullRequestStatusError::Validation(error_message.to_string())
+                    return UpdatePullRequestStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7022,31 +7022,31 @@ impl UpdatePullRequestTitleError {
                 "InvalidPullRequestIdException" => {
                     return UpdatePullRequestTitleError::InvalidPullRequestId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidTitleException" => {
-                    return UpdatePullRequestTitleError::InvalidTitle(String::from(error_message))
+                    return UpdatePullRequestTitleError::InvalidTitle(String::from(error_message));
                 }
                 "PullRequestAlreadyClosedException" => {
                     return UpdatePullRequestTitleError::PullRequestAlreadyClosed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestDoesNotExistException" => {
                     return UpdatePullRequestTitleError::PullRequestDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
                     return UpdatePullRequestTitleError::PullRequestIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TitleRequiredException" => {
-                    return UpdatePullRequestTitleError::TitleRequired(String::from(error_message))
+                    return UpdatePullRequestTitleError::TitleRequired(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePullRequestTitleError::Validation(error_message.to_string())
+                    return UpdatePullRequestTitleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7148,50 +7148,50 @@ impl UpdateRepositoryDescriptionError {
                 "EncryptionIntegrityChecksFailedException" => {
                     return UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
                     return UpdateRepositoryDescriptionError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
                     return UpdateRepositoryDescriptionError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
                     return UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRepositoryDescriptionException" => {
                     return UpdateRepositoryDescriptionError::InvalidRepositoryDescription(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRepositoryNameException" => {
                     return UpdateRepositoryDescriptionError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return UpdateRepositoryDescriptionError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return UpdateRepositoryDescriptionError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateRepositoryDescriptionError::Validation(error_message.to_string())
+                    return UpdateRepositoryDescriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7286,25 +7286,25 @@ impl UpdateRepositoryNameError {
                 "InvalidRepositoryNameException" => {
                     return UpdateRepositoryNameError::InvalidRepositoryName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
                     return UpdateRepositoryNameError::RepositoryDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameExistsException" => {
                     return UpdateRepositoryNameError::RepositoryNameExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
                     return UpdateRepositoryNameError::RepositoryNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateRepositoryNameError::Validation(error_message.to_string())
+                    return UpdateRepositoryNameError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

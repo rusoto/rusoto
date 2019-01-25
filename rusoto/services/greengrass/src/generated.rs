@@ -2765,15 +2765,15 @@ impl AssociateRoleToGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return AssociateRoleToGroupError::BadRequest(String::from(error_message))
+                    return AssociateRoleToGroupError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return AssociateRoleToGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateRoleToGroupError::Validation(error_message.to_string())
+                    return AssociateRoleToGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2871,15 +2871,15 @@ impl AssociateServiceRoleToAccountError {
                 "BadRequestException" => {
                     return AssociateServiceRoleToAccountError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return AssociateServiceRoleToAccountError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateServiceRoleToAccountError::Validation(error_message.to_string())
+                    return AssociateServiceRoleToAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2973,10 +2973,10 @@ impl CreateCoreDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateCoreDefinitionError::BadRequest(String::from(error_message))
+                    return CreateCoreDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateCoreDefinitionError::Validation(error_message.to_string())
+                    return CreateCoreDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3069,10 +3069,10 @@ impl CreateCoreDefinitionVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateCoreDefinitionVersionError::BadRequest(String::from(error_message))
+                    return CreateCoreDefinitionVersionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateCoreDefinitionVersionError::Validation(error_message.to_string())
+                    return CreateCoreDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3165,10 +3165,10 @@ impl CreateDeploymentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDeploymentError::BadRequest(String::from(error_message))
+                    return CreateDeploymentError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDeploymentError::Validation(error_message.to_string())
+                    return CreateDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3259,10 +3259,10 @@ impl CreateDeviceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDeviceDefinitionError::BadRequest(String::from(error_message))
+                    return CreateDeviceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDeviceDefinitionError::Validation(error_message.to_string())
+                    return CreateDeviceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3357,10 +3357,10 @@ impl CreateDeviceDefinitionVersionError {
                 "BadRequestException" => {
                     return CreateDeviceDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDeviceDefinitionVersionError::Validation(error_message.to_string())
+                    return CreateDeviceDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3453,10 +3453,10 @@ impl CreateFunctionDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateFunctionDefinitionError::BadRequest(String::from(error_message))
+                    return CreateFunctionDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateFunctionDefinitionError::Validation(error_message.to_string())
+                    return CreateFunctionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3551,12 +3551,12 @@ impl CreateFunctionDefinitionVersionError {
                 "BadRequestException" => {
                     return CreateFunctionDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateFunctionDefinitionVersionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3649,10 +3649,10 @@ impl CreateGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateGroupError::BadRequest(String::from(error_message))
+                    return CreateGroupError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string())
+                    return CreateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3747,17 +3747,17 @@ impl CreateGroupCertificateAuthorityError {
                 "BadRequestException" => {
                     return CreateGroupCertificateAuthorityError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return CreateGroupCertificateAuthorityError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateGroupCertificateAuthorityError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3851,10 +3851,10 @@ impl CreateGroupVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateGroupVersionError::BadRequest(String::from(error_message))
+                    return CreateGroupVersionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGroupVersionError::Validation(error_message.to_string())
+                    return CreateGroupVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3947,10 +3947,10 @@ impl CreateLoggerDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateLoggerDefinitionError::BadRequest(String::from(error_message))
+                    return CreateLoggerDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLoggerDefinitionError::Validation(error_message.to_string())
+                    return CreateLoggerDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4045,10 +4045,10 @@ impl CreateLoggerDefinitionVersionError {
                 "BadRequestException" => {
                     return CreateLoggerDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateLoggerDefinitionVersionError::Validation(error_message.to_string())
+                    return CreateLoggerDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4141,10 +4141,10 @@ impl CreateResourceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateResourceDefinitionError::BadRequest(String::from(error_message))
+                    return CreateResourceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateResourceDefinitionError::Validation(error_message.to_string())
+                    return CreateResourceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4239,12 +4239,12 @@ impl CreateResourceDefinitionVersionError {
                 "BadRequestException" => {
                     return CreateResourceDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateResourceDefinitionVersionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4339,15 +4339,15 @@ impl CreateSoftwareUpdateJobError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateSoftwareUpdateJobError::BadRequest(String::from(error_message))
+                    return CreateSoftwareUpdateJobError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateSoftwareUpdateJobError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSoftwareUpdateJobError::Validation(error_message.to_string())
+                    return CreateSoftwareUpdateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4443,10 +4443,10 @@ impl CreateSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return CreateSubscriptionDefinitionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSubscriptionDefinitionError::Validation(error_message.to_string())
+                    return CreateSubscriptionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4541,12 +4541,12 @@ impl CreateSubscriptionDefinitionVersionError {
                 "BadRequestException" => {
                     return CreateSubscriptionDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateSubscriptionDefinitionVersionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4639,10 +4639,10 @@ impl DeleteCoreDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteCoreDefinitionError::BadRequest(String::from(error_message))
+                    return DeleteCoreDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteCoreDefinitionError::Validation(error_message.to_string())
+                    return DeleteCoreDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4735,10 +4735,10 @@ impl DeleteDeviceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDeviceDefinitionError::BadRequest(String::from(error_message))
+                    return DeleteDeviceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDeviceDefinitionError::Validation(error_message.to_string())
+                    return DeleteDeviceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4831,10 +4831,10 @@ impl DeleteFunctionDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteFunctionDefinitionError::BadRequest(String::from(error_message))
+                    return DeleteFunctionDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFunctionDefinitionError::Validation(error_message.to_string())
+                    return DeleteFunctionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4927,10 +4927,10 @@ impl DeleteGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteGroupError::BadRequest(String::from(error_message))
+                    return DeleteGroupError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string())
+                    return DeleteGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5021,10 +5021,10 @@ impl DeleteLoggerDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteLoggerDefinitionError::BadRequest(String::from(error_message))
+                    return DeleteLoggerDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLoggerDefinitionError::Validation(error_message.to_string())
+                    return DeleteLoggerDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5117,10 +5117,10 @@ impl DeleteResourceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteResourceDefinitionError::BadRequest(String::from(error_message))
+                    return DeleteResourceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteResourceDefinitionError::Validation(error_message.to_string())
+                    return DeleteResourceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5215,10 +5215,10 @@ impl DeleteSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return DeleteSubscriptionDefinitionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteSubscriptionDefinitionError::Validation(error_message.to_string())
+                    return DeleteSubscriptionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5313,15 +5313,15 @@ impl DisassociateRoleFromGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DisassociateRoleFromGroupError::BadRequest(String::from(error_message))
+                    return DisassociateRoleFromGroupError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DisassociateRoleFromGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateRoleFromGroupError::Validation(error_message.to_string())
+                    return DisassociateRoleFromGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5417,12 +5417,12 @@ impl DisassociateServiceRoleFromAccountError {
                 "InternalServerErrorException" => {
                     return DisassociateServiceRoleFromAccountError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DisassociateServiceRoleFromAccountError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5517,13 +5517,13 @@ impl GetAssociatedRoleError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetAssociatedRoleError::BadRequest(String::from(error_message))
+                    return GetAssociatedRoleError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetAssociatedRoleError::InternalServerError(String::from(error_message))
+                    return GetAssociatedRoleError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAssociatedRoleError::Validation(error_message.to_string())
+                    return GetAssociatedRoleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5619,15 +5619,15 @@ impl GetConnectivityInfoError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetConnectivityInfoError::BadRequest(String::from(error_message))
+                    return GetConnectivityInfoError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return GetConnectivityInfoError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetConnectivityInfoError::Validation(error_message.to_string())
+                    return GetConnectivityInfoError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5721,10 +5721,10 @@ impl GetCoreDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetCoreDefinitionError::BadRequest(String::from(error_message))
+                    return GetCoreDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCoreDefinitionError::Validation(error_message.to_string())
+                    return GetCoreDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5817,10 +5817,10 @@ impl GetCoreDefinitionVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetCoreDefinitionVersionError::BadRequest(String::from(error_message))
+                    return GetCoreDefinitionVersionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCoreDefinitionVersionError::Validation(error_message.to_string())
+                    return GetCoreDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5913,10 +5913,10 @@ impl GetDeploymentStatusError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDeploymentStatusError::BadRequest(String::from(error_message))
+                    return GetDeploymentStatusError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeploymentStatusError::Validation(error_message.to_string())
+                    return GetDeploymentStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6009,10 +6009,10 @@ impl GetDeviceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDeviceDefinitionError::BadRequest(String::from(error_message))
+                    return GetDeviceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeviceDefinitionError::Validation(error_message.to_string())
+                    return GetDeviceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6105,10 +6105,10 @@ impl GetDeviceDefinitionVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDeviceDefinitionVersionError::BadRequest(String::from(error_message))
+                    return GetDeviceDefinitionVersionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeviceDefinitionVersionError::Validation(error_message.to_string())
+                    return GetDeviceDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6201,10 +6201,10 @@ impl GetFunctionDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFunctionDefinitionError::BadRequest(String::from(error_message))
+                    return GetFunctionDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFunctionDefinitionError::Validation(error_message.to_string())
+                    return GetFunctionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6299,10 +6299,10 @@ impl GetFunctionDefinitionVersionError {
                 "BadRequestException" => {
                     return GetFunctionDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetFunctionDefinitionVersionError::Validation(error_message.to_string())
+                    return GetFunctionDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6395,10 +6395,10 @@ impl GetGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGroupError::BadRequest(String::from(error_message))
+                    return GetGroupError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGroupError::Validation(error_message.to_string())
+                    return GetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6493,15 +6493,15 @@ impl GetGroupCertificateAuthorityError {
                 "BadRequestException" => {
                     return GetGroupCertificateAuthorityError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return GetGroupCertificateAuthorityError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetGroupCertificateAuthorityError::Validation(error_message.to_string())
+                    return GetGroupCertificateAuthorityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6599,17 +6599,17 @@ impl GetGroupCertificateConfigurationError {
                 "BadRequestException" => {
                     return GetGroupCertificateConfigurationError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return GetGroupCertificateConfigurationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetGroupCertificateConfigurationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -6703,10 +6703,10 @@ impl GetGroupVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGroupVersionError::BadRequest(String::from(error_message))
+                    return GetGroupVersionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGroupVersionError::Validation(error_message.to_string())
+                    return GetGroupVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6797,10 +6797,10 @@ impl GetLoggerDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetLoggerDefinitionError::BadRequest(String::from(error_message))
+                    return GetLoggerDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLoggerDefinitionError::Validation(error_message.to_string())
+                    return GetLoggerDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6893,10 +6893,10 @@ impl GetLoggerDefinitionVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetLoggerDefinitionVersionError::BadRequest(String::from(error_message))
+                    return GetLoggerDefinitionVersionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLoggerDefinitionVersionError::Validation(error_message.to_string())
+                    return GetLoggerDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6989,10 +6989,10 @@ impl GetResourceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetResourceDefinitionError::BadRequest(String::from(error_message))
+                    return GetResourceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResourceDefinitionError::Validation(error_message.to_string())
+                    return GetResourceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7087,10 +7087,10 @@ impl GetResourceDefinitionVersionError {
                 "BadRequestException" => {
                     return GetResourceDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetResourceDefinitionVersionError::Validation(error_message.to_string())
+                    return GetResourceDefinitionVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7185,10 +7185,10 @@ impl GetServiceRoleForAccountError {
                 "InternalServerErrorException" => {
                     return GetServiceRoleForAccountError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetServiceRoleForAccountError::Validation(error_message.to_string())
+                    return GetServiceRoleForAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7281,10 +7281,10 @@ impl GetSubscriptionDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSubscriptionDefinitionError::BadRequest(String::from(error_message))
+                    return GetSubscriptionDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSubscriptionDefinitionError::Validation(error_message.to_string())
+                    return GetSubscriptionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7379,12 +7379,12 @@ impl GetSubscriptionDefinitionVersionError {
                 "BadRequestException" => {
                     return GetSubscriptionDefinitionVersionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GetSubscriptionDefinitionVersionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -7477,10 +7477,10 @@ impl ListCoreDefinitionVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListCoreDefinitionVersionsError::BadRequest(String::from(error_message))
+                    return ListCoreDefinitionVersionsError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListCoreDefinitionVersionsError::Validation(error_message.to_string())
+                    return ListCoreDefinitionVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7571,7 +7571,7 @@ impl ListCoreDefinitionsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListCoreDefinitionsError::Validation(error_message.to_string())
+                    return ListCoreDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7663,10 +7663,10 @@ impl ListDeploymentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListDeploymentsError::BadRequest(String::from(error_message))
+                    return ListDeploymentsError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeploymentsError::Validation(error_message.to_string())
+                    return ListDeploymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7759,10 +7759,10 @@ impl ListDeviceDefinitionVersionsError {
                 "BadRequestException" => {
                     return ListDeviceDefinitionVersionsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListDeviceDefinitionVersionsError::Validation(error_message.to_string())
+                    return ListDeviceDefinitionVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7853,7 +7853,7 @@ impl ListDeviceDefinitionsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListDeviceDefinitionsError::Validation(error_message.to_string())
+                    return ListDeviceDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7947,12 +7947,12 @@ impl ListFunctionDefinitionVersionsError {
                 "BadRequestException" => {
                     return ListFunctionDefinitionVersionsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListFunctionDefinitionVersionsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8043,7 +8043,7 @@ impl ListFunctionDefinitionsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListFunctionDefinitionsError::Validation(error_message.to_string())
+                    return ListFunctionDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8139,17 +8139,17 @@ impl ListGroupCertificateAuthoritiesError {
                 "BadRequestException" => {
                     return ListGroupCertificateAuthoritiesError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return ListGroupCertificateAuthoritiesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListGroupCertificateAuthoritiesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8243,10 +8243,10 @@ impl ListGroupVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListGroupVersionsError::BadRequest(String::from(error_message))
+                    return ListGroupVersionsError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGroupVersionsError::Validation(error_message.to_string())
+                    return ListGroupVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8337,7 +8337,7 @@ impl ListGroupsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string())
+                    return ListGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8429,10 +8429,10 @@ impl ListLoggerDefinitionVersionsError {
                 "BadRequestException" => {
                     return ListLoggerDefinitionVersionsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListLoggerDefinitionVersionsError::Validation(error_message.to_string())
+                    return ListLoggerDefinitionVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8523,7 +8523,7 @@ impl ListLoggerDefinitionsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListLoggerDefinitionsError::Validation(error_message.to_string())
+                    return ListLoggerDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8617,12 +8617,12 @@ impl ListResourceDefinitionVersionsError {
                 "BadRequestException" => {
                     return ListResourceDefinitionVersionsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListResourceDefinitionVersionsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8713,7 +8713,7 @@ impl ListResourceDefinitionsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListResourceDefinitionsError::Validation(error_message.to_string())
+                    return ListResourceDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8807,12 +8807,12 @@ impl ListSubscriptionDefinitionVersionsError {
                 "BadRequestException" => {
                     return ListSubscriptionDefinitionVersionsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListSubscriptionDefinitionVersionsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8903,7 +8903,7 @@ impl ListSubscriptionDefinitionsError {
 
             match error_type {
                 "ValidationException" => {
-                    return ListSubscriptionDefinitionsError::Validation(error_message.to_string())
+                    return ListSubscriptionDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8995,10 +8995,10 @@ impl ResetDeploymentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ResetDeploymentsError::BadRequest(String::from(error_message))
+                    return ResetDeploymentsError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResetDeploymentsError::Validation(error_message.to_string())
+                    return ResetDeploymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9091,15 +9091,15 @@ impl UpdateConnectivityInfoError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateConnectivityInfoError::BadRequest(String::from(error_message))
+                    return UpdateConnectivityInfoError::BadRequest(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return UpdateConnectivityInfoError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateConnectivityInfoError::Validation(error_message.to_string())
+                    return UpdateConnectivityInfoError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9193,10 +9193,10 @@ impl UpdateCoreDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateCoreDefinitionError::BadRequest(String::from(error_message))
+                    return UpdateCoreDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateCoreDefinitionError::Validation(error_message.to_string())
+                    return UpdateCoreDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9289,10 +9289,10 @@ impl UpdateDeviceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDeviceDefinitionError::BadRequest(String::from(error_message))
+                    return UpdateDeviceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDeviceDefinitionError::Validation(error_message.to_string())
+                    return UpdateDeviceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9385,10 +9385,10 @@ impl UpdateFunctionDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateFunctionDefinitionError::BadRequest(String::from(error_message))
+                    return UpdateFunctionDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFunctionDefinitionError::Validation(error_message.to_string())
+                    return UpdateFunctionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9481,10 +9481,10 @@ impl UpdateGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGroupError::BadRequest(String::from(error_message))
+                    return UpdateGroupError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGroupError::Validation(error_message.to_string())
+                    return UpdateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9579,17 +9579,17 @@ impl UpdateGroupCertificateConfigurationError {
                 "BadRequestException" => {
                     return UpdateGroupCertificateConfigurationError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return UpdateGroupCertificateConfigurationError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return UpdateGroupCertificateConfigurationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -9683,10 +9683,10 @@ impl UpdateLoggerDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateLoggerDefinitionError::BadRequest(String::from(error_message))
+                    return UpdateLoggerDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateLoggerDefinitionError::Validation(error_message.to_string())
+                    return UpdateLoggerDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9779,10 +9779,10 @@ impl UpdateResourceDefinitionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateResourceDefinitionError::BadRequest(String::from(error_message))
+                    return UpdateResourceDefinitionError::BadRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateResourceDefinitionError::Validation(error_message.to_string())
+                    return UpdateResourceDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9877,10 +9877,10 @@ impl UpdateSubscriptionDefinitionError {
                 "BadRequestException" => {
                     return UpdateSubscriptionDefinitionError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateSubscriptionDefinitionError::Validation(error_message.to_string())
+                    return UpdateSubscriptionDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

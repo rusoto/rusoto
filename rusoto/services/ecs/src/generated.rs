@@ -2247,11 +2247,11 @@ impl CreateClusterError {
             match *error_type {
                 "ClientException" => return CreateClusterError::Client(String::from(error_message)),
                 "InvalidParameterException" => {
-                    return CreateClusterError::InvalidParameter(String::from(error_message))
+                    return CreateClusterError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return CreateClusterError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string())
+                    return CreateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2344,29 +2344,29 @@ impl CreateServiceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateServiceError::AccessDenied(String::from(error_message))
+                    return CreateServiceError::AccessDenied(String::from(error_message));
                 }
                 "ClientException" => return CreateServiceError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return CreateServiceError::ClusterNotFound(String::from(error_message))
+                    return CreateServiceError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateServiceError::InvalidParameter(String::from(error_message))
+                    return CreateServiceError::InvalidParameter(String::from(error_message));
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return CreateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PlatformUnknownException" => {
-                    return CreateServiceError::PlatformUnknown(String::from(error_message))
+                    return CreateServiceError::PlatformUnknown(String::from(error_message));
                 }
                 "ServerException" => return CreateServiceError::Server(String::from(error_message)),
                 "UnsupportedFeatureException" => {
-                    return CreateServiceError::UnsupportedFeature(String::from(error_message))
+                    return CreateServiceError::UnsupportedFeature(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateServiceError::Validation(error_message.to_string())
+                    return CreateServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2454,16 +2454,16 @@ impl DeleteAttributesError {
 
             match *error_type {
                 "ClusterNotFoundException" => {
-                    return DeleteAttributesError::ClusterNotFound(String::from(error_message))
+                    return DeleteAttributesError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteAttributesError::InvalidParameter(String::from(error_message))
+                    return DeleteAttributesError::InvalidParameter(String::from(error_message));
                 }
                 "TargetNotFoundException" => {
-                    return DeleteAttributesError::TargetNotFound(String::from(error_message))
+                    return DeleteAttributesError::TargetNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAttributesError::Validation(error_message.to_string())
+                    return DeleteAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2557,23 +2557,23 @@ impl DeleteClusterError {
                 "ClusterContainsContainerInstancesException" => {
                     return DeleteClusterError::ClusterContainsContainerInstances(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ClusterContainsServicesException" => {
-                    return DeleteClusterError::ClusterContainsServices(String::from(error_message))
+                    return DeleteClusterError::ClusterContainsServices(String::from(error_message));
                 }
                 "ClusterContainsTasksException" => {
-                    return DeleteClusterError::ClusterContainsTasks(String::from(error_message))
+                    return DeleteClusterError::ClusterContainsTasks(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
-                    return DeleteClusterError::ClusterNotFound(String::from(error_message))
+                    return DeleteClusterError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteClusterError::InvalidParameter(String::from(error_message))
+                    return DeleteClusterError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return DeleteClusterError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string())
+                    return DeleteClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2665,17 +2665,17 @@ impl DeleteServiceError {
             match *error_type {
                 "ClientException" => return DeleteServiceError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return DeleteServiceError::ClusterNotFound(String::from(error_message))
+                    return DeleteServiceError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteServiceError::InvalidParameter(String::from(error_message))
+                    return DeleteServiceError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return DeleteServiceError::Server(String::from(error_message)),
                 "ServiceNotFoundException" => {
-                    return DeleteServiceError::ServiceNotFound(String::from(error_message))
+                    return DeleteServiceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteServiceError::Validation(error_message.to_string())
+                    return DeleteServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2762,23 +2762,23 @@ impl DeregisterContainerInstanceError {
 
             match *error_type {
                 "ClientException" => {
-                    return DeregisterContainerInstanceError::Client(String::from(error_message))
+                    return DeregisterContainerInstanceError::Client(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
                     return DeregisterContainerInstanceError::ClusterNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DeregisterContainerInstanceError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DeregisterContainerInstanceError::Server(String::from(error_message))
+                    return DeregisterContainerInstanceError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterContainerInstanceError::Validation(error_message.to_string())
+                    return DeregisterContainerInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2864,18 +2864,18 @@ impl DeregisterTaskDefinitionError {
 
             match *error_type {
                 "ClientException" => {
-                    return DeregisterTaskDefinitionError::Client(String::from(error_message))
+                    return DeregisterTaskDefinitionError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DeregisterTaskDefinitionError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DeregisterTaskDefinitionError::Server(String::from(error_message))
+                    return DeregisterTaskDefinitionError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterTaskDefinitionError::Validation(error_message.to_string())
+                    return DeregisterTaskDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2960,16 +2960,16 @@ impl DescribeClustersError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeClustersError::Client(String::from(error_message))
+                    return DescribeClustersError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeClustersError::InvalidParameter(String::from(error_message))
+                    return DescribeClustersError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeClustersError::Server(String::from(error_message))
+                    return DescribeClustersError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeClustersError::Validation(error_message.to_string())
+                    return DescribeClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3054,23 +3054,23 @@ impl DescribeContainerInstancesError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeContainerInstancesError::Client(String::from(error_message))
+                    return DescribeContainerInstancesError::Client(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
                     return DescribeContainerInstancesError::ClusterNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeContainerInstancesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeContainerInstancesError::Server(String::from(error_message))
+                    return DescribeContainerInstancesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeContainerInstancesError::Validation(error_message.to_string())
+                    return DescribeContainerInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3158,19 +3158,19 @@ impl DescribeServicesError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeServicesError::Client(String::from(error_message))
+                    return DescribeServicesError::Client(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
-                    return DescribeServicesError::ClusterNotFound(String::from(error_message))
+                    return DescribeServicesError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeServicesError::InvalidParameter(String::from(error_message))
+                    return DescribeServicesError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeServicesError::Server(String::from(error_message))
+                    return DescribeServicesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeServicesError::Validation(error_message.to_string())
+                    return DescribeServicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3254,18 +3254,18 @@ impl DescribeTaskDefinitionError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeTaskDefinitionError::Client(String::from(error_message))
+                    return DescribeTaskDefinitionError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DescribeTaskDefinitionError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeTaskDefinitionError::Server(String::from(error_message))
+                    return DescribeTaskDefinitionError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTaskDefinitionError::Validation(error_message.to_string())
+                    return DescribeTaskDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3353,14 +3353,14 @@ impl DescribeTasksError {
             match *error_type {
                 "ClientException" => return DescribeTasksError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return DescribeTasksError::ClusterNotFound(String::from(error_message))
+                    return DescribeTasksError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeTasksError::InvalidParameter(String::from(error_message))
+                    return DescribeTasksError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return DescribeTasksError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return DescribeTasksError::Validation(error_message.to_string())
+                    return DescribeTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3442,13 +3442,13 @@ impl DiscoverPollEndpointError {
 
             match *error_type {
                 "ClientException" => {
-                    return DiscoverPollEndpointError::Client(String::from(error_message))
+                    return DiscoverPollEndpointError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DiscoverPollEndpointError::Server(String::from(error_message))
+                    return DiscoverPollEndpointError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DiscoverPollEndpointError::Validation(error_message.to_string())
+                    return DiscoverPollEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3530,13 +3530,13 @@ impl ListAttributesError {
 
             match *error_type {
                 "ClusterNotFoundException" => {
-                    return ListAttributesError::ClusterNotFound(String::from(error_message))
+                    return ListAttributesError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListAttributesError::InvalidParameter(String::from(error_message))
+                    return ListAttributesError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAttributesError::Validation(error_message.to_string())
+                    return ListAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3619,11 +3619,11 @@ impl ListClustersError {
             match *error_type {
                 "ClientException" => return ListClustersError::Client(String::from(error_message)),
                 "InvalidParameterException" => {
-                    return ListClustersError::InvalidParameter(String::from(error_message))
+                    return ListClustersError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return ListClustersError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return ListClustersError::Validation(error_message.to_string())
+                    return ListClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3708,21 +3708,21 @@ impl ListContainerInstancesError {
 
             match *error_type {
                 "ClientException" => {
-                    return ListContainerInstancesError::Client(String::from(error_message))
+                    return ListContainerInstancesError::Client(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
-                    return ListContainerInstancesError::ClusterNotFound(String::from(error_message))
+                    return ListContainerInstancesError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return ListContainerInstancesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return ListContainerInstancesError::Server(String::from(error_message))
+                    return ListContainerInstancesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListContainerInstancesError::Validation(error_message.to_string())
+                    return ListContainerInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3811,14 +3811,14 @@ impl ListServicesError {
             match *error_type {
                 "ClientException" => return ListServicesError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return ListServicesError::ClusterNotFound(String::from(error_message))
+                    return ListServicesError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListServicesError::InvalidParameter(String::from(error_message))
+                    return ListServicesError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return ListServicesError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return ListServicesError::Validation(error_message.to_string())
+                    return ListServicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3902,18 +3902,18 @@ impl ListTaskDefinitionFamiliesError {
 
             match *error_type {
                 "ClientException" => {
-                    return ListTaskDefinitionFamiliesError::Client(String::from(error_message))
+                    return ListTaskDefinitionFamiliesError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return ListTaskDefinitionFamiliesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return ListTaskDefinitionFamiliesError::Server(String::from(error_message))
+                    return ListTaskDefinitionFamiliesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTaskDefinitionFamiliesError::Validation(error_message.to_string())
+                    return ListTaskDefinitionFamiliesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3998,16 +3998,16 @@ impl ListTaskDefinitionsError {
 
             match *error_type {
                 "ClientException" => {
-                    return ListTaskDefinitionsError::Client(String::from(error_message))
+                    return ListTaskDefinitionsError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListTaskDefinitionsError::InvalidParameter(String::from(error_message))
+                    return ListTaskDefinitionsError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => {
-                    return ListTaskDefinitionsError::Server(String::from(error_message))
+                    return ListTaskDefinitionsError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTaskDefinitionsError::Validation(error_message.to_string())
+                    return ListTaskDefinitionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4097,17 +4097,17 @@ impl ListTasksError {
             match *error_type {
                 "ClientException" => return ListTasksError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return ListTasksError::ClusterNotFound(String::from(error_message))
+                    return ListTasksError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListTasksError::InvalidParameter(String::from(error_message))
+                    return ListTasksError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return ListTasksError::Server(String::from(error_message)),
                 "ServiceNotFoundException" => {
-                    return ListTasksError::ServiceNotFound(String::from(error_message))
+                    return ListTasksError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTasksError::Validation(error_message.to_string())
+                    return ListTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4194,19 +4194,19 @@ impl PutAttributesError {
 
             match *error_type {
                 "AttributeLimitExceededException" => {
-                    return PutAttributesError::AttributeLimitExceeded(String::from(error_message))
+                    return PutAttributesError::AttributeLimitExceeded(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
-                    return PutAttributesError::ClusterNotFound(String::from(error_message))
+                    return PutAttributesError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return PutAttributesError::InvalidParameter(String::from(error_message))
+                    return PutAttributesError::InvalidParameter(String::from(error_message));
                 }
                 "TargetNotFoundException" => {
-                    return PutAttributesError::TargetNotFound(String::from(error_message))
+                    return PutAttributesError::TargetNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutAttributesError::Validation(error_message.to_string())
+                    return PutAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4290,18 +4290,18 @@ impl RegisterContainerInstanceError {
 
             match *error_type {
                 "ClientException" => {
-                    return RegisterContainerInstanceError::Client(String::from(error_message))
+                    return RegisterContainerInstanceError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return RegisterContainerInstanceError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return RegisterContainerInstanceError::Server(String::from(error_message))
+                    return RegisterContainerInstanceError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterContainerInstanceError::Validation(error_message.to_string())
+                    return RegisterContainerInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4386,18 +4386,18 @@ impl RegisterTaskDefinitionError {
 
             match *error_type {
                 "ClientException" => {
-                    return RegisterTaskDefinitionError::Client(String::from(error_message))
+                    return RegisterTaskDefinitionError::Client(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return RegisterTaskDefinitionError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return RegisterTaskDefinitionError::Server(String::from(error_message))
+                    return RegisterTaskDefinitionError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterTaskDefinitionError::Validation(error_message.to_string())
+                    return RegisterTaskDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4494,27 +4494,27 @@ impl RunTaskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RunTaskError::AccessDenied(String::from(error_message))
+                    return RunTaskError::AccessDenied(String::from(error_message));
                 }
                 "BlockedException" => return RunTaskError::Blocked(String::from(error_message)),
                 "ClientException" => return RunTaskError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return RunTaskError::ClusterNotFound(String::from(error_message))
+                    return RunTaskError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RunTaskError::InvalidParameter(String::from(error_message))
+                    return RunTaskError::InvalidParameter(String::from(error_message));
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RunTaskError::PlatformTaskDefinitionIncompatibility(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PlatformUnknownException" => {
-                    return RunTaskError::PlatformUnknown(String::from(error_message))
+                    return RunTaskError::PlatformUnknown(String::from(error_message));
                 }
                 "ServerException" => return RunTaskError::Server(String::from(error_message)),
                 "UnsupportedFeatureException" => {
-                    return RunTaskError::UnsupportedFeature(String::from(error_message))
+                    return RunTaskError::UnsupportedFeature(String::from(error_message));
                 }
                 "ValidationException" => return RunTaskError::Validation(error_message.to_string()),
                 _ => {}
@@ -4607,14 +4607,14 @@ impl StartTaskError {
             match *error_type {
                 "ClientException" => return StartTaskError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return StartTaskError::ClusterNotFound(String::from(error_message))
+                    return StartTaskError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StartTaskError::InvalidParameter(String::from(error_message))
+                    return StartTaskError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return StartTaskError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return StartTaskError::Validation(error_message.to_string())
+                    return StartTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4701,14 +4701,14 @@ impl StopTaskError {
             match *error_type {
                 "ClientException" => return StopTaskError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return StopTaskError::ClusterNotFound(String::from(error_message))
+                    return StopTaskError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StopTaskError::InvalidParameter(String::from(error_message))
+                    return StopTaskError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return StopTaskError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return StopTaskError::Validation(error_message.to_string())
+                    return StopTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4794,16 +4794,16 @@ impl SubmitContainerStateChangeError {
                 "AccessDeniedException" => {
                     return SubmitContainerStateChangeError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ClientException" => {
-                    return SubmitContainerStateChangeError::Client(String::from(error_message))
+                    return SubmitContainerStateChangeError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return SubmitContainerStateChangeError::Server(String::from(error_message))
+                    return SubmitContainerStateChangeError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SubmitContainerStateChangeError::Validation(error_message.to_string())
+                    return SubmitContainerStateChangeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4888,16 +4888,16 @@ impl SubmitTaskStateChangeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SubmitTaskStateChangeError::AccessDenied(String::from(error_message))
+                    return SubmitTaskStateChangeError::AccessDenied(String::from(error_message));
                 }
                 "ClientException" => {
-                    return SubmitTaskStateChangeError::Client(String::from(error_message))
+                    return SubmitTaskStateChangeError::Client(String::from(error_message));
                 }
                 "ServerException" => {
-                    return SubmitTaskStateChangeError::Server(String::from(error_message))
+                    return SubmitTaskStateChangeError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SubmitTaskStateChangeError::Validation(error_message.to_string())
+                    return SubmitTaskStateChangeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4990,28 +4990,28 @@ impl UpdateContainerAgentError {
 
             match *error_type {
                 "ClientException" => {
-                    return UpdateContainerAgentError::Client(String::from(error_message))
+                    return UpdateContainerAgentError::Client(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
-                    return UpdateContainerAgentError::ClusterNotFound(String::from(error_message))
+                    return UpdateContainerAgentError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateContainerAgentError::InvalidParameter(String::from(error_message))
+                    return UpdateContainerAgentError::InvalidParameter(String::from(error_message));
                 }
                 "MissingVersionException" => {
-                    return UpdateContainerAgentError::MissingVersion(String::from(error_message))
+                    return UpdateContainerAgentError::MissingVersion(String::from(error_message));
                 }
                 "NoUpdateAvailableException" => {
-                    return UpdateContainerAgentError::NoUpdateAvailable(String::from(error_message))
+                    return UpdateContainerAgentError::NoUpdateAvailable(String::from(error_message));
                 }
                 "ServerException" => {
-                    return UpdateContainerAgentError::Server(String::from(error_message))
+                    return UpdateContainerAgentError::Server(String::from(error_message));
                 }
                 "UpdateInProgressException" => {
-                    return UpdateContainerAgentError::UpdateInProgress(String::from(error_message))
+                    return UpdateContainerAgentError::UpdateInProgress(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateContainerAgentError::Validation(error_message.to_string())
+                    return UpdateContainerAgentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5102,23 +5102,23 @@ impl UpdateContainerInstancesStateError {
 
             match *error_type {
                 "ClientException" => {
-                    return UpdateContainerInstancesStateError::Client(String::from(error_message))
+                    return UpdateContainerInstancesStateError::Client(String::from(error_message));
                 }
                 "ClusterNotFoundException" => {
                     return UpdateContainerInstancesStateError::ClusterNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateContainerInstancesStateError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return UpdateContainerInstancesStateError::Server(String::from(error_message))
+                    return UpdateContainerInstancesStateError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateContainerInstancesStateError::Validation(error_message.to_string())
+                    return UpdateContainerInstancesStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5216,32 +5216,32 @@ impl UpdateServiceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateServiceError::AccessDenied(String::from(error_message))
+                    return UpdateServiceError::AccessDenied(String::from(error_message));
                 }
                 "ClientException" => return UpdateServiceError::Client(String::from(error_message)),
                 "ClusterNotFoundException" => {
-                    return UpdateServiceError::ClusterNotFound(String::from(error_message))
+                    return UpdateServiceError::ClusterNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateServiceError::InvalidParameter(String::from(error_message))
+                    return UpdateServiceError::InvalidParameter(String::from(error_message));
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return UpdateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PlatformUnknownException" => {
-                    return UpdateServiceError::PlatformUnknown(String::from(error_message))
+                    return UpdateServiceError::PlatformUnknown(String::from(error_message));
                 }
                 "ServerException" => return UpdateServiceError::Server(String::from(error_message)),
                 "ServiceNotActiveException" => {
-                    return UpdateServiceError::ServiceNotActive(String::from(error_message))
+                    return UpdateServiceError::ServiceNotActive(String::from(error_message));
                 }
                 "ServiceNotFoundException" => {
-                    return UpdateServiceError::ServiceNotFound(String::from(error_message))
+                    return UpdateServiceError::ServiceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateServiceError::Validation(error_message.to_string())
+                    return UpdateServiceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

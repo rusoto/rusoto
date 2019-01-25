@@ -713,28 +713,28 @@ impl CreateUserError {
 
             match error_type {
                 "DuplicateResourceException" => {
-                    return CreateUserError::DuplicateResource(String::from(error_message))
+                    return CreateUserError::DuplicateResource(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateUserError::InternalService(String::from(error_message))
+                    return CreateUserError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserError::InvalidParameter(String::from(error_message))
+                    return CreateUserError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateUserError::InvalidRequest(String::from(error_message))
+                    return CreateUserError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateUserError::LimitExceeded(String::from(error_message))
+                    return CreateUserError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserError::ResourceNotFound(String::from(error_message))
+                    return CreateUserError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateUserError::Throttling(String::from(error_message))
+                    return CreateUserError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string())
+                    return CreateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -839,22 +839,22 @@ impl DeleteUserError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return DeleteUserError::InternalService(String::from(error_message))
+                    return DeleteUserError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserError::InvalidParameter(String::from(error_message))
+                    return DeleteUserError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteUserError::InvalidRequest(String::from(error_message))
+                    return DeleteUserError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteUserError::Throttling(String::from(error_message))
+                    return DeleteUserError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string())
+                    return DeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -957,22 +957,22 @@ impl DescribeUserError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return DescribeUserError::InternalService(String::from(error_message))
+                    return DescribeUserError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserError::InvalidParameter(String::from(error_message))
+                    return DescribeUserError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeUserError::InvalidRequest(String::from(error_message))
+                    return DescribeUserError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUserError::ResourceNotFound(String::from(error_message))
+                    return DescribeUserError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DescribeUserError::Throttling(String::from(error_message))
+                    return DescribeUserError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserError::Validation(error_message.to_string())
+                    return DescribeUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1077,28 +1077,28 @@ impl DescribeUserHierarchyGroupError {
                 "InternalServiceException" => {
                     return DescribeUserHierarchyGroupError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeUserHierarchyGroupError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeUserHierarchyGroupError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeUserHierarchyGroupError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DescribeUserHierarchyGroupError::Throttling(String::from(error_message))
+                    return DescribeUserHierarchyGroupError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserHierarchyGroupError::Validation(error_message.to_string())
+                    return DescribeUserHierarchyGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1205,32 +1205,32 @@ impl DescribeUserHierarchyStructureError {
                 "InternalServiceException" => {
                     return DescribeUserHierarchyStructureError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeUserHierarchyStructureError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeUserHierarchyStructureError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeUserHierarchyStructureError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
                     return DescribeUserHierarchyStructureError::Throttling(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeUserHierarchyStructureError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1337,25 +1337,25 @@ impl GetFederationTokenError {
 
             match error_type {
                 "DuplicateResourceException" => {
-                    return GetFederationTokenError::DuplicateResource(String::from(error_message))
+                    return GetFederationTokenError::DuplicateResource(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetFederationTokenError::InternalService(String::from(error_message))
+                    return GetFederationTokenError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetFederationTokenError::InvalidParameter(String::from(error_message))
+                    return GetFederationTokenError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetFederationTokenError::InvalidRequest(String::from(error_message))
+                    return GetFederationTokenError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFederationTokenError::ResourceNotFound(String::from(error_message))
+                    return GetFederationTokenError::ResourceNotFound(String::from(error_message));
                 }
                 "UserNotFoundException" => {
-                    return GetFederationTokenError::UserNotFound(String::from(error_message))
+                    return GetFederationTokenError::UserNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFederationTokenError::Validation(error_message.to_string())
+                    return GetFederationTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1461,22 +1461,22 @@ impl ListRoutingProfilesError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return ListRoutingProfilesError::InternalService(String::from(error_message))
+                    return ListRoutingProfilesError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListRoutingProfilesError::InvalidParameter(String::from(error_message))
+                    return ListRoutingProfilesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListRoutingProfilesError::InvalidRequest(String::from(error_message))
+                    return ListRoutingProfilesError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListRoutingProfilesError::ResourceNotFound(String::from(error_message))
+                    return ListRoutingProfilesError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListRoutingProfilesError::Throttling(String::from(error_message))
+                    return ListRoutingProfilesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRoutingProfilesError::Validation(error_message.to_string())
+                    return ListRoutingProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1581,22 +1581,22 @@ impl ListSecurityProfilesError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return ListSecurityProfilesError::InternalService(String::from(error_message))
+                    return ListSecurityProfilesError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListSecurityProfilesError::InvalidParameter(String::from(error_message))
+                    return ListSecurityProfilesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListSecurityProfilesError::InvalidRequest(String::from(error_message))
+                    return ListSecurityProfilesError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListSecurityProfilesError::ResourceNotFound(String::from(error_message))
+                    return ListSecurityProfilesError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListSecurityProfilesError::Throttling(String::from(error_message))
+                    return ListSecurityProfilesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListSecurityProfilesError::Validation(error_message.to_string())
+                    return ListSecurityProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1703,26 +1703,26 @@ impl ListUserHierarchyGroupsError {
                 "InternalServiceException" => {
                     return ListUserHierarchyGroupsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return ListUserHierarchyGroupsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListUserHierarchyGroupsError::InvalidRequest(String::from(error_message))
+                    return ListUserHierarchyGroupsError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ListUserHierarchyGroupsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return ListUserHierarchyGroupsError::Throttling(String::from(error_message))
+                    return ListUserHierarchyGroupsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUserHierarchyGroupsError::Validation(error_message.to_string())
+                    return ListUserHierarchyGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1827,22 +1827,22 @@ impl ListUsersError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return ListUsersError::InternalService(String::from(error_message))
+                    return ListUsersError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListUsersError::InvalidParameter(String::from(error_message))
+                    return ListUsersError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListUsersError::InvalidRequest(String::from(error_message))
+                    return ListUsersError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUsersError::ResourceNotFound(String::from(error_message))
+                    return ListUsersError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListUsersError::Throttling(String::from(error_message))
+                    return ListUsersError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUsersError::Validation(error_message.to_string())
+                    return ListUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1951,40 +1951,40 @@ impl StartOutboundVoiceContactError {
                 "DestinationNotAllowedException" => {
                     return StartOutboundVoiceContactError::DestinationNotAllowed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return StartOutboundVoiceContactError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return StartOutboundVoiceContactError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartOutboundVoiceContactError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return StartOutboundVoiceContactError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OutboundContactNotPermittedException" => {
                     return StartOutboundVoiceContactError::OutboundContactNotPermitted(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return StartOutboundVoiceContactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartOutboundVoiceContactError::Validation(error_message.to_string())
+                    return StartOutboundVoiceContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2091,22 +2091,22 @@ impl StopContactError {
 
             match error_type {
                 "ContactNotFoundException" => {
-                    return StopContactError::ContactNotFound(String::from(error_message))
+                    return StopContactError::ContactNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return StopContactError::InternalService(String::from(error_message))
+                    return StopContactError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StopContactError::InvalidParameter(String::from(error_message))
+                    return StopContactError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StopContactError::InvalidRequest(String::from(error_message))
+                    return StopContactError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopContactError::ResourceNotFound(String::from(error_message))
+                    return StopContactError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopContactError::Validation(error_message.to_string())
+                    return StopContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2209,22 +2209,22 @@ impl UpdateUserHierarchyError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return UpdateUserHierarchyError::InternalService(String::from(error_message))
+                    return UpdateUserHierarchyError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserHierarchyError::InvalidParameter(String::from(error_message))
+                    return UpdateUserHierarchyError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateUserHierarchyError::InvalidRequest(String::from(error_message))
+                    return UpdateUserHierarchyError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserHierarchyError::ResourceNotFound(String::from(error_message))
+                    return UpdateUserHierarchyError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateUserHierarchyError::Throttling(String::from(error_message))
+                    return UpdateUserHierarchyError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserHierarchyError::Validation(error_message.to_string())
+                    return UpdateUserHierarchyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2329,26 +2329,26 @@ impl UpdateUserIdentityInfoError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return UpdateUserIdentityInfoError::InternalService(String::from(error_message))
+                    return UpdateUserIdentityInfoError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return UpdateUserIdentityInfoError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateUserIdentityInfoError::InvalidRequest(String::from(error_message))
+                    return UpdateUserIdentityInfoError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateUserIdentityInfoError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return UpdateUserIdentityInfoError::Throttling(String::from(error_message))
+                    return UpdateUserIdentityInfoError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserIdentityInfoError::Validation(error_message.to_string())
+                    return UpdateUserIdentityInfoError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2453,22 +2453,22 @@ impl UpdateUserPhoneConfigError {
 
             match error_type {
                 "InternalServiceException" => {
-                    return UpdateUserPhoneConfigError::InternalService(String::from(error_message))
+                    return UpdateUserPhoneConfigError::InternalService(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserPhoneConfigError::InvalidParameter(String::from(error_message))
+                    return UpdateUserPhoneConfigError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateUserPhoneConfigError::InvalidRequest(String::from(error_message))
+                    return UpdateUserPhoneConfigError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserPhoneConfigError::ResourceNotFound(String::from(error_message))
+                    return UpdateUserPhoneConfigError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateUserPhoneConfigError::Throttling(String::from(error_message))
+                    return UpdateUserPhoneConfigError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserPhoneConfigError::Validation(error_message.to_string())
+                    return UpdateUserPhoneConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2575,28 +2575,28 @@ impl UpdateUserRoutingProfileError {
                 "InternalServiceException" => {
                     return UpdateUserRoutingProfileError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateUserRoutingProfileError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return UpdateUserRoutingProfileError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateUserRoutingProfileError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return UpdateUserRoutingProfileError::Throttling(String::from(error_message))
+                    return UpdateUserRoutingProfileError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserRoutingProfileError::Validation(error_message.to_string())
+                    return UpdateUserRoutingProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2703,28 +2703,28 @@ impl UpdateUserSecurityProfilesError {
                 "InternalServiceException" => {
                     return UpdateUserSecurityProfilesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateUserSecurityProfilesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return UpdateUserSecurityProfilesError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateUserSecurityProfilesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return UpdateUserSecurityProfilesError::Throttling(String::from(error_message))
+                    return UpdateUserSecurityProfilesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserSecurityProfilesError::Validation(error_message.to_string())
+                    return UpdateUserSecurityProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

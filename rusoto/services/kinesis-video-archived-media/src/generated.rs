@@ -254,45 +254,45 @@ impl GetHLSStreamingSessionURLError {
                 "ClientLimitExceededException" => {
                     return GetHLSStreamingSessionURLError::ClientLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
                     return GetHLSStreamingSessionURLError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCodecPrivateDataException" => {
                     return GetHLSStreamingSessionURLError::InvalidCodecPrivateData(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingCodecPrivateDataException" => {
                     return GetHLSStreamingSessionURLError::MissingCodecPrivateData(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoDataRetentionException" => {
                     return GetHLSStreamingSessionURLError::NoDataRetention(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
                     return GetHLSStreamingSessionURLError::NotAuthorized(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetHLSStreamingSessionURLError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedStreamMediaTypeException" => {
                     return GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetHLSStreamingSessionURLError::Validation(error_message.to_string())
+                    return GetHLSStreamingSessionURLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -400,23 +400,23 @@ impl GetMediaForFragmentListError {
                 "ClientLimitExceededException" => {
                     return GetMediaForFragmentListError::ClientLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
                     return GetMediaForFragmentListError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetMediaForFragmentListError::NotAuthorized(String::from(error_message))
+                    return GetMediaForFragmentListError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return GetMediaForFragmentListError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetMediaForFragmentListError::Validation(error_message.to_string())
+                    return GetMediaForFragmentListError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -518,19 +518,19 @@ impl ListFragmentsError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return ListFragmentsError::ClientLimitExceeded(String::from(error_message))
+                    return ListFragmentsError::ClientLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return ListFragmentsError::InvalidArgument(String::from(error_message))
+                    return ListFragmentsError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return ListFragmentsError::NotAuthorized(String::from(error_message))
+                    return ListFragmentsError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFragmentsError::ResourceNotFound(String::from(error_message))
+                    return ListFragmentsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFragmentsError::Validation(error_message.to_string())
+                    return ListFragmentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

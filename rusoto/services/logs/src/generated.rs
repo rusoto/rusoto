@@ -1084,19 +1084,19 @@ impl AssociateKmsKeyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return AssociateKmsKeyError::InvalidParameter(String::from(error_message))
+                    return AssociateKmsKeyError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return AssociateKmsKeyError::OperationAborted(String::from(error_message))
+                    return AssociateKmsKeyError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateKmsKeyError::ResourceNotFound(String::from(error_message))
+                    return AssociateKmsKeyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return AssociateKmsKeyError::ServiceUnavailable(String::from(error_message))
+                    return AssociateKmsKeyError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateKmsKeyError::Validation(error_message.to_string())
+                    return AssociateKmsKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1182,19 +1182,19 @@ impl CancelExportTaskError {
 
             match *error_type {
                 "InvalidOperationException" => {
-                    return CancelExportTaskError::InvalidOperation(String::from(error_message))
+                    return CancelExportTaskError::InvalidOperation(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CancelExportTaskError::InvalidParameter(String::from(error_message))
+                    return CancelExportTaskError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CancelExportTaskError::ResourceNotFound(String::from(error_message))
+                    return CancelExportTaskError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CancelExportTaskError::ServiceUnavailable(String::from(error_message))
+                    return CancelExportTaskError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelExportTaskError::Validation(error_message.to_string())
+                    return CancelExportTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1284,25 +1284,25 @@ impl CreateExportTaskError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateExportTaskError::InvalidParameter(String::from(error_message))
+                    return CreateExportTaskError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateExportTaskError::LimitExceeded(String::from(error_message))
+                    return CreateExportTaskError::LimitExceeded(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return CreateExportTaskError::OperationAborted(String::from(error_message))
+                    return CreateExportTaskError::OperationAborted(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateExportTaskError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateExportTaskError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateExportTaskError::ResourceNotFound(String::from(error_message))
+                    return CreateExportTaskError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateExportTaskError::ServiceUnavailable(String::from(error_message))
+                    return CreateExportTaskError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateExportTaskError::Validation(error_message.to_string())
+                    return CreateExportTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1392,22 +1392,22 @@ impl CreateLogGroupError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateLogGroupError::InvalidParameter(String::from(error_message))
+                    return CreateLogGroupError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateLogGroupError::LimitExceeded(String::from(error_message))
+                    return CreateLogGroupError::LimitExceeded(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return CreateLogGroupError::OperationAborted(String::from(error_message))
+                    return CreateLogGroupError::OperationAborted(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateLogGroupError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateLogGroupError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateLogGroupError::ServiceUnavailable(String::from(error_message))
+                    return CreateLogGroupError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLogGroupError::Validation(error_message.to_string())
+                    return CreateLogGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1494,19 +1494,19 @@ impl CreateLogStreamError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateLogStreamError::InvalidParameter(String::from(error_message))
+                    return CreateLogStreamError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateLogStreamError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateLogStreamError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateLogStreamError::ResourceNotFound(String::from(error_message))
+                    return CreateLogStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateLogStreamError::ServiceUnavailable(String::from(error_message))
+                    return CreateLogStreamError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLogStreamError::Validation(error_message.to_string())
+                    return CreateLogStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1592,19 +1592,19 @@ impl DeleteDestinationError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteDestinationError::InvalidParameter(String::from(error_message))
+                    return DeleteDestinationError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return DeleteDestinationError::OperationAborted(String::from(error_message))
+                    return DeleteDestinationError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDestinationError::ResourceNotFound(String::from(error_message))
+                    return DeleteDestinationError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteDestinationError::ServiceUnavailable(String::from(error_message))
+                    return DeleteDestinationError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDestinationError::Validation(error_message.to_string())
+                    return DeleteDestinationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1692,19 +1692,19 @@ impl DeleteLogGroupError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteLogGroupError::InvalidParameter(String::from(error_message))
+                    return DeleteLogGroupError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return DeleteLogGroupError::OperationAborted(String::from(error_message))
+                    return DeleteLogGroupError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteLogGroupError::ResourceNotFound(String::from(error_message))
+                    return DeleteLogGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteLogGroupError::ServiceUnavailable(String::from(error_message))
+                    return DeleteLogGroupError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLogGroupError::Validation(error_message.to_string())
+                    return DeleteLogGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1790,19 +1790,19 @@ impl DeleteLogStreamError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteLogStreamError::InvalidParameter(String::from(error_message))
+                    return DeleteLogStreamError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return DeleteLogStreamError::OperationAborted(String::from(error_message))
+                    return DeleteLogStreamError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteLogStreamError::ResourceNotFound(String::from(error_message))
+                    return DeleteLogStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteLogStreamError::ServiceUnavailable(String::from(error_message))
+                    return DeleteLogStreamError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLogStreamError::Validation(error_message.to_string())
+                    return DeleteLogStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1888,19 +1888,19 @@ impl DeleteMetricFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteMetricFilterError::InvalidParameter(String::from(error_message))
+                    return DeleteMetricFilterError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return DeleteMetricFilterError::OperationAborted(String::from(error_message))
+                    return DeleteMetricFilterError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteMetricFilterError::ResourceNotFound(String::from(error_message))
+                    return DeleteMetricFilterError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteMetricFilterError::ServiceUnavailable(String::from(error_message))
+                    return DeleteMetricFilterError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteMetricFilterError::Validation(error_message.to_string())
+                    return DeleteMetricFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1986,18 +1986,18 @@ impl DeleteResourcePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteResourcePolicyError::InvalidParameter(String::from(error_message))
+                    return DeleteResourcePolicyError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteResourcePolicyError::ResourceNotFound(String::from(error_message))
+                    return DeleteResourcePolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteResourcePolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteResourcePolicyError::Validation(error_message.to_string())
+                    return DeleteResourcePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2084,21 +2084,21 @@ impl DeleteRetentionPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteRetentionPolicyError::InvalidParameter(String::from(error_message))
+                    return DeleteRetentionPolicyError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return DeleteRetentionPolicyError::OperationAborted(String::from(error_message))
+                    return DeleteRetentionPolicyError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteRetentionPolicyError::ResourceNotFound(String::from(error_message))
+                    return DeleteRetentionPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteRetentionPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteRetentionPolicyError::Validation(error_message.to_string())
+                    return DeleteRetentionPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2188,25 +2188,25 @@ impl DeleteSubscriptionFilterError {
                 "InvalidParameterException" => {
                     return DeleteSubscriptionFilterError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationAbortedException" => {
                     return DeleteSubscriptionFilterError::OperationAborted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteSubscriptionFilterError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteSubscriptionFilterError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteSubscriptionFilterError::Validation(error_message.to_string())
+                    return DeleteSubscriptionFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2290,15 +2290,15 @@ impl DescribeDestinationsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeDestinationsError::InvalidParameter(String::from(error_message))
+                    return DescribeDestinationsError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeDestinationsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDestinationsError::Validation(error_message.to_string())
+                    return DescribeDestinationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2380,13 +2380,13 @@ impl DescribeExportTasksError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeExportTasksError::InvalidParameter(String::from(error_message))
+                    return DescribeExportTasksError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeExportTasksError::ServiceUnavailable(String::from(error_message))
+                    return DescribeExportTasksError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeExportTasksError::Validation(error_message.to_string())
+                    return DescribeExportTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2468,13 +2468,13 @@ impl DescribeLogGroupsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeLogGroupsError::InvalidParameter(String::from(error_message))
+                    return DescribeLogGroupsError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeLogGroupsError::ServiceUnavailable(String::from(error_message))
+                    return DescribeLogGroupsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLogGroupsError::Validation(error_message.to_string())
+                    return DescribeLogGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2558,16 +2558,16 @@ impl DescribeLogStreamsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeLogStreamsError::InvalidParameter(String::from(error_message))
+                    return DescribeLogStreamsError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeLogStreamsError::ResourceNotFound(String::from(error_message))
+                    return DescribeLogStreamsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeLogStreamsError::ServiceUnavailable(String::from(error_message))
+                    return DescribeLogStreamsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLogStreamsError::Validation(error_message.to_string())
+                    return DescribeLogStreamsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2652,18 +2652,18 @@ impl DescribeMetricFiltersError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeMetricFiltersError::InvalidParameter(String::from(error_message))
+                    return DescribeMetricFiltersError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeMetricFiltersError::ResourceNotFound(String::from(error_message))
+                    return DescribeMetricFiltersError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeMetricFiltersError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeMetricFiltersError::Validation(error_message.to_string())
+                    return DescribeMetricFiltersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2748,15 +2748,15 @@ impl DescribeResourcePoliciesError {
                 "InvalidParameterException" => {
                     return DescribeResourcePoliciesError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeResourcePoliciesError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeResourcePoliciesError::Validation(error_message.to_string())
+                    return DescribeResourcePoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2842,20 +2842,20 @@ impl DescribeSubscriptionFiltersError {
                 "InvalidParameterException" => {
                     return DescribeSubscriptionFiltersError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeSubscriptionFiltersError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeSubscriptionFiltersError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSubscriptionFiltersError::Validation(error_message.to_string())
+                    return DescribeSubscriptionFiltersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2942,19 +2942,19 @@ impl DisassociateKmsKeyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DisassociateKmsKeyError::InvalidParameter(String::from(error_message))
+                    return DisassociateKmsKeyError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return DisassociateKmsKeyError::OperationAborted(String::from(error_message))
+                    return DisassociateKmsKeyError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateKmsKeyError::ResourceNotFound(String::from(error_message))
+                    return DisassociateKmsKeyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DisassociateKmsKeyError::ServiceUnavailable(String::from(error_message))
+                    return DisassociateKmsKeyError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateKmsKeyError::Validation(error_message.to_string())
+                    return DisassociateKmsKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3040,16 +3040,16 @@ impl FilterLogEventsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return FilterLogEventsError::InvalidParameter(String::from(error_message))
+                    return FilterLogEventsError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return FilterLogEventsError::ResourceNotFound(String::from(error_message))
+                    return FilterLogEventsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return FilterLogEventsError::ServiceUnavailable(String::from(error_message))
+                    return FilterLogEventsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return FilterLogEventsError::Validation(error_message.to_string())
+                    return FilterLogEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3132,16 +3132,16 @@ impl GetLogEventsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLogEventsError::InvalidParameter(String::from(error_message))
+                    return GetLogEventsError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLogEventsError::ResourceNotFound(String::from(error_message))
+                    return GetLogEventsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetLogEventsError::ServiceUnavailable(String::from(error_message))
+                    return GetLogEventsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLogEventsError::Validation(error_message.to_string())
+                    return GetLogEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3222,13 +3222,13 @@ impl ListTagsLogGroupError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return ListTagsLogGroupError::ResourceNotFound(String::from(error_message))
+                    return ListTagsLogGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListTagsLogGroupError::ServiceUnavailable(String::from(error_message))
+                    return ListTagsLogGroupError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsLogGroupError::Validation(error_message.to_string())
+                    return ListTagsLogGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3310,16 +3310,16 @@ impl PutDestinationError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutDestinationError::InvalidParameter(String::from(error_message))
+                    return PutDestinationError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return PutDestinationError::OperationAborted(String::from(error_message))
+                    return PutDestinationError::OperationAborted(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutDestinationError::ServiceUnavailable(String::from(error_message))
+                    return PutDestinationError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutDestinationError::Validation(error_message.to_string())
+                    return PutDestinationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3402,18 +3402,18 @@ impl PutDestinationPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutDestinationPolicyError::InvalidParameter(String::from(error_message))
+                    return PutDestinationPolicyError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return PutDestinationPolicyError::OperationAborted(String::from(error_message))
+                    return PutDestinationPolicyError::OperationAborted(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return PutDestinationPolicyError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutDestinationPolicyError::Validation(error_message.to_string())
+                    return PutDestinationPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3502,22 +3502,22 @@ impl PutLogEventsError {
 
             match *error_type {
                 "DataAlreadyAcceptedException" => {
-                    return PutLogEventsError::DataAlreadyAccepted(String::from(error_message))
+                    return PutLogEventsError::DataAlreadyAccepted(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return PutLogEventsError::InvalidParameter(String::from(error_message))
+                    return PutLogEventsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidSequenceTokenException" => {
-                    return PutLogEventsError::InvalidSequenceToken(String::from(error_message))
+                    return PutLogEventsError::InvalidSequenceToken(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutLogEventsError::ResourceNotFound(String::from(error_message))
+                    return PutLogEventsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutLogEventsError::ServiceUnavailable(String::from(error_message))
+                    return PutLogEventsError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutLogEventsError::Validation(error_message.to_string())
+                    return PutLogEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3606,22 +3606,22 @@ impl PutMetricFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutMetricFilterError::InvalidParameter(String::from(error_message))
+                    return PutMetricFilterError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutMetricFilterError::LimitExceeded(String::from(error_message))
+                    return PutMetricFilterError::LimitExceeded(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return PutMetricFilterError::OperationAborted(String::from(error_message))
+                    return PutMetricFilterError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutMetricFilterError::ResourceNotFound(String::from(error_message))
+                    return PutMetricFilterError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutMetricFilterError::ServiceUnavailable(String::from(error_message))
+                    return PutMetricFilterError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutMetricFilterError::Validation(error_message.to_string())
+                    return PutMetricFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3706,16 +3706,16 @@ impl PutResourcePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutResourcePolicyError::InvalidParameter(String::from(error_message))
+                    return PutResourcePolicyError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutResourcePolicyError::LimitExceeded(String::from(error_message))
+                    return PutResourcePolicyError::LimitExceeded(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutResourcePolicyError::ServiceUnavailable(String::from(error_message))
+                    return PutResourcePolicyError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutResourcePolicyError::Validation(error_message.to_string())
+                    return PutResourcePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3802,19 +3802,19 @@ impl PutRetentionPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutRetentionPolicyError::InvalidParameter(String::from(error_message))
+                    return PutRetentionPolicyError::InvalidParameter(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return PutRetentionPolicyError::OperationAborted(String::from(error_message))
+                    return PutRetentionPolicyError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutRetentionPolicyError::ResourceNotFound(String::from(error_message))
+                    return PutRetentionPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return PutRetentionPolicyError::ServiceUnavailable(String::from(error_message))
+                    return PutRetentionPolicyError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutRetentionPolicyError::Validation(error_message.to_string())
+                    return PutRetentionPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3904,24 +3904,24 @@ impl PutSubscriptionFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutSubscriptionFilterError::InvalidParameter(String::from(error_message))
+                    return PutSubscriptionFilterError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutSubscriptionFilterError::LimitExceeded(String::from(error_message))
+                    return PutSubscriptionFilterError::LimitExceeded(String::from(error_message));
                 }
                 "OperationAbortedException" => {
-                    return PutSubscriptionFilterError::OperationAborted(String::from(error_message))
+                    return PutSubscriptionFilterError::OperationAborted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutSubscriptionFilterError::ResourceNotFound(String::from(error_message))
+                    return PutSubscriptionFilterError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return PutSubscriptionFilterError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutSubscriptionFilterError::Validation(error_message.to_string())
+                    return PutSubscriptionFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4006,13 +4006,13 @@ impl TagLogGroupError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return TagLogGroupError::InvalidParameter(String::from(error_message))
+                    return TagLogGroupError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagLogGroupError::ResourceNotFound(String::from(error_message))
+                    return TagLogGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagLogGroupError::Validation(error_message.to_string())
+                    return TagLogGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4092,13 +4092,13 @@ impl TestMetricFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return TestMetricFilterError::InvalidParameter(String::from(error_message))
+                    return TestMetricFilterError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return TestMetricFilterError::ServiceUnavailable(String::from(error_message))
+                    return TestMetricFilterError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TestMetricFilterError::Validation(error_message.to_string())
+                    return TestMetricFilterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4176,10 +4176,10 @@ impl UntagLogGroupError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UntagLogGroupError::ResourceNotFound(String::from(error_message))
+                    return UntagLogGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagLogGroupError::Validation(error_message.to_string())
+                    return UntagLogGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

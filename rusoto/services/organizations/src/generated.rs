@@ -1200,48 +1200,48 @@ impl AcceptHandshakeError {
                 "AWSOrganizationsNotInUseException" => {
                     return AcceptHandshakeError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return AcceptHandshakeError::AccessDenied(String::from(error_message))
+                    return AcceptHandshakeError::AccessDenied(String::from(error_message));
                 }
                 "AccessDeniedForDependencyException" => {
                     return AcceptHandshakeError::AccessDeniedForDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return AcceptHandshakeError::ConcurrentModification(String::from(error_message))
+                    return AcceptHandshakeError::ConcurrentModification(String::from(error_message));
                 }
                 "HandshakeAlreadyInStateException" => {
                     return AcceptHandshakeError::HandshakeAlreadyInState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeConstraintViolationException" => {
                     return AcceptHandshakeError::HandshakeConstraintViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeNotFoundException" => {
-                    return AcceptHandshakeError::HandshakeNotFound(String::from(error_message))
+                    return AcceptHandshakeError::HandshakeNotFound(String::from(error_message));
                 }
                 "InvalidHandshakeTransitionException" => {
                     return AcceptHandshakeError::InvalidHandshakeTransition(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AcceptHandshakeError::InvalidInput(String::from(error_message))
+                    return AcceptHandshakeError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return AcceptHandshakeError::Service(String::from(error_message))
+                    return AcceptHandshakeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AcceptHandshakeError::TooManyRequests(String::from(error_message))
+                    return AcceptHandshakeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AcceptHandshakeError::Validation(error_message.to_string())
+                    return AcceptHandshakeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1348,40 +1348,40 @@ impl AttachPolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return AttachPolicyError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return AttachPolicyError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return AttachPolicyError::AccessDenied(String::from(error_message))
+                    return AttachPolicyError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return AttachPolicyError::ConcurrentModification(String::from(error_message))
+                    return AttachPolicyError::ConcurrentModification(String::from(error_message));
                 }
                 "ConstraintViolationException" => {
-                    return AttachPolicyError::ConstraintViolation(String::from(error_message))
+                    return AttachPolicyError::ConstraintViolation(String::from(error_message));
                 }
                 "DuplicatePolicyAttachmentException" => {
-                    return AttachPolicyError::DuplicatePolicyAttachment(String::from(error_message))
+                    return AttachPolicyError::DuplicatePolicyAttachment(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AttachPolicyError::InvalidInput(String::from(error_message))
+                    return AttachPolicyError::InvalidInput(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return AttachPolicyError::PolicyNotFound(String::from(error_message))
+                    return AttachPolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "PolicyTypeNotEnabledException" => {
-                    return AttachPolicyError::PolicyTypeNotEnabled(String::from(error_message))
+                    return AttachPolicyError::PolicyTypeNotEnabled(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return AttachPolicyError::Service(String::from(error_message))
+                    return AttachPolicyError::Service(String::from(error_message));
                 }
                 "TargetNotFoundException" => {
-                    return AttachPolicyError::TargetNotFound(String::from(error_message))
+                    return AttachPolicyError::TargetNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AttachPolicyError::TooManyRequests(String::from(error_message))
+                    return AttachPolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachPolicyError::Validation(error_message.to_string())
+                    return AttachPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1482,35 +1482,35 @@ impl CancelHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CancelHandshakeError::AccessDenied(String::from(error_message))
+                    return CancelHandshakeError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return CancelHandshakeError::ConcurrentModification(String::from(error_message))
+                    return CancelHandshakeError::ConcurrentModification(String::from(error_message));
                 }
                 "HandshakeAlreadyInStateException" => {
                     return CancelHandshakeError::HandshakeAlreadyInState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeNotFoundException" => {
-                    return CancelHandshakeError::HandshakeNotFound(String::from(error_message))
+                    return CancelHandshakeError::HandshakeNotFound(String::from(error_message));
                 }
                 "InvalidHandshakeTransitionException" => {
                     return CancelHandshakeError::InvalidHandshakeTransition(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CancelHandshakeError::InvalidInput(String::from(error_message))
+                    return CancelHandshakeError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CancelHandshakeError::Service(String::from(error_message))
+                    return CancelHandshakeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CancelHandshakeError::TooManyRequests(String::from(error_message))
+                    return CancelHandshakeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelHandshakeError::Validation(error_message.to_string())
+                    return CancelHandshakeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1608,31 +1608,31 @@ impl CreateAccountError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return CreateAccountError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return CreateAccountError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return CreateAccountError::AccessDenied(String::from(error_message))
+                    return CreateAccountError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateAccountError::ConcurrentModification(String::from(error_message))
+                    return CreateAccountError::ConcurrentModification(String::from(error_message));
                 }
                 "ConstraintViolationException" => {
-                    return CreateAccountError::ConstraintViolation(String::from(error_message))
+                    return CreateAccountError::ConstraintViolation(String::from(error_message));
                 }
                 "FinalizingOrganizationException" => {
-                    return CreateAccountError::FinalizingOrganization(String::from(error_message))
+                    return CreateAccountError::FinalizingOrganization(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateAccountError::InvalidInput(String::from(error_message))
+                    return CreateAccountError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateAccountError::Service(String::from(error_message))
+                    return CreateAccountError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateAccountError::TooManyRequests(String::from(error_message))
+                    return CreateAccountError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAccountError::Validation(error_message.to_string())
+                    return CreateAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1730,37 +1730,37 @@ impl CreateOrganizationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateOrganizationError::AccessDenied(String::from(error_message))
+                    return CreateOrganizationError::AccessDenied(String::from(error_message));
                 }
                 "AccessDeniedForDependencyException" => {
                     return CreateOrganizationError::AccessDeniedForDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AlreadyInOrganizationException" => {
                     return CreateOrganizationError::AlreadyInOrganization(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConcurrentModificationException" => {
                     return CreateOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return CreateOrganizationError::ConstraintViolation(String::from(error_message))
+                    return CreateOrganizationError::ConstraintViolation(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateOrganizationError::InvalidInput(String::from(error_message))
+                    return CreateOrganizationError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateOrganizationError::Service(String::from(error_message))
+                    return CreateOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateOrganizationError::TooManyRequests(String::from(error_message))
+                    return CreateOrganizationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateOrganizationError::Validation(error_message.to_string())
+                    return CreateOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1864,44 +1864,44 @@ impl CreateOrganizationalUnitError {
                 "AWSOrganizationsNotInUseException" => {
                     return CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return CreateOrganizationalUnitError::AccessDenied(String::from(error_message))
+                    return CreateOrganizationalUnitError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return CreateOrganizationalUnitError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
                     return CreateOrganizationalUnitError::ConstraintViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DuplicateOrganizationalUnitException" => {
                     return CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateOrganizationalUnitError::InvalidInput(String::from(error_message))
+                    return CreateOrganizationalUnitError::InvalidInput(String::from(error_message));
                 }
                 "ParentNotFoundException" => {
                     return CreateOrganizationalUnitError::ParentNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateOrganizationalUnitError::Service(String::from(error_message))
+                    return CreateOrganizationalUnitError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return CreateOrganizationalUnitError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateOrganizationalUnitError::Validation(error_message.to_string())
+                    return CreateOrganizationalUnitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2006,39 +2006,39 @@ impl CreatePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return CreatePolicyError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return CreatePolicyError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return CreatePolicyError::AccessDenied(String::from(error_message))
+                    return CreatePolicyError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return CreatePolicyError::ConcurrentModification(String::from(error_message))
+                    return CreatePolicyError::ConcurrentModification(String::from(error_message));
                 }
                 "ConstraintViolationException" => {
-                    return CreatePolicyError::ConstraintViolation(String::from(error_message))
+                    return CreatePolicyError::ConstraintViolation(String::from(error_message));
                 }
                 "DuplicatePolicyException" => {
-                    return CreatePolicyError::DuplicatePolicy(String::from(error_message))
+                    return CreatePolicyError::DuplicatePolicy(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreatePolicyError::InvalidInput(String::from(error_message))
+                    return CreatePolicyError::InvalidInput(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return CreatePolicyError::MalformedPolicyDocument(String::from(error_message))
+                    return CreatePolicyError::MalformedPolicyDocument(String::from(error_message));
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
                     return CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreatePolicyError::Service(String::from(error_message))
+                    return CreatePolicyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreatePolicyError::TooManyRequests(String::from(error_message))
+                    return CreatePolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePolicyError::Validation(error_message.to_string())
+                    return CreatePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2138,37 +2138,37 @@ impl DeclineHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeclineHandshakeError::AccessDenied(String::from(error_message))
+                    return DeclineHandshakeError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DeclineHandshakeError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeAlreadyInStateException" => {
                     return DeclineHandshakeError::HandshakeAlreadyInState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeNotFoundException" => {
-                    return DeclineHandshakeError::HandshakeNotFound(String::from(error_message))
+                    return DeclineHandshakeError::HandshakeNotFound(String::from(error_message));
                 }
                 "InvalidHandshakeTransitionException" => {
                     return DeclineHandshakeError::InvalidHandshakeTransition(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeclineHandshakeError::InvalidInput(String::from(error_message))
+                    return DeclineHandshakeError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeclineHandshakeError::Service(String::from(error_message))
+                    return DeclineHandshakeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeclineHandshakeError::TooManyRequests(String::from(error_message))
+                    return DeclineHandshakeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeclineHandshakeError::Validation(error_message.to_string())
+                    return DeclineHandshakeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2266,32 +2266,32 @@ impl DeleteOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return DeleteOrganizationError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DeleteOrganizationError::AccessDenied(String::from(error_message))
+                    return DeleteOrganizationError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DeleteOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteOrganizationError::InvalidInput(String::from(error_message))
+                    return DeleteOrganizationError::InvalidInput(String::from(error_message));
                 }
                 "OrganizationNotEmptyException" => {
                     return DeleteOrganizationError::OrganizationNotEmpty(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteOrganizationError::Service(String::from(error_message))
+                    return DeleteOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteOrganizationError::TooManyRequests(String::from(error_message))
+                    return DeleteOrganizationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteOrganizationError::Validation(error_message.to_string())
+                    return DeleteOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2392,39 +2392,39 @@ impl DeleteOrganizationalUnitError {
                 "AWSOrganizationsNotInUseException" => {
                     return DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DeleteOrganizationalUnitError::AccessDenied(String::from(error_message))
+                    return DeleteOrganizationalUnitError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DeleteOrganizationalUnitError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteOrganizationalUnitError::InvalidInput(String::from(error_message))
+                    return DeleteOrganizationalUnitError::InvalidInput(String::from(error_message));
                 }
                 "OrganizationalUnitNotEmptyException" => {
                     return DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteOrganizationalUnitError::Service(String::from(error_message))
+                    return DeleteOrganizationalUnitError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteOrganizationalUnitError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteOrganizationalUnitError::Validation(error_message.to_string())
+                    return DeleteOrganizationalUnitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2524,31 +2524,31 @@ impl DeletePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DeletePolicyError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return DeletePolicyError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return DeletePolicyError::AccessDenied(String::from(error_message))
+                    return DeletePolicyError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return DeletePolicyError::ConcurrentModification(String::from(error_message))
+                    return DeletePolicyError::ConcurrentModification(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeletePolicyError::InvalidInput(String::from(error_message))
+                    return DeletePolicyError::InvalidInput(String::from(error_message));
                 }
                 "PolicyInUseException" => {
-                    return DeletePolicyError::PolicyInUse(String::from(error_message))
+                    return DeletePolicyError::PolicyInUse(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return DeletePolicyError::PolicyNotFound(String::from(error_message))
+                    return DeletePolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeletePolicyError::Service(String::from(error_message))
+                    return DeletePolicyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeletePolicyError::TooManyRequests(String::from(error_message))
+                    return DeletePolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePolicyError::Validation(error_message.to_string())
+                    return DeletePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2644,25 +2644,25 @@ impl DescribeAccountError {
                 "AWSOrganizationsNotInUseException" => {
                     return DescribeAccountError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DescribeAccountError::AccessDenied(String::from(error_message))
+                    return DescribeAccountError::AccessDenied(String::from(error_message));
                 }
                 "AccountNotFoundException" => {
-                    return DescribeAccountError::AccountNotFound(String::from(error_message))
+                    return DescribeAccountError::AccountNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeAccountError::InvalidInput(String::from(error_message))
+                    return DescribeAccountError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribeAccountError::Service(String::from(error_message))
+                    return DescribeAccountError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeAccountError::TooManyRequests(String::from(error_message))
+                    return DescribeAccountError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAccountError::Validation(error_message.to_string())
+                    return DescribeAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2756,33 +2756,33 @@ impl DescribeCreateAccountStatusError {
                 "AWSOrganizationsNotInUseException" => {
                     return DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
                     return DescribeCreateAccountStatusError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "CreateAccountStatusNotFoundException" => {
                     return DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return DescribeCreateAccountStatusError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DescribeCreateAccountStatusError::Service(String::from(error_message))
+                    return DescribeCreateAccountStatusError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DescribeCreateAccountStatusError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCreateAccountStatusError::Validation(error_message.to_string())
+                    return DescribeCreateAccountStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2876,27 +2876,27 @@ impl DescribeHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeHandshakeError::AccessDenied(String::from(error_message))
+                    return DescribeHandshakeError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DescribeHandshakeError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeNotFoundException" => {
-                    return DescribeHandshakeError::HandshakeNotFound(String::from(error_message))
+                    return DescribeHandshakeError::HandshakeNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeHandshakeError::InvalidInput(String::from(error_message))
+                    return DescribeHandshakeError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribeHandshakeError::Service(String::from(error_message))
+                    return DescribeHandshakeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeHandshakeError::TooManyRequests(String::from(error_message))
+                    return DescribeHandshakeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeHandshakeError::Validation(error_message.to_string())
+                    return DescribeHandshakeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2990,24 +2990,24 @@ impl DescribeOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DescribeOrganizationError::AccessDenied(String::from(error_message))
+                    return DescribeOrganizationError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DescribeOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DescribeOrganizationError::Service(String::from(error_message))
+                    return DescribeOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeOrganizationError::TooManyRequests(String::from(error_message))
+                    return DescribeOrganizationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeOrganizationError::Validation(error_message.to_string())
+                    return DescribeOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3102,33 +3102,33 @@ impl DescribeOrganizationalUnitError {
                 "AWSOrganizationsNotInUseException" => {
                     return DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
                     return DescribeOrganizationalUnitError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return DescribeOrganizationalUnitError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return DescribeOrganizationalUnitError::OrganizationalUnitNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServiceException" => {
-                    return DescribeOrganizationalUnitError::Service(String::from(error_message))
+                    return DescribeOrganizationalUnitError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DescribeOrganizationalUnitError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeOrganizationalUnitError::Validation(error_message.to_string())
+                    return DescribeOrganizationalUnitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3224,25 +3224,25 @@ impl DescribePolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return DescribePolicyError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DescribePolicyError::AccessDenied(String::from(error_message))
+                    return DescribePolicyError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribePolicyError::InvalidInput(String::from(error_message))
+                    return DescribePolicyError::InvalidInput(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return DescribePolicyError::PolicyNotFound(String::from(error_message))
+                    return DescribePolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribePolicyError::Service(String::from(error_message))
+                    return DescribePolicyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribePolicyError::TooManyRequests(String::from(error_message))
+                    return DescribePolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePolicyError::Validation(error_message.to_string())
+                    return DescribePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3342,37 +3342,37 @@ impl DetachPolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DetachPolicyError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return DetachPolicyError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return DetachPolicyError::AccessDenied(String::from(error_message))
+                    return DetachPolicyError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return DetachPolicyError::ConcurrentModification(String::from(error_message))
+                    return DetachPolicyError::ConcurrentModification(String::from(error_message));
                 }
                 "ConstraintViolationException" => {
-                    return DetachPolicyError::ConstraintViolation(String::from(error_message))
+                    return DetachPolicyError::ConstraintViolation(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DetachPolicyError::InvalidInput(String::from(error_message))
+                    return DetachPolicyError::InvalidInput(String::from(error_message));
                 }
                 "PolicyNotAttachedException" => {
-                    return DetachPolicyError::PolicyNotAttached(String::from(error_message))
+                    return DetachPolicyError::PolicyNotAttached(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return DetachPolicyError::PolicyNotFound(String::from(error_message))
+                    return DetachPolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DetachPolicyError::Service(String::from(error_message))
+                    return DetachPolicyError::Service(String::from(error_message));
                 }
                 "TargetNotFoundException" => {
-                    return DetachPolicyError::TargetNotFound(String::from(error_message))
+                    return DetachPolicyError::TargetNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DetachPolicyError::TooManyRequests(String::from(error_message))
+                    return DetachPolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachPolicyError::Validation(error_message.to_string())
+                    return DetachPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3472,34 +3472,34 @@ impl DisableAWSServiceAccessError {
                 "AWSOrganizationsNotInUseException" => {
                     return DisableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DisableAWSServiceAccessError::AccessDenied(String::from(error_message))
+                    return DisableAWSServiceAccessError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DisableAWSServiceAccessError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
                     return DisableAWSServiceAccessError::ConstraintViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DisableAWSServiceAccessError::InvalidInput(String::from(error_message))
+                    return DisableAWSServiceAccessError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DisableAWSServiceAccessError::Service(String::from(error_message))
+                    return DisableAWSServiceAccessError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DisableAWSServiceAccessError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisableAWSServiceAccessError::Validation(error_message.to_string())
+                    return DisableAWSServiceAccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3602,36 +3602,36 @@ impl DisablePolicyTypeError {
                 "AWSOrganizationsNotInUseException" => {
                     return DisablePolicyTypeError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DisablePolicyTypeError::AccessDenied(String::from(error_message))
+                    return DisablePolicyTypeError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DisablePolicyTypeError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return DisablePolicyTypeError::ConstraintViolation(String::from(error_message))
+                    return DisablePolicyTypeError::ConstraintViolation(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DisablePolicyTypeError::InvalidInput(String::from(error_message))
+                    return DisablePolicyTypeError::InvalidInput(String::from(error_message));
                 }
                 "PolicyTypeNotEnabledException" => {
-                    return DisablePolicyTypeError::PolicyTypeNotEnabled(String::from(error_message))
+                    return DisablePolicyTypeError::PolicyTypeNotEnabled(String::from(error_message));
                 }
                 "RootNotFoundException" => {
-                    return DisablePolicyTypeError::RootNotFound(String::from(error_message))
+                    return DisablePolicyTypeError::RootNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DisablePolicyTypeError::Service(String::from(error_message))
+                    return DisablePolicyTypeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DisablePolicyTypeError::TooManyRequests(String::from(error_message))
+                    return DisablePolicyTypeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisablePolicyTypeError::Validation(error_message.to_string())
+                    return DisablePolicyTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3732,32 +3732,32 @@ impl EnableAWSServiceAccessError {
                 "AWSOrganizationsNotInUseException" => {
                     return EnableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return EnableAWSServiceAccessError::AccessDenied(String::from(error_message))
+                    return EnableAWSServiceAccessError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return EnableAWSServiceAccessError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
                     return EnableAWSServiceAccessError::ConstraintViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return EnableAWSServiceAccessError::InvalidInput(String::from(error_message))
+                    return EnableAWSServiceAccessError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return EnableAWSServiceAccessError::Service(String::from(error_message))
+                    return EnableAWSServiceAccessError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return EnableAWSServiceAccessError::TooManyRequests(String::from(error_message))
+                    return EnableAWSServiceAccessError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableAWSServiceAccessError::Validation(error_message.to_string())
+                    return EnableAWSServiceAccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3856,32 +3856,32 @@ impl EnableAllFeaturesError {
                 "AWSOrganizationsNotInUseException" => {
                     return EnableAllFeaturesError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return EnableAllFeaturesError::AccessDenied(String::from(error_message))
+                    return EnableAllFeaturesError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return EnableAllFeaturesError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeConstraintViolationException" => {
                     return EnableAllFeaturesError::HandshakeConstraintViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return EnableAllFeaturesError::InvalidInput(String::from(error_message))
+                    return EnableAllFeaturesError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return EnableAllFeaturesError::Service(String::from(error_message))
+                    return EnableAllFeaturesError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return EnableAllFeaturesError::TooManyRequests(String::from(error_message))
+                    return EnableAllFeaturesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableAllFeaturesError::Validation(error_message.to_string())
+                    return EnableAllFeaturesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3986,43 +3986,43 @@ impl EnablePolicyTypeError {
                 "AWSOrganizationsNotInUseException" => {
                     return EnablePolicyTypeError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return EnablePolicyTypeError::AccessDenied(String::from(error_message))
+                    return EnablePolicyTypeError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return EnablePolicyTypeError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return EnablePolicyTypeError::ConstraintViolation(String::from(error_message))
+                    return EnablePolicyTypeError::ConstraintViolation(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return EnablePolicyTypeError::InvalidInput(String::from(error_message))
+                    return EnablePolicyTypeError::InvalidInput(String::from(error_message));
                 }
                 "PolicyTypeAlreadyEnabledException" => {
                     return EnablePolicyTypeError::PolicyTypeAlreadyEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
                     return EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RootNotFoundException" => {
-                    return EnablePolicyTypeError::RootNotFound(String::from(error_message))
+                    return EnablePolicyTypeError::RootNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return EnablePolicyTypeError::Service(String::from(error_message))
+                    return EnablePolicyTypeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return EnablePolicyTypeError::TooManyRequests(String::from(error_message))
+                    return EnablePolicyTypeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnablePolicyTypeError::Validation(error_message.to_string())
+                    return EnablePolicyTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4126,48 +4126,48 @@ impl InviteAccountToOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
                     return InviteAccountToOrganizationError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConcurrentModificationException" => {
                     return InviteAccountToOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DuplicateHandshakeException" => {
                     return InviteAccountToOrganizationError::DuplicateHandshake(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FinalizingOrganizationException" => {
                     return InviteAccountToOrganizationError::FinalizingOrganization(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HandshakeConstraintViolationException" => {
                     return InviteAccountToOrganizationError::HandshakeConstraintViolation(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return InviteAccountToOrganizationError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return InviteAccountToOrganizationError::Service(String::from(error_message))
+                    return InviteAccountToOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return InviteAccountToOrganizationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return InviteAccountToOrganizationError::Validation(error_message.to_string())
+                    return InviteAccountToOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4272,38 +4272,38 @@ impl LeaveOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return LeaveOrganizationError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return LeaveOrganizationError::AccessDenied(String::from(error_message))
+                    return LeaveOrganizationError::AccessDenied(String::from(error_message));
                 }
                 "AccountNotFoundException" => {
-                    return LeaveOrganizationError::AccountNotFound(String::from(error_message))
+                    return LeaveOrganizationError::AccountNotFound(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return LeaveOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return LeaveOrganizationError::ConstraintViolation(String::from(error_message))
+                    return LeaveOrganizationError::ConstraintViolation(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return LeaveOrganizationError::InvalidInput(String::from(error_message))
+                    return LeaveOrganizationError::InvalidInput(String::from(error_message));
                 }
                 "MasterCannotLeaveOrganizationException" => {
                     return LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return LeaveOrganizationError::Service(String::from(error_message))
+                    return LeaveOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return LeaveOrganizationError::TooManyRequests(String::from(error_message))
+                    return LeaveOrganizationError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return LeaveOrganizationError::Validation(error_message.to_string())
+                    return LeaveOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4402,37 +4402,37 @@ impl ListAWSServiceAccessForOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "AccessDeniedException" => {
                     return ListAWSServiceAccessForOrganizationError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
                     return ListAWSServiceAccessForOrganizationError::ConstraintViolation(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInputException" => {
                     return ListAWSServiceAccessForOrganizationError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return ListAWSServiceAccessForOrganizationError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListAWSServiceAccessForOrganizationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListAWSServiceAccessForOrganizationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4524,22 +4524,22 @@ impl ListAccountsError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListAccountsError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return ListAccountsError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return ListAccountsError::AccessDenied(String::from(error_message))
+                    return ListAccountsError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListAccountsError::InvalidInput(String::from(error_message))
+                    return ListAccountsError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListAccountsError::Service(String::from(error_message))
+                    return ListAccountsError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListAccountsError::TooManyRequests(String::from(error_message))
+                    return ListAccountsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAccountsError::Validation(error_message.to_string())
+                    return ListAccountsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4632,25 +4632,25 @@ impl ListAccountsForParentError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListAccountsForParentError::AccessDenied(String::from(error_message))
+                    return ListAccountsForParentError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListAccountsForParentError::InvalidInput(String::from(error_message))
+                    return ListAccountsForParentError::InvalidInput(String::from(error_message));
                 }
                 "ParentNotFoundException" => {
-                    return ListAccountsForParentError::ParentNotFound(String::from(error_message))
+                    return ListAccountsForParentError::ParentNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListAccountsForParentError::Service(String::from(error_message))
+                    return ListAccountsForParentError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListAccountsForParentError::TooManyRequests(String::from(error_message))
+                    return ListAccountsForParentError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAccountsForParentError::Validation(error_message.to_string())
+                    return ListAccountsForParentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4744,25 +4744,25 @@ impl ListChildrenError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListChildrenError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return ListChildrenError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return ListChildrenError::AccessDenied(String::from(error_message))
+                    return ListChildrenError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListChildrenError::InvalidInput(String::from(error_message))
+                    return ListChildrenError::InvalidInput(String::from(error_message));
                 }
                 "ParentNotFoundException" => {
-                    return ListChildrenError::ParentNotFound(String::from(error_message))
+                    return ListChildrenError::ParentNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListChildrenError::Service(String::from(error_message))
+                    return ListChildrenError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListChildrenError::TooManyRequests(String::from(error_message))
+                    return ListChildrenError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListChildrenError::Validation(error_message.to_string())
+                    return ListChildrenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4854,24 +4854,24 @@ impl ListCreateAccountStatusError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListCreateAccountStatusError::AccessDenied(String::from(error_message))
+                    return ListCreateAccountStatusError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListCreateAccountStatusError::InvalidInput(String::from(error_message))
+                    return ListCreateAccountStatusError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListCreateAccountStatusError::Service(String::from(error_message))
+                    return ListCreateAccountStatusError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ListCreateAccountStatusError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListCreateAccountStatusError::Validation(error_message.to_string())
+                    return ListCreateAccountStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4962,26 +4962,26 @@ impl ListHandshakesForAccountError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListHandshakesForAccountError::AccessDenied(String::from(error_message))
+                    return ListHandshakesForAccountError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return ListHandshakesForAccountError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListHandshakesForAccountError::InvalidInput(String::from(error_message))
+                    return ListHandshakesForAccountError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListHandshakesForAccountError::Service(String::from(error_message))
+                    return ListHandshakesForAccountError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ListHandshakesForAccountError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListHandshakesForAccountError::Validation(error_message.to_string())
+                    return ListHandshakesForAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5076,33 +5076,33 @@ impl ListHandshakesForOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "AccessDeniedException" => {
                     return ListHandshakesForOrganizationError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConcurrentModificationException" => {
                     return ListHandshakesForOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return ListHandshakesForOrganizationError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return ListHandshakesForOrganizationError::Service(String::from(error_message))
+                    return ListHandshakesForOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ListHandshakesForOrganizationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListHandshakesForOrganizationError::Validation(error_message.to_string())
+                    return ListHandshakesForOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5198,37 +5198,37 @@ impl ListOrganizationalUnitsForParentError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "AccessDeniedException" => {
                     return ListOrganizationalUnitsForParentError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return ListOrganizationalUnitsForParentError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParentNotFoundException" => {
                     return ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return ListOrganizationalUnitsForParentError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListOrganizationalUnitsForParentError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListOrganizationalUnitsForParentError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5322,23 +5322,23 @@ impl ListParentsError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListParentsError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return ListParentsError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return ListParentsError::AccessDenied(String::from(error_message))
+                    return ListParentsError::AccessDenied(String::from(error_message));
                 }
                 "ChildNotFoundException" => {
-                    return ListParentsError::ChildNotFound(String::from(error_message))
+                    return ListParentsError::ChildNotFound(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListParentsError::InvalidInput(String::from(error_message))
+                    return ListParentsError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => return ListParentsError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return ListParentsError::TooManyRequests(String::from(error_message))
+                    return ListParentsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListParentsError::Validation(error_message.to_string())
+                    return ListParentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5428,22 +5428,22 @@ impl ListPoliciesError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListPoliciesError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return ListPoliciesError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return ListPoliciesError::AccessDenied(String::from(error_message))
+                    return ListPoliciesError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListPoliciesError::InvalidInput(String::from(error_message))
+                    return ListPoliciesError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListPoliciesError::Service(String::from(error_message))
+                    return ListPoliciesError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListPoliciesError::TooManyRequests(String::from(error_message))
+                    return ListPoliciesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPoliciesError::Validation(error_message.to_string())
+                    return ListPoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5536,25 +5536,25 @@ impl ListPoliciesForTargetError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListPoliciesForTargetError::AccessDenied(String::from(error_message))
+                    return ListPoliciesForTargetError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListPoliciesForTargetError::InvalidInput(String::from(error_message))
+                    return ListPoliciesForTargetError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListPoliciesForTargetError::Service(String::from(error_message))
+                    return ListPoliciesForTargetError::Service(String::from(error_message));
                 }
                 "TargetNotFoundException" => {
-                    return ListPoliciesForTargetError::TargetNotFound(String::from(error_message))
+                    return ListPoliciesForTargetError::TargetNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListPoliciesForTargetError::TooManyRequests(String::from(error_message))
+                    return ListPoliciesForTargetError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPoliciesForTargetError::Validation(error_message.to_string())
+                    return ListPoliciesForTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5646,20 +5646,20 @@ impl ListRootsError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListRootsError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return ListRootsError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return ListRootsError::AccessDenied(String::from(error_message))
+                    return ListRootsError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListRootsError::InvalidInput(String::from(error_message))
+                    return ListRootsError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => return ListRootsError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return ListRootsError::TooManyRequests(String::from(error_message))
+                    return ListRootsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRootsError::Validation(error_message.to_string())
+                    return ListRootsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5752,25 +5752,25 @@ impl ListTargetsForPolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListTargetsForPolicyError::AccessDenied(String::from(error_message))
+                    return ListTargetsForPolicyError::AccessDenied(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return ListTargetsForPolicyError::InvalidInput(String::from(error_message))
+                    return ListTargetsForPolicyError::InvalidInput(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return ListTargetsForPolicyError::PolicyNotFound(String::from(error_message))
+                    return ListTargetsForPolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListTargetsForPolicyError::Service(String::from(error_message))
+                    return ListTargetsForPolicyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListTargetsForPolicyError::TooManyRequests(String::from(error_message))
+                    return ListTargetsForPolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTargetsForPolicyError::Validation(error_message.to_string())
+                    return ListTargetsForPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5872,35 +5872,35 @@ impl MoveAccountError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return MoveAccountError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return MoveAccountError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return MoveAccountError::AccessDenied(String::from(error_message))
+                    return MoveAccountError::AccessDenied(String::from(error_message));
                 }
                 "AccountNotFoundException" => {
-                    return MoveAccountError::AccountNotFound(String::from(error_message))
+                    return MoveAccountError::AccountNotFound(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return MoveAccountError::ConcurrentModification(String::from(error_message))
+                    return MoveAccountError::ConcurrentModification(String::from(error_message));
                 }
                 "DestinationParentNotFoundException" => {
-                    return MoveAccountError::DestinationParentNotFound(String::from(error_message))
+                    return MoveAccountError::DestinationParentNotFound(String::from(error_message));
                 }
                 "DuplicateAccountException" => {
-                    return MoveAccountError::DuplicateAccount(String::from(error_message))
+                    return MoveAccountError::DuplicateAccount(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return MoveAccountError::InvalidInput(String::from(error_message))
+                    return MoveAccountError::InvalidInput(String::from(error_message));
                 }
                 "ServiceException" => return MoveAccountError::Service(String::from(error_message)),
                 "SourceParentNotFoundException" => {
-                    return MoveAccountError::SourceParentNotFound(String::from(error_message))
+                    return MoveAccountError::SourceParentNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return MoveAccountError::TooManyRequests(String::from(error_message))
+                    return MoveAccountError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return MoveAccountError::Validation(error_message.to_string())
+                    return MoveAccountError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6004,48 +6004,48 @@ impl RemoveAccountFromOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "AccessDeniedException" => {
                     return RemoveAccountFromOrganizationError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccountNotFoundException" => {
                     return RemoveAccountFromOrganizationError::AccountNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConcurrentModificationException" => {
                     return RemoveAccountFromOrganizationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConstraintViolationException" => {
                     return RemoveAccountFromOrganizationError::ConstraintViolation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return RemoveAccountFromOrganizationError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MasterCannotLeaveOrganizationException" => {
                     return RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServiceException" => {
-                    return RemoveAccountFromOrganizationError::Service(String::from(error_message))
+                    return RemoveAccountFromOrganizationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return RemoveAccountFromOrganizationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RemoveAccountFromOrganizationError::Validation(error_message.to_string())
+                    return RemoveAccountFromOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6148,39 +6148,39 @@ impl UpdateOrganizationalUnitError {
                 "AWSOrganizationsNotInUseException" => {
                     return UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return UpdateOrganizationalUnitError::AccessDenied(String::from(error_message))
+                    return UpdateOrganizationalUnitError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return UpdateOrganizationalUnitError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DuplicateOrganizationalUnitException" => {
                     return UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateOrganizationalUnitError::InvalidInput(String::from(error_message))
+                    return UpdateOrganizationalUnitError::InvalidInput(String::from(error_message));
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateOrganizationalUnitError::Service(String::from(error_message))
+                    return UpdateOrganizationalUnitError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateOrganizationalUnitError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateOrganizationalUnitError::Validation(error_message.to_string())
+                    return UpdateOrganizationalUnitError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6284,37 +6284,37 @@ impl UpdatePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return UpdatePolicyError::AWSOrganizationsNotInUse(String::from(error_message))
+                    return UpdatePolicyError::AWSOrganizationsNotInUse(String::from(error_message));
                 }
                 "AccessDeniedException" => {
-                    return UpdatePolicyError::AccessDenied(String::from(error_message))
+                    return UpdatePolicyError::AccessDenied(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return UpdatePolicyError::ConcurrentModification(String::from(error_message))
+                    return UpdatePolicyError::ConcurrentModification(String::from(error_message));
                 }
                 "ConstraintViolationException" => {
-                    return UpdatePolicyError::ConstraintViolation(String::from(error_message))
+                    return UpdatePolicyError::ConstraintViolation(String::from(error_message));
                 }
                 "DuplicatePolicyException" => {
-                    return UpdatePolicyError::DuplicatePolicy(String::from(error_message))
+                    return UpdatePolicyError::DuplicatePolicy(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdatePolicyError::InvalidInput(String::from(error_message))
+                    return UpdatePolicyError::InvalidInput(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return UpdatePolicyError::MalformedPolicyDocument(String::from(error_message))
+                    return UpdatePolicyError::MalformedPolicyDocument(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return UpdatePolicyError::PolicyNotFound(String::from(error_message))
+                    return UpdatePolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return UpdatePolicyError::Service(String::from(error_message))
+                    return UpdatePolicyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdatePolicyError::TooManyRequests(String::from(error_message))
+                    return UpdatePolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePolicyError::Validation(error_message.to_string())
+                    return UpdatePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -1154,28 +1154,28 @@ impl AddPermissionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AddPermissionError::InvalidParameterValue(String::from(error_message))
+                    return AddPermissionError::InvalidParameterValue(String::from(error_message));
                 }
                 "PolicyLengthExceededException" => {
-                    return AddPermissionError::PolicyLengthExceeded(String::from(error_message))
+                    return AddPermissionError::PolicyLengthExceeded(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return AddPermissionError::PreconditionFailed(String::from(error_message))
+                    return AddPermissionError::PreconditionFailed(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return AddPermissionError::ResourceConflict(String::from(error_message))
+                    return AddPermissionError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddPermissionError::ResourceNotFound(String::from(error_message))
+                    return AddPermissionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return AddPermissionError::Service(String::from(error_message))
+                    return AddPermissionError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return AddPermissionError::TooManyRequests(String::from(error_message))
+                    return AddPermissionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddPermissionError::Validation(error_message.to_string())
+                    return AddPermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1280,20 +1280,20 @@ impl CreateAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CreateAliasError::InvalidParameterValue(String::from(error_message))
+                    return CreateAliasError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return CreateAliasError::ResourceConflict(String::from(error_message))
+                    return CreateAliasError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateAliasError::ResourceNotFound(String::from(error_message))
+                    return CreateAliasError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return CreateAliasError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return CreateAliasError::TooManyRequests(String::from(error_message))
+                    return CreateAliasError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string())
+                    return CreateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1398,28 +1398,28 @@ impl CreateEventSourceMappingError {
                 "InvalidParameterValueException" => {
                     return CreateEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceConflictException" => {
                     return CreateEventSourceMappingError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CreateEventSourceMappingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateEventSourceMappingError::Service(String::from(error_message))
+                    return CreateEventSourceMappingError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return CreateEventSourceMappingError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateEventSourceMappingError::Validation(error_message.to_string())
+                    return CreateEventSourceMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1526,25 +1526,25 @@ impl CreateFunctionError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return CreateFunctionError::CodeStorageExceeded(String::from(error_message))
+                    return CreateFunctionError::CodeStorageExceeded(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return CreateFunctionError::InvalidParameterValue(String::from(error_message))
+                    return CreateFunctionError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return CreateFunctionError::ResourceConflict(String::from(error_message))
+                    return CreateFunctionError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateFunctionError::ResourceNotFound(String::from(error_message))
+                    return CreateFunctionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateFunctionError::Service(String::from(error_message))
+                    return CreateFunctionError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateFunctionError::TooManyRequests(String::from(error_message))
+                    return CreateFunctionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateFunctionError::Validation(error_message.to_string())
+                    return CreateFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1644,14 +1644,14 @@ impl DeleteAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteAliasError::InvalidParameterValue(String::from(error_message))
+                    return DeleteAliasError::InvalidParameterValue(String::from(error_message));
                 }
                 "ServiceException" => return DeleteAliasError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return DeleteAliasError::TooManyRequests(String::from(error_message))
+                    return DeleteAliasError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string())
+                    return DeleteAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1754,26 +1754,26 @@ impl DeleteEventSourceMappingError {
                 "InvalidParameterValueException" => {
                     return DeleteEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteEventSourceMappingError::ResourceInUse(String::from(error_message))
+                    return DeleteEventSourceMappingError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteEventSourceMappingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteEventSourceMappingError::Service(String::from(error_message))
+                    return DeleteEventSourceMappingError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteEventSourceMappingError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteEventSourceMappingError::Validation(error_message.to_string())
+                    return DeleteEventSourceMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1878,22 +1878,22 @@ impl DeleteFunctionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteFunctionError::InvalidParameterValue(String::from(error_message))
+                    return DeleteFunctionError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return DeleteFunctionError::ResourceConflict(String::from(error_message))
+                    return DeleteFunctionError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFunctionError::ResourceNotFound(String::from(error_message))
+                    return DeleteFunctionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteFunctionError::Service(String::from(error_message))
+                    return DeleteFunctionError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteFunctionError::TooManyRequests(String::from(error_message))
+                    return DeleteFunctionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFunctionError::Validation(error_message.to_string())
+                    return DeleteFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1996,23 +1996,23 @@ impl DeleteFunctionConcurrencyError {
                 "InvalidParameterValueException" => {
                     return DeleteFunctionConcurrencyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteFunctionConcurrencyError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteFunctionConcurrencyError::Service(String::from(error_message))
+                    return DeleteFunctionConcurrencyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteFunctionConcurrencyError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteFunctionConcurrencyError::Validation(error_message.to_string())
+                    return DeleteFunctionConcurrencyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2110,13 +2110,13 @@ impl GetAccountSettingsError {
 
             match error_type {
                 "ServiceException" => {
-                    return GetAccountSettingsError::Service(String::from(error_message))
+                    return GetAccountSettingsError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetAccountSettingsError::TooManyRequests(String::from(error_message))
+                    return GetAccountSettingsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAccountSettingsError::Validation(error_message.to_string())
+                    return GetAccountSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2216,17 +2216,17 @@ impl GetAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetAliasError::InvalidParameterValue(String::from(error_message))
+                    return GetAliasError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetAliasError::ResourceNotFound(String::from(error_message))
+                    return GetAliasError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return GetAliasError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetAliasError::TooManyRequests(String::from(error_message))
+                    return GetAliasError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAliasError::Validation(error_message.to_string())
+                    return GetAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2328,19 +2328,19 @@ impl GetEventSourceMappingError {
                 "InvalidParameterValueException" => {
                     return GetEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetEventSourceMappingError::ResourceNotFound(String::from(error_message))
+                    return GetEventSourceMappingError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetEventSourceMappingError::Service(String::from(error_message))
+                    return GetEventSourceMappingError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetEventSourceMappingError::TooManyRequests(String::from(error_message))
+                    return GetEventSourceMappingError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetEventSourceMappingError::Validation(error_message.to_string())
+                    return GetEventSourceMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2442,17 +2442,17 @@ impl GetFunctionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetFunctionError::InvalidParameterValue(String::from(error_message))
+                    return GetFunctionError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFunctionError::ResourceNotFound(String::from(error_message))
+                    return GetFunctionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return GetFunctionError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetFunctionError::TooManyRequests(String::from(error_message))
+                    return GetFunctionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFunctionError::Validation(error_message.to_string())
+                    return GetFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2554,23 +2554,23 @@ impl GetFunctionConfigurationError {
                 "InvalidParameterValueException" => {
                     return GetFunctionConfigurationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetFunctionConfigurationError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return GetFunctionConfigurationError::Service(String::from(error_message))
+                    return GetFunctionConfigurationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return GetFunctionConfigurationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetFunctionConfigurationError::Validation(error_message.to_string())
+                    return GetFunctionConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2672,17 +2672,17 @@ impl GetPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetPolicyError::InvalidParameterValue(String::from(error_message))
+                    return GetPolicyError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetPolicyError::ResourceNotFound(String::from(error_message))
+                    return GetPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return GetPolicyError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetPolicyError::TooManyRequests(String::from(error_message))
+                    return GetPolicyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPolicyError::Validation(error_message.to_string())
+                    return GetPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2814,62 +2814,62 @@ impl InvokeError {
 
             match error_type {
                 "EC2AccessDeniedException" => {
-                    return InvokeError::EC2AccessDenied(String::from(error_message))
+                    return InvokeError::EC2AccessDenied(String::from(error_message));
                 }
                 "EC2ThrottledException" => {
-                    return InvokeError::EC2Throttled(String::from(error_message))
+                    return InvokeError::EC2Throttled(String::from(error_message));
                 }
                 "EC2UnexpectedException" => {
-                    return InvokeError::EC2Unexpected(String::from(error_message))
+                    return InvokeError::EC2Unexpected(String::from(error_message));
                 }
                 "ENILimitReachedException" => {
-                    return InvokeError::ENILimitReached(String::from(error_message))
+                    return InvokeError::ENILimitReached(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return InvokeError::InvalidParameterValue(String::from(error_message))
+                    return InvokeError::InvalidParameterValue(String::from(error_message));
                 }
                 "InvalidRequestContentException" => {
-                    return InvokeError::InvalidRequestContent(String::from(error_message))
+                    return InvokeError::InvalidRequestContent(String::from(error_message));
                 }
                 "InvalidRuntimeException" => {
-                    return InvokeError::InvalidRuntime(String::from(error_message))
+                    return InvokeError::InvalidRuntime(String::from(error_message));
                 }
                 "InvalidSecurityGroupIDException" => {
-                    return InvokeError::InvalidSecurityGroupID(String::from(error_message))
+                    return InvokeError::InvalidSecurityGroupID(String::from(error_message));
                 }
                 "InvalidSubnetIDException" => {
-                    return InvokeError::InvalidSubnetID(String::from(error_message))
+                    return InvokeError::InvalidSubnetID(String::from(error_message));
                 }
                 "InvalidZipFileException" => {
-                    return InvokeError::InvalidZipFile(String::from(error_message))
+                    return InvokeError::InvalidZipFile(String::from(error_message));
                 }
                 "KMSAccessDeniedException" => {
-                    return InvokeError::KMSAccessDenied(String::from(error_message))
+                    return InvokeError::KMSAccessDenied(String::from(error_message));
                 }
                 "KMSDisabledException" => {
-                    return InvokeError::KMSDisabled(String::from(error_message))
+                    return InvokeError::KMSDisabled(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return InvokeError::KMSInvalidState(String::from(error_message))
+                    return InvokeError::KMSInvalidState(String::from(error_message));
                 }
                 "KMSNotFoundException" => {
-                    return InvokeError::KMSNotFound(String::from(error_message))
+                    return InvokeError::KMSNotFound(String::from(error_message));
                 }
                 "RequestTooLargeException" => {
-                    return InvokeError::RequestTooLarge(String::from(error_message))
+                    return InvokeError::RequestTooLarge(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return InvokeError::ResourceNotFound(String::from(error_message))
+                    return InvokeError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return InvokeError::Service(String::from(error_message)),
                 "SubnetIPAddressLimitReachedException" => {
-                    return InvokeError::SubnetIPAddressLimitReached(String::from(error_message))
+                    return InvokeError::SubnetIPAddressLimitReached(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return InvokeError::TooManyRequests(String::from(error_message))
+                    return InvokeError::TooManyRequests(String::from(error_message));
                 }
                 "UnsupportedMediaTypeException" => {
-                    return InvokeError::UnsupportedMediaType(String::from(error_message))
+                    return InvokeError::UnsupportedMediaType(String::from(error_message));
                 }
                 "ValidationException" => return InvokeError::Validation(error_message.to_string()),
                 _ => {}
@@ -2986,17 +2986,17 @@ impl InvokeAsyncError {
 
             match error_type {
                 "InvalidRequestContentException" => {
-                    return InvokeAsyncError::InvalidRequestContent(String::from(error_message))
+                    return InvokeAsyncError::InvalidRequestContent(String::from(error_message));
                 }
                 "InvalidRuntimeException" => {
-                    return InvokeAsyncError::InvalidRuntime(String::from(error_message))
+                    return InvokeAsyncError::InvalidRuntime(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return InvokeAsyncError::ResourceNotFound(String::from(error_message))
+                    return InvokeAsyncError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return InvokeAsyncError::Service(String::from(error_message)),
                 "ValidationException" => {
-                    return InvokeAsyncError::Validation(error_message.to_string())
+                    return InvokeAsyncError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3096,17 +3096,17 @@ impl ListAliasesError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListAliasesError::InvalidParameterValue(String::from(error_message))
+                    return ListAliasesError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListAliasesError::ResourceNotFound(String::from(error_message))
+                    return ListAliasesError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return ListAliasesError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return ListAliasesError::TooManyRequests(String::from(error_message))
+                    return ListAliasesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string())
+                    return ListAliasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3208,23 +3208,23 @@ impl ListEventSourceMappingsError {
                 "InvalidParameterValueException" => {
                     return ListEventSourceMappingsError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListEventSourceMappingsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return ListEventSourceMappingsError::Service(String::from(error_message))
+                    return ListEventSourceMappingsError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ListEventSourceMappingsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListEventSourceMappingsError::Validation(error_message.to_string())
+                    return ListEventSourceMappingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3324,16 +3324,16 @@ impl ListFunctionsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListFunctionsError::InvalidParameterValue(String::from(error_message))
+                    return ListFunctionsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListFunctionsError::Service(String::from(error_message))
+                    return ListFunctionsError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListFunctionsError::TooManyRequests(String::from(error_message))
+                    return ListFunctionsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFunctionsError::Validation(error_message.to_string())
+                    return ListFunctionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3432,17 +3432,17 @@ impl ListTagsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListTagsError::InvalidParameterValue(String::from(error_message))
+                    return ListTagsError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsError::ResourceNotFound(String::from(error_message))
+                    return ListTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return ListTagsError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return ListTagsError::TooManyRequests(String::from(error_message))
+                    return ListTagsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3544,21 +3544,21 @@ impl ListVersionsByFunctionError {
                 "InvalidParameterValueException" => {
                     return ListVersionsByFunctionError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListVersionsByFunctionError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return ListVersionsByFunctionError::Service(String::from(error_message))
+                    return ListVersionsByFunctionError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListVersionsByFunctionError::TooManyRequests(String::from(error_message))
+                    return ListVersionsByFunctionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListVersionsByFunctionError::Validation(error_message.to_string())
+                    return ListVersionsByFunctionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3664,25 +3664,25 @@ impl PublishVersionError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return PublishVersionError::CodeStorageExceeded(String::from(error_message))
+                    return PublishVersionError::CodeStorageExceeded(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
-                    return PublishVersionError::InvalidParameterValue(String::from(error_message))
+                    return PublishVersionError::InvalidParameterValue(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return PublishVersionError::PreconditionFailed(String::from(error_message))
+                    return PublishVersionError::PreconditionFailed(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PublishVersionError::ResourceNotFound(String::from(error_message))
+                    return PublishVersionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return PublishVersionError::Service(String::from(error_message))
+                    return PublishVersionError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PublishVersionError::TooManyRequests(String::from(error_message))
+                    return PublishVersionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PublishVersionError::Validation(error_message.to_string())
+                    return PublishVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3786,21 +3786,21 @@ impl PutFunctionConcurrencyError {
                 "InvalidParameterValueException" => {
                     return PutFunctionConcurrencyError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return PutFunctionConcurrencyError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return PutFunctionConcurrencyError::Service(String::from(error_message))
+                    return PutFunctionConcurrencyError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return PutFunctionConcurrencyError::TooManyRequests(String::from(error_message))
+                    return PutFunctionConcurrencyError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutFunctionConcurrencyError::Validation(error_message.to_string())
+                    return PutFunctionConcurrencyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3904,22 +3904,22 @@ impl RemovePermissionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RemovePermissionError::InvalidParameterValue(String::from(error_message))
+                    return RemovePermissionError::InvalidParameterValue(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return RemovePermissionError::PreconditionFailed(String::from(error_message))
+                    return RemovePermissionError::PreconditionFailed(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RemovePermissionError::ResourceNotFound(String::from(error_message))
+                    return RemovePermissionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return RemovePermissionError::Service(String::from(error_message))
+                    return RemovePermissionError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return RemovePermissionError::TooManyRequests(String::from(error_message))
+                    return RemovePermissionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemovePermissionError::Validation(error_message.to_string())
+                    return RemovePermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4020,17 +4020,17 @@ impl TagResourceError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return TagResourceError::InvalidParameterValue(String::from(error_message))
+                    return TagResourceError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return TagResourceError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return TagResourceError::TooManyRequests(String::from(error_message))
+                    return TagResourceError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4130,19 +4130,19 @@ impl UntagResourceError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UntagResourceError::InvalidParameterValue(String::from(error_message))
+                    return UntagResourceError::InvalidParameterValue(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return UntagResourceError::Service(String::from(error_message))
+                    return UntagResourceError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UntagResourceError::TooManyRequests(String::from(error_message))
+                    return UntagResourceError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4244,20 +4244,20 @@ impl UpdateAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UpdateAliasError::InvalidParameterValue(String::from(error_message))
+                    return UpdateAliasError::InvalidParameterValue(String::from(error_message));
                 }
                 "PreconditionFailedException" => {
-                    return UpdateAliasError::PreconditionFailed(String::from(error_message))
+                    return UpdateAliasError::PreconditionFailed(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateAliasError::ResourceNotFound(String::from(error_message))
+                    return UpdateAliasError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => return UpdateAliasError::Service(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return UpdateAliasError::TooManyRequests(String::from(error_message))
+                    return UpdateAliasError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAliasError::Validation(error_message.to_string())
+                    return UpdateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4364,31 +4364,31 @@ impl UpdateEventSourceMappingError {
                 "InvalidParameterValueException" => {
                     return UpdateEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceConflictException" => {
                     return UpdateEventSourceMappingError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateEventSourceMappingError::ResourceInUse(String::from(error_message))
+                    return UpdateEventSourceMappingError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateEventSourceMappingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateEventSourceMappingError::Service(String::from(error_message))
+                    return UpdateEventSourceMappingError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateEventSourceMappingError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateEventSourceMappingError::Validation(error_message.to_string())
+                    return UpdateEventSourceMappingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4496,27 +4496,27 @@ impl UpdateFunctionCodeError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return UpdateFunctionCodeError::CodeStorageExceeded(String::from(error_message))
+                    return UpdateFunctionCodeError::CodeStorageExceeded(String::from(error_message));
                 }
                 "InvalidParameterValueException" => {
                     return UpdateFunctionCodeError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return UpdateFunctionCodeError::PreconditionFailed(String::from(error_message))
+                    return UpdateFunctionCodeError::PreconditionFailed(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFunctionCodeError::ResourceNotFound(String::from(error_message))
+                    return UpdateFunctionCodeError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return UpdateFunctionCodeError::Service(String::from(error_message))
+                    return UpdateFunctionCodeError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateFunctionCodeError::TooManyRequests(String::from(error_message))
+                    return UpdateFunctionCodeError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFunctionCodeError::Validation(error_message.to_string())
+                    return UpdateFunctionCodeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4626,33 +4626,33 @@ impl UpdateFunctionConfigurationError {
                 "InvalidParameterValueException" => {
                     return UpdateFunctionConfigurationError::InvalidParameterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PreconditionFailedException" => {
                     return UpdateFunctionConfigurationError::PreconditionFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceConflictException" => {
                     return UpdateFunctionConfigurationError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateFunctionConfigurationError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateFunctionConfigurationError::Service(String::from(error_message))
+                    return UpdateFunctionConfigurationError::Service(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateFunctionConfigurationError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateFunctionConfigurationError::Validation(error_message.to_string())
+                    return UpdateFunctionConfigurationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

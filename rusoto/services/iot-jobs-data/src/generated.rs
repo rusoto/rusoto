@@ -293,27 +293,27 @@ impl DescribeJobExecutionError {
                 "CertificateValidationException" => {
                     return DescribeJobExecutionError::CertificateValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeJobExecutionError::InvalidRequest(String::from(error_message))
+                    return DescribeJobExecutionError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeJobExecutionError::ResourceNotFound(String::from(error_message))
+                    return DescribeJobExecutionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeJobExecutionError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TerminalStateException" => {
-                    return DescribeJobExecutionError::TerminalState(String::from(error_message))
+                    return DescribeJobExecutionError::TerminalState(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DescribeJobExecutionError::Throttling(String::from(error_message))
+                    return DescribeJobExecutionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeJobExecutionError::Validation(error_message.to_string())
+                    return DescribeJobExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -421,26 +421,26 @@ impl GetPendingJobExecutionsError {
                 "CertificateValidationException" => {
                     return GetPendingJobExecutionsError::CertificateValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return GetPendingJobExecutionsError::InvalidRequest(String::from(error_message))
+                    return GetPendingJobExecutionsError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return GetPendingJobExecutionsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return GetPendingJobExecutionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetPendingJobExecutionsError::Throttling(String::from(error_message))
+                    return GetPendingJobExecutionsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPendingJobExecutionsError::Validation(error_message.to_string())
+                    return GetPendingJobExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -547,30 +547,30 @@ impl StartNextPendingJobExecutionError {
                 "CertificateValidationException" => {
                     return StartNextPendingJobExecutionError::CertificateValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartNextPendingJobExecutionError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return StartNextPendingJobExecutionError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return StartNextPendingJobExecutionError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
                     return StartNextPendingJobExecutionError::Throttling(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartNextPendingJobExecutionError::Validation(error_message.to_string())
+                    return StartNextPendingJobExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -679,27 +679,27 @@ impl UpdateJobExecutionError {
                 "CertificateValidationException" => {
                     return UpdateJobExecutionError::CertificateValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateJobExecutionError::InvalidRequest(String::from(error_message))
+                    return UpdateJobExecutionError::InvalidRequest(String::from(error_message));
                 }
                 "InvalidStateTransitionException" => {
                     return UpdateJobExecutionError::InvalidStateTransition(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateJobExecutionError::ResourceNotFound(String::from(error_message))
+                    return UpdateJobExecutionError::ResourceNotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateJobExecutionError::ServiceUnavailable(String::from(error_message))
+                    return UpdateJobExecutionError::ServiceUnavailable(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return UpdateJobExecutionError::Throttling(String::from(error_message))
+                    return UpdateJobExecutionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateJobExecutionError::Validation(error_message.to_string())
+                    return UpdateJobExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

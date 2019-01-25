@@ -1654,19 +1654,19 @@ impl AddTagsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return AddTagsError::InternalServer(String::from(error_message))
+                    return AddTagsError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return AddTagsError::InvalidInput(String::from(error_message))
+                    return AddTagsError::InvalidInput(String::from(error_message));
                 }
                 "InvalidTagException" => {
-                    return AddTagsError::InvalidTag(String::from(error_message))
+                    return AddTagsError::InvalidTag(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddTagsError::ResourceNotFound(String::from(error_message))
+                    return AddTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "TagLimitExceededException" => {
-                    return AddTagsError::TagLimitExceeded(String::from(error_message))
+                    return AddTagsError::TagLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => return AddTagsError::Validation(error_message.to_string()),
                 _ => {}
@@ -1754,16 +1754,16 @@ impl CreateBatchPredictionError {
                 "IdempotentParameterMismatchException" => {
                     return CreateBatchPredictionError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return CreateBatchPredictionError::InternalServer(String::from(error_message))
+                    return CreateBatchPredictionError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateBatchPredictionError::InvalidInput(String::from(error_message))
+                    return CreateBatchPredictionError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBatchPredictionError::Validation(error_message.to_string())
+                    return CreateBatchPredictionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1850,16 +1850,16 @@ impl CreateDataSourceFromRDSError {
                 "IdempotentParameterMismatchException" => {
                     return CreateDataSourceFromRDSError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return CreateDataSourceFromRDSError::InternalServer(String::from(error_message))
+                    return CreateDataSourceFromRDSError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDataSourceFromRDSError::InvalidInput(String::from(error_message))
+                    return CreateDataSourceFromRDSError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDataSourceFromRDSError::Validation(error_message.to_string())
+                    return CreateDataSourceFromRDSError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1946,20 +1946,20 @@ impl CreateDataSourceFromRedshiftError {
                 "IdempotentParameterMismatchException" => {
                     return CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerException" => {
                     return CreateDataSourceFromRedshiftError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
                     return CreateDataSourceFromRedshiftError::InvalidInput(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDataSourceFromRedshiftError::Validation(error_message.to_string())
+                    return CreateDataSourceFromRedshiftError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2046,16 +2046,16 @@ impl CreateDataSourceFromS3Error {
                 "IdempotentParameterMismatchException" => {
                     return CreateDataSourceFromS3Error::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return CreateDataSourceFromS3Error::InternalServer(String::from(error_message))
+                    return CreateDataSourceFromS3Error::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDataSourceFromS3Error::InvalidInput(String::from(error_message))
+                    return CreateDataSourceFromS3Error::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDataSourceFromS3Error::Validation(error_message.to_string())
+                    return CreateDataSourceFromS3Error::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2142,16 +2142,16 @@ impl CreateEvaluationError {
                 "IdempotentParameterMismatchException" => {
                     return CreateEvaluationError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return CreateEvaluationError::InternalServer(String::from(error_message))
+                    return CreateEvaluationError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateEvaluationError::InvalidInput(String::from(error_message))
+                    return CreateEvaluationError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateEvaluationError::Validation(error_message.to_string())
+                    return CreateEvaluationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2236,16 +2236,16 @@ impl CreateMLModelError {
                 "IdempotentParameterMismatchException" => {
                     return CreateMLModelError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return CreateMLModelError::InternalServer(String::from(error_message))
+                    return CreateMLModelError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateMLModelError::InvalidInput(String::from(error_message))
+                    return CreateMLModelError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateMLModelError::Validation(error_message.to_string())
+                    return CreateMLModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2328,18 +2328,18 @@ impl CreateRealtimeEndpointError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return CreateRealtimeEndpointError::InternalServer(String::from(error_message))
+                    return CreateRealtimeEndpointError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateRealtimeEndpointError::InvalidInput(String::from(error_message))
+                    return CreateRealtimeEndpointError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return CreateRealtimeEndpointError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateRealtimeEndpointError::Validation(error_message.to_string())
+                    return CreateRealtimeEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2424,16 +2424,16 @@ impl DeleteBatchPredictionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteBatchPredictionError::InternalServer(String::from(error_message))
+                    return DeleteBatchPredictionError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteBatchPredictionError::InvalidInput(String::from(error_message))
+                    return DeleteBatchPredictionError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteBatchPredictionError::ResourceNotFound(String::from(error_message))
+                    return DeleteBatchPredictionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBatchPredictionError::Validation(error_message.to_string())
+                    return DeleteBatchPredictionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2518,16 +2518,16 @@ impl DeleteDataSourceError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteDataSourceError::InternalServer(String::from(error_message))
+                    return DeleteDataSourceError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteDataSourceError::InvalidInput(String::from(error_message))
+                    return DeleteDataSourceError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDataSourceError::ResourceNotFound(String::from(error_message))
+                    return DeleteDataSourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDataSourceError::Validation(error_message.to_string())
+                    return DeleteDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2610,16 +2610,16 @@ impl DeleteEvaluationError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteEvaluationError::InternalServer(String::from(error_message))
+                    return DeleteEvaluationError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteEvaluationError::InvalidInput(String::from(error_message))
+                    return DeleteEvaluationError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteEvaluationError::ResourceNotFound(String::from(error_message))
+                    return DeleteEvaluationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteEvaluationError::Validation(error_message.to_string())
+                    return DeleteEvaluationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2702,16 +2702,16 @@ impl DeleteMLModelError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteMLModelError::InternalServer(String::from(error_message))
+                    return DeleteMLModelError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteMLModelError::InvalidInput(String::from(error_message))
+                    return DeleteMLModelError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteMLModelError::ResourceNotFound(String::from(error_message))
+                    return DeleteMLModelError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteMLModelError::Validation(error_message.to_string())
+                    return DeleteMLModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2794,18 +2794,18 @@ impl DeleteRealtimeEndpointError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteRealtimeEndpointError::InternalServer(String::from(error_message))
+                    return DeleteRealtimeEndpointError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteRealtimeEndpointError::InvalidInput(String::from(error_message))
+                    return DeleteRealtimeEndpointError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteRealtimeEndpointError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteRealtimeEndpointError::Validation(error_message.to_string())
+                    return DeleteRealtimeEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2892,19 +2892,19 @@ impl DeleteTagsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteTagsError::InternalServer(String::from(error_message))
+                    return DeleteTagsError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DeleteTagsError::InvalidInput(String::from(error_message))
+                    return DeleteTagsError::InvalidInput(String::from(error_message));
                 }
                 "InvalidTagException" => {
-                    return DeleteTagsError::InvalidTag(String::from(error_message))
+                    return DeleteTagsError::InvalidTag(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTagsError::ResourceNotFound(String::from(error_message))
+                    return DeleteTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string())
+                    return DeleteTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2988,13 +2988,13 @@ impl DescribeBatchPredictionsError {
                 "InternalServerException" => {
                     return DescribeBatchPredictionsError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DescribeBatchPredictionsError::InvalidInput(String::from(error_message))
+                    return DescribeBatchPredictionsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBatchPredictionsError::Validation(error_message.to_string())
+                    return DescribeBatchPredictionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3076,13 +3076,13 @@ impl DescribeDataSourcesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeDataSourcesError::InternalServer(String::from(error_message))
+                    return DescribeDataSourcesError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeDataSourcesError::InvalidInput(String::from(error_message))
+                    return DescribeDataSourcesError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDataSourcesError::Validation(error_message.to_string())
+                    return DescribeDataSourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3164,13 +3164,13 @@ impl DescribeEvaluationsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeEvaluationsError::InternalServer(String::from(error_message))
+                    return DescribeEvaluationsError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeEvaluationsError::InvalidInput(String::from(error_message))
+                    return DescribeEvaluationsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEvaluationsError::Validation(error_message.to_string())
+                    return DescribeEvaluationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3252,13 +3252,13 @@ impl DescribeMLModelsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeMLModelsError::InternalServer(String::from(error_message))
+                    return DescribeMLModelsError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeMLModelsError::InvalidInput(String::from(error_message))
+                    return DescribeMLModelsError::InvalidInput(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeMLModelsError::Validation(error_message.to_string())
+                    return DescribeMLModelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3340,16 +3340,16 @@ impl DescribeTagsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeTagsError::InternalServer(String::from(error_message))
+                    return DescribeTagsError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return DescribeTagsError::InvalidInput(String::from(error_message))
+                    return DescribeTagsError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTagsError::ResourceNotFound(String::from(error_message))
+                    return DescribeTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string())
+                    return DescribeTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3432,16 +3432,16 @@ impl GetBatchPredictionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetBatchPredictionError::InternalServer(String::from(error_message))
+                    return GetBatchPredictionError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetBatchPredictionError::InvalidInput(String::from(error_message))
+                    return GetBatchPredictionError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetBatchPredictionError::ResourceNotFound(String::from(error_message))
+                    return GetBatchPredictionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetBatchPredictionError::Validation(error_message.to_string())
+                    return GetBatchPredictionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3526,16 +3526,16 @@ impl GetDataSourceError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetDataSourceError::InternalServer(String::from(error_message))
+                    return GetDataSourceError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetDataSourceError::InvalidInput(String::from(error_message))
+                    return GetDataSourceError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDataSourceError::ResourceNotFound(String::from(error_message))
+                    return GetDataSourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDataSourceError::Validation(error_message.to_string())
+                    return GetDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3618,16 +3618,16 @@ impl GetEvaluationError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetEvaluationError::InternalServer(String::from(error_message))
+                    return GetEvaluationError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetEvaluationError::InvalidInput(String::from(error_message))
+                    return GetEvaluationError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetEvaluationError::ResourceNotFound(String::from(error_message))
+                    return GetEvaluationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetEvaluationError::Validation(error_message.to_string())
+                    return GetEvaluationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3710,16 +3710,16 @@ impl GetMLModelError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetMLModelError::InternalServer(String::from(error_message))
+                    return GetMLModelError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return GetMLModelError::InvalidInput(String::from(error_message))
+                    return GetMLModelError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetMLModelError::ResourceNotFound(String::from(error_message))
+                    return GetMLModelError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMLModelError::Validation(error_message.to_string())
+                    return GetMLModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3806,19 +3806,19 @@ impl PredictError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return PredictError::InternalServer(String::from(error_message))
+                    return PredictError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return PredictError::InvalidInput(String::from(error_message))
+                    return PredictError::InvalidInput(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PredictError::LimitExceeded(String::from(error_message))
+                    return PredictError::LimitExceeded(String::from(error_message));
                 }
                 "PredictorNotMountedException" => {
-                    return PredictError::PredictorNotMounted(String::from(error_message))
+                    return PredictError::PredictorNotMounted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PredictError::ResourceNotFound(String::from(error_message))
+                    return PredictError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => return PredictError::Validation(error_message.to_string()),
                 _ => {}
@@ -3904,16 +3904,16 @@ impl UpdateBatchPredictionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return UpdateBatchPredictionError::InternalServer(String::from(error_message))
+                    return UpdateBatchPredictionError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateBatchPredictionError::InvalidInput(String::from(error_message))
+                    return UpdateBatchPredictionError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateBatchPredictionError::ResourceNotFound(String::from(error_message))
+                    return UpdateBatchPredictionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateBatchPredictionError::Validation(error_message.to_string())
+                    return UpdateBatchPredictionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3998,16 +3998,16 @@ impl UpdateDataSourceError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return UpdateDataSourceError::InternalServer(String::from(error_message))
+                    return UpdateDataSourceError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateDataSourceError::InvalidInput(String::from(error_message))
+                    return UpdateDataSourceError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDataSourceError::ResourceNotFound(String::from(error_message))
+                    return UpdateDataSourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDataSourceError::Validation(error_message.to_string())
+                    return UpdateDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4090,16 +4090,16 @@ impl UpdateEvaluationError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return UpdateEvaluationError::InternalServer(String::from(error_message))
+                    return UpdateEvaluationError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateEvaluationError::InvalidInput(String::from(error_message))
+                    return UpdateEvaluationError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateEvaluationError::ResourceNotFound(String::from(error_message))
+                    return UpdateEvaluationError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateEvaluationError::Validation(error_message.to_string())
+                    return UpdateEvaluationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4182,16 +4182,16 @@ impl UpdateMLModelError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return UpdateMLModelError::InternalServer(String::from(error_message))
+                    return UpdateMLModelError::InternalServer(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateMLModelError::InvalidInput(String::from(error_message))
+                    return UpdateMLModelError::InvalidInput(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateMLModelError::ResourceNotFound(String::from(error_message))
+                    return UpdateMLModelError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateMLModelError::Validation(error_message.to_string())
+                    return UpdateMLModelError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

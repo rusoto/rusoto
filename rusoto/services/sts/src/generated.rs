@@ -1181,15 +1181,15 @@ impl AssumeRoleError {
                     "MalformedPolicyDocument" => {
                         return AssumeRoleError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PackedPolicyTooLarge" => {
                         return AssumeRoleError::PackedPolicyTooLarge(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RegionDisabledException" => {
-                        return AssumeRoleError::RegionDisabled(String::from(parsed_error.message))
+                        return AssumeRoleError::RegionDisabled(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -1285,32 +1285,32 @@ impl AssumeRoleWithSAMLError {
                     "ExpiredTokenException" => {
                         return AssumeRoleWithSAMLError::ExpiredToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IDPRejectedClaim" => {
                         return AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidIdentityToken" => {
                         return AssumeRoleWithSAMLError::InvalidIdentityToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedPolicyDocument" => {
                         return AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PackedPolicyTooLarge" => {
                         return AssumeRoleWithSAMLError::PackedPolicyTooLarge(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RegionDisabledException" => {
                         return AssumeRoleWithSAMLError::RegionDisabled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1413,37 +1413,37 @@ impl AssumeRoleWithWebIdentityError {
                     "ExpiredTokenException" => {
                         return AssumeRoleWithWebIdentityError::ExpiredToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IDPCommunicationError" => {
                         return AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IDPRejectedClaim" => {
                         return AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidIdentityToken" => {
                         return AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "MalformedPolicyDocument" => {
                         return AssumeRoleWithWebIdentityError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PackedPolicyTooLarge" => {
                         return AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RegionDisabledException" => {
                         return AssumeRoleWithWebIdentityError::RegionDisabled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1535,7 +1535,7 @@ impl DecodeAuthorizationMessageError {
                     "InvalidAuthorizationMessageException" => {
                         return DecodeAuthorizationMessageError::InvalidAuthorizationMessage(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -1703,17 +1703,17 @@ impl GetFederationTokenError {
                     "MalformedPolicyDocument" => {
                         return GetFederationTokenError::MalformedPolicyDocument(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PackedPolicyTooLarge" => {
                         return GetFederationTokenError::PackedPolicyTooLarge(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RegionDisabledException" => {
                         return GetFederationTokenError::RegionDisabled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -1801,7 +1801,7 @@ impl GetSessionTokenError {
                     "RegionDisabledException" => {
                         return GetSessionTokenError::RegionDisabled(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

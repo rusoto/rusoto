@@ -2344,10 +2344,10 @@ impl AddTagsToResourceError {
                 "ResourceNotFoundFault" => {
                     return AddTagsToResourceError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string())
+                    return AddTagsToResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2436,33 +2436,33 @@ impl CreateEndpointError {
 
             match *error_type {
                 "AccessDeniedFault" => {
-                    return CreateEndpointError::AccessDeniedFault(String::from(error_message))
+                    return CreateEndpointError::AccessDeniedFault(String::from(error_message));
                 }
                 "InvalidResourceStateFault" => {
                     return CreateEndpointError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return CreateEndpointError::KMSKeyNotAccessibleFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsFault" => {
                     return CreateEndpointError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
-                    return CreateEndpointError::ResourceNotFoundFault(String::from(error_message))
+                    return CreateEndpointError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ResourceQuotaExceededFault" => {
                     return CreateEndpointError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateEndpointError::Validation(error_message.to_string())
+                    return CreateEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2554,30 +2554,30 @@ impl CreateEventSubscriptionError {
                 "ResourceAlreadyExistsFault" => {
                     return CreateEventSubscriptionError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return CreateEventSubscriptionError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceQuotaExceededFault" => {
                     return CreateEventSubscriptionError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SNSInvalidTopicFault" => {
                     return CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SNSNoAuthorizationFault" => {
                     return CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateEventSubscriptionError::Validation(error_message.to_string())
+                    return CreateEventSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2888,35 +2888,35 @@ impl CreateReplicationTaskError {
                 "AccessDeniedFault" => {
                     return CreateReplicationTaskError::AccessDeniedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateFault" => {
                     return CreateReplicationTaskError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return CreateReplicationTaskError::KMSKeyNotAccessibleFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsFault" => {
                     return CreateReplicationTaskError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return CreateReplicationTaskError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceQuotaExceededFault" => {
                     return CreateReplicationTaskError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateReplicationTaskError::Validation(error_message.to_string())
+                    return CreateReplicationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3004,15 +3004,15 @@ impl DeleteCertificateError {
                 "InvalidResourceStateFault" => {
                     return DeleteCertificateError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return DeleteCertificateError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteCertificateError::Validation(error_message.to_string())
+                    return DeleteCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3096,13 +3096,13 @@ impl DeleteEndpointError {
                 "InvalidResourceStateFault" => {
                     return DeleteEndpointError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
-                    return DeleteEndpointError::ResourceNotFoundFault(String::from(error_message))
+                    return DeleteEndpointError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteEndpointError::Validation(error_message.to_string())
+                    return DeleteEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3184,15 +3184,15 @@ impl DeleteEventSubscriptionError {
                 "InvalidResourceStateFault" => {
                     return DeleteEventSubscriptionError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return DeleteEventSubscriptionError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteEventSubscriptionError::Validation(error_message.to_string())
+                    return DeleteEventSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3276,15 +3276,15 @@ impl DeleteReplicationInstanceError {
                 "InvalidResourceStateFault" => {
                     return DeleteReplicationInstanceError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return DeleteReplicationInstanceError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteReplicationInstanceError::Validation(error_message.to_string())
+                    return DeleteReplicationInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3368,15 +3368,15 @@ impl DeleteReplicationSubnetGroupError {
                 "InvalidResourceStateFault" => {
                     return DeleteReplicationSubnetGroupError::InvalidResourceStateFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundFault" => {
                     return DeleteReplicationSubnetGroupError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteReplicationSubnetGroupError::Validation(error_message.to_string())
+                    return DeleteReplicationSubnetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3460,15 +3460,15 @@ impl DeleteReplicationTaskError {
                 "InvalidResourceStateFault" => {
                     return DeleteReplicationTaskError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return DeleteReplicationTaskError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteReplicationTaskError::Validation(error_message.to_string())
+                    return DeleteReplicationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3546,7 +3546,7 @@ impl DescribeAccountAttributesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeAccountAttributesError::Validation(error_message.to_string())
+                    return DescribeAccountAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3626,10 +3626,10 @@ impl DescribeCertificatesError {
                 "ResourceNotFoundFault" => {
                     return DescribeCertificatesError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCertificatesError::Validation(error_message.to_string())
+                    return DescribeCertificatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3710,10 +3710,10 @@ impl DescribeConnectionsError {
                 "ResourceNotFoundFault" => {
                     return DescribeConnectionsError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeConnectionsError::Validation(error_message.to_string())
+                    return DescribeConnectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3790,7 +3790,7 @@ impl DescribeEndpointTypesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeEndpointTypesError::Validation(error_message.to_string())
+                    return DescribeEndpointTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3870,10 +3870,10 @@ impl DescribeEndpointsError {
                 "ResourceNotFoundFault" => {
                     return DescribeEndpointsError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeEndpointsError::Validation(error_message.to_string())
+                    return DescribeEndpointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3950,7 +3950,7 @@ impl DescribeEventCategoriesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeEventCategoriesError::Validation(error_message.to_string())
+                    return DescribeEventCategoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4030,10 +4030,10 @@ impl DescribeEventSubscriptionsError {
                 "ResourceNotFoundFault" => {
                     return DescribeEventSubscriptionsError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeEventSubscriptionsError::Validation(error_message.to_string())
+                    return DescribeEventSubscriptionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4110,7 +4110,7 @@ impl DescribeEventsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeEventsError::Validation(error_message.to_string())
+                    return DescribeEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4186,7 +4186,7 @@ impl DescribeOrderableReplicationInstancesError {
                 "ValidationException" => {
                     return DescribeOrderableReplicationInstancesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4268,15 +4268,15 @@ impl DescribeRefreshSchemasStatusError {
                 "InvalidResourceStateFault" => {
                     return DescribeRefreshSchemasStatusError::InvalidResourceStateFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundFault" => {
                     return DescribeRefreshSchemasStatusError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeRefreshSchemasStatusError::Validation(error_message.to_string())
+                    return DescribeRefreshSchemasStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4360,17 +4360,17 @@ impl DescribeReplicationInstanceTaskLogsError {
                 "InvalidResourceStateFault" => {
                     return DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundFault" => {
                     return DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeReplicationInstanceTaskLogsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4452,10 +4452,10 @@ impl DescribeReplicationInstancesError {
                 "ResourceNotFoundFault" => {
                     return DescribeReplicationInstancesError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeReplicationInstancesError::Validation(error_message.to_string())
+                    return DescribeReplicationInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4536,12 +4536,12 @@ impl DescribeReplicationSubnetGroupsError {
                 "ResourceNotFoundFault" => {
                     return DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeReplicationSubnetGroupsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4624,12 +4624,12 @@ impl DescribeReplicationTaskAssessmentResultsError {
                 "ResourceNotFoundFault" => {
                     return DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeReplicationTaskAssessmentResultsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4714,10 +4714,10 @@ impl DescribeReplicationTasksError {
                 "ResourceNotFoundFault" => {
                     return DescribeReplicationTasksError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeReplicationTasksError::Validation(error_message.to_string())
+                    return DescribeReplicationTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4800,13 +4800,13 @@ impl DescribeSchemasError {
                 "InvalidResourceStateFault" => {
                     return DescribeSchemasError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
-                    return DescribeSchemasError::ResourceNotFoundFault(String::from(error_message))
+                    return DescribeSchemasError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeSchemasError::Validation(error_message.to_string())
+                    return DescribeSchemasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4888,15 +4888,15 @@ impl DescribeTableStatisticsError {
                 "InvalidResourceStateFault" => {
                     return DescribeTableStatisticsError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return DescribeTableStatisticsError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeTableStatisticsError::Validation(error_message.to_string())
+                    return DescribeTableStatisticsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4982,20 +4982,20 @@ impl ImportCertificateError {
                 "InvalidCertificateFault" => {
                     return ImportCertificateError::InvalidCertificateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsFault" => {
                     return ImportCertificateError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceQuotaExceededFault" => {
                     return ImportCertificateError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ImportCertificateError::Validation(error_message.to_string())
+                    return ImportCertificateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5078,10 +5078,10 @@ impl ListTagsForResourceError {
                 "ResourceNotFoundFault" => {
                     return ListTagsForResourceError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5168,28 +5168,28 @@ impl ModifyEndpointError {
 
             match *error_type {
                 "AccessDeniedFault" => {
-                    return ModifyEndpointError::AccessDeniedFault(String::from(error_message))
+                    return ModifyEndpointError::AccessDeniedFault(String::from(error_message));
                 }
                 "InvalidResourceStateFault" => {
                     return ModifyEndpointError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return ModifyEndpointError::KMSKeyNotAccessibleFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsFault" => {
                     return ModifyEndpointError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
-                    return ModifyEndpointError::ResourceNotFoundFault(String::from(error_message))
+                    return ModifyEndpointError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ModifyEndpointError::Validation(error_message.to_string())
+                    return ModifyEndpointError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5278,25 +5278,25 @@ impl ModifyEventSubscriptionError {
                 "ResourceNotFoundFault" => {
                     return ModifyEventSubscriptionError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceQuotaExceededFault" => {
                     return ModifyEventSubscriptionError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SNSInvalidTopicFault" => {
                     return ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SNSNoAuthorizationFault" => {
                     return ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ModifyEventSubscriptionError::Validation(error_message.to_string())
+                    return ModifyEventSubscriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5390,35 +5390,35 @@ impl ModifyReplicationInstanceError {
                 "InsufficientResourceCapacityFault" => {
                     return ModifyReplicationInstanceError::InsufficientResourceCapacityFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidResourceStateFault" => {
                     return ModifyReplicationInstanceError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsFault" => {
                     return ModifyReplicationInstanceError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return ModifyReplicationInstanceError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StorageQuotaExceededFault" => {
                     return ModifyReplicationInstanceError::StorageQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UpgradeDependencyFailureFault" => {
                     return ModifyReplicationInstanceError::UpgradeDependencyFailureFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return ModifyReplicationInstanceError::Validation(error_message.to_string())
+                    return ModifyReplicationInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5610,25 +5610,25 @@ impl ModifyReplicationTaskError {
                 "InvalidResourceStateFault" => {
                     return ModifyReplicationTaskError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return ModifyReplicationTaskError::KMSKeyNotAccessibleFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsFault" => {
                     return ModifyReplicationTaskError::ResourceAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return ModifyReplicationTaskError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ModifyReplicationTaskError::Validation(error_message.to_string())
+                    return ModifyReplicationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5714,15 +5714,15 @@ impl RebootReplicationInstanceError {
                 "InvalidResourceStateFault" => {
                     return RebootReplicationInstanceError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return RebootReplicationInstanceError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RebootReplicationInstanceError::Validation(error_message.to_string())
+                    return RebootReplicationInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5810,23 +5810,23 @@ impl RefreshSchemasError {
                 "InvalidResourceStateFault" => {
                     return RefreshSchemasError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RefreshSchemasError::KMSKeyNotAccessibleFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
-                    return RefreshSchemasError::ResourceNotFoundFault(String::from(error_message))
+                    return RefreshSchemasError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ResourceQuotaExceededFault" => {
                     return RefreshSchemasError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RefreshSchemasError::Validation(error_message.to_string())
+                    return RefreshSchemasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5908,13 +5908,13 @@ impl ReloadTablesError {
 
             match *error_type {
                 "InvalidResourceStateFault" => {
-                    return ReloadTablesError::InvalidResourceStateFault(String::from(error_message))
+                    return ReloadTablesError::InvalidResourceStateFault(String::from(error_message));
                 }
                 "ResourceNotFoundFault" => {
-                    return ReloadTablesError::ResourceNotFoundFault(String::from(error_message))
+                    return ReloadTablesError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ReloadTablesError::Validation(error_message.to_string())
+                    return ReloadTablesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5994,10 +5994,10 @@ impl RemoveTagsFromResourceError {
                 "ResourceNotFoundFault" => {
                     return RemoveTagsFromResourceError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6080,20 +6080,20 @@ impl StartReplicationTaskError {
 
             match *error_type {
                 "AccessDeniedFault" => {
-                    return StartReplicationTaskError::AccessDeniedFault(String::from(error_message))
+                    return StartReplicationTaskError::AccessDeniedFault(String::from(error_message));
                 }
                 "InvalidResourceStateFault" => {
                     return StartReplicationTaskError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return StartReplicationTaskError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartReplicationTaskError::Validation(error_message.to_string())
+                    return StartReplicationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6178,17 +6178,17 @@ impl StartReplicationTaskAssessmentError {
                 "InvalidResourceStateFault" => {
                     return StartReplicationTaskAssessmentError::InvalidResourceStateFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundFault" => {
                     return StartReplicationTaskAssessmentError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return StartReplicationTaskAssessmentError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -6272,15 +6272,15 @@ impl StopReplicationTaskError {
                 "InvalidResourceStateFault" => {
                     return StopReplicationTaskError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
                     return StopReplicationTaskError::ResourceNotFoundFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StopReplicationTaskError::Validation(error_message.to_string())
+                    return StopReplicationTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6368,23 +6368,23 @@ impl TestConnectionError {
                 "InvalidResourceStateFault" => {
                     return TestConnectionError::InvalidResourceStateFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return TestConnectionError::KMSKeyNotAccessibleFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundFault" => {
-                    return TestConnectionError::ResourceNotFoundFault(String::from(error_message))
+                    return TestConnectionError::ResourceNotFoundFault(String::from(error_message));
                 }
                 "ResourceQuotaExceededFault" => {
                     return TestConnectionError::ResourceQuotaExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return TestConnectionError::Validation(error_message.to_string())
+                    return TestConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -100,28 +100,28 @@ impl TranslateTextError {
                 "DetectedLanguageLowConfidenceException" => {
                     return TranslateTextError::DetectedLanguageLowConfidence(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return TranslateTextError::InternalServer(String::from(error_message))
+                    return TranslateTextError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return TranslateTextError::InvalidRequest(String::from(error_message))
+                    return TranslateTextError::InvalidRequest(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return TranslateTextError::ServiceUnavailable(String::from(error_message))
+                    return TranslateTextError::ServiceUnavailable(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
-                    return TranslateTextError::TextSizeLimitExceeded(String::from(error_message))
+                    return TranslateTextError::TextSizeLimitExceeded(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return TranslateTextError::TooManyRequests(String::from(error_message))
+                    return TranslateTextError::TooManyRequests(String::from(error_message));
                 }
                 "UnsupportedLanguagePairException" => {
-                    return TranslateTextError::UnsupportedLanguagePair(String::from(error_message))
+                    return TranslateTextError::UnsupportedLanguagePair(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TranslateTextError::Validation(error_message.to_string())
+                    return TranslateTextError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

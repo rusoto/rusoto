@@ -260,16 +260,16 @@ impl CreateContainerError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return CreateContainerError::ContainerInUse(String::from(error_message))
+                    return CreateContainerError::ContainerInUse(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CreateContainerError::InternalServerError(String::from(error_message))
+                    return CreateContainerError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateContainerError::LimitExceeded(String::from(error_message))
+                    return CreateContainerError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateContainerError::Validation(error_message.to_string())
+                    return CreateContainerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -352,16 +352,16 @@ impl DeleteContainerError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteContainerError::ContainerInUse(String::from(error_message))
+                    return DeleteContainerError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
-                    return DeleteContainerError::ContainerNotFound(String::from(error_message))
+                    return DeleteContainerError::ContainerNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteContainerError::InternalServerError(String::from(error_message))
+                    return DeleteContainerError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteContainerError::Validation(error_message.to_string())
+                    return DeleteContainerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -446,23 +446,23 @@ impl DeleteContainerPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteContainerPolicyError::ContainerInUse(String::from(error_message))
+                    return DeleteContainerPolicyError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
                     return DeleteContainerPolicyError::ContainerNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DeleteContainerPolicyError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PolicyNotFoundException" => {
-                    return DeleteContainerPolicyError::PolicyNotFound(String::from(error_message))
+                    return DeleteContainerPolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteContainerPolicyError::Validation(error_message.to_string())
+                    return DeleteContainerPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -550,19 +550,19 @@ impl DeleteCorsPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteCorsPolicyError::ContainerInUse(String::from(error_message))
+                    return DeleteCorsPolicyError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
-                    return DeleteCorsPolicyError::ContainerNotFound(String::from(error_message))
+                    return DeleteCorsPolicyError::ContainerNotFound(String::from(error_message));
                 }
                 "CorsPolicyNotFoundException" => {
-                    return DeleteCorsPolicyError::CorsPolicyNotFound(String::from(error_message))
+                    return DeleteCorsPolicyError::CorsPolicyNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteCorsPolicyError::InternalServerError(String::from(error_message))
+                    return DeleteCorsPolicyError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteCorsPolicyError::Validation(error_message.to_string())
+                    return DeleteCorsPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -644,13 +644,13 @@ impl DescribeContainerError {
 
             match *error_type {
                 "ContainerNotFoundException" => {
-                    return DescribeContainerError::ContainerNotFound(String::from(error_message))
+                    return DescribeContainerError::ContainerNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DescribeContainerError::InternalServerError(String::from(error_message))
+                    return DescribeContainerError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeContainerError::Validation(error_message.to_string())
+                    return DescribeContainerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -736,19 +736,19 @@ impl GetContainerPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return GetContainerPolicyError::ContainerInUse(String::from(error_message))
+                    return GetContainerPolicyError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
-                    return GetContainerPolicyError::ContainerNotFound(String::from(error_message))
+                    return GetContainerPolicyError::ContainerNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetContainerPolicyError::InternalServerError(String::from(error_message))
+                    return GetContainerPolicyError::InternalServerError(String::from(error_message));
                 }
                 "PolicyNotFoundException" => {
-                    return GetContainerPolicyError::PolicyNotFound(String::from(error_message))
+                    return GetContainerPolicyError::PolicyNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetContainerPolicyError::Validation(error_message.to_string())
+                    return GetContainerPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -836,19 +836,19 @@ impl GetCorsPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return GetCorsPolicyError::ContainerInUse(String::from(error_message))
+                    return GetCorsPolicyError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
-                    return GetCorsPolicyError::ContainerNotFound(String::from(error_message))
+                    return GetCorsPolicyError::ContainerNotFound(String::from(error_message));
                 }
                 "CorsPolicyNotFoundException" => {
-                    return GetCorsPolicyError::CorsPolicyNotFound(String::from(error_message))
+                    return GetCorsPolicyError::CorsPolicyNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetCorsPolicyError::InternalServerError(String::from(error_message))
+                    return GetCorsPolicyError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCorsPolicyError::Validation(error_message.to_string())
+                    return GetCorsPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -928,10 +928,10 @@ impl ListContainersError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListContainersError::InternalServerError(String::from(error_message))
+                    return ListContainersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListContainersError::Validation(error_message.to_string())
+                    return ListContainersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1012,16 +1012,16 @@ impl PutContainerPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return PutContainerPolicyError::ContainerInUse(String::from(error_message))
+                    return PutContainerPolicyError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
-                    return PutContainerPolicyError::ContainerNotFound(String::from(error_message))
+                    return PutContainerPolicyError::ContainerNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return PutContainerPolicyError::InternalServerError(String::from(error_message))
+                    return PutContainerPolicyError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutContainerPolicyError::Validation(error_message.to_string())
+                    return PutContainerPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1106,16 +1106,16 @@ impl PutCorsPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return PutCorsPolicyError::ContainerInUse(String::from(error_message))
+                    return PutCorsPolicyError::ContainerInUse(String::from(error_message));
                 }
                 "ContainerNotFoundException" => {
-                    return PutCorsPolicyError::ContainerNotFound(String::from(error_message))
+                    return PutCorsPolicyError::ContainerNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return PutCorsPolicyError::InternalServerError(String::from(error_message))
+                    return PutCorsPolicyError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutCorsPolicyError::Validation(error_message.to_string())
+                    return PutCorsPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

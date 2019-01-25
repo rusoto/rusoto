@@ -423,25 +423,25 @@ impl AssociateDeviceWithPlacementError {
                 "InternalFailureException" => {
                     return AssociateDeviceWithPlacementError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return AssociateDeviceWithPlacementError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceConflictException" => {
                     return AssociateDeviceWithPlacementError::ResourceConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AssociateDeviceWithPlacementError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateDeviceWithPlacementError::Validation(error_message.to_string())
+                    return AssociateDeviceWithPlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -543,19 +543,19 @@ impl CreatePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreatePlacementError::InternalFailure(String::from(error_message))
+                    return CreatePlacementError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreatePlacementError::InvalidRequest(String::from(error_message))
+                    return CreatePlacementError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return CreatePlacementError::ResourceConflict(String::from(error_message))
+                    return CreatePlacementError::ResourceConflict(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreatePlacementError::ResourceNotFound(String::from(error_message))
+                    return CreatePlacementError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePlacementError::Validation(error_message.to_string())
+                    return CreatePlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -653,16 +653,16 @@ impl CreateProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreateProjectError::InternalFailure(String::from(error_message))
+                    return CreateProjectError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateProjectError::InvalidRequest(String::from(error_message))
+                    return CreateProjectError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceConflictException" => {
-                    return CreateProjectError::ResourceConflict(String::from(error_message))
+                    return CreateProjectError::ResourceConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string())
+                    return CreateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -761,19 +761,19 @@ impl DeletePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeletePlacementError::InternalFailure(String::from(error_message))
+                    return DeletePlacementError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeletePlacementError::InvalidRequest(String::from(error_message))
+                    return DeletePlacementError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePlacementError::ResourceNotFound(String::from(error_message))
+                    return DeletePlacementError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeletePlacementError::TooManyRequests(String::from(error_message))
+                    return DeletePlacementError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePlacementError::Validation(error_message.to_string())
+                    return DeletePlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -873,19 +873,19 @@ impl DeleteProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteProjectError::InternalFailure(String::from(error_message))
+                    return DeleteProjectError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteProjectError::InvalidRequest(String::from(error_message))
+                    return DeleteProjectError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteProjectError::ResourceNotFound(String::from(error_message))
+                    return DeleteProjectError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteProjectError::TooManyRequests(String::from(error_message))
+                    return DeleteProjectError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string())
+                    return DeleteProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -983,16 +983,16 @@ impl DescribePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribePlacementError::InternalFailure(String::from(error_message))
+                    return DescribePlacementError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribePlacementError::InvalidRequest(String::from(error_message))
+                    return DescribePlacementError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribePlacementError::ResourceNotFound(String::from(error_message))
+                    return DescribePlacementError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePlacementError::Validation(error_message.to_string())
+                    return DescribePlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1091,16 +1091,16 @@ impl DescribeProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeProjectError::InternalFailure(String::from(error_message))
+                    return DescribeProjectError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeProjectError::InvalidRequest(String::from(error_message))
+                    return DescribeProjectError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeProjectError::ResourceNotFound(String::from(error_message))
+                    return DescribeProjectError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeProjectError::Validation(error_message.to_string())
+                    return DescribeProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1201,27 +1201,27 @@ impl DisassociateDeviceFromPlacementError {
                 "InternalFailureException" => {
                     return DisassociateDeviceFromPlacementError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DisassociateDeviceFromPlacementError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociateDeviceFromPlacementError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DisassociateDeviceFromPlacementError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DisassociateDeviceFromPlacementError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1321,16 +1321,16 @@ impl GetDevicesInPlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetDevicesInPlacementError::InternalFailure(String::from(error_message))
+                    return GetDevicesInPlacementError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetDevicesInPlacementError::InvalidRequest(String::from(error_message))
+                    return GetDevicesInPlacementError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDevicesInPlacementError::ResourceNotFound(String::from(error_message))
+                    return GetDevicesInPlacementError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDevicesInPlacementError::Validation(error_message.to_string())
+                    return GetDevicesInPlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1429,16 +1429,16 @@ impl ListPlacementsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListPlacementsError::InternalFailure(String::from(error_message))
+                    return ListPlacementsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListPlacementsError::InvalidRequest(String::from(error_message))
+                    return ListPlacementsError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPlacementsError::ResourceNotFound(String::from(error_message))
+                    return ListPlacementsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPlacementsError::Validation(error_message.to_string())
+                    return ListPlacementsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1533,13 +1533,13 @@ impl ListProjectsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListProjectsError::InternalFailure(String::from(error_message))
+                    return ListProjectsError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListProjectsError::InvalidRequest(String::from(error_message))
+                    return ListProjectsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string())
+                    return ListProjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1637,19 +1637,19 @@ impl UpdatePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdatePlacementError::InternalFailure(String::from(error_message))
+                    return UpdatePlacementError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdatePlacementError::InvalidRequest(String::from(error_message))
+                    return UpdatePlacementError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePlacementError::ResourceNotFound(String::from(error_message))
+                    return UpdatePlacementError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdatePlacementError::TooManyRequests(String::from(error_message))
+                    return UpdatePlacementError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePlacementError::Validation(error_message.to_string())
+                    return UpdatePlacementError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1749,19 +1749,19 @@ impl UpdateProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateProjectError::InternalFailure(String::from(error_message))
+                    return UpdateProjectError::InternalFailure(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateProjectError::InvalidRequest(String::from(error_message))
+                    return UpdateProjectError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateProjectError::ResourceNotFound(String::from(error_message))
+                    return UpdateProjectError::ResourceNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateProjectError::TooManyRequests(String::from(error_message))
+                    return UpdateProjectError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string())
+                    return UpdateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -885,13 +885,13 @@ impl CreateActivityError {
 
             match *error_type {
                 "ActivityLimitExceeded" => {
-                    return CreateActivityError::ActivityLimitExceeded(String::from(error_message))
+                    return CreateActivityError::ActivityLimitExceeded(String::from(error_message));
                 }
                 "InvalidName" => {
-                    return CreateActivityError::InvalidName(String::from(error_message))
+                    return CreateActivityError::InvalidName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateActivityError::Validation(error_message.to_string())
+                    return CreateActivityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -979,31 +979,31 @@ impl CreateStateMachineError {
 
             match *error_type {
                 "InvalidArn" => {
-                    return CreateStateMachineError::InvalidArn(String::from(error_message))
+                    return CreateStateMachineError::InvalidArn(String::from(error_message));
                 }
                 "InvalidDefinition" => {
-                    return CreateStateMachineError::InvalidDefinition(String::from(error_message))
+                    return CreateStateMachineError::InvalidDefinition(String::from(error_message));
                 }
                 "InvalidName" => {
-                    return CreateStateMachineError::InvalidName(String::from(error_message))
+                    return CreateStateMachineError::InvalidName(String::from(error_message));
                 }
                 "StateMachineAlreadyExists" => {
                     return CreateStateMachineError::StateMachineAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StateMachineDeleting" => {
                     return CreateStateMachineError::StateMachineDeleting(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StateMachineLimitExceeded" => {
                     return CreateStateMachineError::StateMachineLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateStateMachineError::Validation(error_message.to_string())
+                    return CreateStateMachineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1088,7 +1088,7 @@ impl DeleteActivityError {
             match *error_type {
                 "InvalidArn" => return DeleteActivityError::InvalidArn(String::from(error_message)),
                 "ValidationException" => {
-                    return DeleteActivityError::Validation(error_message.to_string())
+                    return DeleteActivityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1165,10 +1165,10 @@ impl DeleteStateMachineError {
 
             match *error_type {
                 "InvalidArn" => {
-                    return DeleteStateMachineError::InvalidArn(String::from(error_message))
+                    return DeleteStateMachineError::InvalidArn(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStateMachineError::Validation(error_message.to_string())
+                    return DeleteStateMachineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1249,13 +1249,13 @@ impl DescribeActivityError {
 
             match *error_type {
                 "ActivityDoesNotExist" => {
-                    return DescribeActivityError::ActivityDoesNotExist(String::from(error_message))
+                    return DescribeActivityError::ActivityDoesNotExist(String::from(error_message));
                 }
                 "InvalidArn" => {
-                    return DescribeActivityError::InvalidArn(String::from(error_message))
+                    return DescribeActivityError::InvalidArn(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeActivityError::Validation(error_message.to_string())
+                    return DescribeActivityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1337,13 +1337,13 @@ impl DescribeExecutionError {
                 "ExecutionDoesNotExist" => {
                     return DescribeExecutionError::ExecutionDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArn" => {
-                    return DescribeExecutionError::InvalidArn(String::from(error_message))
+                    return DescribeExecutionError::InvalidArn(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeExecutionError::Validation(error_message.to_string())
+                    return DescribeExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1425,15 +1425,15 @@ impl DescribeStateMachineError {
 
             match *error_type {
                 "InvalidArn" => {
-                    return DescribeStateMachineError::InvalidArn(String::from(error_message))
+                    return DescribeStateMachineError::InvalidArn(String::from(error_message));
                 }
                 "StateMachineDoesNotExist" => {
                     return DescribeStateMachineError::StateMachineDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeStateMachineError::Validation(error_message.to_string())
+                    return DescribeStateMachineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1517,17 +1517,17 @@ impl DescribeStateMachineForExecutionError {
                 "ExecutionDoesNotExist" => {
                     return DescribeStateMachineForExecutionError::ExecutionDoesNotExist(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidArn" => {
                     return DescribeStateMachineForExecutionError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeStateMachineForExecutionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1611,18 +1611,18 @@ impl GetActivityTaskError {
 
             match *error_type {
                 "ActivityDoesNotExist" => {
-                    return GetActivityTaskError::ActivityDoesNotExist(String::from(error_message))
+                    return GetActivityTaskError::ActivityDoesNotExist(String::from(error_message));
                 }
                 "ActivityWorkerLimitExceeded" => {
                     return GetActivityTaskError::ActivityWorkerLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArn" => {
-                    return GetActivityTaskError::InvalidArn(String::from(error_message))
+                    return GetActivityTaskError::InvalidArn(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetActivityTaskError::Validation(error_message.to_string())
+                    return GetActivityTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1707,16 +1707,16 @@ impl GetExecutionHistoryError {
                 "ExecutionDoesNotExist" => {
                     return GetExecutionHistoryError::ExecutionDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArn" => {
-                    return GetExecutionHistoryError::InvalidArn(String::from(error_message))
+                    return GetExecutionHistoryError::InvalidArn(String::from(error_message));
                 }
                 "InvalidToken" => {
-                    return GetExecutionHistoryError::InvalidToken(String::from(error_message))
+                    return GetExecutionHistoryError::InvalidToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetExecutionHistoryError::Validation(error_message.to_string())
+                    return GetExecutionHistoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1797,10 +1797,10 @@ impl ListActivitiesError {
 
             match *error_type {
                 "InvalidToken" => {
-                    return ListActivitiesError::InvalidToken(String::from(error_message))
+                    return ListActivitiesError::InvalidToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListActivitiesError::Validation(error_message.to_string())
+                    return ListActivitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1882,15 +1882,15 @@ impl ListExecutionsError {
             match *error_type {
                 "InvalidArn" => return ListExecutionsError::InvalidArn(String::from(error_message)),
                 "InvalidToken" => {
-                    return ListExecutionsError::InvalidToken(String::from(error_message))
+                    return ListExecutionsError::InvalidToken(String::from(error_message));
                 }
                 "StateMachineDoesNotExist" => {
                     return ListExecutionsError::StateMachineDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListExecutionsError::Validation(error_message.to_string())
+                    return ListExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1969,10 +1969,10 @@ impl ListStateMachinesError {
 
             match *error_type {
                 "InvalidToken" => {
-                    return ListStateMachinesError::InvalidToken(String::from(error_message))
+                    return ListStateMachinesError::InvalidToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListStateMachinesError::Validation(error_message.to_string())
+                    return ListStateMachinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2055,16 +2055,16 @@ impl SendTaskFailureError {
 
             match *error_type {
                 "InvalidToken" => {
-                    return SendTaskFailureError::InvalidToken(String::from(error_message))
+                    return SendTaskFailureError::InvalidToken(String::from(error_message));
                 }
                 "TaskDoesNotExist" => {
-                    return SendTaskFailureError::TaskDoesNotExist(String::from(error_message))
+                    return SendTaskFailureError::TaskDoesNotExist(String::from(error_message));
                 }
                 "TaskTimedOut" => {
-                    return SendTaskFailureError::TaskTimedOut(String::from(error_message))
+                    return SendTaskFailureError::TaskTimedOut(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SendTaskFailureError::Validation(error_message.to_string())
+                    return SendTaskFailureError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2147,16 +2147,16 @@ impl SendTaskHeartbeatError {
 
             match *error_type {
                 "InvalidToken" => {
-                    return SendTaskHeartbeatError::InvalidToken(String::from(error_message))
+                    return SendTaskHeartbeatError::InvalidToken(String::from(error_message));
                 }
                 "TaskDoesNotExist" => {
-                    return SendTaskHeartbeatError::TaskDoesNotExist(String::from(error_message))
+                    return SendTaskHeartbeatError::TaskDoesNotExist(String::from(error_message));
                 }
                 "TaskTimedOut" => {
-                    return SendTaskHeartbeatError::TaskTimedOut(String::from(error_message))
+                    return SendTaskHeartbeatError::TaskTimedOut(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SendTaskHeartbeatError::Validation(error_message.to_string())
+                    return SendTaskHeartbeatError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2243,19 +2243,19 @@ impl SendTaskSuccessError {
 
             match *error_type {
                 "InvalidOutput" => {
-                    return SendTaskSuccessError::InvalidOutput(String::from(error_message))
+                    return SendTaskSuccessError::InvalidOutput(String::from(error_message));
                 }
                 "InvalidToken" => {
-                    return SendTaskSuccessError::InvalidToken(String::from(error_message))
+                    return SendTaskSuccessError::InvalidToken(String::from(error_message));
                 }
                 "TaskDoesNotExist" => {
-                    return SendTaskSuccessError::TaskDoesNotExist(String::from(error_message))
+                    return SendTaskSuccessError::TaskDoesNotExist(String::from(error_message));
                 }
                 "TaskTimedOut" => {
-                    return SendTaskSuccessError::TaskTimedOut(String::from(error_message))
+                    return SendTaskSuccessError::TaskTimedOut(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SendTaskSuccessError::Validation(error_message.to_string())
+                    return SendTaskSuccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2347,28 +2347,28 @@ impl StartExecutionError {
 
             match *error_type {
                 "ExecutionAlreadyExists" => {
-                    return StartExecutionError::ExecutionAlreadyExists(String::from(error_message))
+                    return StartExecutionError::ExecutionAlreadyExists(String::from(error_message));
                 }
                 "ExecutionLimitExceeded" => {
-                    return StartExecutionError::ExecutionLimitExceeded(String::from(error_message))
+                    return StartExecutionError::ExecutionLimitExceeded(String::from(error_message));
                 }
                 "InvalidArn" => return StartExecutionError::InvalidArn(String::from(error_message)),
                 "InvalidExecutionInput" => {
-                    return StartExecutionError::InvalidExecutionInput(String::from(error_message))
+                    return StartExecutionError::InvalidExecutionInput(String::from(error_message));
                 }
                 "InvalidName" => {
-                    return StartExecutionError::InvalidName(String::from(error_message))
+                    return StartExecutionError::InvalidName(String::from(error_message));
                 }
                 "StateMachineDeleting" => {
-                    return StartExecutionError::StateMachineDeleting(String::from(error_message))
+                    return StartExecutionError::StateMachineDeleting(String::from(error_message));
                 }
                 "StateMachineDoesNotExist" => {
                     return StartExecutionError::StateMachineDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartExecutionError::Validation(error_message.to_string())
+                    return StartExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2453,11 +2453,11 @@ impl StopExecutionError {
 
             match *error_type {
                 "ExecutionDoesNotExist" => {
-                    return StopExecutionError::ExecutionDoesNotExist(String::from(error_message))
+                    return StopExecutionError::ExecutionDoesNotExist(String::from(error_message));
                 }
                 "InvalidArn" => return StopExecutionError::InvalidArn(String::from(error_message)),
                 "ValidationException" => {
-                    return StopExecutionError::Validation(error_message.to_string())
+                    return StopExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2543,28 +2543,28 @@ impl UpdateStateMachineError {
 
             match *error_type {
                 "InvalidArn" => {
-                    return UpdateStateMachineError::InvalidArn(String::from(error_message))
+                    return UpdateStateMachineError::InvalidArn(String::from(error_message));
                 }
                 "InvalidDefinition" => {
-                    return UpdateStateMachineError::InvalidDefinition(String::from(error_message))
+                    return UpdateStateMachineError::InvalidDefinition(String::from(error_message));
                 }
                 "MissingRequiredParameter" => {
                     return UpdateStateMachineError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StateMachineDeleting" => {
                     return UpdateStateMachineError::StateMachineDeleting(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StateMachineDoesNotExist" => {
                     return UpdateStateMachineError::StateMachineDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateStateMachineError::Validation(error_message.to_string())
+                    return UpdateStateMachineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
