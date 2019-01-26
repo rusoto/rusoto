@@ -583,10 +583,10 @@ impl UploadDocumentsError {
 
             match error_type {
                 "DocumentServiceException" => {
-                    return UploadDocumentsError::DocumentService(String::from(error_message))
+                    return UploadDocumentsError::DocumentService(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UploadDocumentsError::Validation(error_message.to_string())
+                    return UploadDocumentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

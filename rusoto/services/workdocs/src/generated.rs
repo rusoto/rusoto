@@ -1745,35 +1745,35 @@ impl AbortDocumentVersionUploadError {
                 "EntityNotExistsException" => {
                     return AbortDocumentVersionUploadError::EntityNotExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FailedDependencyException" => {
                     return AbortDocumentVersionUploadError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProhibitedStateException" => {
                     return AbortDocumentVersionUploadError::ProhibitedState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return AbortDocumentVersionUploadError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return AbortDocumentVersionUploadError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return AbortDocumentVersionUploadError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return AbortDocumentVersionUploadError::Validation(error_message.to_string())
+                    return AbortDocumentVersionUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1879,24 +1879,24 @@ impl ActivateUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return ActivateUserError::EntityNotExists(String::from(error_message))
+                    return ActivateUserError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return ActivateUserError::FailedDependency(String::from(error_message))
+                    return ActivateUserError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ActivateUserError::ServiceUnavailable(String::from(error_message))
+                    return ActivateUserError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return ActivateUserError::UnauthorizedOperation(String::from(error_message))
+                    return ActivateUserError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return ActivateUserError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ActivateUserError::Validation(error_message.to_string())
+                    return ActivateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1999,25 +1999,25 @@ impl AddResourcePermissionsError {
                 "FailedDependencyException" => {
                     return AddResourcePermissionsError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return AddResourcePermissionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return AddResourcePermissionsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return AddResourcePermissionsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddResourcePermissionsError::Validation(error_message.to_string())
+                    return AddResourcePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2127,30 +2127,30 @@ impl CreateCommentError {
                 "DocumentLockedForCommentsException" => {
                     return CreateCommentError::DocumentLockedForComments(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotExistsException" => {
-                    return CreateCommentError::EntityNotExists(String::from(error_message))
+                    return CreateCommentError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return CreateCommentError::FailedDependency(String::from(error_message))
+                    return CreateCommentError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return CreateCommentError::ProhibitedState(String::from(error_message))
+                    return CreateCommentError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateCommentError::ServiceUnavailable(String::from(error_message))
+                    return CreateCommentError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateCommentError::UnauthorizedOperation(String::from(error_message))
+                    return CreateCommentError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return CreateCommentError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateCommentError::Validation(error_message.to_string())
+                    return CreateCommentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2261,34 +2261,34 @@ impl CreateCustomMetadataError {
                 "CustomMetadataLimitExceededException" => {
                     return CreateCustomMetadataError::CustomMetadataLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotExistsException" => {
-                    return CreateCustomMetadataError::EntityNotExists(String::from(error_message))
+                    return CreateCustomMetadataError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return CreateCustomMetadataError::FailedDependency(String::from(error_message))
+                    return CreateCustomMetadataError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return CreateCustomMetadataError::ProhibitedState(String::from(error_message))
+                    return CreateCustomMetadataError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return CreateCustomMetadataError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return CreateCustomMetadataError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return CreateCustomMetadataError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateCustomMetadataError::Validation(error_message.to_string())
+                    return CreateCustomMetadataError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2401,33 +2401,33 @@ impl CreateFolderError {
 
             match error_type {
                 "EntityAlreadyExistsException" => {
-                    return CreateFolderError::EntityAlreadyExists(String::from(error_message))
+                    return CreateFolderError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
-                    return CreateFolderError::EntityNotExists(String::from(error_message))
+                    return CreateFolderError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return CreateFolderError::FailedDependency(String::from(error_message))
+                    return CreateFolderError::FailedDependency(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateFolderError::LimitExceeded(String::from(error_message))
+                    return CreateFolderError::LimitExceeded(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return CreateFolderError::ProhibitedState(String::from(error_message))
+                    return CreateFolderError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateFolderError::ServiceUnavailable(String::from(error_message))
+                    return CreateFolderError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateFolderError::UnauthorizedOperation(String::from(error_message))
+                    return CreateFolderError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return CreateFolderError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateFolderError::Validation(error_message.to_string())
+                    return CreateFolderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2535,27 +2535,27 @@ impl CreateLabelsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return CreateLabelsError::EntityNotExists(String::from(error_message))
+                    return CreateLabelsError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return CreateLabelsError::FailedDependency(String::from(error_message))
+                    return CreateLabelsError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateLabelsError::ServiceUnavailable(String::from(error_message))
+                    return CreateLabelsError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyLabelsException" => {
-                    return CreateLabelsError::TooManyLabels(String::from(error_message))
+                    return CreateLabelsError::TooManyLabels(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateLabelsError::UnauthorizedOperation(String::from(error_message))
+                    return CreateLabelsError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return CreateLabelsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateLabelsError::Validation(error_message.to_string())
+                    return CreateLabelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2657,22 +2657,22 @@ impl CreateNotificationSubscriptionError {
                 "ServiceUnavailableException" => {
                     return CreateNotificationSubscriptionError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManySubscriptionsException" => {
                     return CreateNotificationSubscriptionError::TooManySubscriptions(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return CreateNotificationSubscriptionError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return CreateNotificationSubscriptionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2775,22 +2775,22 @@ impl CreateUserError {
 
             match error_type {
                 "EntityAlreadyExistsException" => {
-                    return CreateUserError::EntityAlreadyExists(String::from(error_message))
+                    return CreateUserError::EntityAlreadyExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return CreateUserError::FailedDependency(String::from(error_message))
+                    return CreateUserError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateUserError::ServiceUnavailable(String::from(error_message))
+                    return CreateUserError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateUserError::UnauthorizedOperation(String::from(error_message))
+                    return CreateUserError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return CreateUserError::UnauthorizedResourceAccess(String::from(error_message))
+                    return CreateUserError::UnauthorizedResourceAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string())
+                    return CreateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2893,24 +2893,24 @@ impl DeactivateUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeactivateUserError::EntityNotExists(String::from(error_message))
+                    return DeactivateUserError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeactivateUserError::FailedDependency(String::from(error_message))
+                    return DeactivateUserError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeactivateUserError::ServiceUnavailable(String::from(error_message))
+                    return DeactivateUserError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeactivateUserError::UnauthorizedOperation(String::from(error_message))
+                    return DeactivateUserError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeactivateUserError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeactivateUserError::Validation(error_message.to_string())
+                    return DeactivateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3019,30 +3019,30 @@ impl DeleteCommentError {
                 "DocumentLockedForCommentsException" => {
                     return DeleteCommentError::DocumentLockedForComments(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotExistsException" => {
-                    return DeleteCommentError::EntityNotExists(String::from(error_message))
+                    return DeleteCommentError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteCommentError::FailedDependency(String::from(error_message))
+                    return DeleteCommentError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteCommentError::ProhibitedState(String::from(error_message))
+                    return DeleteCommentError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteCommentError::ServiceUnavailable(String::from(error_message))
+                    return DeleteCommentError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteCommentError::UnauthorizedOperation(String::from(error_message))
+                    return DeleteCommentError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteCommentError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteCommentError::Validation(error_message.to_string())
+                    return DeleteCommentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3149,31 +3149,31 @@ impl DeleteCustomMetadataError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteCustomMetadataError::EntityNotExists(String::from(error_message))
+                    return DeleteCustomMetadataError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteCustomMetadataError::FailedDependency(String::from(error_message))
+                    return DeleteCustomMetadataError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteCustomMetadataError::ProhibitedState(String::from(error_message))
+                    return DeleteCustomMetadataError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteCustomMetadataError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DeleteCustomMetadataError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteCustomMetadataError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteCustomMetadataError::Validation(error_message.to_string())
+                    return DeleteCustomMetadataError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3283,30 +3283,30 @@ impl DeleteDocumentError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteDocumentError::ConcurrentModification(String::from(error_message))
+                    return DeleteDocumentError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
-                    return DeleteDocumentError::EntityNotExists(String::from(error_message))
+                    return DeleteDocumentError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteDocumentError::FailedDependency(String::from(error_message))
+                    return DeleteDocumentError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteDocumentError::ProhibitedState(String::from(error_message))
+                    return DeleteDocumentError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteDocumentError::ServiceUnavailable(String::from(error_message))
+                    return DeleteDocumentError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteDocumentError::UnauthorizedOperation(String::from(error_message))
+                    return DeleteDocumentError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteDocumentError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteDocumentError::Validation(error_message.to_string())
+                    return DeleteDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3415,30 +3415,30 @@ impl DeleteFolderError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteFolderError::ConcurrentModification(String::from(error_message))
+                    return DeleteFolderError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
-                    return DeleteFolderError::EntityNotExists(String::from(error_message))
+                    return DeleteFolderError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteFolderError::FailedDependency(String::from(error_message))
+                    return DeleteFolderError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteFolderError::ProhibitedState(String::from(error_message))
+                    return DeleteFolderError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteFolderError::ServiceUnavailable(String::from(error_message))
+                    return DeleteFolderError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteFolderError::UnauthorizedOperation(String::from(error_message))
+                    return DeleteFolderError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteFolderError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteFolderError::Validation(error_message.to_string())
+                    return DeleteFolderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3543,28 +3543,28 @@ impl DeleteFolderContentsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteFolderContentsError::EntityNotExists(String::from(error_message))
+                    return DeleteFolderContentsError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteFolderContentsError::FailedDependency(String::from(error_message))
+                    return DeleteFolderContentsError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteFolderContentsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DeleteFolderContentsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteFolderContentsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteFolderContentsError::Validation(error_message.to_string())
+                    return DeleteFolderContentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3669,24 +3669,24 @@ impl DeleteLabelsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteLabelsError::EntityNotExists(String::from(error_message))
+                    return DeleteLabelsError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteLabelsError::FailedDependency(String::from(error_message))
+                    return DeleteLabelsError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteLabelsError::ServiceUnavailable(String::from(error_message))
+                    return DeleteLabelsError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteLabelsError::UnauthorizedOperation(String::from(error_message))
+                    return DeleteLabelsError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteLabelsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteLabelsError::Validation(error_message.to_string())
+                    return DeleteLabelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3789,27 +3789,27 @@ impl DeleteNotificationSubscriptionError {
                 "EntityNotExistsException" => {
                     return DeleteNotificationSubscriptionError::EntityNotExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProhibitedStateException" => {
                     return DeleteNotificationSubscriptionError::ProhibitedState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteNotificationSubscriptionError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeleteNotificationSubscriptionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3913,22 +3913,22 @@ impl DeleteUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteUserError::EntityNotExists(String::from(error_message))
+                    return DeleteUserError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DeleteUserError::FailedDependency(String::from(error_message))
+                    return DeleteUserError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteUserError::ServiceUnavailable(String::from(error_message))
+                    return DeleteUserError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteUserError::UnauthorizedOperation(String::from(error_message))
+                    return DeleteUserError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DeleteUserError::UnauthorizedResourceAccess(String::from(error_message))
+                    return DeleteUserError::UnauthorizedResourceAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string())
+                    return DeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4031,26 +4031,26 @@ impl DescribeActivitiesError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeActivitiesError::FailedDependency(String::from(error_message))
+                    return DescribeActivitiesError::FailedDependency(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeActivitiesError::InvalidArgument(String::from(error_message))
+                    return DescribeActivitiesError::InvalidArgument(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeActivitiesError::ServiceUnavailable(String::from(error_message))
+                    return DescribeActivitiesError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
                     return DescribeActivitiesError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeActivitiesError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeActivitiesError::Validation(error_message.to_string())
+                    return DescribeActivitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4157,27 +4157,27 @@ impl DescribeCommentsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeCommentsError::EntityNotExists(String::from(error_message))
+                    return DescribeCommentsError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return DescribeCommentsError::FailedDependency(String::from(error_message))
+                    return DescribeCommentsError::FailedDependency(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return DescribeCommentsError::ProhibitedState(String::from(error_message))
+                    return DescribeCommentsError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeCommentsError::ServiceUnavailable(String::from(error_message))
+                    return DescribeCommentsError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DescribeCommentsError::UnauthorizedOperation(String::from(error_message))
+                    return DescribeCommentsError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeCommentsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCommentsError::Validation(error_message.to_string())
+                    return DescribeCommentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4287,40 +4287,40 @@ impl DescribeDocumentVersionsError {
                 "EntityNotExistsException" => {
                     return DescribeDocumentVersionsError::EntityNotExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FailedDependencyException" => {
                     return DescribeDocumentVersionsError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
                     return DescribeDocumentVersionsError::InvalidArgument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProhibitedStateException" => {
                     return DescribeDocumentVersionsError::ProhibitedState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeDocumentVersionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DescribeDocumentVersionsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeDocumentVersionsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDocumentVersionsError::Validation(error_message.to_string())
+                    return DescribeDocumentVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4429,31 +4429,31 @@ impl DescribeFolderContentsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeFolderContentsError::EntityNotExists(String::from(error_message))
+                    return DescribeFolderContentsError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
                     return DescribeFolderContentsError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeFolderContentsError::InvalidArgument(String::from(error_message))
+                    return DescribeFolderContentsError::InvalidArgument(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return DescribeFolderContentsError::ProhibitedState(String::from(error_message))
+                    return DescribeFolderContentsError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeFolderContentsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeFolderContentsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeFolderContentsError::Validation(error_message.to_string())
+                    return DescribeFolderContentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4557,21 +4557,21 @@ impl DescribeGroupsError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeGroupsError::FailedDependency(String::from(error_message))
+                    return DescribeGroupsError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeGroupsError::ServiceUnavailable(String::from(error_message))
+                    return DescribeGroupsError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DescribeGroupsError::UnauthorizedOperation(String::from(error_message))
+                    return DescribeGroupsError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeGroupsError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeGroupsError::Validation(error_message.to_string())
+                    return DescribeGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4671,22 +4671,22 @@ impl DescribeNotificationSubscriptionsError {
                 "EntityNotExistsException" => {
                     return DescribeNotificationSubscriptionsError::EntityNotExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeNotificationSubscriptionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeNotificationSubscriptionsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4789,25 +4789,25 @@ impl DescribeResourcePermissionsError {
                 "FailedDependencyException" => {
                     return DescribeResourcePermissionsError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeResourcePermissionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DescribeResourcePermissionsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeResourcePermissionsError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return DescribeResourcePermissionsError::Validation(error_message.to_string())
+                    return DescribeResourcePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4911,26 +4911,26 @@ impl DescribeRootFoldersError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeRootFoldersError::FailedDependency(String::from(error_message))
+                    return DescribeRootFoldersError::FailedDependency(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeRootFoldersError::InvalidArgument(String::from(error_message))
+                    return DescribeRootFoldersError::InvalidArgument(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeRootFoldersError::ServiceUnavailable(String::from(error_message))
+                    return DescribeRootFoldersError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
                     return DescribeRootFoldersError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeRootFoldersError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeRootFoldersError::Validation(error_message.to_string())
+                    return DescribeRootFoldersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5035,24 +5035,24 @@ impl DescribeUsersError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeUsersError::FailedDependency(String::from(error_message))
+                    return DescribeUsersError::FailedDependency(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeUsersError::InvalidArgument(String::from(error_message))
+                    return DescribeUsersError::InvalidArgument(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeUsersError::ServiceUnavailable(String::from(error_message))
+                    return DescribeUsersError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return DescribeUsersError::UnauthorizedOperation(String::from(error_message))
+                    return DescribeUsersError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return DescribeUsersError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeUsersError::Validation(error_message.to_string())
+                    return DescribeUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5155,24 +5155,24 @@ impl GetCurrentUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetCurrentUserError::EntityNotExists(String::from(error_message))
+                    return GetCurrentUserError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return GetCurrentUserError::FailedDependency(String::from(error_message))
+                    return GetCurrentUserError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetCurrentUserError::ServiceUnavailable(String::from(error_message))
+                    return GetCurrentUserError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetCurrentUserError::UnauthorizedOperation(String::from(error_message))
+                    return GetCurrentUserError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return GetCurrentUserError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetCurrentUserError::Validation(error_message.to_string())
+                    return GetCurrentUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5279,28 +5279,28 @@ impl GetDocumentError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetDocumentError::EntityNotExists(String::from(error_message))
+                    return GetDocumentError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return GetDocumentError::FailedDependency(String::from(error_message))
+                    return GetDocumentError::FailedDependency(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return GetDocumentError::InvalidArgument(String::from(error_message))
+                    return GetDocumentError::InvalidArgument(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return GetDocumentError::InvalidPassword(String::from(error_message))
+                    return GetDocumentError::InvalidPassword(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDocumentError::ServiceUnavailable(String::from(error_message))
+                    return GetDocumentError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetDocumentError::UnauthorizedOperation(String::from(error_message))
+                    return GetDocumentError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return GetDocumentError::UnauthorizedResourceAccess(String::from(error_message))
+                    return GetDocumentError::UnauthorizedResourceAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDocumentError::Validation(error_message.to_string())
+                    return GetDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5405,24 +5405,24 @@ impl GetDocumentPathError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetDocumentPathError::EntityNotExists(String::from(error_message))
+                    return GetDocumentPathError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return GetDocumentPathError::FailedDependency(String::from(error_message))
+                    return GetDocumentPathError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDocumentPathError::ServiceUnavailable(String::from(error_message))
+                    return GetDocumentPathError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetDocumentPathError::UnauthorizedOperation(String::from(error_message))
+                    return GetDocumentPathError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return GetDocumentPathError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDocumentPathError::Validation(error_message.to_string())
+                    return GetDocumentPathError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5529,32 +5529,32 @@ impl GetDocumentVersionError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetDocumentVersionError::EntityNotExists(String::from(error_message))
+                    return GetDocumentVersionError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return GetDocumentVersionError::FailedDependency(String::from(error_message))
+                    return GetDocumentVersionError::FailedDependency(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return GetDocumentVersionError::InvalidPassword(String::from(error_message))
+                    return GetDocumentVersionError::InvalidPassword(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return GetDocumentVersionError::ProhibitedState(String::from(error_message))
+                    return GetDocumentVersionError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDocumentVersionError::ServiceUnavailable(String::from(error_message))
+                    return GetDocumentVersionError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
                     return GetDocumentVersionError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return GetDocumentVersionError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDocumentVersionError::Validation(error_message.to_string())
+                    return GetDocumentVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5665,28 +5665,28 @@ impl GetFolderError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetFolderError::EntityNotExists(String::from(error_message))
+                    return GetFolderError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return GetFolderError::FailedDependency(String::from(error_message))
+                    return GetFolderError::FailedDependency(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return GetFolderError::InvalidArgument(String::from(error_message))
+                    return GetFolderError::InvalidArgument(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return GetFolderError::ProhibitedState(String::from(error_message))
+                    return GetFolderError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetFolderError::ServiceUnavailable(String::from(error_message))
+                    return GetFolderError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetFolderError::UnauthorizedOperation(String::from(error_message))
+                    return GetFolderError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return GetFolderError::UnauthorizedResourceAccess(String::from(error_message))
+                    return GetFolderError::UnauthorizedResourceAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFolderError::Validation(error_message.to_string())
+                    return GetFolderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5791,24 +5791,24 @@ impl GetFolderPathError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetFolderPathError::EntityNotExists(String::from(error_message))
+                    return GetFolderPathError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return GetFolderPathError::FailedDependency(String::from(error_message))
+                    return GetFolderPathError::FailedDependency(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return GetFolderPathError::ServiceUnavailable(String::from(error_message))
+                    return GetFolderPathError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetFolderPathError::UnauthorizedOperation(String::from(error_message))
+                    return GetFolderPathError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return GetFolderPathError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetFolderPathError::Validation(error_message.to_string())
+                    return GetFolderPathError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5925,60 +5925,60 @@ impl InitiateDocumentVersionUploadError {
                 "DraftUploadOutOfSyncException" => {
                     return InitiateDocumentVersionUploadError::DraftUploadOutOfSync(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityAlreadyExistsException" => {
                     return InitiateDocumentVersionUploadError::EntityAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotExistsException" => {
                     return InitiateDocumentVersionUploadError::EntityNotExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FailedDependencyException" => {
                     return InitiateDocumentVersionUploadError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProhibitedStateException" => {
                     return InitiateDocumentVersionUploadError::ProhibitedState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyCheckedOutException" => {
                     return InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ServiceUnavailableException" => {
                     return InitiateDocumentVersionUploadError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StorageLimitExceededException" => {
                     return InitiateDocumentVersionUploadError::StorageLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StorageLimitWillExceedException" => {
                     return InitiateDocumentVersionUploadError::StorageLimitWillExceed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return InitiateDocumentVersionUploadError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return InitiateDocumentVersionUploadError::Validation(error_message.to_string())
+                    return InitiateDocumentVersionUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6089,25 +6089,25 @@ impl RemoveAllResourcePermissionsError {
                 "FailedDependencyException" => {
                     return RemoveAllResourcePermissionsError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return RemoveAllResourcePermissionsError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return RemoveAllResourcePermissionsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return RemoveAllResourcePermissionsError::Validation(error_message.to_string())
+                    return RemoveAllResourcePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6211,25 +6211,25 @@ impl RemoveResourcePermissionError {
                 "FailedDependencyException" => {
                     return RemoveResourcePermissionError::FailedDependency(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceUnavailableException" => {
                     return RemoveResourcePermissionError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return RemoveResourcePermissionError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return RemoveResourcePermissionError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RemoveResourcePermissionError::Validation(error_message.to_string())
+                    return RemoveResourcePermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6341,36 +6341,36 @@ impl UpdateDocumentError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateDocumentError::ConcurrentModification(String::from(error_message))
+                    return UpdateDocumentError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityAlreadyExistsException" => {
-                    return UpdateDocumentError::EntityAlreadyExists(String::from(error_message))
+                    return UpdateDocumentError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
-                    return UpdateDocumentError::EntityNotExists(String::from(error_message))
+                    return UpdateDocumentError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return UpdateDocumentError::FailedDependency(String::from(error_message))
+                    return UpdateDocumentError::FailedDependency(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateDocumentError::LimitExceeded(String::from(error_message))
+                    return UpdateDocumentError::LimitExceeded(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return UpdateDocumentError::ProhibitedState(String::from(error_message))
+                    return UpdateDocumentError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateDocumentError::ServiceUnavailable(String::from(error_message))
+                    return UpdateDocumentError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateDocumentError::UnauthorizedOperation(String::from(error_message))
+                    return UpdateDocumentError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return UpdateDocumentError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDocumentError::Validation(error_message.to_string())
+                    return UpdateDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6485,37 +6485,37 @@ impl UpdateDocumentVersionError {
                 "ConcurrentModificationException" => {
                     return UpdateDocumentVersionError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotExistsException" => {
-                    return UpdateDocumentVersionError::EntityNotExists(String::from(error_message))
+                    return UpdateDocumentVersionError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return UpdateDocumentVersionError::FailedDependency(String::from(error_message))
+                    return UpdateDocumentVersionError::FailedDependency(String::from(error_message));
                 }
                 "InvalidOperationException" => {
-                    return UpdateDocumentVersionError::InvalidOperation(String::from(error_message))
+                    return UpdateDocumentVersionError::InvalidOperation(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return UpdateDocumentVersionError::ProhibitedState(String::from(error_message))
+                    return UpdateDocumentVersionError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return UpdateDocumentVersionError::ServiceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return UpdateDocumentVersionError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return UpdateDocumentVersionError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDocumentVersionError::Validation(error_message.to_string())
+                    return UpdateDocumentVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6631,36 +6631,36 @@ impl UpdateFolderError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateFolderError::ConcurrentModification(String::from(error_message))
+                    return UpdateFolderError::ConcurrentModification(String::from(error_message));
                 }
                 "EntityAlreadyExistsException" => {
-                    return UpdateFolderError::EntityAlreadyExists(String::from(error_message))
+                    return UpdateFolderError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
-                    return UpdateFolderError::EntityNotExists(String::from(error_message))
+                    return UpdateFolderError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return UpdateFolderError::FailedDependency(String::from(error_message))
+                    return UpdateFolderError::FailedDependency(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateFolderError::LimitExceeded(String::from(error_message))
+                    return UpdateFolderError::LimitExceeded(String::from(error_message));
                 }
                 "ProhibitedStateException" => {
-                    return UpdateFolderError::ProhibitedState(String::from(error_message))
+                    return UpdateFolderError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateFolderError::ServiceUnavailable(String::from(error_message))
+                    return UpdateFolderError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateFolderError::UnauthorizedOperation(String::from(error_message))
+                    return UpdateFolderError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
                     return UpdateFolderError::UnauthorizedResourceAccess(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateFolderError::Validation(error_message.to_string())
+                    return UpdateFolderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6773,31 +6773,31 @@ impl UpdateUserError {
 
             match error_type {
                 "DeactivatingLastSystemUserException" => {
-                    return UpdateUserError::DeactivatingLastSystemUser(String::from(error_message))
+                    return UpdateUserError::DeactivatingLastSystemUser(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
-                    return UpdateUserError::EntityNotExists(String::from(error_message))
+                    return UpdateUserError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
-                    return UpdateUserError::FailedDependency(String::from(error_message))
+                    return UpdateUserError::FailedDependency(String::from(error_message));
                 }
                 "IllegalUserStateException" => {
-                    return UpdateUserError::IllegalUserState(String::from(error_message))
+                    return UpdateUserError::IllegalUserState(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateUserError::InvalidArgument(String::from(error_message))
+                    return UpdateUserError::InvalidArgument(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateUserError::ServiceUnavailable(String::from(error_message))
+                    return UpdateUserError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateUserError::UnauthorizedOperation(String::from(error_message))
+                    return UpdateUserError::UnauthorizedOperation(String::from(error_message));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return UpdateUserError::UnauthorizedResourceAccess(String::from(error_message))
+                    return UpdateUserError::UnauthorizedResourceAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserError::Validation(error_message.to_string())
+                    return UpdateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

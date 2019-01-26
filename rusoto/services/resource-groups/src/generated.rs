@@ -404,22 +404,22 @@ impl CreateGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateGroupError::BadRequest(String::from(error_message))
+                    return CreateGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateGroupError::Forbidden(String::from(error_message))
+                    return CreateGroupError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateGroupError::InternalServerError(String::from(error_message))
+                    return CreateGroupError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return CreateGroupError::MethodNotAllowed(String::from(error_message))
+                    return CreateGroupError::MethodNotAllowed(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateGroupError::TooManyRequests(String::from(error_message))
+                    return CreateGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string())
+                    return CreateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -524,25 +524,25 @@ impl DeleteGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteGroupError::BadRequest(String::from(error_message))
+                    return DeleteGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteGroupError::Forbidden(String::from(error_message))
+                    return DeleteGroupError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteGroupError::InternalServerError(String::from(error_message))
+                    return DeleteGroupError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return DeleteGroupError::MethodNotAllowed(String::from(error_message))
+                    return DeleteGroupError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteGroupError::NotFound(String::from(error_message))
+                    return DeleteGroupError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteGroupError::TooManyRequests(String::from(error_message))
+                    return DeleteGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string())
+                    return DeleteGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -648,23 +648,23 @@ impl GetGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGroupError::BadRequest(String::from(error_message))
+                    return GetGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return GetGroupError::Forbidden(String::from(error_message))
+                    return GetGroupError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetGroupError::InternalServerError(String::from(error_message))
+                    return GetGroupError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return GetGroupError::MethodNotAllowed(String::from(error_message))
+                    return GetGroupError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => return GetGroupError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetGroupError::TooManyRequests(String::from(error_message))
+                    return GetGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGroupError::Validation(error_message.to_string())
+                    return GetGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -770,25 +770,25 @@ impl GetGroupQueryError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGroupQueryError::BadRequest(String::from(error_message))
+                    return GetGroupQueryError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return GetGroupQueryError::Forbidden(String::from(error_message))
+                    return GetGroupQueryError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetGroupQueryError::InternalServerError(String::from(error_message))
+                    return GetGroupQueryError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return GetGroupQueryError::MethodNotAllowed(String::from(error_message))
+                    return GetGroupQueryError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetGroupQueryError::NotFound(String::from(error_message))
+                    return GetGroupQueryError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetGroupQueryError::TooManyRequests(String::from(error_message))
+                    return GetGroupQueryError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGroupQueryError::Validation(error_message.to_string())
+                    return GetGroupQueryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -894,18 +894,18 @@ impl GetTagsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetTagsError::BadRequest(String::from(error_message))
+                    return GetTagsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => return GetTagsError::Forbidden(String::from(error_message)),
                 "InternalServerErrorException" => {
-                    return GetTagsError::InternalServerError(String::from(error_message))
+                    return GetTagsError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return GetTagsError::MethodNotAllowed(String::from(error_message))
+                    return GetTagsError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => return GetTagsError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetTagsError::TooManyRequests(String::from(error_message))
+                    return GetTagsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => return GetTagsError::Validation(error_message.to_string()),
                 _ => {}
@@ -1014,28 +1014,28 @@ impl ListGroupResourcesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListGroupResourcesError::BadRequest(String::from(error_message))
+                    return ListGroupResourcesError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListGroupResourcesError::Forbidden(String::from(error_message))
+                    return ListGroupResourcesError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListGroupResourcesError::InternalServerError(String::from(error_message))
+                    return ListGroupResourcesError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return ListGroupResourcesError::MethodNotAllowed(String::from(error_message))
+                    return ListGroupResourcesError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListGroupResourcesError::NotFound(String::from(error_message))
+                    return ListGroupResourcesError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListGroupResourcesError::TooManyRequests(String::from(error_message))
+                    return ListGroupResourcesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListGroupResourcesError::Unauthorized(String::from(error_message))
+                    return ListGroupResourcesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGroupResourcesError::Validation(error_message.to_string())
+                    return ListGroupResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1142,22 +1142,22 @@ impl ListGroupsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListGroupsError::BadRequest(String::from(error_message))
+                    return ListGroupsError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListGroupsError::Forbidden(String::from(error_message))
+                    return ListGroupsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListGroupsError::InternalServerError(String::from(error_message))
+                    return ListGroupsError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return ListGroupsError::MethodNotAllowed(String::from(error_message))
+                    return ListGroupsError::MethodNotAllowed(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListGroupsError::TooManyRequests(String::from(error_message))
+                    return ListGroupsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string())
+                    return ListGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1262,25 +1262,25 @@ impl SearchResourcesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return SearchResourcesError::BadRequest(String::from(error_message))
+                    return SearchResourcesError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return SearchResourcesError::Forbidden(String::from(error_message))
+                    return SearchResourcesError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return SearchResourcesError::InternalServerError(String::from(error_message))
+                    return SearchResourcesError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return SearchResourcesError::MethodNotAllowed(String::from(error_message))
+                    return SearchResourcesError::MethodNotAllowed(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return SearchResourcesError::TooManyRequests(String::from(error_message))
+                    return SearchResourcesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return SearchResourcesError::Unauthorized(String::from(error_message))
+                    return SearchResourcesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SearchResourcesError::Validation(error_message.to_string())
+                    return SearchResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1388,14 +1388,14 @@ impl TagError {
                 "BadRequestException" => return TagError::BadRequest(String::from(error_message)),
                 "ForbiddenException" => return TagError::Forbidden(String::from(error_message)),
                 "InternalServerErrorException" => {
-                    return TagError::InternalServerError(String::from(error_message))
+                    return TagError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return TagError::MethodNotAllowed(String::from(error_message))
+                    return TagError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => return TagError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return TagError::TooManyRequests(String::from(error_message))
+                    return TagError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => return TagError::Validation(error_message.to_string()),
                 _ => {}
@@ -1504,14 +1504,14 @@ impl UntagError {
                 "BadRequestException" => return UntagError::BadRequest(String::from(error_message)),
                 "ForbiddenException" => return UntagError::Forbidden(String::from(error_message)),
                 "InternalServerErrorException" => {
-                    return UntagError::InternalServerError(String::from(error_message))
+                    return UntagError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return UntagError::MethodNotAllowed(String::from(error_message))
+                    return UntagError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => return UntagError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return UntagError::TooManyRequests(String::from(error_message))
+                    return UntagError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => return UntagError::Validation(error_message.to_string()),
                 _ => {}
@@ -1618,25 +1618,25 @@ impl UpdateGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGroupError::BadRequest(String::from(error_message))
+                    return UpdateGroupError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateGroupError::Forbidden(String::from(error_message))
+                    return UpdateGroupError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateGroupError::InternalServerError(String::from(error_message))
+                    return UpdateGroupError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return UpdateGroupError::MethodNotAllowed(String::from(error_message))
+                    return UpdateGroupError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateGroupError::NotFound(String::from(error_message))
+                    return UpdateGroupError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGroupError::TooManyRequests(String::from(error_message))
+                    return UpdateGroupError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGroupError::Validation(error_message.to_string())
+                    return UpdateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1742,25 +1742,25 @@ impl UpdateGroupQueryError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGroupQueryError::BadRequest(String::from(error_message))
+                    return UpdateGroupQueryError::BadRequest(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateGroupQueryError::Forbidden(String::from(error_message))
+                    return UpdateGroupQueryError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateGroupQueryError::InternalServerError(String::from(error_message))
+                    return UpdateGroupQueryError::InternalServerError(String::from(error_message));
                 }
                 "MethodNotAllowedException" => {
-                    return UpdateGroupQueryError::MethodNotAllowed(String::from(error_message))
+                    return UpdateGroupQueryError::MethodNotAllowed(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateGroupQueryError::NotFound(String::from(error_message))
+                    return UpdateGroupQueryError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGroupQueryError::TooManyRequests(String::from(error_message))
+                    return UpdateGroupQueryError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGroupQueryError::Validation(error_message.to_string())
+                    return UpdateGroupQueryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -409,13 +409,13 @@ impl DescribeStreamError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeStreamError::InternalServerError(String::from(error_message))
+                    return DescribeStreamError::InternalServerError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamError::ResourceNotFound(String::from(error_message))
+                    return DescribeStreamError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStreamError::Validation(error_message.to_string())
+                    return DescribeStreamError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -501,22 +501,22 @@ impl GetRecordsError {
 
             match *error_type {
                 "ExpiredIteratorException" => {
-                    return GetRecordsError::ExpiredIterator(String::from(error_message))
+                    return GetRecordsError::ExpiredIterator(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetRecordsError::InternalServerError(String::from(error_message))
+                    return GetRecordsError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetRecordsError::LimitExceeded(String::from(error_message))
+                    return GetRecordsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetRecordsError::ResourceNotFound(String::from(error_message))
+                    return GetRecordsError::ResourceNotFound(String::from(error_message));
                 }
                 "TrimmedDataAccessException" => {
-                    return GetRecordsError::TrimmedDataAccess(String::from(error_message))
+                    return GetRecordsError::TrimmedDataAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRecordsError::Validation(error_message.to_string())
+                    return GetRecordsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -601,16 +601,16 @@ impl GetShardIteratorError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetShardIteratorError::InternalServerError(String::from(error_message))
+                    return GetShardIteratorError::InternalServerError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetShardIteratorError::ResourceNotFound(String::from(error_message))
+                    return GetShardIteratorError::ResourceNotFound(String::from(error_message));
                 }
                 "TrimmedDataAccessException" => {
-                    return GetShardIteratorError::TrimmedDataAccess(String::from(error_message))
+                    return GetShardIteratorError::TrimmedDataAccess(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetShardIteratorError::Validation(error_message.to_string())
+                    return GetShardIteratorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -691,13 +691,13 @@ impl ListStreamsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListStreamsError::InternalServerError(String::from(error_message))
+                    return ListStreamsError::InternalServerError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListStreamsError::ResourceNotFound(String::from(error_message))
+                    return ListStreamsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListStreamsError::Validation(error_message.to_string())
+                    return ListStreamsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

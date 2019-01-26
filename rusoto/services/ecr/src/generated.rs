@@ -1004,18 +1004,18 @@ impl BatchCheckLayerAvailabilityError {
                 "InvalidParameterException" => {
                     return BatchCheckLayerAvailabilityError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNotFoundException" => {
                     return BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return BatchCheckLayerAvailabilityError::Server(String::from(error_message))
+                    return BatchCheckLayerAvailabilityError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchCheckLayerAvailabilityError::Validation(error_message.to_string())
+                    return BatchCheckLayerAvailabilityError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1100,16 +1100,16 @@ impl BatchDeleteImageError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return BatchDeleteImageError::InvalidParameter(String::from(error_message))
+                    return BatchDeleteImageError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return BatchDeleteImageError::RepositoryNotFound(String::from(error_message))
+                    return BatchDeleteImageError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return BatchDeleteImageError::Server(String::from(error_message))
+                    return BatchDeleteImageError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchDeleteImageError::Validation(error_message.to_string())
+                    return BatchDeleteImageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1192,14 +1192,14 @@ impl BatchGetImageError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return BatchGetImageError::InvalidParameter(String::from(error_message))
+                    return BatchGetImageError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return BatchGetImageError::RepositoryNotFound(String::from(error_message))
+                    return BatchGetImageError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => return BatchGetImageError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return BatchGetImageError::Validation(error_message.to_string())
+                    return BatchGetImageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1292,31 +1292,31 @@ impl CompleteLayerUploadError {
 
             match *error_type {
                 "EmptyUploadException" => {
-                    return CompleteLayerUploadError::EmptyUpload(String::from(error_message))
+                    return CompleteLayerUploadError::EmptyUpload(String::from(error_message));
                 }
                 "InvalidLayerException" => {
-                    return CompleteLayerUploadError::InvalidLayer(String::from(error_message))
+                    return CompleteLayerUploadError::InvalidLayer(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CompleteLayerUploadError::InvalidParameter(String::from(error_message))
+                    return CompleteLayerUploadError::InvalidParameter(String::from(error_message));
                 }
                 "LayerAlreadyExistsException" => {
-                    return CompleteLayerUploadError::LayerAlreadyExists(String::from(error_message))
+                    return CompleteLayerUploadError::LayerAlreadyExists(String::from(error_message));
                 }
                 "LayerPartTooSmallException" => {
-                    return CompleteLayerUploadError::LayerPartTooSmall(String::from(error_message))
+                    return CompleteLayerUploadError::LayerPartTooSmall(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return CompleteLayerUploadError::RepositoryNotFound(String::from(error_message))
+                    return CompleteLayerUploadError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return CompleteLayerUploadError::Server(String::from(error_message))
+                    return CompleteLayerUploadError::Server(String::from(error_message));
                 }
                 "UploadNotFoundException" => {
-                    return CompleteLayerUploadError::UploadNotFound(String::from(error_message))
+                    return CompleteLayerUploadError::UploadNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CompleteLayerUploadError::Validation(error_message.to_string())
+                    return CompleteLayerUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1408,21 +1408,21 @@ impl CreateRepositoryError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateRepositoryError::InvalidParameter(String::from(error_message))
+                    return CreateRepositoryError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateRepositoryError::LimitExceeded(String::from(error_message))
+                    return CreateRepositoryError::LimitExceeded(String::from(error_message));
                 }
                 "RepositoryAlreadyExistsException" => {
                     return CreateRepositoryError::RepositoryAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return CreateRepositoryError::Server(String::from(error_message))
+                    return CreateRepositoryError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRepositoryError::Validation(error_message.to_string())
+                    return CreateRepositoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1508,23 +1508,23 @@ impl DeleteLifecyclePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteLifecyclePolicyError::InvalidParameter(String::from(error_message))
+                    return DeleteLifecyclePolicyError::InvalidParameter(String::from(error_message));
                 }
                 "LifecyclePolicyNotFoundException" => {
                     return DeleteLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNotFoundException" => {
                     return DeleteLifecyclePolicyError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DeleteLifecyclePolicyError::Server(String::from(error_message))
+                    return DeleteLifecyclePolicyError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLifecyclePolicyError::Validation(error_message.to_string())
+                    return DeleteLifecyclePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1612,19 +1612,19 @@ impl DeleteRepositoryError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteRepositoryError::InvalidParameter(String::from(error_message))
+                    return DeleteRepositoryError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotEmptyException" => {
-                    return DeleteRepositoryError::RepositoryNotEmpty(String::from(error_message))
+                    return DeleteRepositoryError::RepositoryNotEmpty(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return DeleteRepositoryError::RepositoryNotFound(String::from(error_message))
+                    return DeleteRepositoryError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DeleteRepositoryError::Server(String::from(error_message))
+                    return DeleteRepositoryError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRepositoryError::Validation(error_message.to_string())
+                    return DeleteRepositoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1712,23 +1712,23 @@ impl DeleteRepositoryPolicyError {
                 "InvalidParameterException" => {
                     return DeleteRepositoryPolicyError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNotFoundException" => {
                     return DeleteRepositoryPolicyError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryPolicyNotFoundException" => {
                     return DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DeleteRepositoryPolicyError::Server(String::from(error_message))
+                    return DeleteRepositoryPolicyError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRepositoryPolicyError::Validation(error_message.to_string())
+                    return DeleteRepositoryPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1816,19 +1816,19 @@ impl DescribeImagesError {
 
             match *error_type {
                 "ImageNotFoundException" => {
-                    return DescribeImagesError::ImageNotFound(String::from(error_message))
+                    return DescribeImagesError::ImageNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeImagesError::InvalidParameter(String::from(error_message))
+                    return DescribeImagesError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return DescribeImagesError::RepositoryNotFound(String::from(error_message))
+                    return DescribeImagesError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeImagesError::Server(String::from(error_message))
+                    return DescribeImagesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeImagesError::Validation(error_message.to_string())
+                    return DescribeImagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1912,18 +1912,18 @@ impl DescribeRepositoriesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeRepositoriesError::InvalidParameter(String::from(error_message))
+                    return DescribeRepositoriesError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
                     return DescribeRepositoriesError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeRepositoriesError::Server(String::from(error_message))
+                    return DescribeRepositoriesError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeRepositoriesError::Validation(error_message.to_string())
+                    return DescribeRepositoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2006,13 +2006,13 @@ impl GetAuthorizationTokenError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetAuthorizationTokenError::InvalidParameter(String::from(error_message))
+                    return GetAuthorizationTokenError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => {
-                    return GetAuthorizationTokenError::Server(String::from(error_message))
+                    return GetAuthorizationTokenError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAuthorizationTokenError::Validation(error_message.to_string())
+                    return GetAuthorizationTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2102,26 +2102,26 @@ impl GetDownloadUrlForLayerError {
                 "InvalidParameterException" => {
                     return GetDownloadUrlForLayerError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LayerInaccessibleException" => {
                     return GetDownloadUrlForLayerError::LayerInaccessible(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LayersNotFoundException" => {
-                    return GetDownloadUrlForLayerError::LayersNotFound(String::from(error_message))
+                    return GetDownloadUrlForLayerError::LayersNotFound(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
                     return GetDownloadUrlForLayerError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return GetDownloadUrlForLayerError::Server(String::from(error_message))
+                    return GetDownloadUrlForLayerError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDownloadUrlForLayerError::Validation(error_message.to_string())
+                    return GetDownloadUrlForLayerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2210,21 +2210,21 @@ impl GetLifecyclePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLifecyclePolicyError::InvalidParameter(String::from(error_message))
+                    return GetLifecyclePolicyError::InvalidParameter(String::from(error_message));
                 }
                 "LifecyclePolicyNotFoundException" => {
                     return GetLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return GetLifecyclePolicyError::RepositoryNotFound(String::from(error_message))
+                    return GetLifecyclePolicyError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return GetLifecyclePolicyError::Server(String::from(error_message))
+                    return GetLifecyclePolicyError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLifecyclePolicyError::Validation(error_message.to_string())
+                    return GetLifecyclePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2314,23 +2314,23 @@ impl GetLifecyclePolicyPreviewError {
                 "InvalidParameterException" => {
                     return GetLifecyclePolicyPreviewError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LifecyclePolicyPreviewNotFoundException" => {
                     return GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryNotFoundException" => {
                     return GetLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return GetLifecyclePolicyPreviewError::Server(String::from(error_message))
+                    return GetLifecyclePolicyPreviewError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLifecyclePolicyPreviewError::Validation(error_message.to_string())
+                    return GetLifecyclePolicyPreviewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2418,21 +2418,21 @@ impl GetRepositoryPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetRepositoryPolicyError::InvalidParameter(String::from(error_message))
+                    return GetRepositoryPolicyError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return GetRepositoryPolicyError::RepositoryNotFound(String::from(error_message))
+                    return GetRepositoryPolicyError::RepositoryNotFound(String::from(error_message));
                 }
                 "RepositoryPolicyNotFoundException" => {
                     return GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return GetRepositoryPolicyError::Server(String::from(error_message))
+                    return GetRepositoryPolicyError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRepositoryPolicyError::Validation(error_message.to_string())
+                    return GetRepositoryPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2518,16 +2518,16 @@ impl InitiateLayerUploadError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return InitiateLayerUploadError::InvalidParameter(String::from(error_message))
+                    return InitiateLayerUploadError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return InitiateLayerUploadError::RepositoryNotFound(String::from(error_message))
+                    return InitiateLayerUploadError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return InitiateLayerUploadError::Server(String::from(error_message))
+                    return InitiateLayerUploadError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return InitiateLayerUploadError::Validation(error_message.to_string())
+                    return InitiateLayerUploadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2612,14 +2612,14 @@ impl ListImagesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListImagesError::InvalidParameter(String::from(error_message))
+                    return ListImagesError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return ListImagesError::RepositoryNotFound(String::from(error_message))
+                    return ListImagesError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => return ListImagesError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return ListImagesError::Validation(error_message.to_string())
+                    return ListImagesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2708,23 +2708,23 @@ impl PutImageError {
 
             match *error_type {
                 "ImageAlreadyExistsException" => {
-                    return PutImageError::ImageAlreadyExists(String::from(error_message))
+                    return PutImageError::ImageAlreadyExists(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return PutImageError::InvalidParameter(String::from(error_message))
+                    return PutImageError::InvalidParameter(String::from(error_message));
                 }
                 "LayersNotFoundException" => {
-                    return PutImageError::LayersNotFound(String::from(error_message))
+                    return PutImageError::LayersNotFound(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutImageError::LimitExceeded(String::from(error_message))
+                    return PutImageError::LimitExceeded(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return PutImageError::RepositoryNotFound(String::from(error_message))
+                    return PutImageError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => return PutImageError::Server(String::from(error_message)),
                 "ValidationException" => {
-                    return PutImageError::Validation(error_message.to_string())
+                    return PutImageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2810,16 +2810,16 @@ impl PutLifecyclePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutLifecyclePolicyError::InvalidParameter(String::from(error_message))
+                    return PutLifecyclePolicyError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return PutLifecyclePolicyError::RepositoryNotFound(String::from(error_message))
+                    return PutLifecyclePolicyError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return PutLifecyclePolicyError::Server(String::from(error_message))
+                    return PutLifecyclePolicyError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutLifecyclePolicyError::Validation(error_message.to_string())
+                    return PutLifecyclePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2904,16 +2904,16 @@ impl SetRepositoryPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return SetRepositoryPolicyError::InvalidParameter(String::from(error_message))
+                    return SetRepositoryPolicyError::InvalidParameter(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return SetRepositoryPolicyError::RepositoryNotFound(String::from(error_message))
+                    return SetRepositoryPolicyError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return SetRepositoryPolicyError::Server(String::from(error_message))
+                    return SetRepositoryPolicyError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetRepositoryPolicyError::Validation(error_message.to_string())
+                    return SetRepositoryPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3004,28 +3004,28 @@ impl StartLifecyclePolicyPreviewError {
                 "InvalidParameterException" => {
                     return StartLifecyclePolicyPreviewError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LifecyclePolicyNotFoundException" => {
                     return StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LifecyclePolicyPreviewInProgressException" => {
                     return StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RepositoryNotFoundException" => {
                     return StartLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerException" => {
-                    return StartLifecyclePolicyPreviewError::Server(String::from(error_message))
+                    return StartLifecyclePolicyPreviewError::Server(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartLifecyclePolicyPreviewError::Validation(error_message.to_string())
+                    return StartLifecyclePolicyPreviewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3118,25 +3118,25 @@ impl UploadLayerPartError {
 
             match *error_type {
                 "InvalidLayerPartException" => {
-                    return UploadLayerPartError::InvalidLayerPart(String::from(error_message))
+                    return UploadLayerPartError::InvalidLayerPart(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UploadLayerPartError::InvalidParameter(String::from(error_message))
+                    return UploadLayerPartError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UploadLayerPartError::LimitExceeded(String::from(error_message))
+                    return UploadLayerPartError::LimitExceeded(String::from(error_message));
                 }
                 "RepositoryNotFoundException" => {
-                    return UploadLayerPartError::RepositoryNotFound(String::from(error_message))
+                    return UploadLayerPartError::RepositoryNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return UploadLayerPartError::Server(String::from(error_message))
+                    return UploadLayerPartError::Server(String::from(error_message));
                 }
                 "UploadNotFoundException" => {
-                    return UploadLayerPartError::UploadNotFound(String::from(error_message))
+                    return UploadLayerPartError::UploadNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UploadLayerPartError::Validation(error_message.to_string())
+                    return UploadLayerPartError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

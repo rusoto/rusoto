@@ -260,25 +260,25 @@ impl CreateClusterError {
             match error_type {
                 "ClientException" => return CreateClusterError::Client(String::from(error_message)),
                 "InvalidParameterException" => {
-                    return CreateClusterError::InvalidParameter(String::from(error_message))
+                    return CreateClusterError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateClusterError::ResourceInUse(String::from(error_message))
+                    return CreateClusterError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceLimitExceededException" => {
-                    return CreateClusterError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateClusterError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ServerException" => return CreateClusterError::Server(String::from(error_message)),
                 "ServiceUnavailableException" => {
-                    return CreateClusterError::ServiceUnavailable(String::from(error_message))
+                    return CreateClusterError::ServiceUnavailable(String::from(error_message));
                 }
                 "UnsupportedAvailabilityZoneException" => {
                     return CreateClusterError::UnsupportedAvailabilityZone(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string())
+                    return CreateClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -384,17 +384,17 @@ impl DeleteClusterError {
             match error_type {
                 "ClientException" => return DeleteClusterError::Client(String::from(error_message)),
                 "ResourceInUseException" => {
-                    return DeleteClusterError::ResourceInUse(String::from(error_message))
+                    return DeleteClusterError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteClusterError::ResourceNotFound(String::from(error_message))
+                    return DeleteClusterError::ResourceNotFound(String::from(error_message));
                 }
                 "ServerException" => return DeleteClusterError::Server(String::from(error_message)),
                 "ServiceUnavailableException" => {
-                    return DeleteClusterError::ServiceUnavailable(String::from(error_message))
+                    return DeleteClusterError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string())
+                    return DeleteClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -495,19 +495,19 @@ impl DescribeClusterError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeClusterError::Client(String::from(error_message))
+                    return DescribeClusterError::Client(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeClusterError::ResourceNotFound(String::from(error_message))
+                    return DescribeClusterError::ResourceNotFound(String::from(error_message));
                 }
                 "ServerException" => {
-                    return DescribeClusterError::Server(String::from(error_message))
+                    return DescribeClusterError::Server(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeClusterError::ServiceUnavailable(String::from(error_message))
+                    return DescribeClusterError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeClusterError::Validation(error_message.to_string())
+                    return DescribeClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -608,14 +608,14 @@ impl ListClustersError {
             match error_type {
                 "ClientException" => return ListClustersError::Client(String::from(error_message)),
                 "InvalidParameterException" => {
-                    return ListClustersError::InvalidParameter(String::from(error_message))
+                    return ListClustersError::InvalidParameter(String::from(error_message));
                 }
                 "ServerException" => return ListClustersError::Server(String::from(error_message)),
                 "ServiceUnavailableException" => {
-                    return ListClustersError::ServiceUnavailable(String::from(error_message))
+                    return ListClustersError::ServiceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListClustersError::Validation(error_message.to_string())
+                    return ListClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

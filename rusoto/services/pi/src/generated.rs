@@ -286,16 +286,16 @@ impl DescribeDimensionKeysError {
                 "InternalServiceError" => {
                     return DescribeDimensionKeysError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeDimensionKeysError::InvalidArgument(String::from(error_message))
+                    return DescribeDimensionKeysError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeDimensionKeysError::NotAuthorized(String::from(error_message))
+                    return DescribeDimensionKeysError::NotAuthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDimensionKeysError::Validation(error_message.to_string())
+                    return DescribeDimensionKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -382,16 +382,16 @@ impl GetResourceMetricsError {
                 "InternalServiceError" => {
                     return GetResourceMetricsError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return GetResourceMetricsError::InvalidArgument(String::from(error_message))
+                    return GetResourceMetricsError::InvalidArgument(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetResourceMetricsError::NotAuthorized(String::from(error_message))
+                    return GetResourceMetricsError::NotAuthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResourceMetricsError::Validation(error_message.to_string())
+                    return GetResourceMetricsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

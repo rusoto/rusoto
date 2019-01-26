@@ -3286,10 +3286,10 @@ impl AssignInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return AssignInstanceError::ResourceNotFound(String::from(error_message))
+                    return AssignInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssignInstanceError::Validation(error_message.to_string())
+                    return AssignInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3366,10 +3366,10 @@ impl AssignVolumeError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return AssignVolumeError::ResourceNotFound(String::from(error_message))
+                    return AssignVolumeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssignVolumeError::Validation(error_message.to_string())
+                    return AssignVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3446,10 +3446,10 @@ impl AssociateElasticIpError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return AssociateElasticIpError::ResourceNotFound(String::from(error_message))
+                    return AssociateElasticIpError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateElasticIpError::Validation(error_message.to_string())
+                    return AssociateElasticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3530,10 +3530,10 @@ impl AttachElasticLoadBalancerError {
                 "ResourceNotFoundException" => {
                     return AttachElasticLoadBalancerError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AttachElasticLoadBalancerError::Validation(error_message.to_string())
+                    return AttachElasticLoadBalancerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3612,10 +3612,10 @@ impl CloneStackError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return CloneStackError::ResourceNotFound(String::from(error_message))
+                    return CloneStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CloneStackError::Validation(error_message.to_string())
+                    return CloneStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3692,10 +3692,10 @@ impl CreateAppError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return CreateAppError::ResourceNotFound(String::from(error_message))
+                    return CreateAppError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAppError::Validation(error_message.to_string())
+                    return CreateAppError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3772,10 +3772,10 @@ impl CreateDeploymentError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return CreateDeploymentError::ResourceNotFound(String::from(error_message))
+                    return CreateDeploymentError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDeploymentError::Validation(error_message.to_string())
+                    return CreateDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3852,10 +3852,10 @@ impl CreateInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return CreateInstanceError::ResourceNotFound(String::from(error_message))
+                    return CreateInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateInstanceError::Validation(error_message.to_string())
+                    return CreateInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3932,10 +3932,10 @@ impl CreateLayerError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return CreateLayerError::ResourceNotFound(String::from(error_message))
+                    return CreateLayerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLayerError::Validation(error_message.to_string())
+                    return CreateLayerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4010,7 +4010,7 @@ impl CreateStackError {
 
             match *error_type {
                 "ValidationException" => {
-                    return CreateStackError::Validation(error_message.to_string())
+                    return CreateStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4084,7 +4084,7 @@ impl CreateUserProfileError {
 
             match *error_type {
                 "ValidationException" => {
-                    return CreateUserProfileError::Validation(error_message.to_string())
+                    return CreateUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4162,10 +4162,10 @@ impl DeleteAppError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeleteAppError::ResourceNotFound(String::from(error_message))
+                    return DeleteAppError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAppError::Validation(error_message.to_string())
+                    return DeleteAppError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4242,10 +4242,10 @@ impl DeleteInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeleteInstanceError::ResourceNotFound(String::from(error_message))
+                    return DeleteInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInstanceError::Validation(error_message.to_string())
+                    return DeleteInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4322,10 +4322,10 @@ impl DeleteLayerError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeleteLayerError::ResourceNotFound(String::from(error_message))
+                    return DeleteLayerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLayerError::Validation(error_message.to_string())
+                    return DeleteLayerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4402,10 +4402,10 @@ impl DeleteStackError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeleteStackError::ResourceNotFound(String::from(error_message))
+                    return DeleteStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStackError::Validation(error_message.to_string())
+                    return DeleteStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4482,10 +4482,10 @@ impl DeleteUserProfileError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeleteUserProfileError::ResourceNotFound(String::from(error_message))
+                    return DeleteUserProfileError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserProfileError::Validation(error_message.to_string())
+                    return DeleteUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4564,10 +4564,10 @@ impl DeregisterEcsClusterError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeregisterEcsClusterError::ResourceNotFound(String::from(error_message))
+                    return DeregisterEcsClusterError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterEcsClusterError::Validation(error_message.to_string())
+                    return DeregisterEcsClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4646,10 +4646,10 @@ impl DeregisterElasticIpError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeregisterElasticIpError::ResourceNotFound(String::from(error_message))
+                    return DeregisterElasticIpError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterElasticIpError::Validation(error_message.to_string())
+                    return DeregisterElasticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4728,10 +4728,10 @@ impl DeregisterInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeregisterInstanceError::ResourceNotFound(String::from(error_message))
+                    return DeregisterInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterInstanceError::Validation(error_message.to_string())
+                    return DeregisterInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4812,10 +4812,10 @@ impl DeregisterRdsDbInstanceError {
                 "ResourceNotFoundException" => {
                     return DeregisterRdsDbInstanceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeregisterRdsDbInstanceError::Validation(error_message.to_string())
+                    return DeregisterRdsDbInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4894,10 +4894,10 @@ impl DeregisterVolumeError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeregisterVolumeError::ResourceNotFound(String::from(error_message))
+                    return DeregisterVolumeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterVolumeError::Validation(error_message.to_string())
+                    return DeregisterVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4974,10 +4974,10 @@ impl DescribeAgentVersionsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeAgentVersionsError::ResourceNotFound(String::from(error_message))
+                    return DescribeAgentVersionsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAgentVersionsError::Validation(error_message.to_string())
+                    return DescribeAgentVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5056,10 +5056,10 @@ impl DescribeAppsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeAppsError::ResourceNotFound(String::from(error_message))
+                    return DescribeAppsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAppsError::Validation(error_message.to_string())
+                    return DescribeAppsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5136,10 +5136,10 @@ impl DescribeCommandsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeCommandsError::ResourceNotFound(String::from(error_message))
+                    return DescribeCommandsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeCommandsError::Validation(error_message.to_string())
+                    return DescribeCommandsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5216,10 +5216,10 @@ impl DescribeDeploymentsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeDeploymentsError::ResourceNotFound(String::from(error_message))
+                    return DescribeDeploymentsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDeploymentsError::Validation(error_message.to_string())
+                    return DescribeDeploymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5298,10 +5298,10 @@ impl DescribeEcsClustersError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeEcsClustersError::ResourceNotFound(String::from(error_message))
+                    return DescribeEcsClustersError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEcsClustersError::Validation(error_message.to_string())
+                    return DescribeEcsClustersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5380,10 +5380,10 @@ impl DescribeElasticIpsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeElasticIpsError::ResourceNotFound(String::from(error_message))
+                    return DescribeElasticIpsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeElasticIpsError::Validation(error_message.to_string())
+                    return DescribeElasticIpsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5464,10 +5464,10 @@ impl DescribeElasticLoadBalancersError {
                 "ResourceNotFoundException" => {
                     return DescribeElasticLoadBalancersError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeElasticLoadBalancersError::Validation(error_message.to_string())
+                    return DescribeElasticLoadBalancersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5546,10 +5546,10 @@ impl DescribeInstancesError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeInstancesError::ResourceNotFound(String::from(error_message))
+                    return DescribeInstancesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeInstancesError::Validation(error_message.to_string())
+                    return DescribeInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5628,10 +5628,10 @@ impl DescribeLayersError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeLayersError::ResourceNotFound(String::from(error_message))
+                    return DescribeLayersError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLayersError::Validation(error_message.to_string())
+                    return DescribeLayersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5710,10 +5710,10 @@ impl DescribeLoadBasedAutoScalingError {
                 "ResourceNotFoundException" => {
                     return DescribeLoadBasedAutoScalingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeLoadBasedAutoScalingError::Validation(error_message.to_string())
+                    return DescribeLoadBasedAutoScalingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5790,7 +5790,7 @@ impl DescribeMyUserProfileError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeMyUserProfileError::Validation(error_message.to_string())
+                    return DescribeMyUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5866,7 +5866,7 @@ impl DescribeOperatingSystemsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DescribeOperatingSystemsError::Validation(error_message.to_string())
+                    return DescribeOperatingSystemsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5944,10 +5944,10 @@ impl DescribePermissionsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribePermissionsError::ResourceNotFound(String::from(error_message))
+                    return DescribePermissionsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePermissionsError::Validation(error_message.to_string())
+                    return DescribePermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6026,10 +6026,10 @@ impl DescribeRaidArraysError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeRaidArraysError::ResourceNotFound(String::from(error_message))
+                    return DescribeRaidArraysError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeRaidArraysError::Validation(error_message.to_string())
+                    return DescribeRaidArraysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6110,10 +6110,10 @@ impl DescribeRdsDbInstancesError {
                 "ResourceNotFoundException" => {
                     return DescribeRdsDbInstancesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeRdsDbInstancesError::Validation(error_message.to_string())
+                    return DescribeRdsDbInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6192,10 +6192,10 @@ impl DescribeServiceErrorsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeServiceErrorsError::ResourceNotFound(String::from(error_message))
+                    return DescribeServiceErrorsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeServiceErrorsError::Validation(error_message.to_string())
+                    return DescribeServiceErrorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6276,12 +6276,12 @@ impl DescribeStackProvisioningParametersError {
                 "ResourceNotFoundException" => {
                     return DescribeStackProvisioningParametersError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeStackProvisioningParametersError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -6360,10 +6360,10 @@ impl DescribeStackSummaryError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeStackSummaryError::ResourceNotFound(String::from(error_message))
+                    return DescribeStackSummaryError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStackSummaryError::Validation(error_message.to_string())
+                    return DescribeStackSummaryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6442,10 +6442,10 @@ impl DescribeStacksError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeStacksError::ResourceNotFound(String::from(error_message))
+                    return DescribeStacksError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStacksError::Validation(error_message.to_string())
+                    return DescribeStacksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6524,10 +6524,10 @@ impl DescribeTimeBasedAutoScalingError {
                 "ResourceNotFoundException" => {
                     return DescribeTimeBasedAutoScalingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeTimeBasedAutoScalingError::Validation(error_message.to_string())
+                    return DescribeTimeBasedAutoScalingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6606,10 +6606,10 @@ impl DescribeUserProfilesError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeUserProfilesError::ResourceNotFound(String::from(error_message))
+                    return DescribeUserProfilesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserProfilesError::Validation(error_message.to_string())
+                    return DescribeUserProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6688,10 +6688,10 @@ impl DescribeVolumesError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeVolumesError::ResourceNotFound(String::from(error_message))
+                    return DescribeVolumesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeVolumesError::Validation(error_message.to_string())
+                    return DescribeVolumesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6770,10 +6770,10 @@ impl DetachElasticLoadBalancerError {
                 "ResourceNotFoundException" => {
                     return DetachElasticLoadBalancerError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DetachElasticLoadBalancerError::Validation(error_message.to_string())
+                    return DetachElasticLoadBalancerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6852,10 +6852,10 @@ impl DisassociateElasticIpError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DisassociateElasticIpError::ResourceNotFound(String::from(error_message))
+                    return DisassociateElasticIpError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateElasticIpError::Validation(error_message.to_string())
+                    return DisassociateElasticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6934,10 +6934,10 @@ impl GetHostnameSuggestionError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return GetHostnameSuggestionError::ResourceNotFound(String::from(error_message))
+                    return GetHostnameSuggestionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetHostnameSuggestionError::Validation(error_message.to_string())
+                    return GetHostnameSuggestionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7016,10 +7016,10 @@ impl GrantAccessError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return GrantAccessError::ResourceNotFound(String::from(error_message))
+                    return GrantAccessError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GrantAccessError::Validation(error_message.to_string())
+                    return GrantAccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7096,10 +7096,10 @@ impl ListTagsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return ListTagsError::ResourceNotFound(String::from(error_message))
+                    return ListTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7176,10 +7176,10 @@ impl RebootInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RebootInstanceError::ResourceNotFound(String::from(error_message))
+                    return RebootInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RebootInstanceError::Validation(error_message.to_string())
+                    return RebootInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7256,10 +7256,10 @@ impl RegisterEcsClusterError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RegisterEcsClusterError::ResourceNotFound(String::from(error_message))
+                    return RegisterEcsClusterError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterEcsClusterError::Validation(error_message.to_string())
+                    return RegisterEcsClusterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7338,10 +7338,10 @@ impl RegisterElasticIpError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RegisterElasticIpError::ResourceNotFound(String::from(error_message))
+                    return RegisterElasticIpError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterElasticIpError::Validation(error_message.to_string())
+                    return RegisterElasticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7420,10 +7420,10 @@ impl RegisterInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RegisterInstanceError::ResourceNotFound(String::from(error_message))
+                    return RegisterInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterInstanceError::Validation(error_message.to_string())
+                    return RegisterInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7500,10 +7500,10 @@ impl RegisterRdsDbInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RegisterRdsDbInstanceError::ResourceNotFound(String::from(error_message))
+                    return RegisterRdsDbInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterRdsDbInstanceError::Validation(error_message.to_string())
+                    return RegisterRdsDbInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7582,10 +7582,10 @@ impl RegisterVolumeError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RegisterVolumeError::ResourceNotFound(String::from(error_message))
+                    return RegisterVolumeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterVolumeError::Validation(error_message.to_string())
+                    return RegisterVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7664,10 +7664,10 @@ impl SetLoadBasedAutoScalingError {
                 "ResourceNotFoundException" => {
                     return SetLoadBasedAutoScalingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetLoadBasedAutoScalingError::Validation(error_message.to_string())
+                    return SetLoadBasedAutoScalingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7746,10 +7746,10 @@ impl SetPermissionError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return SetPermissionError::ResourceNotFound(String::from(error_message))
+                    return SetPermissionError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetPermissionError::Validation(error_message.to_string())
+                    return SetPermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7828,10 +7828,10 @@ impl SetTimeBasedAutoScalingError {
                 "ResourceNotFoundException" => {
                     return SetTimeBasedAutoScalingError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SetTimeBasedAutoScalingError::Validation(error_message.to_string())
+                    return SetTimeBasedAutoScalingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7910,10 +7910,10 @@ impl StartInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return StartInstanceError::ResourceNotFound(String::from(error_message))
+                    return StartInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartInstanceError::Validation(error_message.to_string())
+                    return StartInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7990,10 +7990,10 @@ impl StartStackError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return StartStackError::ResourceNotFound(String::from(error_message))
+                    return StartStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartStackError::Validation(error_message.to_string())
+                    return StartStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8070,10 +8070,10 @@ impl StopInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return StopInstanceError::ResourceNotFound(String::from(error_message))
+                    return StopInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopInstanceError::Validation(error_message.to_string())
+                    return StopInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8150,10 +8150,10 @@ impl StopStackError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return StopStackError::ResourceNotFound(String::from(error_message))
+                    return StopStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopStackError::Validation(error_message.to_string())
+                    return StopStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8230,10 +8230,10 @@ impl TagResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8310,10 +8310,10 @@ impl UnassignInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UnassignInstanceError::ResourceNotFound(String::from(error_message))
+                    return UnassignInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UnassignInstanceError::Validation(error_message.to_string())
+                    return UnassignInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8390,10 +8390,10 @@ impl UnassignVolumeError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UnassignVolumeError::ResourceNotFound(String::from(error_message))
+                    return UnassignVolumeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UnassignVolumeError::Validation(error_message.to_string())
+                    return UnassignVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8470,10 +8470,10 @@ impl UntagResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8550,10 +8550,10 @@ impl UpdateAppError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateAppError::ResourceNotFound(String::from(error_message))
+                    return UpdateAppError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAppError::Validation(error_message.to_string())
+                    return UpdateAppError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8630,10 +8630,10 @@ impl UpdateElasticIpError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateElasticIpError::ResourceNotFound(String::from(error_message))
+                    return UpdateElasticIpError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateElasticIpError::Validation(error_message.to_string())
+                    return UpdateElasticIpError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8710,10 +8710,10 @@ impl UpdateInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateInstanceError::ResourceNotFound(String::from(error_message))
+                    return UpdateInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateInstanceError::Validation(error_message.to_string())
+                    return UpdateInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8790,10 +8790,10 @@ impl UpdateLayerError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateLayerError::ResourceNotFound(String::from(error_message))
+                    return UpdateLayerError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateLayerError::Validation(error_message.to_string())
+                    return UpdateLayerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8868,7 +8868,7 @@ impl UpdateMyUserProfileError {
 
             match *error_type {
                 "ValidationException" => {
-                    return UpdateMyUserProfileError::Validation(error_message.to_string())
+                    return UpdateMyUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8946,10 +8946,10 @@ impl UpdateRdsDbInstanceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateRdsDbInstanceError::ResourceNotFound(String::from(error_message))
+                    return UpdateRdsDbInstanceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRdsDbInstanceError::Validation(error_message.to_string())
+                    return UpdateRdsDbInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9028,10 +9028,10 @@ impl UpdateStackError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateStackError::ResourceNotFound(String::from(error_message))
+                    return UpdateStackError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateStackError::Validation(error_message.to_string())
+                    return UpdateStackError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9108,10 +9108,10 @@ impl UpdateUserProfileError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateUserProfileError::ResourceNotFound(String::from(error_message))
+                    return UpdateUserProfileError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateUserProfileError::Validation(error_message.to_string())
+                    return UpdateUserProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9190,10 +9190,10 @@ impl UpdateVolumeError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UpdateVolumeError::ResourceNotFound(String::from(error_message))
+                    return UpdateVolumeError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateVolumeError::Validation(error_message.to_string())
+                    return UpdateVolumeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

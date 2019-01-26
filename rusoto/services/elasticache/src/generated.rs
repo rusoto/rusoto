@@ -8220,22 +8220,22 @@ impl AddTagsToResourceError {
                     "CacheClusterNotFound" => {
                         return AddTagsToResourceError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidARN" => {
                         return AddTagsToResourceError::InvalidARNFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotNotFoundFault" => {
                         return AddTagsToResourceError::SnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagQuotaPerResourceExceeded" => {
                         return AddTagsToResourceError::TagQuotaPerResourceExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8435,32 +8435,32 @@ impl CopySnapshotError {
                     "InvalidParameterCombination" => {
                         return CopySnapshotError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return CopySnapshotError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSnapshotState" => {
                         return CopySnapshotError::InvalidSnapshotStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return CopySnapshotError::SnapshotAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotNotFoundFault" => {
                         return CopySnapshotError::SnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotQuotaExceededFault" => {
                         return CopySnapshotError::SnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8575,72 +8575,72 @@ impl CreateCacheClusterError {
                     "CacheClusterAlreadyExists" => {
                         return CreateCacheClusterError::CacheClusterAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheParameterGroupNotFound" => {
                         return CreateCacheClusterError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSecurityGroupNotFound" => {
                         return CreateCacheClusterError::CacheSecurityGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSubnetGroupNotFoundFault" => {
                         return CreateCacheClusterError::CacheSubnetGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ClusterQuotaForCustomerExceeded" => {
                         return CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return CreateCacheClusterError::InsufficientCacheClusterCapacityFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return CreateCacheClusterError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return CreateCacheClusterError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidReplicationGroupState" => {
                         return CreateCacheClusterError::InvalidReplicationGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return CreateCacheClusterError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NodeQuotaForClusterExceeded" => {
                         return CreateCacheClusterError::NodeQuotaForClusterExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NodeQuotaForCustomerExceeded" => {
                         return CreateCacheClusterError::NodeQuotaForCustomerExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return CreateCacheClusterError::ReplicationGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagQuotaPerResourceExceeded" => {
                         return CreateCacheClusterError::TagQuotaPerResourceExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8747,27 +8747,27 @@ impl CreateCacheParameterGroupError {
                     "CacheParameterGroupAlreadyExists" => {
                         return CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheParameterGroupQuotaExceeded" => {
                         return CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheParameterGroupState" => {
                         return CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return CreateCacheParameterGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return CreateCacheParameterGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8869,22 +8869,22 @@ impl CreateCacheSecurityGroupError {
                     "CacheSecurityGroupAlreadyExists" => {
                         return CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "QuotaExceeded.CacheSecurityGroup" => {
                         return CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return CreateCacheSecurityGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return CreateCacheSecurityGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8979,22 +8979,22 @@ impl CreateCacheSubnetGroupError {
                     "CacheSubnetGroupAlreadyExists" => {
                         return CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSubnetGroupQuotaExceeded" => {
                         return CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSubnetQuotaExceededFault" => {
                         return CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidSubnet" => {
                         return CreateCacheSubnetGroupError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9224,47 +9224,47 @@ impl CreateSnapshotError {
                     "CacheClusterNotFound" => {
                         return CreateSnapshotError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidCacheClusterState" => {
                         return CreateSnapshotError::InvalidCacheClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return CreateSnapshotError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return CreateSnapshotError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidReplicationGroupState" => {
                         return CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return CreateSnapshotError::ReplicationGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return CreateSnapshotError::SnapshotAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotFeatureNotSupportedFault" => {
                         return CreateSnapshotError::SnapshotFeatureNotSupportedFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotQuotaExceededFault" => {
                         return CreateSnapshotError::SnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9368,37 +9368,37 @@ impl DeleteCacheClusterError {
                     "CacheClusterNotFound" => {
                         return DeleteCacheClusterError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidCacheClusterState" => {
                         return DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return DeleteCacheClusterError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return DeleteCacheClusterError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotFeatureNotSupportedFault" => {
                         return DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotQuotaExceededFault" => {
                         return DeleteCacheClusterError::SnapshotQuotaExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9496,22 +9496,22 @@ impl DeleteCacheParameterGroupError {
                     "CacheParameterGroupNotFound" => {
                         return DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheParameterGroupState" => {
                         return DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return DeleteCacheParameterGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DeleteCacheParameterGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9608,22 +9608,22 @@ impl DeleteCacheSecurityGroupError {
                     "CacheSecurityGroupNotFound" => {
                         return DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheSecurityGroupState" => {
                         return DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return DeleteCacheSecurityGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DeleteCacheSecurityGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9714,12 +9714,12 @@ impl DeleteCacheSubnetGroupError {
                     "CacheSubnetGroupInUse" => {
                         return DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CacheSubnetGroupNotFoundFault" => {
                         return DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9818,37 +9818,37 @@ impl DeleteReplicationGroupError {
                     "InvalidParameterCombination" => {
                         return DeleteReplicationGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DeleteReplicationGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidReplicationGroupState" => {
                         return DeleteReplicationGroupError::InvalidReplicationGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return DeleteReplicationGroupError::ReplicationGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return DeleteReplicationGroupError::SnapshotAlreadyExistsFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotFeatureNotSupportedFault" => {
                         return DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "SnapshotQuotaExceededFault" => {
                         return DeleteReplicationGroupError::SnapshotQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9946,22 +9946,22 @@ impl DeleteSnapshotError {
                     "InvalidParameterCombination" => {
                         return DeleteSnapshotError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return DeleteSnapshotError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSnapshotState" => {
                         return DeleteSnapshotError::InvalidSnapshotStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotNotFoundFault" => {
                         return DeleteSnapshotError::SnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10052,17 +10052,17 @@ impl DescribeCacheClustersError {
                     "CacheClusterNotFound" => {
                         return DescribeCacheClustersError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return DescribeCacheClustersError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeCacheClustersError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10232,17 +10232,17 @@ impl DescribeCacheParameterGroupsError {
                     "CacheParameterGroupNotFound" => {
                         return DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return DescribeCacheParameterGroupsError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeCacheParameterGroupsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10334,17 +10334,17 @@ impl DescribeCacheParametersError {
                     "CacheParameterGroupNotFound" => {
                         return DescribeCacheParametersError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return DescribeCacheParametersError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeCacheParametersError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10436,17 +10436,17 @@ impl DescribeCacheSecurityGroupsError {
                     "CacheSecurityGroupNotFound" => {
                         return DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return DescribeCacheSecurityGroupsError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeCacheSecurityGroupsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10534,7 +10534,7 @@ impl DescribeCacheSubnetGroupsError {
                     "CacheSubnetGroupNotFoundFault" => {
                         return DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10622,12 +10622,12 @@ impl DescribeEngineDefaultParametersError {
                     "InvalidParameterCombination" => {
                         return DescribeEngineDefaultParametersError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeEngineDefaultParametersError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10716,12 +10716,12 @@ impl DescribeEventsError {
                     "InvalidParameterCombination" => {
                         return DescribeEventsError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return DescribeEventsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10810,17 +10810,17 @@ impl DescribeReplicationGroupsError {
                     "InvalidParameterCombination" => {
                         return DescribeReplicationGroupsError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeReplicationGroupsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10912,17 +10912,17 @@ impl DescribeReservedCacheNodesError {
                     "InvalidParameterCombination" => {
                         return DescribeReservedCacheNodesError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return DescribeReservedCacheNodesError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReservedCacheNodeNotFound" => {
                         return DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11107,22 +11107,22 @@ impl DescribeSnapshotsError {
                     "CacheClusterNotFound" => {
                         return DescribeSnapshotsError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return DescribeSnapshotsError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return DescribeSnapshotsError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotNotFoundFault" => {
                         return DescribeSnapshotsError::SnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11217,22 +11217,22 @@ impl ListAllowedNodeTypeModificationsError {
                     "CacheClusterNotFound" => {
                         return ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return ListAllowedNodeTypeModificationsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11327,17 +11327,17 @@ impl ListTagsForResourceError {
                     "CacheClusterNotFound" => {
                         return ListTagsForResourceError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidARN" => {
                         return ListTagsForResourceError::InvalidARNFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotNotFoundFault" => {
                         return ListTagsForResourceError::SnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11445,57 +11445,57 @@ impl ModifyCacheClusterError {
                     "CacheClusterNotFound" => {
                         return ModifyCacheClusterError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CacheParameterGroupNotFound" => {
                         return ModifyCacheClusterError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSecurityGroupNotFound" => {
                         return ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheClusterState" => {
                         return ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidCacheSecurityGroupState" => {
                         return ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return ModifyCacheClusterError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return ModifyCacheClusterError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NodeQuotaForClusterExceeded" => {
                         return ModifyCacheClusterError::NodeQuotaForClusterExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NodeQuotaForCustomerExceeded" => {
                         return ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -11597,22 +11597,22 @@ impl ModifyCacheParameterGroupError {
                     "CacheParameterGroupNotFound" => {
                         return ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheParameterGroupState" => {
                         return ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return ModifyCacheParameterGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return ModifyCacheParameterGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11709,22 +11709,22 @@ impl ModifyCacheSubnetGroupError {
                     "CacheSubnetGroupNotFoundFault" => {
                         return ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSubnetQuotaExceededFault" => {
                         return ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidSubnet" => {
                         return ModifyCacheSubnetGroupError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetInUse" => {
                         return ModifyCacheSubnetGroupError::SubnetInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11837,67 +11837,67 @@ impl ModifyReplicationGroupError {
                     "CacheClusterNotFound" => {
                         return ModifyReplicationGroupError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CacheParameterGroupNotFound" => {
                         return ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "CacheSecurityGroupNotFound" => {
                         return ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheClusterState" => {
                         return ModifyReplicationGroupError::InvalidCacheClusterStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheSecurityGroupState" => {
                         return ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return ModifyReplicationGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return ModifyReplicationGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidReplicationGroupState" => {
                         return ModifyReplicationGroupError::InvalidReplicationGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return ModifyReplicationGroupError::InvalidVPCNetworkStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NodeQuotaForClusterExceeded" => {
                         return ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "NodeQuotaForCustomerExceeded" => {
                         return ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return ModifyReplicationGroupError::ReplicationGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -12203,12 +12203,12 @@ impl RebootCacheClusterError {
                     "CacheClusterNotFound" => {
                         return RebootCacheClusterError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidCacheClusterState" => {
                         return RebootCacheClusterError::InvalidCacheClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12301,22 +12301,22 @@ impl RemoveTagsFromResourceError {
                     "CacheClusterNotFound" => {
                         return RemoveTagsFromResourceError::CacheClusterNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidARN" => {
                         return RemoveTagsFromResourceError::InvalidARNFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SnapshotNotFoundFault" => {
                         return RemoveTagsFromResourceError::SnapshotNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TagNotFound" => {
                         return RemoveTagsFromResourceError::TagNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12411,22 +12411,22 @@ impl ResetCacheParameterGroupError {
                     "CacheParameterGroupNotFound" => {
                         return ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidCacheParameterGroupState" => {
                         return ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterCombination" => {
                         return ResetCacheParameterGroupError::InvalidParameterCombination(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidParameterValue" => {
                         return ResetCacheParameterGroupError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12626,42 +12626,42 @@ impl TestFailoverError {
                     "APICallRateForCustomerExceeded" => {
                         return TestFailoverError::APICallRateForCustomerExceededFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidCacheClusterState" => {
                         return TestFailoverError::InvalidCacheClusterStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterCombination" => {
                         return TestFailoverError::InvalidParameterCombination(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidParameterValue" => {
                         return TestFailoverError::InvalidParameterValue(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidReplicationGroupState" => {
                         return TestFailoverError::InvalidReplicationGroupStateFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NodeGroupNotFoundFault" => {
                         return TestFailoverError::NodeGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return TestFailoverError::ReplicationGroupNotFoundFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TestFailoverNotAvailableFault" => {
                         return TestFailoverError::TestFailoverNotAvailableFault(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

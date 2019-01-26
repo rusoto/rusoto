@@ -738,19 +738,19 @@ impl ActivatePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ActivatePipelineError::InternalServiceError(String::from(error_message))
+                    return ActivatePipelineError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ActivatePipelineError::InvalidRequest(String::from(error_message))
+                    return ActivatePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return ActivatePipelineError::PipelineDeleted(String::from(error_message))
+                    return ActivatePipelineError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return ActivatePipelineError::PipelineNotFound(String::from(error_message))
+                    return ActivatePipelineError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ActivatePipelineError::Validation(error_message.to_string())
+                    return ActivatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -836,16 +836,16 @@ impl AddTagsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return AddTagsError::InternalServiceError(String::from(error_message))
+                    return AddTagsError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return AddTagsError::InvalidRequest(String::from(error_message))
+                    return AddTagsError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return AddTagsError::PipelineDeleted(String::from(error_message))
+                    return AddTagsError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return AddTagsError::PipelineNotFound(String::from(error_message))
+                    return AddTagsError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => return AddTagsError::Validation(error_message.to_string()),
                 _ => {}
@@ -928,13 +928,13 @@ impl CreatePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return CreatePipelineError::InternalServiceError(String::from(error_message))
+                    return CreatePipelineError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreatePipelineError::InvalidRequest(String::from(error_message))
+                    return CreatePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string())
+                    return CreatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1020,19 +1020,19 @@ impl DeactivatePipelineError {
                 "InternalServiceError" => {
                     return DeactivatePipelineError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeactivatePipelineError::InvalidRequest(String::from(error_message))
+                    return DeactivatePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return DeactivatePipelineError::PipelineDeleted(String::from(error_message))
+                    return DeactivatePipelineError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return DeactivatePipelineError::PipelineNotFound(String::from(error_message))
+                    return DeactivatePipelineError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeactivatePipelineError::Validation(error_message.to_string())
+                    return DeactivatePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1118,16 +1118,16 @@ impl DeletePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DeletePipelineError::InternalServiceError(String::from(error_message))
+                    return DeletePipelineError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeletePipelineError::InvalidRequest(String::from(error_message))
+                    return DeletePipelineError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return DeletePipelineError::PipelineNotFound(String::from(error_message))
+                    return DeletePipelineError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string())
+                    return DeletePipelineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1212,19 +1212,19 @@ impl DescribeObjectsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DescribeObjectsError::InternalServiceError(String::from(error_message))
+                    return DescribeObjectsError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribeObjectsError::InvalidRequest(String::from(error_message))
+                    return DescribeObjectsError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return DescribeObjectsError::PipelineDeleted(String::from(error_message))
+                    return DescribeObjectsError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return DescribeObjectsError::PipelineNotFound(String::from(error_message))
+                    return DescribeObjectsError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeObjectsError::Validation(error_message.to_string())
+                    return DescribeObjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1310,19 +1310,19 @@ impl DescribePipelinesError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DescribePipelinesError::InternalServiceError(String::from(error_message))
+                    return DescribePipelinesError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DescribePipelinesError::InvalidRequest(String::from(error_message))
+                    return DescribePipelinesError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return DescribePipelinesError::PipelineDeleted(String::from(error_message))
+                    return DescribePipelinesError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return DescribePipelinesError::PipelineNotFound(String::from(error_message))
+                    return DescribePipelinesError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePipelinesError::Validation(error_message.to_string())
+                    return DescribePipelinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1414,22 +1414,22 @@ impl EvaluateExpressionError {
                 "InternalServiceError" => {
                     return EvaluateExpressionError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return EvaluateExpressionError::InvalidRequest(String::from(error_message))
+                    return EvaluateExpressionError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return EvaluateExpressionError::PipelineDeleted(String::from(error_message))
+                    return EvaluateExpressionError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return EvaluateExpressionError::PipelineNotFound(String::from(error_message))
+                    return EvaluateExpressionError::PipelineNotFound(String::from(error_message));
                 }
                 "TaskNotFoundException" => {
-                    return EvaluateExpressionError::TaskNotFound(String::from(error_message))
+                    return EvaluateExpressionError::TaskNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EvaluateExpressionError::Validation(error_message.to_string())
+                    return EvaluateExpressionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1520,19 +1520,19 @@ impl GetPipelineDefinitionError {
                 "InternalServiceError" => {
                     return GetPipelineDefinitionError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return GetPipelineDefinitionError::InvalidRequest(String::from(error_message))
+                    return GetPipelineDefinitionError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return GetPipelineDefinitionError::PipelineDeleted(String::from(error_message))
+                    return GetPipelineDefinitionError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return GetPipelineDefinitionError::PipelineNotFound(String::from(error_message))
+                    return GetPipelineDefinitionError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPipelineDefinitionError::Validation(error_message.to_string())
+                    return GetPipelineDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1616,13 +1616,13 @@ impl ListPipelinesError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ListPipelinesError::InternalServiceError(String::from(error_message))
+                    return ListPipelinesError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListPipelinesError::InvalidRequest(String::from(error_message))
+                    return ListPipelinesError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string())
+                    return ListPipelinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1704,16 +1704,16 @@ impl PollForTaskError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return PollForTaskError::InternalServiceError(String::from(error_message))
+                    return PollForTaskError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return PollForTaskError::InvalidRequest(String::from(error_message))
+                    return PollForTaskError::InvalidRequest(String::from(error_message));
                 }
                 "TaskNotFoundException" => {
-                    return PollForTaskError::TaskNotFound(String::from(error_message))
+                    return PollForTaskError::TaskNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PollForTaskError::Validation(error_message.to_string())
+                    return PollForTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1800,19 +1800,19 @@ impl PutPipelineDefinitionError {
                 "InternalServiceError" => {
                     return PutPipelineDefinitionError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return PutPipelineDefinitionError::InvalidRequest(String::from(error_message))
+                    return PutPipelineDefinitionError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return PutPipelineDefinitionError::PipelineDeleted(String::from(error_message))
+                    return PutPipelineDefinitionError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return PutPipelineDefinitionError::PipelineNotFound(String::from(error_message))
+                    return PutPipelineDefinitionError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutPipelineDefinitionError::Validation(error_message.to_string())
+                    return PutPipelineDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1900,19 +1900,19 @@ impl QueryObjectsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return QueryObjectsError::InternalServiceError(String::from(error_message))
+                    return QueryObjectsError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return QueryObjectsError::InvalidRequest(String::from(error_message))
+                    return QueryObjectsError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return QueryObjectsError::PipelineDeleted(String::from(error_message))
+                    return QueryObjectsError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return QueryObjectsError::PipelineNotFound(String::from(error_message))
+                    return QueryObjectsError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return QueryObjectsError::Validation(error_message.to_string())
+                    return QueryObjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1998,19 +1998,19 @@ impl RemoveTagsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return RemoveTagsError::InternalServiceError(String::from(error_message))
+                    return RemoveTagsError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return RemoveTagsError::InvalidRequest(String::from(error_message))
+                    return RemoveTagsError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return RemoveTagsError::PipelineDeleted(String::from(error_message))
+                    return RemoveTagsError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return RemoveTagsError::PipelineNotFound(String::from(error_message))
+                    return RemoveTagsError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsError::Validation(error_message.to_string())
+                    return RemoveTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2100,22 +2100,22 @@ impl ReportTaskProgressError {
                 "InternalServiceError" => {
                     return ReportTaskProgressError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ReportTaskProgressError::InvalidRequest(String::from(error_message))
+                    return ReportTaskProgressError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return ReportTaskProgressError::PipelineDeleted(String::from(error_message))
+                    return ReportTaskProgressError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return ReportTaskProgressError::PipelineNotFound(String::from(error_message))
+                    return ReportTaskProgressError::PipelineNotFound(String::from(error_message));
                 }
                 "TaskNotFoundException" => {
-                    return ReportTaskProgressError::TaskNotFound(String::from(error_message))
+                    return ReportTaskProgressError::TaskNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ReportTaskProgressError::Validation(error_message.to_string())
+                    return ReportTaskProgressError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2202,15 +2202,15 @@ impl ReportTaskRunnerHeartbeatError {
                 "InternalServiceError" => {
                     return ReportTaskRunnerHeartbeatError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ReportTaskRunnerHeartbeatError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ReportTaskRunnerHeartbeatError::Validation(error_message.to_string())
+                    return ReportTaskRunnerHeartbeatError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2296,19 +2296,19 @@ impl SetStatusError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return SetStatusError::InternalServiceError(String::from(error_message))
+                    return SetStatusError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return SetStatusError::InvalidRequest(String::from(error_message))
+                    return SetStatusError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return SetStatusError::PipelineDeleted(String::from(error_message))
+                    return SetStatusError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return SetStatusError::PipelineNotFound(String::from(error_message))
+                    return SetStatusError::PipelineNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetStatusError::Validation(error_message.to_string())
+                    return SetStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2396,22 +2396,22 @@ impl SetTaskStatusError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return SetTaskStatusError::InternalServiceError(String::from(error_message))
+                    return SetTaskStatusError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return SetTaskStatusError::InvalidRequest(String::from(error_message))
+                    return SetTaskStatusError::InvalidRequest(String::from(error_message));
                 }
                 "PipelineDeletedException" => {
-                    return SetTaskStatusError::PipelineDeleted(String::from(error_message))
+                    return SetTaskStatusError::PipelineDeleted(String::from(error_message));
                 }
                 "PipelineNotFoundException" => {
-                    return SetTaskStatusError::PipelineNotFound(String::from(error_message))
+                    return SetTaskStatusError::PipelineNotFound(String::from(error_message));
                 }
                 "TaskNotFoundException" => {
-                    return SetTaskStatusError::TaskNotFound(String::from(error_message))
+                    return SetTaskStatusError::TaskNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SetTaskStatusError::Validation(error_message.to_string())
+                    return SetTaskStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2500,25 +2500,25 @@ impl ValidatePipelineDefinitionError {
                 "InternalServiceError" => {
                     return ValidatePipelineDefinitionError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ValidatePipelineDefinitionError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PipelineDeletedException" => {
                     return ValidatePipelineDefinitionError::PipelineDeleted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "PipelineNotFoundException" => {
                     return ValidatePipelineDefinitionError::PipelineNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ValidatePipelineDefinitionError::Validation(error_message.to_string())
+                    return ValidatePipelineDefinitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

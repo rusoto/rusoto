@@ -1527,23 +1527,23 @@ impl AddIpRoutesError {
             match *error_type {
                 "ClientException" => return AddIpRoutesError::Client(String::from(error_message)),
                 "DirectoryUnavailableException" => {
-                    return AddIpRoutesError::DirectoryUnavailable(String::from(error_message))
+                    return AddIpRoutesError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityAlreadyExistsException" => {
-                    return AddIpRoutesError::EntityAlreadyExists(String::from(error_message))
+                    return AddIpRoutesError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return AddIpRoutesError::EntityDoesNotExist(String::from(error_message))
+                    return AddIpRoutesError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AddIpRoutesError::InvalidParameter(String::from(error_message))
+                    return AddIpRoutesError::InvalidParameter(String::from(error_message));
                 }
                 "IpRouteLimitExceededException" => {
-                    return AddIpRoutesError::IpRouteLimitExceeded(String::from(error_message))
+                    return AddIpRoutesError::IpRouteLimitExceeded(String::from(error_message));
                 }
                 "ServiceException" => return AddIpRoutesError::Service(String::from(error_message)),
                 "ValidationException" => {
-                    return AddIpRoutesError::Validation(error_message.to_string())
+                    return AddIpRoutesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1634,22 +1634,22 @@ impl AddTagsToResourceError {
 
             match *error_type {
                 "ClientException" => {
-                    return AddTagsToResourceError::Client(String::from(error_message))
+                    return AddTagsToResourceError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return AddTagsToResourceError::EntityDoesNotExist(String::from(error_message))
+                    return AddTagsToResourceError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return AddTagsToResourceError::InvalidParameter(String::from(error_message))
+                    return AddTagsToResourceError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return AddTagsToResourceError::Service(String::from(error_message))
+                    return AddTagsToResourceError::Service(String::from(error_message));
                 }
                 "TagLimitExceededException" => {
-                    return AddTagsToResourceError::TagLimitExceeded(String::from(error_message))
+                    return AddTagsToResourceError::TagLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string())
+                    return AddTagsToResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1736,18 +1736,18 @@ impl CancelSchemaExtensionError {
 
             match *error_type {
                 "ClientException" => {
-                    return CancelSchemaExtensionError::Client(String::from(error_message))
+                    return CancelSchemaExtensionError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
                     return CancelSchemaExtensionError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CancelSchemaExtensionError::Service(String::from(error_message))
+                    return CancelSchemaExtensionError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelSchemaExtensionError::Validation(error_message.to_string())
+                    return CancelSchemaExtensionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1834,21 +1834,21 @@ impl ConnectDirectoryError {
 
             match *error_type {
                 "ClientException" => {
-                    return ConnectDirectoryError::Client(String::from(error_message))
+                    return ConnectDirectoryError::Client(String::from(error_message));
                 }
                 "DirectoryLimitExceededException" => {
                     return ConnectDirectoryError::DirectoryLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ConnectDirectoryError::InvalidParameter(String::from(error_message))
+                    return ConnectDirectoryError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ConnectDirectoryError::Service(String::from(error_message))
+                    return ConnectDirectoryError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ConnectDirectoryError::Validation(error_message.to_string())
+                    return ConnectDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1937,17 +1937,17 @@ impl CreateAliasError {
             match *error_type {
                 "ClientException" => return CreateAliasError::Client(String::from(error_message)),
                 "EntityAlreadyExistsException" => {
-                    return CreateAliasError::EntityAlreadyExists(String::from(error_message))
+                    return CreateAliasError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return CreateAliasError::EntityDoesNotExist(String::from(error_message))
+                    return CreateAliasError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateAliasError::InvalidParameter(String::from(error_message))
+                    return CreateAliasError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => return CreateAliasError::Service(String::from(error_message)),
                 "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string())
+                    return CreateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2042,31 +2042,31 @@ impl CreateComputerError {
 
             match *error_type {
                 "AuthenticationFailedException" => {
-                    return CreateComputerError::AuthenticationFailed(String::from(error_message))
+                    return CreateComputerError::AuthenticationFailed(String::from(error_message));
                 }
                 "ClientException" => {
-                    return CreateComputerError::Client(String::from(error_message))
+                    return CreateComputerError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateComputerError::DirectoryUnavailable(String::from(error_message))
+                    return CreateComputerError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityAlreadyExistsException" => {
-                    return CreateComputerError::EntityAlreadyExists(String::from(error_message))
+                    return CreateComputerError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return CreateComputerError::EntityDoesNotExist(String::from(error_message))
+                    return CreateComputerError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateComputerError::InvalidParameter(String::from(error_message))
+                    return CreateComputerError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateComputerError::Service(String::from(error_message))
+                    return CreateComputerError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateComputerError::UnsupportedOperation(String::from(error_message))
+                    return CreateComputerError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateComputerError::Validation(error_message.to_string())
+                    return CreateComputerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2162,38 +2162,38 @@ impl CreateConditionalForwarderError {
 
             match *error_type {
                 "ClientException" => {
-                    return CreateConditionalForwarderError::Client(String::from(error_message))
+                    return CreateConditionalForwarderError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
                     return CreateConditionalForwarderError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityAlreadyExistsException" => {
                     return CreateConditionalForwarderError::EntityAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityDoesNotExistException" => {
                     return CreateConditionalForwarderError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return CreateConditionalForwarderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateConditionalForwarderError::Service(String::from(error_message))
+                    return CreateConditionalForwarderError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return CreateConditionalForwarderError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateConditionalForwarderError::Validation(error_message.to_string())
+                    return CreateConditionalForwarderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2284,19 +2284,19 @@ impl CreateDirectoryError {
 
             match *error_type {
                 "ClientException" => {
-                    return CreateDirectoryError::Client(String::from(error_message))
+                    return CreateDirectoryError::Client(String::from(error_message));
                 }
                 "DirectoryLimitExceededException" => {
-                    return CreateDirectoryError::DirectoryLimitExceeded(String::from(error_message))
+                    return CreateDirectoryError::DirectoryLimitExceeded(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateDirectoryError::InvalidParameter(String::from(error_message))
+                    return CreateDirectoryError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateDirectoryError::Service(String::from(error_message))
+                    return CreateDirectoryError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDirectoryError::Validation(error_message.to_string())
+                    return CreateDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2384,24 +2384,24 @@ impl CreateMicrosoftADError {
 
             match *error_type {
                 "ClientException" => {
-                    return CreateMicrosoftADError::Client(String::from(error_message))
+                    return CreateMicrosoftADError::Client(String::from(error_message));
                 }
                 "DirectoryLimitExceededException" => {
                     return CreateMicrosoftADError::DirectoryLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateMicrosoftADError::InvalidParameter(String::from(error_message))
+                    return CreateMicrosoftADError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateMicrosoftADError::Service(String::from(error_message))
+                    return CreateMicrosoftADError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateMicrosoftADError::UnsupportedOperation(String::from(error_message))
+                    return CreateMicrosoftADError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateMicrosoftADError::Validation(error_message.to_string())
+                    return CreateMicrosoftADError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2492,22 +2492,22 @@ impl CreateSnapshotError {
 
             match *error_type {
                 "ClientException" => {
-                    return CreateSnapshotError::Client(String::from(error_message))
+                    return CreateSnapshotError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return CreateSnapshotError::EntityDoesNotExist(String::from(error_message))
+                    return CreateSnapshotError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateSnapshotError::InvalidParameter(String::from(error_message))
+                    return CreateSnapshotError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return CreateSnapshotError::Service(String::from(error_message))
+                    return CreateSnapshotError::Service(String::from(error_message));
                 }
                 "SnapshotLimitExceededException" => {
-                    return CreateSnapshotError::SnapshotLimitExceeded(String::from(error_message))
+                    return CreateSnapshotError::SnapshotLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSnapshotError::Validation(error_message.to_string())
+                    return CreateSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2599,20 +2599,20 @@ impl CreateTrustError {
             match *error_type {
                 "ClientException" => return CreateTrustError::Client(String::from(error_message)),
                 "EntityAlreadyExistsException" => {
-                    return CreateTrustError::EntityAlreadyExists(String::from(error_message))
+                    return CreateTrustError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return CreateTrustError::EntityDoesNotExist(String::from(error_message))
+                    return CreateTrustError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateTrustError::InvalidParameter(String::from(error_message))
+                    return CreateTrustError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => return CreateTrustError::Service(String::from(error_message)),
                 "UnsupportedOperationException" => {
-                    return CreateTrustError::UnsupportedOperation(String::from(error_message))
+                    return CreateTrustError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTrustError::Validation(error_message.to_string())
+                    return CreateTrustError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2704,33 +2704,33 @@ impl DeleteConditionalForwarderError {
 
             match *error_type {
                 "ClientException" => {
-                    return DeleteConditionalForwarderError::Client(String::from(error_message))
+                    return DeleteConditionalForwarderError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
                     return DeleteConditionalForwarderError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityDoesNotExistException" => {
                     return DeleteConditionalForwarderError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DeleteConditionalForwarderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteConditionalForwarderError::Service(String::from(error_message))
+                    return DeleteConditionalForwarderError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return DeleteConditionalForwarderError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteConditionalForwarderError::Validation(error_message.to_string())
+                    return DeleteConditionalForwarderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2818,16 +2818,16 @@ impl DeleteDirectoryError {
 
             match *error_type {
                 "ClientException" => {
-                    return DeleteDirectoryError::Client(String::from(error_message))
+                    return DeleteDirectoryError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return DeleteDirectoryError::EntityDoesNotExist(String::from(error_message))
+                    return DeleteDirectoryError::EntityDoesNotExist(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteDirectoryError::Service(String::from(error_message))
+                    return DeleteDirectoryError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDirectoryError::Validation(error_message.to_string())
+                    return DeleteDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2912,19 +2912,19 @@ impl DeleteSnapshotError {
 
             match *error_type {
                 "ClientException" => {
-                    return DeleteSnapshotError::Client(String::from(error_message))
+                    return DeleteSnapshotError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return DeleteSnapshotError::EntityDoesNotExist(String::from(error_message))
+                    return DeleteSnapshotError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteSnapshotError::InvalidParameter(String::from(error_message))
+                    return DeleteSnapshotError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeleteSnapshotError::Service(String::from(error_message))
+                    return DeleteSnapshotError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSnapshotError::Validation(error_message.to_string())
+                    return DeleteSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3013,17 +3013,17 @@ impl DeleteTrustError {
             match *error_type {
                 "ClientException" => return DeleteTrustError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return DeleteTrustError::EntityDoesNotExist(String::from(error_message))
+                    return DeleteTrustError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteTrustError::InvalidParameter(String::from(error_message))
+                    return DeleteTrustError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => return DeleteTrustError::Service(String::from(error_message)),
                 "UnsupportedOperationException" => {
-                    return DeleteTrustError::UnsupportedOperation(String::from(error_message))
+                    return DeleteTrustError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTrustError::Validation(error_message.to_string())
+                    return DeleteTrustError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3110,21 +3110,21 @@ impl DeregisterEventTopicError {
 
             match *error_type {
                 "ClientException" => {
-                    return DeregisterEventTopicError::Client(String::from(error_message))
+                    return DeregisterEventTopicError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
                     return DeregisterEventTopicError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeregisterEventTopicError::InvalidParameter(String::from(error_message))
+                    return DeregisterEventTopicError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DeregisterEventTopicError::Service(String::from(error_message))
+                    return DeregisterEventTopicError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeregisterEventTopicError::Validation(error_message.to_string())
+                    return DeregisterEventTopicError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3216,33 +3216,33 @@ impl DescribeConditionalForwardersError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeConditionalForwardersError::Client(String::from(error_message))
+                    return DescribeConditionalForwardersError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
                     return DescribeConditionalForwardersError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityDoesNotExistException" => {
                     return DescribeConditionalForwardersError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeConditionalForwardersError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DescribeConditionalForwardersError::Service(String::from(error_message))
+                    return DescribeConditionalForwardersError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return DescribeConditionalForwardersError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeConditionalForwardersError::Validation(error_message.to_string())
+                    return DescribeConditionalForwardersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3334,22 +3334,22 @@ impl DescribeDirectoriesError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeDirectoriesError::Client(String::from(error_message))
+                    return DescribeDirectoriesError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return DescribeDirectoriesError::EntityDoesNotExist(String::from(error_message))
+                    return DescribeDirectoriesError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeDirectoriesError::InvalidNextToken(String::from(error_message))
+                    return DescribeDirectoriesError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeDirectoriesError::InvalidParameter(String::from(error_message))
+                    return DescribeDirectoriesError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribeDirectoriesError::Service(String::from(error_message))
+                    return DescribeDirectoriesError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDirectoriesError::Validation(error_message.to_string())
+                    return DescribeDirectoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3442,33 +3442,33 @@ impl DescribeDomainControllersError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeDomainControllersError::Client(String::from(error_message))
+                    return DescribeDomainControllersError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
                     return DescribeDomainControllersError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return DescribeDomainControllersError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeDomainControllersError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return DescribeDomainControllersError::Service(String::from(error_message))
+                    return DescribeDomainControllersError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return DescribeDomainControllersError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDomainControllersError::Validation(error_message.to_string())
+                    return DescribeDomainControllersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3558,19 +3558,19 @@ impl DescribeEventTopicsError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeEventTopicsError::Client(String::from(error_message))
+                    return DescribeEventTopicsError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return DescribeEventTopicsError::EntityDoesNotExist(String::from(error_message))
+                    return DescribeEventTopicsError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeEventTopicsError::InvalidParameter(String::from(error_message))
+                    return DescribeEventTopicsError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribeEventTopicsError::Service(String::from(error_message))
+                    return DescribeEventTopicsError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEventTopicsError::Validation(error_message.to_string())
+                    return DescribeEventTopicsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3660,22 +3660,22 @@ impl DescribeSnapshotsError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeSnapshotsError::Client(String::from(error_message))
+                    return DescribeSnapshotsError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return DescribeSnapshotsError::EntityDoesNotExist(String::from(error_message))
+                    return DescribeSnapshotsError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeSnapshotsError::InvalidNextToken(String::from(error_message))
+                    return DescribeSnapshotsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeSnapshotsError::InvalidParameter(String::from(error_message))
+                    return DescribeSnapshotsError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribeSnapshotsError::Service(String::from(error_message))
+                    return DescribeSnapshotsError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeSnapshotsError::Validation(error_message.to_string())
+                    return DescribeSnapshotsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3768,25 +3768,25 @@ impl DescribeTrustsError {
 
             match *error_type {
                 "ClientException" => {
-                    return DescribeTrustsError::Client(String::from(error_message))
+                    return DescribeTrustsError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return DescribeTrustsError::EntityDoesNotExist(String::from(error_message))
+                    return DescribeTrustsError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeTrustsError::InvalidNextToken(String::from(error_message))
+                    return DescribeTrustsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeTrustsError::InvalidParameter(String::from(error_message))
+                    return DescribeTrustsError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DescribeTrustsError::Service(String::from(error_message))
+                    return DescribeTrustsError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return DescribeTrustsError::UnsupportedOperation(String::from(error_message))
+                    return DescribeTrustsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTrustsError::Validation(error_message.to_string())
+                    return DescribeTrustsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3873,13 +3873,13 @@ impl DisableRadiusError {
             match *error_type {
                 "ClientException" => return DisableRadiusError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return DisableRadiusError::EntityDoesNotExist(String::from(error_message))
+                    return DisableRadiusError::EntityDoesNotExist(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return DisableRadiusError::Service(String::from(error_message))
+                    return DisableRadiusError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableRadiusError::Validation(error_message.to_string())
+                    return DisableRadiusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3966,18 +3966,18 @@ impl DisableSsoError {
 
             match *error_type {
                 "AuthenticationFailedException" => {
-                    return DisableSsoError::AuthenticationFailed(String::from(error_message))
+                    return DisableSsoError::AuthenticationFailed(String::from(error_message));
                 }
                 "ClientException" => return DisableSsoError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return DisableSsoError::EntityDoesNotExist(String::from(error_message))
+                    return DisableSsoError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InsufficientPermissionsException" => {
-                    return DisableSsoError::InsufficientPermissions(String::from(error_message))
+                    return DisableSsoError::InsufficientPermissions(String::from(error_message));
                 }
                 "ServiceException" => return DisableSsoError::Service(String::from(error_message)),
                 "ValidationException" => {
-                    return DisableSsoError::Validation(error_message.to_string())
+                    return DisableSsoError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4067,19 +4067,19 @@ impl EnableRadiusError {
             match *error_type {
                 "ClientException" => return EnableRadiusError::Client(String::from(error_message)),
                 "EntityAlreadyExistsException" => {
-                    return EnableRadiusError::EntityAlreadyExists(String::from(error_message))
+                    return EnableRadiusError::EntityAlreadyExists(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return EnableRadiusError::EntityDoesNotExist(String::from(error_message))
+                    return EnableRadiusError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return EnableRadiusError::InvalidParameter(String::from(error_message))
+                    return EnableRadiusError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return EnableRadiusError::Service(String::from(error_message))
+                    return EnableRadiusError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableRadiusError::Validation(error_message.to_string())
+                    return EnableRadiusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4168,18 +4168,18 @@ impl EnableSsoError {
 
             match *error_type {
                 "AuthenticationFailedException" => {
-                    return EnableSsoError::AuthenticationFailed(String::from(error_message))
+                    return EnableSsoError::AuthenticationFailed(String::from(error_message));
                 }
                 "ClientException" => return EnableSsoError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return EnableSsoError::EntityDoesNotExist(String::from(error_message))
+                    return EnableSsoError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InsufficientPermissionsException" => {
-                    return EnableSsoError::InsufficientPermissions(String::from(error_message))
+                    return EnableSsoError::InsufficientPermissions(String::from(error_message));
                 }
                 "ServiceException" => return EnableSsoError::Service(String::from(error_message)),
                 "ValidationException" => {
-                    return EnableSsoError::Validation(error_message.to_string())
+                    return EnableSsoError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4264,16 +4264,16 @@ impl GetDirectoryLimitsError {
 
             match *error_type {
                 "ClientException" => {
-                    return GetDirectoryLimitsError::Client(String::from(error_message))
+                    return GetDirectoryLimitsError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return GetDirectoryLimitsError::EntityDoesNotExist(String::from(error_message))
+                    return GetDirectoryLimitsError::EntityDoesNotExist(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetDirectoryLimitsError::Service(String::from(error_message))
+                    return GetDirectoryLimitsError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDirectoryLimitsError::Validation(error_message.to_string())
+                    return GetDirectoryLimitsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4358,16 +4358,16 @@ impl GetSnapshotLimitsError {
 
             match *error_type {
                 "ClientException" => {
-                    return GetSnapshotLimitsError::Client(String::from(error_message))
+                    return GetSnapshotLimitsError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return GetSnapshotLimitsError::EntityDoesNotExist(String::from(error_message))
+                    return GetSnapshotLimitsError::EntityDoesNotExist(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return GetSnapshotLimitsError::Service(String::from(error_message))
+                    return GetSnapshotLimitsError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSnapshotLimitsError::Validation(error_message.to_string())
+                    return GetSnapshotLimitsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4457,19 +4457,19 @@ impl ListIpRoutesError {
             match *error_type {
                 "ClientException" => return ListIpRoutesError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return ListIpRoutesError::EntityDoesNotExist(String::from(error_message))
+                    return ListIpRoutesError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListIpRoutesError::InvalidNextToken(String::from(error_message))
+                    return ListIpRoutesError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListIpRoutesError::InvalidParameter(String::from(error_message))
+                    return ListIpRoutesError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListIpRoutesError::Service(String::from(error_message))
+                    return ListIpRoutesError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIpRoutesError::Validation(error_message.to_string())
+                    return ListIpRoutesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4556,21 +4556,21 @@ impl ListSchemaExtensionsError {
 
             match *error_type {
                 "ClientException" => {
-                    return ListSchemaExtensionsError::Client(String::from(error_message))
+                    return ListSchemaExtensionsError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
                     return ListSchemaExtensionsError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListSchemaExtensionsError::InvalidNextToken(String::from(error_message))
+                    return ListSchemaExtensionsError::InvalidNextToken(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListSchemaExtensionsError::Service(String::from(error_message))
+                    return ListSchemaExtensionsError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListSchemaExtensionsError::Validation(error_message.to_string())
+                    return ListSchemaExtensionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4660,22 +4660,22 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "ClientException" => {
-                    return ListTagsForResourceError::Client(String::from(error_message))
+                    return ListTagsForResourceError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return ListTagsForResourceError::EntityDoesNotExist(String::from(error_message))
+                    return ListTagsForResourceError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListTagsForResourceError::InvalidNextToken(String::from(error_message))
+                    return ListTagsForResourceError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListTagsForResourceError::InvalidParameter(String::from(error_message))
+                    return ListTagsForResourceError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ListTagsForResourceError::Service(String::from(error_message))
+                    return ListTagsForResourceError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4764,19 +4764,19 @@ impl RegisterEventTopicError {
 
             match *error_type {
                 "ClientException" => {
-                    return RegisterEventTopicError::Client(String::from(error_message))
+                    return RegisterEventTopicError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return RegisterEventTopicError::EntityDoesNotExist(String::from(error_message))
+                    return RegisterEventTopicError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RegisterEventTopicError::InvalidParameter(String::from(error_message))
+                    return RegisterEventTopicError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return RegisterEventTopicError::Service(String::from(error_message))
+                    return RegisterEventTopicError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterEventTopicError::Validation(error_message.to_string())
+                    return RegisterEventTopicError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4866,22 +4866,22 @@ impl RemoveIpRoutesError {
 
             match *error_type {
                 "ClientException" => {
-                    return RemoveIpRoutesError::Client(String::from(error_message))
+                    return RemoveIpRoutesError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
-                    return RemoveIpRoutesError::DirectoryUnavailable(String::from(error_message))
+                    return RemoveIpRoutesError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return RemoveIpRoutesError::EntityDoesNotExist(String::from(error_message))
+                    return RemoveIpRoutesError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RemoveIpRoutesError::InvalidParameter(String::from(error_message))
+                    return RemoveIpRoutesError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return RemoveIpRoutesError::Service(String::from(error_message))
+                    return RemoveIpRoutesError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveIpRoutesError::Validation(error_message.to_string())
+                    return RemoveIpRoutesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4968,23 +4968,23 @@ impl RemoveTagsFromResourceError {
 
             match *error_type {
                 "ClientException" => {
-                    return RemoveTagsFromResourceError::Client(String::from(error_message))
+                    return RemoveTagsFromResourceError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
                     return RemoveTagsFromResourceError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return RemoveTagsFromResourceError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return RemoveTagsFromResourceError::Service(String::from(error_message))
+                    return RemoveTagsFromResourceError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5078,28 +5078,28 @@ impl ResetUserPasswordError {
 
             match *error_type {
                 "ClientException" => {
-                    return ResetUserPasswordError::Client(String::from(error_message))
+                    return ResetUserPasswordError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
-                    return ResetUserPasswordError::DirectoryUnavailable(String::from(error_message))
+                    return ResetUserPasswordError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return ResetUserPasswordError::EntityDoesNotExist(String::from(error_message))
+                    return ResetUserPasswordError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return ResetUserPasswordError::InvalidPassword(String::from(error_message))
+                    return ResetUserPasswordError::InvalidPassword(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return ResetUserPasswordError::Service(String::from(error_message))
+                    return ResetUserPasswordError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return ResetUserPasswordError::UnsupportedOperation(String::from(error_message))
+                    return ResetUserPasswordError::UnsupportedOperation(String::from(error_message));
                 }
                 "UserDoesNotExistException" => {
-                    return ResetUserPasswordError::UserDoesNotExist(String::from(error_message))
+                    return ResetUserPasswordError::UserDoesNotExist(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResetUserPasswordError::Validation(error_message.to_string())
+                    return ResetUserPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5190,19 +5190,19 @@ impl RestoreFromSnapshotError {
 
             match *error_type {
                 "ClientException" => {
-                    return RestoreFromSnapshotError::Client(String::from(error_message))
+                    return RestoreFromSnapshotError::Client(String::from(error_message));
                 }
                 "EntityDoesNotExistException" => {
-                    return RestoreFromSnapshotError::EntityDoesNotExist(String::from(error_message))
+                    return RestoreFromSnapshotError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RestoreFromSnapshotError::InvalidParameter(String::from(error_message))
+                    return RestoreFromSnapshotError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return RestoreFromSnapshotError::Service(String::from(error_message))
+                    return RestoreFromSnapshotError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RestoreFromSnapshotError::Validation(error_message.to_string())
+                    return RestoreFromSnapshotError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5294,31 +5294,31 @@ impl StartSchemaExtensionError {
 
             match *error_type {
                 "ClientException" => {
-                    return StartSchemaExtensionError::Client(String::from(error_message))
+                    return StartSchemaExtensionError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
                     return StartSchemaExtensionError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityDoesNotExistException" => {
                     return StartSchemaExtensionError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartSchemaExtensionError::InvalidParameter(String::from(error_message))
+                    return StartSchemaExtensionError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return StartSchemaExtensionError::Service(String::from(error_message))
+                    return StartSchemaExtensionError::Service(String::from(error_message));
                 }
                 "SnapshotLimitExceededException" => {
                     return StartSchemaExtensionError::SnapshotLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartSchemaExtensionError::Validation(error_message.to_string())
+                    return StartSchemaExtensionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5412,33 +5412,33 @@ impl UpdateConditionalForwarderError {
 
             match *error_type {
                 "ClientException" => {
-                    return UpdateConditionalForwarderError::Client(String::from(error_message))
+                    return UpdateConditionalForwarderError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
                     return UpdateConditionalForwarderError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityDoesNotExistException" => {
                     return UpdateConditionalForwarderError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateConditionalForwarderError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateConditionalForwarderError::Service(String::from(error_message))
+                    return UpdateConditionalForwarderError::Service(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return UpdateConditionalForwarderError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateConditionalForwarderError::Validation(error_message.to_string())
+                    return UpdateConditionalForwarderError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5534,42 +5534,42 @@ impl UpdateNumberOfDomainControllersError {
 
             match *error_type {
                 "ClientException" => {
-                    return UpdateNumberOfDomainControllersError::Client(String::from(error_message))
+                    return UpdateNumberOfDomainControllersError::Client(String::from(error_message));
                 }
                 "DirectoryUnavailableException" => {
                     return UpdateNumberOfDomainControllersError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DomainControllerLimitExceededException" => {
                     return UpdateNumberOfDomainControllersError::DomainControllerLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "EntityDoesNotExistException" => {
                     return UpdateNumberOfDomainControllersError::EntityDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateNumberOfDomainControllersError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceException" => {
                     return UpdateNumberOfDomainControllersError::Service(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedOperationException" => {
                     return UpdateNumberOfDomainControllersError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return UpdateNumberOfDomainControllersError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5661,16 +5661,16 @@ impl UpdateRadiusError {
             match *error_type {
                 "ClientException" => return UpdateRadiusError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return UpdateRadiusError::EntityDoesNotExist(String::from(error_message))
+                    return UpdateRadiusError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateRadiusError::InvalidParameter(String::from(error_message))
+                    return UpdateRadiusError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => {
-                    return UpdateRadiusError::Service(String::from(error_message))
+                    return UpdateRadiusError::Service(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRadiusError::Validation(error_message.to_string())
+                    return UpdateRadiusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5759,17 +5759,17 @@ impl VerifyTrustError {
             match *error_type {
                 "ClientException" => return VerifyTrustError::Client(String::from(error_message)),
                 "EntityDoesNotExistException" => {
-                    return VerifyTrustError::EntityDoesNotExist(String::from(error_message))
+                    return VerifyTrustError::EntityDoesNotExist(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return VerifyTrustError::InvalidParameter(String::from(error_message))
+                    return VerifyTrustError::InvalidParameter(String::from(error_message));
                 }
                 "ServiceException" => return VerifyTrustError::Service(String::from(error_message)),
                 "UnsupportedOperationException" => {
-                    return VerifyTrustError::UnsupportedOperation(String::from(error_message))
+                    return VerifyTrustError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return VerifyTrustError::Validation(error_message.to_string())
+                    return VerifyTrustError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

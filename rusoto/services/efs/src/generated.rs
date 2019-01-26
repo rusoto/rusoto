@@ -425,33 +425,33 @@ impl CreateFileSystemError {
 
             match error_type {
                 "BadRequest" => {
-                    return CreateFileSystemError::BadRequest(String::from(error_message))
+                    return CreateFileSystemError::BadRequest(String::from(error_message));
                 }
                 "FileSystemAlreadyExists" => {
                     return CreateFileSystemError::FileSystemAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FileSystemLimitExceeded" => {
                     return CreateFileSystemError::FileSystemLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientThroughputCapacity" => {
                     return CreateFileSystemError::InsufficientThroughputCapacity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateFileSystemError::InternalServerError(String::from(error_message))
+                    return CreateFileSystemError::InternalServerError(String::from(error_message));
                 }
                 "ThroughputLimitExceeded" => {
                     return CreateFileSystemError::ThroughputLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateFileSystemError::Validation(error_message.to_string())
+                    return CreateFileSystemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -569,55 +569,55 @@ impl CreateMountTargetError {
 
             match error_type {
                 "BadRequest" => {
-                    return CreateMountTargetError::BadRequest(String::from(error_message))
+                    return CreateMountTargetError::BadRequest(String::from(error_message));
                 }
                 "FileSystemNotFound" => {
-                    return CreateMountTargetError::FileSystemNotFound(String::from(error_message))
+                    return CreateMountTargetError::FileSystemNotFound(String::from(error_message));
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateMountTargetError::InternalServerError(String::from(error_message))
+                    return CreateMountTargetError::InternalServerError(String::from(error_message));
                 }
                 "IpAddressInUse" => {
-                    return CreateMountTargetError::IpAddressInUse(String::from(error_message))
+                    return CreateMountTargetError::IpAddressInUse(String::from(error_message));
                 }
                 "MountTargetConflict" => {
-                    return CreateMountTargetError::MountTargetConflict(String::from(error_message))
+                    return CreateMountTargetError::MountTargetConflict(String::from(error_message));
                 }
                 "NetworkInterfaceLimitExceeded" => {
                     return CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoFreeAddressesInSubnet" => {
                     return CreateMountTargetError::NoFreeAddressesInSubnet(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SecurityGroupLimitExceeded" => {
                     return CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SecurityGroupNotFound" => {
                     return CreateMountTargetError::SecurityGroupNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SubnetNotFound" => {
-                    return CreateMountTargetError::SubnetNotFound(String::from(error_message))
+                    return CreateMountTargetError::SubnetNotFound(String::from(error_message));
                 }
                 "UnsupportedAvailabilityZone" => {
                     return CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateMountTargetError::Validation(error_message.to_string())
+                    return CreateMountTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -726,13 +726,13 @@ impl CreateTagsError {
             match error_type {
                 "BadRequest" => return CreateTagsError::BadRequest(String::from(error_message)),
                 "FileSystemNotFound" => {
-                    return CreateTagsError::FileSystemNotFound(String::from(error_message))
+                    return CreateTagsError::FileSystemNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CreateTagsError::InternalServerError(String::from(error_message))
+                    return CreateTagsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTagsError::Validation(error_message.to_string())
+                    return CreateTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -831,19 +831,19 @@ impl DeleteFileSystemError {
 
             match error_type {
                 "BadRequest" => {
-                    return DeleteFileSystemError::BadRequest(String::from(error_message))
+                    return DeleteFileSystemError::BadRequest(String::from(error_message));
                 }
                 "FileSystemInUse" => {
-                    return DeleteFileSystemError::FileSystemInUse(String::from(error_message))
+                    return DeleteFileSystemError::FileSystemInUse(String::from(error_message));
                 }
                 "FileSystemNotFound" => {
-                    return DeleteFileSystemError::FileSystemNotFound(String::from(error_message))
+                    return DeleteFileSystemError::FileSystemNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteFileSystemError::InternalServerError(String::from(error_message))
+                    return DeleteFileSystemError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFileSystemError::Validation(error_message.to_string())
+                    return DeleteFileSystemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -943,19 +943,19 @@ impl DeleteMountTargetError {
 
             match error_type {
                 "BadRequest" => {
-                    return DeleteMountTargetError::BadRequest(String::from(error_message))
+                    return DeleteMountTargetError::BadRequest(String::from(error_message));
                 }
                 "DependencyTimeout" => {
-                    return DeleteMountTargetError::DependencyTimeout(String::from(error_message))
+                    return DeleteMountTargetError::DependencyTimeout(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteMountTargetError::InternalServerError(String::from(error_message))
+                    return DeleteMountTargetError::InternalServerError(String::from(error_message));
                 }
                 "MountTargetNotFound" => {
-                    return DeleteMountTargetError::MountTargetNotFound(String::from(error_message))
+                    return DeleteMountTargetError::MountTargetNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteMountTargetError::Validation(error_message.to_string())
+                    return DeleteMountTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1056,13 +1056,13 @@ impl DeleteTagsError {
             match error_type {
                 "BadRequest" => return DeleteTagsError::BadRequest(String::from(error_message)),
                 "FileSystemNotFound" => {
-                    return DeleteTagsError::FileSystemNotFound(String::from(error_message))
+                    return DeleteTagsError::FileSystemNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteTagsError::InternalServerError(String::from(error_message))
+                    return DeleteTagsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string())
+                    return DeleteTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1159,18 +1159,18 @@ impl DescribeFileSystemsError {
 
             match error_type {
                 "BadRequest" => {
-                    return DescribeFileSystemsError::BadRequest(String::from(error_message))
+                    return DescribeFileSystemsError::BadRequest(String::from(error_message));
                 }
                 "FileSystemNotFound" => {
-                    return DescribeFileSystemsError::FileSystemNotFound(String::from(error_message))
+                    return DescribeFileSystemsError::FileSystemNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DescribeFileSystemsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeFileSystemsError::Validation(error_message.to_string())
+                    return DescribeFileSystemsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1273,27 +1273,27 @@ impl DescribeMountTargetSecurityGroupsError {
                 "BadRequest" => {
                     return DescribeMountTargetSecurityGroupsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IncorrectMountTargetState" => {
                     return DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return DescribeMountTargetSecurityGroupsError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "MountTargetNotFound" => {
                     return DescribeMountTargetSecurityGroupsError::MountTargetNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeMountTargetSecurityGroupsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1395,25 +1395,25 @@ impl DescribeMountTargetsError {
 
             match error_type {
                 "BadRequest" => {
-                    return DescribeMountTargetsError::BadRequest(String::from(error_message))
+                    return DescribeMountTargetsError::BadRequest(String::from(error_message));
                 }
                 "FileSystemNotFound" => {
                     return DescribeMountTargetsError::FileSystemNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeMountTargetsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MountTargetNotFound" => {
                     return DescribeMountTargetsError::MountTargetNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeMountTargetsError::Validation(error_message.to_string())
+                    return DescribeMountTargetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1514,13 +1514,13 @@ impl DescribeTagsError {
             match error_type {
                 "BadRequest" => return DescribeTagsError::BadRequest(String::from(error_message)),
                 "FileSystemNotFound" => {
-                    return DescribeTagsError::FileSystemNotFound(String::from(error_message))
+                    return DescribeTagsError::FileSystemNotFound(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DescribeTagsError::InternalServerError(String::from(error_message))
+                    return DescribeTagsError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string())
+                    return DescribeTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1625,37 +1625,37 @@ impl ModifyMountTargetSecurityGroupsError {
                 "BadRequest" => {
                     return ModifyMountTargetSecurityGroupsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IncorrectMountTargetState" => {
                     return ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MountTargetNotFound" => {
                     return ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "SecurityGroupLimitExceeded" => {
                     return ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "SecurityGroupNotFound" => {
                     return ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return ModifyMountTargetSecurityGroupsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1765,34 +1765,34 @@ impl UpdateFileSystemError {
 
             match error_type {
                 "BadRequest" => {
-                    return UpdateFileSystemError::BadRequest(String::from(error_message))
+                    return UpdateFileSystemError::BadRequest(String::from(error_message));
                 }
                 "FileSystemNotFound" => {
-                    return UpdateFileSystemError::FileSystemNotFound(String::from(error_message))
+                    return UpdateFileSystemError::FileSystemNotFound(String::from(error_message));
                 }
                 "IncorrectFileSystemLifeCycleState" => {
                     return UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientThroughputCapacity" => {
                     return UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return UpdateFileSystemError::InternalServerError(String::from(error_message))
+                    return UpdateFileSystemError::InternalServerError(String::from(error_message));
                 }
                 "ThroughputLimitExceeded" => {
                     return UpdateFileSystemError::ThroughputLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequests" => {
-                    return UpdateFileSystemError::TooManyRequests(String::from(error_message))
+                    return UpdateFileSystemError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFileSystemError::Validation(error_message.to_string())
+                    return UpdateFileSystemError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -406,28 +406,28 @@ impl CreateProjectError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateProjectError::BadRequest(String::from(error_message))
+                    return CreateProjectError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateProjectError::InternalFailure(String::from(error_message))
+                    return CreateProjectError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateProjectError::LimitExceeded(String::from(error_message))
+                    return CreateProjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateProjectError::NotFound(String::from(error_message))
+                    return CreateProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateProjectError::ServiceUnavailable(String::from(error_message))
+                    return CreateProjectError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateProjectError::TooManyRequests(String::from(error_message))
+                    return CreateProjectError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateProjectError::Unauthorized(String::from(error_message))
+                    return CreateProjectError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string())
+                    return CreateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -532,22 +532,22 @@ impl DeleteProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteProjectError::InternalFailure(String::from(error_message))
+                    return DeleteProjectError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteProjectError::NotFound(String::from(error_message))
+                    return DeleteProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteProjectError::ServiceUnavailable(String::from(error_message))
+                    return DeleteProjectError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteProjectError::TooManyRequests(String::from(error_message))
+                    return DeleteProjectError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteProjectError::Unauthorized(String::from(error_message))
+                    return DeleteProjectError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string())
+                    return DeleteProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -652,25 +652,25 @@ impl DescribeBundleError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeBundleError::BadRequest(String::from(error_message))
+                    return DescribeBundleError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DescribeBundleError::InternalFailure(String::from(error_message))
+                    return DescribeBundleError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeBundleError::NotFound(String::from(error_message))
+                    return DescribeBundleError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeBundleError::ServiceUnavailable(String::from(error_message))
+                    return DescribeBundleError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeBundleError::TooManyRequests(String::from(error_message))
+                    return DescribeBundleError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeBundleError::Unauthorized(String::from(error_message))
+                    return DescribeBundleError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeBundleError::Validation(error_message.to_string())
+                    return DescribeBundleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -776,25 +776,25 @@ impl DescribeProjectError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeProjectError::BadRequest(String::from(error_message))
+                    return DescribeProjectError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DescribeProjectError::InternalFailure(String::from(error_message))
+                    return DescribeProjectError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeProjectError::NotFound(String::from(error_message))
+                    return DescribeProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeProjectError::ServiceUnavailable(String::from(error_message))
+                    return DescribeProjectError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeProjectError::TooManyRequests(String::from(error_message))
+                    return DescribeProjectError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DescribeProjectError::Unauthorized(String::from(error_message))
+                    return DescribeProjectError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeProjectError::Validation(error_message.to_string())
+                    return DescribeProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -900,25 +900,25 @@ impl ExportBundleError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ExportBundleError::BadRequest(String::from(error_message))
+                    return ExportBundleError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ExportBundleError::InternalFailure(String::from(error_message))
+                    return ExportBundleError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ExportBundleError::NotFound(String::from(error_message))
+                    return ExportBundleError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ExportBundleError::ServiceUnavailable(String::from(error_message))
+                    return ExportBundleError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ExportBundleError::TooManyRequests(String::from(error_message))
+                    return ExportBundleError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ExportBundleError::Unauthorized(String::from(error_message))
+                    return ExportBundleError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ExportBundleError::Validation(error_message.to_string())
+                    return ExportBundleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1024,25 +1024,25 @@ impl ExportProjectError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ExportProjectError::BadRequest(String::from(error_message))
+                    return ExportProjectError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ExportProjectError::InternalFailure(String::from(error_message))
+                    return ExportProjectError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ExportProjectError::NotFound(String::from(error_message))
+                    return ExportProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ExportProjectError::ServiceUnavailable(String::from(error_message))
+                    return ExportProjectError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ExportProjectError::TooManyRequests(String::from(error_message))
+                    return ExportProjectError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ExportProjectError::Unauthorized(String::from(error_message))
+                    return ExportProjectError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ExportProjectError::Validation(error_message.to_string())
+                    return ExportProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1146,22 +1146,22 @@ impl ListBundlesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListBundlesError::BadRequest(String::from(error_message))
+                    return ListBundlesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListBundlesError::InternalFailure(String::from(error_message))
+                    return ListBundlesError::InternalFailure(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListBundlesError::ServiceUnavailable(String::from(error_message))
+                    return ListBundlesError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListBundlesError::TooManyRequests(String::from(error_message))
+                    return ListBundlesError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListBundlesError::Unauthorized(String::from(error_message))
+                    return ListBundlesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBundlesError::Validation(error_message.to_string())
+                    return ListBundlesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1264,22 +1264,22 @@ impl ListProjectsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListProjectsError::BadRequest(String::from(error_message))
+                    return ListProjectsError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListProjectsError::InternalFailure(String::from(error_message))
+                    return ListProjectsError::InternalFailure(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return ListProjectsError::ServiceUnavailable(String::from(error_message))
+                    return ListProjectsError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListProjectsError::TooManyRequests(String::from(error_message))
+                    return ListProjectsError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListProjectsError::Unauthorized(String::from(error_message))
+                    return ListProjectsError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string())
+                    return ListProjectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1388,31 +1388,31 @@ impl UpdateProjectError {
 
             match error_type {
                 "AccountActionRequiredException" => {
-                    return UpdateProjectError::AccountActionRequired(String::from(error_message))
+                    return UpdateProjectError::AccountActionRequired(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return UpdateProjectError::BadRequest(String::from(error_message))
+                    return UpdateProjectError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return UpdateProjectError::InternalFailure(String::from(error_message))
+                    return UpdateProjectError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateProjectError::LimitExceeded(String::from(error_message))
+                    return UpdateProjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateProjectError::NotFound(String::from(error_message))
+                    return UpdateProjectError::NotFound(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateProjectError::ServiceUnavailable(String::from(error_message))
+                    return UpdateProjectError::ServiceUnavailable(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateProjectError::TooManyRequests(String::from(error_message))
+                    return UpdateProjectError::TooManyRequests(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateProjectError::Unauthorized(String::from(error_message))
+                    return UpdateProjectError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string())
+                    return UpdateProjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

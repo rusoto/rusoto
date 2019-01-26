@@ -2760,16 +2760,16 @@ impl AcceptPortfolioShareError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return AcceptPortfolioShareError::InvalidParameters(String::from(error_message))
+                    return AcceptPortfolioShareError::InvalidParameters(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AcceptPortfolioShareError::LimitExceeded(String::from(error_message))
+                    return AcceptPortfolioShareError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AcceptPortfolioShareError::ResourceNotFound(String::from(error_message))
+                    return AcceptPortfolioShareError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AcceptPortfolioShareError::Validation(error_message.to_string())
+                    return AcceptPortfolioShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2856,22 +2856,22 @@ impl AssociatePrincipalWithPortfolioError {
                 "InvalidParametersException" => {
                     return AssociatePrincipalWithPortfolioError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return AssociatePrincipalWithPortfolioError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AssociatePrincipalWithPortfolioError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AssociatePrincipalWithPortfolioError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2958,20 +2958,20 @@ impl AssociateProductWithPortfolioError {
                 "InvalidParametersException" => {
                     return AssociateProductWithPortfolioError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return AssociateProductWithPortfolioError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AssociateProductWithPortfolioError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateProductWithPortfolioError::Validation(error_message.to_string())
+                    return AssociateProductWithPortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3064,37 +3064,37 @@ impl AssociateTagOptionWithResourceError {
                 "DuplicateResourceException" => {
                     return AssociateTagOptionWithResourceError::DuplicateResource(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParametersException" => {
                     return AssociateTagOptionWithResourceError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return AssociateTagOptionWithResourceError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return AssociateTagOptionWithResourceError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return AssociateTagOptionWithResourceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagOptionNotMigratedException" => {
                     return AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AssociateTagOptionWithResourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3180,13 +3180,13 @@ impl CopyProductError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return CopyProductError::InvalidParameters(String::from(error_message))
+                    return CopyProductError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CopyProductError::ResourceNotFound(String::from(error_message))
+                    return CopyProductError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CopyProductError::Validation(error_message.to_string())
+                    return CopyProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3270,19 +3270,19 @@ impl CreateConstraintError {
 
             match *error_type {
                 "DuplicateResourceException" => {
-                    return CreateConstraintError::DuplicateResource(String::from(error_message))
+                    return CreateConstraintError::DuplicateResource(String::from(error_message));
                 }
                 "InvalidParametersException" => {
-                    return CreateConstraintError::InvalidParameters(String::from(error_message))
+                    return CreateConstraintError::InvalidParameters(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateConstraintError::LimitExceeded(String::from(error_message))
+                    return CreateConstraintError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateConstraintError::ResourceNotFound(String::from(error_message))
+                    return CreateConstraintError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateConstraintError::Validation(error_message.to_string())
+                    return CreateConstraintError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3366,16 +3366,16 @@ impl CreatePortfolioError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return CreatePortfolioError::InvalidParameters(String::from(error_message))
+                    return CreatePortfolioError::InvalidParameters(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreatePortfolioError::LimitExceeded(String::from(error_message))
+                    return CreatePortfolioError::LimitExceeded(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return CreatePortfolioError::TagOptionNotMigrated(String::from(error_message))
+                    return CreatePortfolioError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePortfolioError::Validation(error_message.to_string())
+                    return CreatePortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3458,16 +3458,16 @@ impl CreatePortfolioShareError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return CreatePortfolioShareError::InvalidParameters(String::from(error_message))
+                    return CreatePortfolioShareError::InvalidParameters(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreatePortfolioShareError::LimitExceeded(String::from(error_message))
+                    return CreatePortfolioShareError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreatePortfolioShareError::ResourceNotFound(String::from(error_message))
+                    return CreatePortfolioShareError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePortfolioShareError::Validation(error_message.to_string())
+                    return CreatePortfolioShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3552,16 +3552,16 @@ impl CreateProductError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return CreateProductError::InvalidParameters(String::from(error_message))
+                    return CreateProductError::InvalidParameters(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateProductError::LimitExceeded(String::from(error_message))
+                    return CreateProductError::LimitExceeded(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return CreateProductError::TagOptionNotMigrated(String::from(error_message))
+                    return CreateProductError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProductError::Validation(error_message.to_string())
+                    return CreateProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3646,20 +3646,20 @@ impl CreateProvisionedProductPlanError {
                 "InvalidParametersException" => {
                     return CreateProvisionedProductPlanError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return CreateProvisionedProductPlanError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CreateProvisionedProductPlanError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateProvisionedProductPlanError::Validation(error_message.to_string())
+                    return CreateProvisionedProductPlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3746,20 +3746,20 @@ impl CreateProvisioningArtifactError {
                 "InvalidParametersException" => {
                     return CreateProvisioningArtifactError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return CreateProvisioningArtifactError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CreateProvisioningArtifactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateProvisioningArtifactError::Validation(error_message.to_string())
+                    return CreateProvisioningArtifactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3844,16 +3844,16 @@ impl CreateTagOptionError {
 
             match *error_type {
                 "DuplicateResourceException" => {
-                    return CreateTagOptionError::DuplicateResource(String::from(error_message))
+                    return CreateTagOptionError::DuplicateResource(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateTagOptionError::LimitExceeded(String::from(error_message))
+                    return CreateTagOptionError::LimitExceeded(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return CreateTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    return CreateTagOptionError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTagOptionError::Validation(error_message.to_string())
+                    return CreateTagOptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3934,13 +3934,13 @@ impl DeleteConstraintError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return DeleteConstraintError::InvalidParameters(String::from(error_message))
+                    return DeleteConstraintError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteConstraintError::ResourceNotFound(String::from(error_message))
+                    return DeleteConstraintError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteConstraintError::Validation(error_message.to_string())
+                    return DeleteConstraintError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4024,19 +4024,19 @@ impl DeletePortfolioError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return DeletePortfolioError::InvalidParameters(String::from(error_message))
+                    return DeletePortfolioError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeletePortfolioError::ResourceInUse(String::from(error_message))
+                    return DeletePortfolioError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePortfolioError::ResourceNotFound(String::from(error_message))
+                    return DeletePortfolioError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return DeletePortfolioError::TagOptionNotMigrated(String::from(error_message))
+                    return DeletePortfolioError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePortfolioError::Validation(error_message.to_string())
+                    return DeletePortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4116,10 +4116,10 @@ impl DeletePortfolioShareError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeletePortfolioShareError::ResourceNotFound(String::from(error_message))
+                    return DeletePortfolioShareError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePortfolioShareError::Validation(error_message.to_string())
+                    return DeletePortfolioShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4204,19 +4204,19 @@ impl DeleteProductError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return DeleteProductError::InvalidParameters(String::from(error_message))
+                    return DeleteProductError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return DeleteProductError::ResourceInUse(String::from(error_message))
+                    return DeleteProductError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteProductError::ResourceNotFound(String::from(error_message))
+                    return DeleteProductError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return DeleteProductError::TagOptionNotMigrated(String::from(error_message))
+                    return DeleteProductError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProductError::Validation(error_message.to_string())
+                    return DeleteProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4300,15 +4300,15 @@ impl DeleteProvisionedProductPlanError {
                 "InvalidParametersException" => {
                     return DeleteProvisionedProductPlanError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteProvisionedProductPlanError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteProvisionedProductPlanError::Validation(error_message.to_string())
+                    return DeleteProvisionedProductPlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4394,20 +4394,20 @@ impl DeleteProvisioningArtifactError {
                 "InvalidParametersException" => {
                     return DeleteProvisioningArtifactError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return DeleteProvisioningArtifactError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteProvisioningArtifactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteProvisioningArtifactError::Validation(error_message.to_string())
+                    return DeleteProvisioningArtifactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4492,16 +4492,16 @@ impl DeleteTagOptionError {
 
             match *error_type {
                 "ResourceInUseException" => {
-                    return DeleteTagOptionError::ResourceInUse(String::from(error_message))
+                    return DeleteTagOptionError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTagOptionError::ResourceNotFound(String::from(error_message))
+                    return DeleteTagOptionError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return DeleteTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    return DeleteTagOptionError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTagOptionError::Validation(error_message.to_string())
+                    return DeleteTagOptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4580,10 +4580,10 @@ impl DescribeConstraintError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeConstraintError::ResourceNotFound(String::from(error_message))
+                    return DescribeConstraintError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeConstraintError::Validation(error_message.to_string())
+                    return DescribeConstraintError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4664,10 +4664,10 @@ impl DescribeCopyProductStatusError {
                 "ResourceNotFoundException" => {
                     return DescribeCopyProductStatusError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeCopyProductStatusError::Validation(error_message.to_string())
+                    return DescribeCopyProductStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4746,10 +4746,10 @@ impl DescribePortfolioError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribePortfolioError::ResourceNotFound(String::from(error_message))
+                    return DescribePortfolioError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribePortfolioError::Validation(error_message.to_string())
+                    return DescribePortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4830,13 +4830,13 @@ impl DescribeProductError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return DescribeProductError::InvalidParameters(String::from(error_message))
+                    return DescribeProductError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeProductError::ResourceNotFound(String::from(error_message))
+                    return DescribeProductError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeProductError::Validation(error_message.to_string())
+                    return DescribeProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4916,10 +4916,10 @@ impl DescribeProductAsAdminError {
                 "ResourceNotFoundException" => {
                     return DescribeProductAsAdminError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeProductAsAdminError::Validation(error_message.to_string())
+                    return DescribeProductAsAdminError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5000,13 +5000,13 @@ impl DescribeProductViewError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return DescribeProductViewError::InvalidParameters(String::from(error_message))
+                    return DescribeProductViewError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeProductViewError::ResourceNotFound(String::from(error_message))
+                    return DescribeProductViewError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeProductViewError::Validation(error_message.to_string())
+                    return DescribeProductViewError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5088,10 +5088,10 @@ impl DescribeProvisionedProductError {
                 "ResourceNotFoundException" => {
                     return DescribeProvisionedProductError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeProvisionedProductError::Validation(error_message.to_string())
+                    return DescribeProvisionedProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5174,17 +5174,17 @@ impl DescribeProvisionedProductPlanError {
                 "InvalidParametersException" => {
                     return DescribeProvisionedProductPlanError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeProvisionedProductPlanError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeProvisionedProductPlanError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5266,10 +5266,10 @@ impl DescribeProvisioningArtifactError {
                 "ResourceNotFoundException" => {
                     return DescribeProvisioningArtifactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeProvisioningArtifactError::Validation(error_message.to_string())
+                    return DescribeProvisioningArtifactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5352,17 +5352,17 @@ impl DescribeProvisioningParametersError {
                 "InvalidParametersException" => {
                     return DescribeProvisioningParametersError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeProvisioningParametersError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeProvisioningParametersError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5442,10 +5442,10 @@ impl DescribeRecordError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeRecordError::ResourceNotFound(String::from(error_message))
+                    return DescribeRecordError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeRecordError::Validation(error_message.to_string())
+                    return DescribeRecordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5524,13 +5524,13 @@ impl DescribeTagOptionError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeTagOptionError::ResourceNotFound(String::from(error_message))
+                    return DescribeTagOptionError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return DescribeTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    return DescribeTagOptionError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTagOptionError::Validation(error_message.to_string())
+                    return DescribeTagOptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5614,17 +5614,17 @@ impl DisassociatePrincipalFromPortfolioError {
                 "InvalidParametersException" => {
                     return DisassociatePrincipalFromPortfolioError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociatePrincipalFromPortfolioError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DisassociatePrincipalFromPortfolioError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5710,22 +5710,22 @@ impl DisassociateProductFromPortfolioError {
                 "InvalidParametersException" => {
                     return DisassociateProductFromPortfolioError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
                     return DisassociateProductFromPortfolioError::ResourceInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return DisassociateProductFromPortfolioError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DisassociateProductFromPortfolioError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5810,17 +5810,17 @@ impl DisassociateTagOptionFromResourceError {
                 "ResourceNotFoundException" => {
                     return DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagOptionNotMigratedException" => {
                     return DisassociateTagOptionFromResourceError::TagOptionNotMigrated(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DisassociateTagOptionFromResourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5906,20 +5906,20 @@ impl ExecuteProvisionedProductPlanError {
                 "InvalidParametersException" => {
                     return ExecuteProvisionedProductPlanError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidStateException" => {
                     return ExecuteProvisionedProductPlanError::InvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ExecuteProvisionedProductPlanError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ExecuteProvisionedProductPlanError::Validation(error_message.to_string())
+                    return ExecuteProvisionedProductPlanError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6002,10 +6002,10 @@ impl ListAcceptedPortfolioSharesError {
                 "InvalidParametersException" => {
                     return ListAcceptedPortfolioSharesError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListAcceptedPortfolioSharesError::Validation(error_message.to_string())
+                    return ListAcceptedPortfolioSharesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6088,15 +6088,15 @@ impl ListConstraintsForPortfolioError {
                 "InvalidParametersException" => {
                     return ListConstraintsForPortfolioError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListConstraintsForPortfolioError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListConstraintsForPortfolioError::Validation(error_message.to_string())
+                    return ListConstraintsForPortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6178,13 +6178,13 @@ impl ListLaunchPathsError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return ListLaunchPathsError::InvalidParameters(String::from(error_message))
+                    return ListLaunchPathsError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListLaunchPathsError::ResourceNotFound(String::from(error_message))
+                    return ListLaunchPathsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListLaunchPathsError::Validation(error_message.to_string())
+                    return ListLaunchPathsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6262,10 +6262,10 @@ impl ListPortfolioAccessError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return ListPortfolioAccessError::ResourceNotFound(String::from(error_message))
+                    return ListPortfolioAccessError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPortfolioAccessError::Validation(error_message.to_string())
+                    return ListPortfolioAccessError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6344,10 +6344,10 @@ impl ListPortfoliosError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return ListPortfoliosError::InvalidParameters(String::from(error_message))
+                    return ListPortfoliosError::InvalidParameters(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPortfoliosError::Validation(error_message.to_string())
+                    return ListPortfoliosError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6428,15 +6428,15 @@ impl ListPortfoliosForProductError {
                 "InvalidParametersException" => {
                     return ListPortfoliosForProductError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListPortfoliosForProductError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListPortfoliosForProductError::Validation(error_message.to_string())
+                    return ListPortfoliosForProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6520,15 +6520,15 @@ impl ListPrincipalsForPortfolioError {
                 "InvalidParametersException" => {
                     return ListPrincipalsForPortfolioError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListPrincipalsForPortfolioError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListPrincipalsForPortfolioError::Validation(error_message.to_string())
+                    return ListPrincipalsForPortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6612,15 +6612,15 @@ impl ListProvisionedProductPlansError {
                 "InvalidParametersException" => {
                     return ListProvisionedProductPlansError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListProvisionedProductPlansError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListProvisionedProductPlansError::Validation(error_message.to_string())
+                    return ListProvisionedProductPlansError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6704,15 +6704,15 @@ impl ListProvisioningArtifactsError {
                 "InvalidParametersException" => {
                     return ListProvisioningArtifactsError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListProvisioningArtifactsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListProvisioningArtifactsError::Validation(error_message.to_string())
+                    return ListProvisioningArtifactsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6792,10 +6792,10 @@ impl ListRecordHistoryError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return ListRecordHistoryError::InvalidParameters(String::from(error_message))
+                    return ListRecordHistoryError::InvalidParameters(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRecordHistoryError::Validation(error_message.to_string())
+                    return ListRecordHistoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6880,20 +6880,20 @@ impl ListResourcesForTagOptionError {
                 "InvalidParametersException" => {
                     return ListResourcesForTagOptionError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListResourcesForTagOptionError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagOptionNotMigratedException" => {
                     return ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListResourcesForTagOptionError::Validation(error_message.to_string())
+                    return ListResourcesForTagOptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6976,13 +6976,13 @@ impl ListTagOptionsError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return ListTagOptionsError::InvalidParameters(String::from(error_message))
+                    return ListTagOptionsError::InvalidParameters(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return ListTagOptionsError::TagOptionNotMigrated(String::from(error_message))
+                    return ListTagOptionsError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagOptionsError::Validation(error_message.to_string())
+                    return ListTagOptionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7064,16 +7064,16 @@ impl ProvisionProductError {
 
             match *error_type {
                 "DuplicateResourceException" => {
-                    return ProvisionProductError::DuplicateResource(String::from(error_message))
+                    return ProvisionProductError::DuplicateResource(String::from(error_message));
                 }
                 "InvalidParametersException" => {
-                    return ProvisionProductError::InvalidParameters(String::from(error_message))
+                    return ProvisionProductError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ProvisionProductError::ResourceNotFound(String::from(error_message))
+                    return ProvisionProductError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ProvisionProductError::Validation(error_message.to_string())
+                    return ProvisionProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7152,10 +7152,10 @@ impl RejectPortfolioShareError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RejectPortfolioShareError::ResourceNotFound(String::from(error_message))
+                    return RejectPortfolioShareError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RejectPortfolioShareError::Validation(error_message.to_string())
+                    return RejectPortfolioShareError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7236,10 +7236,10 @@ impl ScanProvisionedProductsError {
                 "InvalidParametersException" => {
                     return ScanProvisionedProductsError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ScanProvisionedProductsError::Validation(error_message.to_string())
+                    return ScanProvisionedProductsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7318,10 +7318,10 @@ impl SearchProductsError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return SearchProductsError::InvalidParameters(String::from(error_message))
+                    return SearchProductsError::InvalidParameters(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SearchProductsError::Validation(error_message.to_string())
+                    return SearchProductsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7402,13 +7402,13 @@ impl SearchProductsAsAdminError {
                 "InvalidParametersException" => {
                     return SearchProductsAsAdminError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SearchProductsAsAdminError::ResourceNotFound(String::from(error_message))
+                    return SearchProductsAsAdminError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SearchProductsAsAdminError::Validation(error_message.to_string())
+                    return SearchProductsAsAdminError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7490,10 +7490,10 @@ impl SearchProvisionedProductsError {
                 "InvalidParametersException" => {
                     return SearchProvisionedProductsError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SearchProvisionedProductsError::Validation(error_message.to_string())
+                    return SearchProvisionedProductsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7574,10 +7574,10 @@ impl TerminateProvisionedProductError {
                 "ResourceNotFoundException" => {
                     return TerminateProvisionedProductError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return TerminateProvisionedProductError::Validation(error_message.to_string())
+                    return TerminateProvisionedProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7658,13 +7658,13 @@ impl UpdateConstraintError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return UpdateConstraintError::InvalidParameters(String::from(error_message))
+                    return UpdateConstraintError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateConstraintError::ResourceNotFound(String::from(error_message))
+                    return UpdateConstraintError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateConstraintError::Validation(error_message.to_string())
+                    return UpdateConstraintError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7748,19 +7748,19 @@ impl UpdatePortfolioError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return UpdatePortfolioError::InvalidParameters(String::from(error_message))
+                    return UpdatePortfolioError::InvalidParameters(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdatePortfolioError::LimitExceeded(String::from(error_message))
+                    return UpdatePortfolioError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePortfolioError::ResourceNotFound(String::from(error_message))
+                    return UpdatePortfolioError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return UpdatePortfolioError::TagOptionNotMigrated(String::from(error_message))
+                    return UpdatePortfolioError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePortfolioError::Validation(error_message.to_string())
+                    return UpdatePortfolioError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7844,16 +7844,16 @@ impl UpdateProductError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return UpdateProductError::InvalidParameters(String::from(error_message))
+                    return UpdateProductError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateProductError::ResourceNotFound(String::from(error_message))
+                    return UpdateProductError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return UpdateProductError::TagOptionNotMigrated(String::from(error_message))
+                    return UpdateProductError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProductError::Validation(error_message.to_string())
+                    return UpdateProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7936,15 +7936,15 @@ impl UpdateProvisionedProductError {
                 "InvalidParametersException" => {
                     return UpdateProvisionedProductError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateProvisionedProductError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateProvisionedProductError::Validation(error_message.to_string())
+                    return UpdateProvisionedProductError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8028,15 +8028,15 @@ impl UpdateProvisioningArtifactError {
                 "InvalidParametersException" => {
                     return UpdateProvisioningArtifactError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateProvisioningArtifactError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateProvisioningArtifactError::Validation(error_message.to_string())
+                    return UpdateProvisioningArtifactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8122,19 +8122,19 @@ impl UpdateTagOptionError {
 
             match *error_type {
                 "DuplicateResourceException" => {
-                    return UpdateTagOptionError::DuplicateResource(String::from(error_message))
+                    return UpdateTagOptionError::DuplicateResource(String::from(error_message));
                 }
                 "InvalidParametersException" => {
-                    return UpdateTagOptionError::InvalidParameters(String::from(error_message))
+                    return UpdateTagOptionError::InvalidParameters(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTagOptionError::ResourceNotFound(String::from(error_message))
+                    return UpdateTagOptionError::ResourceNotFound(String::from(error_message));
                 }
                 "TagOptionNotMigratedException" => {
-                    return UpdateTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    return UpdateTagOptionError::TagOptionNotMigrated(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTagOptionError::Validation(error_message.to_string())
+                    return UpdateTagOptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

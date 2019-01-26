@@ -7510,17 +7510,17 @@ impl AddListenerCertificatesError {
                     "CertificateNotFound" => {
                         return AddListenerCertificatesError::CertificateNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ListenerNotFound" => {
                         return AddListenerCertificatesError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCertificates" => {
                         return AddListenerCertificatesError::TooManyCertificates(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7612,18 +7612,18 @@ impl AddTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateTagKeys" => {
-                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
+                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message));
                     }
                     "LoadBalancerNotFound" => {
                         return AddTagsError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
-                        return AddTagsError::TargetGroupNotFound(String::from(parsed_error.message))
+                        return AddTagsError::TargetGroupNotFound(String::from(parsed_error.message));
                     }
                     "TooManyTags" => {
-                        return AddTagsError::TooManyTags(String::from(parsed_error.message))
+                        return AddTagsError::TooManyTags(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -7738,77 +7738,77 @@ impl CreateListenerError {
                     "CertificateNotFound" => {
                         return CreateListenerError::CertificateNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateListener" => {
                         return CreateListenerError::DuplicateListener(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IncompatibleProtocols" => {
                         return CreateListenerError::IncompatibleProtocols(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateListenerError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLoadBalancerAction" => {
                         return CreateListenerError::InvalidLoadBalancerAction(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LoadBalancerNotFound" => {
                         return CreateListenerError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SSLPolicyNotFound" => {
                         return CreateListenerError::SSLPolicyNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupAssociationLimit" => {
                         return CreateListenerError::TargetGroupAssociationLimit(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return CreateListenerError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyActions" => {
                         return CreateListenerError::TooManyActions(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCertificates" => {
                         return CreateListenerError::TooManyCertificates(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyListeners" => {
                         return CreateListenerError::TooManyListeners(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return CreateListenerError::TooManyRegistrationsForTargetId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTargets" => {
                         return CreateListenerError::TooManyTargets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnsupportedProtocol" => {
                         return CreateListenerError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7930,67 +7930,67 @@ impl CreateLoadBalancerError {
                     "AllocationIdNotFound" => {
                         return CreateLoadBalancerError::AllocationIdNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AvailabilityZoneNotSupported" => {
                         return CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateLoadBalancerName" => {
                         return CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateTagKeys" => {
                         return CreateLoadBalancerError::DuplicateTagKeys(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidScheme" => {
                         return CreateLoadBalancerError::InvalidScheme(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSecurityGroup" => {
                         return CreateLoadBalancerError::InvalidSecurityGroup(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return CreateLoadBalancerError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationNotPermitted" => {
                         return CreateLoadBalancerError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return CreateLoadBalancerError::ResourceInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetNotFound" => {
                         return CreateLoadBalancerError::SubnetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyLoadBalancers" => {
                         return CreateLoadBalancerError::TooManyLoadBalancers(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTags" => {
                         return CreateLoadBalancerError::TooManyTags(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8112,57 +8112,57 @@ impl CreateRuleError {
                     "IncompatibleProtocols" => {
                         return CreateRuleError::IncompatibleProtocols(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateRuleError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLoadBalancerAction" => {
                         return CreateRuleError::InvalidLoadBalancerAction(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ListenerNotFound" => {
-                        return CreateRuleError::ListenerNotFound(String::from(parsed_error.message))
+                        return CreateRuleError::ListenerNotFound(String::from(parsed_error.message));
                     }
                     "PriorityInUse" => {
-                        return CreateRuleError::PriorityInUse(String::from(parsed_error.message))
+                        return CreateRuleError::PriorityInUse(String::from(parsed_error.message));
                     }
                     "TargetGroupAssociationLimit" => {
                         return CreateRuleError::TargetGroupAssociationLimit(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return CreateRuleError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyActions" => {
-                        return CreateRuleError::TooManyActions(String::from(parsed_error.message))
+                        return CreateRuleError::TooManyActions(String::from(parsed_error.message));
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return CreateRuleError::TooManyRegistrationsForTargetId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyRules" => {
-                        return CreateRuleError::TooManyRules(String::from(parsed_error.message))
+                        return CreateRuleError::TooManyRules(String::from(parsed_error.message));
                     }
                     "TooManyTargetGroups" => {
                         return CreateRuleError::TooManyTargetGroups(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTargets" => {
-                        return CreateRuleError::TooManyTargets(String::from(parsed_error.message))
+                        return CreateRuleError::TooManyTargets(String::from(parsed_error.message));
                     }
                     "UnsupportedProtocol" => {
                         return CreateRuleError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8262,17 +8262,17 @@ impl CreateTargetGroupError {
                     "DuplicateTargetGroupName" => {
                         return CreateTargetGroupError::DuplicateTargetGroupName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateTargetGroupError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTargetGroups" => {
                         return CreateTargetGroupError::TooManyTargetGroups(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8360,7 +8360,7 @@ impl DeleteListenerError {
                     "ListenerNotFound" => {
                         return DeleteListenerError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8448,17 +8448,17 @@ impl DeleteLoadBalancerError {
                     "LoadBalancerNotFound" => {
                         return DeleteLoadBalancerError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationNotPermitted" => {
                         return DeleteLoadBalancerError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ResourceInUse" => {
                         return DeleteLoadBalancerError::ResourceInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8548,10 +8548,10 @@ impl DeleteRuleError {
                     "OperationNotPermitted" => {
                         return DeleteRuleError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleNotFound" => {
-                        return DeleteRuleError::RuleNotFound(String::from(parsed_error.message))
+                        return DeleteRuleError::RuleNotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -8636,7 +8636,7 @@ impl DeleteTargetGroupError {
                     "ResourceInUse" => {
                         return DeleteTargetGroupError::ResourceInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8724,12 +8724,12 @@ impl DeregisterTargetsError {
                     "InvalidTarget" => {
                         return DeregisterTargetsError::InvalidTarget(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return DeregisterTargetsError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8894,7 +8894,7 @@ impl DescribeListenerCertificatesError {
                     "ListenerNotFound" => {
                         return DescribeListenerCertificatesError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8984,17 +8984,17 @@ impl DescribeListenersError {
                     "ListenerNotFound" => {
                         return DescribeListenersError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LoadBalancerNotFound" => {
                         return DescribeListenersError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnsupportedProtocol" => {
                         return DescribeListenersError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9082,7 +9082,7 @@ impl DescribeLoadBalancerAttributesError {
                     "LoadBalancerNotFound" => {
                         return DescribeLoadBalancerAttributesError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9168,7 +9168,7 @@ impl DescribeLoadBalancersError {
                     "LoadBalancerNotFound" => {
                         return DescribeLoadBalancersError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9258,15 +9258,15 @@ impl DescribeRulesError {
                     "ListenerNotFound" => {
                         return DescribeRulesError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleNotFound" => {
-                        return DescribeRulesError::RuleNotFound(String::from(parsed_error.message))
+                        return DescribeRulesError::RuleNotFound(String::from(parsed_error.message));
                     }
                     "UnsupportedProtocol" => {
                         return DescribeRulesError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9352,7 +9352,7 @@ impl DescribeSSLPoliciesError {
                     "SSLPolicyNotFound" => {
                         return DescribeSSLPoliciesError::SSLPolicyNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9444,20 +9444,20 @@ impl DescribeTagsError {
                     "ListenerNotFound" => {
                         return DescribeTagsError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LoadBalancerNotFound" => {
                         return DescribeTagsError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleNotFound" => {
-                        return DescribeTagsError::RuleNotFound(String::from(parsed_error.message))
+                        return DescribeTagsError::RuleNotFound(String::from(parsed_error.message));
                     }
                     "TargetGroupNotFound" => {
                         return DescribeTagsError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9544,7 +9544,7 @@ impl DescribeTargetGroupAttributesError {
                     "TargetGroupNotFound" => {
                         return DescribeTargetGroupAttributesError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -9632,12 +9632,12 @@ impl DescribeTargetGroupsError {
                     "LoadBalancerNotFound" => {
                         return DescribeTargetGroupsError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return DescribeTargetGroupsError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9728,17 +9728,17 @@ impl DescribeTargetHealthError {
                     "HealthUnavailable" => {
                         return DescribeTargetHealthError::HealthUnavailable(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidTarget" => {
                         return DescribeTargetHealthError::InvalidTarget(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return DescribeTargetHealthError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9854,77 +9854,77 @@ impl ModifyListenerError {
                     "CertificateNotFound" => {
                         return ModifyListenerError::CertificateNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateListener" => {
                         return ModifyListenerError::DuplicateListener(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "IncompatibleProtocols" => {
                         return ModifyListenerError::IncompatibleProtocols(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return ModifyListenerError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLoadBalancerAction" => {
                         return ModifyListenerError::InvalidLoadBalancerAction(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "ListenerNotFound" => {
                         return ModifyListenerError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SSLPolicyNotFound" => {
                         return ModifyListenerError::SSLPolicyNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupAssociationLimit" => {
                         return ModifyListenerError::TargetGroupAssociationLimit(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return ModifyListenerError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyActions" => {
                         return ModifyListenerError::TooManyActions(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyCertificates" => {
                         return ModifyListenerError::TooManyCertificates(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyListeners" => {
                         return ModifyListenerError::TooManyListeners(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTargets" => {
                         return ModifyListenerError::TooManyTargets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnsupportedProtocol" => {
                         return ModifyListenerError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10024,12 +10024,12 @@ impl ModifyLoadBalancerAttributesError {
                     "InvalidConfigurationRequest" => {
                         return ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "LoadBalancerNotFound" => {
                         return ModifyLoadBalancerAttributesError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -10134,46 +10134,46 @@ impl ModifyRuleError {
                     "IncompatibleProtocols" => {
                         return ModifyRuleError::IncompatibleProtocols(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidLoadBalancerAction" => {
                         return ModifyRuleError::InvalidLoadBalancerAction(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationNotPermitted" => {
                         return ModifyRuleError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleNotFound" => {
-                        return ModifyRuleError::RuleNotFound(String::from(parsed_error.message))
+                        return ModifyRuleError::RuleNotFound(String::from(parsed_error.message));
                     }
                     "TargetGroupAssociationLimit" => {
                         return ModifyRuleError::TargetGroupAssociationLimit(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return ModifyRuleError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyActions" => {
-                        return ModifyRuleError::TooManyActions(String::from(parsed_error.message))
+                        return ModifyRuleError::TooManyActions(String::from(parsed_error.message));
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTargets" => {
-                        return ModifyRuleError::TooManyTargets(String::from(parsed_error.message))
+                        return ModifyRuleError::TooManyTargets(String::from(parsed_error.message));
                     }
                     "UnsupportedProtocol" => {
                         return ModifyRuleError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10268,12 +10268,12 @@ impl ModifyTargetGroupError {
                     "InvalidConfigurationRequest" => {
                         return ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return ModifyTargetGroupError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10362,12 +10362,12 @@ impl ModifyTargetGroupAttributesError {
                     "InvalidConfigurationRequest" => {
                         return ModifyTargetGroupAttributesError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TargetGroupNotFound" => {
                         return ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10460,22 +10460,22 @@ impl RegisterTargetsError {
                     "InvalidTarget" => {
                         return RegisterTargetsError::InvalidTarget(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TargetGroupNotFound" => {
                         return RegisterTargetsError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTargets" => {
                         return RegisterTargetsError::TooManyTargets(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10564,12 +10564,12 @@ impl RemoveListenerCertificatesError {
                     "ListenerNotFound" => {
                         return RemoveListenerCertificatesError::ListenerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationNotPermitted" => {
                         return RemoveListenerCertificatesError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10662,23 +10662,23 @@ impl RemoveTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return RemoveTagsError::ListenerNotFound(String::from(parsed_error.message))
+                        return RemoveTagsError::ListenerNotFound(String::from(parsed_error.message));
                     }
                     "LoadBalancerNotFound" => {
                         return RemoveTagsError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleNotFound" => {
-                        return RemoveTagsError::RuleNotFound(String::from(parsed_error.message))
+                        return RemoveTagsError::RuleNotFound(String::from(parsed_error.message));
                     }
                     "TargetGroupNotFound" => {
                         return RemoveTagsError::TargetGroupNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTags" => {
-                        return RemoveTagsError::TooManyTags(String::from(parsed_error.message))
+                        return RemoveTagsError::TooManyTags(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -10770,17 +10770,17 @@ impl SetIpAddressTypeError {
                     "InvalidConfigurationRequest" => {
                         return SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return SetIpAddressTypeError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LoadBalancerNotFound" => {
                         return SetIpAddressTypeError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10870,17 +10870,17 @@ impl SetRulePrioritiesError {
                     "OperationNotPermitted" => {
                         return SetRulePrioritiesError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PriorityInUse" => {
                         return SetRulePrioritiesError::PriorityInUse(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "RuleNotFound" => {
                         return SetRulePrioritiesError::RuleNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10972,17 +10972,17 @@ impl SetSecurityGroupsError {
                     "InvalidConfigurationRequest" => {
                         return SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSecurityGroup" => {
                         return SetSecurityGroupsError::InvalidSecurityGroup(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LoadBalancerNotFound" => {
                         return SetSecurityGroupsError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11080,28 +11080,28 @@ impl SetSubnetsError {
                     "AllocationIdNotFound" => {
                         return SetSubnetsError::AllocationIdNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "AvailabilityZoneNotSupported" => {
                         return SetSubnetsError::AvailabilityZoneNotSupported(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return SetSubnetsError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
-                        return SetSubnetsError::InvalidSubnet(String::from(parsed_error.message))
+                        return SetSubnetsError::InvalidSubnet(String::from(parsed_error.message));
                     }
                     "LoadBalancerNotFound" => {
                         return SetSubnetsError::LoadBalancerNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetNotFound" => {
-                        return SetSubnetsError::SubnetNotFound(String::from(parsed_error.message))
+                        return SetSubnetsError::SubnetNotFound(String::from(parsed_error.message));
                     }
                     _ => {}
                 }

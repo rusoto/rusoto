@@ -536,13 +536,13 @@ impl BatchGetNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return BatchGetNamedQueryError::InternalServer(String::from(error_message))
+                    return BatchGetNamedQueryError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchGetNamedQueryError::InvalidRequest(String::from(error_message))
+                    return BatchGetNamedQueryError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetNamedQueryError::Validation(error_message.to_string())
+                    return BatchGetNamedQueryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -624,13 +624,13 @@ impl BatchGetQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return BatchGetQueryExecutionError::InternalServer(String::from(error_message))
+                    return BatchGetQueryExecutionError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchGetQueryExecutionError::InvalidRequest(String::from(error_message))
+                    return BatchGetQueryExecutionError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchGetQueryExecutionError::Validation(error_message.to_string())
+                    return BatchGetQueryExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -712,13 +712,13 @@ impl CreateNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return CreateNamedQueryError::InternalServer(String::from(error_message))
+                    return CreateNamedQueryError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateNamedQueryError::InvalidRequest(String::from(error_message))
+                    return CreateNamedQueryError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateNamedQueryError::Validation(error_message.to_string())
+                    return CreateNamedQueryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -798,13 +798,13 @@ impl DeleteNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteNamedQueryError::InternalServer(String::from(error_message))
+                    return DeleteNamedQueryError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteNamedQueryError::InvalidRequest(String::from(error_message))
+                    return DeleteNamedQueryError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteNamedQueryError::Validation(error_message.to_string())
+                    return DeleteNamedQueryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -884,13 +884,13 @@ impl GetNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetNamedQueryError::InternalServer(String::from(error_message))
+                    return GetNamedQueryError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetNamedQueryError::InvalidRequest(String::from(error_message))
+                    return GetNamedQueryError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetNamedQueryError::Validation(error_message.to_string())
+                    return GetNamedQueryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -970,13 +970,13 @@ impl GetQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetQueryExecutionError::InternalServer(String::from(error_message))
+                    return GetQueryExecutionError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetQueryExecutionError::InvalidRequest(String::from(error_message))
+                    return GetQueryExecutionError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetQueryExecutionError::Validation(error_message.to_string())
+                    return GetQueryExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1058,13 +1058,13 @@ impl GetQueryResultsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetQueryResultsError::InternalServer(String::from(error_message))
+                    return GetQueryResultsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetQueryResultsError::InvalidRequest(String::from(error_message))
+                    return GetQueryResultsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetQueryResultsError::Validation(error_message.to_string())
+                    return GetQueryResultsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1144,13 +1144,13 @@ impl ListNamedQueriesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListNamedQueriesError::InternalServer(String::from(error_message))
+                    return ListNamedQueriesError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListNamedQueriesError::InvalidRequest(String::from(error_message))
+                    return ListNamedQueriesError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListNamedQueriesError::Validation(error_message.to_string())
+                    return ListNamedQueriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1230,13 +1230,13 @@ impl ListQueryExecutionsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListQueryExecutionsError::InternalServer(String::from(error_message))
+                    return ListQueryExecutionsError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListQueryExecutionsError::InvalidRequest(String::from(error_message))
+                    return ListQueryExecutionsError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListQueryExecutionsError::Validation(error_message.to_string())
+                    return ListQueryExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1320,16 +1320,16 @@ impl StartQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartQueryExecutionError::InternalServer(String::from(error_message))
+                    return StartQueryExecutionError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StartQueryExecutionError::InvalidRequest(String::from(error_message))
+                    return StartQueryExecutionError::InvalidRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return StartQueryExecutionError::TooManyRequests(String::from(error_message))
+                    return StartQueryExecutionError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartQueryExecutionError::Validation(error_message.to_string())
+                    return StartQueryExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1412,13 +1412,13 @@ impl StopQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopQueryExecutionError::InternalServer(String::from(error_message))
+                    return StopQueryExecutionError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StopQueryExecutionError::InvalidRequest(String::from(error_message))
+                    return StopQueryExecutionError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopQueryExecutionError::Validation(error_message.to_string())
+                    return StopQueryExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

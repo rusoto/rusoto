@@ -1347,17 +1347,17 @@ impl AllocateConnectionOnInterconnectError {
                 "DirectConnectClientException" => {
                     return AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AllocateConnectionOnInterconnectError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1441,15 +1441,15 @@ impl AllocateHostedConnectionError {
                 "DirectConnectClientException" => {
                     return AllocateHostedConnectionError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AllocateHostedConnectionError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AllocateHostedConnectionError::Validation(error_message.to_string())
+                    return AllocateHostedConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1533,17 +1533,17 @@ impl AllocatePrivateVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AllocatePrivateVirtualInterfaceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1627,17 +1627,17 @@ impl AllocatePublicVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AllocatePublicVirtualInterfaceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1721,15 +1721,15 @@ impl AssociateConnectionWithLagError {
                 "DirectConnectClientException" => {
                     return AssociateConnectionWithLagError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AssociateConnectionWithLagError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateConnectionWithLagError::Validation(error_message.to_string())
+                    return AssociateConnectionWithLagError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1813,15 +1813,15 @@ impl AssociateHostedConnectionError {
                 "DirectConnectClientException" => {
                     return AssociateHostedConnectionError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AssociateHostedConnectionError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateHostedConnectionError::Validation(error_message.to_string())
+                    return AssociateHostedConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1905,15 +1905,15 @@ impl AssociateVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return AssociateVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return AssociateVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateVirtualInterfaceError::Validation(error_message.to_string())
+                    return AssociateVirtualInterfaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1995,13 +1995,13 @@ impl ConfirmConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return ConfirmConnectionError::DirectConnectClient(String::from(error_message))
+                    return ConfirmConnectionError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return ConfirmConnectionError::DirectConnectServer(String::from(error_message))
+                    return ConfirmConnectionError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ConfirmConnectionError::Validation(error_message.to_string())
+                    return ConfirmConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2085,17 +2085,17 @@ impl ConfirmPrivateVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ConfirmPrivateVirtualInterfaceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2179,15 +2179,15 @@ impl ConfirmPublicVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string())
+                    return ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2269,13 +2269,13 @@ impl CreateBGPPeerError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateBGPPeerError::DirectConnectClient(String::from(error_message))
+                    return CreateBGPPeerError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return CreateBGPPeerError::DirectConnectServer(String::from(error_message))
+                    return CreateBGPPeerError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateBGPPeerError::Validation(error_message.to_string())
+                    return CreateBGPPeerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2355,13 +2355,13 @@ impl CreateConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateConnectionError::DirectConnectClient(String::from(error_message))
+                    return CreateConnectionError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return CreateConnectionError::DirectConnectServer(String::from(error_message))
+                    return CreateConnectionError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateConnectionError::Validation(error_message.to_string())
+                    return CreateConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2443,15 +2443,15 @@ impl CreateDirectConnectGatewayError {
                 "DirectConnectClientException" => {
                     return CreateDirectConnectGatewayError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return CreateDirectConnectGatewayError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDirectConnectGatewayError::Validation(error_message.to_string())
+                    return CreateDirectConnectGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2535,17 +2535,17 @@ impl CreateDirectConnectGatewayAssociationError {
                 "DirectConnectClientException" => {
                     return CreateDirectConnectGatewayAssociationError::DirectConnectClient(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectConnectServerException" => {
                     return CreateDirectConnectGatewayAssociationError::DirectConnectServer(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return CreateDirectConnectGatewayAssociationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2627,13 +2627,13 @@ impl CreateInterconnectError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateInterconnectError::DirectConnectClient(String::from(error_message))
+                    return CreateInterconnectError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return CreateInterconnectError::DirectConnectServer(String::from(error_message))
+                    return CreateInterconnectError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateInterconnectError::Validation(error_message.to_string())
+                    return CreateInterconnectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2715,13 +2715,13 @@ impl CreateLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateLagError::DirectConnectClient(String::from(error_message))
+                    return CreateLagError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return CreateLagError::DirectConnectServer(String::from(error_message))
+                    return CreateLagError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateLagError::Validation(error_message.to_string())
+                    return CreateLagError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2803,15 +2803,15 @@ impl CreatePrivateVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreatePrivateVirtualInterfaceError::Validation(error_message.to_string())
+                    return CreatePrivateVirtualInterfaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2895,15 +2895,15 @@ impl CreatePublicVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreatePublicVirtualInterfaceError::Validation(error_message.to_string())
+                    return CreatePublicVirtualInterfaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2985,13 +2985,13 @@ impl DeleteBGPPeerError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteBGPPeerError::DirectConnectClient(String::from(error_message))
+                    return DeleteBGPPeerError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteBGPPeerError::DirectConnectServer(String::from(error_message))
+                    return DeleteBGPPeerError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteBGPPeerError::Validation(error_message.to_string())
+                    return DeleteBGPPeerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3071,13 +3071,13 @@ impl DeleteConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteConnectionError::DirectConnectClient(String::from(error_message))
+                    return DeleteConnectionError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteConnectionError::DirectConnectServer(String::from(error_message))
+                    return DeleteConnectionError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteConnectionError::Validation(error_message.to_string())
+                    return DeleteConnectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3159,15 +3159,15 @@ impl DeleteDirectConnectGatewayError {
                 "DirectConnectClientException" => {
                     return DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteDirectConnectGatewayError::Validation(error_message.to_string())
+                    return DeleteDirectConnectGatewayError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3251,17 +3251,17 @@ impl DeleteDirectConnectGatewayAssociationError {
                 "DirectConnectClientException" => {
                     return DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectConnectServerException" => {
                     return DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeleteDirectConnectGatewayAssociationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3343,13 +3343,13 @@ impl DeleteInterconnectError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteInterconnectError::DirectConnectClient(String::from(error_message))
+                    return DeleteInterconnectError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteInterconnectError::DirectConnectServer(String::from(error_message))
+                    return DeleteInterconnectError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInterconnectError::Validation(error_message.to_string())
+                    return DeleteInterconnectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3431,13 +3431,13 @@ impl DeleteLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteLagError::DirectConnectClient(String::from(error_message))
+                    return DeleteLagError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteLagError::DirectConnectServer(String::from(error_message))
+                    return DeleteLagError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteLagError::Validation(error_message.to_string())
+                    return DeleteLagError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3519,15 +3519,15 @@ impl DeleteVirtualInterfaceError {
                 "DirectConnectClientException" => {
                     return DeleteVirtualInterfaceError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DeleteVirtualInterfaceError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteVirtualInterfaceError::Validation(error_message.to_string())
+                    return DeleteVirtualInterfaceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3611,15 +3611,15 @@ impl DescribeConnectionLoaError {
                 "DirectConnectClientException" => {
                     return DescribeConnectionLoaError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeConnectionLoaError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeConnectionLoaError::Validation(error_message.to_string())
+                    return DescribeConnectionLoaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3703,15 +3703,15 @@ impl DescribeConnectionsError {
                 "DirectConnectClientException" => {
                     return DescribeConnectionsError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeConnectionsError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeConnectionsError::Validation(error_message.to_string())
+                    return DescribeConnectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3795,17 +3795,17 @@ impl DescribeConnectionsOnInterconnectError {
                 "DirectConnectClientException" => {
                     return DescribeConnectionsOnInterconnectError::DirectConnectClient(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectConnectServerException" => {
                     return DescribeConnectionsOnInterconnectError::DirectConnectServer(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeConnectionsOnInterconnectError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3891,17 +3891,17 @@ impl DescribeDirectConnectGatewayAssociationsError {
                 "DirectConnectClientException" => {
                     return DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectConnectServerException" => {
                     return DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeDirectConnectGatewayAssociationsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3989,17 +3989,17 @@ impl DescribeDirectConnectGatewayAttachmentsError {
                 "DirectConnectClientException" => {
                     return DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectConnectServerException" => {
                     return DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeDirectConnectGatewayAttachmentsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4083,15 +4083,15 @@ impl DescribeDirectConnectGatewaysError {
                 "DirectConnectClientException" => {
                     return DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDirectConnectGatewaysError::Validation(error_message.to_string())
+                    return DescribeDirectConnectGatewaysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4175,15 +4175,15 @@ impl DescribeHostedConnectionsError {
                 "DirectConnectClientException" => {
                     return DescribeHostedConnectionsError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeHostedConnectionsError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeHostedConnectionsError::Validation(error_message.to_string())
+                    return DescribeHostedConnectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4267,15 +4267,15 @@ impl DescribeInterconnectLoaError {
                 "DirectConnectClientException" => {
                     return DescribeInterconnectLoaError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeInterconnectLoaError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInterconnectLoaError::Validation(error_message.to_string())
+                    return DescribeInterconnectLoaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4359,15 +4359,15 @@ impl DescribeInterconnectsError {
                 "DirectConnectClientException" => {
                     return DescribeInterconnectsError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeInterconnectsError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInterconnectsError::Validation(error_message.to_string())
+                    return DescribeInterconnectsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4449,13 +4449,13 @@ impl DescribeLagsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeLagsError::DirectConnectClient(String::from(error_message))
+                    return DescribeLagsError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeLagsError::DirectConnectServer(String::from(error_message))
+                    return DescribeLagsError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLagsError::Validation(error_message.to_string())
+                    return DescribeLagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4535,13 +4535,13 @@ impl DescribeLoaError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeLoaError::DirectConnectClient(String::from(error_message))
+                    return DescribeLoaError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeLoaError::DirectConnectServer(String::from(error_message))
+                    return DescribeLoaError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLoaError::Validation(error_message.to_string())
+                    return DescribeLoaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4621,13 +4621,13 @@ impl DescribeLocationsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeLocationsError::DirectConnectClient(String::from(error_message))
+                    return DescribeLocationsError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeLocationsError::DirectConnectServer(String::from(error_message))
+                    return DescribeLocationsError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeLocationsError::Validation(error_message.to_string())
+                    return DescribeLocationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4709,13 +4709,13 @@ impl DescribeTagsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeTagsError::DirectConnectClient(String::from(error_message))
+                    return DescribeTagsError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeTagsError::DirectConnectServer(String::from(error_message))
+                    return DescribeTagsError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string())
+                    return DescribeTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4797,15 +4797,15 @@ impl DescribeVirtualGatewaysError {
                 "DirectConnectClientException" => {
                     return DescribeVirtualGatewaysError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeVirtualGatewaysError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeVirtualGatewaysError::Validation(error_message.to_string())
+                    return DescribeVirtualGatewaysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4889,15 +4889,15 @@ impl DescribeVirtualInterfacesError {
                 "DirectConnectClientException" => {
                     return DescribeVirtualInterfacesError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DescribeVirtualInterfacesError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeVirtualInterfacesError::Validation(error_message.to_string())
+                    return DescribeVirtualInterfacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4981,15 +4981,15 @@ impl DisassociateConnectionFromLagError {
                 "DirectConnectClientException" => {
                     return DisassociateConnectionFromLagError::DirectConnectClient(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectConnectServerException" => {
                     return DisassociateConnectionFromLagError::DirectConnectServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateConnectionFromLagError::Validation(error_message.to_string())
+                    return DisassociateConnectionFromLagError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5075,19 +5075,19 @@ impl TagResourceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return TagResourceError::DirectConnectClient(String::from(error_message))
+                    return TagResourceError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return TagResourceError::DirectConnectServer(String::from(error_message))
+                    return TagResourceError::DirectConnectServer(String::from(error_message));
                 }
                 "DuplicateTagKeysException" => {
-                    return TagResourceError::DuplicateTagKeys(String::from(error_message))
+                    return TagResourceError::DuplicateTagKeys(String::from(error_message));
                 }
                 "TooManyTagsException" => {
-                    return TagResourceError::TooManyTags(String::from(error_message))
+                    return TagResourceError::TooManyTags(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5169,13 +5169,13 @@ impl UntagResourceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return UntagResourceError::DirectConnectClient(String::from(error_message))
+                    return UntagResourceError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return UntagResourceError::DirectConnectServer(String::from(error_message))
+                    return UntagResourceError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5255,13 +5255,13 @@ impl UpdateLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return UpdateLagError::DirectConnectClient(String::from(error_message))
+                    return UpdateLagError::DirectConnectClient(String::from(error_message));
                 }
                 "DirectConnectServerException" => {
-                    return UpdateLagError::DirectConnectServer(String::from(error_message))
+                    return UpdateLagError::DirectConnectServer(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateLagError::Validation(error_message.to_string())
+                    return UpdateLagError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -6289,22 +6289,22 @@ impl AddTagsToResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddTagsToResourceError::InternalServerError(String::from(error_message))
+                    return AddTagsToResourceError::InternalServerError(String::from(error_message));
                 }
                 "InvalidResourceId" => {
-                    return AddTagsToResourceError::InvalidResourceId(String::from(error_message))
+                    return AddTagsToResourceError::InvalidResourceId(String::from(error_message));
                 }
                 "InvalidResourceType" => {
-                    return AddTagsToResourceError::InvalidResourceType(String::from(error_message))
+                    return AddTagsToResourceError::InvalidResourceType(String::from(error_message));
                 }
                 "TooManyTagsError" => {
-                    return AddTagsToResourceError::TooManyTagsError(String::from(error_message))
+                    return AddTagsToResourceError::TooManyTagsError(String::from(error_message));
                 }
                 "TooManyUpdates" => {
-                    return AddTagsToResourceError::TooManyUpdates(String::from(error_message))
+                    return AddTagsToResourceError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string())
+                    return AddTagsToResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6393,19 +6393,19 @@ impl CancelCommandError {
 
             match *error_type {
                 "DuplicateInstanceId" => {
-                    return CancelCommandError::DuplicateInstanceId(String::from(error_message))
+                    return CancelCommandError::DuplicateInstanceId(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CancelCommandError::InternalServerError(String::from(error_message))
+                    return CancelCommandError::InternalServerError(String::from(error_message));
                 }
                 "InvalidCommandId" => {
-                    return CancelCommandError::InvalidCommandId(String::from(error_message))
+                    return CancelCommandError::InvalidCommandId(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return CancelCommandError::InvalidInstanceId(String::from(error_message))
+                    return CancelCommandError::InvalidInstanceId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelCommandError::Validation(error_message.to_string())
+                    return CancelCommandError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6485,10 +6485,10 @@ impl CreateActivationError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateActivationError::InternalServerError(String::from(error_message))
+                    return CreateActivationError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateActivationError::Validation(error_message.to_string())
+                    return CreateActivationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6587,48 +6587,48 @@ impl CreateAssociationError {
                 "AssociationAlreadyExists" => {
                     return CreateAssociationError::AssociationAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AssociationLimitExceeded" => {
                     return CreateAssociationError::AssociationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateAssociationError::InternalServerError(String::from(error_message))
+                    return CreateAssociationError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return CreateAssociationError::InvalidDocument(String::from(error_message))
+                    return CreateAssociationError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentVersion" => {
                     return CreateAssociationError::InvalidDocumentVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
-                    return CreateAssociationError::InvalidInstanceId(String::from(error_message))
+                    return CreateAssociationError::InvalidInstanceId(String::from(error_message));
                 }
                 "InvalidOutputLocation" => {
                     return CreateAssociationError::InvalidOutputLocation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameters" => {
-                    return CreateAssociationError::InvalidParameters(String::from(error_message))
+                    return CreateAssociationError::InvalidParameters(String::from(error_message));
                 }
                 "InvalidSchedule" => {
-                    return CreateAssociationError::InvalidSchedule(String::from(error_message))
+                    return CreateAssociationError::InvalidSchedule(String::from(error_message));
                 }
                 "InvalidTarget" => {
-                    return CreateAssociationError::InvalidTarget(String::from(error_message))
+                    return CreateAssociationError::InvalidTarget(String::from(error_message));
                 }
                 "UnsupportedPlatformType" => {
                     return CreateAssociationError::UnsupportedPlatformType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateAssociationError::Validation(error_message.to_string())
+                    return CreateAssociationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6739,54 +6739,54 @@ impl CreateAssociationBatchError {
                 "AssociationLimitExceeded" => {
                     return CreateAssociationBatchError::AssociationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DuplicateInstanceId" => {
                     return CreateAssociationBatchError::DuplicateInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return CreateAssociationBatchError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
-                    return CreateAssociationBatchError::InvalidDocument(String::from(error_message))
+                    return CreateAssociationBatchError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentVersion" => {
                     return CreateAssociationBatchError::InvalidDocumentVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
                     return CreateAssociationBatchError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOutputLocation" => {
                     return CreateAssociationBatchError::InvalidOutputLocation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameters" => {
                     return CreateAssociationBatchError::InvalidParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSchedule" => {
-                    return CreateAssociationBatchError::InvalidSchedule(String::from(error_message))
+                    return CreateAssociationBatchError::InvalidSchedule(String::from(error_message));
                 }
                 "InvalidTarget" => {
-                    return CreateAssociationBatchError::InvalidTarget(String::from(error_message))
+                    return CreateAssociationBatchError::InvalidTarget(String::from(error_message));
                 }
                 "UnsupportedPlatformType" => {
                     return CreateAssociationBatchError::UnsupportedPlatformType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateAssociationBatchError::Validation(error_message.to_string())
+                    return CreateAssociationBatchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6885,27 +6885,27 @@ impl CreateDocumentError {
 
             match *error_type {
                 "DocumentAlreadyExists" => {
-                    return CreateDocumentError::DocumentAlreadyExists(String::from(error_message))
+                    return CreateDocumentError::DocumentAlreadyExists(String::from(error_message));
                 }
                 "DocumentLimitExceeded" => {
-                    return CreateDocumentError::DocumentLimitExceeded(String::from(error_message))
+                    return CreateDocumentError::DocumentLimitExceeded(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CreateDocumentError::InternalServerError(String::from(error_message))
+                    return CreateDocumentError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocumentContent" => {
-                    return CreateDocumentError::InvalidDocumentContent(String::from(error_message))
+                    return CreateDocumentError::InvalidDocumentContent(String::from(error_message));
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return CreateDocumentError::InvalidDocumentSchemaVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MaxDocumentSizeExceeded" => {
-                    return CreateDocumentError::MaxDocumentSizeExceeded(String::from(error_message))
+                    return CreateDocumentError::MaxDocumentSizeExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDocumentError::Validation(error_message.to_string())
+                    return CreateDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6993,20 +6993,20 @@ impl CreateMaintenanceWindowError {
                 "IdempotentParameterMismatch" => {
                     return CreateMaintenanceWindowError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return CreateMaintenanceWindowError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceededException" => {
                     return CreateMaintenanceWindowError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateMaintenanceWindowError::Validation(error_message.to_string())
+                    return CreateMaintenanceWindowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7093,20 +7093,20 @@ impl CreatePatchBaselineError {
                 "IdempotentParameterMismatch" => {
                     return CreatePatchBaselineError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return CreatePatchBaselineError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceededException" => {
                     return CreatePatchBaselineError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreatePatchBaselineError::Validation(error_message.to_string())
+                    return CreatePatchBaselineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7195,25 +7195,25 @@ impl CreateResourceDataSyncError {
                 "InternalServerError" => {
                     return CreateResourceDataSyncError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceDataSyncAlreadyExistsException" => {
                     return CreateResourceDataSyncError::ResourceDataSyncAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceDataSyncCountExceededException" => {
                     return CreateResourceDataSyncError::ResourceDataSyncCountExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceDataSyncInvalidConfigurationException" => {
                     return CreateResourceDataSyncError::ResourceDataSyncInvalidConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return CreateResourceDataSyncError::Validation(error_message.to_string())
+                    return CreateResourceDataSyncError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7301,19 +7301,19 @@ impl DeleteActivationError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteActivationError::InternalServerError(String::from(error_message))
+                    return DeleteActivationError::InternalServerError(String::from(error_message));
                 }
                 "InvalidActivation" => {
-                    return DeleteActivationError::InvalidActivation(String::from(error_message))
+                    return DeleteActivationError::InvalidActivation(String::from(error_message));
                 }
                 "InvalidActivationId" => {
-                    return DeleteActivationError::InvalidActivationId(String::from(error_message))
+                    return DeleteActivationError::InvalidActivationId(String::from(error_message));
                 }
                 "TooManyUpdates" => {
-                    return DeleteActivationError::TooManyUpdates(String::from(error_message))
+                    return DeleteActivationError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteActivationError::Validation(error_message.to_string())
+                    return DeleteActivationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7403,22 +7403,22 @@ impl DeleteAssociationError {
                 "AssociationDoesNotExist" => {
                     return DeleteAssociationError::AssociationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteAssociationError::InternalServerError(String::from(error_message))
+                    return DeleteAssociationError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return DeleteAssociationError::InvalidDocument(String::from(error_message))
+                    return DeleteAssociationError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return DeleteAssociationError::InvalidInstanceId(String::from(error_message))
+                    return DeleteAssociationError::InvalidInstanceId(String::from(error_message));
                 }
                 "TooManyUpdates" => {
-                    return DeleteAssociationError::TooManyUpdates(String::from(error_message))
+                    return DeleteAssociationError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAssociationError::Validation(error_message.to_string())
+                    return DeleteAssociationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7507,21 +7507,21 @@ impl DeleteDocumentError {
 
             match *error_type {
                 "AssociatedInstances" => {
-                    return DeleteDocumentError::AssociatedInstances(String::from(error_message))
+                    return DeleteDocumentError::AssociatedInstances(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteDocumentError::InternalServerError(String::from(error_message))
+                    return DeleteDocumentError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return DeleteDocumentError::InvalidDocument(String::from(error_message))
+                    return DeleteDocumentError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentOperation" => {
                     return DeleteDocumentError::InvalidDocumentOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteDocumentError::Validation(error_message.to_string())
+                    return DeleteDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7609,26 +7609,26 @@ impl DeleteInventoryError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteInventoryError::InternalServerError(String::from(error_message))
+                    return DeleteInventoryError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDeleteInventoryParametersException" => {
                     return DeleteInventoryError::InvalidDeleteInventoryParameters(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInventoryRequestException" => {
                     return DeleteInventoryError::InvalidInventoryRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOptionException" => {
-                    return DeleteInventoryError::InvalidOption(String::from(error_message))
+                    return DeleteInventoryError::InvalidOption(String::from(error_message));
                 }
                 "InvalidTypeNameException" => {
-                    return DeleteInventoryError::InvalidTypeName(String::from(error_message))
+                    return DeleteInventoryError::InvalidTypeName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteInventoryError::Validation(error_message.to_string())
+                    return DeleteInventoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7711,10 +7711,10 @@ impl DeleteMaintenanceWindowError {
                 "InternalServerError" => {
                     return DeleteMaintenanceWindowError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteMaintenanceWindowError::Validation(error_message.to_string())
+                    return DeleteMaintenanceWindowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7795,13 +7795,13 @@ impl DeleteParameterError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteParameterError::InternalServerError(String::from(error_message))
+                    return DeleteParameterError::InternalServerError(String::from(error_message));
                 }
                 "ParameterNotFound" => {
-                    return DeleteParameterError::ParameterNotFound(String::from(error_message))
+                    return DeleteParameterError::ParameterNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteParameterError::Validation(error_message.to_string())
+                    return DeleteParameterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7879,10 +7879,10 @@ impl DeleteParametersError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteParametersError::InternalServerError(String::from(error_message))
+                    return DeleteParametersError::InternalServerError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteParametersError::Validation(error_message.to_string())
+                    return DeleteParametersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7963,13 +7963,13 @@ impl DeletePatchBaselineError {
                 "InternalServerError" => {
                     return DeletePatchBaselineError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeletePatchBaselineError::ResourceInUse(String::from(error_message))
+                    return DeletePatchBaselineError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePatchBaselineError::Validation(error_message.to_string())
+                    return DeletePatchBaselineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8053,15 +8053,15 @@ impl DeleteResourceDataSyncError {
                 "InternalServerError" => {
                     return DeleteResourceDataSyncError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceDataSyncNotFoundException" => {
                     return DeleteResourceDataSyncError::ResourceDataSyncNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteResourceDataSyncError::Validation(error_message.to_string())
+                    return DeleteResourceDataSyncError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8145,15 +8145,15 @@ impl DeregisterManagedInstanceError {
                 "InternalServerError" => {
                     return DeregisterManagedInstanceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
                     return DeregisterManagedInstanceError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeregisterManagedInstanceError::Validation(error_message.to_string())
+                    return DeregisterManagedInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8237,17 +8237,17 @@ impl DeregisterPatchBaselineForPatchGroupError {
                 "InternalServerError" => {
                     return DeregisterPatchBaselineForPatchGroupError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidResourceId" => {
                     return DeregisterPatchBaselineForPatchGroupError::InvalidResourceId(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeregisterPatchBaselineForPatchGroupError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8333,22 +8333,22 @@ impl DeregisterTargetFromMaintenanceWindowError {
                 "DoesNotExistException" => {
                     return DeregisterTargetFromMaintenanceWindowError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DeregisterTargetFromMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "TargetInUseException" => {
                     return DeregisterTargetFromMaintenanceWindowError::TargetInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DeregisterTargetFromMaintenanceWindowError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8433,17 +8433,17 @@ impl DeregisterTaskFromMaintenanceWindowError {
                 "DoesNotExistException" => {
                     return DeregisterTaskFromMaintenanceWindowError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DeregisterTaskFromMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DeregisterTaskFromMaintenanceWindowError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -8529,16 +8529,16 @@ impl DescribeActivationsError {
                 "InternalServerError" => {
                     return DescribeActivationsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilter" => {
-                    return DescribeActivationsError::InvalidFilter(String::from(error_message))
+                    return DescribeActivationsError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return DescribeActivationsError::InvalidNextToken(String::from(error_message))
+                    return DescribeActivationsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeActivationsError::Validation(error_message.to_string())
+                    return DescribeActivationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8629,26 +8629,26 @@ impl DescribeAssociationError {
                 "AssociationDoesNotExist" => {
                     return DescribeAssociationError::AssociationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeAssociationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAssociationVersion" => {
                     return DescribeAssociationError::InvalidAssociationVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
-                    return DescribeAssociationError::InvalidDocument(String::from(error_message))
+                    return DescribeAssociationError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return DescribeAssociationError::InvalidInstanceId(String::from(error_message))
+                    return DescribeAssociationError::InvalidInstanceId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeAssociationError::Validation(error_message.to_string())
+                    return DescribeAssociationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8829,20 +8829,20 @@ impl DescribeAssociationExecutionsError {
                 "AssociationDoesNotExist" => {
                     return DescribeAssociationExecutionsError::AssociationDoesNotExist(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return DescribeAssociationExecutionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeAssociationExecutionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeAssociationExecutionsError::Validation(error_message.to_string())
+                    return DescribeAssociationExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8931,25 +8931,25 @@ impl DescribeAutomationExecutionsError {
                 "InternalServerError" => {
                     return DescribeAutomationExecutionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterKey" => {
                     return DescribeAutomationExecutionsError::InvalidFilterKey(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterValue" => {
                     return DescribeAutomationExecutionsError::InvalidFilterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeAutomationExecutionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeAutomationExecutionsError::Validation(error_message.to_string())
+                    return DescribeAutomationExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9041,32 +9041,32 @@ impl DescribeAutomationStepExecutionsError {
                 "AutomationExecutionNotFoundException" => {
                     return DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return DescribeAutomationStepExecutionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterKey" => {
                     return DescribeAutomationStepExecutionsError::InvalidFilterKey(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterValue" => {
                     return DescribeAutomationStepExecutionsError::InvalidFilterValue(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeAutomationStepExecutionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeAutomationStepExecutionsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -9151,10 +9151,10 @@ impl DescribeAvailablePatchesError {
                 "InternalServerError" => {
                     return DescribeAvailablePatchesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeAvailablePatchesError::Validation(error_message.to_string())
+                    return DescribeAvailablePatchesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9237,18 +9237,18 @@ impl DescribeDocumentError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeDocumentError::InternalServerError(String::from(error_message))
+                    return DescribeDocumentError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return DescribeDocumentError::InvalidDocument(String::from(error_message))
+                    return DescribeDocumentError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentVersion" => {
                     return DescribeDocumentError::InvalidDocumentVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDocumentError::Validation(error_message.to_string())
+                    return DescribeDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9333,20 +9333,20 @@ impl DescribeDocumentPermissionError {
                 "InternalServerError" => {
                     return DescribeDocumentPermissionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
                     return DescribeDocumentPermissionError::InvalidDocument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPermissionType" => {
                     return DescribeDocumentPermissionError::InvalidPermissionType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeDocumentPermissionError::Validation(error_message.to_string())
+                    return DescribeDocumentPermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9433,22 +9433,22 @@ impl DescribeEffectiveInstanceAssociationsError {
                 "InternalServerError" => {
                     return DescribeEffectiveInstanceAssociationsError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInstanceId" => {
                     return DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidNextToken" => {
                     return DescribeEffectiveInstanceAssociationsError::InvalidNextToken(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeEffectiveInstanceAssociationsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -9539,27 +9539,27 @@ impl DescribeEffectivePatchesForPatchBaselineError {
                 "DoesNotExistException" => {
                     return DescribeEffectivePatchesForPatchBaselineError::DoesNotExist(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return DescribeEffectivePatchesForPatchBaselineError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidResourceId" => {
                     return DescribeEffectivePatchesForPatchBaselineError::InvalidResourceId(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnsupportedOperatingSystem" => {
                     return DescribeEffectivePatchesForPatchBaselineError::UnsupportedOperatingSystem(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeEffectivePatchesForPatchBaselineError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -9651,22 +9651,22 @@ impl DescribeInstanceAssociationsStatusError {
                 "InternalServerError" => {
                     return DescribeInstanceAssociationsStatusError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInstanceId" => {
                     return DescribeInstanceAssociationsStatusError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeInstanceAssociationsStatusError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeInstanceAssociationsStatusError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -9757,30 +9757,30 @@ impl DescribeInstanceInformationError {
                 "InternalServerError" => {
                     return DescribeInstanceInformationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterKey" => {
                     return DescribeInstanceInformationError::InvalidFilterKey(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
                     return DescribeInstanceInformationError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceInformationFilterValue" => {
                     return DescribeInstanceInformationError::InvalidInstanceInformationFilterValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidNextToken" => {
                     return DescribeInstanceInformationError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInstanceInformationError::Validation(error_message.to_string())
+                    return DescribeInstanceInformationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9869,15 +9869,15 @@ impl DescribeInstancePatchStatesError {
                 "InternalServerError" => {
                     return DescribeInstancePatchStatesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeInstancePatchStatesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInstancePatchStatesError::Validation(error_message.to_string())
+                    return DescribeInstancePatchStatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9965,22 +9965,22 @@ impl DescribeInstancePatchStatesForPatchGroupError {
                 "InternalServerError" => {
                     return DescribeInstancePatchStatesForPatchGroupError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidFilter" => {
                     return DescribeInstancePatchStatesForPatchGroupError::InvalidFilter(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidNextToken" => {
                     return DescribeInstancePatchStatesForPatchGroupError::InvalidNextToken(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeInstancePatchStatesForPatchGroupError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -10071,23 +10071,23 @@ impl DescribeInstancePatchesError {
                 "InternalServerError" => {
                     return DescribeInstancePatchesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilter" => {
-                    return DescribeInstancePatchesError::InvalidFilter(String::from(error_message))
+                    return DescribeInstancePatchesError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
                     return DescribeInstancePatchesError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeInstancePatchesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInstancePatchesError::Validation(error_message.to_string())
+                    return DescribeInstancePatchesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10175,20 +10175,20 @@ impl DescribeInventoryDeletionsError {
                 "InternalServerError" => {
                     return DescribeInventoryDeletionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeletionIdException" => {
                     return DescribeInventoryDeletionsError::InvalidDeletionId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribeInventoryDeletionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeInventoryDeletionsError::Validation(error_message.to_string())
+                    return DescribeInventoryDeletionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10371,17 +10371,17 @@ impl DescribeMaintenanceWindowExecutionTasksError {
                 "DoesNotExistException" => {
                     return DescribeMaintenanceWindowExecutionTasksError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeMaintenanceWindowExecutionTasksError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeMaintenanceWindowExecutionTasksError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -10463,12 +10463,12 @@ impl DescribeMaintenanceWindowExecutionsError {
                 "InternalServerError" => {
                     return DescribeMaintenanceWindowExecutionsError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeMaintenanceWindowExecutionsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -10551,17 +10551,17 @@ impl DescribeMaintenanceWindowTargetsError {
                 "DoesNotExistException" => {
                     return DescribeMaintenanceWindowTargetsError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeMaintenanceWindowTargetsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeMaintenanceWindowTargetsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -10645,17 +10645,17 @@ impl DescribeMaintenanceWindowTasksError {
                 "DoesNotExistException" => {
                     return DescribeMaintenanceWindowTasksError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return DescribeMaintenanceWindowTasksError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeMaintenanceWindowTasksError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -10737,10 +10737,10 @@ impl DescribeMaintenanceWindowsError {
                 "InternalServerError" => {
                     return DescribeMaintenanceWindowsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeMaintenanceWindowsError::Validation(error_message.to_string())
+                    return DescribeMaintenanceWindowsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10827,22 +10827,22 @@ impl DescribeParametersError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeParametersError::InternalServerError(String::from(error_message))
+                    return DescribeParametersError::InternalServerError(String::from(error_message));
                 }
                 "InvalidFilterKey" => {
-                    return DescribeParametersError::InvalidFilterKey(String::from(error_message))
+                    return DescribeParametersError::InvalidFilterKey(String::from(error_message));
                 }
                 "InvalidFilterOption" => {
-                    return DescribeParametersError::InvalidFilterOption(String::from(error_message))
+                    return DescribeParametersError::InvalidFilterOption(String::from(error_message));
                 }
                 "InvalidFilterValue" => {
-                    return DescribeParametersError::InvalidFilterValue(String::from(error_message))
+                    return DescribeParametersError::InvalidFilterValue(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return DescribeParametersError::InvalidNextToken(String::from(error_message))
+                    return DescribeParametersError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeParametersError::Validation(error_message.to_string())
+                    return DescribeParametersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10927,10 +10927,10 @@ impl DescribePatchBaselinesError {
                 "InternalServerError" => {
                     return DescribePatchBaselinesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribePatchBaselinesError::Validation(error_message.to_string())
+                    return DescribePatchBaselinesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11013,15 +11013,15 @@ impl DescribePatchGroupStateError {
                 "InternalServerError" => {
                     return DescribePatchGroupStateError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return DescribePatchGroupStateError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribePatchGroupStateError::Validation(error_message.to_string())
+                    return DescribePatchGroupStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11103,10 +11103,10 @@ impl DescribePatchGroupsError {
                 "InternalServerError" => {
                     return DescribePatchGroupsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribePatchGroupsError::Validation(error_message.to_string())
+                    return DescribePatchGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11189,15 +11189,15 @@ impl GetAutomationExecutionError {
                 "AutomationExecutionNotFoundException" => {
                     return GetAutomationExecutionError::AutomationExecutionNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return GetAutomationExecutionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetAutomationExecutionError::Validation(error_message.to_string())
+                    return GetAutomationExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11287,24 +11287,24 @@ impl GetCommandInvocationError {
                 "InternalServerError" => {
                     return GetCommandInvocationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommandId" => {
-                    return GetCommandInvocationError::InvalidCommandId(String::from(error_message))
+                    return GetCommandInvocationError::InvalidCommandId(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return GetCommandInvocationError::InvalidInstanceId(String::from(error_message))
+                    return GetCommandInvocationError::InvalidInstanceId(String::from(error_message));
                 }
                 "InvalidPluginName" => {
-                    return GetCommandInvocationError::InvalidPluginName(String::from(error_message))
+                    return GetCommandInvocationError::InvalidPluginName(String::from(error_message));
                 }
                 "InvocationDoesNotExist" => {
                     return GetCommandInvocationError::InvocationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetCommandInvocationError::Validation(error_message.to_string())
+                    return GetCommandInvocationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11389,10 +11389,10 @@ impl GetDefaultPatchBaselineError {
                 "InternalServerError" => {
                     return GetDefaultPatchBaselineError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDefaultPatchBaselineError::Validation(error_message.to_string())
+                    return GetDefaultPatchBaselineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11475,17 +11475,17 @@ impl GetDeployablePatchSnapshotForInstanceError {
                 "InternalServerError" => {
                     return GetDeployablePatchSnapshotForInstanceError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnsupportedOperatingSystem" => {
                     return GetDeployablePatchSnapshotForInstanceError::UnsupportedOperatingSystem(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return GetDeployablePatchSnapshotForInstanceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -11571,16 +11571,16 @@ impl GetDocumentError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetDocumentError::InternalServerError(String::from(error_message))
+                    return GetDocumentError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return GetDocumentError::InvalidDocument(String::from(error_message))
+                    return GetDocumentError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentVersion" => {
-                    return GetDocumentError::InvalidDocumentVersion(String::from(error_message))
+                    return GetDocumentError::InvalidDocumentVersion(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDocumentError::Validation(error_message.to_string())
+                    return GetDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11667,22 +11667,22 @@ impl GetInventoryError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetInventoryError::InternalServerError(String::from(error_message))
+                    return GetInventoryError::InternalServerError(String::from(error_message));
                 }
                 "InvalidFilter" => {
-                    return GetInventoryError::InvalidFilter(String::from(error_message))
+                    return GetInventoryError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return GetInventoryError::InvalidNextToken(String::from(error_message))
+                    return GetInventoryError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidResultAttributeException" => {
-                    return GetInventoryError::InvalidResultAttribute(String::from(error_message))
+                    return GetInventoryError::InvalidResultAttribute(String::from(error_message));
                 }
                 "InvalidTypeNameException" => {
-                    return GetInventoryError::InvalidTypeName(String::from(error_message))
+                    return GetInventoryError::InvalidTypeName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInventoryError::Validation(error_message.to_string())
+                    return GetInventoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11767,16 +11767,16 @@ impl GetInventorySchemaError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetInventorySchemaError::InternalServerError(String::from(error_message))
+                    return GetInventorySchemaError::InternalServerError(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return GetInventorySchemaError::InvalidNextToken(String::from(error_message))
+                    return GetInventorySchemaError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidTypeNameException" => {
-                    return GetInventorySchemaError::InvalidTypeName(String::from(error_message))
+                    return GetInventorySchemaError::InvalidTypeName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetInventorySchemaError::Validation(error_message.to_string())
+                    return GetInventorySchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11859,15 +11859,15 @@ impl GetMaintenanceWindowError {
 
             match *error_type {
                 "DoesNotExistException" => {
-                    return GetMaintenanceWindowError::DoesNotExist(String::from(error_message))
+                    return GetMaintenanceWindowError::DoesNotExist(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return GetMaintenanceWindowError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetMaintenanceWindowError::Validation(error_message.to_string())
+                    return GetMaintenanceWindowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11951,15 +11951,15 @@ impl GetMaintenanceWindowExecutionError {
                 "DoesNotExistException" => {
                     return GetMaintenanceWindowExecutionError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return GetMaintenanceWindowExecutionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetMaintenanceWindowExecutionError::Validation(error_message.to_string())
+                    return GetMaintenanceWindowExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12043,17 +12043,17 @@ impl GetMaintenanceWindowExecutionTaskError {
                 "DoesNotExistException" => {
                     return GetMaintenanceWindowExecutionTaskError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return GetMaintenanceWindowExecutionTaskError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return GetMaintenanceWindowExecutionTaskError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -12139,17 +12139,17 @@ impl GetMaintenanceWindowExecutionTaskInvocationError {
                 "DoesNotExistException" => {
                     return GetMaintenanceWindowExecutionTaskInvocationError::DoesNotExist(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return GetMaintenanceWindowExecutionTaskInvocationError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return GetMaintenanceWindowExecutionTaskInvocationError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -12235,15 +12235,15 @@ impl GetMaintenanceWindowTaskError {
 
             match *error_type {
                 "DoesNotExistException" => {
-                    return GetMaintenanceWindowTaskError::DoesNotExist(String::from(error_message))
+                    return GetMaintenanceWindowTaskError::DoesNotExist(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return GetMaintenanceWindowTaskError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetMaintenanceWindowTaskError::Validation(error_message.to_string())
+                    return GetMaintenanceWindowTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12329,19 +12329,19 @@ impl GetParameterError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetParameterError::InternalServerError(String::from(error_message))
+                    return GetParameterError::InternalServerError(String::from(error_message));
                 }
                 "InvalidKeyId" => {
-                    return GetParameterError::InvalidKeyId(String::from(error_message))
+                    return GetParameterError::InvalidKeyId(String::from(error_message));
                 }
                 "ParameterNotFound" => {
-                    return GetParameterError::ParameterNotFound(String::from(error_message))
+                    return GetParameterError::ParameterNotFound(String::from(error_message));
                 }
                 "ParameterVersionNotFound" => {
-                    return GetParameterError::ParameterVersionNotFound(String::from(error_message))
+                    return GetParameterError::ParameterVersionNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetParameterError::Validation(error_message.to_string())
+                    return GetParameterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12429,19 +12429,19 @@ impl GetParameterHistoryError {
                 "InternalServerError" => {
                     return GetParameterHistoryError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidKeyId" => {
-                    return GetParameterHistoryError::InvalidKeyId(String::from(error_message))
+                    return GetParameterHistoryError::InvalidKeyId(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return GetParameterHistoryError::InvalidNextToken(String::from(error_message))
+                    return GetParameterHistoryError::InvalidNextToken(String::from(error_message));
                 }
                 "ParameterNotFound" => {
-                    return GetParameterHistoryError::ParameterNotFound(String::from(error_message))
+                    return GetParameterHistoryError::ParameterNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetParameterHistoryError::Validation(error_message.to_string())
+                    return GetParameterHistoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12525,13 +12525,13 @@ impl GetParametersError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetParametersError::InternalServerError(String::from(error_message))
+                    return GetParametersError::InternalServerError(String::from(error_message));
                 }
                 "InvalidKeyId" => {
-                    return GetParametersError::InvalidKeyId(String::from(error_message))
+                    return GetParametersError::InvalidKeyId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetParametersError::Validation(error_message.to_string())
+                    return GetParametersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12621,27 +12621,27 @@ impl GetParametersByPathError {
                 "InternalServerError" => {
                     return GetParametersByPathError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterKey" => {
-                    return GetParametersByPathError::InvalidFilterKey(String::from(error_message))
+                    return GetParametersByPathError::InvalidFilterKey(String::from(error_message));
                 }
                 "InvalidFilterOption" => {
                     return GetParametersByPathError::InvalidFilterOption(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterValue" => {
-                    return GetParametersByPathError::InvalidFilterValue(String::from(error_message))
+                    return GetParametersByPathError::InvalidFilterValue(String::from(error_message));
                 }
                 "InvalidKeyId" => {
-                    return GetParametersByPathError::InvalidKeyId(String::from(error_message))
+                    return GetParametersByPathError::InvalidKeyId(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return GetParametersByPathError::InvalidNextToken(String::from(error_message))
+                    return GetParametersByPathError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetParametersByPathError::Validation(error_message.to_string())
+                    return GetParametersByPathError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12729,16 +12729,16 @@ impl GetPatchBaselineError {
 
             match *error_type {
                 "DoesNotExistException" => {
-                    return GetPatchBaselineError::DoesNotExist(String::from(error_message))
+                    return GetPatchBaselineError::DoesNotExist(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetPatchBaselineError::InternalServerError(String::from(error_message))
+                    return GetPatchBaselineError::InternalServerError(String::from(error_message));
                 }
                 "InvalidResourceId" => {
-                    return GetPatchBaselineError::InvalidResourceId(String::from(error_message))
+                    return GetPatchBaselineError::InvalidResourceId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPatchBaselineError::Validation(error_message.to_string())
+                    return GetPatchBaselineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12819,10 +12819,10 @@ impl GetPatchBaselineForPatchGroupError {
                 "InternalServerError" => {
                     return GetPatchBaselineForPatchGroupError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetPatchBaselineForPatchGroupError::Validation(error_message.to_string())
+                    return GetPatchBaselineForPatchGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -12911,28 +12911,28 @@ impl LabelParameterVersionError {
                 "InternalServerError" => {
                     return LabelParameterVersionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterNotFound" => {
                     return LabelParameterVersionError::ParameterNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterVersionLabelLimitExceeded" => {
                     return LabelParameterVersionError::ParameterVersionLabelLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ParameterVersionNotFound" => {
                     return LabelParameterVersionError::ParameterVersionNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyUpdates" => {
-                    return LabelParameterVersionError::TooManyUpdates(String::from(error_message))
+                    return LabelParameterVersionError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return LabelParameterVersionError::Validation(error_message.to_string())
+                    return LabelParameterVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13021,20 +13021,20 @@ impl ListAssociationVersionsError {
                 "AssociationDoesNotExist" => {
                     return ListAssociationVersionsError::AssociationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return ListAssociationVersionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return ListAssociationVersionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListAssociationVersionsError::Validation(error_message.to_string())
+                    return ListAssociationVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13117,13 +13117,13 @@ impl ListAssociationsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListAssociationsError::InternalServerError(String::from(error_message))
+                    return ListAssociationsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return ListAssociationsError::InvalidNextToken(String::from(error_message))
+                    return ListAssociationsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAssociationsError::Validation(error_message.to_string())
+                    return ListAssociationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13211,30 +13211,30 @@ impl ListCommandInvocationsError {
                 "InternalServerError" => {
                     return ListCommandInvocationsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCommandId" => {
                     return ListCommandInvocationsError::InvalidCommandId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterKey" => {
                     return ListCommandInvocationsError::InvalidFilterKey(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
                     return ListCommandInvocationsError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return ListCommandInvocationsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListCommandInvocationsError::Validation(error_message.to_string())
+                    return ListCommandInvocationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13325,22 +13325,22 @@ impl ListCommandsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListCommandsError::InternalServerError(String::from(error_message))
+                    return ListCommandsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidCommandId" => {
-                    return ListCommandsError::InvalidCommandId(String::from(error_message))
+                    return ListCommandsError::InvalidCommandId(String::from(error_message));
                 }
                 "InvalidFilterKey" => {
-                    return ListCommandsError::InvalidFilterKey(String::from(error_message))
+                    return ListCommandsError::InvalidFilterKey(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return ListCommandsError::InvalidInstanceId(String::from(error_message))
+                    return ListCommandsError::InvalidInstanceId(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return ListCommandsError::InvalidNextToken(String::from(error_message))
+                    return ListCommandsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListCommandsError::Validation(error_message.to_string())
+                    return ListCommandsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13431,24 +13431,24 @@ impl ListComplianceItemsError {
                 "InternalServerError" => {
                     return ListComplianceItemsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilter" => {
-                    return ListComplianceItemsError::InvalidFilter(String::from(error_message))
+                    return ListComplianceItemsError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return ListComplianceItemsError::InvalidNextToken(String::from(error_message))
+                    return ListComplianceItemsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidResourceId" => {
-                    return ListComplianceItemsError::InvalidResourceId(String::from(error_message))
+                    return ListComplianceItemsError::InvalidResourceId(String::from(error_message));
                 }
                 "InvalidResourceType" => {
                     return ListComplianceItemsError::InvalidResourceType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListComplianceItemsError::Validation(error_message.to_string())
+                    return ListComplianceItemsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13537,18 +13537,18 @@ impl ListComplianceSummariesError {
                 "InternalServerError" => {
                     return ListComplianceSummariesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilter" => {
-                    return ListComplianceSummariesError::InvalidFilter(String::from(error_message))
+                    return ListComplianceSummariesError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidNextToken" => {
                     return ListComplianceSummariesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListComplianceSummariesError::Validation(error_message.to_string())
+                    return ListComplianceSummariesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13635,16 +13635,16 @@ impl ListDocumentVersionsError {
                 "InternalServerError" => {
                     return ListDocumentVersionsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
-                    return ListDocumentVersionsError::InvalidDocument(String::from(error_message))
+                    return ListDocumentVersionsError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return ListDocumentVersionsError::InvalidNextToken(String::from(error_message))
+                    return ListDocumentVersionsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDocumentVersionsError::Validation(error_message.to_string())
+                    return ListDocumentVersionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13729,16 +13729,16 @@ impl ListDocumentsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListDocumentsError::InternalServerError(String::from(error_message))
+                    return ListDocumentsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidFilterKey" => {
-                    return ListDocumentsError::InvalidFilterKey(String::from(error_message))
+                    return ListDocumentsError::InvalidFilterKey(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return ListDocumentsError::InvalidNextToken(String::from(error_message))
+                    return ListDocumentsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDocumentsError::Validation(error_message.to_string())
+                    return ListDocumentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13827,22 +13827,22 @@ impl ListInventoryEntriesError {
                 "InternalServerError" => {
                     return ListInventoryEntriesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilter" => {
-                    return ListInventoryEntriesError::InvalidFilter(String::from(error_message))
+                    return ListInventoryEntriesError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return ListInventoryEntriesError::InvalidInstanceId(String::from(error_message))
+                    return ListInventoryEntriesError::InvalidInstanceId(String::from(error_message));
                 }
                 "InvalidNextToken" => {
-                    return ListInventoryEntriesError::InvalidNextToken(String::from(error_message))
+                    return ListInventoryEntriesError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidTypeNameException" => {
-                    return ListInventoryEntriesError::InvalidTypeName(String::from(error_message))
+                    return ListInventoryEntriesError::InvalidTypeName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListInventoryEntriesError::Validation(error_message.to_string())
+                    return ListInventoryEntriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -13931,22 +13931,22 @@ impl ListResourceComplianceSummariesError {
                 "InternalServerError" => {
                     return ListResourceComplianceSummariesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilter" => {
                     return ListResourceComplianceSummariesError::InvalidFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
                     return ListResourceComplianceSummariesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListResourceComplianceSummariesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -14031,13 +14031,13 @@ impl ListResourceDataSyncError {
                 "InternalServerError" => {
                     return ListResourceDataSyncError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextToken" => {
-                    return ListResourceDataSyncError::InvalidNextToken(String::from(error_message))
+                    return ListResourceDataSyncError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListResourceDataSyncError::Validation(error_message.to_string())
+                    return ListResourceDataSyncError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14123,18 +14123,18 @@ impl ListTagsForResourceError {
                 "InternalServerError" => {
                     return ListTagsForResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceId" => {
-                    return ListTagsForResourceError::InvalidResourceId(String::from(error_message))
+                    return ListTagsForResourceError::InvalidResourceId(String::from(error_message));
                 }
                 "InvalidResourceType" => {
                     return ListTagsForResourceError::InvalidResourceType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14225,30 +14225,30 @@ impl ModifyDocumentPermissionError {
                 "DocumentLimitExceeded" => {
                     return ModifyDocumentPermissionError::DocumentLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DocumentPermissionLimit" => {
                     return ModifyDocumentPermissionError::DocumentPermissionLimit(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return ModifyDocumentPermissionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
                     return ModifyDocumentPermissionError::InvalidDocument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPermissionType" => {
                     return ModifyDocumentPermissionError::InvalidPermissionType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ModifyDocumentPermissionError::Validation(error_message.to_string())
+                    return ModifyDocumentPermissionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14345,32 +14345,32 @@ impl PutComplianceItemsError {
                 "ComplianceTypeCountLimitExceededException" => {
                     return PutComplianceItemsError::ComplianceTypeCountLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return PutComplianceItemsError::InternalServerError(String::from(error_message))
+                    return PutComplianceItemsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidItemContentException" => {
-                    return PutComplianceItemsError::InvalidItemContent(String::from(error_message))
+                    return PutComplianceItemsError::InvalidItemContent(String::from(error_message));
                 }
                 "InvalidResourceId" => {
-                    return PutComplianceItemsError::InvalidResourceId(String::from(error_message))
+                    return PutComplianceItemsError::InvalidResourceId(String::from(error_message));
                 }
                 "InvalidResourceType" => {
-                    return PutComplianceItemsError::InvalidResourceType(String::from(error_message))
+                    return PutComplianceItemsError::InvalidResourceType(String::from(error_message));
                 }
                 "ItemSizeLimitExceededException" => {
                     return PutComplianceItemsError::ItemSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TotalSizeLimitExceededException" => {
                     return PutComplianceItemsError::TotalSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutComplianceItemsError::Validation(error_message.to_string())
+                    return PutComplianceItemsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14479,49 +14479,49 @@ impl PutInventoryError {
                 "CustomSchemaCountLimitExceededException" => {
                     return PutInventoryError::CustomSchemaCountLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return PutInventoryError::InternalServerError(String::from(error_message))
+                    return PutInventoryError::InternalServerError(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return PutInventoryError::InvalidInstanceId(String::from(error_message))
+                    return PutInventoryError::InvalidInstanceId(String::from(error_message));
                 }
                 "InvalidInventoryItemContextException" => {
                     return PutInventoryError::InvalidInventoryItemContext(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidItemContentException" => {
-                    return PutInventoryError::InvalidItemContent(String::from(error_message))
+                    return PutInventoryError::InvalidItemContent(String::from(error_message));
                 }
                 "InvalidTypeNameException" => {
-                    return PutInventoryError::InvalidTypeName(String::from(error_message))
+                    return PutInventoryError::InvalidTypeName(String::from(error_message));
                 }
                 "ItemContentMismatchException" => {
-                    return PutInventoryError::ItemContentMismatch(String::from(error_message))
+                    return PutInventoryError::ItemContentMismatch(String::from(error_message));
                 }
                 "ItemSizeLimitExceededException" => {
-                    return PutInventoryError::ItemSizeLimitExceeded(String::from(error_message))
+                    return PutInventoryError::ItemSizeLimitExceeded(String::from(error_message));
                 }
                 "SubTypeCountLimitExceededException" => {
-                    return PutInventoryError::SubTypeCountLimitExceeded(String::from(error_message))
+                    return PutInventoryError::SubTypeCountLimitExceeded(String::from(error_message));
                 }
                 "TotalSizeLimitExceededException" => {
-                    return PutInventoryError::TotalSizeLimitExceeded(String::from(error_message))
+                    return PutInventoryError::TotalSizeLimitExceeded(String::from(error_message));
                 }
                 "UnsupportedInventoryItemContextException" => {
                     return PutInventoryError::UnsupportedInventoryItemContext(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedInventorySchemaVersionException" => {
                     return PutInventoryError::UnsupportedInventorySchemaVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutInventoryError::Validation(error_message.to_string())
+                    return PutInventoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14631,42 +14631,42 @@ impl PutParameterError {
                 "HierarchyLevelLimitExceededException" => {
                     return PutParameterError::HierarchyLevelLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "HierarchyTypeMismatchException" => {
-                    return PutParameterError::HierarchyTypeMismatch(String::from(error_message))
+                    return PutParameterError::HierarchyTypeMismatch(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return PutParameterError::InternalServerError(String::from(error_message))
+                    return PutParameterError::InternalServerError(String::from(error_message));
                 }
                 "InvalidAllowedPatternException" => {
-                    return PutParameterError::InvalidAllowedPattern(String::from(error_message))
+                    return PutParameterError::InvalidAllowedPattern(String::from(error_message));
                 }
                 "InvalidKeyId" => {
-                    return PutParameterError::InvalidKeyId(String::from(error_message))
+                    return PutParameterError::InvalidKeyId(String::from(error_message));
                 }
                 "ParameterAlreadyExists" => {
-                    return PutParameterError::ParameterAlreadyExists(String::from(error_message))
+                    return PutParameterError::ParameterAlreadyExists(String::from(error_message));
                 }
                 "ParameterLimitExceeded" => {
-                    return PutParameterError::ParameterLimitExceeded(String::from(error_message))
+                    return PutParameterError::ParameterLimitExceeded(String::from(error_message));
                 }
                 "ParameterMaxVersionLimitExceeded" => {
                     return PutParameterError::ParameterMaxVersionLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ParameterPatternMismatchException" => {
-                    return PutParameterError::ParameterPatternMismatch(String::from(error_message))
+                    return PutParameterError::ParameterPatternMismatch(String::from(error_message));
                 }
                 "TooManyUpdates" => {
-                    return PutParameterError::TooManyUpdates(String::from(error_message))
+                    return PutParameterError::TooManyUpdates(String::from(error_message));
                 }
                 "UnsupportedParameterType" => {
-                    return PutParameterError::UnsupportedParameterType(String::from(error_message))
+                    return PutParameterError::UnsupportedParameterType(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutParameterError::Validation(error_message.to_string())
+                    return PutParameterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14759,20 +14759,20 @@ impl RegisterDefaultPatchBaselineError {
                 "DoesNotExistException" => {
                     return RegisterDefaultPatchBaselineError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return RegisterDefaultPatchBaselineError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceId" => {
                     return RegisterDefaultPatchBaselineError::InvalidResourceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterDefaultPatchBaselineError::Validation(error_message.to_string())
+                    return RegisterDefaultPatchBaselineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -14863,32 +14863,32 @@ impl RegisterPatchBaselineForPatchGroupError {
                 "AlreadyExistsException" => {
                     return RegisterPatchBaselineForPatchGroupError::AlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DoesNotExistException" => {
                     return RegisterPatchBaselineForPatchGroupError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return RegisterPatchBaselineForPatchGroupError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidResourceId" => {
                     return RegisterPatchBaselineForPatchGroupError::InvalidResourceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceededException" => {
                     return RegisterPatchBaselineForPatchGroupError::ResourceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return RegisterPatchBaselineForPatchGroupError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -14979,27 +14979,27 @@ impl RegisterTargetWithMaintenanceWindowError {
                 "DoesNotExistException" => {
                     return RegisterTargetWithMaintenanceWindowError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IdempotentParameterMismatch" => {
                     return RegisterTargetWithMaintenanceWindowError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return RegisterTargetWithMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceLimitExceededException" => {
                     return RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return RegisterTargetWithMaintenanceWindowError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -15093,32 +15093,32 @@ impl RegisterTaskWithMaintenanceWindowError {
                 "DoesNotExistException" => {
                     return RegisterTaskWithMaintenanceWindowError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FeatureNotAvailableException" => {
                     return RegisterTaskWithMaintenanceWindowError::FeatureNotAvailable(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "IdempotentParameterMismatch" => {
                     return RegisterTaskWithMaintenanceWindowError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return RegisterTaskWithMaintenanceWindowError::InternalServerError(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceLimitExceededException" => {
                     return RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return RegisterTaskWithMaintenanceWindowError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -15209,23 +15209,23 @@ impl RemoveTagsFromResourceError {
                 "InternalServerError" => {
                     return RemoveTagsFromResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceId" => {
                     return RemoveTagsFromResourceError::InvalidResourceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceType" => {
                     return RemoveTagsFromResourceError::InvalidResourceType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyUpdates" => {
-                    return RemoveTagsFromResourceError::TooManyUpdates(String::from(error_message))
+                    return RemoveTagsFromResourceError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15315,25 +15315,25 @@ impl SendAutomationSignalError {
                 "AutomationExecutionNotFoundException" => {
                     return SendAutomationSignalError::AutomationExecutionNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AutomationStepNotFoundException" => {
                     return SendAutomationSignalError::AutomationStepNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return SendAutomationSignalError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutomationSignalException" => {
                     return SendAutomationSignalError::InvalidAutomationSignal(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SendAutomationSignalError::Validation(error_message.to_string())
+                    return SendAutomationSignalError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15435,38 +15435,38 @@ impl SendCommandError {
 
             match *error_type {
                 "DuplicateInstanceId" => {
-                    return SendCommandError::DuplicateInstanceId(String::from(error_message))
+                    return SendCommandError::DuplicateInstanceId(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return SendCommandError::InternalServerError(String::from(error_message))
+                    return SendCommandError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return SendCommandError::InvalidDocument(String::from(error_message))
+                    return SendCommandError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentVersion" => {
-                    return SendCommandError::InvalidDocumentVersion(String::from(error_message))
+                    return SendCommandError::InvalidDocumentVersion(String::from(error_message));
                 }
                 "InvalidInstanceId" => {
-                    return SendCommandError::InvalidInstanceId(String::from(error_message))
+                    return SendCommandError::InvalidInstanceId(String::from(error_message));
                 }
                 "InvalidNotificationConfig" => {
-                    return SendCommandError::InvalidNotificationConfig(String::from(error_message))
+                    return SendCommandError::InvalidNotificationConfig(String::from(error_message));
                 }
                 "InvalidOutputFolder" => {
-                    return SendCommandError::InvalidOutputFolder(String::from(error_message))
+                    return SendCommandError::InvalidOutputFolder(String::from(error_message));
                 }
                 "InvalidParameters" => {
-                    return SendCommandError::InvalidParameters(String::from(error_message))
+                    return SendCommandError::InvalidParameters(String::from(error_message));
                 }
                 "InvalidRole" => return SendCommandError::InvalidRole(String::from(error_message)),
                 "MaxDocumentSizeExceeded" => {
-                    return SendCommandError::MaxDocumentSizeExceeded(String::from(error_message))
+                    return SendCommandError::MaxDocumentSizeExceeded(String::from(error_message));
                 }
                 "UnsupportedPlatformType" => {
-                    return SendCommandError::UnsupportedPlatformType(String::from(error_message))
+                    return SendCommandError::UnsupportedPlatformType(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SendCommandError::Validation(error_message.to_string())
+                    return SendCommandError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15557,15 +15557,15 @@ impl StartAssociationsOnceError {
                 "AssociationDoesNotExist" => {
                     return StartAssociationsOnceError::AssociationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAssociation" => {
                     return StartAssociationsOnceError::InvalidAssociation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartAssociationsOnceError::Validation(error_message.to_string())
+                    return StartAssociationsOnceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15659,38 +15659,38 @@ impl StartAutomationExecutionError {
                 "AutomationDefinitionNotFoundException" => {
                     return StartAutomationExecutionError::AutomationDefinitionNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "AutomationDefinitionVersionNotFoundException" => {
                     return StartAutomationExecutionError::AutomationDefinitionVersionNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "AutomationExecutionLimitExceededException" => {
                     return StartAutomationExecutionError::AutomationExecutionLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "IdempotentParameterMismatch" => {
                     return StartAutomationExecutionError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return StartAutomationExecutionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutomationExecutionParametersException" => {
                     return StartAutomationExecutionError::InvalidAutomationExecutionParameters(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidTarget" => {
-                    return StartAutomationExecutionError::InvalidTarget(String::from(error_message))
+                    return StartAutomationExecutionError::InvalidTarget(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartAutomationExecutionError::Validation(error_message.to_string())
+                    return StartAutomationExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15781,20 +15781,20 @@ impl StopAutomationExecutionError {
                 "AutomationExecutionNotFoundException" => {
                     return StopAutomationExecutionError::AutomationExecutionNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return StopAutomationExecutionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutomationStatusUpdateException" => {
                     return StopAutomationExecutionError::InvalidAutomationStatusUpdate(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return StopAutomationExecutionError::Validation(error_message.to_string())
+                    return StopAutomationExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -15899,51 +15899,51 @@ impl UpdateAssociationError {
                 "AssociationDoesNotExist" => {
                     return UpdateAssociationError::AssociationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "AssociationVersionLimitExceeded" => {
                     return UpdateAssociationError::AssociationVersionLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return UpdateAssociationError::InternalServerError(String::from(error_message))
+                    return UpdateAssociationError::InternalServerError(String::from(error_message));
                 }
                 "InvalidAssociationVersion" => {
                     return UpdateAssociationError::InvalidAssociationVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
-                    return UpdateAssociationError::InvalidDocument(String::from(error_message))
+                    return UpdateAssociationError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentVersion" => {
                     return UpdateAssociationError::InvalidDocumentVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOutputLocation" => {
                     return UpdateAssociationError::InvalidOutputLocation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameters" => {
-                    return UpdateAssociationError::InvalidParameters(String::from(error_message))
+                    return UpdateAssociationError::InvalidParameters(String::from(error_message));
                 }
                 "InvalidSchedule" => {
-                    return UpdateAssociationError::InvalidSchedule(String::from(error_message))
+                    return UpdateAssociationError::InvalidSchedule(String::from(error_message));
                 }
                 "InvalidTarget" => {
-                    return UpdateAssociationError::InvalidTarget(String::from(error_message))
+                    return UpdateAssociationError::InvalidTarget(String::from(error_message));
                 }
                 "InvalidUpdate" => {
-                    return UpdateAssociationError::InvalidUpdate(String::from(error_message))
+                    return UpdateAssociationError::InvalidUpdate(String::from(error_message));
                 }
                 "TooManyUpdates" => {
-                    return UpdateAssociationError::TooManyUpdates(String::from(error_message))
+                    return UpdateAssociationError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAssociationError::Validation(error_message.to_string())
+                    return UpdateAssociationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16045,33 +16045,33 @@ impl UpdateAssociationStatusError {
                 "AssociationDoesNotExist" => {
                     return UpdateAssociationStatusError::AssociationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return UpdateAssociationStatusError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
                     return UpdateAssociationStatusError::InvalidDocument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
                     return UpdateAssociationStatusError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "StatusUnchanged" => {
                     return UpdateAssociationStatusError::StatusUnchanged(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyUpdates" => {
-                    return UpdateAssociationStatusError::TooManyUpdates(String::from(error_message))
+                    return UpdateAssociationStatusError::TooManyUpdates(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAssociationStatusError::Validation(error_message.to_string())
+                    return UpdateAssociationStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16171,35 +16171,35 @@ impl UpdateDocumentError {
                 "DocumentVersionLimitExceeded" => {
                     return UpdateDocumentError::DocumentVersionLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DuplicateDocumentContent" => {
                     return UpdateDocumentError::DuplicateDocumentContent(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return UpdateDocumentError::InternalServerError(String::from(error_message))
+                    return UpdateDocumentError::InternalServerError(String::from(error_message));
                 }
                 "InvalidDocument" => {
-                    return UpdateDocumentError::InvalidDocument(String::from(error_message))
+                    return UpdateDocumentError::InvalidDocument(String::from(error_message));
                 }
                 "InvalidDocumentContent" => {
-                    return UpdateDocumentError::InvalidDocumentContent(String::from(error_message))
+                    return UpdateDocumentError::InvalidDocumentContent(String::from(error_message));
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return UpdateDocumentError::InvalidDocumentSchemaVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocumentVersion" => {
-                    return UpdateDocumentError::InvalidDocumentVersion(String::from(error_message))
+                    return UpdateDocumentError::InvalidDocumentVersion(String::from(error_message));
                 }
                 "MaxDocumentSizeExceeded" => {
-                    return UpdateDocumentError::MaxDocumentSizeExceeded(String::from(error_message))
+                    return UpdateDocumentError::MaxDocumentSizeExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDocumentError::Validation(error_message.to_string())
+                    return UpdateDocumentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16291,25 +16291,25 @@ impl UpdateDocumentDefaultVersionError {
                 "InternalServerError" => {
                     return UpdateDocumentDefaultVersionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocument" => {
                     return UpdateDocumentDefaultVersionError::InvalidDocument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return UpdateDocumentDefaultVersionError::InvalidDocumentSchemaVersion(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidDocumentVersion" => {
                     return UpdateDocumentDefaultVersionError::InvalidDocumentVersion(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDocumentDefaultVersionError::Validation(error_message.to_string())
+                    return UpdateDocumentDefaultVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16393,15 +16393,15 @@ impl UpdateMaintenanceWindowError {
 
             match *error_type {
                 "DoesNotExistException" => {
-                    return UpdateMaintenanceWindowError::DoesNotExist(String::from(error_message))
+                    return UpdateMaintenanceWindowError::DoesNotExist(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return UpdateMaintenanceWindowError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateMaintenanceWindowError::Validation(error_message.to_string())
+                    return UpdateMaintenanceWindowError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16485,15 +16485,15 @@ impl UpdateMaintenanceWindowTargetError {
                 "DoesNotExistException" => {
                     return UpdateMaintenanceWindowTargetError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return UpdateMaintenanceWindowTargetError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateMaintenanceWindowTargetError::Validation(error_message.to_string())
+                    return UpdateMaintenanceWindowTargetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16577,15 +16577,15 @@ impl UpdateMaintenanceWindowTaskError {
                 "DoesNotExistException" => {
                     return UpdateMaintenanceWindowTaskError::DoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return UpdateMaintenanceWindowTaskError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateMaintenanceWindowTaskError::Validation(error_message.to_string())
+                    return UpdateMaintenanceWindowTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16669,15 +16669,15 @@ impl UpdateManagedInstanceRoleError {
                 "InternalServerError" => {
                     return UpdateManagedInstanceRoleError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceId" => {
                     return UpdateManagedInstanceRoleError::InvalidInstanceId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateManagedInstanceRoleError::Validation(error_message.to_string())
+                    return UpdateManagedInstanceRoleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -16759,15 +16759,15 @@ impl UpdatePatchBaselineError {
 
             match *error_type {
                 "DoesNotExistException" => {
-                    return UpdatePatchBaselineError::DoesNotExist(String::from(error_message))
+                    return UpdatePatchBaselineError::DoesNotExist(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return UpdatePatchBaselineError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdatePatchBaselineError::Validation(error_message.to_string())
+                    return UpdatePatchBaselineError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

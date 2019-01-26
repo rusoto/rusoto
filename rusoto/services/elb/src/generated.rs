@@ -5726,13 +5726,13 @@ impl AddTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return AddTagsError::AccessPointNotFound(String::from(parsed_error.message))
+                        return AddTagsError::AccessPointNotFound(String::from(parsed_error.message));
                     }
                     "DuplicateTagKeys" => {
-                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
+                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message));
                     }
                     "TooManyTags" => {
-                        return AddTagsError::TooManyTags(String::from(parsed_error.message))
+                        return AddTagsError::TooManyTags(String::from(parsed_error.message));
                     }
                     _ => {}
                 }
@@ -5822,17 +5822,17 @@ impl ApplySecurityGroupsToLoadBalancerError {
                     "LoadBalancerNotFound" => {
                         return ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidConfigurationRequest" => {
                         return ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidSecurityGroup" => {
                         return ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -5926,22 +5926,22 @@ impl AttachLoadBalancerToSubnetsError {
                     "LoadBalancerNotFound" => {
                         return AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidSubnet" => {
                         return AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetNotFound" => {
                         return AttachLoadBalancerToSubnetsError::SubnetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6030,7 +6030,7 @@ impl ConfigureHealthCheckError {
                     "LoadBalancerNotFound" => {
                         return ConfigureHealthCheckError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6122,22 +6122,22 @@ impl CreateAppCookieStickinessPolicyError {
                     "LoadBalancerNotFound" => {
                         return CreateAppCookieStickinessPolicyError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DuplicatePolicyName" => {
                         return CreateAppCookieStickinessPolicyError::DuplicatePolicyName(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyPolicies" => {
                         return CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6232,22 +6232,22 @@ impl CreateLBCookieStickinessPolicyError {
                     "LoadBalancerNotFound" => {
                         return CreateLBCookieStickinessPolicyError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "DuplicatePolicyName" => {
                         return CreateLBCookieStickinessPolicyError::DuplicatePolicyName(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "TooManyPolicies" => {
                         return CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6358,62 +6358,62 @@ impl CreateLoadBalancerError {
                     "CertificateNotFound" => {
                         return CreateLoadBalancerError::CertificateNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateLoadBalancerName" => {
                         return CreateLoadBalancerError::DuplicateAccessPointName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateTagKeys" => {
                         return CreateLoadBalancerError::DuplicateTagKeys(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidScheme" => {
                         return CreateLoadBalancerError::InvalidScheme(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSecurityGroup" => {
                         return CreateLoadBalancerError::InvalidSecurityGroup(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidSubnet" => {
                         return CreateLoadBalancerError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationNotPermitted" => {
                         return CreateLoadBalancerError::OperationNotPermitted(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "SubnetNotFound" => {
                         return CreateLoadBalancerError::SubnetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyLoadBalancers" => {
                         return CreateLoadBalancerError::TooManyAccessPoints(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyTags" => {
                         return CreateLoadBalancerError::TooManyTags(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "UnsupportedProtocol" => {
                         return CreateLoadBalancerError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6518,27 +6518,27 @@ impl CreateLoadBalancerListenersError {
                     "LoadBalancerNotFound" => {
                         return CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "CertificateNotFound" => {
                         return CreateLoadBalancerListenersError::CertificateNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicateListener" => {
                         return CreateLoadBalancerListenersError::DuplicateListener(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateLoadBalancerListenersError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "UnsupportedProtocol" => {
                         return CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6636,27 +6636,27 @@ impl CreateLoadBalancerPolicyError {
                     "LoadBalancerNotFound" => {
                         return CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DuplicatePolicyName" => {
                         return CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return CreateLoadBalancerPolicyError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PolicyTypeNotFound" => {
                         return CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TooManyPolicies" => {
                         return CreateLoadBalancerPolicyError::TooManyPolicies(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6824,7 +6824,7 @@ impl DeleteLoadBalancerListenersError {
                     "LoadBalancerNotFound" => {
                         return DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -6912,12 +6912,12 @@ impl DeleteLoadBalancerPolicyError {
                     "LoadBalancerNotFound" => {
                         return DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -7006,12 +7006,12 @@ impl DeregisterInstancesFromLoadBalancerError {
                     "LoadBalancerNotFound" => {
                         return DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidInstance" => {
                         return DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -7178,12 +7178,12 @@ impl DescribeInstanceHealthError {
                     "LoadBalancerNotFound" => {
                         return DescribeInstanceHealthError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidInstance" => {
                         return DescribeInstanceHealthError::InvalidEndPoint(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7272,12 +7272,12 @@ impl DescribeLoadBalancerAttributesError {
                     "LoadBalancerNotFound" => {
                         return DescribeLoadBalancerAttributesError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "LoadBalancerAttributeNotFound" => {
                         return DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -7366,12 +7366,12 @@ impl DescribeLoadBalancerPoliciesError {
                     "LoadBalancerNotFound" => {
                         return DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "PolicyNotFound" => {
                         return DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7458,7 +7458,7 @@ impl DescribeLoadBalancerPolicyTypesError {
                     "PolicyTypeNotFound" => {
                         return DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -7546,12 +7546,12 @@ impl DescribeLoadBalancersError {
                     "LoadBalancerNotFound" => {
                         return DescribeLoadBalancersError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "DependencyThrottle" => {
                         return DescribeLoadBalancersError::DependencyThrottle(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7638,7 +7638,7 @@ impl DescribeTagsError {
                     "LoadBalancerNotFound" => {
                         return DescribeTagsError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -7724,12 +7724,12 @@ impl DetachLoadBalancerFromSubnetsError {
                     "LoadBalancerNotFound" => {
                         return DetachLoadBalancerFromSubnetsError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidConfigurationRequest" => {
                         return DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -7904,7 +7904,7 @@ impl EnableAvailabilityZonesForLoadBalancerError {
                     "LoadBalancerNotFound" => {
                         return EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -7994,17 +7994,17 @@ impl ModifyLoadBalancerAttributesError {
                     "LoadBalancerNotFound" => {
                         return ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidConfigurationRequest" => {
                         return ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "LoadBalancerAttributeNotFound" => {
                         return ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -8094,12 +8094,12 @@ impl RegisterInstancesWithLoadBalancerError {
                     "LoadBalancerNotFound" => {
                         return RegisterInstancesWithLoadBalancerError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidInstance" => {
                         return RegisterInstancesWithLoadBalancerError::InvalidEndPoint(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -8186,7 +8186,7 @@ impl RemoveTagsError {
                     "LoadBalancerNotFound" => {
                         return RemoveTagsError::AccessPointNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -8462,22 +8462,22 @@ impl SetLoadBalancerPoliciesOfListenerError {
                     "LoadBalancerNotFound" => {
                         return SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "InvalidConfigurationRequest" => {
                         return SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "ListenerNotFound" => {
                         return SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        )
+                        );
                     }
                     "PolicyNotFound" => {
                         return SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }

@@ -2283,25 +2283,25 @@ impl CreateByteMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateByteMatchSetError::WAFDisallowedName(String::from(error_message))
+                    return CreateByteMatchSetError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateByteMatchSetError::WAFInternalError(String::from(error_message))
+                    return CreateByteMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateByteMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return CreateByteMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateByteMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    return CreateByteMatchSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateByteMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateByteMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateByteMatchSetError::WAFStaleData(String::from(error_message))
+                    return CreateByteMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateByteMatchSetError::Validation(error_message.to_string())
+                    return CreateByteMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2395,25 +2395,25 @@ impl CreateGeoMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateGeoMatchSetError::WAFDisallowedName(String::from(error_message))
+                    return CreateGeoMatchSetError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    return CreateGeoMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return CreateGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateGeoMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    return CreateGeoMatchSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateGeoMatchSetError::WAFStaleData(String::from(error_message))
+                    return CreateGeoMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGeoMatchSetError::Validation(error_message.to_string())
+                    return CreateGeoMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2507,25 +2507,25 @@ impl CreateIPSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateIPSetError::WAFDisallowedName(String::from(error_message))
+                    return CreateIPSetError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateIPSetError::WAFInternalError(String::from(error_message))
+                    return CreateIPSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateIPSetError::WAFInvalidAccount(String::from(error_message))
+                    return CreateIPSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateIPSetError::WAFInvalidParameter(String::from(error_message))
+                    return CreateIPSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateIPSetError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateIPSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateIPSetError::WAFStaleData(String::from(error_message))
+                    return CreateIPSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIPSetError::Validation(error_message.to_string())
+                    return CreateIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2615,24 +2615,24 @@ impl CreateRateBasedRuleError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRateBasedRuleError::WAFDisallowedName(String::from(error_message))
+                    return CreateRateBasedRuleError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRateBasedRuleError::WAFInternalError(String::from(error_message))
+                    return CreateRateBasedRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
                     return CreateRateBasedRuleError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRateBasedRuleError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateRateBasedRuleError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRateBasedRuleError::WAFStaleData(String::from(error_message))
+                    return CreateRateBasedRuleError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRateBasedRuleError::Validation(error_message.to_string())
+                    return CreateRateBasedRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2721,19 +2721,19 @@ impl CreateRegexMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRegexMatchSetError::WAFDisallowedName(String::from(error_message))
+                    return CreateRegexMatchSetError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    return CreateRegexMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRegexMatchSetError::WAFStaleData(String::from(error_message))
+                    return CreateRegexMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRegexMatchSetError::Validation(error_message.to_string())
+                    return CreateRegexMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2823,21 +2823,21 @@ impl CreateRegexPatternSetError {
                 "WAFDisallowedNameException" => {
                     return CreateRegexPatternSetError::WAFDisallowedName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    return CreateRegexPatternSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
                     return CreateRegexPatternSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRegexPatternSetError::WAFStaleData(String::from(error_message))
+                    return CreateRegexPatternSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRegexPatternSetError::Validation(error_message.to_string())
+                    return CreateRegexPatternSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2927,22 +2927,22 @@ impl CreateRuleError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRuleError::WAFDisallowedName(String::from(error_message))
+                    return CreateRuleError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRuleError::WAFInternalError(String::from(error_message))
+                    return CreateRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateRuleError::WAFInvalidParameter(String::from(error_message))
+                    return CreateRuleError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRuleError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateRuleError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRuleError::WAFStaleData(String::from(error_message))
+                    return CreateRuleError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRuleError::Validation(error_message.to_string())
+                    return CreateRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3029,19 +3029,19 @@ impl CreateRuleGroupError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRuleGroupError::WAFDisallowedName(String::from(error_message))
+                    return CreateRuleGroupError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRuleGroupError::WAFInternalError(String::from(error_message))
+                    return CreateRuleGroupError::WAFInternalError(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRuleGroupError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateRuleGroupError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRuleGroupError::WAFStaleData(String::from(error_message))
+                    return CreateRuleGroupError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRuleGroupError::Validation(error_message.to_string())
+                    return CreateRuleGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3133,33 +3133,33 @@ impl CreateSizeConstraintSetError {
                 "WAFDisallowedNameException" => {
                     return CreateSizeConstraintSetError::WAFDisallowedName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInternalErrorException" => {
                     return CreateSizeConstraintSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return CreateSizeConstraintSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return CreateSizeConstraintSetError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
                     return CreateSizeConstraintSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateSizeConstraintSetError::WAFStaleData(String::from(error_message))
+                    return CreateSizeConstraintSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSizeConstraintSetError::Validation(error_message.to_string())
+                    return CreateSizeConstraintSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3255,35 +3255,35 @@ impl CreateSqlInjectionMatchSetError {
                 "WAFDisallowedNameException" => {
                     return CreateSqlInjectionMatchSetError::WAFDisallowedName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInternalErrorException" => {
                     return CreateSqlInjectionMatchSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return CreateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return CreateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
                     return CreateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
                     return CreateSqlInjectionMatchSetError::WAFStaleData(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateSqlInjectionMatchSetError::Validation(error_message.to_string())
+                    return CreateSqlInjectionMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3377,25 +3377,25 @@ impl CreateWebACLError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateWebACLError::WAFDisallowedName(String::from(error_message))
+                    return CreateWebACLError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateWebACLError::WAFInternalError(String::from(error_message))
+                    return CreateWebACLError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateWebACLError::WAFInvalidAccount(String::from(error_message))
+                    return CreateWebACLError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateWebACLError::WAFInvalidParameter(String::from(error_message))
+                    return CreateWebACLError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateWebACLError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateWebACLError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateWebACLError::WAFStaleData(String::from(error_message))
+                    return CreateWebACLError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateWebACLError::Validation(error_message.to_string())
+                    return CreateWebACLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3487,25 +3487,25 @@ impl CreateXssMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateXssMatchSetError::WAFDisallowedName(String::from(error_message))
+                    return CreateXssMatchSetError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateXssMatchSetError::WAFInternalError(String::from(error_message))
+                    return CreateXssMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateXssMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return CreateXssMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateXssMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    return CreateXssMatchSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateXssMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return CreateXssMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return CreateXssMatchSetError::WAFStaleData(String::from(error_message))
+                    return CreateXssMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateXssMatchSetError::Validation(error_message.to_string())
+                    return CreateXssMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3599,25 +3599,25 @@ impl DeleteByteMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteByteMatchSetError::WAFInternalError(String::from(error_message))
+                    return DeleteByteMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteByteMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteByteMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteByteMatchSetError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteByteMatchSetError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteByteMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteByteMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteByteMatchSetError::WAFReferencedItem(String::from(error_message))
+                    return DeleteByteMatchSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteByteMatchSetError::WAFStaleData(String::from(error_message))
+                    return DeleteByteMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteByteMatchSetError::Validation(error_message.to_string())
+                    return DeleteByteMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3711,25 +3711,25 @@ impl DeleteGeoMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    return DeleteGeoMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteGeoMatchSetError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteGeoMatchSetError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteGeoMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteGeoMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteGeoMatchSetError::WAFReferencedItem(String::from(error_message))
+                    return DeleteGeoMatchSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteGeoMatchSetError::WAFStaleData(String::from(error_message))
+                    return DeleteGeoMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGeoMatchSetError::Validation(error_message.to_string())
+                    return DeleteGeoMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3823,25 +3823,25 @@ impl DeleteIPSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteIPSetError::WAFInternalError(String::from(error_message))
+                    return DeleteIPSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteIPSetError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteIPSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteIPSetError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteIPSetError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteIPSetError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteIPSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteIPSetError::WAFReferencedItem(String::from(error_message))
+                    return DeleteIPSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteIPSetError::WAFStaleData(String::from(error_message))
+                    return DeleteIPSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIPSetError::Validation(error_message.to_string())
+                    return DeleteIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3929,18 +3929,18 @@ impl DeletePermissionPolicyError {
                 "WAFInternalErrorException" => {
                     return DeletePermissionPolicyError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return DeletePermissionPolicyError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeletePermissionPolicyError::WAFStaleData(String::from(error_message))
+                    return DeletePermissionPolicyError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePermissionPolicyError::Validation(error_message.to_string())
+                    return DeletePermissionPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4031,25 +4031,25 @@ impl DeleteRateBasedRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRateBasedRuleError::WAFInternalError(String::from(error_message))
+                    return DeleteRateBasedRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRateBasedRuleError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteRateBasedRuleError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRateBasedRuleError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteRateBasedRuleError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRateBasedRuleError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteRateBasedRuleError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRateBasedRuleError::WAFReferencedItem(String::from(error_message))
+                    return DeleteRateBasedRuleError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRateBasedRuleError::WAFStaleData(String::from(error_message))
+                    return DeleteRateBasedRuleError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRateBasedRuleError::Validation(error_message.to_string())
+                    return DeleteRateBasedRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4143,25 +4143,25 @@ impl DeleteRegexMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    return DeleteRegexMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRegexMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteRegexMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRegexMatchSetError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteRegexMatchSetError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRegexMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteRegexMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRegexMatchSetError::WAFReferencedItem(String::from(error_message))
+                    return DeleteRegexMatchSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRegexMatchSetError::WAFStaleData(String::from(error_message))
+                    return DeleteRegexMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRegexMatchSetError::Validation(error_message.to_string())
+                    return DeleteRegexMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4255,33 +4255,33 @@ impl DeleteRegexPatternSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    return DeleteRegexPatternSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
                     return DeleteRegexPatternSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
                     return DeleteRegexPatternSetError::WAFNonEmptyEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return DeleteRegexPatternSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFReferencedItemException" => {
                     return DeleteRegexPatternSetError::WAFReferencedItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRegexPatternSetError::WAFStaleData(String::from(error_message))
+                    return DeleteRegexPatternSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRegexPatternSetError::Validation(error_message.to_string())
+                    return DeleteRegexPatternSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4375,25 +4375,25 @@ impl DeleteRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRuleError::WAFInternalError(String::from(error_message))
+                    return DeleteRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRuleError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteRuleError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRuleError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteRuleError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRuleError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteRuleError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRuleError::WAFReferencedItem(String::from(error_message))
+                    return DeleteRuleError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRuleError::WAFStaleData(String::from(error_message))
+                    return DeleteRuleError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRuleError::Validation(error_message.to_string())
+                    return DeleteRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4483,22 +4483,22 @@ impl DeleteRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRuleGroupError::WAFInternalError(String::from(error_message))
+                    return DeleteRuleGroupError::WAFInternalError(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRuleGroupError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteRuleGroupError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRuleGroupError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteRuleGroupError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRuleGroupError::WAFReferencedItem(String::from(error_message))
+                    return DeleteRuleGroupError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRuleGroupError::WAFStaleData(String::from(error_message))
+                    return DeleteRuleGroupError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRuleGroupError::Validation(error_message.to_string())
+                    return DeleteRuleGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4591,33 +4591,33 @@ impl DeleteSizeConstraintSetError {
                 "WAFInternalErrorException" => {
                     return DeleteSizeConstraintSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return DeleteSizeConstraintSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
                     return DeleteSizeConstraintSetError::WAFNonEmptyEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return DeleteSizeConstraintSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFReferencedItemException" => {
                     return DeleteSizeConstraintSetError::WAFReferencedItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteSizeConstraintSetError::WAFStaleData(String::from(error_message))
+                    return DeleteSizeConstraintSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSizeConstraintSetError::Validation(error_message.to_string())
+                    return DeleteSizeConstraintSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4713,35 +4713,35 @@ impl DeleteSqlInjectionMatchSetError {
                 "WAFInternalErrorException" => {
                     return DeleteSqlInjectionMatchSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return DeleteSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
                     return DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return DeleteSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFReferencedItemException" => {
                     return DeleteSqlInjectionMatchSetError::WAFReferencedItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
                     return DeleteSqlInjectionMatchSetError::WAFStaleData(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteSqlInjectionMatchSetError::Validation(error_message.to_string())
+                    return DeleteSqlInjectionMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4835,25 +4835,25 @@ impl DeleteWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteWebACLError::WAFInternalError(String::from(error_message))
+                    return DeleteWebACLError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteWebACLError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteWebACLError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteWebACLError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteWebACLError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteWebACLError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteWebACLError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteWebACLError::WAFReferencedItem(String::from(error_message))
+                    return DeleteWebACLError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteWebACLError::WAFStaleData(String::from(error_message))
+                    return DeleteWebACLError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteWebACLError::Validation(error_message.to_string())
+                    return DeleteWebACLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4945,25 +4945,25 @@ impl DeleteXssMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteXssMatchSetError::WAFInternalError(String::from(error_message))
+                    return DeleteXssMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteXssMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return DeleteXssMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteXssMatchSetError::WAFNonEmptyEntity(String::from(error_message))
+                    return DeleteXssMatchSetError::WAFNonEmptyEntity(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteXssMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return DeleteXssMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteXssMatchSetError::WAFReferencedItem(String::from(error_message))
+                    return DeleteXssMatchSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteXssMatchSetError::WAFStaleData(String::from(error_message))
+                    return DeleteXssMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteXssMatchSetError::Validation(error_message.to_string())
+                    return DeleteXssMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5051,16 +5051,16 @@ impl GetByteMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetByteMatchSetError::WAFInternalError(String::from(error_message))
+                    return GetByteMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetByteMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetByteMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetByteMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return GetByteMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetByteMatchSetError::Validation(error_message.to_string())
+                    return GetByteMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5139,10 +5139,10 @@ impl GetChangeTokenError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetChangeTokenError::WAFInternalError(String::from(error_message))
+                    return GetChangeTokenError::WAFInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetChangeTokenError::Validation(error_message.to_string())
+                    return GetChangeTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5221,15 +5221,15 @@ impl GetChangeTokenStatusError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetChangeTokenStatusError::WAFInternalError(String::from(error_message))
+                    return GetChangeTokenStatusError::WAFInternalError(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
                     return GetChangeTokenStatusError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetChangeTokenStatusError::Validation(error_message.to_string())
+                    return GetChangeTokenStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5313,16 +5313,16 @@ impl GetGeoMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    return GetGeoMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetGeoMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return GetGeoMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGeoMatchSetError::Validation(error_message.to_string())
+                    return GetGeoMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5405,16 +5405,16 @@ impl GetIPSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetIPSetError::WAFInternalError(String::from(error_message))
+                    return GetIPSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetIPSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetIPSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetIPSetError::WAFNonexistentItem(String::from(error_message))
+                    return GetIPSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIPSetError::Validation(error_message.to_string())
+                    return GetIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5495,13 +5495,13 @@ impl GetPermissionPolicyError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetPermissionPolicyError::WAFInternalError(String::from(error_message))
+                    return GetPermissionPolicyError::WAFInternalError(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetPermissionPolicyError::WAFNonexistentItem(String::from(error_message))
+                    return GetPermissionPolicyError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPermissionPolicyError::Validation(error_message.to_string())
+                    return GetPermissionPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5585,16 +5585,16 @@ impl GetRateBasedRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRateBasedRuleError::WAFInternalError(String::from(error_message))
+                    return GetRateBasedRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRateBasedRuleError::WAFInvalidAccount(String::from(error_message))
+                    return GetRateBasedRuleError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRateBasedRuleError::WAFNonexistentItem(String::from(error_message))
+                    return GetRateBasedRuleError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRateBasedRuleError::Validation(error_message.to_string())
+                    return GetRateBasedRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5681,25 +5681,25 @@ impl GetRateBasedRuleManagedKeysError {
                 "WAFInternalErrorException" => {
                     return GetRateBasedRuleManagedKeysError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return GetRateBasedRuleManagedKeysError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return GetRateBasedRuleManagedKeysError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return GetRateBasedRuleManagedKeysError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetRateBasedRuleManagedKeysError::Validation(error_message.to_string())
+                    return GetRateBasedRuleManagedKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5785,16 +5785,16 @@ impl GetRegexMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    return GetRegexMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRegexMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetRegexMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRegexMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return GetRegexMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRegexMatchSetError::Validation(error_message.to_string())
+                    return GetRegexMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5877,16 +5877,16 @@ impl GetRegexPatternSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    return GetRegexPatternSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRegexPatternSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetRegexPatternSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRegexPatternSetError::WAFNonexistentItem(String::from(error_message))
+                    return GetRegexPatternSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRegexPatternSetError::Validation(error_message.to_string())
+                    return GetRegexPatternSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5971,13 +5971,13 @@ impl GetRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRuleError::WAFInternalError(String::from(error_message))
+                    return GetRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRuleError::WAFInvalidAccount(String::from(error_message))
+                    return GetRuleError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRuleError::WAFNonexistentItem(String::from(error_message))
+                    return GetRuleError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => return GetRuleError::Validation(error_message.to_string()),
                 _ => {}
@@ -6059,13 +6059,13 @@ impl GetRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRuleGroupError::WAFInternalError(String::from(error_message))
+                    return GetRuleGroupError::WAFInternalError(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRuleGroupError::WAFNonexistentItem(String::from(error_message))
+                    return GetRuleGroupError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRuleGroupError::Validation(error_message.to_string())
+                    return GetRuleGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6145,13 +6145,13 @@ impl GetSampledRequestsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetSampledRequestsError::WAFInternalError(String::from(error_message))
+                    return GetSampledRequestsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetSampledRequestsError::WAFNonexistentItem(String::from(error_message))
+                    return GetSampledRequestsError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSampledRequestsError::Validation(error_message.to_string())
+                    return GetSampledRequestsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6235,18 +6235,18 @@ impl GetSizeConstraintSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetSizeConstraintSetError::WAFInternalError(String::from(error_message))
+                    return GetSizeConstraintSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetSizeConstraintSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetSizeConstraintSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
                     return GetSizeConstraintSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetSizeConstraintSetError::Validation(error_message.to_string())
+                    return GetSizeConstraintSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6333,20 +6333,20 @@ impl GetSqlInjectionMatchSetError {
                 "WAFInternalErrorException" => {
                     return GetSqlInjectionMatchSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return GetSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return GetSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetSqlInjectionMatchSetError::Validation(error_message.to_string())
+                    return GetSqlInjectionMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6431,16 +6431,16 @@ impl GetWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetWebACLError::WAFInternalError(String::from(error_message))
+                    return GetWebACLError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetWebACLError::WAFInvalidAccount(String::from(error_message))
+                    return GetWebACLError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetWebACLError::WAFNonexistentItem(String::from(error_message))
+                    return GetWebACLError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetWebACLError::Validation(error_message.to_string())
+                    return GetWebACLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6523,16 +6523,16 @@ impl GetXssMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetXssMatchSetError::WAFInternalError(String::from(error_message))
+                    return GetXssMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetXssMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return GetXssMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetXssMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return GetXssMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetXssMatchSetError::Validation(error_message.to_string())
+                    return GetXssMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6617,20 +6617,20 @@ impl ListActivatedRulesInRuleGroupError {
                 "WAFInternalErrorException" => {
                     return ListActivatedRulesInRuleGroupError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return ListActivatedRulesInRuleGroupError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return ListActivatedRulesInRuleGroupError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListActivatedRulesInRuleGroupError::Validation(error_message.to_string())
+                    return ListActivatedRulesInRuleGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6713,13 +6713,13 @@ impl ListByteMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListByteMatchSetsError::WAFInternalError(String::from(error_message))
+                    return ListByteMatchSetsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListByteMatchSetsError::WAFInvalidAccount(String::from(error_message))
+                    return ListByteMatchSetsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListByteMatchSetsError::Validation(error_message.to_string())
+                    return ListByteMatchSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6801,13 +6801,13 @@ impl ListGeoMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListGeoMatchSetsError::WAFInternalError(String::from(error_message))
+                    return ListGeoMatchSetsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListGeoMatchSetsError::WAFInvalidAccount(String::from(error_message))
+                    return ListGeoMatchSetsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGeoMatchSetsError::Validation(error_message.to_string())
+                    return ListGeoMatchSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6887,13 +6887,13 @@ impl ListIPSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListIPSetsError::WAFInternalError(String::from(error_message))
+                    return ListIPSetsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListIPSetsError::WAFInvalidAccount(String::from(error_message))
+                    return ListIPSetsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIPSetsError::Validation(error_message.to_string())
+                    return ListIPSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6973,13 +6973,13 @@ impl ListRateBasedRulesError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRateBasedRulesError::WAFInternalError(String::from(error_message))
+                    return ListRateBasedRulesError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRateBasedRulesError::WAFInvalidAccount(String::from(error_message))
+                    return ListRateBasedRulesError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRateBasedRulesError::Validation(error_message.to_string())
+                    return ListRateBasedRulesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7061,13 +7061,13 @@ impl ListRegexMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRegexMatchSetsError::WAFInternalError(String::from(error_message))
+                    return ListRegexMatchSetsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRegexMatchSetsError::WAFInvalidAccount(String::from(error_message))
+                    return ListRegexMatchSetsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRegexMatchSetsError::Validation(error_message.to_string())
+                    return ListRegexMatchSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7149,13 +7149,13 @@ impl ListRegexPatternSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRegexPatternSetsError::WAFInternalError(String::from(error_message))
+                    return ListRegexPatternSetsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRegexPatternSetsError::WAFInvalidAccount(String::from(error_message))
+                    return ListRegexPatternSetsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRegexPatternSetsError::Validation(error_message.to_string())
+                    return ListRegexPatternSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7235,10 +7235,10 @@ impl ListRuleGroupsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRuleGroupsError::WAFInternalError(String::from(error_message))
+                    return ListRuleGroupsError::WAFInternalError(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRuleGroupsError::Validation(error_message.to_string())
+                    return ListRuleGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7317,13 +7317,13 @@ impl ListRulesError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRulesError::WAFInternalError(String::from(error_message))
+                    return ListRulesError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRulesError::WAFInvalidAccount(String::from(error_message))
+                    return ListRulesError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRulesError::Validation(error_message.to_string())
+                    return ListRulesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7405,15 +7405,15 @@ impl ListSizeConstraintSetsError {
                 "WAFInternalErrorException" => {
                     return ListSizeConstraintSetsError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return ListSizeConstraintSetsError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListSizeConstraintSetsError::Validation(error_message.to_string())
+                    return ListSizeConstraintSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7497,15 +7497,15 @@ impl ListSqlInjectionMatchSetsError {
                 "WAFInternalErrorException" => {
                     return ListSqlInjectionMatchSetsError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return ListSqlInjectionMatchSetsError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListSqlInjectionMatchSetsError::Validation(error_message.to_string())
+                    return ListSqlInjectionMatchSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7589,15 +7589,15 @@ impl ListSubscribedRuleGroupsError {
                 "WAFInternalErrorException" => {
                     return ListSubscribedRuleGroupsError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return ListSubscribedRuleGroupsError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListSubscribedRuleGroupsError::Validation(error_message.to_string())
+                    return ListSubscribedRuleGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7679,13 +7679,13 @@ impl ListWebACLsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListWebACLsError::WAFInternalError(String::from(error_message))
+                    return ListWebACLsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListWebACLsError::WAFInvalidAccount(String::from(error_message))
+                    return ListWebACLsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListWebACLsError::Validation(error_message.to_string())
+                    return ListWebACLsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7765,13 +7765,13 @@ impl ListXssMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListXssMatchSetsError::WAFInternalError(String::from(error_message))
+                    return ListXssMatchSetsError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListXssMatchSetsError::WAFInvalidAccount(String::from(error_message))
+                    return ListXssMatchSetsError::WAFInvalidAccount(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListXssMatchSetsError::Validation(error_message.to_string())
+                    return ListXssMatchSetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7855,21 +7855,21 @@ impl PutPermissionPolicyError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return PutPermissionPolicyError::WAFInternalError(String::from(error_message))
+                    return PutPermissionPolicyError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidPermissionPolicyException" => {
                     return PutPermissionPolicyError::WAFInvalidPermissionPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return PutPermissionPolicyError::WAFNonexistentItem(String::from(error_message))
+                    return PutPermissionPolicyError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return PutPermissionPolicyError::WAFStaleData(String::from(error_message))
+                    return PutPermissionPolicyError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutPermissionPolicyError::Validation(error_message.to_string())
+                    return PutPermissionPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7965,33 +7965,33 @@ impl UpdateByteMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateByteMatchSetError::WAFInternalError(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateByteMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateByteMatchSetError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateByteMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateByteMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateByteMatchSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateByteMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateByteMatchSetError::WAFStaleData(String::from(error_message))
+                    return UpdateByteMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateByteMatchSetError::Validation(error_message.to_string())
+                    return UpdateByteMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8093,36 +8093,36 @@ impl UpdateGeoMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateGeoMatchSetError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateGeoMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateGeoMatchSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateGeoMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateGeoMatchSetError::WAFReferencedItem(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateGeoMatchSetError::WAFStaleData(String::from(error_message))
+                    return UpdateGeoMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGeoMatchSetError::Validation(error_message.to_string())
+                    return UpdateGeoMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8225,34 +8225,34 @@ impl UpdateIPSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateIPSetError::WAFInternalError(String::from(error_message))
+                    return UpdateIPSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateIPSetError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateIPSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateIPSetError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateIPSetError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateIPSetError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateIPSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateIPSetError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateIPSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateIPSetError::WAFNonexistentContainer(String::from(error_message))
+                    return UpdateIPSetError::WAFNonexistentContainer(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateIPSetError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateIPSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateIPSetError::WAFReferencedItem(String::from(error_message))
+                    return UpdateIPSetError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateIPSetError::WAFStaleData(String::from(error_message))
+                    return UpdateIPSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateIPSetError::Validation(error_message.to_string())
+                    return UpdateIPSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8353,40 +8353,40 @@ impl UpdateRateBasedRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRateBasedRuleError::WAFInternalError(String::from(error_message))
+                    return UpdateRateBasedRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRateBasedRuleError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateRateBasedRuleError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
                     return UpdateRateBasedRuleError::WAFInvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return UpdateRateBasedRuleError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRateBasedRuleError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateRateBasedRuleError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateRateBasedRuleError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRateBasedRuleError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateRateBasedRuleError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateRateBasedRuleError::WAFReferencedItem(String::from(error_message))
+                    return UpdateRateBasedRuleError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRateBasedRuleError::WAFStaleData(String::from(error_message))
+                    return UpdateRateBasedRuleError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRateBasedRuleError::Validation(error_message.to_string())
+                    return UpdateRateBasedRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8487,35 +8487,35 @@ impl UpdateRegexMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return UpdateRegexMatchSetError::WAFDisallowedName(String::from(error_message))
+                    return UpdateRegexMatchSetError::WAFDisallowedName(String::from(error_message));
                 }
                 "WAFInternalErrorException" => {
-                    return UpdateRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    return UpdateRegexMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRegexMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateRegexMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
                     return UpdateRegexMatchSetError::WAFInvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateRegexMatchSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRegexMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateRegexMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRegexMatchSetError::WAFStaleData(String::from(error_message))
+                    return UpdateRegexMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRegexMatchSetError::Validation(error_message.to_string())
+                    return UpdateRegexMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8615,43 +8615,43 @@ impl UpdateRegexPatternSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    return UpdateRegexPatternSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
                     return UpdateRegexPatternSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidOperationException" => {
                     return UpdateRegexPatternSetError::WAFInvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidRegexPatternException" => {
                     return UpdateRegexPatternSetError::WAFInvalidRegexPattern(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
                     return UpdateRegexPatternSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateRegexPatternSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return UpdateRegexPatternSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRegexPatternSetError::WAFStaleData(String::from(error_message))
+                    return UpdateRegexPatternSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRegexPatternSetError::Validation(error_message.to_string())
+                    return UpdateRegexPatternSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8753,34 +8753,34 @@ impl UpdateRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRuleError::WAFInternalError(String::from(error_message))
+                    return UpdateRuleError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRuleError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateRuleError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRuleError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateRuleError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateRuleError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateRuleError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRuleError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateRuleError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateRuleError::WAFNonexistentContainer(String::from(error_message))
+                    return UpdateRuleError::WAFNonexistentContainer(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRuleError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateRuleError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateRuleError::WAFReferencedItem(String::from(error_message))
+                    return UpdateRuleError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRuleError::WAFStaleData(String::from(error_message))
+                    return UpdateRuleError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRuleError::Validation(error_message.to_string())
+                    return UpdateRuleError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8877,30 +8877,30 @@ impl UpdateRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRuleGroupError::WAFInternalError(String::from(error_message))
+                    return UpdateRuleGroupError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRuleGroupError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateRuleGroupError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateRuleGroupError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateRuleGroupError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRuleGroupError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateRuleGroupError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateRuleGroupError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRuleGroupError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateRuleGroupError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRuleGroupError::WAFStaleData(String::from(error_message))
+                    return UpdateRuleGroupError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRuleGroupError::Validation(error_message.to_string())
+                    return UpdateRuleGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9001,48 +9001,48 @@ impl UpdateSizeConstraintSetError {
                 "WAFInternalErrorException" => {
                     return UpdateSizeConstraintSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return UpdateSizeConstraintSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidOperationException" => {
                     return UpdateSizeConstraintSetError::WAFInvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return UpdateSizeConstraintSetError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
                     return UpdateSizeConstraintSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateSizeConstraintSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return UpdateSizeConstraintSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFReferencedItemException" => {
                     return UpdateSizeConstraintSetError::WAFReferencedItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateSizeConstraintSetError::WAFStaleData(String::from(error_message))
+                    return UpdateSizeConstraintSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateSizeConstraintSetError::Validation(error_message.to_string())
+                    return UpdateSizeConstraintSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9145,45 +9145,45 @@ impl UpdateSqlInjectionMatchSetError {
                 "WAFInternalErrorException" => {
                     return UpdateSqlInjectionMatchSetError::WAFInternalError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidAccountException" => {
                     return UpdateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidOperationException" => {
                     return UpdateSqlInjectionMatchSetError::WAFInvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFInvalidParameterException" => {
                     return UpdateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFLimitsExceededException" => {
                     return UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
                     return UpdateSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFStaleDataException" => {
                     return UpdateSqlInjectionMatchSetError::WAFStaleData(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateSqlInjectionMatchSetError::Validation(error_message.to_string())
+                    return UpdateSqlInjectionMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9287,37 +9287,37 @@ impl UpdateWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateWebACLError::WAFInternalError(String::from(error_message))
+                    return UpdateWebACLError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateWebACLError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateWebACLError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateWebACLError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateWebACLError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateWebACLError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateWebACLError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateWebACLError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateWebACLError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateWebACLError::WAFNonexistentContainer(String::from(error_message))
+                    return UpdateWebACLError::WAFNonexistentContainer(String::from(error_message));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateWebACLError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateWebACLError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateWebACLError::WAFReferencedItem(String::from(error_message))
+                    return UpdateWebACLError::WAFReferencedItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateWebACLError::WAFStaleData(String::from(error_message))
+                    return UpdateWebACLError::WAFStaleData(String::from(error_message));
                 }
                 "WAFSubscriptionNotFoundException" => {
-                    return UpdateWebACLError::WAFSubscriptionNotFound(String::from(error_message))
+                    return UpdateWebACLError::WAFSubscriptionNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateWebACLError::Validation(error_message.to_string())
+                    return UpdateWebACLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9417,33 +9417,33 @@ impl UpdateXssMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateXssMatchSetError::WAFInternalError(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFInternalError(String::from(error_message));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateXssMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFInvalidAccount(String::from(error_message));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateXssMatchSetError::WAFInvalidOperation(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFInvalidOperation(String::from(error_message));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateXssMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFInvalidParameter(String::from(error_message));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateXssMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFLimitsExceeded(String::from(error_message));
                 }
                 "WAFNonexistentContainerException" => {
                     return UpdateXssMatchSetError::WAFNonexistentContainer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateXssMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFNonexistentItem(String::from(error_message));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateXssMatchSetError::WAFStaleData(String::from(error_message))
+                    return UpdateXssMatchSetError::WAFStaleData(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateXssMatchSetError::Validation(error_message.to_string())
+                    return UpdateXssMatchSetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

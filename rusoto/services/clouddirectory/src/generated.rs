@@ -3082,31 +3082,31 @@ impl AddFacetToObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AddFacetToObjectError::AccessDenied(String::from(error_message))
+                    return AddFacetToObjectError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AddFacetToObjectError::DirectoryNotEnabled(String::from(error_message))
+                    return AddFacetToObjectError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return AddFacetToObjectError::FacetValidation(String::from(error_message))
+                    return AddFacetToObjectError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return AddFacetToObjectError::InternalService(String::from(error_message))
+                    return AddFacetToObjectError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return AddFacetToObjectError::InvalidArn(String::from(error_message))
+                    return AddFacetToObjectError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AddFacetToObjectError::LimitExceeded(String::from(error_message))
+                    return AddFacetToObjectError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddFacetToObjectError::ResourceNotFound(String::from(error_message))
+                    return AddFacetToObjectError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return AddFacetToObjectError::RetryableConflict(String::from(error_message))
+                    return AddFacetToObjectError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AddFacetToObjectError::Validation(error_message.to_string())
+                    return AddFacetToObjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3216,28 +3216,28 @@ impl ApplySchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ApplySchemaError::AccessDenied(String::from(error_message))
+                    return ApplySchemaError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ApplySchemaError::InternalService(String::from(error_message))
+                    return ApplySchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ApplySchemaError::InvalidArn(String::from(error_message))
+                    return ApplySchemaError::InvalidArn(String::from(error_message));
                 }
                 "InvalidAttachmentException" => {
-                    return ApplySchemaError::InvalidAttachment(String::from(error_message))
+                    return ApplySchemaError::InvalidAttachment(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ApplySchemaError::LimitExceeded(String::from(error_message))
+                    return ApplySchemaError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ApplySchemaError::ResourceNotFound(String::from(error_message))
+                    return ApplySchemaError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ApplySchemaError::RetryableConflict(String::from(error_message))
+                    return ApplySchemaError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ApplySchemaError::Validation(error_message.to_string())
+                    return ApplySchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3352,37 +3352,37 @@ impl AttachObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachObjectError::AccessDenied(String::from(error_message))
+                    return AttachObjectError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachObjectError::DirectoryNotEnabled(String::from(error_message))
+                    return AttachObjectError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return AttachObjectError::FacetValidation(String::from(error_message))
+                    return AttachObjectError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return AttachObjectError::InternalService(String::from(error_message))
+                    return AttachObjectError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return AttachObjectError::InvalidArn(String::from(error_message))
+                    return AttachObjectError::InvalidArn(String::from(error_message));
                 }
                 "InvalidAttachmentException" => {
-                    return AttachObjectError::InvalidAttachment(String::from(error_message))
+                    return AttachObjectError::InvalidAttachment(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AttachObjectError::LimitExceeded(String::from(error_message))
+                    return AttachObjectError::LimitExceeded(String::from(error_message));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return AttachObjectError::LinkNameAlreadyInUse(String::from(error_message))
+                    return AttachObjectError::LinkNameAlreadyInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachObjectError::ResourceNotFound(String::from(error_message))
+                    return AttachObjectError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return AttachObjectError::RetryableConflict(String::from(error_message))
+                    return AttachObjectError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachObjectError::Validation(error_message.to_string())
+                    return AttachObjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3496,31 +3496,31 @@ impl AttachPolicyError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachPolicyError::AccessDenied(String::from(error_message))
+                    return AttachPolicyError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachPolicyError::DirectoryNotEnabled(String::from(error_message))
+                    return AttachPolicyError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return AttachPolicyError::InternalService(String::from(error_message))
+                    return AttachPolicyError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return AttachPolicyError::InvalidArn(String::from(error_message))
+                    return AttachPolicyError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AttachPolicyError::LimitExceeded(String::from(error_message))
+                    return AttachPolicyError::LimitExceeded(String::from(error_message));
                 }
                 "NotPolicyException" => {
-                    return AttachPolicyError::NotPolicy(String::from(error_message))
+                    return AttachPolicyError::NotPolicy(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachPolicyError::ResourceNotFound(String::from(error_message))
+                    return AttachPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return AttachPolicyError::RetryableConflict(String::from(error_message))
+                    return AttachPolicyError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachPolicyError::Validation(error_message.to_string())
+                    return AttachPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3638,40 +3638,40 @@ impl AttachToIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachToIndexError::AccessDenied(String::from(error_message))
+                    return AttachToIndexError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachToIndexError::DirectoryNotEnabled(String::from(error_message))
+                    return AttachToIndexError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "IndexedAttributeMissingException" => {
-                    return AttachToIndexError::IndexedAttributeMissing(String::from(error_message))
+                    return AttachToIndexError::IndexedAttributeMissing(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return AttachToIndexError::InternalService(String::from(error_message))
+                    return AttachToIndexError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return AttachToIndexError::InvalidArn(String::from(error_message))
+                    return AttachToIndexError::InvalidArn(String::from(error_message));
                 }
                 "InvalidAttachmentException" => {
-                    return AttachToIndexError::InvalidAttachment(String::from(error_message))
+                    return AttachToIndexError::InvalidAttachment(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AttachToIndexError::LimitExceeded(String::from(error_message))
+                    return AttachToIndexError::LimitExceeded(String::from(error_message));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return AttachToIndexError::LinkNameAlreadyInUse(String::from(error_message))
+                    return AttachToIndexError::LinkNameAlreadyInUse(String::from(error_message));
                 }
                 "NotIndexException" => {
-                    return AttachToIndexError::NotIndex(String::from(error_message))
+                    return AttachToIndexError::NotIndex(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachToIndexError::ResourceNotFound(String::from(error_message))
+                    return AttachToIndexError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return AttachToIndexError::RetryableConflict(String::from(error_message))
+                    return AttachToIndexError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachToIndexError::Validation(error_message.to_string())
+                    return AttachToIndexError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3788,34 +3788,34 @@ impl AttachTypedLinkError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachTypedLinkError::AccessDenied(String::from(error_message))
+                    return AttachTypedLinkError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachTypedLinkError::DirectoryNotEnabled(String::from(error_message))
+                    return AttachTypedLinkError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return AttachTypedLinkError::FacetValidation(String::from(error_message))
+                    return AttachTypedLinkError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return AttachTypedLinkError::InternalService(String::from(error_message))
+                    return AttachTypedLinkError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return AttachTypedLinkError::InvalidArn(String::from(error_message))
+                    return AttachTypedLinkError::InvalidArn(String::from(error_message));
                 }
                 "InvalidAttachmentException" => {
-                    return AttachTypedLinkError::InvalidAttachment(String::from(error_message))
+                    return AttachTypedLinkError::InvalidAttachment(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return AttachTypedLinkError::LimitExceeded(String::from(error_message))
+                    return AttachTypedLinkError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachTypedLinkError::ResourceNotFound(String::from(error_message))
+                    return AttachTypedLinkError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return AttachTypedLinkError::RetryableConflict(String::from(error_message))
+                    return AttachTypedLinkError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AttachTypedLinkError::Validation(error_message.to_string())
+                    return AttachTypedLinkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3924,25 +3924,25 @@ impl BatchReadError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return BatchReadError::AccessDenied(String::from(error_message))
+                    return BatchReadError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return BatchReadError::DirectoryNotEnabled(String::from(error_message))
+                    return BatchReadError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return BatchReadError::InternalService(String::from(error_message))
+                    return BatchReadError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return BatchReadError::InvalidArn(String::from(error_message))
+                    return BatchReadError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return BatchReadError::LimitExceeded(String::from(error_message))
+                    return BatchReadError::LimitExceeded(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return BatchReadError::RetryableConflict(String::from(error_message))
+                    return BatchReadError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchReadError::Validation(error_message.to_string())
+                    return BatchReadError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4050,28 +4050,28 @@ impl BatchWriteError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return BatchWriteError::AccessDenied(String::from(error_message))
+                    return BatchWriteError::AccessDenied(String::from(error_message));
                 }
                 "BatchWriteException" => {
-                    return BatchWriteError::BatchWrite(String::from(error_message))
+                    return BatchWriteError::BatchWrite(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return BatchWriteError::DirectoryNotEnabled(String::from(error_message))
+                    return BatchWriteError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return BatchWriteError::InternalService(String::from(error_message))
+                    return BatchWriteError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return BatchWriteError::InvalidArn(String::from(error_message))
+                    return BatchWriteError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return BatchWriteError::LimitExceeded(String::from(error_message))
+                    return BatchWriteError::LimitExceeded(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return BatchWriteError::RetryableConflict(String::from(error_message))
+                    return BatchWriteError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchWriteError::Validation(error_message.to_string())
+                    return BatchWriteError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4180,28 +4180,28 @@ impl CreateDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateDirectoryError::AccessDenied(String::from(error_message))
+                    return CreateDirectoryError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryAlreadyExistsException" => {
-                    return CreateDirectoryError::DirectoryAlreadyExists(String::from(error_message))
+                    return CreateDirectoryError::DirectoryAlreadyExists(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateDirectoryError::InternalService(String::from(error_message))
+                    return CreateDirectoryError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateDirectoryError::InvalidArn(String::from(error_message))
+                    return CreateDirectoryError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateDirectoryError::LimitExceeded(String::from(error_message))
+                    return CreateDirectoryError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateDirectoryError::ResourceNotFound(String::from(error_message))
+                    return CreateDirectoryError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return CreateDirectoryError::RetryableConflict(String::from(error_message))
+                    return CreateDirectoryError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDirectoryError::Validation(error_message.to_string())
+                    return CreateDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4314,34 +4314,34 @@ impl CreateFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateFacetError::AccessDenied(String::from(error_message))
+                    return CreateFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetAlreadyExistsException" => {
-                    return CreateFacetError::FacetAlreadyExists(String::from(error_message))
+                    return CreateFacetError::FacetAlreadyExists(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return CreateFacetError::FacetValidation(String::from(error_message))
+                    return CreateFacetError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateFacetError::InternalService(String::from(error_message))
+                    return CreateFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateFacetError::InvalidArn(String::from(error_message))
+                    return CreateFacetError::InvalidArn(String::from(error_message));
                 }
                 "InvalidRuleException" => {
-                    return CreateFacetError::InvalidRule(String::from(error_message))
+                    return CreateFacetError::InvalidRule(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateFacetError::LimitExceeded(String::from(error_message))
+                    return CreateFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateFacetError::ResourceNotFound(String::from(error_message))
+                    return CreateFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return CreateFacetError::RetryableConflict(String::from(error_message))
+                    return CreateFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateFacetError::Validation(error_message.to_string())
+                    return CreateFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4458,37 +4458,37 @@ impl CreateIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateIndexError::AccessDenied(String::from(error_message))
+                    return CreateIndexError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return CreateIndexError::DirectoryNotEnabled(String::from(error_message))
+                    return CreateIndexError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return CreateIndexError::FacetValidation(String::from(error_message))
+                    return CreateIndexError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateIndexError::InternalService(String::from(error_message))
+                    return CreateIndexError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateIndexError::InvalidArn(String::from(error_message))
+                    return CreateIndexError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateIndexError::LimitExceeded(String::from(error_message))
+                    return CreateIndexError::LimitExceeded(String::from(error_message));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return CreateIndexError::LinkNameAlreadyInUse(String::from(error_message))
+                    return CreateIndexError::LinkNameAlreadyInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateIndexError::ResourceNotFound(String::from(error_message))
+                    return CreateIndexError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return CreateIndexError::RetryableConflict(String::from(error_message))
+                    return CreateIndexError::RetryableConflict(String::from(error_message));
                 }
                 "UnsupportedIndexTypeException" => {
-                    return CreateIndexError::UnsupportedIndexType(String::from(error_message))
+                    return CreateIndexError::UnsupportedIndexType(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIndexError::Validation(error_message.to_string())
+                    return CreateIndexError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4606,37 +4606,37 @@ impl CreateObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateObjectError::AccessDenied(String::from(error_message))
+                    return CreateObjectError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return CreateObjectError::DirectoryNotEnabled(String::from(error_message))
+                    return CreateObjectError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return CreateObjectError::FacetValidation(String::from(error_message))
+                    return CreateObjectError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateObjectError::InternalService(String::from(error_message))
+                    return CreateObjectError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateObjectError::InvalidArn(String::from(error_message))
+                    return CreateObjectError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateObjectError::LimitExceeded(String::from(error_message))
+                    return CreateObjectError::LimitExceeded(String::from(error_message));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return CreateObjectError::LinkNameAlreadyInUse(String::from(error_message))
+                    return CreateObjectError::LinkNameAlreadyInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateObjectError::ResourceNotFound(String::from(error_message))
+                    return CreateObjectError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return CreateObjectError::RetryableConflict(String::from(error_message))
+                    return CreateObjectError::RetryableConflict(String::from(error_message));
                 }
                 "UnsupportedIndexTypeException" => {
-                    return CreateObjectError::UnsupportedIndexType(String::from(error_message))
+                    return CreateObjectError::UnsupportedIndexType(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateObjectError::Validation(error_message.to_string())
+                    return CreateObjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4746,25 +4746,25 @@ impl CreateSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateSchemaError::AccessDenied(String::from(error_message))
+                    return CreateSchemaError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateSchemaError::InternalService(String::from(error_message))
+                    return CreateSchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateSchemaError::InvalidArn(String::from(error_message))
+                    return CreateSchemaError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateSchemaError::LimitExceeded(String::from(error_message))
+                    return CreateSchemaError::LimitExceeded(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return CreateSchemaError::RetryableConflict(String::from(error_message))
+                    return CreateSchemaError::RetryableConflict(String::from(error_message));
                 }
                 "SchemaAlreadyExistsException" => {
-                    return CreateSchemaError::SchemaAlreadyExists(String::from(error_message))
+                    return CreateSchemaError::SchemaAlreadyExists(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSchemaError::Validation(error_message.to_string())
+                    return CreateSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4876,36 +4876,36 @@ impl CreateTypedLinkFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateTypedLinkFacetError::AccessDenied(String::from(error_message))
+                    return CreateTypedLinkFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetAlreadyExistsException" => {
                     return CreateTypedLinkFacetError::FacetAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return CreateTypedLinkFacetError::FacetValidation(String::from(error_message))
+                    return CreateTypedLinkFacetError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return CreateTypedLinkFacetError::InternalService(String::from(error_message))
+                    return CreateTypedLinkFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateTypedLinkFacetError::InvalidArn(String::from(error_message))
+                    return CreateTypedLinkFacetError::InvalidArn(String::from(error_message));
                 }
                 "InvalidRuleException" => {
-                    return CreateTypedLinkFacetError::InvalidRule(String::from(error_message))
+                    return CreateTypedLinkFacetError::InvalidRule(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateTypedLinkFacetError::LimitExceeded(String::from(error_message))
+                    return CreateTypedLinkFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateTypedLinkFacetError::ResourceNotFound(String::from(error_message))
+                    return CreateTypedLinkFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return CreateTypedLinkFacetError::RetryableConflict(String::from(error_message))
+                    return CreateTypedLinkFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTypedLinkFacetError::Validation(error_message.to_string())
+                    return CreateTypedLinkFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5020,31 +5020,31 @@ impl DeleteDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteDirectoryError::AccessDenied(String::from(error_message))
+                    return DeleteDirectoryError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryDeletedException" => {
-                    return DeleteDirectoryError::DirectoryDeleted(String::from(error_message))
+                    return DeleteDirectoryError::DirectoryDeleted(String::from(error_message));
                 }
                 "DirectoryNotDisabledException" => {
-                    return DeleteDirectoryError::DirectoryNotDisabled(String::from(error_message))
+                    return DeleteDirectoryError::DirectoryNotDisabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteDirectoryError::InternalService(String::from(error_message))
+                    return DeleteDirectoryError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DeleteDirectoryError::InvalidArn(String::from(error_message))
+                    return DeleteDirectoryError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteDirectoryError::LimitExceeded(String::from(error_message))
+                    return DeleteDirectoryError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDirectoryError::ResourceNotFound(String::from(error_message))
+                    return DeleteDirectoryError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DeleteDirectoryError::RetryableConflict(String::from(error_message))
+                    return DeleteDirectoryError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDirectoryError::Validation(error_message.to_string())
+                    return DeleteDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5156,31 +5156,31 @@ impl DeleteFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteFacetError::AccessDenied(String::from(error_message))
+                    return DeleteFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetInUseException" => {
-                    return DeleteFacetError::FacetInUse(String::from(error_message))
+                    return DeleteFacetError::FacetInUse(String::from(error_message));
                 }
                 "FacetNotFoundException" => {
-                    return DeleteFacetError::FacetNotFound(String::from(error_message))
+                    return DeleteFacetError::FacetNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteFacetError::InternalService(String::from(error_message))
+                    return DeleteFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DeleteFacetError::InvalidArn(String::from(error_message))
+                    return DeleteFacetError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteFacetError::LimitExceeded(String::from(error_message))
+                    return DeleteFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFacetError::ResourceNotFound(String::from(error_message))
+                    return DeleteFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DeleteFacetError::RetryableConflict(String::from(error_message))
+                    return DeleteFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFacetError::Validation(error_message.to_string())
+                    return DeleteFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5292,31 +5292,31 @@ impl DeleteObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteObjectError::AccessDenied(String::from(error_message))
+                    return DeleteObjectError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DeleteObjectError::DirectoryNotEnabled(String::from(error_message))
+                    return DeleteObjectError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteObjectError::InternalService(String::from(error_message))
+                    return DeleteObjectError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DeleteObjectError::InvalidArn(String::from(error_message))
+                    return DeleteObjectError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteObjectError::LimitExceeded(String::from(error_message))
+                    return DeleteObjectError::LimitExceeded(String::from(error_message));
                 }
                 "ObjectNotDetachedException" => {
-                    return DeleteObjectError::ObjectNotDetached(String::from(error_message))
+                    return DeleteObjectError::ObjectNotDetached(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteObjectError::ResourceNotFound(String::from(error_message))
+                    return DeleteObjectError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DeleteObjectError::RetryableConflict(String::from(error_message))
+                    return DeleteObjectError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteObjectError::Validation(error_message.to_string())
+                    return DeleteObjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5426,28 +5426,28 @@ impl DeleteSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteSchemaError::AccessDenied(String::from(error_message))
+                    return DeleteSchemaError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteSchemaError::InternalService(String::from(error_message))
+                    return DeleteSchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DeleteSchemaError::InvalidArn(String::from(error_message))
+                    return DeleteSchemaError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteSchemaError::LimitExceeded(String::from(error_message))
+                    return DeleteSchemaError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteSchemaError::ResourceNotFound(String::from(error_message))
+                    return DeleteSchemaError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DeleteSchemaError::RetryableConflict(String::from(error_message))
+                    return DeleteSchemaError::RetryableConflict(String::from(error_message));
                 }
                 "StillContainsLinksException" => {
-                    return DeleteSchemaError::StillContainsLinks(String::from(error_message))
+                    return DeleteSchemaError::StillContainsLinks(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSchemaError::Validation(error_message.to_string())
+                    return DeleteSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5556,28 +5556,28 @@ impl DeleteTypedLinkFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteTypedLinkFacetError::AccessDenied(String::from(error_message))
+                    return DeleteTypedLinkFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetNotFoundException" => {
-                    return DeleteTypedLinkFacetError::FacetNotFound(String::from(error_message))
+                    return DeleteTypedLinkFacetError::FacetNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DeleteTypedLinkFacetError::InternalService(String::from(error_message))
+                    return DeleteTypedLinkFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DeleteTypedLinkFacetError::InvalidArn(String::from(error_message))
+                    return DeleteTypedLinkFacetError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteTypedLinkFacetError::LimitExceeded(String::from(error_message))
+                    return DeleteTypedLinkFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTypedLinkFacetError::ResourceNotFound(String::from(error_message))
+                    return DeleteTypedLinkFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DeleteTypedLinkFacetError::RetryableConflict(String::from(error_message))
+                    return DeleteTypedLinkFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTypedLinkFacetError::Validation(error_message.to_string())
+                    return DeleteTypedLinkFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5692,34 +5692,34 @@ impl DetachFromIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachFromIndexError::AccessDenied(String::from(error_message))
+                    return DetachFromIndexError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachFromIndexError::DirectoryNotEnabled(String::from(error_message))
+                    return DetachFromIndexError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DetachFromIndexError::InternalService(String::from(error_message))
+                    return DetachFromIndexError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DetachFromIndexError::InvalidArn(String::from(error_message))
+                    return DetachFromIndexError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DetachFromIndexError::LimitExceeded(String::from(error_message))
+                    return DetachFromIndexError::LimitExceeded(String::from(error_message));
                 }
                 "NotIndexException" => {
-                    return DetachFromIndexError::NotIndex(String::from(error_message))
+                    return DetachFromIndexError::NotIndex(String::from(error_message));
                 }
                 "ObjectAlreadyDetachedException" => {
-                    return DetachFromIndexError::ObjectAlreadyDetached(String::from(error_message))
+                    return DetachFromIndexError::ObjectAlreadyDetached(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachFromIndexError::ResourceNotFound(String::from(error_message))
+                    return DetachFromIndexError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DetachFromIndexError::RetryableConflict(String::from(error_message))
+                    return DetachFromIndexError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachFromIndexError::Validation(error_message.to_string())
+                    return DetachFromIndexError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5832,31 +5832,31 @@ impl DetachObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachObjectError::AccessDenied(String::from(error_message))
+                    return DetachObjectError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachObjectError::DirectoryNotEnabled(String::from(error_message))
+                    return DetachObjectError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DetachObjectError::InternalService(String::from(error_message))
+                    return DetachObjectError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DetachObjectError::InvalidArn(String::from(error_message))
+                    return DetachObjectError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DetachObjectError::LimitExceeded(String::from(error_message))
+                    return DetachObjectError::LimitExceeded(String::from(error_message));
                 }
                 "NotNodeException" => {
-                    return DetachObjectError::NotNode(String::from(error_message))
+                    return DetachObjectError::NotNode(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachObjectError::ResourceNotFound(String::from(error_message))
+                    return DetachObjectError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DetachObjectError::RetryableConflict(String::from(error_message))
+                    return DetachObjectError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachObjectError::Validation(error_message.to_string())
+                    return DetachObjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5968,31 +5968,31 @@ impl DetachPolicyError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachPolicyError::AccessDenied(String::from(error_message))
+                    return DetachPolicyError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachPolicyError::DirectoryNotEnabled(String::from(error_message))
+                    return DetachPolicyError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DetachPolicyError::InternalService(String::from(error_message))
+                    return DetachPolicyError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DetachPolicyError::InvalidArn(String::from(error_message))
+                    return DetachPolicyError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DetachPolicyError::LimitExceeded(String::from(error_message))
+                    return DetachPolicyError::LimitExceeded(String::from(error_message));
                 }
                 "NotPolicyException" => {
-                    return DetachPolicyError::NotPolicy(String::from(error_message))
+                    return DetachPolicyError::NotPolicy(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachPolicyError::ResourceNotFound(String::from(error_message))
+                    return DetachPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DetachPolicyError::RetryableConflict(String::from(error_message))
+                    return DetachPolicyError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachPolicyError::Validation(error_message.to_string())
+                    return DetachPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6104,31 +6104,31 @@ impl DetachTypedLinkError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachTypedLinkError::AccessDenied(String::from(error_message))
+                    return DetachTypedLinkError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachTypedLinkError::DirectoryNotEnabled(String::from(error_message))
+                    return DetachTypedLinkError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return DetachTypedLinkError::FacetValidation(String::from(error_message))
+                    return DetachTypedLinkError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DetachTypedLinkError::InternalService(String::from(error_message))
+                    return DetachTypedLinkError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DetachTypedLinkError::InvalidArn(String::from(error_message))
+                    return DetachTypedLinkError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DetachTypedLinkError::LimitExceeded(String::from(error_message))
+                    return DetachTypedLinkError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachTypedLinkError::ResourceNotFound(String::from(error_message))
+                    return DetachTypedLinkError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DetachTypedLinkError::RetryableConflict(String::from(error_message))
+                    return DetachTypedLinkError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetachTypedLinkError::Validation(error_message.to_string())
+                    return DetachTypedLinkError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6238,28 +6238,28 @@ impl DisableDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DisableDirectoryError::AccessDenied(String::from(error_message))
+                    return DisableDirectoryError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryDeletedException" => {
-                    return DisableDirectoryError::DirectoryDeleted(String::from(error_message))
+                    return DisableDirectoryError::DirectoryDeleted(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return DisableDirectoryError::InternalService(String::from(error_message))
+                    return DisableDirectoryError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DisableDirectoryError::InvalidArn(String::from(error_message))
+                    return DisableDirectoryError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DisableDirectoryError::LimitExceeded(String::from(error_message))
+                    return DisableDirectoryError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DisableDirectoryError::ResourceNotFound(String::from(error_message))
+                    return DisableDirectoryError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return DisableDirectoryError::RetryableConflict(String::from(error_message))
+                    return DisableDirectoryError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableDirectoryError::Validation(error_message.to_string())
+                    return DisableDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6368,28 +6368,28 @@ impl EnableDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return EnableDirectoryError::AccessDenied(String::from(error_message))
+                    return EnableDirectoryError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryDeletedException" => {
-                    return EnableDirectoryError::DirectoryDeleted(String::from(error_message))
+                    return EnableDirectoryError::DirectoryDeleted(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return EnableDirectoryError::InternalService(String::from(error_message))
+                    return EnableDirectoryError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return EnableDirectoryError::InvalidArn(String::from(error_message))
+                    return EnableDirectoryError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return EnableDirectoryError::LimitExceeded(String::from(error_message))
+                    return EnableDirectoryError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return EnableDirectoryError::ResourceNotFound(String::from(error_message))
+                    return EnableDirectoryError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return EnableDirectoryError::RetryableConflict(String::from(error_message))
+                    return EnableDirectoryError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableDirectoryError::Validation(error_message.to_string())
+                    return EnableDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6496,31 +6496,31 @@ impl GetAppliedSchemaVersionError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetAppliedSchemaVersionError::AccessDenied(String::from(error_message))
+                    return GetAppliedSchemaVersionError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetAppliedSchemaVersionError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return GetAppliedSchemaVersionError::InvalidArn(String::from(error_message))
+                    return GetAppliedSchemaVersionError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetAppliedSchemaVersionError::LimitExceeded(String::from(error_message))
+                    return GetAppliedSchemaVersionError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return GetAppliedSchemaVersionError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return GetAppliedSchemaVersionError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetAppliedSchemaVersionError::Validation(error_message.to_string())
+                    return GetAppliedSchemaVersionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6626,22 +6626,22 @@ impl GetDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetDirectoryError::AccessDenied(String::from(error_message))
+                    return GetDirectoryError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetDirectoryError::InternalService(String::from(error_message))
+                    return GetDirectoryError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetDirectoryError::InvalidArn(String::from(error_message))
+                    return GetDirectoryError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetDirectoryError::LimitExceeded(String::from(error_message))
+                    return GetDirectoryError::LimitExceeded(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return GetDirectoryError::RetryableConflict(String::from(error_message))
+                    return GetDirectoryError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDirectoryError::Validation(error_message.to_string())
+                    return GetDirectoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6748,28 +6748,28 @@ impl GetFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetFacetError::AccessDenied(String::from(error_message))
+                    return GetFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetNotFoundException" => {
-                    return GetFacetError::FacetNotFound(String::from(error_message))
+                    return GetFacetError::FacetNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetFacetError::InternalService(String::from(error_message))
+                    return GetFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetFacetError::InvalidArn(String::from(error_message))
+                    return GetFacetError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetFacetError::LimitExceeded(String::from(error_message))
+                    return GetFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFacetError::ResourceNotFound(String::from(error_message))
+                    return GetFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return GetFacetError::RetryableConflict(String::from(error_message))
+                    return GetFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFacetError::Validation(error_message.to_string())
+                    return GetFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6880,31 +6880,31 @@ impl GetLinkAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetLinkAttributesError::AccessDenied(String::from(error_message))
+                    return GetLinkAttributesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return GetLinkAttributesError::DirectoryNotEnabled(String::from(error_message))
+                    return GetLinkAttributesError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return GetLinkAttributesError::FacetValidation(String::from(error_message))
+                    return GetLinkAttributesError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetLinkAttributesError::InternalService(String::from(error_message))
+                    return GetLinkAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetLinkAttributesError::InvalidArn(String::from(error_message))
+                    return GetLinkAttributesError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetLinkAttributesError::LimitExceeded(String::from(error_message))
+                    return GetLinkAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLinkAttributesError::ResourceNotFound(String::from(error_message))
+                    return GetLinkAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return GetLinkAttributesError::RetryableConflict(String::from(error_message))
+                    return GetLinkAttributesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLinkAttributesError::Validation(error_message.to_string())
+                    return GetLinkAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7018,33 +7018,33 @@ impl GetObjectAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetObjectAttributesError::AccessDenied(String::from(error_message))
+                    return GetObjectAttributesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return GetObjectAttributesError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return GetObjectAttributesError::FacetValidation(String::from(error_message))
+                    return GetObjectAttributesError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetObjectAttributesError::InternalService(String::from(error_message))
+                    return GetObjectAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetObjectAttributesError::InvalidArn(String::from(error_message))
+                    return GetObjectAttributesError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetObjectAttributesError::LimitExceeded(String::from(error_message))
+                    return GetObjectAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetObjectAttributesError::ResourceNotFound(String::from(error_message))
+                    return GetObjectAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return GetObjectAttributesError::RetryableConflict(String::from(error_message))
+                    return GetObjectAttributesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetObjectAttributesError::Validation(error_message.to_string())
+                    return GetObjectAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7156,30 +7156,30 @@ impl GetObjectInformationError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetObjectInformationError::AccessDenied(String::from(error_message))
+                    return GetObjectInformationError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return GetObjectInformationError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetObjectInformationError::InternalService(String::from(error_message))
+                    return GetObjectInformationError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetObjectInformationError::InvalidArn(String::from(error_message))
+                    return GetObjectInformationError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetObjectInformationError::LimitExceeded(String::from(error_message))
+                    return GetObjectInformationError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetObjectInformationError::ResourceNotFound(String::from(error_message))
+                    return GetObjectInformationError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return GetObjectInformationError::RetryableConflict(String::from(error_message))
+                    return GetObjectInformationError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetObjectInformationError::Validation(error_message.to_string())
+                    return GetObjectInformationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7288,25 +7288,25 @@ impl GetSchemaAsJsonError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetSchemaAsJsonError::AccessDenied(String::from(error_message))
+                    return GetSchemaAsJsonError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return GetSchemaAsJsonError::InternalService(String::from(error_message))
+                    return GetSchemaAsJsonError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetSchemaAsJsonError::InvalidArn(String::from(error_message))
+                    return GetSchemaAsJsonError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return GetSchemaAsJsonError::LimitExceeded(String::from(error_message))
+                    return GetSchemaAsJsonError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetSchemaAsJsonError::ResourceNotFound(String::from(error_message))
+                    return GetSchemaAsJsonError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return GetSchemaAsJsonError::RetryableConflict(String::from(error_message))
+                    return GetSchemaAsJsonError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSchemaAsJsonError::Validation(error_message.to_string())
+                    return GetSchemaAsJsonError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7418,45 +7418,45 @@ impl GetTypedLinkFacetInformationError {
                 "AccessDeniedException" => {
                     return GetTypedLinkFacetInformationError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetNotFoundException" => {
                     return GetTypedLinkFacetInformationError::FacetNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return GetTypedLinkFacetInformationError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
                     return GetTypedLinkFacetInformationError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return GetTypedLinkFacetInformationError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return GetTypedLinkFacetInformationError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return GetTypedLinkFacetInformationError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return GetTypedLinkFacetInformationError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetTypedLinkFacetInformationError::Validation(error_message.to_string())
+                    return GetTypedLinkFacetInformationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7568,30 +7568,30 @@ impl ListAppliedSchemaArnsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListAppliedSchemaArnsError::AccessDenied(String::from(error_message))
+                    return ListAppliedSchemaArnsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListAppliedSchemaArnsError::InternalService(String::from(error_message))
+                    return ListAppliedSchemaArnsError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListAppliedSchemaArnsError::InvalidArn(String::from(error_message))
+                    return ListAppliedSchemaArnsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListAppliedSchemaArnsError::InvalidNextToken(String::from(error_message))
+                    return ListAppliedSchemaArnsError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListAppliedSchemaArnsError::LimitExceeded(String::from(error_message))
+                    return ListAppliedSchemaArnsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListAppliedSchemaArnsError::ResourceNotFound(String::from(error_message))
+                    return ListAppliedSchemaArnsError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
                     return ListAppliedSchemaArnsError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListAppliedSchemaArnsError::Validation(error_message.to_string())
+                    return ListAppliedSchemaArnsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7702,30 +7702,30 @@ impl ListAttachedIndicesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListAttachedIndicesError::AccessDenied(String::from(error_message))
+                    return ListAttachedIndicesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return ListAttachedIndicesError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListAttachedIndicesError::InternalService(String::from(error_message))
+                    return ListAttachedIndicesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListAttachedIndicesError::InvalidArn(String::from(error_message))
+                    return ListAttachedIndicesError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListAttachedIndicesError::LimitExceeded(String::from(error_message))
+                    return ListAttachedIndicesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListAttachedIndicesError::ResourceNotFound(String::from(error_message))
+                    return ListAttachedIndicesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListAttachedIndicesError::RetryableConflict(String::from(error_message))
+                    return ListAttachedIndicesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAttachedIndicesError::Validation(error_message.to_string())
+                    return ListAttachedIndicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7836,38 +7836,38 @@ impl ListDevelopmentSchemaArnsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListDevelopmentSchemaArnsError::AccessDenied(String::from(error_message))
+                    return ListDevelopmentSchemaArnsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return ListDevelopmentSchemaArnsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListDevelopmentSchemaArnsError::InvalidArn(String::from(error_message))
+                    return ListDevelopmentSchemaArnsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return ListDevelopmentSchemaArnsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return ListDevelopmentSchemaArnsError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListDevelopmentSchemaArnsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return ListDevelopmentSchemaArnsError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListDevelopmentSchemaArnsError::Validation(error_message.to_string())
+                    return ListDevelopmentSchemaArnsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -7976,25 +7976,25 @@ impl ListDirectoriesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListDirectoriesError::AccessDenied(String::from(error_message))
+                    return ListDirectoriesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListDirectoriesError::InternalService(String::from(error_message))
+                    return ListDirectoriesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListDirectoriesError::InvalidArn(String::from(error_message))
+                    return ListDirectoriesError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDirectoriesError::InvalidNextToken(String::from(error_message))
+                    return ListDirectoriesError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListDirectoriesError::LimitExceeded(String::from(error_message))
+                    return ListDirectoriesError::LimitExceeded(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListDirectoriesError::RetryableConflict(String::from(error_message))
+                    return ListDirectoriesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDirectoriesError::Validation(error_message.to_string())
+                    return ListDirectoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8104,31 +8104,31 @@ impl ListFacetAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListFacetAttributesError::AccessDenied(String::from(error_message))
+                    return ListFacetAttributesError::AccessDenied(String::from(error_message));
                 }
                 "FacetNotFoundException" => {
-                    return ListFacetAttributesError::FacetNotFound(String::from(error_message))
+                    return ListFacetAttributesError::FacetNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListFacetAttributesError::InternalService(String::from(error_message))
+                    return ListFacetAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListFacetAttributesError::InvalidArn(String::from(error_message))
+                    return ListFacetAttributesError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListFacetAttributesError::InvalidNextToken(String::from(error_message))
+                    return ListFacetAttributesError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListFacetAttributesError::LimitExceeded(String::from(error_message))
+                    return ListFacetAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFacetAttributesError::ResourceNotFound(String::from(error_message))
+                    return ListFacetAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListFacetAttributesError::RetryableConflict(String::from(error_message))
+                    return ListFacetAttributesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFacetAttributesError::Validation(error_message.to_string())
+                    return ListFacetAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8240,28 +8240,28 @@ impl ListFacetNamesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListFacetNamesError::AccessDenied(String::from(error_message))
+                    return ListFacetNamesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListFacetNamesError::InternalService(String::from(error_message))
+                    return ListFacetNamesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListFacetNamesError::InvalidArn(String::from(error_message))
+                    return ListFacetNamesError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListFacetNamesError::InvalidNextToken(String::from(error_message))
+                    return ListFacetNamesError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListFacetNamesError::LimitExceeded(String::from(error_message))
+                    return ListFacetNamesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFacetNamesError::ResourceNotFound(String::from(error_message))
+                    return ListFacetNamesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListFacetNamesError::RetryableConflict(String::from(error_message))
+                    return ListFacetNamesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFacetNamesError::Validation(error_message.to_string())
+                    return ListFacetNamesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8374,42 +8374,42 @@ impl ListIncomingTypedLinksError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListIncomingTypedLinksError::AccessDenied(String::from(error_message))
+                    return ListIncomingTypedLinksError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return ListIncomingTypedLinksError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return ListIncomingTypedLinksError::FacetValidation(String::from(error_message))
+                    return ListIncomingTypedLinksError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListIncomingTypedLinksError::InternalService(String::from(error_message))
+                    return ListIncomingTypedLinksError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListIncomingTypedLinksError::InvalidArn(String::from(error_message))
+                    return ListIncomingTypedLinksError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return ListIncomingTypedLinksError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListIncomingTypedLinksError::LimitExceeded(String::from(error_message))
+                    return ListIncomingTypedLinksError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ListIncomingTypedLinksError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return ListIncomingTypedLinksError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListIncomingTypedLinksError::Validation(error_message.to_string())
+                    return ListIncomingTypedLinksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8528,35 +8528,35 @@ impl ListIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListIndexError::AccessDenied(String::from(error_message))
+                    return ListIndexError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListIndexError::DirectoryNotEnabled(String::from(error_message))
+                    return ListIndexError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return ListIndexError::FacetValidation(String::from(error_message))
+                    return ListIndexError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListIndexError::InternalService(String::from(error_message))
+                    return ListIndexError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListIndexError::InvalidArn(String::from(error_message))
+                    return ListIndexError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListIndexError::InvalidNextToken(String::from(error_message))
+                    return ListIndexError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListIndexError::LimitExceeded(String::from(error_message))
+                    return ListIndexError::LimitExceeded(String::from(error_message));
                 }
                 "NotIndexException" => return ListIndexError::NotIndex(String::from(error_message)),
                 "ResourceNotFoundException" => {
-                    return ListIndexError::ResourceNotFound(String::from(error_message))
+                    return ListIndexError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListIndexError::RetryableConflict(String::from(error_message))
+                    return ListIndexError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListIndexError::Validation(error_message.to_string())
+                    return ListIndexError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8672,36 +8672,36 @@ impl ListObjectAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectAttributesError::AccessDenied(String::from(error_message))
+                    return ListObjectAttributesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return ListObjectAttributesError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return ListObjectAttributesError::FacetValidation(String::from(error_message))
+                    return ListObjectAttributesError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListObjectAttributesError::InternalService(String::from(error_message))
+                    return ListObjectAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListObjectAttributesError::InvalidArn(String::from(error_message))
+                    return ListObjectAttributesError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectAttributesError::InvalidNextToken(String::from(error_message))
+                    return ListObjectAttributesError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListObjectAttributesError::LimitExceeded(String::from(error_message))
+                    return ListObjectAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectAttributesError::ResourceNotFound(String::from(error_message))
+                    return ListObjectAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectAttributesError::RetryableConflict(String::from(error_message))
+                    return ListObjectAttributesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListObjectAttributesError::Validation(error_message.to_string())
+                    return ListObjectAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8818,34 +8818,34 @@ impl ListObjectChildrenError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectChildrenError::AccessDenied(String::from(error_message))
+                    return ListObjectChildrenError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectChildrenError::DirectoryNotEnabled(String::from(error_message))
+                    return ListObjectChildrenError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListObjectChildrenError::InternalService(String::from(error_message))
+                    return ListObjectChildrenError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListObjectChildrenError::InvalidArn(String::from(error_message))
+                    return ListObjectChildrenError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectChildrenError::InvalidNextToken(String::from(error_message))
+                    return ListObjectChildrenError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListObjectChildrenError::LimitExceeded(String::from(error_message))
+                    return ListObjectChildrenError::LimitExceeded(String::from(error_message));
                 }
                 "NotNodeException" => {
-                    return ListObjectChildrenError::NotNode(String::from(error_message))
+                    return ListObjectChildrenError::NotNode(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectChildrenError::ResourceNotFound(String::from(error_message))
+                    return ListObjectChildrenError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectChildrenError::RetryableConflict(String::from(error_message))
+                    return ListObjectChildrenError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListObjectChildrenError::Validation(error_message.to_string())
+                    return ListObjectChildrenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -8960,35 +8960,35 @@ impl ListObjectParentPathsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectParentPathsError::AccessDenied(String::from(error_message))
+                    return ListObjectParentPathsError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return ListObjectParentPathsError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListObjectParentPathsError::InternalService(String::from(error_message))
+                    return ListObjectParentPathsError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListObjectParentPathsError::InvalidArn(String::from(error_message))
+                    return ListObjectParentPathsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectParentPathsError::InvalidNextToken(String::from(error_message))
+                    return ListObjectParentPathsError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListObjectParentPathsError::LimitExceeded(String::from(error_message))
+                    return ListObjectParentPathsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectParentPathsError::ResourceNotFound(String::from(error_message))
+                    return ListObjectParentPathsError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
                     return ListObjectParentPathsError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListObjectParentPathsError::Validation(error_message.to_string())
+                    return ListObjectParentPathsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9104,36 +9104,36 @@ impl ListObjectParentsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectParentsError::AccessDenied(String::from(error_message))
+                    return ListObjectParentsError::AccessDenied(String::from(error_message));
                 }
                 "CannotListParentOfRootException" => {
                     return ListObjectParentsError::CannotListParentOfRoot(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectParentsError::DirectoryNotEnabled(String::from(error_message))
+                    return ListObjectParentsError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListObjectParentsError::InternalService(String::from(error_message))
+                    return ListObjectParentsError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListObjectParentsError::InvalidArn(String::from(error_message))
+                    return ListObjectParentsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectParentsError::InvalidNextToken(String::from(error_message))
+                    return ListObjectParentsError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListObjectParentsError::LimitExceeded(String::from(error_message))
+                    return ListObjectParentsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectParentsError::ResourceNotFound(String::from(error_message))
+                    return ListObjectParentsError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectParentsError::RetryableConflict(String::from(error_message))
+                    return ListObjectParentsError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListObjectParentsError::Validation(error_message.to_string())
+                    return ListObjectParentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9248,31 +9248,31 @@ impl ListObjectPoliciesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectPoliciesError::AccessDenied(String::from(error_message))
+                    return ListObjectPoliciesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectPoliciesError::DirectoryNotEnabled(String::from(error_message))
+                    return ListObjectPoliciesError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListObjectPoliciesError::InternalService(String::from(error_message))
+                    return ListObjectPoliciesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListObjectPoliciesError::InvalidArn(String::from(error_message))
+                    return ListObjectPoliciesError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectPoliciesError::InvalidNextToken(String::from(error_message))
+                    return ListObjectPoliciesError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListObjectPoliciesError::LimitExceeded(String::from(error_message))
+                    return ListObjectPoliciesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectPoliciesError::ResourceNotFound(String::from(error_message))
+                    return ListObjectPoliciesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectPoliciesError::RetryableConflict(String::from(error_message))
+                    return ListObjectPoliciesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListObjectPoliciesError::Validation(error_message.to_string())
+                    return ListObjectPoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9388,42 +9388,42 @@ impl ListOutgoingTypedLinksError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListOutgoingTypedLinksError::AccessDenied(String::from(error_message))
+                    return ListOutgoingTypedLinksError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return ListOutgoingTypedLinksError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return ListOutgoingTypedLinksError::FacetValidation(String::from(error_message))
+                    return ListOutgoingTypedLinksError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListOutgoingTypedLinksError::InternalService(String::from(error_message))
+                    return ListOutgoingTypedLinksError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListOutgoingTypedLinksError::InvalidArn(String::from(error_message))
+                    return ListOutgoingTypedLinksError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return ListOutgoingTypedLinksError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListOutgoingTypedLinksError::LimitExceeded(String::from(error_message))
+                    return ListOutgoingTypedLinksError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ListOutgoingTypedLinksError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return ListOutgoingTypedLinksError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListOutgoingTypedLinksError::Validation(error_message.to_string())
+                    return ListOutgoingTypedLinksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9540,38 +9540,38 @@ impl ListPolicyAttachmentsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPolicyAttachmentsError::AccessDenied(String::from(error_message))
+                    return ListPolicyAttachmentsError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return ListPolicyAttachmentsError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListPolicyAttachmentsError::InternalService(String::from(error_message))
+                    return ListPolicyAttachmentsError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListPolicyAttachmentsError::InvalidArn(String::from(error_message))
+                    return ListPolicyAttachmentsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListPolicyAttachmentsError::InvalidNextToken(String::from(error_message))
+                    return ListPolicyAttachmentsError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListPolicyAttachmentsError::LimitExceeded(String::from(error_message))
+                    return ListPolicyAttachmentsError::LimitExceeded(String::from(error_message));
                 }
                 "NotPolicyException" => {
-                    return ListPolicyAttachmentsError::NotPolicy(String::from(error_message))
+                    return ListPolicyAttachmentsError::NotPolicy(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPolicyAttachmentsError::ResourceNotFound(String::from(error_message))
+                    return ListPolicyAttachmentsError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
                     return ListPolicyAttachmentsError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListPolicyAttachmentsError::Validation(error_message.to_string())
+                    return ListPolicyAttachmentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9684,36 +9684,36 @@ impl ListPublishedSchemaArnsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPublishedSchemaArnsError::AccessDenied(String::from(error_message))
+                    return ListPublishedSchemaArnsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return ListPublishedSchemaArnsError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListPublishedSchemaArnsError::InvalidArn(String::from(error_message))
+                    return ListPublishedSchemaArnsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return ListPublishedSchemaArnsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListPublishedSchemaArnsError::LimitExceeded(String::from(error_message))
+                    return ListPublishedSchemaArnsError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ListPublishedSchemaArnsError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return ListPublishedSchemaArnsError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListPublishedSchemaArnsError::Validation(error_message.to_string())
+                    return ListPublishedSchemaArnsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9824,30 +9824,30 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListTagsForResourceError::AccessDenied(String::from(error_message))
+                    return ListTagsForResourceError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return ListTagsForResourceError::InternalService(String::from(error_message))
+                    return ListTagsForResourceError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListTagsForResourceError::InvalidArn(String::from(error_message))
+                    return ListTagsForResourceError::InvalidArn(String::from(error_message));
                 }
                 "InvalidTaggingRequestException" => {
                     return ListTagsForResourceError::InvalidTaggingRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListTagsForResourceError::LimitExceeded(String::from(error_message))
+                    return ListTagsForResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message))
+                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return ListTagsForResourceError::RetryableConflict(String::from(error_message))
+                    return ListTagsForResourceError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -9962,45 +9962,45 @@ impl ListTypedLinkFacetAttributesError {
                 "AccessDeniedException" => {
                     return ListTypedLinkFacetAttributesError::AccessDenied(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetNotFoundException" => {
                     return ListTypedLinkFacetAttributesError::FacetNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
                     return ListTypedLinkFacetAttributesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
                     return ListTypedLinkFacetAttributesError::InvalidArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return ListTypedLinkFacetAttributesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return ListTypedLinkFacetAttributesError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ListTypedLinkFacetAttributesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return ListTypedLinkFacetAttributesError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTypedLinkFacetAttributesError::Validation(error_message.to_string())
+                    return ListTypedLinkFacetAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10112,36 +10112,36 @@ impl ListTypedLinkFacetNamesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListTypedLinkFacetNamesError::AccessDenied(String::from(error_message))
+                    return ListTypedLinkFacetNamesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return ListTypedLinkFacetNamesError::InternalService(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListTypedLinkFacetNamesError::InvalidArn(String::from(error_message))
+                    return ListTypedLinkFacetNamesError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
                     return ListTypedLinkFacetNamesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListTypedLinkFacetNamesError::LimitExceeded(String::from(error_message))
+                    return ListTypedLinkFacetNamesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ListTypedLinkFacetNamesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return ListTypedLinkFacetNamesError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTypedLinkFacetNamesError::Validation(error_message.to_string())
+                    return ListTypedLinkFacetNamesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10254,31 +10254,31 @@ impl LookupPolicyError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return LookupPolicyError::AccessDenied(String::from(error_message))
+                    return LookupPolicyError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
-                    return LookupPolicyError::DirectoryNotEnabled(String::from(error_message))
+                    return LookupPolicyError::DirectoryNotEnabled(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return LookupPolicyError::InternalService(String::from(error_message))
+                    return LookupPolicyError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return LookupPolicyError::InvalidArn(String::from(error_message))
+                    return LookupPolicyError::InvalidArn(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return LookupPolicyError::InvalidNextToken(String::from(error_message))
+                    return LookupPolicyError::InvalidNextToken(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return LookupPolicyError::LimitExceeded(String::from(error_message))
+                    return LookupPolicyError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return LookupPolicyError::ResourceNotFound(String::from(error_message))
+                    return LookupPolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return LookupPolicyError::RetryableConflict(String::from(error_message))
+                    return LookupPolicyError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return LookupPolicyError::Validation(error_message.to_string())
+                    return LookupPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10388,28 +10388,28 @@ impl PublishSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return PublishSchemaError::AccessDenied(String::from(error_message))
+                    return PublishSchemaError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return PublishSchemaError::InternalService(String::from(error_message))
+                    return PublishSchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return PublishSchemaError::InvalidArn(String::from(error_message))
+                    return PublishSchemaError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PublishSchemaError::LimitExceeded(String::from(error_message))
+                    return PublishSchemaError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PublishSchemaError::ResourceNotFound(String::from(error_message))
+                    return PublishSchemaError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return PublishSchemaError::RetryableConflict(String::from(error_message))
+                    return PublishSchemaError::RetryableConflict(String::from(error_message));
                 }
                 "SchemaAlreadyPublishedException" => {
-                    return PublishSchemaError::SchemaAlreadyPublished(String::from(error_message))
+                    return PublishSchemaError::SchemaAlreadyPublished(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PublishSchemaError::Validation(error_message.to_string())
+                    return PublishSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10518,28 +10518,28 @@ impl PutSchemaFromJsonError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return PutSchemaFromJsonError::AccessDenied(String::from(error_message))
+                    return PutSchemaFromJsonError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return PutSchemaFromJsonError::InternalService(String::from(error_message))
+                    return PutSchemaFromJsonError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return PutSchemaFromJsonError::InvalidArn(String::from(error_message))
+                    return PutSchemaFromJsonError::InvalidArn(String::from(error_message));
                 }
                 "InvalidRuleException" => {
-                    return PutSchemaFromJsonError::InvalidRule(String::from(error_message))
+                    return PutSchemaFromJsonError::InvalidRule(String::from(error_message));
                 }
                 "InvalidSchemaDocException" => {
-                    return PutSchemaFromJsonError::InvalidSchemaDoc(String::from(error_message))
+                    return PutSchemaFromJsonError::InvalidSchemaDoc(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutSchemaFromJsonError::LimitExceeded(String::from(error_message))
+                    return PutSchemaFromJsonError::LimitExceeded(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return PutSchemaFromJsonError::RetryableConflict(String::from(error_message))
+                    return PutSchemaFromJsonError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutSchemaFromJsonError::Validation(error_message.to_string())
+                    return PutSchemaFromJsonError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10652,35 +10652,35 @@ impl RemoveFacetFromObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return RemoveFacetFromObjectError::AccessDenied(String::from(error_message))
+                    return RemoveFacetFromObjectError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return RemoveFacetFromObjectError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return RemoveFacetFromObjectError::FacetValidation(String::from(error_message))
+                    return RemoveFacetFromObjectError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return RemoveFacetFromObjectError::InternalService(String::from(error_message))
+                    return RemoveFacetFromObjectError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return RemoveFacetFromObjectError::InvalidArn(String::from(error_message))
+                    return RemoveFacetFromObjectError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return RemoveFacetFromObjectError::LimitExceeded(String::from(error_message))
+                    return RemoveFacetFromObjectError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveFacetFromObjectError::ResourceNotFound(String::from(error_message))
+                    return RemoveFacetFromObjectError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
                     return RemoveFacetFromObjectError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RemoveFacetFromObjectError::Validation(error_message.to_string())
+                    return RemoveFacetFromObjectError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10792,28 +10792,28 @@ impl TagResourceError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return TagResourceError::AccessDenied(String::from(error_message))
+                    return TagResourceError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return TagResourceError::InternalService(String::from(error_message))
+                    return TagResourceError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return TagResourceError::InvalidArn(String::from(error_message))
+                    return TagResourceError::InvalidArn(String::from(error_message));
                 }
                 "InvalidTaggingRequestException" => {
-                    return TagResourceError::InvalidTaggingRequest(String::from(error_message))
+                    return TagResourceError::InvalidTaggingRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message))
+                    return TagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return TagResourceError::RetryableConflict(String::from(error_message))
+                    return TagResourceError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -10922,28 +10922,28 @@ impl UntagResourceError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UntagResourceError::AccessDenied(String::from(error_message))
+                    return UntagResourceError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UntagResourceError::InternalService(String::from(error_message))
+                    return UntagResourceError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UntagResourceError::InvalidArn(String::from(error_message))
+                    return UntagResourceError::InvalidArn(String::from(error_message));
                 }
                 "InvalidTaggingRequestException" => {
-                    return UntagResourceError::InvalidTaggingRequest(String::from(error_message))
+                    return UntagResourceError::InvalidTaggingRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UntagResourceError::LimitExceeded(String::from(error_message))
+                    return UntagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return UntagResourceError::RetryableConflict(String::from(error_message))
+                    return UntagResourceError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11056,34 +11056,34 @@ impl UpdateFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateFacetError::AccessDenied(String::from(error_message))
+                    return UpdateFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetNotFoundException" => {
-                    return UpdateFacetError::FacetNotFound(String::from(error_message))
+                    return UpdateFacetError::FacetNotFound(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateFacetError::InternalService(String::from(error_message))
+                    return UpdateFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateFacetError::InvalidArn(String::from(error_message))
+                    return UpdateFacetError::InvalidArn(String::from(error_message));
                 }
                 "InvalidFacetUpdateException" => {
-                    return UpdateFacetError::InvalidFacetUpdate(String::from(error_message))
+                    return UpdateFacetError::InvalidFacetUpdate(String::from(error_message));
                 }
                 "InvalidRuleException" => {
-                    return UpdateFacetError::InvalidRule(String::from(error_message))
+                    return UpdateFacetError::InvalidRule(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateFacetError::LimitExceeded(String::from(error_message))
+                    return UpdateFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFacetError::ResourceNotFound(String::from(error_message))
+                    return UpdateFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return UpdateFacetError::RetryableConflict(String::from(error_message))
+                    return UpdateFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateFacetError::Validation(error_message.to_string())
+                    return UpdateFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11196,33 +11196,33 @@ impl UpdateLinkAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateLinkAttributesError::AccessDenied(String::from(error_message))
+                    return UpdateLinkAttributesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return UpdateLinkAttributesError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return UpdateLinkAttributesError::FacetValidation(String::from(error_message))
+                    return UpdateLinkAttributesError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateLinkAttributesError::InternalService(String::from(error_message))
+                    return UpdateLinkAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateLinkAttributesError::InvalidArn(String::from(error_message))
+                    return UpdateLinkAttributesError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateLinkAttributesError::LimitExceeded(String::from(error_message))
+                    return UpdateLinkAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateLinkAttributesError::ResourceNotFound(String::from(error_message))
+                    return UpdateLinkAttributesError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return UpdateLinkAttributesError::RetryableConflict(String::from(error_message))
+                    return UpdateLinkAttributesError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateLinkAttributesError::Validation(error_message.to_string())
+                    return UpdateLinkAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11338,42 +11338,42 @@ impl UpdateObjectAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateObjectAttributesError::AccessDenied(String::from(error_message))
+                    return UpdateObjectAttributesError::AccessDenied(String::from(error_message));
                 }
                 "DirectoryNotEnabledException" => {
                     return UpdateObjectAttributesError::DirectoryNotEnabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "FacetValidationException" => {
-                    return UpdateObjectAttributesError::FacetValidation(String::from(error_message))
+                    return UpdateObjectAttributesError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateObjectAttributesError::InternalService(String::from(error_message))
+                    return UpdateObjectAttributesError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateObjectAttributesError::InvalidArn(String::from(error_message))
+                    return UpdateObjectAttributesError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateObjectAttributesError::LimitExceeded(String::from(error_message))
+                    return UpdateObjectAttributesError::LimitExceeded(String::from(error_message));
                 }
                 "LinkNameAlreadyInUseException" => {
                     return UpdateObjectAttributesError::LinkNameAlreadyInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateObjectAttributesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return UpdateObjectAttributesError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateObjectAttributesError::Validation(error_message.to_string())
+                    return UpdateObjectAttributesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11484,25 +11484,25 @@ impl UpdateSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateSchemaError::AccessDenied(String::from(error_message))
+                    return UpdateSchemaError::AccessDenied(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateSchemaError::InternalService(String::from(error_message))
+                    return UpdateSchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateSchemaError::InvalidArn(String::from(error_message))
+                    return UpdateSchemaError::InvalidArn(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateSchemaError::LimitExceeded(String::from(error_message))
+                    return UpdateSchemaError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateSchemaError::ResourceNotFound(String::from(error_message))
+                    return UpdateSchemaError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return UpdateSchemaError::RetryableConflict(String::from(error_message))
+                    return UpdateSchemaError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateSchemaError::Validation(error_message.to_string())
+                    return UpdateSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11616,39 +11616,39 @@ impl UpdateTypedLinkFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateTypedLinkFacetError::AccessDenied(String::from(error_message))
+                    return UpdateTypedLinkFacetError::AccessDenied(String::from(error_message));
                 }
                 "FacetNotFoundException" => {
-                    return UpdateTypedLinkFacetError::FacetNotFound(String::from(error_message))
+                    return UpdateTypedLinkFacetError::FacetNotFound(String::from(error_message));
                 }
                 "FacetValidationException" => {
-                    return UpdateTypedLinkFacetError::FacetValidation(String::from(error_message))
+                    return UpdateTypedLinkFacetError::FacetValidation(String::from(error_message));
                 }
                 "InternalServiceException" => {
-                    return UpdateTypedLinkFacetError::InternalService(String::from(error_message))
+                    return UpdateTypedLinkFacetError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateTypedLinkFacetError::InvalidArn(String::from(error_message))
+                    return UpdateTypedLinkFacetError::InvalidArn(String::from(error_message));
                 }
                 "InvalidFacetUpdateException" => {
                     return UpdateTypedLinkFacetError::InvalidFacetUpdate(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRuleException" => {
-                    return UpdateTypedLinkFacetError::InvalidRule(String::from(error_message))
+                    return UpdateTypedLinkFacetError::InvalidRule(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateTypedLinkFacetError::LimitExceeded(String::from(error_message))
+                    return UpdateTypedLinkFacetError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTypedLinkFacetError::ResourceNotFound(String::from(error_message))
+                    return UpdateTypedLinkFacetError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return UpdateTypedLinkFacetError::RetryableConflict(String::from(error_message))
+                    return UpdateTypedLinkFacetError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTypedLinkFacetError::Validation(error_message.to_string())
+                    return UpdateTypedLinkFacetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11762,30 +11762,30 @@ impl UpgradeAppliedSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpgradeAppliedSchemaError::AccessDenied(String::from(error_message))
+                    return UpgradeAppliedSchemaError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleSchemaException" => {
                     return UpgradeAppliedSchemaError::IncompatibleSchema(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpgradeAppliedSchemaError::InternalService(String::from(error_message))
+                    return UpgradeAppliedSchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpgradeAppliedSchemaError::InvalidArn(String::from(error_message))
+                    return UpgradeAppliedSchemaError::InvalidArn(String::from(error_message));
                 }
                 "InvalidAttachmentException" => {
-                    return UpgradeAppliedSchemaError::InvalidAttachment(String::from(error_message))
+                    return UpgradeAppliedSchemaError::InvalidAttachment(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpgradeAppliedSchemaError::ResourceNotFound(String::from(error_message))
+                    return UpgradeAppliedSchemaError::ResourceNotFound(String::from(error_message));
                 }
                 "RetryableConflictException" => {
-                    return UpgradeAppliedSchemaError::RetryableConflict(String::from(error_message))
+                    return UpgradeAppliedSchemaError::RetryableConflict(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpgradeAppliedSchemaError::Validation(error_message.to_string())
+                    return UpgradeAppliedSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -11898,39 +11898,39 @@ impl UpgradePublishedSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpgradePublishedSchemaError::AccessDenied(String::from(error_message))
+                    return UpgradePublishedSchemaError::AccessDenied(String::from(error_message));
                 }
                 "IncompatibleSchemaException" => {
                     return UpgradePublishedSchemaError::IncompatibleSchema(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpgradePublishedSchemaError::InternalService(String::from(error_message))
+                    return UpgradePublishedSchemaError::InternalService(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpgradePublishedSchemaError::InvalidArn(String::from(error_message))
+                    return UpgradePublishedSchemaError::InvalidArn(String::from(error_message));
                 }
                 "InvalidAttachmentException" => {
                     return UpgradePublishedSchemaError::InvalidAttachment(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpgradePublishedSchemaError::LimitExceeded(String::from(error_message))
+                    return UpgradePublishedSchemaError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UpgradePublishedSchemaError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RetryableConflictException" => {
                     return UpgradePublishedSchemaError::RetryableConflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpgradePublishedSchemaError::Validation(error_message.to_string())
+                    return UpgradePublishedSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

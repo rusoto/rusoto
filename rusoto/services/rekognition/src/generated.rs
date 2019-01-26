@@ -1853,33 +1853,33 @@ impl CompareFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CompareFacesError::AccessDenied(String::from(error_message))
+                    return CompareFacesError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return CompareFacesError::ImageTooLarge(String::from(error_message))
+                    return CompareFacesError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CompareFacesError::InternalServerError(String::from(error_message))
+                    return CompareFacesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidImageFormatException" => {
-                    return CompareFacesError::InvalidImageFormat(String::from(error_message))
+                    return CompareFacesError::InvalidImageFormat(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CompareFacesError::InvalidParameter(String::from(error_message))
+                    return CompareFacesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return CompareFacesError::InvalidS3Object(String::from(error_message))
+                    return CompareFacesError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return CompareFacesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return CompareFacesError::Throttling(String::from(error_message))
+                    return CompareFacesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CompareFacesError::Validation(error_message.to_string())
+                    return CompareFacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1973,27 +1973,27 @@ impl CreateCollectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateCollectionError::AccessDenied(String::from(error_message))
+                    return CreateCollectionError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return CreateCollectionError::InternalServerError(String::from(error_message))
+                    return CreateCollectionError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateCollectionError::InvalidParameter(String::from(error_message))
+                    return CreateCollectionError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return CreateCollectionError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateCollectionError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateCollectionError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateCollectionError::Throttling(String::from(error_message))
+                    return CreateCollectionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateCollectionError::Validation(error_message.to_string())
+                    return CreateCollectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2087,32 +2087,32 @@ impl CreateStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateStreamProcessorError::AccessDenied(String::from(error_message))
+                    return CreateStreamProcessorError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return CreateStreamProcessorError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateStreamProcessorError::InvalidParameter(String::from(error_message))
+                    return CreateStreamProcessorError::InvalidParameter(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateStreamProcessorError::LimitExceeded(String::from(error_message))
+                    return CreateStreamProcessorError::LimitExceeded(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return CreateStreamProcessorError::ResourceInUse(String::from(error_message))
+                    return CreateStreamProcessorError::ResourceInUse(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateStreamProcessorError::Throttling(String::from(error_message))
+                    return CreateStreamProcessorError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateStreamProcessorError::Validation(error_message.to_string())
+                    return CreateStreamProcessorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2207,27 +2207,27 @@ impl DeleteCollectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteCollectionError::AccessDenied(String::from(error_message))
+                    return DeleteCollectionError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteCollectionError::InternalServerError(String::from(error_message))
+                    return DeleteCollectionError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteCollectionError::InvalidParameter(String::from(error_message))
+                    return DeleteCollectionError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteCollectionError::ResourceNotFound(String::from(error_message))
+                    return DeleteCollectionError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteCollectionError::Throttling(String::from(error_message))
+                    return DeleteCollectionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteCollectionError::Validation(error_message.to_string())
+                    return DeleteCollectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2319,27 +2319,27 @@ impl DeleteFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteFacesError::AccessDenied(String::from(error_message))
+                    return DeleteFacesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DeleteFacesError::InternalServerError(String::from(error_message))
+                    return DeleteFacesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteFacesError::InvalidParameter(String::from(error_message))
+                    return DeleteFacesError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DeleteFacesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFacesError::ResourceNotFound(String::from(error_message))
+                    return DeleteFacesError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteFacesError::Throttling(String::from(error_message))
+                    return DeleteFacesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteFacesError::Validation(error_message.to_string())
+                    return DeleteFacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2433,32 +2433,32 @@ impl DeleteStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteStreamProcessorError::AccessDenied(String::from(error_message))
+                    return DeleteStreamProcessorError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DeleteStreamProcessorError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteStreamProcessorError::InvalidParameter(String::from(error_message))
+                    return DeleteStreamProcessorError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteStreamProcessorError::ResourceInUse(String::from(error_message))
+                    return DeleteStreamProcessorError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStreamProcessorError::ResourceNotFound(String::from(error_message))
+                    return DeleteStreamProcessorError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return DeleteStreamProcessorError::Throttling(String::from(error_message))
+                    return DeleteStreamProcessorError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteStreamProcessorError::Validation(error_message.to_string())
+                    return DeleteStreamProcessorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2553,33 +2553,33 @@ impl DescribeStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeStreamProcessorError::AccessDenied(String::from(error_message))
+                    return DescribeStreamProcessorError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DescribeStreamProcessorError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DescribeStreamProcessorError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DescribeStreamProcessorError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return DescribeStreamProcessorError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DescribeStreamProcessorError::Throttling(String::from(error_message))
+                    return DescribeStreamProcessorError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeStreamProcessorError::Validation(error_message.to_string())
+                    return DescribeStreamProcessorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2677,33 +2677,33 @@ impl DetectFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectFacesError::AccessDenied(String::from(error_message))
+                    return DetectFacesError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return DetectFacesError::ImageTooLarge(String::from(error_message))
+                    return DetectFacesError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DetectFacesError::InternalServerError(String::from(error_message))
+                    return DetectFacesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectFacesError::InvalidImageFormat(String::from(error_message))
+                    return DetectFacesError::InvalidImageFormat(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DetectFacesError::InvalidParameter(String::from(error_message))
+                    return DetectFacesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectFacesError::InvalidS3Object(String::from(error_message))
+                    return DetectFacesError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DetectFacesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DetectFacesError::Throttling(String::from(error_message))
+                    return DetectFacesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectFacesError::Validation(error_message.to_string())
+                    return DetectFacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2801,33 +2801,33 @@ impl DetectLabelsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectLabelsError::AccessDenied(String::from(error_message))
+                    return DetectLabelsError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return DetectLabelsError::ImageTooLarge(String::from(error_message))
+                    return DetectLabelsError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DetectLabelsError::InternalServerError(String::from(error_message))
+                    return DetectLabelsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectLabelsError::InvalidImageFormat(String::from(error_message))
+                    return DetectLabelsError::InvalidImageFormat(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DetectLabelsError::InvalidParameter(String::from(error_message))
+                    return DetectLabelsError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectLabelsError::InvalidS3Object(String::from(error_message))
+                    return DetectLabelsError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DetectLabelsError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DetectLabelsError::Throttling(String::from(error_message))
+                    return DetectLabelsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectLabelsError::Validation(error_message.to_string())
+                    return DetectLabelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2925,39 +2925,39 @@ impl DetectModerationLabelsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectModerationLabelsError::AccessDenied(String::from(error_message))
+                    return DetectModerationLabelsError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return DetectModerationLabelsError::ImageTooLarge(String::from(error_message))
+                    return DetectModerationLabelsError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return DetectModerationLabelsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidImageFormatException" => {
                     return DetectModerationLabelsError::InvalidImageFormat(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DetectModerationLabelsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectModerationLabelsError::InvalidS3Object(String::from(error_message))
+                    return DetectModerationLabelsError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DetectModerationLabelsError::Throttling(String::from(error_message))
+                    return DetectModerationLabelsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectModerationLabelsError::Validation(error_message.to_string())
+                    return DetectModerationLabelsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3057,33 +3057,33 @@ impl DetectTextError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectTextError::AccessDenied(String::from(error_message))
+                    return DetectTextError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return DetectTextError::ImageTooLarge(String::from(error_message))
+                    return DetectTextError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return DetectTextError::InternalServerError(String::from(error_message))
+                    return DetectTextError::InternalServerError(String::from(error_message));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectTextError::InvalidImageFormat(String::from(error_message))
+                    return DetectTextError::InvalidImageFormat(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DetectTextError::InvalidParameter(String::from(error_message))
+                    return DetectTextError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectTextError::InvalidS3Object(String::from(error_message))
+                    return DetectTextError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return DetectTextError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DetectTextError::Throttling(String::from(error_message))
+                    return DetectTextError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectTextError::Validation(error_message.to_string())
+                    return DetectTextError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3177,27 +3177,27 @@ impl GetCelebrityInfoError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetCelebrityInfoError::AccessDenied(String::from(error_message))
+                    return GetCelebrityInfoError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetCelebrityInfoError::InternalServerError(String::from(error_message))
+                    return GetCelebrityInfoError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetCelebrityInfoError::InvalidParameter(String::from(error_message))
+                    return GetCelebrityInfoError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCelebrityInfoError::ResourceNotFound(String::from(error_message))
+                    return GetCelebrityInfoError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetCelebrityInfoError::Throttling(String::from(error_message))
+                    return GetCelebrityInfoError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCelebrityInfoError::Validation(error_message.to_string())
+                    return GetCelebrityInfoError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3291,38 +3291,38 @@ impl GetCelebrityRecognitionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetCelebrityRecognitionError::AccessDenied(String::from(error_message))
+                    return GetCelebrityRecognitionError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return GetCelebrityRecognitionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
                     return GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return GetCelebrityRecognitionError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetCelebrityRecognitionError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ResourceNotFoundException" => {
                     return GetCelebrityRecognitionError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetCelebrityRecognitionError::Throttling(String::from(error_message))
+                    return GetCelebrityRecognitionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetCelebrityRecognitionError::Validation(error_message.to_string())
+                    return GetCelebrityRecognitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3419,34 +3419,34 @@ impl GetContentModerationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetContentModerationError::AccessDenied(String::from(error_message))
+                    return GetContentModerationError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return GetContentModerationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
                     return GetContentModerationError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetContentModerationError::InvalidParameter(String::from(error_message))
+                    return GetContentModerationError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetContentModerationError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetContentModerationError::ResourceNotFound(String::from(error_message))
+                    return GetContentModerationError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetContentModerationError::Throttling(String::from(error_message))
+                    return GetContentModerationError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetContentModerationError::Validation(error_message.to_string())
+                    return GetContentModerationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3543,32 +3543,32 @@ impl GetFaceDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetFaceDetectionError::AccessDenied(String::from(error_message))
+                    return GetFaceDetectionError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetFaceDetectionError::InternalServerError(String::from(error_message))
+                    return GetFaceDetectionError::InternalServerError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
                     return GetFaceDetectionError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetFaceDetectionError::InvalidParameter(String::from(error_message))
+                    return GetFaceDetectionError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFaceDetectionError::ResourceNotFound(String::from(error_message))
+                    return GetFaceDetectionError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetFaceDetectionError::Throttling(String::from(error_message))
+                    return GetFaceDetectionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFaceDetectionError::Validation(error_message.to_string())
+                    return GetFaceDetectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3663,30 +3663,30 @@ impl GetFaceSearchError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetFaceSearchError::AccessDenied(String::from(error_message))
+                    return GetFaceSearchError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetFaceSearchError::InternalServerError(String::from(error_message))
+                    return GetFaceSearchError::InternalServerError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetFaceSearchError::InvalidPaginationToken(String::from(error_message))
+                    return GetFaceSearchError::InvalidPaginationToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetFaceSearchError::InvalidParameter(String::from(error_message))
+                    return GetFaceSearchError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetFaceSearchError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFaceSearchError::ResourceNotFound(String::from(error_message))
+                    return GetFaceSearchError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetFaceSearchError::Throttling(String::from(error_message))
+                    return GetFaceSearchError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFaceSearchError::Validation(error_message.to_string())
+                    return GetFaceSearchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3781,32 +3781,32 @@ impl GetLabelDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLabelDetectionError::AccessDenied(String::from(error_message))
+                    return GetLabelDetectionError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetLabelDetectionError::InternalServerError(String::from(error_message))
+                    return GetLabelDetectionError::InternalServerError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
                     return GetLabelDetectionError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetLabelDetectionError::InvalidParameter(String::from(error_message))
+                    return GetLabelDetectionError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLabelDetectionError::ResourceNotFound(String::from(error_message))
+                    return GetLabelDetectionError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetLabelDetectionError::Throttling(String::from(error_message))
+                    return GetLabelDetectionError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetLabelDetectionError::Validation(error_message.to_string())
+                    return GetLabelDetectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3903,32 +3903,32 @@ impl GetPersonTrackingError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetPersonTrackingError::AccessDenied(String::from(error_message))
+                    return GetPersonTrackingError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return GetPersonTrackingError::InternalServerError(String::from(error_message))
+                    return GetPersonTrackingError::InternalServerError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
                     return GetPersonTrackingError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetPersonTrackingError::InvalidParameter(String::from(error_message))
+                    return GetPersonTrackingError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetPersonTrackingError::ResourceNotFound(String::from(error_message))
+                    return GetPersonTrackingError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return GetPersonTrackingError::Throttling(String::from(error_message))
+                    return GetPersonTrackingError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPersonTrackingError::Validation(error_message.to_string())
+                    return GetPersonTrackingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4029,36 +4029,36 @@ impl IndexFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return IndexFacesError::AccessDenied(String::from(error_message))
+                    return IndexFacesError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return IndexFacesError::ImageTooLarge(String::from(error_message))
+                    return IndexFacesError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return IndexFacesError::InternalServerError(String::from(error_message))
+                    return IndexFacesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidImageFormatException" => {
-                    return IndexFacesError::InvalidImageFormat(String::from(error_message))
+                    return IndexFacesError::InvalidImageFormat(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return IndexFacesError::InvalidParameter(String::from(error_message))
+                    return IndexFacesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return IndexFacesError::InvalidS3Object(String::from(error_message))
+                    return IndexFacesError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return IndexFacesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return IndexFacesError::ResourceNotFound(String::from(error_message))
+                    return IndexFacesError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return IndexFacesError::Throttling(String::from(error_message))
+                    return IndexFacesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return IndexFacesError::Validation(error_message.to_string())
+                    return IndexFacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4155,30 +4155,30 @@ impl ListCollectionsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListCollectionsError::AccessDenied(String::from(error_message))
+                    return ListCollectionsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return ListCollectionsError::InternalServerError(String::from(error_message))
+                    return ListCollectionsError::InternalServerError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
-                    return ListCollectionsError::InvalidPaginationToken(String::from(error_message))
+                    return ListCollectionsError::InvalidPaginationToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListCollectionsError::InvalidParameter(String::from(error_message))
+                    return ListCollectionsError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return ListCollectionsError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListCollectionsError::ResourceNotFound(String::from(error_message))
+                    return ListCollectionsError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListCollectionsError::Throttling(String::from(error_message))
+                    return ListCollectionsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListCollectionsError::Validation(error_message.to_string())
+                    return ListCollectionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4273,30 +4273,30 @@ impl ListFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListFacesError::AccessDenied(String::from(error_message))
+                    return ListFacesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return ListFacesError::InternalServerError(String::from(error_message))
+                    return ListFacesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidPaginationTokenException" => {
-                    return ListFacesError::InvalidPaginationToken(String::from(error_message))
+                    return ListFacesError::InvalidPaginationToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListFacesError::InvalidParameter(String::from(error_message))
+                    return ListFacesError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return ListFacesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFacesError::ResourceNotFound(String::from(error_message))
+                    return ListFacesError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ListFacesError::Throttling(String::from(error_message))
+                    return ListFacesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListFacesError::Validation(error_message.to_string())
+                    return ListFacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4389,31 +4389,31 @@ impl ListStreamProcessorsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListStreamProcessorsError::AccessDenied(String::from(error_message))
+                    return ListStreamProcessorsError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return ListStreamProcessorsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
                     return ListStreamProcessorsError::InvalidPaginationToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListStreamProcessorsError::InvalidParameter(String::from(error_message))
+                    return ListStreamProcessorsError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return ListStreamProcessorsError::Throttling(String::from(error_message))
+                    return ListStreamProcessorsError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListStreamProcessorsError::Validation(error_message.to_string())
+                    return ListStreamProcessorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4511,37 +4511,37 @@ impl RecognizeCelebritiesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RecognizeCelebritiesError::AccessDenied(String::from(error_message))
+                    return RecognizeCelebritiesError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return RecognizeCelebritiesError::ImageTooLarge(String::from(error_message))
+                    return RecognizeCelebritiesError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return RecognizeCelebritiesError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidImageFormatException" => {
                     return RecognizeCelebritiesError::InvalidImageFormat(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return RecognizeCelebritiesError::InvalidParameter(String::from(error_message))
+                    return RecognizeCelebritiesError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return RecognizeCelebritiesError::InvalidS3Object(String::from(error_message))
+                    return RecognizeCelebritiesError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return RecognizeCelebritiesError::Throttling(String::from(error_message))
+                    return RecognizeCelebritiesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RecognizeCelebritiesError::Validation(error_message.to_string())
+                    return RecognizeCelebritiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4637,27 +4637,27 @@ impl SearchFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SearchFacesError::AccessDenied(String::from(error_message))
+                    return SearchFacesError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return SearchFacesError::InternalServerError(String::from(error_message))
+                    return SearchFacesError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SearchFacesError::InvalidParameter(String::from(error_message))
+                    return SearchFacesError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return SearchFacesError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SearchFacesError::ResourceNotFound(String::from(error_message))
+                    return SearchFacesError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return SearchFacesError::Throttling(String::from(error_message))
+                    return SearchFacesError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SearchFacesError::Validation(error_message.to_string())
+                    return SearchFacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4755,36 +4755,36 @@ impl SearchFacesByImageError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SearchFacesByImageError::AccessDenied(String::from(error_message))
+                    return SearchFacesByImageError::AccessDenied(String::from(error_message));
                 }
                 "ImageTooLargeException" => {
-                    return SearchFacesByImageError::ImageTooLarge(String::from(error_message))
+                    return SearchFacesByImageError::ImageTooLarge(String::from(error_message));
                 }
                 "InternalServerError" => {
-                    return SearchFacesByImageError::InternalServerError(String::from(error_message))
+                    return SearchFacesByImageError::InternalServerError(String::from(error_message));
                 }
                 "InvalidImageFormatException" => {
-                    return SearchFacesByImageError::InvalidImageFormat(String::from(error_message))
+                    return SearchFacesByImageError::InvalidImageFormat(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return SearchFacesByImageError::InvalidParameter(String::from(error_message))
+                    return SearchFacesByImageError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return SearchFacesByImageError::InvalidS3Object(String::from(error_message))
+                    return SearchFacesByImageError::InvalidS3Object(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SearchFacesByImageError::ResourceNotFound(String::from(error_message))
+                    return SearchFacesByImageError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return SearchFacesByImageError::Throttling(String::from(error_message))
+                    return SearchFacesByImageError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SearchFacesByImageError::Validation(error_message.to_string())
+                    return SearchFacesByImageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4887,48 +4887,48 @@ impl StartCelebrityRecognitionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartCelebrityRecognitionError::AccessDenied(String::from(error_message))
+                    return StartCelebrityRecognitionError::AccessDenied(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return StartCelebrityRecognitionError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InternalServerError" => {
                     return StartCelebrityRecognitionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return StartCelebrityRecognitionError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3ObjectException" => {
                     return StartCelebrityRecognitionError::InvalidS3Object(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return StartCelebrityRecognitionError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ThrottlingException" => {
-                    return StartCelebrityRecognitionError::Throttling(String::from(error_message))
+                    return StartCelebrityRecognitionError::Throttling(String::from(error_message));
                 }
                 "VideoTooLargeException" => {
                     return StartCelebrityRecognitionError::VideoTooLarge(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartCelebrityRecognitionError::Validation(error_message.to_string())
+                    return StartCelebrityRecognitionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5031,42 +5031,42 @@ impl StartContentModerationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartContentModerationError::AccessDenied(String::from(error_message))
+                    return StartContentModerationError::AccessDenied(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return StartContentModerationError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return StartContentModerationError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return StartContentModerationError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartContentModerationError::InvalidS3Object(String::from(error_message))
+                    return StartContentModerationError::InvalidS3Object(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartContentModerationError::LimitExceeded(String::from(error_message))
+                    return StartContentModerationError::LimitExceeded(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartContentModerationError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartContentModerationError::Throttling(String::from(error_message))
+                    return StartContentModerationError::Throttling(String::from(error_message));
                 }
                 "VideoTooLargeException" => {
-                    return StartContentModerationError::VideoTooLarge(String::from(error_message))
+                    return StartContentModerationError::VideoTooLarge(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartContentModerationError::Validation(error_message.to_string())
+                    return StartContentModerationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5169,38 +5169,38 @@ impl StartFaceDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartFaceDetectionError::AccessDenied(String::from(error_message))
+                    return StartFaceDetectionError::AccessDenied(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return StartFaceDetectionError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return StartFaceDetectionError::InternalServerError(String::from(error_message))
+                    return StartFaceDetectionError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StartFaceDetectionError::InvalidParameter(String::from(error_message))
+                    return StartFaceDetectionError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartFaceDetectionError::InvalidS3Object(String::from(error_message))
+                    return StartFaceDetectionError::InvalidS3Object(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartFaceDetectionError::LimitExceeded(String::from(error_message))
+                    return StartFaceDetectionError::LimitExceeded(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartFaceDetectionError::Throttling(String::from(error_message))
+                    return StartFaceDetectionError::Throttling(String::from(error_message));
                 }
                 "VideoTooLargeException" => {
-                    return StartFaceDetectionError::VideoTooLarge(String::from(error_message))
+                    return StartFaceDetectionError::VideoTooLarge(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartFaceDetectionError::Validation(error_message.to_string())
+                    return StartFaceDetectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5305,41 +5305,41 @@ impl StartFaceSearchError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartFaceSearchError::AccessDenied(String::from(error_message))
+                    return StartFaceSearchError::AccessDenied(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return StartFaceSearchError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
-                    return StartFaceSearchError::InternalServerError(String::from(error_message))
+                    return StartFaceSearchError::InternalServerError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return StartFaceSearchError::InvalidParameter(String::from(error_message))
+                    return StartFaceSearchError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartFaceSearchError::InvalidS3Object(String::from(error_message))
+                    return StartFaceSearchError::InvalidS3Object(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartFaceSearchError::LimitExceeded(String::from(error_message))
+                    return StartFaceSearchError::LimitExceeded(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartFaceSearchError::ResourceNotFound(String::from(error_message))
+                    return StartFaceSearchError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return StartFaceSearchError::Throttling(String::from(error_message))
+                    return StartFaceSearchError::Throttling(String::from(error_message));
                 }
                 "VideoTooLargeException" => {
-                    return StartFaceSearchError::VideoTooLarge(String::from(error_message))
+                    return StartFaceSearchError::VideoTooLarge(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartFaceSearchError::Validation(error_message.to_string())
+                    return StartFaceSearchError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5441,40 +5441,40 @@ impl StartLabelDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartLabelDetectionError::AccessDenied(String::from(error_message))
+                    return StartLabelDetectionError::AccessDenied(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return StartLabelDetectionError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return StartLabelDetectionError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartLabelDetectionError::InvalidParameter(String::from(error_message))
+                    return StartLabelDetectionError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartLabelDetectionError::InvalidS3Object(String::from(error_message))
+                    return StartLabelDetectionError::InvalidS3Object(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartLabelDetectionError::LimitExceeded(String::from(error_message))
+                    return StartLabelDetectionError::LimitExceeded(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartLabelDetectionError::Throttling(String::from(error_message))
+                    return StartLabelDetectionError::Throttling(String::from(error_message));
                 }
                 "VideoTooLargeException" => {
-                    return StartLabelDetectionError::VideoTooLarge(String::from(error_message))
+                    return StartLabelDetectionError::VideoTooLarge(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartLabelDetectionError::Validation(error_message.to_string())
+                    return StartLabelDetectionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5577,40 +5577,40 @@ impl StartPersonTrackingError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartPersonTrackingError::AccessDenied(String::from(error_message))
+                    return StartPersonTrackingError::AccessDenied(String::from(error_message));
                 }
                 "IdempotentParameterMismatchException" => {
                     return StartPersonTrackingError::IdempotentParameterMismatch(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerError" => {
                     return StartPersonTrackingError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartPersonTrackingError::InvalidParameter(String::from(error_message))
+                    return StartPersonTrackingError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartPersonTrackingError::InvalidS3Object(String::from(error_message))
+                    return StartPersonTrackingError::InvalidS3Object(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return StartPersonTrackingError::LimitExceeded(String::from(error_message))
+                    return StartPersonTrackingError::LimitExceeded(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartPersonTrackingError::Throttling(String::from(error_message))
+                    return StartPersonTrackingError::Throttling(String::from(error_message));
                 }
                 "VideoTooLargeException" => {
-                    return StartPersonTrackingError::VideoTooLarge(String::from(error_message))
+                    return StartPersonTrackingError::VideoTooLarge(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartPersonTrackingError::Validation(error_message.to_string())
+                    return StartPersonTrackingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5709,32 +5709,32 @@ impl StartStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartStreamProcessorError::AccessDenied(String::from(error_message))
+                    return StartStreamProcessorError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return StartStreamProcessorError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartStreamProcessorError::InvalidParameter(String::from(error_message))
+                    return StartStreamProcessorError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return StartStreamProcessorError::ResourceInUse(String::from(error_message))
+                    return StartStreamProcessorError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StartStreamProcessorError::ResourceNotFound(String::from(error_message))
+                    return StartStreamProcessorError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return StartStreamProcessorError::Throttling(String::from(error_message))
+                    return StartStreamProcessorError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartStreamProcessorError::Validation(error_message.to_string())
+                    return StartStreamProcessorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5831,32 +5831,32 @@ impl StopStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StopStreamProcessorError::AccessDenied(String::from(error_message))
+                    return StopStreamProcessorError::AccessDenied(String::from(error_message));
                 }
                 "InternalServerError" => {
                     return StopStreamProcessorError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StopStreamProcessorError::InvalidParameter(String::from(error_message))
+                    return StopStreamProcessorError::InvalidParameter(String::from(error_message));
                 }
                 "ProvisionedThroughputExceededException" => {
                     return StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return StopStreamProcessorError::ResourceInUse(String::from(error_message))
+                    return StopStreamProcessorError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return StopStreamProcessorError::ResourceNotFound(String::from(error_message))
+                    return StopStreamProcessorError::ResourceNotFound(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return StopStreamProcessorError::Throttling(String::from(error_message))
+                    return StopStreamProcessorError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopStreamProcessorError::Validation(error_message.to_string())
+                    return StopStreamProcessorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

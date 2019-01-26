@@ -352,30 +352,30 @@ impl CreateEnvironmentEC2Error {
 
             match *error_type {
                 "BadRequestException" => {
-                    return CreateEnvironmentEC2Error::BadRequest(String::from(error_message))
+                    return CreateEnvironmentEC2Error::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateEnvironmentEC2Error::Conflict(String::from(error_message))
+                    return CreateEnvironmentEC2Error::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateEnvironmentEC2Error::Forbidden(String::from(error_message))
+                    return CreateEnvironmentEC2Error::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateEnvironmentEC2Error::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateEnvironmentEC2Error::LimitExceeded(String::from(error_message))
+                    return CreateEnvironmentEC2Error::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateEnvironmentEC2Error::NotFound(String::from(error_message))
+                    return CreateEnvironmentEC2Error::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateEnvironmentEC2Error::TooManyRequests(String::from(error_message))
+                    return CreateEnvironmentEC2Error::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateEnvironmentEC2Error::Validation(error_message.to_string())
+                    return CreateEnvironmentEC2Error::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -472,34 +472,34 @@ impl CreateEnvironmentMembershipError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return CreateEnvironmentMembershipError::BadRequest(String::from(error_message))
+                    return CreateEnvironmentMembershipError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateEnvironmentMembershipError::Conflict(String::from(error_message))
+                    return CreateEnvironmentMembershipError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateEnvironmentMembershipError::Forbidden(String::from(error_message))
+                    return CreateEnvironmentMembershipError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return CreateEnvironmentMembershipError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return CreateEnvironmentMembershipError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateEnvironmentMembershipError::NotFound(String::from(error_message))
+                    return CreateEnvironmentMembershipError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return CreateEnvironmentMembershipError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateEnvironmentMembershipError::Validation(error_message.to_string())
+                    return CreateEnvironmentMembershipError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -596,28 +596,28 @@ impl DeleteEnvironmentError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteEnvironmentError::BadRequest(String::from(error_message))
+                    return DeleteEnvironmentError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteEnvironmentError::Conflict(String::from(error_message))
+                    return DeleteEnvironmentError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteEnvironmentError::Forbidden(String::from(error_message))
+                    return DeleteEnvironmentError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteEnvironmentError::InternalServerError(String::from(error_message))
+                    return DeleteEnvironmentError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return DeleteEnvironmentError::LimitExceeded(String::from(error_message))
+                    return DeleteEnvironmentError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteEnvironmentError::NotFound(String::from(error_message))
+                    return DeleteEnvironmentError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteEnvironmentError::TooManyRequests(String::from(error_message))
+                    return DeleteEnvironmentError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteEnvironmentError::Validation(error_message.to_string())
+                    return DeleteEnvironmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -714,34 +714,34 @@ impl DeleteEnvironmentMembershipError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteEnvironmentMembershipError::BadRequest(String::from(error_message))
+                    return DeleteEnvironmentMembershipError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteEnvironmentMembershipError::Conflict(String::from(error_message))
+                    return DeleteEnvironmentMembershipError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteEnvironmentMembershipError::Forbidden(String::from(error_message))
+                    return DeleteEnvironmentMembershipError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DeleteEnvironmentMembershipError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return DeleteEnvironmentMembershipError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteEnvironmentMembershipError::NotFound(String::from(error_message))
+                    return DeleteEnvironmentMembershipError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DeleteEnvironmentMembershipError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteEnvironmentMembershipError::Validation(error_message.to_string())
+                    return DeleteEnvironmentMembershipError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -840,42 +840,42 @@ impl DescribeEnvironmentMembershipsError {
                 "BadRequestException" => {
                     return DescribeEnvironmentMembershipsError::BadRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ConflictException" => {
                     return DescribeEnvironmentMembershipsError::Conflict(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ForbiddenException" => {
                     return DescribeEnvironmentMembershipsError::Forbidden(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerErrorException" => {
                     return DescribeEnvironmentMembershipsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return DescribeEnvironmentMembershipsError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return DescribeEnvironmentMembershipsError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeEnvironmentMembershipsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -972,34 +972,34 @@ impl DescribeEnvironmentStatusError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DescribeEnvironmentStatusError::BadRequest(String::from(error_message))
+                    return DescribeEnvironmentStatusError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DescribeEnvironmentStatusError::Conflict(String::from(error_message))
+                    return DescribeEnvironmentStatusError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeEnvironmentStatusError::Forbidden(String::from(error_message))
+                    return DescribeEnvironmentStatusError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DescribeEnvironmentStatusError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return DescribeEnvironmentStatusError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeEnvironmentStatusError::NotFound(String::from(error_message))
+                    return DescribeEnvironmentStatusError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DescribeEnvironmentStatusError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeEnvironmentStatusError::Validation(error_message.to_string())
+                    return DescribeEnvironmentStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1096,30 +1096,30 @@ impl DescribeEnvironmentsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DescribeEnvironmentsError::BadRequest(String::from(error_message))
+                    return DescribeEnvironmentsError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DescribeEnvironmentsError::Conflict(String::from(error_message))
+                    return DescribeEnvironmentsError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeEnvironmentsError::Forbidden(String::from(error_message))
+                    return DescribeEnvironmentsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return DescribeEnvironmentsError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DescribeEnvironmentsError::LimitExceeded(String::from(error_message))
+                    return DescribeEnvironmentsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeEnvironmentsError::NotFound(String::from(error_message))
+                    return DescribeEnvironmentsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeEnvironmentsError::TooManyRequests(String::from(error_message))
+                    return DescribeEnvironmentsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEnvironmentsError::Validation(error_message.to_string())
+                    return DescribeEnvironmentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1216,28 +1216,28 @@ impl ListEnvironmentsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return ListEnvironmentsError::BadRequest(String::from(error_message))
+                    return ListEnvironmentsError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ListEnvironmentsError::Conflict(String::from(error_message))
+                    return ListEnvironmentsError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListEnvironmentsError::Forbidden(String::from(error_message))
+                    return ListEnvironmentsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListEnvironmentsError::InternalServerError(String::from(error_message))
+                    return ListEnvironmentsError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return ListEnvironmentsError::LimitExceeded(String::from(error_message))
+                    return ListEnvironmentsError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListEnvironmentsError::NotFound(String::from(error_message))
+                    return ListEnvironmentsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListEnvironmentsError::TooManyRequests(String::from(error_message))
+                    return ListEnvironmentsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListEnvironmentsError::Validation(error_message.to_string())
+                    return ListEnvironmentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1332,28 +1332,28 @@ impl UpdateEnvironmentError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return UpdateEnvironmentError::BadRequest(String::from(error_message))
+                    return UpdateEnvironmentError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateEnvironmentError::Conflict(String::from(error_message))
+                    return UpdateEnvironmentError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateEnvironmentError::Forbidden(String::from(error_message))
+                    return UpdateEnvironmentError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateEnvironmentError::InternalServerError(String::from(error_message))
+                    return UpdateEnvironmentError::InternalServerError(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateEnvironmentError::LimitExceeded(String::from(error_message))
+                    return UpdateEnvironmentError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateEnvironmentError::NotFound(String::from(error_message))
+                    return UpdateEnvironmentError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateEnvironmentError::TooManyRequests(String::from(error_message))
+                    return UpdateEnvironmentError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateEnvironmentError::Validation(error_message.to_string())
+                    return UpdateEnvironmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1450,34 +1450,34 @@ impl UpdateEnvironmentMembershipError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return UpdateEnvironmentMembershipError::BadRequest(String::from(error_message))
+                    return UpdateEnvironmentMembershipError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateEnvironmentMembershipError::Conflict(String::from(error_message))
+                    return UpdateEnvironmentMembershipError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateEnvironmentMembershipError::Forbidden(String::from(error_message))
+                    return UpdateEnvironmentMembershipError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return UpdateEnvironmentMembershipError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
                     return UpdateEnvironmentMembershipError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateEnvironmentMembershipError::NotFound(String::from(error_message))
+                    return UpdateEnvironmentMembershipError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return UpdateEnvironmentMembershipError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateEnvironmentMembershipError::Validation(error_message.to_string())
+                    return UpdateEnvironmentMembershipError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

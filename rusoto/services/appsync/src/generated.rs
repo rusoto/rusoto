@@ -1005,28 +1005,28 @@ impl CreateApiKeyError {
 
             match error_type {
                 "ApiKeyLimitExceededException" => {
-                    return CreateApiKeyError::ApiKeyLimitExceeded(String::from(error_message))
+                    return CreateApiKeyError::ApiKeyLimitExceeded(String::from(error_message));
                 }
                 "ApiKeyValidityOutOfBoundsException" => {
-                    return CreateApiKeyError::ApiKeyValidityOutOfBounds(String::from(error_message))
+                    return CreateApiKeyError::ApiKeyValidityOutOfBounds(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return CreateApiKeyError::BadRequest(String::from(error_message))
+                    return CreateApiKeyError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateApiKeyError::InternalFailure(String::from(error_message))
+                    return CreateApiKeyError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateApiKeyError::LimitExceeded(String::from(error_message))
+                    return CreateApiKeyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateApiKeyError::NotFound(String::from(error_message))
+                    return CreateApiKeyError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateApiKeyError::Unauthorized(String::from(error_message))
+                    return CreateApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateApiKeyError::Validation(error_message.to_string())
+                    return CreateApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1131,24 +1131,24 @@ impl CreateDataSourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDataSourceError::BadRequest(String::from(error_message))
+                    return CreateDataSourceError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return CreateDataSourceError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return CreateDataSourceError::InternalFailure(String::from(error_message))
+                    return CreateDataSourceError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateDataSourceError::NotFound(String::from(error_message))
+                    return CreateDataSourceError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateDataSourceError::Unauthorized(String::from(error_message))
+                    return CreateDataSourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDataSourceError::Validation(error_message.to_string())
+                    return CreateDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1253,27 +1253,27 @@ impl CreateGraphqlApiError {
 
             match error_type {
                 "ApiLimitExceededException" => {
-                    return CreateGraphqlApiError::ApiLimitExceeded(String::from(error_message))
+                    return CreateGraphqlApiError::ApiLimitExceeded(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return CreateGraphqlApiError::BadRequest(String::from(error_message))
+                    return CreateGraphqlApiError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return CreateGraphqlApiError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return CreateGraphqlApiError::InternalFailure(String::from(error_message))
+                    return CreateGraphqlApiError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateGraphqlApiError::LimitExceeded(String::from(error_message))
+                    return CreateGraphqlApiError::LimitExceeded(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateGraphqlApiError::Unauthorized(String::from(error_message))
+                    return CreateGraphqlApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGraphqlApiError::Validation(error_message.to_string())
+                    return CreateGraphqlApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1375,19 +1375,19 @@ impl CreateResolverError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return CreateResolverError::ConcurrentModification(String::from(error_message))
+                    return CreateResolverError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateResolverError::InternalFailure(String::from(error_message))
+                    return CreateResolverError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateResolverError::NotFound(String::from(error_message))
+                    return CreateResolverError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateResolverError::Unauthorized(String::from(error_message))
+                    return CreateResolverError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateResolverError::Validation(error_message.to_string())
+                    return CreateResolverError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1489,22 +1489,22 @@ impl CreateTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateTypeError::BadRequest(String::from(error_message))
+                    return CreateTypeError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateTypeError::ConcurrentModification(String::from(error_message))
+                    return CreateTypeError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return CreateTypeError::InternalFailure(String::from(error_message))
+                    return CreateTypeError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateTypeError::NotFound(String::from(error_message))
+                    return CreateTypeError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return CreateTypeError::Unauthorized(String::from(error_message))
+                    return CreateTypeError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTypeError::Validation(error_message.to_string())
+                    return CreateTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1605,19 +1605,19 @@ impl DeleteApiKeyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteApiKeyError::BadRequest(String::from(error_message))
+                    return DeleteApiKeyError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteApiKeyError::InternalFailure(String::from(error_message))
+                    return DeleteApiKeyError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteApiKeyError::NotFound(String::from(error_message))
+                    return DeleteApiKeyError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteApiKeyError::Unauthorized(String::from(error_message))
+                    return DeleteApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteApiKeyError::Validation(error_message.to_string())
+                    return DeleteApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1719,24 +1719,24 @@ impl DeleteDataSourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDataSourceError::BadRequest(String::from(error_message))
+                    return DeleteDataSourceError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DeleteDataSourceError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return DeleteDataSourceError::InternalFailure(String::from(error_message))
+                    return DeleteDataSourceError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteDataSourceError::NotFound(String::from(error_message))
+                    return DeleteDataSourceError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteDataSourceError::Unauthorized(String::from(error_message))
+                    return DeleteDataSourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDataSourceError::Validation(error_message.to_string())
+                    return DeleteDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1839,24 +1839,24 @@ impl DeleteGraphqlApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteGraphqlApiError::BadRequest(String::from(error_message))
+                    return DeleteGraphqlApiError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return DeleteGraphqlApiError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return DeleteGraphqlApiError::InternalFailure(String::from(error_message))
+                    return DeleteGraphqlApiError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteGraphqlApiError::NotFound(String::from(error_message))
+                    return DeleteGraphqlApiError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteGraphqlApiError::Unauthorized(String::from(error_message))
+                    return DeleteGraphqlApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGraphqlApiError::Validation(error_message.to_string())
+                    return DeleteGraphqlApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1957,19 +1957,19 @@ impl DeleteResolverError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteResolverError::ConcurrentModification(String::from(error_message))
+                    return DeleteResolverError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteResolverError::InternalFailure(String::from(error_message))
+                    return DeleteResolverError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteResolverError::NotFound(String::from(error_message))
+                    return DeleteResolverError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteResolverError::Unauthorized(String::from(error_message))
+                    return DeleteResolverError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteResolverError::Validation(error_message.to_string())
+                    return DeleteResolverError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2071,22 +2071,22 @@ impl DeleteTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteTypeError::BadRequest(String::from(error_message))
+                    return DeleteTypeError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return DeleteTypeError::ConcurrentModification(String::from(error_message))
+                    return DeleteTypeError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return DeleteTypeError::InternalFailure(String::from(error_message))
+                    return DeleteTypeError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteTypeError::NotFound(String::from(error_message))
+                    return DeleteTypeError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return DeleteTypeError::Unauthorized(String::from(error_message))
+                    return DeleteTypeError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTypeError::Validation(error_message.to_string())
+                    return DeleteTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2189,22 +2189,22 @@ impl GetDataSourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDataSourceError::BadRequest(String::from(error_message))
+                    return GetDataSourceError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return GetDataSourceError::ConcurrentModification(String::from(error_message))
+                    return GetDataSourceError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetDataSourceError::InternalFailure(String::from(error_message))
+                    return GetDataSourceError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetDataSourceError::NotFound(String::from(error_message))
+                    return GetDataSourceError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetDataSourceError::Unauthorized(String::from(error_message))
+                    return GetDataSourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDataSourceError::Validation(error_message.to_string())
+                    return GetDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2305,19 +2305,19 @@ impl GetGraphqlApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGraphqlApiError::BadRequest(String::from(error_message))
+                    return GetGraphqlApiError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetGraphqlApiError::InternalFailure(String::from(error_message))
+                    return GetGraphqlApiError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetGraphqlApiError::NotFound(String::from(error_message))
+                    return GetGraphqlApiError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetGraphqlApiError::Unauthorized(String::from(error_message))
+                    return GetGraphqlApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetGraphqlApiError::Validation(error_message.to_string())
+                    return GetGraphqlApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2417,19 +2417,19 @@ impl GetIntrospectionSchemaError {
 
             match error_type {
                 "GraphQLSchemaException" => {
-                    return GetIntrospectionSchemaError::GraphQLSchema(String::from(error_message))
+                    return GetIntrospectionSchemaError::GraphQLSchema(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetIntrospectionSchemaError::InternalFailure(String::from(error_message))
+                    return GetIntrospectionSchemaError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetIntrospectionSchemaError::NotFound(String::from(error_message))
+                    return GetIntrospectionSchemaError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetIntrospectionSchemaError::Unauthorized(String::from(error_message))
+                    return GetIntrospectionSchemaError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetIntrospectionSchemaError::Validation(error_message.to_string())
+                    return GetIntrospectionSchemaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2529,16 +2529,16 @@ impl GetResolverError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return GetResolverError::ConcurrentModification(String::from(error_message))
+                    return GetResolverError::ConcurrentModification(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetResolverError::NotFound(String::from(error_message))
+                    return GetResolverError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetResolverError::Unauthorized(String::from(error_message))
+                    return GetResolverError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResolverError::Validation(error_message.to_string())
+                    return GetResolverError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2637,21 +2637,21 @@ impl GetSchemaCreationStatusError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSchemaCreationStatusError::BadRequest(String::from(error_message))
+                    return GetSchemaCreationStatusError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
                     return GetSchemaCreationStatusError::InternalFailure(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetSchemaCreationStatusError::NotFound(String::from(error_message))
+                    return GetSchemaCreationStatusError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return GetSchemaCreationStatusError::Unauthorized(String::from(error_message))
+                    return GetSchemaCreationStatusError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSchemaCreationStatusError::Validation(error_message.to_string())
+                    return GetSchemaCreationStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2755,17 +2755,17 @@ impl GetTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetTypeError::BadRequest(String::from(error_message))
+                    return GetTypeError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return GetTypeError::ConcurrentModification(String::from(error_message))
+                    return GetTypeError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return GetTypeError::InternalFailure(String::from(error_message))
+                    return GetTypeError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => return GetTypeError::NotFound(String::from(error_message)),
                 "UnauthorizedException" => {
-                    return GetTypeError::Unauthorized(String::from(error_message))
+                    return GetTypeError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => return GetTypeError::Validation(error_message.to_string()),
                 _ => {}
@@ -2867,19 +2867,19 @@ impl ListApiKeysError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListApiKeysError::BadRequest(String::from(error_message))
+                    return ListApiKeysError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListApiKeysError::InternalFailure(String::from(error_message))
+                    return ListApiKeysError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListApiKeysError::NotFound(String::from(error_message))
+                    return ListApiKeysError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListApiKeysError::Unauthorized(String::from(error_message))
+                    return ListApiKeysError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListApiKeysError::Validation(error_message.to_string())
+                    return ListApiKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2979,19 +2979,19 @@ impl ListDataSourcesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListDataSourcesError::BadRequest(String::from(error_message))
+                    return ListDataSourcesError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListDataSourcesError::InternalFailure(String::from(error_message))
+                    return ListDataSourcesError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListDataSourcesError::NotFound(String::from(error_message))
+                    return ListDataSourcesError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListDataSourcesError::Unauthorized(String::from(error_message))
+                    return ListDataSourcesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDataSourcesError::Validation(error_message.to_string())
+                    return ListDataSourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3089,16 +3089,16 @@ impl ListGraphqlApisError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListGraphqlApisError::BadRequest(String::from(error_message))
+                    return ListGraphqlApisError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListGraphqlApisError::InternalFailure(String::from(error_message))
+                    return ListGraphqlApisError::InternalFailure(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListGraphqlApisError::Unauthorized(String::from(error_message))
+                    return ListGraphqlApisError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGraphqlApisError::Validation(error_message.to_string())
+                    return ListGraphqlApisError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3197,19 +3197,19 @@ impl ListResolversError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListResolversError::BadRequest(String::from(error_message))
+                    return ListResolversError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListResolversError::InternalFailure(String::from(error_message))
+                    return ListResolversError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListResolversError::NotFound(String::from(error_message))
+                    return ListResolversError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return ListResolversError::Unauthorized(String::from(error_message))
+                    return ListResolversError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListResolversError::Validation(error_message.to_string())
+                    return ListResolversError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3311,20 +3311,20 @@ impl ListTypesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListTypesError::BadRequest(String::from(error_message))
+                    return ListTypesError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return ListTypesError::ConcurrentModification(String::from(error_message))
+                    return ListTypesError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return ListTypesError::InternalFailure(String::from(error_message))
+                    return ListTypesError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => return ListTypesError::NotFound(String::from(error_message)),
                 "UnauthorizedException" => {
-                    return ListTypesError::Unauthorized(String::from(error_message))
+                    return ListTypesError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTypesError::Validation(error_message.to_string())
+                    return ListTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3427,24 +3427,24 @@ impl StartSchemaCreationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StartSchemaCreationError::BadRequest(String::from(error_message))
+                    return StartSchemaCreationError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return StartSchemaCreationError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return StartSchemaCreationError::InternalFailure(String::from(error_message))
+                    return StartSchemaCreationError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return StartSchemaCreationError::NotFound(String::from(error_message))
+                    return StartSchemaCreationError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return StartSchemaCreationError::Unauthorized(String::from(error_message))
+                    return StartSchemaCreationError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartSchemaCreationError::Validation(error_message.to_string())
+                    return StartSchemaCreationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3551,25 +3551,25 @@ impl UpdateApiKeyError {
 
             match error_type {
                 "ApiKeyValidityOutOfBoundsException" => {
-                    return UpdateApiKeyError::ApiKeyValidityOutOfBounds(String::from(error_message))
+                    return UpdateApiKeyError::ApiKeyValidityOutOfBounds(String::from(error_message));
                 }
                 "BadRequestException" => {
-                    return UpdateApiKeyError::BadRequest(String::from(error_message))
+                    return UpdateApiKeyError::BadRequest(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return UpdateApiKeyError::InternalFailure(String::from(error_message))
+                    return UpdateApiKeyError::InternalFailure(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateApiKeyError::LimitExceeded(String::from(error_message))
+                    return UpdateApiKeyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateApiKeyError::NotFound(String::from(error_message))
+                    return UpdateApiKeyError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateApiKeyError::Unauthorized(String::from(error_message))
+                    return UpdateApiKeyError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateApiKeyError::Validation(error_message.to_string())
+                    return UpdateApiKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3673,24 +3673,24 @@ impl UpdateDataSourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDataSourceError::BadRequest(String::from(error_message))
+                    return UpdateDataSourceError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return UpdateDataSourceError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return UpdateDataSourceError::InternalFailure(String::from(error_message))
+                    return UpdateDataSourceError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDataSourceError::NotFound(String::from(error_message))
+                    return UpdateDataSourceError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateDataSourceError::Unauthorized(String::from(error_message))
+                    return UpdateDataSourceError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDataSourceError::Validation(error_message.to_string())
+                    return UpdateDataSourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3793,24 +3793,24 @@ impl UpdateGraphqlApiError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGraphqlApiError::BadRequest(String::from(error_message))
+                    return UpdateGraphqlApiError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
                     return UpdateGraphqlApiError::ConcurrentModification(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalFailureException" => {
-                    return UpdateGraphqlApiError::InternalFailure(String::from(error_message))
+                    return UpdateGraphqlApiError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateGraphqlApiError::NotFound(String::from(error_message))
+                    return UpdateGraphqlApiError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateGraphqlApiError::Unauthorized(String::from(error_message))
+                    return UpdateGraphqlApiError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateGraphqlApiError::Validation(error_message.to_string())
+                    return UpdateGraphqlApiError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3911,19 +3911,19 @@ impl UpdateResolverError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateResolverError::ConcurrentModification(String::from(error_message))
+                    return UpdateResolverError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return UpdateResolverError::InternalFailure(String::from(error_message))
+                    return UpdateResolverError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateResolverError::NotFound(String::from(error_message))
+                    return UpdateResolverError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateResolverError::Unauthorized(String::from(error_message))
+                    return UpdateResolverError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateResolverError::Validation(error_message.to_string())
+                    return UpdateResolverError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4025,22 +4025,22 @@ impl UpdateTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateTypeError::BadRequest(String::from(error_message))
+                    return UpdateTypeError::BadRequest(String::from(error_message));
                 }
                 "ConcurrentModificationException" => {
-                    return UpdateTypeError::ConcurrentModification(String::from(error_message))
+                    return UpdateTypeError::ConcurrentModification(String::from(error_message));
                 }
                 "InternalFailureException" => {
-                    return UpdateTypeError::InternalFailure(String::from(error_message))
+                    return UpdateTypeError::InternalFailure(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateTypeError::NotFound(String::from(error_message))
+                    return UpdateTypeError::NotFound(String::from(error_message));
                 }
                 "UnauthorizedException" => {
-                    return UpdateTypeError::Unauthorized(String::from(error_message))
+                    return UpdateTypeError::Unauthorized(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTypeError::Validation(error_message.to_string())
+                    return UpdateTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

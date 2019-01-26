@@ -1317,25 +1317,25 @@ impl BatchDetectDominantLanguageError {
                 "BatchSizeLimitExceededException" => {
                     return BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
                     return BatchDetectDominantLanguageError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return BatchDetectDominantLanguageError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
                     return BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchDetectDominantLanguageError::Validation(error_message.to_string())
+                    return BatchDetectDominantLanguageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1427,26 +1427,26 @@ impl BatchDetectEntitiesError {
                 "BatchSizeLimitExceededException" => {
                     return BatchDetectEntitiesError::BatchSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectEntitiesError::InternalServer(String::from(error_message))
+                    return BatchDetectEntitiesError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectEntitiesError::InvalidRequest(String::from(error_message))
+                    return BatchDetectEntitiesError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
                     return BatchDetectEntitiesError::TextSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedLanguageException" => {
                     return BatchDetectEntitiesError::UnsupportedLanguage(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchDetectEntitiesError::Validation(error_message.to_string())
+                    return BatchDetectEntitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1539,26 +1539,26 @@ impl BatchDetectKeyPhrasesError {
                 "BatchSizeLimitExceededException" => {
                     return BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectKeyPhrasesError::InternalServer(String::from(error_message))
+                    return BatchDetectKeyPhrasesError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectKeyPhrasesError::InvalidRequest(String::from(error_message))
+                    return BatchDetectKeyPhrasesError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
                     return BatchDetectKeyPhrasesError::TextSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedLanguageException" => {
                     return BatchDetectKeyPhrasesError::UnsupportedLanguage(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchDetectKeyPhrasesError::Validation(error_message.to_string())
+                    return BatchDetectKeyPhrasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1651,26 +1651,26 @@ impl BatchDetectSentimentError {
                 "BatchSizeLimitExceededException" => {
                     return BatchDetectSentimentError::BatchSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectSentimentError::InternalServer(String::from(error_message))
+                    return BatchDetectSentimentError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectSentimentError::InvalidRequest(String::from(error_message))
+                    return BatchDetectSentimentError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
                     return BatchDetectSentimentError::TextSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedLanguageException" => {
                     return BatchDetectSentimentError::UnsupportedLanguage(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchDetectSentimentError::Validation(error_message.to_string())
+                    return BatchDetectSentimentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1763,24 +1763,24 @@ impl BatchDetectSyntaxError {
                 "BatchSizeLimitExceededException" => {
                     return BatchDetectSyntaxError::BatchSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectSyntaxError::InternalServer(String::from(error_message))
+                    return BatchDetectSyntaxError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectSyntaxError::InvalidRequest(String::from(error_message))
+                    return BatchDetectSyntaxError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
                     return BatchDetectSyntaxError::TextSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedLanguageException" => {
-                    return BatchDetectSyntaxError::UnsupportedLanguage(String::from(error_message))
+                    return BatchDetectSyntaxError::UnsupportedLanguage(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchDetectSyntaxError::Validation(error_message.to_string())
+                    return BatchDetectSyntaxError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1871,27 +1871,27 @@ impl DescribeDominantLanguageDetectionJobError {
                 "InternalServerException" => {
                     return DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeDominantLanguageDetectionJobError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1981,25 +1981,25 @@ impl DescribeEntitiesDetectionJobError {
                 "InternalServerException" => {
                     return DescribeEntitiesDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeEntitiesDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return DescribeEntitiesDetectionJobError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeEntitiesDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeEntitiesDetectionJobError::Validation(error_message.to_string())
+                    return DescribeEntitiesDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2089,27 +2089,27 @@ impl DescribeKeyPhrasesDetectionJobError {
                 "InternalServerException" => {
                     return DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return DescribeKeyPhrasesDetectionJobError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeKeyPhrasesDetectionJobError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2199,25 +2199,25 @@ impl DescribeSentimentDetectionJobError {
                 "InternalServerException" => {
                     return DescribeSentimentDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeSentimentDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return DescribeSentimentDetectionJobError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return DescribeSentimentDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeSentimentDetectionJobError::Validation(error_message.to_string())
+                    return DescribeSentimentDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2307,23 +2307,23 @@ impl DescribeTopicsDetectionJobError {
                 "InternalServerException" => {
                     return DescribeTopicsDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return DescribeTopicsDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return DescribeTopicsDetectionJobError::JobNotFound(String::from(error_message))
+                    return DescribeTopicsDetectionJobError::JobNotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return DescribeTopicsDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeTopicsDetectionJobError::Validation(error_message.to_string())
+                    return DescribeTopicsDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2409,18 +2409,18 @@ impl DetectDominantLanguageError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectDominantLanguageError::InternalServer(String::from(error_message))
+                    return DetectDominantLanguageError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DetectDominantLanguageError::InvalidRequest(String::from(error_message))
+                    return DetectDominantLanguageError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
                     return DetectDominantLanguageError::TextSizeLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DetectDominantLanguageError::Validation(error_message.to_string())
+                    return DetectDominantLanguageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2507,19 +2507,19 @@ impl DetectEntitiesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectEntitiesError::InternalServer(String::from(error_message))
+                    return DetectEntitiesError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DetectEntitiesError::InvalidRequest(String::from(error_message))
+                    return DetectEntitiesError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectEntitiesError::TextSizeLimitExceeded(String::from(error_message))
+                    return DetectEntitiesError::TextSizeLimitExceeded(String::from(error_message));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectEntitiesError::UnsupportedLanguage(String::from(error_message))
+                    return DetectEntitiesError::UnsupportedLanguage(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectEntitiesError::Validation(error_message.to_string())
+                    return DetectEntitiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2605,19 +2605,19 @@ impl DetectKeyPhrasesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectKeyPhrasesError::InternalServer(String::from(error_message))
+                    return DetectKeyPhrasesError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DetectKeyPhrasesError::InvalidRequest(String::from(error_message))
+                    return DetectKeyPhrasesError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectKeyPhrasesError::TextSizeLimitExceeded(String::from(error_message))
+                    return DetectKeyPhrasesError::TextSizeLimitExceeded(String::from(error_message));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectKeyPhrasesError::UnsupportedLanguage(String::from(error_message))
+                    return DetectKeyPhrasesError::UnsupportedLanguage(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectKeyPhrasesError::Validation(error_message.to_string())
+                    return DetectKeyPhrasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2703,19 +2703,19 @@ impl DetectSentimentError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectSentimentError::InternalServer(String::from(error_message))
+                    return DetectSentimentError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DetectSentimentError::InvalidRequest(String::from(error_message))
+                    return DetectSentimentError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectSentimentError::TextSizeLimitExceeded(String::from(error_message))
+                    return DetectSentimentError::TextSizeLimitExceeded(String::from(error_message));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectSentimentError::UnsupportedLanguage(String::from(error_message))
+                    return DetectSentimentError::UnsupportedLanguage(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectSentimentError::Validation(error_message.to_string())
+                    return DetectSentimentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2801,19 +2801,19 @@ impl DetectSyntaxError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectSyntaxError::InternalServer(String::from(error_message))
+                    return DetectSyntaxError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DetectSyntaxError::InvalidRequest(String::from(error_message))
+                    return DetectSyntaxError::InvalidRequest(String::from(error_message));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectSyntaxError::TextSizeLimitExceeded(String::from(error_message))
+                    return DetectSyntaxError::TextSizeLimitExceeded(String::from(error_message));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectSyntaxError::UnsupportedLanguage(String::from(error_message))
+                    return DetectSyntaxError::UnsupportedLanguage(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DetectSyntaxError::Validation(error_message.to_string())
+                    return DetectSyntaxError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2901,27 +2901,27 @@ impl ListDominantLanguageDetectionJobsError {
                 "InternalServerException" => {
                     return ListDominantLanguageDetectionJobsError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterException" => {
                     return ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListDominantLanguageDetectionJobsError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3011,25 +3011,25 @@ impl ListEntitiesDetectionJobsError {
                 "InternalServerException" => {
                     return ListEntitiesDetectionJobsError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterException" => {
                     return ListEntitiesDetectionJobsError::InvalidFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ListEntitiesDetectionJobsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListEntitiesDetectionJobsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListEntitiesDetectionJobsError::Validation(error_message.to_string())
+                    return ListEntitiesDetectionJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3119,25 +3119,25 @@ impl ListKeyPhrasesDetectionJobsError {
                 "InternalServerException" => {
                     return ListKeyPhrasesDetectionJobsError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterException" => {
                     return ListKeyPhrasesDetectionJobsError::InvalidFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ListKeyPhrasesDetectionJobsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListKeyPhrasesDetectionJobsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListKeyPhrasesDetectionJobsError::Validation(error_message.to_string())
+                    return ListKeyPhrasesDetectionJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3227,25 +3227,25 @@ impl ListSentimentDetectionJobsError {
                 "InternalServerException" => {
                     return ListSentimentDetectionJobsError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFilterException" => {
                     return ListSentimentDetectionJobsError::InvalidFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return ListSentimentDetectionJobsError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return ListSentimentDetectionJobsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListSentimentDetectionJobsError::Validation(error_message.to_string())
+                    return ListSentimentDetectionJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3333,21 +3333,21 @@ impl ListTopicsDetectionJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListTopicsDetectionJobsError::InternalServer(String::from(error_message))
+                    return ListTopicsDetectionJobsError::InternalServer(String::from(error_message));
                 }
                 "InvalidFilterException" => {
-                    return ListTopicsDetectionJobsError::InvalidFilter(String::from(error_message))
+                    return ListTopicsDetectionJobsError::InvalidFilter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return ListTopicsDetectionJobsError::InvalidRequest(String::from(error_message))
+                    return ListTopicsDetectionJobsError::InvalidRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return ListTopicsDetectionJobsError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListTopicsDetectionJobsError::Validation(error_message.to_string())
+                    return ListTopicsDetectionJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3435,22 +3435,22 @@ impl StartDominantLanguageDetectionJobError {
                 "InternalServerException" => {
                     return StartDominantLanguageDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return StartDominantLanguageDetectionJobError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3537,20 +3537,20 @@ impl StartEntitiesDetectionJobError {
                 "InternalServerException" => {
                     return StartEntitiesDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartEntitiesDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return StartEntitiesDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartEntitiesDetectionJobError::Validation(error_message.to_string())
+                    return StartEntitiesDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3637,20 +3637,20 @@ impl StartKeyPhrasesDetectionJobError {
                 "InternalServerException" => {
                     return StartKeyPhrasesDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartKeyPhrasesDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return StartKeyPhrasesDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartKeyPhrasesDetectionJobError::Validation(error_message.to_string())
+                    return StartKeyPhrasesDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3737,20 +3737,20 @@ impl StartSentimentDetectionJobError {
                 "InternalServerException" => {
                     return StartSentimentDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StartSentimentDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TooManyRequestsException" => {
                     return StartSentimentDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartSentimentDetectionJobError::Validation(error_message.to_string())
+                    return StartSentimentDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3835,18 +3835,18 @@ impl StartTopicsDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartTopicsDetectionJobError::InternalServer(String::from(error_message))
+                    return StartTopicsDetectionJobError::InternalServer(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return StartTopicsDetectionJobError::InvalidRequest(String::from(error_message))
+                    return StartTopicsDetectionJobError::InvalidRequest(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
                     return StartTopicsDetectionJobError::TooManyRequests(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartTopicsDetectionJobError::Validation(error_message.to_string())
+                    return StartTopicsDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3933,22 +3933,22 @@ impl StopDominantLanguageDetectionJobError {
                 "InternalServerException" => {
                     return StopDominantLanguageDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
                     return StopDominantLanguageDetectionJobError::JobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return StopDominantLanguageDetectionJobError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4035,18 +4035,18 @@ impl StopEntitiesDetectionJobError {
                 "InternalServerException" => {
                     return StopEntitiesDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StopEntitiesDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return StopEntitiesDetectionJobError::JobNotFound(String::from(error_message))
+                    return StopEntitiesDetectionJobError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopEntitiesDetectionJobError::Validation(error_message.to_string())
+                    return StopEntitiesDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4133,18 +4133,18 @@ impl StopKeyPhrasesDetectionJobError {
                 "InternalServerException" => {
                     return StopKeyPhrasesDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StopKeyPhrasesDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return StopKeyPhrasesDetectionJobError::JobNotFound(String::from(error_message))
+                    return StopKeyPhrasesDetectionJobError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopKeyPhrasesDetectionJobError::Validation(error_message.to_string())
+                    return StopKeyPhrasesDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4231,18 +4231,18 @@ impl StopSentimentDetectionJobError {
                 "InternalServerException" => {
                     return StopSentimentDetectionJobError::InternalServer(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return StopSentimentDetectionJobError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return StopSentimentDetectionJobError::JobNotFound(String::from(error_message))
+                    return StopSentimentDetectionJobError::JobNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopSentimentDetectionJobError::Validation(error_message.to_string())
+                    return StopSentimentDetectionJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

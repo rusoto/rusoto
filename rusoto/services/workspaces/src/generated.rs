@@ -929,31 +929,31 @@ impl AssociateIpGroupsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AssociateIpGroupsError::AccessDenied(String::from(error_message))
+                    return AssociateIpGroupsError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
                     return AssociateIpGroupsError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateException" => {
-                    return AssociateIpGroupsError::InvalidResourceState(String::from(error_message))
+                    return AssociateIpGroupsError::InvalidResourceState(String::from(error_message));
                 }
                 "OperationNotSupportedException" => {
                     return AssociateIpGroupsError::OperationNotSupported(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceededException" => {
                     return AssociateIpGroupsError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateIpGroupsError::ResourceNotFound(String::from(error_message))
+                    return AssociateIpGroupsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateIpGroupsError::Validation(error_message.to_string())
+                    return AssociateIpGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1045,24 +1045,24 @@ impl AuthorizeIpRulesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AuthorizeIpRulesError::AccessDenied(String::from(error_message))
+                    return AuthorizeIpRulesError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
                     return AuthorizeIpRulesError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateException" => {
-                    return AuthorizeIpRulesError::InvalidResourceState(String::from(error_message))
+                    return AuthorizeIpRulesError::InvalidResourceState(String::from(error_message));
                 }
                 "ResourceLimitExceededException" => {
-                    return AuthorizeIpRulesError::ResourceLimitExceeded(String::from(error_message))
+                    return AuthorizeIpRulesError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AuthorizeIpRulesError::ResourceNotFound(String::from(error_message))
+                    return AuthorizeIpRulesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AuthorizeIpRulesError::Validation(error_message.to_string())
+                    return AuthorizeIpRulesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1151,22 +1151,22 @@ impl CreateIpGroupError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateIpGroupError::AccessDenied(String::from(error_message))
+                    return CreateIpGroupError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
-                    return CreateIpGroupError::InvalidParameterValues(String::from(error_message))
+                    return CreateIpGroupError::InvalidParameterValues(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateIpGroupError::ResourceAlreadyExists(String::from(error_message))
+                    return CreateIpGroupError::ResourceAlreadyExists(String::from(error_message));
                 }
                 "ResourceCreationFailedException" => {
-                    return CreateIpGroupError::ResourceCreationFailed(String::from(error_message))
+                    return CreateIpGroupError::ResourceCreationFailed(String::from(error_message));
                 }
                 "ResourceLimitExceededException" => {
-                    return CreateIpGroupError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateIpGroupError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateIpGroupError::Validation(error_message.to_string())
+                    return CreateIpGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1251,16 +1251,16 @@ impl CreateTagsError {
 
             match *error_type {
                 "InvalidParameterValuesException" => {
-                    return CreateTagsError::InvalidParameterValues(String::from(error_message))
+                    return CreateTagsError::InvalidParameterValues(String::from(error_message));
                 }
                 "ResourceLimitExceededException" => {
-                    return CreateTagsError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateTagsError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateTagsError::ResourceNotFound(String::from(error_message))
+                    return CreateTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTagsError::Validation(error_message.to_string())
+                    return CreateTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1343,13 +1343,13 @@ impl CreateWorkspacesError {
                 "InvalidParameterValuesException" => {
                     return CreateWorkspacesError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceededException" => {
-                    return CreateWorkspacesError::ResourceLimitExceeded(String::from(error_message))
+                    return CreateWorkspacesError::ResourceLimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateWorkspacesError::Validation(error_message.to_string())
+                    return CreateWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1433,19 +1433,19 @@ impl DeleteIpGroupError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteIpGroupError::AccessDenied(String::from(error_message))
+                    return DeleteIpGroupError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
-                    return DeleteIpGroupError::InvalidParameterValues(String::from(error_message))
+                    return DeleteIpGroupError::InvalidParameterValues(String::from(error_message));
                 }
                 "ResourceAssociatedException" => {
-                    return DeleteIpGroupError::ResourceAssociated(String::from(error_message))
+                    return DeleteIpGroupError::ResourceAssociated(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteIpGroupError::ResourceNotFound(String::from(error_message))
+                    return DeleteIpGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteIpGroupError::Validation(error_message.to_string())
+                    return DeleteIpGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1527,13 +1527,13 @@ impl DeleteTagsError {
 
             match *error_type {
                 "InvalidParameterValuesException" => {
-                    return DeleteTagsError::InvalidParameterValues(String::from(error_message))
+                    return DeleteTagsError::InvalidParameterValues(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTagsError::ResourceNotFound(String::from(error_message))
+                    return DeleteTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string())
+                    return DeleteTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1613,15 +1613,15 @@ impl DescribeIpGroupsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeIpGroupsError::AccessDenied(String::from(error_message))
+                    return DescribeIpGroupsError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
                     return DescribeIpGroupsError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeIpGroupsError::Validation(error_message.to_string())
+                    return DescribeIpGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1699,10 +1699,10 @@ impl DescribeTagsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeTagsError::ResourceNotFound(String::from(error_message))
+                    return DescribeTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string())
+                    return DescribeTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1781,10 +1781,10 @@ impl DescribeWorkspaceBundlesError {
                 "InvalidParameterValuesException" => {
                     return DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeWorkspaceBundlesError::Validation(error_message.to_string())
+                    return DescribeWorkspaceBundlesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1865,10 +1865,10 @@ impl DescribeWorkspaceDirectoriesError {
                 "InvalidParameterValuesException" => {
                     return DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeWorkspaceDirectoriesError::Validation(error_message.to_string())
+                    return DescribeWorkspaceDirectoriesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1951,13 +1951,13 @@ impl DescribeWorkspacesError {
                 "InvalidParameterValuesException" => {
                     return DescribeWorkspacesError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceUnavailableException" => {
-                    return DescribeWorkspacesError::ResourceUnavailable(String::from(error_message))
+                    return DescribeWorkspacesError::ResourceUnavailable(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeWorkspacesError::Validation(error_message.to_string())
+                    return DescribeWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2039,12 +2039,12 @@ impl DescribeWorkspacesConnectionStatusError {
                 "InvalidParameterValuesException" => {
                     return DescribeWorkspacesConnectionStatusError::InvalidParameterValues(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
                     return DescribeWorkspacesConnectionStatusError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2129,23 +2129,23 @@ impl DisassociateIpGroupsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DisassociateIpGroupsError::AccessDenied(String::from(error_message))
+                    return DisassociateIpGroupsError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
                     return DisassociateIpGroupsError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateException" => {
                     return DisassociateIpGroupsError::InvalidResourceState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateIpGroupsError::ResourceNotFound(String::from(error_message))
+                    return DisassociateIpGroupsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisassociateIpGroupsError::Validation(error_message.to_string())
+                    return DisassociateIpGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2239,40 +2239,40 @@ impl ModifyWorkspacePropertiesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ModifyWorkspacePropertiesError::AccessDenied(String::from(error_message))
+                    return ModifyWorkspacePropertiesError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
                     return ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateException" => {
                     return ModifyWorkspacePropertiesError::InvalidResourceState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationInProgressException" => {
                     return ModifyWorkspacePropertiesError::OperationInProgress(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return ModifyWorkspacePropertiesError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceUnavailableException" => {
                     return ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedWorkspaceConfigurationException" => {
                     return ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return ModifyWorkspacePropertiesError::Validation(error_message.to_string())
+                    return ModifyWorkspacePropertiesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2363,18 +2363,18 @@ impl ModifyWorkspaceStateError {
                 "InvalidParameterValuesException" => {
                     return ModifyWorkspaceStateError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateException" => {
                     return ModifyWorkspaceStateError::InvalidResourceState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ModifyWorkspaceStateError::ResourceNotFound(String::from(error_message))
+                    return ModifyWorkspaceStateError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ModifyWorkspaceStateError::Validation(error_message.to_string())
+                    return ModifyWorkspaceStateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2453,7 +2453,7 @@ impl RebootWorkspacesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return RebootWorkspacesError::Validation(error_message.to_string())
+                    return RebootWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2527,7 +2527,7 @@ impl RebuildWorkspacesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return RebuildWorkspacesError::Validation(error_message.to_string())
+                    return RebuildWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2611,19 +2611,19 @@ impl RevokeIpRulesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RevokeIpRulesError::AccessDenied(String::from(error_message))
+                    return RevokeIpRulesError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
-                    return RevokeIpRulesError::InvalidParameterValues(String::from(error_message))
+                    return RevokeIpRulesError::InvalidParameterValues(String::from(error_message));
                 }
                 "InvalidResourceStateException" => {
-                    return RevokeIpRulesError::InvalidResourceState(String::from(error_message))
+                    return RevokeIpRulesError::InvalidResourceState(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RevokeIpRulesError::ResourceNotFound(String::from(error_message))
+                    return RevokeIpRulesError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RevokeIpRulesError::Validation(error_message.to_string())
+                    return RevokeIpRulesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2701,7 +2701,7 @@ impl StartWorkspacesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return StartWorkspacesError::Validation(error_message.to_string())
+                    return StartWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2775,7 +2775,7 @@ impl StopWorkspacesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return StopWorkspacesError::Validation(error_message.to_string())
+                    return StopWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2849,7 +2849,7 @@ impl TerminateWorkspacesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return TerminateWorkspacesError::Validation(error_message.to_string())
+                    return TerminateWorkspacesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2935,28 +2935,28 @@ impl UpdateRulesOfIpGroupError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateRulesOfIpGroupError::AccessDenied(String::from(error_message))
+                    return UpdateRulesOfIpGroupError::AccessDenied(String::from(error_message));
                 }
                 "InvalidParameterValuesException" => {
                     return UpdateRulesOfIpGroupError::InvalidParameterValues(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidResourceStateException" => {
                     return UpdateRulesOfIpGroupError::InvalidResourceState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceLimitExceededException" => {
                     return UpdateRulesOfIpGroupError::ResourceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateRulesOfIpGroupError::ResourceNotFound(String::from(error_message))
+                    return UpdateRulesOfIpGroupError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRulesOfIpGroupError::Validation(error_message.to_string())
+                    return UpdateRulesOfIpGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

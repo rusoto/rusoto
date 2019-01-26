@@ -773,19 +773,19 @@ impl CancelRotateSecretError {
                 "InternalServiceError" => {
                     return CancelRotateSecretError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CancelRotateSecretError::InvalidParameter(String::from(error_message))
+                    return CancelRotateSecretError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CancelRotateSecretError::InvalidRequest(String::from(error_message))
+                    return CancelRotateSecretError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CancelRotateSecretError::ResourceNotFound(String::from(error_message))
+                    return CancelRotateSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelRotateSecretError::Validation(error_message.to_string())
+                    return CancelRotateSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -883,34 +883,34 @@ impl CreateSecretError {
 
             match *error_type {
                 "EncryptionFailure" => {
-                    return CreateSecretError::EncryptionFailure(String::from(error_message))
+                    return CreateSecretError::EncryptionFailure(String::from(error_message));
                 }
                 "InternalServiceError" => {
-                    return CreateSecretError::InternalServiceError(String::from(error_message))
+                    return CreateSecretError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateSecretError::InvalidParameter(String::from(error_message))
+                    return CreateSecretError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return CreateSecretError::InvalidRequest(String::from(error_message))
+                    return CreateSecretError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateSecretError::LimitExceeded(String::from(error_message))
+                    return CreateSecretError::LimitExceeded(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return CreateSecretError::MalformedPolicyDocument(String::from(error_message))
+                    return CreateSecretError::MalformedPolicyDocument(String::from(error_message));
                 }
                 "PreconditionNotMetException" => {
-                    return CreateSecretError::PreconditionNotMet(String::from(error_message))
+                    return CreateSecretError::PreconditionNotMet(String::from(error_message));
                 }
                 "ResourceExistsException" => {
-                    return CreateSecretError::ResourceExists(String::from(error_message))
+                    return CreateSecretError::ResourceExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateSecretError::ResourceNotFound(String::from(error_message))
+                    return CreateSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSecretError::Validation(error_message.to_string())
+                    return CreateSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1001,16 +1001,16 @@ impl DeleteResourcePolicyError {
                 "InternalServiceError" => {
                     return DeleteResourcePolicyError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeleteResourcePolicyError::InvalidRequest(String::from(error_message))
+                    return DeleteResourcePolicyError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteResourcePolicyError::ResourceNotFound(String::from(error_message))
+                    return DeleteResourcePolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteResourcePolicyError::Validation(error_message.to_string())
+                    return DeleteResourcePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1097,19 +1097,19 @@ impl DeleteSecretError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DeleteSecretError::InternalServiceError(String::from(error_message))
+                    return DeleteSecretError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteSecretError::InvalidParameter(String::from(error_message))
+                    return DeleteSecretError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return DeleteSecretError::InvalidRequest(String::from(error_message))
+                    return DeleteSecretError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteSecretError::ResourceNotFound(String::from(error_message))
+                    return DeleteSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSecretError::Validation(error_message.to_string())
+                    return DeleteSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1191,13 +1191,13 @@ impl DescribeSecretError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DescribeSecretError::InternalServiceError(String::from(error_message))
+                    return DescribeSecretError::InternalServiceError(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeSecretError::ResourceNotFound(String::from(error_message))
+                    return DescribeSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeSecretError::Validation(error_message.to_string())
+                    return DescribeSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1279,16 +1279,16 @@ impl GetRandomPasswordError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return GetRandomPasswordError::InternalServiceError(String::from(error_message))
+                    return GetRandomPasswordError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetRandomPasswordError::InvalidParameter(String::from(error_message))
+                    return GetRandomPasswordError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetRandomPasswordError::InvalidRequest(String::from(error_message))
+                    return GetRandomPasswordError::InvalidRequest(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRandomPasswordError::Validation(error_message.to_string())
+                    return GetRandomPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1373,16 +1373,16 @@ impl GetResourcePolicyError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return GetResourcePolicyError::InternalServiceError(String::from(error_message))
+                    return GetResourcePolicyError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetResourcePolicyError::InvalidRequest(String::from(error_message))
+                    return GetResourcePolicyError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetResourcePolicyError::ResourceNotFound(String::from(error_message))
+                    return GetResourcePolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetResourcePolicyError::Validation(error_message.to_string())
+                    return GetResourcePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1471,22 +1471,22 @@ impl GetSecretValueError {
 
             match *error_type {
                 "DecryptionFailure" => {
-                    return GetSecretValueError::DecryptionFailure(String::from(error_message))
+                    return GetSecretValueError::DecryptionFailure(String::from(error_message));
                 }
                 "InternalServiceError" => {
-                    return GetSecretValueError::InternalServiceError(String::from(error_message))
+                    return GetSecretValueError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return GetSecretValueError::InvalidParameter(String::from(error_message))
+                    return GetSecretValueError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return GetSecretValueError::InvalidRequest(String::from(error_message))
+                    return GetSecretValueError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetSecretValueError::ResourceNotFound(String::from(error_message))
+                    return GetSecretValueError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSecretValueError::Validation(error_message.to_string())
+                    return GetSecretValueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1573,16 +1573,16 @@ impl ListSecretVersionIdsError {
                 "InternalServiceError" => {
                     return ListSecretVersionIdsError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListSecretVersionIdsError::InvalidNextToken(String::from(error_message))
+                    return ListSecretVersionIdsError::InvalidNextToken(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListSecretVersionIdsError::ResourceNotFound(String::from(error_message))
+                    return ListSecretVersionIdsError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListSecretVersionIdsError::Validation(error_message.to_string())
+                    return ListSecretVersionIdsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1667,16 +1667,16 @@ impl ListSecretsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ListSecretsError::InternalServiceError(String::from(error_message))
+                    return ListSecretsError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return ListSecretsError::InvalidNextToken(String::from(error_message))
+                    return ListSecretsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListSecretsError::InvalidParameter(String::from(error_message))
+                    return ListSecretsError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListSecretsError::Validation(error_message.to_string())
+                    return ListSecretsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1763,24 +1763,24 @@ impl PutResourcePolicyError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return PutResourcePolicyError::InternalServiceError(String::from(error_message))
+                    return PutResourcePolicyError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return PutResourcePolicyError::InvalidParameter(String::from(error_message))
+                    return PutResourcePolicyError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return PutResourcePolicyError::InvalidRequest(String::from(error_message))
+                    return PutResourcePolicyError::InvalidRequest(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
                     return PutResourcePolicyError::MalformedPolicyDocument(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutResourcePolicyError::ResourceNotFound(String::from(error_message))
+                    return PutResourcePolicyError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutResourcePolicyError::Validation(error_message.to_string())
+                    return PutResourcePolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1875,28 +1875,28 @@ impl PutSecretValueError {
 
             match *error_type {
                 "EncryptionFailure" => {
-                    return PutSecretValueError::EncryptionFailure(String::from(error_message))
+                    return PutSecretValueError::EncryptionFailure(String::from(error_message));
                 }
                 "InternalServiceError" => {
-                    return PutSecretValueError::InternalServiceError(String::from(error_message))
+                    return PutSecretValueError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return PutSecretValueError::InvalidParameter(String::from(error_message))
+                    return PutSecretValueError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return PutSecretValueError::InvalidRequest(String::from(error_message))
+                    return PutSecretValueError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutSecretValueError::LimitExceeded(String::from(error_message))
+                    return PutSecretValueError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceExistsException" => {
-                    return PutSecretValueError::ResourceExists(String::from(error_message))
+                    return PutSecretValueError::ResourceExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return PutSecretValueError::ResourceNotFound(String::from(error_message))
+                    return PutSecretValueError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutSecretValueError::Validation(error_message.to_string())
+                    return PutSecretValueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1985,19 +1985,19 @@ impl RestoreSecretError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return RestoreSecretError::InternalServiceError(String::from(error_message))
+                    return RestoreSecretError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RestoreSecretError::InvalidParameter(String::from(error_message))
+                    return RestoreSecretError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return RestoreSecretError::InvalidRequest(String::from(error_message))
+                    return RestoreSecretError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RestoreSecretError::ResourceNotFound(String::from(error_message))
+                    return RestoreSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RestoreSecretError::Validation(error_message.to_string())
+                    return RestoreSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2083,19 +2083,19 @@ impl RotateSecretError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return RotateSecretError::InternalServiceError(String::from(error_message))
+                    return RotateSecretError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RotateSecretError::InvalidParameter(String::from(error_message))
+                    return RotateSecretError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return RotateSecretError::InvalidRequest(String::from(error_message))
+                    return RotateSecretError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RotateSecretError::ResourceNotFound(String::from(error_message))
+                    return RotateSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RotateSecretError::Validation(error_message.to_string())
+                    return RotateSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2181,19 +2181,19 @@ impl TagResourceError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return TagResourceError::InternalServiceError(String::from(error_message))
+                    return TagResourceError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return TagResourceError::InvalidParameter(String::from(error_message))
+                    return TagResourceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return TagResourceError::InvalidRequest(String::from(error_message))
+                    return TagResourceError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2279,19 +2279,19 @@ impl UntagResourceError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return UntagResourceError::InternalServiceError(String::from(error_message))
+                    return UntagResourceError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UntagResourceError::InvalidParameter(String::from(error_message))
+                    return UntagResourceError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UntagResourceError::InvalidRequest(String::from(error_message))
+                    return UntagResourceError::InvalidRequest(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2387,34 +2387,34 @@ impl UpdateSecretError {
 
             match *error_type {
                 "EncryptionFailure" => {
-                    return UpdateSecretError::EncryptionFailure(String::from(error_message))
+                    return UpdateSecretError::EncryptionFailure(String::from(error_message));
                 }
                 "InternalServiceError" => {
-                    return UpdateSecretError::InternalServiceError(String::from(error_message))
+                    return UpdateSecretError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateSecretError::InvalidParameter(String::from(error_message))
+                    return UpdateSecretError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidRequestException" => {
-                    return UpdateSecretError::InvalidRequest(String::from(error_message))
+                    return UpdateSecretError::InvalidRequest(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return UpdateSecretError::LimitExceeded(String::from(error_message))
+                    return UpdateSecretError::LimitExceeded(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return UpdateSecretError::MalformedPolicyDocument(String::from(error_message))
+                    return UpdateSecretError::MalformedPolicyDocument(String::from(error_message));
                 }
                 "PreconditionNotMetException" => {
-                    return UpdateSecretError::PreconditionNotMet(String::from(error_message))
+                    return UpdateSecretError::PreconditionNotMet(String::from(error_message));
                 }
                 "ResourceExistsException" => {
-                    return UpdateSecretError::ResourceExists(String::from(error_message))
+                    return UpdateSecretError::ResourceExists(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateSecretError::ResourceNotFound(String::from(error_message))
+                    return UpdateSecretError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateSecretError::Validation(error_message.to_string())
+                    return UpdateSecretError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2509,28 +2509,28 @@ impl UpdateSecretVersionStageError {
                 "InternalServiceError" => {
                     return UpdateSecretVersionStageError::InternalServiceError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return UpdateSecretVersionStageError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRequestException" => {
                     return UpdateSecretVersionStageError::InvalidRequest(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateSecretVersionStageError::LimitExceeded(String::from(error_message))
+                    return UpdateSecretVersionStageError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return UpdateSecretVersionStageError::ResourceNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateSecretVersionStageError::Validation(error_message.to_string())
+                    return UpdateSecretVersionStageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

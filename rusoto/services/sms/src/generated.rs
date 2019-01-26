@@ -442,43 +442,43 @@ impl CreateReplicationJobError {
 
             match *error_type {
                 "InternalError" => {
-                    return CreateReplicationJobError::InternalError(String::from(error_message))
+                    return CreateReplicationJobError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateReplicationJobError::InvalidParameter(String::from(error_message))
+                    return CreateReplicationJobError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return CreateReplicationJobError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoConnectorsAvailableException" => {
                     return CreateReplicationJobError::NoConnectorsAvailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return CreateReplicationJobError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReplicationJobAlreadyExistsException" => {
                     return CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerCannotBeReplicatedException" => {
                     return CreateReplicationJobError::ServerCannotBeReplicated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return CreateReplicationJobError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateReplicationJobError::Validation(error_message.to_string())
+                    return CreateReplicationJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -572,30 +572,30 @@ impl DeleteReplicationJobError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteReplicationJobError::InvalidParameter(String::from(error_message))
+                    return DeleteReplicationJobError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return DeleteReplicationJobError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return DeleteReplicationJobError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReplicationJobNotFoundException" => {
                     return DeleteReplicationJobError::ReplicationJobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DeleteReplicationJobError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteReplicationJobError::Validation(error_message.to_string())
+                    return DeleteReplicationJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -684,25 +684,25 @@ impl DeleteServerCatalogError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteServerCatalogError::InvalidParameter(String::from(error_message))
+                    return DeleteServerCatalogError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return DeleteServerCatalogError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return DeleteServerCatalogError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DeleteServerCatalogError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteServerCatalogError::Validation(error_message.to_string())
+                    return DeleteServerCatalogError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -790,25 +790,25 @@ impl DisassociateConnectorError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DisassociateConnectorError::InvalidParameter(String::from(error_message))
+                    return DisassociateConnectorError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return DisassociateConnectorError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return DisassociateConnectorError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return DisassociateConnectorError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateConnectorError::Validation(error_message.to_string())
+                    return DisassociateConnectorError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -890,10 +890,10 @@ impl GetConnectorsError {
 
             match *error_type {
                 "UnauthorizedOperationException" => {
-                    return GetConnectorsError::UnauthorizedOperation(String::from(error_message))
+                    return GetConnectorsError::UnauthorizedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetConnectorsError::Validation(error_message.to_string())
+                    return GetConnectorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -974,20 +974,20 @@ impl GetReplicationJobsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetReplicationJobsError::InvalidParameter(String::from(error_message))
+                    return GetReplicationJobsError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return GetReplicationJobsError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return GetReplicationJobsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetReplicationJobsError::Validation(error_message.to_string())
+                    return GetReplicationJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1072,20 +1072,20 @@ impl GetReplicationRunsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetReplicationRunsError::InvalidParameter(String::from(error_message))
+                    return GetReplicationRunsError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return GetReplicationRunsError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return GetReplicationRunsError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetReplicationRunsError::Validation(error_message.to_string())
+                    return GetReplicationRunsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1166,10 +1166,10 @@ impl GetServersError {
 
             match *error_type {
                 "UnauthorizedOperationException" => {
-                    return GetServersError::UnauthorizedOperation(String::from(error_message))
+                    return GetServersError::UnauthorizedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetServersError::Validation(error_message.to_string())
+                    return GetServersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1254,30 +1254,30 @@ impl ImportServerCatalogError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ImportServerCatalogError::InvalidParameter(String::from(error_message))
+                    return ImportServerCatalogError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return ImportServerCatalogError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NoConnectorsAvailableException" => {
                     return ImportServerCatalogError::NoConnectorsAvailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return ImportServerCatalogError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return ImportServerCatalogError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ImportServerCatalogError::Validation(error_message.to_string())
+                    return ImportServerCatalogError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1370,30 +1370,30 @@ impl StartOnDemandReplicationRunError {
                 "InvalidParameterException" => {
                     return StartOnDemandReplicationRunError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MissingRequiredParameterException" => {
                     return StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReplicationRunLimitExceededException" => {
                     return StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnauthorizedOperationException" => {
                     return StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return StartOnDemandReplicationRunError::Validation(error_message.to_string())
+                    return StartOnDemandReplicationRunError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1488,38 +1488,38 @@ impl UpdateReplicationJobError {
 
             match *error_type {
                 "InternalError" => {
-                    return UpdateReplicationJobError::InternalError(String::from(error_message))
+                    return UpdateReplicationJobError::InternalError(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return UpdateReplicationJobError::InvalidParameter(String::from(error_message))
+                    return UpdateReplicationJobError::InvalidParameter(String::from(error_message));
                 }
                 "MissingRequiredParameterException" => {
                     return UpdateReplicationJobError::MissingRequiredParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return UpdateReplicationJobError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ReplicationJobNotFoundException" => {
                     return UpdateReplicationJobError::ReplicationJobNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServerCannotBeReplicatedException" => {
                     return UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnauthorizedOperationException" => {
                     return UpdateReplicationJobError::UnauthorizedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateReplicationJobError::Validation(error_message.to_string())
+                    return UpdateReplicationJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

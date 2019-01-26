@@ -1011,30 +1011,30 @@ impl AssociateDelegateToResourceError {
                 "EntityNotFoundException" => {
                     return AssociateDelegateToResourceError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityStateException" => {
                     return AssociateDelegateToResourceError::EntityState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return AssociateDelegateToResourceError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return AssociateDelegateToResourceError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return AssociateDelegateToResourceError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateDelegateToResourceError::Validation(error_message.to_string())
+                    return AssociateDelegateToResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1133,41 +1133,41 @@ impl AssociateMemberToGroupError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return AssociateMemberToGroupError::DirectoryServiceAuthenticationFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectoryUnavailableException" => {
                     return AssociateMemberToGroupError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return AssociateMemberToGroupError::EntityNotFound(String::from(error_message))
+                    return AssociateMemberToGroupError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return AssociateMemberToGroupError::EntityState(String::from(error_message))
+                    return AssociateMemberToGroupError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return AssociateMemberToGroupError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return AssociateMemberToGroupError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return AssociateMemberToGroupError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedOperationException" => {
                     return AssociateMemberToGroupError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AssociateMemberToGroupError::Validation(error_message.to_string())
+                    return AssociateMemberToGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1267,31 +1267,31 @@ impl CreateAliasError {
 
             match *error_type {
                 "EmailAddressInUseException" => {
-                    return CreateAliasError::EmailAddressInUse(String::from(error_message))
+                    return CreateAliasError::EmailAddressInUse(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return CreateAliasError::EntityNotFound(String::from(error_message))
+                    return CreateAliasError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return CreateAliasError::EntityState(String::from(error_message))
+                    return CreateAliasError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateAliasError::InvalidParameter(String::from(error_message))
+                    return CreateAliasError::InvalidParameter(String::from(error_message));
                 }
                 "MailDomainNotFoundException" => {
-                    return CreateAliasError::MailDomainNotFound(String::from(error_message))
+                    return CreateAliasError::MailDomainNotFound(String::from(error_message));
                 }
                 "MailDomainStateException" => {
-                    return CreateAliasError::MailDomainState(String::from(error_message))
+                    return CreateAliasError::MailDomainState(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateAliasError::OrganizationNotFound(String::from(error_message))
+                    return CreateAliasError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return CreateAliasError::OrganizationState(String::from(error_message))
+                    return CreateAliasError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string())
+                    return CreateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1391,31 +1391,31 @@ impl CreateGroupError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return CreateGroupError::DirectoryServiceAuthenticationFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateGroupError::DirectoryUnavailable(String::from(error_message))
+                    return CreateGroupError::DirectoryUnavailable(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateGroupError::InvalidParameter(String::from(error_message))
+                    return CreateGroupError::InvalidParameter(String::from(error_message));
                 }
                 "NameAvailabilityException" => {
-                    return CreateGroupError::NameAvailability(String::from(error_message))
+                    return CreateGroupError::NameAvailability(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateGroupError::OrganizationNotFound(String::from(error_message))
+                    return CreateGroupError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return CreateGroupError::OrganizationState(String::from(error_message))
+                    return CreateGroupError::OrganizationState(String::from(error_message));
                 }
                 "ReservedNameException" => {
-                    return CreateGroupError::ReservedName(String::from(error_message))
+                    return CreateGroupError::ReservedName(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateGroupError::UnsupportedOperation(String::from(error_message))
+                    return CreateGroupError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string())
+                    return CreateGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1513,28 +1513,28 @@ impl CreateResourceError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return CreateResourceError::DirectoryServiceAuthenticationFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateResourceError::DirectoryUnavailable(String::from(error_message))
+                    return CreateResourceError::DirectoryUnavailable(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateResourceError::InvalidParameter(String::from(error_message))
+                    return CreateResourceError::InvalidParameter(String::from(error_message));
                 }
                 "NameAvailabilityException" => {
-                    return CreateResourceError::NameAvailability(String::from(error_message))
+                    return CreateResourceError::NameAvailability(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateResourceError::OrganizationNotFound(String::from(error_message))
+                    return CreateResourceError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return CreateResourceError::OrganizationState(String::from(error_message))
+                    return CreateResourceError::OrganizationState(String::from(error_message));
                 }
                 "ReservedNameException" => {
-                    return CreateResourceError::ReservedName(String::from(error_message))
+                    return CreateResourceError::ReservedName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateResourceError::Validation(error_message.to_string())
+                    return CreateResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1635,34 +1635,34 @@ impl CreateUserError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return CreateUserError::DirectoryServiceAuthenticationFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateUserError::DirectoryUnavailable(String::from(error_message))
+                    return CreateUserError::DirectoryUnavailable(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserError::InvalidParameter(String::from(error_message))
+                    return CreateUserError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return CreateUserError::InvalidPassword(String::from(error_message))
+                    return CreateUserError::InvalidPassword(String::from(error_message));
                 }
                 "NameAvailabilityException" => {
-                    return CreateUserError::NameAvailability(String::from(error_message))
+                    return CreateUserError::NameAvailability(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateUserError::OrganizationNotFound(String::from(error_message))
+                    return CreateUserError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return CreateUserError::OrganizationState(String::from(error_message))
+                    return CreateUserError::OrganizationState(String::from(error_message));
                 }
                 "ReservedNameException" => {
-                    return CreateUserError::ReservedName(String::from(error_message))
+                    return CreateUserError::ReservedName(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateUserError::UnsupportedOperation(String::from(error_message))
+                    return CreateUserError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string())
+                    return CreateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1755,22 +1755,22 @@ impl DeleteAliasError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteAliasError::EntityNotFound(String::from(error_message))
+                    return DeleteAliasError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return DeleteAliasError::EntityState(String::from(error_message))
+                    return DeleteAliasError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteAliasError::InvalidParameter(String::from(error_message))
+                    return DeleteAliasError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteAliasError::OrganizationNotFound(String::from(error_message))
+                    return DeleteAliasError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DeleteAliasError::OrganizationState(String::from(error_message))
+                    return DeleteAliasError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string())
+                    return DeleteAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1865,28 +1865,28 @@ impl DeleteGroupError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return DeleteGroupError::DirectoryServiceAuthenticationFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryUnavailableException" => {
-                    return DeleteGroupError::DirectoryUnavailable(String::from(error_message))
+                    return DeleteGroupError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return DeleteGroupError::EntityState(String::from(error_message))
+                    return DeleteGroupError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteGroupError::InvalidParameter(String::from(error_message))
+                    return DeleteGroupError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteGroupError::OrganizationNotFound(String::from(error_message))
+                    return DeleteGroupError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DeleteGroupError::OrganizationState(String::from(error_message))
+                    return DeleteGroupError::OrganizationState(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteGroupError::UnsupportedOperation(String::from(error_message))
+                    return DeleteGroupError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string())
+                    return DeleteGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1979,28 +1979,28 @@ impl DeleteMailboxPermissionsError {
                 "EntityNotFoundException" => {
                     return DeleteMailboxPermissionsError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityStateException" => {
-                    return DeleteMailboxPermissionsError::EntityState(String::from(error_message))
+                    return DeleteMailboxPermissionsError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DeleteMailboxPermissionsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return DeleteMailboxPermissionsError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return DeleteMailboxPermissionsError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteMailboxPermissionsError::Validation(error_message.to_string())
+                    return DeleteMailboxPermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2089,19 +2089,19 @@ impl DeleteResourceError {
 
             match *error_type {
                 "EntityStateException" => {
-                    return DeleteResourceError::EntityState(String::from(error_message))
+                    return DeleteResourceError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteResourceError::InvalidParameter(String::from(error_message))
+                    return DeleteResourceError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteResourceError::OrganizationNotFound(String::from(error_message))
+                    return DeleteResourceError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DeleteResourceError::OrganizationState(String::from(error_message))
+                    return DeleteResourceError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteResourceError::Validation(error_message.to_string())
+                    return DeleteResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2195,28 +2195,28 @@ impl DeleteUserError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return DeleteUserError::DirectoryServiceAuthenticationFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryUnavailableException" => {
-                    return DeleteUserError::DirectoryUnavailable(String::from(error_message))
+                    return DeleteUserError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return DeleteUserError::EntityState(String::from(error_message))
+                    return DeleteUserError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserError::InvalidParameter(String::from(error_message))
+                    return DeleteUserError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteUserError::OrganizationNotFound(String::from(error_message))
+                    return DeleteUserError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DeleteUserError::OrganizationState(String::from(error_message))
+                    return DeleteUserError::OrganizationState(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteUserError::UnsupportedOperation(String::from(error_message))
+                    return DeleteUserError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string())
+                    return DeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2307,28 +2307,28 @@ impl DeregisterFromWorkMailError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeregisterFromWorkMailError::EntityNotFound(String::from(error_message))
+                    return DeregisterFromWorkMailError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return DeregisterFromWorkMailError::EntityState(String::from(error_message))
+                    return DeregisterFromWorkMailError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return DeregisterFromWorkMailError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return DeregisterFromWorkMailError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return DeregisterFromWorkMailError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeregisterFromWorkMailError::Validation(error_message.to_string())
+                    return DeregisterFromWorkMailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2417,19 +2417,19 @@ impl DescribeGroupError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DescribeGroupError::EntityNotFound(String::from(error_message))
+                    return DescribeGroupError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeGroupError::InvalidParameter(String::from(error_message))
+                    return DescribeGroupError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DescribeGroupError::OrganizationNotFound(String::from(error_message))
+                    return DescribeGroupError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DescribeGroupError::OrganizationState(String::from(error_message))
+                    return DescribeGroupError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeGroupError::Validation(error_message.to_string())
+                    return DescribeGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2511,15 +2511,15 @@ impl DescribeOrganizationError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeOrganizationError::InvalidParameter(String::from(error_message))
+                    return DescribeOrganizationError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
                     return DescribeOrganizationError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeOrganizationError::Validation(error_message.to_string())
+                    return DescribeOrganizationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2605,19 +2605,19 @@ impl DescribeResourceError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DescribeResourceError::EntityNotFound(String::from(error_message))
+                    return DescribeResourceError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeResourceError::InvalidParameter(String::from(error_message))
+                    return DescribeResourceError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DescribeResourceError::OrganizationNotFound(String::from(error_message))
+                    return DescribeResourceError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DescribeResourceError::OrganizationState(String::from(error_message))
+                    return DescribeResourceError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeResourceError::Validation(error_message.to_string())
+                    return DescribeResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2703,19 +2703,19 @@ impl DescribeUserError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DescribeUserError::EntityNotFound(String::from(error_message))
+                    return DescribeUserError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserError::InvalidParameter(String::from(error_message))
+                    return DescribeUserError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return DescribeUserError::OrganizationNotFound(String::from(error_message))
+                    return DescribeUserError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return DescribeUserError::OrganizationState(String::from(error_message))
+                    return DescribeUserError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeUserError::Validation(error_message.to_string())
+                    return DescribeUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2805,32 +2805,32 @@ impl DisassociateDelegateFromResourceError {
                 "EntityNotFoundException" => {
                     return DisassociateDelegateFromResourceError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityStateException" => {
                     return DisassociateDelegateFromResourceError::EntityState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DisassociateDelegateFromResourceError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return DisassociateDelegateFromResourceError::OrganizationNotFound(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "OrganizationStateException" => {
                     return DisassociateDelegateFromResourceError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DisassociateDelegateFromResourceError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2929,45 +2929,45 @@ impl DisassociateMemberFromGroupError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return DisassociateMemberFromGroupError::DirectoryServiceAuthenticationFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectoryUnavailableException" => {
                     return DisassociateMemberFromGroupError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotFoundException" => {
                     return DisassociateMemberFromGroupError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityStateException" => {
                     return DisassociateMemberFromGroupError::EntityState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidParameterException" => {
                     return DisassociateMemberFromGroupError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return DisassociateMemberFromGroupError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return DisassociateMemberFromGroupError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedOperationException" => {
                     return DisassociateMemberFromGroupError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateMemberFromGroupError::Validation(error_message.to_string())
+                    return DisassociateMemberFromGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3063,22 +3063,22 @@ impl ListAliasesError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListAliasesError::EntityNotFound(String::from(error_message))
+                    return ListAliasesError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return ListAliasesError::EntityState(String::from(error_message))
+                    return ListAliasesError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListAliasesError::InvalidParameter(String::from(error_message))
+                    return ListAliasesError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListAliasesError::OrganizationNotFound(String::from(error_message))
+                    return ListAliasesError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return ListAliasesError::OrganizationState(String::from(error_message))
+                    return ListAliasesError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string())
+                    return ListAliasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3167,22 +3167,22 @@ impl ListGroupMembersError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListGroupMembersError::EntityNotFound(String::from(error_message))
+                    return ListGroupMembersError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return ListGroupMembersError::EntityState(String::from(error_message))
+                    return ListGroupMembersError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListGroupMembersError::InvalidParameter(String::from(error_message))
+                    return ListGroupMembersError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListGroupMembersError::OrganizationNotFound(String::from(error_message))
+                    return ListGroupMembersError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return ListGroupMembersError::OrganizationState(String::from(error_message))
+                    return ListGroupMembersError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGroupMembersError::Validation(error_message.to_string())
+                    return ListGroupMembersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3269,19 +3269,19 @@ impl ListGroupsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListGroupsError::EntityNotFound(String::from(error_message))
+                    return ListGroupsError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListGroupsError::InvalidParameter(String::from(error_message))
+                    return ListGroupsError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListGroupsError::OrganizationNotFound(String::from(error_message))
+                    return ListGroupsError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return ListGroupsError::OrganizationState(String::from(error_message))
+                    return ListGroupsError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string())
+                    return ListGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3367,25 +3367,25 @@ impl ListMailboxPermissionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListMailboxPermissionsError::EntityNotFound(String::from(error_message))
+                    return ListMailboxPermissionsError::EntityNotFound(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return ListMailboxPermissionsError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return ListMailboxPermissionsError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return ListMailboxPermissionsError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListMailboxPermissionsError::Validation(error_message.to_string())
+                    return ListMailboxPermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3467,10 +3467,10 @@ impl ListOrganizationsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListOrganizationsError::InvalidParameter(String::from(error_message))
+                    return ListOrganizationsError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListOrganizationsError::Validation(error_message.to_string())
+                    return ListOrganizationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3557,26 +3557,26 @@ impl ListResourceDelegatesError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListResourceDelegatesError::EntityNotFound(String::from(error_message))
+                    return ListResourceDelegatesError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return ListResourceDelegatesError::EntityState(String::from(error_message))
+                    return ListResourceDelegatesError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ListResourceDelegatesError::InvalidParameter(String::from(error_message))
+                    return ListResourceDelegatesError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
                     return ListResourceDelegatesError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return ListResourceDelegatesError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListResourceDelegatesError::Validation(error_message.to_string())
+                    return ListResourceDelegatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3663,16 +3663,16 @@ impl ListResourcesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListResourcesError::InvalidParameter(String::from(error_message))
+                    return ListResourcesError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListResourcesError::OrganizationNotFound(String::from(error_message))
+                    return ListResourcesError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return ListResourcesError::OrganizationState(String::from(error_message))
+                    return ListResourcesError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListResourcesError::Validation(error_message.to_string())
+                    return ListResourcesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3755,16 +3755,16 @@ impl ListUsersError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListUsersError::InvalidParameter(String::from(error_message))
+                    return ListUsersError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListUsersError::OrganizationNotFound(String::from(error_message))
+                    return ListUsersError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return ListUsersError::OrganizationState(String::from(error_message))
+                    return ListUsersError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListUsersError::Validation(error_message.to_string())
+                    return ListUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3851,26 +3851,26 @@ impl PutMailboxPermissionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return PutMailboxPermissionsError::EntityNotFound(String::from(error_message))
+                    return PutMailboxPermissionsError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return PutMailboxPermissionsError::EntityState(String::from(error_message))
+                    return PutMailboxPermissionsError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return PutMailboxPermissionsError::InvalidParameter(String::from(error_message))
+                    return PutMailboxPermissionsError::InvalidParameter(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
                     return PutMailboxPermissionsError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return PutMailboxPermissionsError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PutMailboxPermissionsError::Validation(error_message.to_string())
+                    return PutMailboxPermissionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3975,46 +3975,46 @@ impl RegisterToWorkMailError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return RegisterToWorkMailError::DirectoryServiceAuthenticationFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectoryUnavailableException" => {
                     return RegisterToWorkMailError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EmailAddressInUseException" => {
-                    return RegisterToWorkMailError::EmailAddressInUse(String::from(error_message))
+                    return RegisterToWorkMailError::EmailAddressInUse(String::from(error_message));
                 }
                 "EntityAlreadyRegisteredException" => {
                     return RegisterToWorkMailError::EntityAlreadyRegistered(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return RegisterToWorkMailError::EntityNotFound(String::from(error_message))
+                    return RegisterToWorkMailError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return RegisterToWorkMailError::EntityState(String::from(error_message))
+                    return RegisterToWorkMailError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return RegisterToWorkMailError::InvalidParameter(String::from(error_message))
+                    return RegisterToWorkMailError::InvalidParameter(String::from(error_message));
                 }
                 "MailDomainNotFoundException" => {
-                    return RegisterToWorkMailError::MailDomainNotFound(String::from(error_message))
+                    return RegisterToWorkMailError::MailDomainNotFound(String::from(error_message));
                 }
                 "MailDomainStateException" => {
-                    return RegisterToWorkMailError::MailDomainState(String::from(error_message))
+                    return RegisterToWorkMailError::MailDomainState(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
                     return RegisterToWorkMailError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return RegisterToWorkMailError::OrganizationState(String::from(error_message))
+                    return RegisterToWorkMailError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RegisterToWorkMailError::Validation(error_message.to_string())
+                    return RegisterToWorkMailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4121,34 +4121,34 @@ impl ResetPasswordError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return ResetPasswordError::DirectoryServiceAuthenticationFailed(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DirectoryUnavailableException" => {
-                    return ResetPasswordError::DirectoryUnavailable(String::from(error_message))
+                    return ResetPasswordError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return ResetPasswordError::EntityNotFound(String::from(error_message))
+                    return ResetPasswordError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return ResetPasswordError::EntityState(String::from(error_message))
+                    return ResetPasswordError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
-                    return ResetPasswordError::InvalidParameter(String::from(error_message))
+                    return ResetPasswordError::InvalidParameter(String::from(error_message));
                 }
                 "InvalidPasswordException" => {
-                    return ResetPasswordError::InvalidPassword(String::from(error_message))
+                    return ResetPasswordError::InvalidPassword(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return ResetPasswordError::OrganizationNotFound(String::from(error_message))
+                    return ResetPasswordError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return ResetPasswordError::OrganizationState(String::from(error_message))
+                    return ResetPasswordError::OrganizationState(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return ResetPasswordError::UnsupportedOperation(String::from(error_message))
+                    return ResetPasswordError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResetPasswordError::Validation(error_message.to_string())
+                    return ResetPasswordError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4255,58 +4255,58 @@ impl UpdatePrimaryEmailAddressError {
                 "DirectoryServiceAuthenticationFailedException" => {
                     return UpdatePrimaryEmailAddressError::DirectoryServiceAuthenticationFailed(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "DirectoryUnavailableException" => {
                     return UpdatePrimaryEmailAddressError::DirectoryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EmailAddressInUseException" => {
                     return UpdatePrimaryEmailAddressError::EmailAddressInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityNotFoundException" => {
                     return UpdatePrimaryEmailAddressError::EntityNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "EntityStateException" => {
-                    return UpdatePrimaryEmailAddressError::EntityState(String::from(error_message))
+                    return UpdatePrimaryEmailAddressError::EntityState(String::from(error_message));
                 }
                 "InvalidParameterException" => {
                     return UpdatePrimaryEmailAddressError::InvalidParameter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MailDomainNotFoundException" => {
                     return UpdatePrimaryEmailAddressError::MailDomainNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MailDomainStateException" => {
                     return UpdatePrimaryEmailAddressError::MailDomainState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationNotFoundException" => {
                     return UpdatePrimaryEmailAddressError::OrganizationNotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OrganizationStateException" => {
                     return UpdatePrimaryEmailAddressError::OrganizationState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnsupportedOperationException" => {
                     return UpdatePrimaryEmailAddressError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdatePrimaryEmailAddressError::Validation(error_message.to_string())
+                    return UpdatePrimaryEmailAddressError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4415,37 +4415,37 @@ impl UpdateResourceError {
 
             match *error_type {
                 "DirectoryUnavailableException" => {
-                    return UpdateResourceError::DirectoryUnavailable(String::from(error_message))
+                    return UpdateResourceError::DirectoryUnavailable(String::from(error_message));
                 }
                 "EmailAddressInUseException" => {
-                    return UpdateResourceError::EmailAddressInUse(String::from(error_message))
+                    return UpdateResourceError::EmailAddressInUse(String::from(error_message));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateResourceError::EntityNotFound(String::from(error_message))
+                    return UpdateResourceError::EntityNotFound(String::from(error_message));
                 }
                 "EntityStateException" => {
-                    return UpdateResourceError::EntityState(String::from(error_message))
+                    return UpdateResourceError::EntityState(String::from(error_message));
                 }
                 "InvalidConfigurationException" => {
-                    return UpdateResourceError::InvalidConfiguration(String::from(error_message))
+                    return UpdateResourceError::InvalidConfiguration(String::from(error_message));
                 }
                 "MailDomainNotFoundException" => {
-                    return UpdateResourceError::MailDomainNotFound(String::from(error_message))
+                    return UpdateResourceError::MailDomainNotFound(String::from(error_message));
                 }
                 "MailDomainStateException" => {
-                    return UpdateResourceError::MailDomainState(String::from(error_message))
+                    return UpdateResourceError::MailDomainState(String::from(error_message));
                 }
                 "NameAvailabilityException" => {
-                    return UpdateResourceError::NameAvailability(String::from(error_message))
+                    return UpdateResourceError::NameAvailability(String::from(error_message));
                 }
                 "OrganizationNotFoundException" => {
-                    return UpdateResourceError::OrganizationNotFound(String::from(error_message))
+                    return UpdateResourceError::OrganizationNotFound(String::from(error_message));
                 }
                 "OrganizationStateException" => {
-                    return UpdateResourceError::OrganizationState(String::from(error_message))
+                    return UpdateResourceError::OrganizationState(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateResourceError::Validation(error_message.to_string())
+                    return UpdateResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

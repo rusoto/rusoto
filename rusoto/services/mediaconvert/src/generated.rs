@@ -3249,21 +3249,21 @@ impl CancelJobError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CancelJobError::BadRequest(String::from(error_message))
+                    return CancelJobError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return CancelJobError::Conflict(String::from(error_message)),
                 "ForbiddenException" => {
-                    return CancelJobError::Forbidden(String::from(error_message))
+                    return CancelJobError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CancelJobError::InternalServerError(String::from(error_message))
+                    return CancelJobError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return CancelJobError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return CancelJobError::TooManyRequests(String::from(error_message))
+                    return CancelJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string())
+                    return CancelJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3369,21 +3369,21 @@ impl CreateJobError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateJobError::BadRequest(String::from(error_message))
+                    return CreateJobError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return CreateJobError::Conflict(String::from(error_message)),
                 "ForbiddenException" => {
-                    return CreateJobError::Forbidden(String::from(error_message))
+                    return CreateJobError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateJobError::InternalServerError(String::from(error_message))
+                    return CreateJobError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return CreateJobError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return CreateJobError::TooManyRequests(String::from(error_message))
+                    return CreateJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string())
+                    return CreateJobError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3489,25 +3489,25 @@ impl CreateJobTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateJobTemplateError::BadRequest(String::from(error_message))
+                    return CreateJobTemplateError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateJobTemplateError::Conflict(String::from(error_message))
+                    return CreateJobTemplateError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateJobTemplateError::Forbidden(String::from(error_message))
+                    return CreateJobTemplateError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateJobTemplateError::InternalServerError(String::from(error_message))
+                    return CreateJobTemplateError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateJobTemplateError::NotFound(String::from(error_message))
+                    return CreateJobTemplateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateJobTemplateError::TooManyRequests(String::from(error_message))
+                    return CreateJobTemplateError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateJobTemplateError::Validation(error_message.to_string())
+                    return CreateJobTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3615,25 +3615,25 @@ impl CreatePresetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreatePresetError::BadRequest(String::from(error_message))
+                    return CreatePresetError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreatePresetError::Conflict(String::from(error_message))
+                    return CreatePresetError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreatePresetError::Forbidden(String::from(error_message))
+                    return CreatePresetError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreatePresetError::InternalServerError(String::from(error_message))
+                    return CreatePresetError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreatePresetError::NotFound(String::from(error_message))
+                    return CreatePresetError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreatePresetError::TooManyRequests(String::from(error_message))
+                    return CreatePresetError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreatePresetError::Validation(error_message.to_string())
+                    return CreatePresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3739,25 +3739,25 @@ impl CreateQueueError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateQueueError::BadRequest(String::from(error_message))
+                    return CreateQueueError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return CreateQueueError::Conflict(String::from(error_message))
+                    return CreateQueueError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return CreateQueueError::Forbidden(String::from(error_message))
+                    return CreateQueueError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return CreateQueueError::InternalServerError(String::from(error_message))
+                    return CreateQueueError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateQueueError::NotFound(String::from(error_message))
+                    return CreateQueueError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return CreateQueueError::TooManyRequests(String::from(error_message))
+                    return CreateQueueError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateQueueError::Validation(error_message.to_string())
+                    return CreateQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3863,25 +3863,25 @@ impl DeleteJobTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteJobTemplateError::BadRequest(String::from(error_message))
+                    return DeleteJobTemplateError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteJobTemplateError::Conflict(String::from(error_message))
+                    return DeleteJobTemplateError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteJobTemplateError::Forbidden(String::from(error_message))
+                    return DeleteJobTemplateError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteJobTemplateError::InternalServerError(String::from(error_message))
+                    return DeleteJobTemplateError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteJobTemplateError::NotFound(String::from(error_message))
+                    return DeleteJobTemplateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteJobTemplateError::TooManyRequests(String::from(error_message))
+                    return DeleteJobTemplateError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteJobTemplateError::Validation(error_message.to_string())
+                    return DeleteJobTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3989,25 +3989,25 @@ impl DeletePresetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeletePresetError::BadRequest(String::from(error_message))
+                    return DeletePresetError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeletePresetError::Conflict(String::from(error_message))
+                    return DeletePresetError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeletePresetError::Forbidden(String::from(error_message))
+                    return DeletePresetError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeletePresetError::InternalServerError(String::from(error_message))
+                    return DeletePresetError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeletePresetError::NotFound(String::from(error_message))
+                    return DeletePresetError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeletePresetError::TooManyRequests(String::from(error_message))
+                    return DeletePresetError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeletePresetError::Validation(error_message.to_string())
+                    return DeletePresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4113,25 +4113,25 @@ impl DeleteQueueError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteQueueError::BadRequest(String::from(error_message))
+                    return DeleteQueueError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DeleteQueueError::Conflict(String::from(error_message))
+                    return DeleteQueueError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DeleteQueueError::Forbidden(String::from(error_message))
+                    return DeleteQueueError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteQueueError::InternalServerError(String::from(error_message))
+                    return DeleteQueueError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteQueueError::NotFound(String::from(error_message))
+                    return DeleteQueueError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteQueueError::TooManyRequests(String::from(error_message))
+                    return DeleteQueueError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteQueueError::Validation(error_message.to_string())
+                    return DeleteQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4237,25 +4237,25 @@ impl DescribeEndpointsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeEndpointsError::BadRequest(String::from(error_message))
+                    return DescribeEndpointsError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return DescribeEndpointsError::Conflict(String::from(error_message))
+                    return DescribeEndpointsError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return DescribeEndpointsError::Forbidden(String::from(error_message))
+                    return DescribeEndpointsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeEndpointsError::InternalServerError(String::from(error_message))
+                    return DescribeEndpointsError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeEndpointsError::NotFound(String::from(error_message))
+                    return DescribeEndpointsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeEndpointsError::TooManyRequests(String::from(error_message))
+                    return DescribeEndpointsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeEndpointsError::Validation(error_message.to_string())
+                    return DescribeEndpointsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4363,16 +4363,16 @@ impl GetJobError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetJobError::BadRequest(String::from(error_message))
+                    return GetJobError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return GetJobError::Conflict(String::from(error_message)),
                 "ForbiddenException" => return GetJobError::Forbidden(String::from(error_message)),
                 "InternalServerErrorException" => {
-                    return GetJobError::InternalServerError(String::from(error_message))
+                    return GetJobError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return GetJobError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetJobError::TooManyRequests(String::from(error_message))
+                    return GetJobError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => return GetJobError::Validation(error_message.to_string()),
                 _ => {}
@@ -4479,25 +4479,25 @@ impl GetJobTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetJobTemplateError::BadRequest(String::from(error_message))
+                    return GetJobTemplateError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return GetJobTemplateError::Conflict(String::from(error_message))
+                    return GetJobTemplateError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return GetJobTemplateError::Forbidden(String::from(error_message))
+                    return GetJobTemplateError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetJobTemplateError::InternalServerError(String::from(error_message))
+                    return GetJobTemplateError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetJobTemplateError::NotFound(String::from(error_message))
+                    return GetJobTemplateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return GetJobTemplateError::TooManyRequests(String::from(error_message))
+                    return GetJobTemplateError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetJobTemplateError::Validation(error_message.to_string())
+                    return GetJobTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4603,21 +4603,21 @@ impl GetPresetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetPresetError::BadRequest(String::from(error_message))
+                    return GetPresetError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return GetPresetError::Conflict(String::from(error_message)),
                 "ForbiddenException" => {
-                    return GetPresetError::Forbidden(String::from(error_message))
+                    return GetPresetError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetPresetError::InternalServerError(String::from(error_message))
+                    return GetPresetError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return GetPresetError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetPresetError::TooManyRequests(String::from(error_message))
+                    return GetPresetError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetPresetError::Validation(error_message.to_string())
+                    return GetPresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4723,21 +4723,21 @@ impl GetQueueError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetQueueError::BadRequest(String::from(error_message))
+                    return GetQueueError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return GetQueueError::Conflict(String::from(error_message)),
                 "ForbiddenException" => {
-                    return GetQueueError::Forbidden(String::from(error_message))
+                    return GetQueueError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return GetQueueError::InternalServerError(String::from(error_message))
+                    return GetQueueError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return GetQueueError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return GetQueueError::TooManyRequests(String::from(error_message))
+                    return GetQueueError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetQueueError::Validation(error_message.to_string())
+                    return GetQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4843,25 +4843,25 @@ impl ListJobTemplatesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListJobTemplatesError::BadRequest(String::from(error_message))
+                    return ListJobTemplatesError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ListJobTemplatesError::Conflict(String::from(error_message))
+                    return ListJobTemplatesError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListJobTemplatesError::Forbidden(String::from(error_message))
+                    return ListJobTemplatesError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListJobTemplatesError::InternalServerError(String::from(error_message))
+                    return ListJobTemplatesError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListJobTemplatesError::NotFound(String::from(error_message))
+                    return ListJobTemplatesError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListJobTemplatesError::TooManyRequests(String::from(error_message))
+                    return ListJobTemplatesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobTemplatesError::Validation(error_message.to_string())
+                    return ListJobTemplatesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4967,21 +4967,21 @@ impl ListJobsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListJobsError::BadRequest(String::from(error_message))
+                    return ListJobsError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => return ListJobsError::Conflict(String::from(error_message)),
                 "ForbiddenException" => {
-                    return ListJobsError::Forbidden(String::from(error_message))
+                    return ListJobsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListJobsError::InternalServerError(String::from(error_message))
+                    return ListJobsError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => return ListJobsError::NotFound(String::from(error_message)),
                 "TooManyRequestsException" => {
-                    return ListJobsError::TooManyRequests(String::from(error_message))
+                    return ListJobsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string())
+                    return ListJobsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5087,25 +5087,25 @@ impl ListPresetsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListPresetsError::BadRequest(String::from(error_message))
+                    return ListPresetsError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ListPresetsError::Conflict(String::from(error_message))
+                    return ListPresetsError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListPresetsError::Forbidden(String::from(error_message))
+                    return ListPresetsError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListPresetsError::InternalServerError(String::from(error_message))
+                    return ListPresetsError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListPresetsError::NotFound(String::from(error_message))
+                    return ListPresetsError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListPresetsError::TooManyRequests(String::from(error_message))
+                    return ListPresetsError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPresetsError::Validation(error_message.to_string())
+                    return ListPresetsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5211,25 +5211,25 @@ impl ListQueuesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListQueuesError::BadRequest(String::from(error_message))
+                    return ListQueuesError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ListQueuesError::Conflict(String::from(error_message))
+                    return ListQueuesError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListQueuesError::Forbidden(String::from(error_message))
+                    return ListQueuesError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return ListQueuesError::InternalServerError(String::from(error_message))
+                    return ListQueuesError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListQueuesError::NotFound(String::from(error_message))
+                    return ListQueuesError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListQueuesError::TooManyRequests(String::from(error_message))
+                    return ListQueuesError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListQueuesError::Validation(error_message.to_string())
+                    return ListQueuesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5335,27 +5335,27 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListTagsForResourceError::BadRequest(String::from(error_message))
+                    return ListTagsForResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return ListTagsForResourceError::Conflict(String::from(error_message))
+                    return ListTagsForResourceError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return ListTagsForResourceError::Forbidden(String::from(error_message))
+                    return ListTagsForResourceError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
                     return ListTagsForResourceError::InternalServerError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListTagsForResourceError::NotFound(String::from(error_message))
+                    return ListTagsForResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return ListTagsForResourceError::TooManyRequests(String::from(error_message))
+                    return ListTagsForResourceError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string())
+                    return ListTagsForResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5463,25 +5463,25 @@ impl TagResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return TagResourceError::BadRequest(String::from(error_message))
+                    return TagResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return TagResourceError::Conflict(String::from(error_message))
+                    return TagResourceError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return TagResourceError::Forbidden(String::from(error_message))
+                    return TagResourceError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return TagResourceError::InternalServerError(String::from(error_message))
+                    return TagResourceError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return TagResourceError::NotFound(String::from(error_message))
+                    return TagResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return TagResourceError::TooManyRequests(String::from(error_message))
+                    return TagResourceError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5587,25 +5587,25 @@ impl UntagResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UntagResourceError::BadRequest(String::from(error_message))
+                    return UntagResourceError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UntagResourceError::Conflict(String::from(error_message))
+                    return UntagResourceError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UntagResourceError::Forbidden(String::from(error_message))
+                    return UntagResourceError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UntagResourceError::InternalServerError(String::from(error_message))
+                    return UntagResourceError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UntagResourceError::NotFound(String::from(error_message))
+                    return UntagResourceError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UntagResourceError::TooManyRequests(String::from(error_message))
+                    return UntagResourceError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5711,25 +5711,25 @@ impl UpdateJobTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateJobTemplateError::BadRequest(String::from(error_message))
+                    return UpdateJobTemplateError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateJobTemplateError::Conflict(String::from(error_message))
+                    return UpdateJobTemplateError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateJobTemplateError::Forbidden(String::from(error_message))
+                    return UpdateJobTemplateError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateJobTemplateError::InternalServerError(String::from(error_message))
+                    return UpdateJobTemplateError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateJobTemplateError::NotFound(String::from(error_message))
+                    return UpdateJobTemplateError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateJobTemplateError::TooManyRequests(String::from(error_message))
+                    return UpdateJobTemplateError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateJobTemplateError::Validation(error_message.to_string())
+                    return UpdateJobTemplateError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5837,25 +5837,25 @@ impl UpdatePresetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdatePresetError::BadRequest(String::from(error_message))
+                    return UpdatePresetError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdatePresetError::Conflict(String::from(error_message))
+                    return UpdatePresetError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdatePresetError::Forbidden(String::from(error_message))
+                    return UpdatePresetError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdatePresetError::InternalServerError(String::from(error_message))
+                    return UpdatePresetError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdatePresetError::NotFound(String::from(error_message))
+                    return UpdatePresetError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdatePresetError::TooManyRequests(String::from(error_message))
+                    return UpdatePresetError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdatePresetError::Validation(error_message.to_string())
+                    return UpdatePresetError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5961,25 +5961,25 @@ impl UpdateQueueError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateQueueError::BadRequest(String::from(error_message))
+                    return UpdateQueueError::BadRequest(String::from(error_message));
                 }
                 "ConflictException" => {
-                    return UpdateQueueError::Conflict(String::from(error_message))
+                    return UpdateQueueError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
-                    return UpdateQueueError::Forbidden(String::from(error_message))
+                    return UpdateQueueError::Forbidden(String::from(error_message));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateQueueError::InternalServerError(String::from(error_message))
+                    return UpdateQueueError::InternalServerError(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateQueueError::NotFound(String::from(error_message))
+                    return UpdateQueueError::NotFound(String::from(error_message));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateQueueError::TooManyRequests(String::from(error_message))
+                    return UpdateQueueError::TooManyRequests(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateQueueError::Validation(error_message.to_string())
+                    return UpdateQueueError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

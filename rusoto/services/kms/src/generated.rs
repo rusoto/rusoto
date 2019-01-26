@@ -1024,22 +1024,22 @@ impl CancelKeyDeletionError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return CancelKeyDeletionError::DependencyTimeout(String::from(error_message))
+                    return CancelKeyDeletionError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CancelKeyDeletionError::InvalidArn(String::from(error_message))
+                    return CancelKeyDeletionError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return CancelKeyDeletionError::KMSInternal(String::from(error_message))
+                    return CancelKeyDeletionError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return CancelKeyDeletionError::KMSInvalidState(String::from(error_message))
+                    return CancelKeyDeletionError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CancelKeyDeletionError::NotFound(String::from(error_message))
+                    return CancelKeyDeletionError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CancelKeyDeletionError::Validation(error_message.to_string())
+                    return CancelKeyDeletionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1134,28 +1134,28 @@ impl CreateAliasError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateAliasError::AlreadyExists(String::from(error_message))
+                    return CreateAliasError::AlreadyExists(String::from(error_message));
                 }
                 "DependencyTimeoutException" => {
-                    return CreateAliasError::DependencyTimeout(String::from(error_message))
+                    return CreateAliasError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidAliasNameException" => {
-                    return CreateAliasError::InvalidAliasName(String::from(error_message))
+                    return CreateAliasError::InvalidAliasName(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return CreateAliasError::KMSInternal(String::from(error_message))
+                    return CreateAliasError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return CreateAliasError::KMSInvalidState(String::from(error_message))
+                    return CreateAliasError::KMSInvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateAliasError::LimitExceeded(String::from(error_message))
+                    return CreateAliasError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateAliasError::NotFound(String::from(error_message))
+                    return CreateAliasError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string())
+                    return CreateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1252,31 +1252,31 @@ impl CreateGrantError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return CreateGrantError::DependencyTimeout(String::from(error_message))
+                    return CreateGrantError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => {
-                    return CreateGrantError::Disabled(String::from(error_message))
+                    return CreateGrantError::Disabled(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateGrantError::InvalidArn(String::from(error_message))
+                    return CreateGrantError::InvalidArn(String::from(error_message));
                 }
                 "InvalidGrantTokenException" => {
-                    return CreateGrantError::InvalidGrantToken(String::from(error_message))
+                    return CreateGrantError::InvalidGrantToken(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return CreateGrantError::KMSInternal(String::from(error_message))
+                    return CreateGrantError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return CreateGrantError::KMSInvalidState(String::from(error_message))
+                    return CreateGrantError::KMSInvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateGrantError::LimitExceeded(String::from(error_message))
+                    return CreateGrantError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return CreateGrantError::NotFound(String::from(error_message))
+                    return CreateGrantError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateGrantError::Validation(error_message.to_string())
+                    return CreateGrantError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1372,26 +1372,26 @@ impl CreateKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return CreateKeyError::DependencyTimeout(String::from(error_message))
+                    return CreateKeyError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return CreateKeyError::InvalidArn(String::from(error_message))
+                    return CreateKeyError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return CreateKeyError::KMSInternal(String::from(error_message))
+                    return CreateKeyError::KMSInternal(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateKeyError::LimitExceeded(String::from(error_message))
+                    return CreateKeyError::LimitExceeded(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return CreateKeyError::MalformedPolicyDocument(String::from(error_message))
+                    return CreateKeyError::MalformedPolicyDocument(String::from(error_message));
                 }
                 "TagException" => return CreateKeyError::Tag(String::from(error_message)),
                 "UnsupportedOperationException" => {
-                    return CreateKeyError::UnsupportedOperation(String::from(error_message))
+                    return CreateKeyError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateKeyError::Validation(error_message.to_string())
+                    return CreateKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1488,23 +1488,23 @@ impl DecryptError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DecryptError::DependencyTimeout(String::from(error_message))
+                    return DecryptError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => return DecryptError::Disabled(String::from(error_message)),
                 "InvalidCiphertextException" => {
-                    return DecryptError::InvalidCiphertext(String::from(error_message))
+                    return DecryptError::InvalidCiphertext(String::from(error_message));
                 }
                 "InvalidGrantTokenException" => {
-                    return DecryptError::InvalidGrantToken(String::from(error_message))
+                    return DecryptError::InvalidGrantToken(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return DecryptError::KMSInternal(String::from(error_message))
+                    return DecryptError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return DecryptError::KMSInvalidState(String::from(error_message))
+                    return DecryptError::KMSInvalidState(String::from(error_message));
                 }
                 "KeyUnavailableException" => {
-                    return DecryptError::KeyUnavailable(String::from(error_message))
+                    return DecryptError::KeyUnavailable(String::from(error_message));
                 }
                 "NotFoundException" => return DecryptError::NotFound(String::from(error_message)),
                 "ValidationException" => return DecryptError::Validation(error_message.to_string()),
@@ -1596,19 +1596,19 @@ impl DeleteAliasError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DeleteAliasError::DependencyTimeout(String::from(error_message))
+                    return DeleteAliasError::DependencyTimeout(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return DeleteAliasError::KMSInternal(String::from(error_message))
+                    return DeleteAliasError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return DeleteAliasError::KMSInvalidState(String::from(error_message))
+                    return DeleteAliasError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DeleteAliasError::NotFound(String::from(error_message))
+                    return DeleteAliasError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string())
+                    return DeleteAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1700,29 +1700,29 @@ impl DeleteImportedKeyMaterialError {
                 "DependencyTimeoutException" => {
                     return DeleteImportedKeyMaterialError::DependencyTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message))
+                    return DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message))
+                    return DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
                     return DeleteImportedKeyMaterialError::KMSInvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteImportedKeyMaterialError::NotFound(String::from(error_message))
+                    return DeleteImportedKeyMaterialError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteImportedKeyMaterialError::Validation(error_message.to_string())
+                    return DeleteImportedKeyMaterialError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1812,19 +1812,19 @@ impl DescribeKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DescribeKeyError::DependencyTimeout(String::from(error_message))
+                    return DescribeKeyError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DescribeKeyError::InvalidArn(String::from(error_message))
+                    return DescribeKeyError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return DescribeKeyError::KMSInternal(String::from(error_message))
+                    return DescribeKeyError::KMSInternal(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DescribeKeyError::NotFound(String::from(error_message))
+                    return DescribeKeyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeKeyError::Validation(error_message.to_string())
+                    return DescribeKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1912,22 +1912,22 @@ impl DisableKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DisableKeyError::DependencyTimeout(String::from(error_message))
+                    return DisableKeyError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DisableKeyError::InvalidArn(String::from(error_message))
+                    return DisableKeyError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return DisableKeyError::KMSInternal(String::from(error_message))
+                    return DisableKeyError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return DisableKeyError::KMSInvalidState(String::from(error_message))
+                    return DisableKeyError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DisableKeyError::NotFound(String::from(error_message))
+                    return DisableKeyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DisableKeyError::Validation(error_message.to_string())
+                    return DisableKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2020,30 +2020,30 @@ impl DisableKeyRotationError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DisableKeyRotationError::DependencyTimeout(String::from(error_message))
+                    return DisableKeyRotationError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => {
-                    return DisableKeyRotationError::Disabled(String::from(error_message))
+                    return DisableKeyRotationError::Disabled(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return DisableKeyRotationError::InvalidArn(String::from(error_message))
+                    return DisableKeyRotationError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return DisableKeyRotationError::KMSInternal(String::from(error_message))
+                    return DisableKeyRotationError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return DisableKeyRotationError::KMSInvalidState(String::from(error_message))
+                    return DisableKeyRotationError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return DisableKeyRotationError::NotFound(String::from(error_message))
+                    return DisableKeyRotationError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return DisableKeyRotationError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisableKeyRotationError::Validation(error_message.to_string())
+                    return DisableKeyRotationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2138,23 +2138,23 @@ impl EnableKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return EnableKeyError::DependencyTimeout(String::from(error_message))
+                    return EnableKeyError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return EnableKeyError::InvalidArn(String::from(error_message))
+                    return EnableKeyError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return EnableKeyError::KMSInternal(String::from(error_message))
+                    return EnableKeyError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return EnableKeyError::KMSInvalidState(String::from(error_message))
+                    return EnableKeyError::KMSInvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return EnableKeyError::LimitExceeded(String::from(error_message))
+                    return EnableKeyError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => return EnableKeyError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return EnableKeyError::Validation(error_message.to_string())
+                    return EnableKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2248,28 +2248,28 @@ impl EnableKeyRotationError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return EnableKeyRotationError::DependencyTimeout(String::from(error_message))
+                    return EnableKeyRotationError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => {
-                    return EnableKeyRotationError::Disabled(String::from(error_message))
+                    return EnableKeyRotationError::Disabled(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return EnableKeyRotationError::InvalidArn(String::from(error_message))
+                    return EnableKeyRotationError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return EnableKeyRotationError::KMSInternal(String::from(error_message))
+                    return EnableKeyRotationError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return EnableKeyRotationError::KMSInvalidState(String::from(error_message))
+                    return EnableKeyRotationError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return EnableKeyRotationError::NotFound(String::from(error_message))
+                    return EnableKeyRotationError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return EnableKeyRotationError::UnsupportedOperation(String::from(error_message))
+                    return EnableKeyRotationError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return EnableKeyRotationError::Validation(error_message.to_string())
+                    return EnableKeyRotationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2368,23 +2368,23 @@ impl EncryptError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return EncryptError::DependencyTimeout(String::from(error_message))
+                    return EncryptError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => return EncryptError::Disabled(String::from(error_message)),
                 "InvalidGrantTokenException" => {
-                    return EncryptError::InvalidGrantToken(String::from(error_message))
+                    return EncryptError::InvalidGrantToken(String::from(error_message));
                 }
                 "InvalidKeyUsageException" => {
-                    return EncryptError::InvalidKeyUsage(String::from(error_message))
+                    return EncryptError::InvalidKeyUsage(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return EncryptError::KMSInternal(String::from(error_message))
+                    return EncryptError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return EncryptError::KMSInvalidState(String::from(error_message))
+                    return EncryptError::KMSInvalidState(String::from(error_message));
                 }
                 "KeyUnavailableException" => {
-                    return EncryptError::KeyUnavailable(String::from(error_message))
+                    return EncryptError::KeyUnavailable(String::from(error_message));
                 }
                 "NotFoundException" => return EncryptError::NotFound(String::from(error_message)),
                 "ValidationException" => return EncryptError::Validation(error_message.to_string()),
@@ -2484,31 +2484,31 @@ impl GenerateDataKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GenerateDataKeyError::DependencyTimeout(String::from(error_message))
+                    return GenerateDataKeyError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => {
-                    return GenerateDataKeyError::Disabled(String::from(error_message))
+                    return GenerateDataKeyError::Disabled(String::from(error_message));
                 }
                 "InvalidGrantTokenException" => {
-                    return GenerateDataKeyError::InvalidGrantToken(String::from(error_message))
+                    return GenerateDataKeyError::InvalidGrantToken(String::from(error_message));
                 }
                 "InvalidKeyUsageException" => {
-                    return GenerateDataKeyError::InvalidKeyUsage(String::from(error_message))
+                    return GenerateDataKeyError::InvalidKeyUsage(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return GenerateDataKeyError::KMSInternal(String::from(error_message))
+                    return GenerateDataKeyError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return GenerateDataKeyError::KMSInvalidState(String::from(error_message))
+                    return GenerateDataKeyError::KMSInvalidState(String::from(error_message));
                 }
                 "KeyUnavailableException" => {
-                    return GenerateDataKeyError::KeyUnavailable(String::from(error_message))
+                    return GenerateDataKeyError::KeyUnavailable(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GenerateDataKeyError::NotFound(String::from(error_message))
+                    return GenerateDataKeyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GenerateDataKeyError::Validation(error_message.to_string())
+                    return GenerateDataKeyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2608,47 +2608,47 @@ impl GenerateDataKeyWithoutPlaintextError {
                 "DependencyTimeoutException" => {
                     return GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DisabledException" => {
                     return GenerateDataKeyWithoutPlaintextError::Disabled(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGrantTokenException" => {
                     return GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidKeyUsageException" => {
                     return GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSInternalException" => {
                     return GenerateDataKeyWithoutPlaintextError::KMSInternal(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KMSInvalidStateException" => {
                     return GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "KeyUnavailableException" => {
                     return GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "NotFoundException" => {
                     return GenerateDataKeyWithoutPlaintextError::NotFound(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return GenerateDataKeyWithoutPlaintextError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2736,13 +2736,13 @@ impl GenerateRandomError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GenerateRandomError::DependencyTimeout(String::from(error_message))
+                    return GenerateRandomError::DependencyTimeout(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return GenerateRandomError::KMSInternal(String::from(error_message))
+                    return GenerateRandomError::KMSInternal(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GenerateRandomError::Validation(error_message.to_string())
+                    return GenerateRandomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2828,22 +2828,22 @@ impl GetKeyPolicyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GetKeyPolicyError::DependencyTimeout(String::from(error_message))
+                    return GetKeyPolicyError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetKeyPolicyError::InvalidArn(String::from(error_message))
+                    return GetKeyPolicyError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return GetKeyPolicyError::KMSInternal(String::from(error_message))
+                    return GetKeyPolicyError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return GetKeyPolicyError::KMSInvalidState(String::from(error_message))
+                    return GetKeyPolicyError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetKeyPolicyError::NotFound(String::from(error_message))
+                    return GetKeyPolicyError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetKeyPolicyError::Validation(error_message.to_string())
+                    return GetKeyPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2934,27 +2934,27 @@ impl GetKeyRotationStatusError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GetKeyRotationStatusError::DependencyTimeout(String::from(error_message))
+                    return GetKeyRotationStatusError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return GetKeyRotationStatusError::InvalidArn(String::from(error_message))
+                    return GetKeyRotationStatusError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return GetKeyRotationStatusError::KMSInternal(String::from(error_message))
+                    return GetKeyRotationStatusError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return GetKeyRotationStatusError::KMSInvalidState(String::from(error_message))
+                    return GetKeyRotationStatusError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetKeyRotationStatusError::NotFound(String::from(error_message))
+                    return GetKeyRotationStatusError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return GetKeyRotationStatusError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetKeyRotationStatusError::Validation(error_message.to_string())
+                    return GetKeyRotationStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3050,27 +3050,27 @@ impl GetParametersForImportError {
                 "DependencyTimeoutException" => {
                     return GetParametersForImportError::DependencyTimeout(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidArnException" => {
-                    return GetParametersForImportError::InvalidArn(String::from(error_message))
+                    return GetParametersForImportError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return GetParametersForImportError::KMSInternal(String::from(error_message))
+                    return GetParametersForImportError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return GetParametersForImportError::KMSInvalidState(String::from(error_message))
+                    return GetParametersForImportError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return GetParametersForImportError::NotFound(String::from(error_message))
+                    return GetParametersForImportError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
                     return GetParametersForImportError::UnsupportedOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetParametersForImportError::Validation(error_message.to_string())
+                    return GetParametersForImportError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3172,37 +3172,37 @@ impl ImportKeyMaterialError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ImportKeyMaterialError::DependencyTimeout(String::from(error_message))
+                    return ImportKeyMaterialError::DependencyTimeout(String::from(error_message));
                 }
                 "ExpiredImportTokenException" => {
-                    return ImportKeyMaterialError::ExpiredImportToken(String::from(error_message))
+                    return ImportKeyMaterialError::ExpiredImportToken(String::from(error_message));
                 }
                 "IncorrectKeyMaterialException" => {
-                    return ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message))
+                    return ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ImportKeyMaterialError::InvalidArn(String::from(error_message))
+                    return ImportKeyMaterialError::InvalidArn(String::from(error_message));
                 }
                 "InvalidCiphertextException" => {
-                    return ImportKeyMaterialError::InvalidCiphertext(String::from(error_message))
+                    return ImportKeyMaterialError::InvalidCiphertext(String::from(error_message));
                 }
                 "InvalidImportTokenException" => {
-                    return ImportKeyMaterialError::InvalidImportToken(String::from(error_message))
+                    return ImportKeyMaterialError::InvalidImportToken(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ImportKeyMaterialError::KMSInternal(String::from(error_message))
+                    return ImportKeyMaterialError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return ImportKeyMaterialError::KMSInvalidState(String::from(error_message))
+                    return ImportKeyMaterialError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ImportKeyMaterialError::NotFound(String::from(error_message))
+                    return ImportKeyMaterialError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return ImportKeyMaterialError::UnsupportedOperation(String::from(error_message))
+                    return ImportKeyMaterialError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ImportKeyMaterialError::Validation(error_message.to_string())
+                    return ImportKeyMaterialError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3294,16 +3294,16 @@ impl ListAliasesError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListAliasesError::DependencyTimeout(String::from(error_message))
+                    return ListAliasesError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidMarkerException" => {
-                    return ListAliasesError::InvalidMarker(String::from(error_message))
+                    return ListAliasesError::InvalidMarker(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ListAliasesError::KMSInternal(String::from(error_message))
+                    return ListAliasesError::KMSInternal(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string())
+                    return ListAliasesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3392,25 +3392,25 @@ impl ListGrantsError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListGrantsError::DependencyTimeout(String::from(error_message))
+                    return ListGrantsError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListGrantsError::InvalidArn(String::from(error_message))
+                    return ListGrantsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidMarkerException" => {
-                    return ListGrantsError::InvalidMarker(String::from(error_message))
+                    return ListGrantsError::InvalidMarker(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ListGrantsError::KMSInternal(String::from(error_message))
+                    return ListGrantsError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return ListGrantsError::KMSInvalidState(String::from(error_message))
+                    return ListGrantsError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListGrantsError::NotFound(String::from(error_message))
+                    return ListGrantsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListGrantsError::Validation(error_message.to_string())
+                    return ListGrantsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3500,22 +3500,22 @@ impl ListKeyPoliciesError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListKeyPoliciesError::DependencyTimeout(String::from(error_message))
+                    return ListKeyPoliciesError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListKeyPoliciesError::InvalidArn(String::from(error_message))
+                    return ListKeyPoliciesError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ListKeyPoliciesError::KMSInternal(String::from(error_message))
+                    return ListKeyPoliciesError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return ListKeyPoliciesError::KMSInvalidState(String::from(error_message))
+                    return ListKeyPoliciesError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListKeyPoliciesError::NotFound(String::from(error_message))
+                    return ListKeyPoliciesError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListKeyPoliciesError::Validation(error_message.to_string())
+                    return ListKeyPoliciesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3600,16 +3600,16 @@ impl ListKeysError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListKeysError::DependencyTimeout(String::from(error_message))
+                    return ListKeysError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidMarkerException" => {
-                    return ListKeysError::InvalidMarker(String::from(error_message))
+                    return ListKeysError::InvalidMarker(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ListKeysError::KMSInternal(String::from(error_message))
+                    return ListKeysError::KMSInternal(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListKeysError::Validation(error_message.to_string())
+                    return ListKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3694,19 +3694,19 @@ impl ListResourceTagsError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ListResourceTagsError::InvalidArn(String::from(error_message))
+                    return ListResourceTagsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidMarkerException" => {
-                    return ListResourceTagsError::InvalidMarker(String::from(error_message))
+                    return ListResourceTagsError::InvalidMarker(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ListResourceTagsError::KMSInternal(String::from(error_message))
+                    return ListResourceTagsError::KMSInternal(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListResourceTagsError::NotFound(String::from(error_message))
+                    return ListResourceTagsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListResourceTagsError::Validation(error_message.to_string())
+                    return ListResourceTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3794,22 +3794,22 @@ impl ListRetirableGrantsError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListRetirableGrantsError::DependencyTimeout(String::from(error_message))
+                    return ListRetirableGrantsError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ListRetirableGrantsError::InvalidArn(String::from(error_message))
+                    return ListRetirableGrantsError::InvalidArn(String::from(error_message));
                 }
                 "InvalidMarkerException" => {
-                    return ListRetirableGrantsError::InvalidMarker(String::from(error_message))
+                    return ListRetirableGrantsError::InvalidMarker(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ListRetirableGrantsError::KMSInternal(String::from(error_message))
+                    return ListRetirableGrantsError::KMSInternal(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ListRetirableGrantsError::NotFound(String::from(error_message))
+                    return ListRetirableGrantsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListRetirableGrantsError::Validation(error_message.to_string())
+                    return ListRetirableGrantsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3906,31 +3906,31 @@ impl PutKeyPolicyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return PutKeyPolicyError::DependencyTimeout(String::from(error_message))
+                    return PutKeyPolicyError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return PutKeyPolicyError::InvalidArn(String::from(error_message))
+                    return PutKeyPolicyError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return PutKeyPolicyError::KMSInternal(String::from(error_message))
+                    return PutKeyPolicyError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return PutKeyPolicyError::KMSInvalidState(String::from(error_message))
+                    return PutKeyPolicyError::KMSInvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return PutKeyPolicyError::LimitExceeded(String::from(error_message))
+                    return PutKeyPolicyError::LimitExceeded(String::from(error_message));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message))
+                    return PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return PutKeyPolicyError::NotFound(String::from(error_message))
+                    return PutKeyPolicyError::NotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return PutKeyPolicyError::UnsupportedOperation(String::from(error_message))
+                    return PutKeyPolicyError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutKeyPolicyError::Validation(error_message.to_string())
+                    return PutKeyPolicyError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4030,30 +4030,30 @@ impl ReEncryptError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ReEncryptError::DependencyTimeout(String::from(error_message))
+                    return ReEncryptError::DependencyTimeout(String::from(error_message));
                 }
                 "DisabledException" => return ReEncryptError::Disabled(String::from(error_message)),
                 "InvalidCiphertextException" => {
-                    return ReEncryptError::InvalidCiphertext(String::from(error_message))
+                    return ReEncryptError::InvalidCiphertext(String::from(error_message));
                 }
                 "InvalidGrantTokenException" => {
-                    return ReEncryptError::InvalidGrantToken(String::from(error_message))
+                    return ReEncryptError::InvalidGrantToken(String::from(error_message));
                 }
                 "InvalidKeyUsageException" => {
-                    return ReEncryptError::InvalidKeyUsage(String::from(error_message))
+                    return ReEncryptError::InvalidKeyUsage(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ReEncryptError::KMSInternal(String::from(error_message))
+                    return ReEncryptError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return ReEncryptError::KMSInvalidState(String::from(error_message))
+                    return ReEncryptError::KMSInvalidState(String::from(error_message));
                 }
                 "KeyUnavailableException" => {
-                    return ReEncryptError::KeyUnavailable(String::from(error_message))
+                    return ReEncryptError::KeyUnavailable(String::from(error_message));
                 }
                 "NotFoundException" => return ReEncryptError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return ReEncryptError::Validation(error_message.to_string())
+                    return ReEncryptError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4150,28 +4150,28 @@ impl RetireGrantError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return RetireGrantError::DependencyTimeout(String::from(error_message))
+                    return RetireGrantError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return RetireGrantError::InvalidArn(String::from(error_message))
+                    return RetireGrantError::InvalidArn(String::from(error_message));
                 }
                 "InvalidGrantIdException" => {
-                    return RetireGrantError::InvalidGrantId(String::from(error_message))
+                    return RetireGrantError::InvalidGrantId(String::from(error_message));
                 }
                 "InvalidGrantTokenException" => {
-                    return RetireGrantError::InvalidGrantToken(String::from(error_message))
+                    return RetireGrantError::InvalidGrantToken(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return RetireGrantError::KMSInternal(String::from(error_message))
+                    return RetireGrantError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return RetireGrantError::KMSInvalidState(String::from(error_message))
+                    return RetireGrantError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return RetireGrantError::NotFound(String::from(error_message))
+                    return RetireGrantError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RetireGrantError::Validation(error_message.to_string())
+                    return RetireGrantError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4264,25 +4264,25 @@ impl RevokeGrantError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return RevokeGrantError::DependencyTimeout(String::from(error_message))
+                    return RevokeGrantError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return RevokeGrantError::InvalidArn(String::from(error_message))
+                    return RevokeGrantError::InvalidArn(String::from(error_message));
                 }
                 "InvalidGrantIdException" => {
-                    return RevokeGrantError::InvalidGrantId(String::from(error_message))
+                    return RevokeGrantError::InvalidGrantId(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return RevokeGrantError::KMSInternal(String::from(error_message))
+                    return RevokeGrantError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return RevokeGrantError::KMSInvalidState(String::from(error_message))
+                    return RevokeGrantError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return RevokeGrantError::NotFound(String::from(error_message))
+                    return RevokeGrantError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RevokeGrantError::Validation(error_message.to_string())
+                    return RevokeGrantError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4372,22 +4372,22 @@ impl ScheduleKeyDeletionError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message))
+                    return ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return ScheduleKeyDeletionError::InvalidArn(String::from(error_message))
+                    return ScheduleKeyDeletionError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return ScheduleKeyDeletionError::KMSInternal(String::from(error_message))
+                    return ScheduleKeyDeletionError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message))
+                    return ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return ScheduleKeyDeletionError::NotFound(String::from(error_message))
+                    return ScheduleKeyDeletionError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ScheduleKeyDeletionError::Validation(error_message.to_string())
+                    return ScheduleKeyDeletionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4480,23 +4480,23 @@ impl TagResourceError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return TagResourceError::InvalidArn(String::from(error_message))
+                    return TagResourceError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return TagResourceError::KMSInternal(String::from(error_message))
+                    return TagResourceError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return TagResourceError::KMSInvalidState(String::from(error_message))
+                    return TagResourceError::KMSInvalidState(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message))
+                    return TagResourceError::LimitExceeded(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return TagResourceError::NotFound(String::from(error_message))
+                    return TagResourceError::NotFound(String::from(error_message));
                 }
                 "TagException" => return TagResourceError::Tag(String::from(error_message)),
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4586,20 +4586,20 @@ impl UntagResourceError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return UntagResourceError::InvalidArn(String::from(error_message))
+                    return UntagResourceError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return UntagResourceError::KMSInternal(String::from(error_message))
+                    return UntagResourceError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return UntagResourceError::KMSInvalidState(String::from(error_message))
+                    return UntagResourceError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UntagResourceError::NotFound(String::from(error_message))
+                    return UntagResourceError::NotFound(String::from(error_message));
                 }
                 "TagException" => return UntagResourceError::Tag(String::from(error_message)),
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4686,19 +4686,19 @@ impl UpdateAliasError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return UpdateAliasError::DependencyTimeout(String::from(error_message))
+                    return UpdateAliasError::DependencyTimeout(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return UpdateAliasError::KMSInternal(String::from(error_message))
+                    return UpdateAliasError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return UpdateAliasError::KMSInvalidState(String::from(error_message))
+                    return UpdateAliasError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateAliasError::NotFound(String::from(error_message))
+                    return UpdateAliasError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAliasError::Validation(error_message.to_string())
+                    return UpdateAliasError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4786,22 +4786,22 @@ impl UpdateKeyDescriptionError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message))
+                    return UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message));
                 }
                 "InvalidArnException" => {
-                    return UpdateKeyDescriptionError::InvalidArn(String::from(error_message))
+                    return UpdateKeyDescriptionError::InvalidArn(String::from(error_message));
                 }
                 "KMSInternalException" => {
-                    return UpdateKeyDescriptionError::KMSInternal(String::from(error_message))
+                    return UpdateKeyDescriptionError::KMSInternal(String::from(error_message));
                 }
                 "KMSInvalidStateException" => {
-                    return UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message))
+                    return UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateKeyDescriptionError::NotFound(String::from(error_message))
+                    return UpdateKeyDescriptionError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateKeyDescriptionError::Validation(error_message.to_string())
+                    return UpdateKeyDescriptionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

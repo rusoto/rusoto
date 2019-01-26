@@ -9017,7 +9017,7 @@ impl CancelUpdateStackError {
                     "TokenAlreadyExistsException" => {
                         return CancelUpdateStackError::TokenAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9103,7 +9103,7 @@ impl ContinueUpdateRollbackError {
                     "TokenAlreadyExistsException" => {
                         return ContinueUpdateRollbackError::TokenAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9193,17 +9193,17 @@ impl CreateChangeSetError {
                     "AlreadyExistsException" => {
                         return CreateChangeSetError::AlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientCapabilitiesException" => {
                         return CreateChangeSetError::InsufficientCapabilities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededException" => {
                         return CreateChangeSetError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9293,20 +9293,20 @@ impl CreateStackError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExistsException" => {
-                        return CreateStackError::AlreadyExists(String::from(parsed_error.message))
+                        return CreateStackError::AlreadyExists(String::from(parsed_error.message));
                     }
                     "InsufficientCapabilitiesException" => {
                         return CreateStackError::InsufficientCapabilities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededException" => {
-                        return CreateStackError::LimitExceeded(String::from(parsed_error.message))
+                        return CreateStackError::LimitExceeded(String::from(parsed_error.message));
                     }
                     "TokenAlreadyExistsException" => {
                         return CreateStackError::TokenAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9403,32 +9403,32 @@ impl CreateStackInstancesError {
                     "InvalidOperationException" => {
                         return CreateStackInstancesError::InvalidOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededException" => {
                         return CreateStackInstancesError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationIdAlreadyExistsException" => {
                         return CreateStackInstancesError::OperationIdAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressException" => {
                         return CreateStackInstancesError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return CreateStackInstancesError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StaleRequestException" => {
                         return CreateStackInstancesError::StaleRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9523,17 +9523,17 @@ impl CreateStackSetError {
                     "CreatedButModifiedException" => {
                         return CreateStackSetError::CreatedButModified(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "LimitExceededException" => {
                         return CreateStackSetError::LimitExceeded(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "NameAlreadyExistsException" => {
                         return CreateStackSetError::NameAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9619,7 +9619,7 @@ impl DeleteChangeSetError {
                     "InvalidChangeSetStatus" => {
                         return DeleteChangeSetError::InvalidChangeSetStatus(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9703,7 +9703,7 @@ impl DeleteStackError {
                     "TokenAlreadyExistsException" => {
                         return DeleteStackError::TokenAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9795,27 +9795,27 @@ impl DeleteStackInstancesError {
                     "InvalidOperationException" => {
                         return DeleteStackInstancesError::InvalidOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationIdAlreadyExistsException" => {
                         return DeleteStackInstancesError::OperationIdAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressException" => {
                         return DeleteStackInstancesError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return DeleteStackInstancesError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StaleRequestException" => {
                         return DeleteStackInstancesError::StaleRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -9907,12 +9907,12 @@ impl DeleteStackSetError {
                     "OperationInProgressException" => {
                         return DeleteStackSetError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotEmptyException" => {
                         return DeleteStackSetError::StackSetNotEmpty(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10075,7 +10075,7 @@ impl DescribeChangeSetError {
                     "ChangeSetNotFound" => {
                         return DescribeChangeSetError::ChangeSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10241,12 +10241,12 @@ impl DescribeStackInstanceError {
                     "StackInstanceNotFoundException" => {
                         return DescribeStackInstanceError::StackInstanceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return DescribeStackInstanceError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10489,7 +10489,7 @@ impl DescribeStackSetError {
                     "StackSetNotFoundException" => {
                         return DescribeStackSetError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10575,12 +10575,12 @@ impl DescribeStackSetOperationError {
                     "OperationNotFoundException" => {
                         return DescribeStackSetOperationError::OperationNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return DescribeStackSetOperationError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -10827,22 +10827,22 @@ impl ExecuteChangeSetError {
                     "ChangeSetNotFound" => {
                         return ExecuteChangeSetError::ChangeSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InsufficientCapabilitiesException" => {
                         return ExecuteChangeSetError::InsufficientCapabilities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "InvalidChangeSetStatus" => {
                         return ExecuteChangeSetError::InvalidChangeSetStatus(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TokenAlreadyExistsException" => {
                         return ExecuteChangeSetError::TokenAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11005,7 +11005,7 @@ impl GetTemplateError {
                     "ChangeSetNotFound" => {
                         return GetTemplateError::ChangeSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11089,7 +11089,7 @@ impl GetTemplateSummaryError {
                     "StackSetNotFoundException" => {
                         return GetTemplateSummaryError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11403,7 +11403,7 @@ impl ListStackInstancesError {
                     "StackSetNotFoundException" => {
                         return ListStackInstancesError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11569,12 +11569,12 @@ impl ListStackSetOperationResultsError {
                     "OperationNotFoundException" => {
                         return ListStackSetOperationResultsError::OperationNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return ListStackSetOperationResultsError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -11661,7 +11661,7 @@ impl ListStackSetOperationsError {
                     "StackSetNotFoundException" => {
                         return ListStackSetOperationsError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12055,17 +12055,17 @@ impl StopStackSetOperationError {
                     "InvalidOperationException" => {
                         return StopStackSetOperationError::InvalidOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationNotFoundException" => {
                         return StopStackSetOperationError::OperationNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return StopStackSetOperationError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12155,12 +12155,12 @@ impl UpdateStackError {
                     "InsufficientCapabilitiesException" => {
                         return UpdateStackError::InsufficientCapabilities(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "TokenAlreadyExistsException" => {
                         return UpdateStackError::TokenAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12255,32 +12255,32 @@ impl UpdateStackInstancesError {
                     "InvalidOperationException" => {
                         return UpdateStackInstancesError::InvalidOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationIdAlreadyExistsException" => {
                         return UpdateStackInstancesError::OperationIdAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressException" => {
                         return UpdateStackInstancesError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackInstanceNotFoundException" => {
                         return UpdateStackInstancesError::StackInstanceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return UpdateStackInstancesError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StaleRequestException" => {
                         return UpdateStackInstancesError::StaleRequest(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     _ => {}
                 }
@@ -12381,30 +12381,30 @@ impl UpdateStackSetError {
                     "InvalidOperationException" => {
                         return UpdateStackSetError::InvalidOperation(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationIdAlreadyExistsException" => {
                         return UpdateStackSetError::OperationIdAlreadyExists(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "OperationInProgressException" => {
                         return UpdateStackSetError::OperationInProgress(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackInstanceNotFoundException" => {
                         return UpdateStackSetError::StackInstanceNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StackSetNotFoundException" => {
                         return UpdateStackSetError::StackSetNotFound(String::from(
                             parsed_error.message,
-                        ))
+                        ));
                     }
                     "StaleRequestException" => {
-                        return UpdateStackSetError::StaleRequest(String::from(parsed_error.message))
+                        return UpdateStackSetError::StaleRequest(String::from(parsed_error.message));
                     }
                     _ => {}
                 }

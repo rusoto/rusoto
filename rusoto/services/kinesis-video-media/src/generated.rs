@@ -126,25 +126,25 @@ impl GetMediaError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return GetMediaError::ClientLimitExceeded(String::from(error_message))
+                    return GetMediaError::ClientLimitExceeded(String::from(error_message));
                 }
                 "ConnectionLimitExceededException" => {
-                    return GetMediaError::ConnectionLimitExceeded(String::from(error_message))
+                    return GetMediaError::ConnectionLimitExceeded(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
-                    return GetMediaError::InvalidArgument(String::from(error_message))
+                    return GetMediaError::InvalidArgument(String::from(error_message));
                 }
                 "InvalidEndpointException" => {
-                    return GetMediaError::InvalidEndpoint(String::from(error_message))
+                    return GetMediaError::InvalidEndpoint(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
-                    return GetMediaError::NotAuthorized(String::from(error_message))
+                    return GetMediaError::NotAuthorized(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return GetMediaError::ResourceNotFound(String::from(error_message))
+                    return GetMediaError::ResourceNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetMediaError::Validation(error_message.to_string())
+                    return GetMediaError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

@@ -2854,15 +2854,15 @@ impl CountClosedWorkflowExecutionsError {
                 "OperationNotPermittedFault" => {
                     return CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CountClosedWorkflowExecutionsError::Validation(error_message.to_string())
+                    return CountClosedWorkflowExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2946,15 +2946,15 @@ impl CountOpenWorkflowExecutionsError {
                 "OperationNotPermittedFault" => {
                     return CountOpenWorkflowExecutionsError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CountOpenWorkflowExecutionsError::Validation(error_message.to_string())
+                    return CountOpenWorkflowExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3038,15 +3038,15 @@ impl CountPendingActivityTasksError {
                 "OperationNotPermittedFault" => {
                     return CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return CountPendingActivityTasksError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CountPendingActivityTasksError::Validation(error_message.to_string())
+                    return CountPendingActivityTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3130,15 +3130,15 @@ impl CountPendingDecisionTasksError {
                 "OperationNotPermittedFault" => {
                     return CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return CountPendingDecisionTasksError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CountPendingDecisionTasksError::Validation(error_message.to_string())
+                    return CountPendingDecisionTasksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3224,20 +3224,20 @@ impl DeprecateActivityTypeError {
                 "OperationNotPermittedFault" => {
                     return DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TypeDeprecatedFault" => {
                     return DeprecateActivityTypeError::TypeDeprecatedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return DeprecateActivityTypeError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeprecateActivityTypeError::Validation(error_message.to_string())
+                    return DeprecateActivityTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3322,18 +3322,18 @@ impl DeprecateDomainError {
 
             match *error_type {
                 "DomainDeprecatedFault" => {
-                    return DeprecateDomainError::DomainDeprecatedFault(String::from(error_message))
+                    return DeprecateDomainError::DomainDeprecatedFault(String::from(error_message));
                 }
                 "OperationNotPermittedFault" => {
                     return DeprecateDomainError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
-                    return DeprecateDomainError::UnknownResourceFault(String::from(error_message))
+                    return DeprecateDomainError::UnknownResourceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeprecateDomainError::Validation(error_message.to_string())
+                    return DeprecateDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3418,20 +3418,20 @@ impl DeprecateWorkflowTypeError {
                 "OperationNotPermittedFault" => {
                     return DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TypeDeprecatedFault" => {
                     return DeprecateWorkflowTypeError::TypeDeprecatedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return DeprecateWorkflowTypeError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeprecateWorkflowTypeError::Validation(error_message.to_string())
+                    return DeprecateWorkflowTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3516,15 +3516,15 @@ impl DescribeActivityTypeError {
                 "OperationNotPermittedFault" => {
                     return DescribeActivityTypeError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return DescribeActivityTypeError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeActivityTypeError::Validation(error_message.to_string())
+                    return DescribeActivityTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3608,13 +3608,13 @@ impl DescribeDomainError {
                 "OperationNotPermittedFault" => {
                     return DescribeDomainError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
-                    return DescribeDomainError::UnknownResourceFault(String::from(error_message))
+                    return DescribeDomainError::UnknownResourceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeDomainError::Validation(error_message.to_string())
+                    return DescribeDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3696,15 +3696,15 @@ impl DescribeWorkflowExecutionError {
                 "OperationNotPermittedFault" => {
                     return DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeWorkflowExecutionError::Validation(error_message.to_string())
+                    return DescribeWorkflowExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3788,15 +3788,15 @@ impl DescribeWorkflowTypeError {
                 "OperationNotPermittedFault" => {
                     return DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return DescribeWorkflowTypeError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DescribeWorkflowTypeError::Validation(error_message.to_string())
+                    return DescribeWorkflowTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3880,15 +3880,15 @@ impl GetWorkflowExecutionHistoryError {
                 "OperationNotPermittedFault" => {
                     return GetWorkflowExecutionHistoryError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetWorkflowExecutionHistoryError::Validation(error_message.to_string())
+                    return GetWorkflowExecutionHistoryError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3972,13 +3972,13 @@ impl ListActivityTypesError {
                 "OperationNotPermittedFault" => {
                     return ListActivityTypesError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
-                    return ListActivityTypesError::UnknownResourceFault(String::from(error_message))
+                    return ListActivityTypesError::UnknownResourceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListActivityTypesError::Validation(error_message.to_string())
+                    return ListActivityTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4062,15 +4062,15 @@ impl ListClosedWorkflowExecutionsError {
                 "OperationNotPermittedFault" => {
                     return ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListClosedWorkflowExecutionsError::Validation(error_message.to_string())
+                    return ListClosedWorkflowExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4150,10 +4150,10 @@ impl ListDomainsError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return ListDomainsError::OperationNotPermittedFault(String::from(error_message))
+                    return ListDomainsError::OperationNotPermittedFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDomainsError::Validation(error_message.to_string())
+                    return ListDomainsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4234,15 +4234,15 @@ impl ListOpenWorkflowExecutionsError {
                 "OperationNotPermittedFault" => {
                     return ListOpenWorkflowExecutionsError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListOpenWorkflowExecutionsError::Validation(error_message.to_string())
+                    return ListOpenWorkflowExecutionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4326,13 +4326,13 @@ impl ListWorkflowTypesError {
                 "OperationNotPermittedFault" => {
                     return ListWorkflowTypesError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
-                    return ListWorkflowTypesError::UnknownResourceFault(String::from(error_message))
+                    return ListWorkflowTypesError::UnknownResourceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListWorkflowTypesError::Validation(error_message.to_string())
+                    return ListWorkflowTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4416,20 +4416,20 @@ impl PollForActivityTaskError {
 
             match *error_type {
                 "LimitExceededFault" => {
-                    return PollForActivityTaskError::LimitExceededFault(String::from(error_message))
+                    return PollForActivityTaskError::LimitExceededFault(String::from(error_message));
                 }
                 "OperationNotPermittedFault" => {
                     return PollForActivityTaskError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return PollForActivityTaskError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PollForActivityTaskError::Validation(error_message.to_string())
+                    return PollForActivityTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4514,20 +4514,20 @@ impl PollForDecisionTaskError {
 
             match *error_type {
                 "LimitExceededFault" => {
-                    return PollForDecisionTaskError::LimitExceededFault(String::from(error_message))
+                    return PollForDecisionTaskError::LimitExceededFault(String::from(error_message));
                 }
                 "OperationNotPermittedFault" => {
                     return PollForDecisionTaskError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return PollForDecisionTaskError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return PollForDecisionTaskError::Validation(error_message.to_string())
+                    return PollForDecisionTaskError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4612,15 +4612,15 @@ impl RecordActivityTaskHeartbeatError {
                 "OperationNotPermittedFault" => {
                     return RecordActivityTaskHeartbeatError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RecordActivityTaskHeartbeatError::Validation(error_message.to_string())
+                    return RecordActivityTaskHeartbeatError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4708,25 +4708,25 @@ impl RegisterActivityTypeError {
                 "LimitExceededFault" => {
                     return RegisterActivityTypeError::LimitExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedFault" => {
                     return RegisterActivityTypeError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TypeAlreadyExistsFault" => {
                     return RegisterActivityTypeError::TypeAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return RegisterActivityTypeError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterActivityTypeError::Validation(error_message.to_string())
+                    return RegisterActivityTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4814,18 +4814,18 @@ impl RegisterDomainError {
                 "DomainAlreadyExistsFault" => {
                     return RegisterDomainError::DomainAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededFault" => {
-                    return RegisterDomainError::LimitExceededFault(String::from(error_message))
+                    return RegisterDomainError::LimitExceededFault(String::from(error_message));
                 }
                 "OperationNotPermittedFault" => {
                     return RegisterDomainError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterDomainError::Validation(error_message.to_string())
+                    return RegisterDomainError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4912,25 +4912,25 @@ impl RegisterWorkflowTypeError {
                 "LimitExceededFault" => {
                     return RegisterWorkflowTypeError::LimitExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedFault" => {
                     return RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TypeAlreadyExistsFault" => {
                     return RegisterWorkflowTypeError::TypeAlreadyExistsFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return RegisterWorkflowTypeError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterWorkflowTypeError::Validation(error_message.to_string())
+                    return RegisterWorkflowTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5016,17 +5016,17 @@ impl RequestCancelWorkflowExecutionError {
                 "OperationNotPermittedFault" => {
                     return RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return RequestCancelWorkflowExecutionError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -5110,15 +5110,15 @@ impl RespondActivityTaskCanceledError {
                 "OperationNotPermittedFault" => {
                     return RespondActivityTaskCanceledError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RespondActivityTaskCanceledError::Validation(error_message.to_string())
+                    return RespondActivityTaskCanceledError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5202,15 +5202,15 @@ impl RespondActivityTaskCompletedError {
                 "OperationNotPermittedFault" => {
                     return RespondActivityTaskCompletedError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RespondActivityTaskCompletedError::Validation(error_message.to_string())
+                    return RespondActivityTaskCompletedError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5294,15 +5294,15 @@ impl RespondActivityTaskFailedError {
                 "OperationNotPermittedFault" => {
                     return RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return RespondActivityTaskFailedError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RespondActivityTaskFailedError::Validation(error_message.to_string())
+                    return RespondActivityTaskFailedError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5386,15 +5386,15 @@ impl RespondDecisionTaskCompletedError {
                 "OperationNotPermittedFault" => {
                     return RespondDecisionTaskCompletedError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RespondDecisionTaskCompletedError::Validation(error_message.to_string())
+                    return RespondDecisionTaskCompletedError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5478,15 +5478,15 @@ impl SignalWorkflowExecutionError {
                 "OperationNotPermittedFault" => {
                     return SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return SignalWorkflowExecutionError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return SignalWorkflowExecutionError::Validation(error_message.to_string())
+                    return SignalWorkflowExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5578,35 +5578,35 @@ impl StartWorkflowExecutionError {
                 "DefaultUndefinedFault" => {
                     return StartWorkflowExecutionError::DefaultUndefinedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededFault" => {
                     return StartWorkflowExecutionError::LimitExceededFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedFault" => {
                     return StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TypeDeprecatedFault" => {
                     return StartWorkflowExecutionError::TypeDeprecatedFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "UnknownResourceFault" => {
                     return StartWorkflowExecutionError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "WorkflowExecutionAlreadyStartedFault" => {
                     return StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return StartWorkflowExecutionError::Validation(error_message.to_string())
+                    return StartWorkflowExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5694,15 +5694,15 @@ impl TerminateWorkflowExecutionError {
                 "OperationNotPermittedFault" => {
                     return TerminateWorkflowExecutionError::OperationNotPermittedFault(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "UnknownResourceFault" => {
                     return TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return TerminateWorkflowExecutionError::Validation(error_message.to_string())
+                    return TerminateWorkflowExecutionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

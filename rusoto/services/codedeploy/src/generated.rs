@@ -1935,40 +1935,40 @@ impl AddTagsToOnPremisesInstancesError {
                 "InstanceLimitExceededException" => {
                     return AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceNameRequiredException" => {
                     return AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceNotRegisteredException" => {
                     return AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return AddTagsToOnPremisesInstancesError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidTagException" => {
                     return AddTagsToOnPremisesInstancesError::InvalidTag(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagLimitExceededException" => {
                     return AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagRequiredException" => {
                     return AddTagsToOnPremisesInstancesError::TagRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AddTagsToOnPremisesInstancesError::Validation(error_message.to_string())
+                    return AddTagsToOnPremisesInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2065,35 +2065,35 @@ impl BatchGetApplicationRevisionsError {
                 "ApplicationDoesNotExistException" => {
                     return BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "BatchLimitExceededException" => {
                     return BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRevisionException" => {
                     return BatchGetApplicationRevisionsError::InvalidRevision(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RevisionRequiredException" => {
                     return BatchGetApplicationRevisionsError::RevisionRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetApplicationRevisionsError::Validation(error_message.to_string())
+                    return BatchGetApplicationRevisionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2185,25 +2185,25 @@ impl BatchGetApplicationsError {
                 "ApplicationDoesNotExistException" => {
                     return BatchGetApplicationsError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return BatchGetApplicationsError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "BatchLimitExceededException" => {
                     return BatchGetApplicationsError::BatchLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return BatchGetApplicationsError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetApplicationsError::Validation(error_message.to_string())
+                    return BatchGetApplicationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2297,35 +2297,35 @@ impl BatchGetDeploymentGroupsError {
                 "ApplicationDoesNotExistException" => {
                     return BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "BatchLimitExceededException" => {
                     return BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetDeploymentGroupsError::Validation(error_message.to_string())
+                    return BatchGetDeploymentGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2421,35 +2421,35 @@ impl BatchGetDeploymentInstancesError {
                 "BatchLimitExceededException" => {
                     return BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentDoesNotExistException" => {
                     return BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
                     return BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceIdRequiredException" => {
                     return BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
                     return BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetDeploymentInstancesError::Validation(error_message.to_string())
+                    return BatchGetDeploymentInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2537,20 +2537,20 @@ impl BatchGetDeploymentsError {
 
             match *error_type {
                 "BatchLimitExceededException" => {
-                    return BatchGetDeploymentsError::BatchLimitExceeded(String::from(error_message))
+                    return BatchGetDeploymentsError::BatchLimitExceeded(String::from(error_message));
                 }
                 "DeploymentIdRequiredException" => {
                     return BatchGetDeploymentsError::DeploymentIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
                     return BatchGetDeploymentsError::InvalidDeploymentId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetDeploymentsError::Validation(error_message.to_string())
+                    return BatchGetDeploymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2637,20 +2637,20 @@ impl BatchGetOnPremisesInstancesError {
                 "BatchLimitExceededException" => {
                     return BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceNameRequiredException" => {
                     return BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return BatchGetOnPremisesInstancesError::Validation(error_message.to_string())
+                    return BatchGetOnPremisesInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2743,33 +2743,33 @@ impl ContinueDeploymentError {
                 "DeploymentAlreadyCompletedException" => {
                     return ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentDoesNotExistException" => {
                     return ContinueDeploymentError::DeploymentDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
                     return ContinueDeploymentError::DeploymentIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentIsNotInReadyStateException" => {
                     return ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
-                    return ContinueDeploymentError::InvalidDeploymentId(String::from(error_message))
+                    return ContinueDeploymentError::InvalidDeploymentId(String::from(error_message));
                 }
                 "UnsupportedActionForDeploymentTypeException" => {
                     return ContinueDeploymentError::UnsupportedActionForDeploymentType(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return ContinueDeploymentError::Validation(error_message.to_string())
+                    return ContinueDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2863,30 +2863,30 @@ impl CreateApplicationError {
                 "ApplicationAlreadyExistsException" => {
                     return CreateApplicationError::ApplicationAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationLimitExceededException" => {
                     return CreateApplicationError::ApplicationLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return CreateApplicationError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return CreateApplicationError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidComputePlatformException" => {
                     return CreateApplicationError::InvalidComputePlatform(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string())
+                    return CreateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3015,108 +3015,108 @@ impl CreateDeploymentError {
                 "ApplicationDoesNotExistException" => {
                     return CreateDeploymentError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return CreateDeploymentError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return CreateDeploymentError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentLimitExceededException" => {
                     return CreateDeploymentError::DeploymentLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DescriptionTooLongException" => {
-                    return CreateDeploymentError::DescriptionTooLong(String::from(error_message))
+                    return CreateDeploymentError::DescriptionTooLong(String::from(error_message));
                 }
                 "InvalidApplicationNameException" => {
                     return CreateDeploymentError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return CreateDeploymentError::InvalidAutoRollbackConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutoScalingGroupException" => {
                     return CreateDeploymentError::InvalidAutoScalingGroup(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return CreateDeploymentError::InvalidDeploymentConfigName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return CreateDeploymentError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidFileExistsBehaviorException" => {
                     return CreateDeploymentError::InvalidFileExistsBehavior(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidGitHubAccountTokenException" => {
                     return CreateDeploymentError::InvalidGitHubAccountToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidIgnoreApplicationStopFailuresValueException" => {
                     return CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return CreateDeploymentError::InvalidLoadBalancerInfo(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRevisionException" => {
-                    return CreateDeploymentError::InvalidRevision(String::from(error_message))
+                    return CreateDeploymentError::InvalidRevision(String::from(error_message));
                 }
                 "InvalidRoleException" => {
-                    return CreateDeploymentError::InvalidRole(String::from(error_message))
+                    return CreateDeploymentError::InvalidRole(String::from(error_message));
                 }
                 "InvalidTargetInstancesException" => {
                     return CreateDeploymentError::InvalidTargetInstances(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidUpdateOutdatedInstancesOnlyValueException" => {
                     return CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "RevisionDoesNotExistException" => {
-                    return CreateDeploymentError::RevisionDoesNotExist(String::from(error_message))
+                    return CreateDeploymentError::RevisionDoesNotExist(String::from(error_message));
                 }
                 "RevisionRequiredException" => {
-                    return CreateDeploymentError::RevisionRequired(String::from(error_message))
+                    return CreateDeploymentError::RevisionRequired(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return CreateDeploymentError::Throttling(String::from(error_message))
+                    return CreateDeploymentError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateDeploymentError::Validation(error_message.to_string())
+                    return CreateDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3229,40 +3229,40 @@ impl CreateDeploymentConfigError {
                 "DeploymentConfigAlreadyExistsException" => {
                     return CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigLimitExceededException" => {
                     return CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidComputePlatformException" => {
                     return CreateDeploymentConfigError::InvalidComputePlatform(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidMinimumHealthyHostValueException" => {
                     return CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidTrafficRoutingConfigurationException" => {
                     return CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "ValidationException" => {
-                    return CreateDeploymentConfigError::Validation(error_message.to_string())
+                    return CreateDeploymentConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3401,130 +3401,130 @@ impl CreateDeploymentGroupError {
                 "AlarmsLimitExceededException" => {
                     return CreateDeploymentGroupError::AlarmsLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationDoesNotExistException" => {
                     return CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return CreateDeploymentGroupError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupAlreadyExistsException" => {
                     return CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupLimitExceededException" => {
                     return CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAlarmConfigException" => {
                     return CreateDeploymentGroupError::InvalidAlarmConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return CreateDeploymentGroupError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutoScalingGroupException" => {
                     return CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
                     return CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentStyleException" => {
                     return CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidEC2TagCombinationException" => {
                     return CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidEC2TagException" => {
-                    return CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
+                    return CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return CreateDeploymentGroupError::InvalidInput(String::from(error_message))
+                    return CreateDeploymentGroupError::InvalidInput(String::from(error_message));
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOnPremisesTagCombinationException" => {
                     return CreateDeploymentGroupError::InvalidOnPremisesTagCombination(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRoleException" => {
-                    return CreateDeploymentGroupError::InvalidRole(String::from(error_message))
+                    return CreateDeploymentGroupError::InvalidRole(String::from(error_message));
                 }
                 "InvalidTagException" => {
-                    return CreateDeploymentGroupError::InvalidTag(String::from(error_message))
+                    return CreateDeploymentGroupError::InvalidTag(String::from(error_message));
                 }
                 "InvalidTriggerConfigException" => {
                     return CreateDeploymentGroupError::InvalidTriggerConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LifecycleHookLimitExceededException" => {
                     return CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RoleRequiredException" => {
-                    return CreateDeploymentGroupError::RoleRequired(String::from(error_message))
+                    return CreateDeploymentGroupError::RoleRequired(String::from(error_message));
                 }
                 "TagSetListLimitExceededException" => {
                     return CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return CreateDeploymentGroupError::Validation(error_message.to_string())
+                    return CreateDeploymentGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3633,15 +3633,15 @@ impl DeleteApplicationError {
                 "ApplicationNameRequiredException" => {
                     return DeleteApplicationError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return DeleteApplicationError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteApplicationError::Validation(error_message.to_string())
+                    return DeleteApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3729,25 +3729,25 @@ impl DeleteDeploymentConfigError {
                 "DeploymentConfigInUseException" => {
                     return DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOperationException" => {
                     return DeleteDeploymentConfigError::InvalidOperation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteDeploymentConfigError::Validation(error_message.to_string())
+                    return DeleteDeploymentConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3839,28 +3839,28 @@ impl DeleteDeploymentGroupError {
                 "ApplicationNameRequiredException" => {
                     return DeleteDeploymentGroupError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return DeleteDeploymentGroupError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return DeleteDeploymentGroupError::InvalidRole(String::from(error_message))
+                    return DeleteDeploymentGroupError::InvalidRole(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteDeploymentGroupError::Validation(error_message.to_string())
+                    return DeleteDeploymentGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3953,30 +3953,30 @@ impl DeleteGitHubAccountTokenError {
                 "GitHubAccountTokenDoesNotExistException" => {
                     return DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "GitHubAccountTokenNameRequiredException" => {
                     return DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidGitHubAccountTokenNameException" => {
                     return DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "OperationNotSupportedException" => {
                     return DeleteGitHubAccountTokenError::OperationNotSupported(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceValidationException" => {
                     return DeleteGitHubAccountTokenError::ResourceValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeleteGitHubAccountTokenError::Validation(error_message.to_string())
+                    return DeleteGitHubAccountTokenError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4063,15 +4063,15 @@ impl DeregisterOnPremisesInstanceError {
                 "InstanceNameRequiredException" => {
                     return DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DeregisterOnPremisesInstanceError::Validation(error_message.to_string())
+                    return DeregisterOnPremisesInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4155,16 +4155,16 @@ impl GetApplicationError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return GetApplicationError::ApplicationDoesNotExist(String::from(error_message))
+                    return GetApplicationError::ApplicationDoesNotExist(String::from(error_message));
                 }
                 "ApplicationNameRequiredException" => {
-                    return GetApplicationError::ApplicationNameRequired(String::from(error_message))
+                    return GetApplicationError::ApplicationNameRequired(String::from(error_message));
                 }
                 "InvalidApplicationNameException" => {
-                    return GetApplicationError::InvalidApplicationName(String::from(error_message))
+                    return GetApplicationError::InvalidApplicationName(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetApplicationError::Validation(error_message.to_string())
+                    return GetApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4255,33 +4255,33 @@ impl GetApplicationRevisionError {
                 "ApplicationDoesNotExistException" => {
                     return GetApplicationRevisionError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return GetApplicationRevisionError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return GetApplicationRevisionError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRevisionException" => {
-                    return GetApplicationRevisionError::InvalidRevision(String::from(error_message))
+                    return GetApplicationRevisionError::InvalidRevision(String::from(error_message));
                 }
                 "RevisionDoesNotExistException" => {
                     return GetApplicationRevisionError::RevisionDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RevisionRequiredException" => {
                     return GetApplicationRevisionError::RevisionRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetApplicationRevisionError::Validation(error_message.to_string())
+                    return GetApplicationRevisionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4369,16 +4369,16 @@ impl GetDeploymentError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return GetDeploymentError::DeploymentDoesNotExist(String::from(error_message))
+                    return GetDeploymentError::DeploymentDoesNotExist(String::from(error_message));
                 }
                 "DeploymentIdRequiredException" => {
-                    return GetDeploymentError::DeploymentIdRequired(String::from(error_message))
+                    return GetDeploymentError::DeploymentIdRequired(String::from(error_message));
                 }
                 "InvalidDeploymentIdException" => {
-                    return GetDeploymentError::InvalidDeploymentId(String::from(error_message))
+                    return GetDeploymentError::InvalidDeploymentId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetDeploymentError::Validation(error_message.to_string())
+                    return GetDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4463,20 +4463,20 @@ impl GetDeploymentConfigError {
                 "DeploymentConfigDoesNotExistException" => {
                     return GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDeploymentConfigError::Validation(error_message.to_string())
+                    return GetDeploymentConfigError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4569,35 +4569,35 @@ impl GetDeploymentGroupError {
                 "ApplicationDoesNotExistException" => {
                     return GetDeploymentGroupError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return GetDeploymentGroupError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return GetDeploymentGroupError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDeploymentGroupError::Validation(error_message.to_string())
+                    return GetDeploymentGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4693,35 +4693,35 @@ impl GetDeploymentInstanceError {
                 "DeploymentDoesNotExistException" => {
                     return GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
                     return GetDeploymentInstanceError::DeploymentIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceDoesNotExistException" => {
                     return GetDeploymentInstanceError::InstanceDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceIdRequiredException" => {
                     return GetDeploymentInstanceError::InstanceIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
                     return GetDeploymentInstanceError::InvalidDeploymentId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return GetDeploymentInstanceError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetDeploymentInstanceError::Validation(error_message.to_string())
+                    return GetDeploymentInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4811,20 +4811,20 @@ impl GetOnPremisesInstanceError {
                 "InstanceNameRequiredException" => {
                     return GetOnPremisesInstanceError::InstanceNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceNotRegisteredException" => {
                     return GetOnPremisesInstanceError::InstanceNotRegistered(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return GetOnPremisesInstanceError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return GetOnPremisesInstanceError::Validation(error_message.to_string())
+                    return GetOnPremisesInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4925,53 +4925,53 @@ impl ListApplicationRevisionsError {
                 "ApplicationDoesNotExistException" => {
                     return ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return ListApplicationRevisionsError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "BucketNameFilterRequiredException" => {
                     return ListApplicationRevisionsError::BucketNameFilterRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return ListApplicationRevisionsError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBucketNameFilterException" => {
                     return ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeployedStateFilterException" => {
                     return ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidKeyPrefixFilterException" => {
                     return ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return ListApplicationRevisionsError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidSortByException" => {
-                    return ListApplicationRevisionsError::InvalidSortBy(String::from(error_message))
+                    return ListApplicationRevisionsError::InvalidSortBy(String::from(error_message));
                 }
                 "InvalidSortOrderException" => {
                     return ListApplicationRevisionsError::InvalidSortOrder(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListApplicationRevisionsError::Validation(error_message.to_string())
+                    return ListApplicationRevisionsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5059,10 +5059,10 @@ impl ListApplicationsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListApplicationsError::InvalidNextToken(String::from(error_message))
+                    return ListApplicationsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListApplicationsError::Validation(error_message.to_string())
+                    return ListApplicationsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5139,10 +5139,10 @@ impl ListDeploymentConfigsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListDeploymentConfigsError::InvalidNextToken(String::from(error_message))
+                    return ListDeploymentConfigsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeploymentConfigsError::Validation(error_message.to_string())
+                    return ListDeploymentConfigsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5229,23 +5229,23 @@ impl ListDeploymentGroupsError {
                 "ApplicationDoesNotExistException" => {
                     return ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return ListDeploymentGroupsError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return ListDeploymentGroupsError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDeploymentGroupsError::InvalidNextToken(String::from(error_message))
+                    return ListDeploymentGroupsError::InvalidNextToken(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeploymentGroupsError::Validation(error_message.to_string())
+                    return ListDeploymentGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5343,45 +5343,45 @@ impl ListDeploymentInstancesError {
                 "DeploymentDoesNotExistException" => {
                     return ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
                     return ListDeploymentInstancesError::DeploymentIdRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentNotStartedException" => {
                     return ListDeploymentInstancesError::DeploymentNotStarted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
                     return ListDeploymentInstancesError::InvalidDeploymentId(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentInstanceTypeException" => {
                     return ListDeploymentInstancesError::InvalidDeploymentInstanceType(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInstanceStatusException" => {
                     return ListDeploymentInstancesError::InvalidInstanceStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceTypeException" => {
                     return ListDeploymentInstancesError::InvalidInstanceType(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
                     return ListDeploymentInstancesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListDeploymentInstancesError::Validation(error_message.to_string())
+                    return ListDeploymentInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5485,44 +5485,44 @@ impl ListDeploymentsError {
                 "ApplicationDoesNotExistException" => {
                     return ListDeploymentsError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return ListDeploymentsError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return ListDeploymentsError::DeploymentGroupDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return ListDeploymentsError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
-                    return ListDeploymentsError::InvalidApplicationName(String::from(error_message))
+                    return ListDeploymentsError::InvalidApplicationName(String::from(error_message));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return ListDeploymentsError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentStatusException" => {
                     return ListDeploymentsError::InvalidDeploymentStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDeploymentsError::InvalidNextToken(String::from(error_message))
+                    return ListDeploymentsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidTimeRangeException" => {
-                    return ListDeploymentsError::InvalidTimeRange(String::from(error_message))
+                    return ListDeploymentsError::InvalidTimeRange(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeploymentsError::Validation(error_message.to_string())
+                    return ListDeploymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5613,20 +5613,20 @@ impl ListGitHubAccountTokenNamesError {
                 "InvalidNextTokenException" => {
                     return ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotSupportedException" => {
                     return ListGitHubAccountTokenNamesError::OperationNotSupported(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ResourceValidationException" => {
                     return ListGitHubAccountTokenNamesError::ResourceValidation(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListGitHubAccountTokenNamesError::Validation(error_message.to_string())
+                    return ListGitHubAccountTokenNamesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5713,20 +5713,20 @@ impl ListOnPremisesInstancesError {
                 "InvalidNextTokenException" => {
                     return ListOnPremisesInstancesError::InvalidNextToken(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRegistrationStatusException" => {
                     return ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidTagFilterException" => {
                     return ListOnPremisesInstancesError::InvalidTagFilter(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListOnPremisesInstancesError::Validation(error_message.to_string())
+                    return ListOnPremisesInstancesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5929,35 +5929,35 @@ impl RegisterApplicationRevisionError {
                 "ApplicationDoesNotExistException" => {
                     return RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return RegisterApplicationRevisionError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DescriptionTooLongException" => {
                     return RegisterApplicationRevisionError::DescriptionTooLong(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return RegisterApplicationRevisionError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidRevisionException" => {
                     return RegisterApplicationRevisionError::InvalidRevision(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "RevisionRequiredException" => {
                     return RegisterApplicationRevisionError::RevisionRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterApplicationRevisionError::Validation(error_message.to_string())
+                    return RegisterApplicationRevisionError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6061,55 +6061,55 @@ impl RegisterOnPremisesInstanceError {
                 "IamArnRequiredException" => {
                     return RegisterOnPremisesInstanceError::IamArnRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "IamSessionArnAlreadyRegisteredException" => {
                     return RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "IamUserArnAlreadyRegisteredException" => {
                     return RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "IamUserArnRequiredException" => {
                     return RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InstanceNameAlreadyRegisteredException" => {
                     return RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InstanceNameRequiredException" => {
                     return RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidIamSessionArnException" => {
                     return RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidIamUserArnException" => {
                     return RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidInstanceNameException" => {
                     return RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "MultipleIamArnsProvidedException" => {
                     return RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RegisterOnPremisesInstanceError::Validation(error_message.to_string())
+                    return RegisterOnPremisesInstanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6211,42 +6211,42 @@ impl RemoveTagsFromOnPremisesInstancesError {
                 "InstanceLimitExceededException" => {
                     return RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InstanceNameRequiredException" => {
                     return RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InstanceNotRegisteredException" => {
                     return RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidInstanceNameException" => {
                     return RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidTagException" => {
                     return RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagLimitExceededException" => {
                     return RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagRequiredException" => {
                     return RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return RemoveTagsFromOnPremisesInstancesError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -6439,19 +6439,19 @@ impl StopDeploymentError {
                 "DeploymentAlreadyCompletedException" => {
                     return StopDeploymentError::DeploymentAlreadyCompleted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentDoesNotExistException" => {
-                    return StopDeploymentError::DeploymentDoesNotExist(String::from(error_message))
+                    return StopDeploymentError::DeploymentDoesNotExist(String::from(error_message));
                 }
                 "DeploymentIdRequiredException" => {
-                    return StopDeploymentError::DeploymentIdRequired(String::from(error_message))
+                    return StopDeploymentError::DeploymentIdRequired(String::from(error_message));
                 }
                 "InvalidDeploymentIdException" => {
-                    return StopDeploymentError::InvalidDeploymentId(String::from(error_message))
+                    return StopDeploymentError::InvalidDeploymentId(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopDeploymentError::Validation(error_message.to_string())
+                    return StopDeploymentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6539,25 +6539,25 @@ impl UpdateApplicationError {
                 "ApplicationAlreadyExistsException" => {
                     return UpdateApplicationError::ApplicationAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationDoesNotExistException" => {
                     return UpdateApplicationError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return UpdateApplicationError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return UpdateApplicationError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string())
+                    return UpdateApplicationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -6691,127 +6691,127 @@ impl UpdateDeploymentGroupError {
                 "AlarmsLimitExceededException" => {
                     return UpdateDeploymentGroupError::AlarmsLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationDoesNotExistException" => {
                     return UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
                     return UpdateDeploymentGroupError::ApplicationNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentConfigDoesNotExistException" => {
                     return UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupAlreadyExistsException" => {
                     return UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupDoesNotExistException" => {
                     return UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAlarmConfigException" => {
                     return UpdateDeploymentGroupError::InvalidAlarmConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidApplicationNameException" => {
                     return UpdateDeploymentGroupError::InvalidApplicationName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutoRollbackConfigException" => {
                     return UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidAutoScalingGroupException" => {
                     return UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
                     return UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidDeploymentConfigNameException" => {
                     return UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
                     return UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidDeploymentStyleException" => {
                     return UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidEC2TagCombinationException" => {
                     return UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidEC2TagException" => {
-                    return UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
+                    return UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message));
                 }
                 "InvalidInputException" => {
-                    return UpdateDeploymentGroupError::InvalidInput(String::from(error_message))
+                    return UpdateDeploymentGroupError::InvalidInput(String::from(error_message));
                 }
                 "InvalidLoadBalancerInfoException" => {
                     return UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidOnPremisesTagCombinationException" => {
                     return UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(
                         String::from(error_message),
-                    )
+                    );
                 }
                 "InvalidRoleException" => {
-                    return UpdateDeploymentGroupError::InvalidRole(String::from(error_message))
+                    return UpdateDeploymentGroupError::InvalidRole(String::from(error_message));
                 }
                 "InvalidTagException" => {
-                    return UpdateDeploymentGroupError::InvalidTag(String::from(error_message))
+                    return UpdateDeploymentGroupError::InvalidTag(String::from(error_message));
                 }
                 "InvalidTriggerConfigException" => {
                     return UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LifecycleHookLimitExceededException" => {
                     return UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TagSetListLimitExceededException" => {
                     return UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateDeploymentGroupError::Validation(error_message.to_string())
+                    return UpdateDeploymentGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

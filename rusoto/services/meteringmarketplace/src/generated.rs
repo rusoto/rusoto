@@ -178,27 +178,27 @@ impl BatchMeterUsageError {
 
             match *error_type {
                 "InternalServiceErrorException" => {
-                    return BatchMeterUsageError::InternalServiceError(String::from(error_message))
+                    return BatchMeterUsageError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidCustomerIdentifierException" => {
                     return BatchMeterUsageError::InvalidCustomerIdentifier(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidProductCodeException" => {
-                    return BatchMeterUsageError::InvalidProductCode(String::from(error_message))
+                    return BatchMeterUsageError::InvalidProductCode(String::from(error_message));
                 }
                 "InvalidUsageDimensionException" => {
-                    return BatchMeterUsageError::InvalidUsageDimension(String::from(error_message))
+                    return BatchMeterUsageError::InvalidUsageDimension(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return BatchMeterUsageError::Throttling(String::from(error_message))
+                    return BatchMeterUsageError::Throttling(String::from(error_message));
                 }
                 "TimestampOutOfBoundsException" => {
-                    return BatchMeterUsageError::TimestampOutOfBounds(String::from(error_message))
+                    return BatchMeterUsageError::TimestampOutOfBounds(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return BatchMeterUsageError::Validation(error_message.to_string())
+                    return BatchMeterUsageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -292,28 +292,28 @@ impl MeterUsageError {
 
             match *error_type {
                 "DuplicateRequestException" => {
-                    return MeterUsageError::DuplicateRequest(String::from(error_message))
+                    return MeterUsageError::DuplicateRequest(String::from(error_message));
                 }
                 "InternalServiceErrorException" => {
-                    return MeterUsageError::InternalServiceError(String::from(error_message))
+                    return MeterUsageError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidEndpointRegionException" => {
-                    return MeterUsageError::InvalidEndpointRegion(String::from(error_message))
+                    return MeterUsageError::InvalidEndpointRegion(String::from(error_message));
                 }
                 "InvalidProductCodeException" => {
-                    return MeterUsageError::InvalidProductCode(String::from(error_message))
+                    return MeterUsageError::InvalidProductCode(String::from(error_message));
                 }
                 "InvalidUsageDimensionException" => {
-                    return MeterUsageError::InvalidUsageDimension(String::from(error_message))
+                    return MeterUsageError::InvalidUsageDimension(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return MeterUsageError::Throttling(String::from(error_message))
+                    return MeterUsageError::Throttling(String::from(error_message));
                 }
                 "TimestampOutOfBoundsException" => {
-                    return MeterUsageError::TimestampOutOfBounds(String::from(error_message))
+                    return MeterUsageError::TimestampOutOfBounds(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return MeterUsageError::Validation(error_message.to_string())
+                    return MeterUsageError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -402,19 +402,19 @@ impl ResolveCustomerError {
 
             match *error_type {
                 "ExpiredTokenException" => {
-                    return ResolveCustomerError::ExpiredToken(String::from(error_message))
+                    return ResolveCustomerError::ExpiredToken(String::from(error_message));
                 }
                 "InternalServiceErrorException" => {
-                    return ResolveCustomerError::InternalServiceError(String::from(error_message))
+                    return ResolveCustomerError::InternalServiceError(String::from(error_message));
                 }
                 "InvalidTokenException" => {
-                    return ResolveCustomerError::InvalidToken(String::from(error_message))
+                    return ResolveCustomerError::InvalidToken(String::from(error_message));
                 }
                 "ThrottlingException" => {
-                    return ResolveCustomerError::Throttling(String::from(error_message))
+                    return ResolveCustomerError::Throttling(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResolveCustomerError::Validation(error_message.to_string())
+                    return ResolveCustomerError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

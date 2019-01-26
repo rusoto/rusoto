@@ -1572,15 +1572,15 @@ impl AcceptQualificationRequestError {
                 "RequestError" => {
                     return AcceptQualificationRequestError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return AcceptQualificationRequestError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return AcceptQualificationRequestError::Validation(error_message.to_string())
+                    return AcceptQualificationRequestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1662,13 +1662,13 @@ impl ApproveAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return ApproveAssignmentError::RequestError(String::from(error_message))
+                    return ApproveAssignmentError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ApproveAssignmentError::ServiceFault(String::from(error_message))
+                    return ApproveAssignmentError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ApproveAssignmentError::Validation(error_message.to_string())
+                    return ApproveAssignmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1752,17 +1752,17 @@ impl AssociateQualificationWithWorkerError {
                 "RequestError" => {
                     return AssociateQualificationWithWorkerError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return AssociateQualificationWithWorkerError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AssociateQualificationWithWorkerError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1846,17 +1846,17 @@ impl CreateAdditionalAssignmentsForHITError {
                 "RequestError" => {
                     return CreateAdditionalAssignmentsForHITError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return CreateAdditionalAssignmentsForHITError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return CreateAdditionalAssignmentsForHITError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1940,7 +1940,7 @@ impl CreateHITError {
                 "RequestError" => return CreateHITError::RequestError(String::from(error_message)),
                 "ServiceFault" => return CreateHITError::ServiceFault(String::from(error_message)),
                 "ValidationException" => {
-                    return CreateHITError::Validation(error_message.to_string())
+                    return CreateHITError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2020,13 +2020,13 @@ impl CreateHITTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateHITTypeError::RequestError(String::from(error_message))
+                    return CreateHITTypeError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return CreateHITTypeError::ServiceFault(String::from(error_message))
+                    return CreateHITTypeError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateHITTypeError::Validation(error_message.to_string())
+                    return CreateHITTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2106,13 +2106,13 @@ impl CreateHITWithHITTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateHITWithHITTypeError::RequestError(String::from(error_message))
+                    return CreateHITWithHITTypeError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return CreateHITWithHITTypeError::ServiceFault(String::from(error_message))
+                    return CreateHITWithHITTypeError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateHITWithHITTypeError::Validation(error_message.to_string())
+                    return CreateHITWithHITTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2194,13 +2194,13 @@ impl CreateQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateQualificationTypeError::RequestError(String::from(error_message))
+                    return CreateQualificationTypeError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return CreateQualificationTypeError::ServiceFault(String::from(error_message))
+                    return CreateQualificationTypeError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateQualificationTypeError::Validation(error_message.to_string())
+                    return CreateQualificationTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2282,13 +2282,13 @@ impl CreateWorkerBlockError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateWorkerBlockError::RequestError(String::from(error_message))
+                    return CreateWorkerBlockError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return CreateWorkerBlockError::ServiceFault(String::from(error_message))
+                    return CreateWorkerBlockError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateWorkerBlockError::Validation(error_message.to_string())
+                    return CreateWorkerBlockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2372,7 +2372,7 @@ impl DeleteHITError {
                 "RequestError" => return DeleteHITError::RequestError(String::from(error_message)),
                 "ServiceFault" => return DeleteHITError::ServiceFault(String::from(error_message)),
                 "ValidationException" => {
-                    return DeleteHITError::Validation(error_message.to_string())
+                    return DeleteHITError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2452,13 +2452,13 @@ impl DeleteQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return DeleteQualificationTypeError::RequestError(String::from(error_message))
+                    return DeleteQualificationTypeError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return DeleteQualificationTypeError::ServiceFault(String::from(error_message))
+                    return DeleteQualificationTypeError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteQualificationTypeError::Validation(error_message.to_string())
+                    return DeleteQualificationTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2540,13 +2540,13 @@ impl DeleteWorkerBlockError {
 
             match *error_type {
                 "RequestError" => {
-                    return DeleteWorkerBlockError::RequestError(String::from(error_message))
+                    return DeleteWorkerBlockError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return DeleteWorkerBlockError::ServiceFault(String::from(error_message))
+                    return DeleteWorkerBlockError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteWorkerBlockError::Validation(error_message.to_string())
+                    return DeleteWorkerBlockError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2630,17 +2630,17 @@ impl DisassociateQualificationFromWorkerError {
                 "RequestError" => {
                     return DisassociateQualificationFromWorkerError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return DisassociateQualificationFromWorkerError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return DisassociateQualificationFromWorkerError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -2722,13 +2722,13 @@ impl GetAccountBalanceError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetAccountBalanceError::RequestError(String::from(error_message))
+                    return GetAccountBalanceError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return GetAccountBalanceError::ServiceFault(String::from(error_message))
+                    return GetAccountBalanceError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAccountBalanceError::Validation(error_message.to_string())
+                    return GetAccountBalanceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2810,13 +2810,13 @@ impl GetAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetAssignmentError::RequestError(String::from(error_message))
+                    return GetAssignmentError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return GetAssignmentError::ServiceFault(String::from(error_message))
+                    return GetAssignmentError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAssignmentError::Validation(error_message.to_string())
+                    return GetAssignmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2896,13 +2896,13 @@ impl GetFileUploadURLError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetFileUploadURLError::RequestError(String::from(error_message))
+                    return GetFileUploadURLError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return GetFileUploadURLError::ServiceFault(String::from(error_message))
+                    return GetFileUploadURLError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetFileUploadURLError::Validation(error_message.to_string())
+                    return GetFileUploadURLError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3062,13 +3062,13 @@ impl GetQualificationScoreError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetQualificationScoreError::RequestError(String::from(error_message))
+                    return GetQualificationScoreError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return GetQualificationScoreError::ServiceFault(String::from(error_message))
+                    return GetQualificationScoreError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetQualificationScoreError::Validation(error_message.to_string())
+                    return GetQualificationScoreError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3150,13 +3150,13 @@ impl GetQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetQualificationTypeError::RequestError(String::from(error_message))
+                    return GetQualificationTypeError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return GetQualificationTypeError::ServiceFault(String::from(error_message))
+                    return GetQualificationTypeError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetQualificationTypeError::Validation(error_message.to_string())
+                    return GetQualificationTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3238,13 +3238,13 @@ impl ListAssignmentsForHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListAssignmentsForHITError::RequestError(String::from(error_message))
+                    return ListAssignmentsForHITError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ListAssignmentsForHITError::ServiceFault(String::from(error_message))
+                    return ListAssignmentsForHITError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListAssignmentsForHITError::Validation(error_message.to_string())
+                    return ListAssignmentsForHITError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3326,13 +3326,13 @@ impl ListBonusPaymentsError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListBonusPaymentsError::RequestError(String::from(error_message))
+                    return ListBonusPaymentsError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ListBonusPaymentsError::ServiceFault(String::from(error_message))
+                    return ListBonusPaymentsError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListBonusPaymentsError::Validation(error_message.to_string())
+                    return ListBonusPaymentsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3416,7 +3416,7 @@ impl ListHITsError {
                 "RequestError" => return ListHITsError::RequestError(String::from(error_message)),
                 "ServiceFault" => return ListHITsError::ServiceFault(String::from(error_message)),
                 "ValidationException" => {
-                    return ListHITsError::Validation(error_message.to_string())
+                    return ListHITsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3498,15 +3498,15 @@ impl ListHITsForQualificationTypeError {
                 "RequestError" => {
                     return ListHITsForQualificationTypeError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return ListHITsForQualificationTypeError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListHITsForQualificationTypeError::Validation(error_message.to_string())
+                    return ListHITsForQualificationTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3588,13 +3588,13 @@ impl ListQualificationRequestsError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListQualificationRequestsError::RequestError(String::from(error_message))
+                    return ListQualificationRequestsError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ListQualificationRequestsError::ServiceFault(String::from(error_message))
+                    return ListQualificationRequestsError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListQualificationRequestsError::Validation(error_message.to_string())
+                    return ListQualificationRequestsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3676,13 +3676,13 @@ impl ListQualificationTypesError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListQualificationTypesError::RequestError(String::from(error_message))
+                    return ListQualificationTypesError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ListQualificationTypesError::ServiceFault(String::from(error_message))
+                    return ListQualificationTypesError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListQualificationTypesError::Validation(error_message.to_string())
+                    return ListQualificationTypesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3766,15 +3766,15 @@ impl ListReviewPolicyResultsForHITError {
                 "RequestError" => {
                     return ListReviewPolicyResultsForHITError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return ListReviewPolicyResultsForHITError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return ListReviewPolicyResultsForHITError::Validation(error_message.to_string())
+                    return ListReviewPolicyResultsForHITError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3856,13 +3856,13 @@ impl ListReviewableHITsError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListReviewableHITsError::RequestError(String::from(error_message))
+                    return ListReviewableHITsError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ListReviewableHITsError::ServiceFault(String::from(error_message))
+                    return ListReviewableHITsError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListReviewableHITsError::Validation(error_message.to_string())
+                    return ListReviewableHITsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3944,13 +3944,13 @@ impl ListWorkerBlocksError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListWorkerBlocksError::RequestError(String::from(error_message))
+                    return ListWorkerBlocksError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return ListWorkerBlocksError::ServiceFault(String::from(error_message))
+                    return ListWorkerBlocksError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListWorkerBlocksError::Validation(error_message.to_string())
+                    return ListWorkerBlocksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4032,17 +4032,17 @@ impl ListWorkersWithQualificationTypeError {
                 "RequestError" => {
                     return ListWorkersWithQualificationTypeError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return ListWorkersWithQualificationTypeError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return ListWorkersWithQualificationTypeError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -4124,13 +4124,13 @@ impl NotifyWorkersError {
 
             match *error_type {
                 "RequestError" => {
-                    return NotifyWorkersError::RequestError(String::from(error_message))
+                    return NotifyWorkersError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return NotifyWorkersError::ServiceFault(String::from(error_message))
+                    return NotifyWorkersError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return NotifyWorkersError::Validation(error_message.to_string())
+                    return NotifyWorkersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4210,13 +4210,13 @@ impl RejectAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return RejectAssignmentError::RequestError(String::from(error_message))
+                    return RejectAssignmentError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return RejectAssignmentError::ServiceFault(String::from(error_message))
+                    return RejectAssignmentError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RejectAssignmentError::Validation(error_message.to_string())
+                    return RejectAssignmentError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4298,15 +4298,15 @@ impl RejectQualificationRequestError {
                 "RequestError" => {
                     return RejectQualificationRequestError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return RejectQualificationRequestError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return RejectQualificationRequestError::Validation(error_message.to_string())
+                    return RejectQualificationRequestError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4390,7 +4390,7 @@ impl SendBonusError {
                 "RequestError" => return SendBonusError::RequestError(String::from(error_message)),
                 "ServiceFault" => return SendBonusError::ServiceFault(String::from(error_message)),
                 "ValidationException" => {
-                    return SendBonusError::Validation(error_message.to_string())
+                    return SendBonusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4470,13 +4470,13 @@ impl SendTestEventNotificationError {
 
             match *error_type {
                 "RequestError" => {
-                    return SendTestEventNotificationError::RequestError(String::from(error_message))
+                    return SendTestEventNotificationError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return SendTestEventNotificationError::ServiceFault(String::from(error_message))
+                    return SendTestEventNotificationError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SendTestEventNotificationError::Validation(error_message.to_string())
+                    return SendTestEventNotificationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4558,13 +4558,13 @@ impl UpdateExpirationForHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateExpirationForHITError::RequestError(String::from(error_message))
+                    return UpdateExpirationForHITError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return UpdateExpirationForHITError::ServiceFault(String::from(error_message))
+                    return UpdateExpirationForHITError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateExpirationForHITError::Validation(error_message.to_string())
+                    return UpdateExpirationForHITError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4646,13 +4646,13 @@ impl UpdateHITReviewStatusError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateHITReviewStatusError::RequestError(String::from(error_message))
+                    return UpdateHITReviewStatusError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return UpdateHITReviewStatusError::ServiceFault(String::from(error_message))
+                    return UpdateHITReviewStatusError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateHITReviewStatusError::Validation(error_message.to_string())
+                    return UpdateHITReviewStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4734,13 +4734,13 @@ impl UpdateHITTypeOfHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateHITTypeOfHITError::RequestError(String::from(error_message))
+                    return UpdateHITTypeOfHITError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return UpdateHITTypeOfHITError::ServiceFault(String::from(error_message))
+                    return UpdateHITTypeOfHITError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateHITTypeOfHITError::Validation(error_message.to_string())
+                    return UpdateHITTypeOfHITError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4824,15 +4824,15 @@ impl UpdateNotificationSettingsError {
                 "RequestError" => {
                     return UpdateNotificationSettingsError::RequestError(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ServiceFault" => {
                     return UpdateNotificationSettingsError::ServiceFault(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return UpdateNotificationSettingsError::Validation(error_message.to_string())
+                    return UpdateNotificationSettingsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4914,13 +4914,13 @@ impl UpdateQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateQualificationTypeError::RequestError(String::from(error_message))
+                    return UpdateQualificationTypeError::RequestError(String::from(error_message));
                 }
                 "ServiceFault" => {
-                    return UpdateQualificationTypeError::ServiceFault(String::from(error_message))
+                    return UpdateQualificationTypeError::ServiceFault(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateQualificationTypeError::Validation(error_message.to_string())
+                    return UpdateQualificationTypeError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

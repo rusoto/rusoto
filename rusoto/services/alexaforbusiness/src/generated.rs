@@ -1671,12 +1671,12 @@ impl AssociateContactWithAddressBookError {
                 "LimitExceededException" => {
                     return AssociateContactWithAddressBookError::LimitExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
                     return AssociateContactWithAddressBookError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -1758,13 +1758,13 @@ impl AssociateDeviceWithRoomError {
                 "DeviceNotRegisteredException" => {
                     return AssociateDeviceWithRoomError::DeviceNotRegistered(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AssociateDeviceWithRoomError::LimitExceeded(String::from(error_message))
+                    return AssociateDeviceWithRoomError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return AssociateDeviceWithRoomError::Validation(error_message.to_string())
+                    return AssociateDeviceWithRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1842,7 +1842,7 @@ impl AssociateSkillGroupWithRoomError {
 
             match *error_type {
                 "ValidationException" => {
-                    return AssociateSkillGroupWithRoomError::Validation(error_message.to_string())
+                    return AssociateSkillGroupWithRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1922,13 +1922,13 @@ impl CreateAddressBookError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateAddressBookError::AlreadyExists(String::from(error_message))
+                    return CreateAddressBookError::AlreadyExists(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateAddressBookError::LimitExceeded(String::from(error_message))
+                    return CreateAddressBookError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateAddressBookError::Validation(error_message.to_string())
+                    return CreateAddressBookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2010,13 +2010,13 @@ impl CreateContactError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateContactError::AlreadyExists(String::from(error_message))
+                    return CreateContactError::AlreadyExists(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateContactError::LimitExceeded(String::from(error_message))
+                    return CreateContactError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateContactError::Validation(error_message.to_string())
+                    return CreateContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2096,13 +2096,13 @@ impl CreateProfileError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateProfileError::AlreadyExists(String::from(error_message))
+                    return CreateProfileError::AlreadyExists(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateProfileError::LimitExceeded(String::from(error_message))
+                    return CreateProfileError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateProfileError::Validation(error_message.to_string())
+                    return CreateProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2182,13 +2182,13 @@ impl CreateRoomError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateRoomError::AlreadyExists(String::from(error_message))
+                    return CreateRoomError::AlreadyExists(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateRoomError::LimitExceeded(String::from(error_message))
+                    return CreateRoomError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateRoomError::Validation(error_message.to_string())
+                    return CreateRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2268,13 +2268,13 @@ impl CreateSkillGroupError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateSkillGroupError::AlreadyExists(String::from(error_message))
+                    return CreateSkillGroupError::AlreadyExists(String::from(error_message));
                 }
                 "LimitExceededException" => {
-                    return CreateSkillGroupError::LimitExceeded(String::from(error_message))
+                    return CreateSkillGroupError::LimitExceeded(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateSkillGroupError::Validation(error_message.to_string())
+                    return CreateSkillGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2354,13 +2354,13 @@ impl CreateUserError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return CreateUserError::LimitExceeded(String::from(error_message))
+                    return CreateUserError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceInUseException" => {
-                    return CreateUserError::ResourceInUse(String::from(error_message))
+                    return CreateUserError::ResourceInUse(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string())
+                    return CreateUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2438,10 +2438,10 @@ impl DeleteAddressBookError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return DeleteAddressBookError::NotFound(String::from(error_message))
+                    return DeleteAddressBookError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteAddressBookError::Validation(error_message.to_string())
+                    return DeleteAddressBookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2520,10 +2520,10 @@ impl DeleteContactError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return DeleteContactError::NotFound(String::from(error_message))
+                    return DeleteContactError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteContactError::Validation(error_message.to_string())
+                    return DeleteContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2600,10 +2600,10 @@ impl DeleteProfileError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return DeleteProfileError::NotFound(String::from(error_message))
+                    return DeleteProfileError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteProfileError::Validation(error_message.to_string())
+                    return DeleteProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2680,10 +2680,10 @@ impl DeleteRoomError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return DeleteRoomError::NotFound(String::from(error_message))
+                    return DeleteRoomError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteRoomError::Validation(error_message.to_string())
+                    return DeleteRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2758,7 +2758,7 @@ impl DeleteRoomSkillParameterError {
 
             match *error_type {
                 "ValidationException" => {
-                    return DeleteRoomSkillParameterError::Validation(error_message.to_string())
+                    return DeleteRoomSkillParameterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2836,10 +2836,10 @@ impl DeleteSkillGroupError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return DeleteSkillGroupError::NotFound(String::from(error_message))
+                    return DeleteSkillGroupError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteSkillGroupError::Validation(error_message.to_string())
+                    return DeleteSkillGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2916,10 +2916,10 @@ impl DeleteUserError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return DeleteUserError::NotFound(String::from(error_message))
+                    return DeleteUserError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string())
+                    return DeleteUserError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2996,7 +2996,7 @@ impl DisassociateContactFromAddressBookError {
                 "ValidationException" => {
                     return DisassociateContactFromAddressBookError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3075,10 +3075,10 @@ impl DisassociateDeviceFromRoomError {
                 "DeviceNotRegisteredException" => {
                     return DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "ValidationException" => {
-                    return DisassociateDeviceFromRoomError::Validation(error_message.to_string())
+                    return DisassociateDeviceFromRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3157,7 +3157,7 @@ impl DisassociateSkillGroupFromRoomError {
                 "ValidationException" => {
                     return DisassociateSkillGroupFromRoomError::Validation(
                         error_message.to_string(),
-                    )
+                    );
                 }
                 _ => {}
             }
@@ -3235,10 +3235,10 @@ impl GetAddressBookError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return GetAddressBookError::NotFound(String::from(error_message))
+                    return GetAddressBookError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetAddressBookError::Validation(error_message.to_string())
+                    return GetAddressBookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3315,10 +3315,10 @@ impl GetContactError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return GetContactError::NotFound(String::from(error_message))
+                    return GetContactError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetContactError::Validation(error_message.to_string())
+                    return GetContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3396,7 +3396,7 @@ impl GetDeviceError {
             match *error_type {
                 "NotFoundException" => return GetDeviceError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return GetDeviceError::Validation(error_message.to_string())
+                    return GetDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3473,10 +3473,10 @@ impl GetProfileError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return GetProfileError::NotFound(String::from(error_message))
+                    return GetProfileError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetProfileError::Validation(error_message.to_string())
+                    return GetProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3629,10 +3629,10 @@ impl GetRoomSkillParameterError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return GetRoomSkillParameterError::NotFound(String::from(error_message))
+                    return GetRoomSkillParameterError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetRoomSkillParameterError::Validation(error_message.to_string())
+                    return GetRoomSkillParameterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3711,10 +3711,10 @@ impl GetSkillGroupError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return GetSkillGroupError::NotFound(String::from(error_message))
+                    return GetSkillGroupError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetSkillGroupError::Validation(error_message.to_string())
+                    return GetSkillGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3791,10 +3791,10 @@ impl ListDeviceEventsError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return ListDeviceEventsError::NotFound(String::from(error_message))
+                    return ListDeviceEventsError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListDeviceEventsError::Validation(error_message.to_string())
+                    return ListDeviceEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3869,7 +3869,7 @@ impl ListSkillsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return ListSkillsError::Validation(error_message.to_string())
+                    return ListSkillsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -3946,7 +3946,7 @@ impl ListTagsError {
             match *error_type {
                 "NotFoundException" => return ListTagsError::NotFound(String::from(error_message)),
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4021,7 +4021,7 @@ impl PutRoomSkillParameterError {
 
             match *error_type {
                 "ValidationException" => {
-                    return PutRoomSkillParameterError::Validation(error_message.to_string())
+                    return PutRoomSkillParameterError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4099,10 +4099,10 @@ impl ResolveRoomError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return ResolveRoomError::NotFound(String::from(error_message))
+                    return ResolveRoomError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ResolveRoomError::Validation(error_message.to_string())
+                    return ResolveRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4179,10 +4179,10 @@ impl RevokeInvitationError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return RevokeInvitationError::NotFound(String::from(error_message))
+                    return RevokeInvitationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RevokeInvitationError::Validation(error_message.to_string())
+                    return RevokeInvitationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4257,7 +4257,7 @@ impl SearchAddressBooksError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchAddressBooksError::Validation(error_message.to_string())
+                    return SearchAddressBooksError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4333,7 +4333,7 @@ impl SearchContactsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchContactsError::Validation(error_message.to_string())
+                    return SearchContactsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4407,7 +4407,7 @@ impl SearchDevicesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchDevicesError::Validation(error_message.to_string())
+                    return SearchDevicesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4481,7 +4481,7 @@ impl SearchProfilesError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchProfilesError::Validation(error_message.to_string())
+                    return SearchProfilesError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4555,7 +4555,7 @@ impl SearchRoomsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchRoomsError::Validation(error_message.to_string())
+                    return SearchRoomsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4629,7 +4629,7 @@ impl SearchSkillGroupsError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchSkillGroupsError::Validation(error_message.to_string())
+                    return SearchSkillGroupsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4705,7 +4705,7 @@ impl SearchUsersError {
 
             match *error_type {
                 "ValidationException" => {
-                    return SearchUsersError::Validation(error_message.to_string())
+                    return SearchUsersError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4783,13 +4783,13 @@ impl SendInvitationError {
 
             match *error_type {
                 "InvalidUserStatusException" => {
-                    return SendInvitationError::InvalidUserStatus(String::from(error_message))
+                    return SendInvitationError::InvalidUserStatus(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return SendInvitationError::NotFound(String::from(error_message))
+                    return SendInvitationError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return SendInvitationError::Validation(error_message.to_string())
+                    return SendInvitationError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4866,10 +4866,10 @@ impl StartDeviceSyncError {
 
             match *error_type {
                 "DeviceNotRegisteredException" => {
-                    return StartDeviceSyncError::DeviceNotRegistered(String::from(error_message))
+                    return StartDeviceSyncError::DeviceNotRegistered(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartDeviceSyncError::Validation(error_message.to_string())
+                    return StartDeviceSyncError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -4946,10 +4946,10 @@ impl TagResourceError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return TagResourceError::NotFound(String::from(error_message))
+                    return TagResourceError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string())
+                    return TagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5026,10 +5026,10 @@ impl UntagResourceError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return UntagResourceError::NotFound(String::from(error_message))
+                    return UntagResourceError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string())
+                    return UntagResourceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5108,13 +5108,13 @@ impl UpdateAddressBookError {
 
             match *error_type {
                 "NameInUseException" => {
-                    return UpdateAddressBookError::NameInUse(String::from(error_message))
+                    return UpdateAddressBookError::NameInUse(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateAddressBookError::NotFound(String::from(error_message))
+                    return UpdateAddressBookError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateAddressBookError::Validation(error_message.to_string())
+                    return UpdateAddressBookError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5194,10 +5194,10 @@ impl UpdateContactError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return UpdateContactError::NotFound(String::from(error_message))
+                    return UpdateContactError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateContactError::Validation(error_message.to_string())
+                    return UpdateContactError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5275,13 +5275,13 @@ impl UpdateDeviceError {
 
             match *error_type {
                 "DeviceNotRegisteredException" => {
-                    return UpdateDeviceError::DeviceNotRegistered(String::from(error_message))
+                    return UpdateDeviceError::DeviceNotRegistered(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateDeviceError::NotFound(String::from(error_message))
+                    return UpdateDeviceError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateDeviceError::Validation(error_message.to_string())
+                    return UpdateDeviceError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5361,13 +5361,13 @@ impl UpdateProfileError {
 
             match *error_type {
                 "NameInUseException" => {
-                    return UpdateProfileError::NameInUse(String::from(error_message))
+                    return UpdateProfileError::NameInUse(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateProfileError::NotFound(String::from(error_message))
+                    return UpdateProfileError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateProfileError::Validation(error_message.to_string())
+                    return UpdateProfileError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5447,13 +5447,13 @@ impl UpdateRoomError {
 
             match *error_type {
                 "NameInUseException" => {
-                    return UpdateRoomError::NameInUse(String::from(error_message))
+                    return UpdateRoomError::NameInUse(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateRoomError::NotFound(String::from(error_message))
+                    return UpdateRoomError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateRoomError::Validation(error_message.to_string())
+                    return UpdateRoomError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -5533,13 +5533,13 @@ impl UpdateSkillGroupError {
 
             match *error_type {
                 "NameInUseException" => {
-                    return UpdateSkillGroupError::NameInUse(String::from(error_message))
+                    return UpdateSkillGroupError::NameInUse(String::from(error_message));
                 }
                 "NotFoundException" => {
-                    return UpdateSkillGroupError::NotFound(String::from(error_message))
+                    return UpdateSkillGroupError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateSkillGroupError::Validation(error_message.to_string())
+                    return UpdateSkillGroupError::Validation(error_message.to_string());
                 }
                 _ => {}
             }

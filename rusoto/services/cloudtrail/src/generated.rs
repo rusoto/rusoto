@@ -777,28 +777,28 @@ impl AddTagsError {
 
             match *error_type {
                 "CloudTrailARNInvalidException" => {
-                    return AddTagsError::CloudTrailARNInvalid(String::from(error_message))
+                    return AddTagsError::CloudTrailARNInvalid(String::from(error_message));
                 }
                 "InvalidTagParameterException" => {
-                    return AddTagsError::InvalidTagParameter(String::from(error_message))
+                    return AddTagsError::InvalidTagParameter(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return AddTagsError::InvalidTrailName(String::from(error_message))
+                    return AddTagsError::InvalidTrailName(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return AddTagsError::OperationNotPermitted(String::from(error_message))
+                    return AddTagsError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return AddTagsError::ResourceNotFound(String::from(error_message))
+                    return AddTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ResourceTypeNotSupportedException" => {
-                    return AddTagsError::ResourceTypeNotSupported(String::from(error_message))
+                    return AddTagsError::ResourceTypeNotSupported(String::from(error_message));
                 }
                 "TagsLimitExceededException" => {
-                    return AddTagsError::TagsLimitExceeded(String::from(error_message))
+                    return AddTagsError::TagsLimitExceeded(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return AddTagsError::UnsupportedOperation(String::from(error_message))
+                    return AddTagsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => return AddTagsError::Validation(error_message.to_string()),
                 _ => {}
@@ -925,78 +925,78 @@ impl CreateTrailError {
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return CreateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return CreateTrailError::InsufficientEncryptionPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientS3BucketPolicyException" => {
-                    return CreateTrailError::InsufficientS3BucketPolicy(String::from(error_message))
+                    return CreateTrailError::InsufficientS3BucketPolicy(String::from(error_message));
                 }
                 "InsufficientSnsTopicPolicyException" => {
-                    return CreateTrailError::InsufficientSnsTopicPolicy(String::from(error_message))
+                    return CreateTrailError::InsufficientSnsTopicPolicy(String::from(error_message));
                 }
                 "InvalidCloudWatchLogsLogGroupArnException" => {
                     return CreateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCloudWatchLogsRoleArnException" => {
                     return CreateTrailError::InvalidCloudWatchLogsRoleArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidKmsKeyIdException" => {
-                    return CreateTrailError::InvalidKmsKeyId(String::from(error_message))
+                    return CreateTrailError::InvalidKmsKeyId(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return CreateTrailError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3BucketNameException" => {
-                    return CreateTrailError::InvalidS3BucketName(String::from(error_message))
+                    return CreateTrailError::InvalidS3BucketName(String::from(error_message));
                 }
                 "InvalidS3PrefixException" => {
-                    return CreateTrailError::InvalidS3Prefix(String::from(error_message))
+                    return CreateTrailError::InvalidS3Prefix(String::from(error_message));
                 }
                 "InvalidSnsTopicNameException" => {
-                    return CreateTrailError::InvalidSnsTopicName(String::from(error_message))
+                    return CreateTrailError::InvalidSnsTopicName(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return CreateTrailError::InvalidTrailName(String::from(error_message))
+                    return CreateTrailError::InvalidTrailName(String::from(error_message));
                 }
                 "KmsException" => return CreateTrailError::Kms(String::from(error_message)),
                 "KmsKeyDisabledException" => {
-                    return CreateTrailError::KmsKeyDisabled(String::from(error_message))
+                    return CreateTrailError::KmsKeyDisabled(String::from(error_message));
                 }
                 "KmsKeyNotFoundException" => {
-                    return CreateTrailError::KmsKeyNotFound(String::from(error_message))
+                    return CreateTrailError::KmsKeyNotFound(String::from(error_message));
                 }
                 "MaximumNumberOfTrailsExceededException" => {
                     return CreateTrailError::MaximumNumberOfTrailsExceeded(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateTrailError::OperationNotPermitted(String::from(error_message))
+                    return CreateTrailError::OperationNotPermitted(String::from(error_message));
                 }
                 "S3BucketDoesNotExistException" => {
-                    return CreateTrailError::S3BucketDoesNotExist(String::from(error_message))
+                    return CreateTrailError::S3BucketDoesNotExist(String::from(error_message));
                 }
                 "TrailAlreadyExistsException" => {
-                    return CreateTrailError::TrailAlreadyExists(String::from(error_message))
+                    return CreateTrailError::TrailAlreadyExists(String::from(error_message));
                 }
                 "TrailNotProvidedException" => {
-                    return CreateTrailError::TrailNotProvided(String::from(error_message))
+                    return CreateTrailError::TrailNotProvided(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateTrailError::UnsupportedOperation(String::from(error_message))
+                    return CreateTrailError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return CreateTrailError::Validation(error_message.to_string())
+                    return CreateTrailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1097,16 +1097,16 @@ impl DeleteTrailError {
 
             match *error_type {
                 "InvalidHomeRegionException" => {
-                    return DeleteTrailError::InvalidHomeRegion(String::from(error_message))
+                    return DeleteTrailError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return DeleteTrailError::InvalidTrailName(String::from(error_message))
+                    return DeleteTrailError::InvalidTrailName(String::from(error_message));
                 }
                 "TrailNotFoundException" => {
-                    return DeleteTrailError::TrailNotFound(String::from(error_message))
+                    return DeleteTrailError::TrailNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DeleteTrailError::Validation(error_message.to_string())
+                    return DeleteTrailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1187,13 +1187,13 @@ impl DescribeTrailsError {
 
             match *error_type {
                 "OperationNotPermittedException" => {
-                    return DescribeTrailsError::OperationNotPermitted(String::from(error_message))
+                    return DescribeTrailsError::OperationNotPermitted(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return DescribeTrailsError::UnsupportedOperation(String::from(error_message))
+                    return DescribeTrailsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return DescribeTrailsError::Validation(error_message.to_string())
+                    return DescribeTrailsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1277,21 +1277,21 @@ impl GetEventSelectorsError {
 
             match *error_type {
                 "InvalidTrailNameException" => {
-                    return GetEventSelectorsError::InvalidTrailName(String::from(error_message))
+                    return GetEventSelectorsError::InvalidTrailName(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
                     return GetEventSelectorsError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TrailNotFoundException" => {
-                    return GetEventSelectorsError::TrailNotFound(String::from(error_message))
+                    return GetEventSelectorsError::TrailNotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return GetEventSelectorsError::UnsupportedOperation(String::from(error_message))
+                    return GetEventSelectorsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetEventSelectorsError::Validation(error_message.to_string())
+                    return GetEventSelectorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1375,13 +1375,13 @@ impl GetTrailStatusError {
 
             match *error_type {
                 "InvalidTrailNameException" => {
-                    return GetTrailStatusError::InvalidTrailName(String::from(error_message))
+                    return GetTrailStatusError::InvalidTrailName(String::from(error_message));
                 }
                 "TrailNotFoundException" => {
-                    return GetTrailStatusError::TrailNotFound(String::from(error_message))
+                    return GetTrailStatusError::TrailNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return GetTrailStatusError::Validation(error_message.to_string())
+                    return GetTrailStatusError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1465,19 +1465,19 @@ impl ListPublicKeysError {
 
             match *error_type {
                 "InvalidTimeRangeException" => {
-                    return ListPublicKeysError::InvalidTimeRange(String::from(error_message))
+                    return ListPublicKeysError::InvalidTimeRange(String::from(error_message));
                 }
                 "InvalidTokenException" => {
-                    return ListPublicKeysError::InvalidToken(String::from(error_message))
+                    return ListPublicKeysError::InvalidToken(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return ListPublicKeysError::OperationNotPermitted(String::from(error_message))
+                    return ListPublicKeysError::OperationNotPermitted(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return ListPublicKeysError::UnsupportedOperation(String::from(error_message))
+                    return ListPublicKeysError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListPublicKeysError::Validation(error_message.to_string())
+                    return ListPublicKeysError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1569,28 +1569,28 @@ impl ListTagsError {
 
             match *error_type {
                 "CloudTrailARNInvalidException" => {
-                    return ListTagsError::CloudTrailARNInvalid(String::from(error_message))
+                    return ListTagsError::CloudTrailARNInvalid(String::from(error_message));
                 }
                 "InvalidTokenException" => {
-                    return ListTagsError::InvalidToken(String::from(error_message))
+                    return ListTagsError::InvalidToken(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return ListTagsError::InvalidTrailName(String::from(error_message))
+                    return ListTagsError::InvalidTrailName(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return ListTagsError::OperationNotPermitted(String::from(error_message))
+                    return ListTagsError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsError::ResourceNotFound(String::from(error_message))
+                    return ListTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ResourceTypeNotSupportedException" => {
-                    return ListTagsError::ResourceTypeNotSupported(String::from(error_message))
+                    return ListTagsError::ResourceTypeNotSupported(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return ListTagsError::UnsupportedOperation(String::from(error_message))
+                    return ListTagsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string())
+                    return ListTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1679,19 +1679,19 @@ impl LookupEventsError {
 
             match *error_type {
                 "InvalidLookupAttributesException" => {
-                    return LookupEventsError::InvalidLookupAttributes(String::from(error_message))
+                    return LookupEventsError::InvalidLookupAttributes(String::from(error_message));
                 }
                 "InvalidMaxResultsException" => {
-                    return LookupEventsError::InvalidMaxResults(String::from(error_message))
+                    return LookupEventsError::InvalidMaxResults(String::from(error_message));
                 }
                 "InvalidNextTokenException" => {
-                    return LookupEventsError::InvalidNextToken(String::from(error_message))
+                    return LookupEventsError::InvalidNextToken(String::from(error_message));
                 }
                 "InvalidTimeRangeException" => {
-                    return LookupEventsError::InvalidTimeRange(String::from(error_message))
+                    return LookupEventsError::InvalidTimeRange(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return LookupEventsError::Validation(error_message.to_string())
+                    return LookupEventsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1783,27 +1783,27 @@ impl PutEventSelectorsError {
                 "InvalidEventSelectorsException" => {
                     return PutEventSelectorsError::InvalidEventSelectors(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidHomeRegionException" => {
-                    return PutEventSelectorsError::InvalidHomeRegion(String::from(error_message))
+                    return PutEventSelectorsError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return PutEventSelectorsError::InvalidTrailName(String::from(error_message))
+                    return PutEventSelectorsError::InvalidTrailName(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
                     return PutEventSelectorsError::OperationNotPermitted(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "TrailNotFoundException" => {
-                    return PutEventSelectorsError::TrailNotFound(String::from(error_message))
+                    return PutEventSelectorsError::TrailNotFound(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return PutEventSelectorsError::UnsupportedOperation(String::from(error_message))
+                    return PutEventSelectorsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return PutEventSelectorsError::Validation(error_message.to_string())
+                    return PutEventSelectorsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -1899,28 +1899,28 @@ impl RemoveTagsError {
 
             match *error_type {
                 "CloudTrailARNInvalidException" => {
-                    return RemoveTagsError::CloudTrailARNInvalid(String::from(error_message))
+                    return RemoveTagsError::CloudTrailARNInvalid(String::from(error_message));
                 }
                 "InvalidTagParameterException" => {
-                    return RemoveTagsError::InvalidTagParameter(String::from(error_message))
+                    return RemoveTagsError::InvalidTagParameter(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return RemoveTagsError::InvalidTrailName(String::from(error_message))
+                    return RemoveTagsError::InvalidTrailName(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return RemoveTagsError::OperationNotPermitted(String::from(error_message))
+                    return RemoveTagsError::OperationNotPermitted(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveTagsError::ResourceNotFound(String::from(error_message))
+                    return RemoveTagsError::ResourceNotFound(String::from(error_message));
                 }
                 "ResourceTypeNotSupportedException" => {
-                    return RemoveTagsError::ResourceTypeNotSupported(String::from(error_message))
+                    return RemoveTagsError::ResourceTypeNotSupported(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return RemoveTagsError::UnsupportedOperation(String::from(error_message))
+                    return RemoveTagsError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return RemoveTagsError::Validation(error_message.to_string())
+                    return RemoveTagsError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2007,16 +2007,16 @@ impl StartLoggingError {
 
             match *error_type {
                 "InvalidHomeRegionException" => {
-                    return StartLoggingError::InvalidHomeRegion(String::from(error_message))
+                    return StartLoggingError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return StartLoggingError::InvalidTrailName(String::from(error_message))
+                    return StartLoggingError::InvalidTrailName(String::from(error_message));
                 }
                 "TrailNotFoundException" => {
-                    return StartLoggingError::TrailNotFound(String::from(error_message))
+                    return StartLoggingError::TrailNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StartLoggingError::Validation(error_message.to_string())
+                    return StartLoggingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2099,16 +2099,16 @@ impl StopLoggingError {
 
             match *error_type {
                 "InvalidHomeRegionException" => {
-                    return StopLoggingError::InvalidHomeRegion(String::from(error_message))
+                    return StopLoggingError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return StopLoggingError::InvalidTrailName(String::from(error_message))
+                    return StopLoggingError::InvalidTrailName(String::from(error_message));
                 }
                 "TrailNotFoundException" => {
-                    return StopLoggingError::TrailNotFound(String::from(error_message))
+                    return StopLoggingError::TrailNotFound(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return StopLoggingError::Validation(error_message.to_string())
+                    return StopLoggingError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
@@ -2229,76 +2229,76 @@ impl UpdateTrailError {
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return UpdateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return UpdateTrailError::InsufficientEncryptionPolicy(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InsufficientS3BucketPolicyException" => {
-                    return UpdateTrailError::InsufficientS3BucketPolicy(String::from(error_message))
+                    return UpdateTrailError::InsufficientS3BucketPolicy(String::from(error_message));
                 }
                 "InsufficientSnsTopicPolicyException" => {
-                    return UpdateTrailError::InsufficientSnsTopicPolicy(String::from(error_message))
+                    return UpdateTrailError::InsufficientSnsTopicPolicy(String::from(error_message));
                 }
                 "InvalidCloudWatchLogsLogGroupArnException" => {
                     return UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidCloudWatchLogsRoleArnException" => {
                     return UpdateTrailError::InvalidCloudWatchLogsRoleArn(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidHomeRegionException" => {
-                    return UpdateTrailError::InvalidHomeRegion(String::from(error_message))
+                    return UpdateTrailError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidKmsKeyIdException" => {
-                    return UpdateTrailError::InvalidKmsKeyId(String::from(error_message))
+                    return UpdateTrailError::InvalidKmsKeyId(String::from(error_message));
                 }
                 "InvalidParameterCombinationException" => {
                     return UpdateTrailError::InvalidParameterCombination(String::from(
                         error_message,
-                    ))
+                    ));
                 }
                 "InvalidS3BucketNameException" => {
-                    return UpdateTrailError::InvalidS3BucketName(String::from(error_message))
+                    return UpdateTrailError::InvalidS3BucketName(String::from(error_message));
                 }
                 "InvalidS3PrefixException" => {
-                    return UpdateTrailError::InvalidS3Prefix(String::from(error_message))
+                    return UpdateTrailError::InvalidS3Prefix(String::from(error_message));
                 }
                 "InvalidSnsTopicNameException" => {
-                    return UpdateTrailError::InvalidSnsTopicName(String::from(error_message))
+                    return UpdateTrailError::InvalidSnsTopicName(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
-                    return UpdateTrailError::InvalidTrailName(String::from(error_message))
+                    return UpdateTrailError::InvalidTrailName(String::from(error_message));
                 }
                 "KmsException" => return UpdateTrailError::Kms(String::from(error_message)),
                 "KmsKeyDisabledException" => {
-                    return UpdateTrailError::KmsKeyDisabled(String::from(error_message))
+                    return UpdateTrailError::KmsKeyDisabled(String::from(error_message));
                 }
                 "KmsKeyNotFoundException" => {
-                    return UpdateTrailError::KmsKeyNotFound(String::from(error_message))
+                    return UpdateTrailError::KmsKeyNotFound(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateTrailError::OperationNotPermitted(String::from(error_message))
+                    return UpdateTrailError::OperationNotPermitted(String::from(error_message));
                 }
                 "S3BucketDoesNotExistException" => {
-                    return UpdateTrailError::S3BucketDoesNotExist(String::from(error_message))
+                    return UpdateTrailError::S3BucketDoesNotExist(String::from(error_message));
                 }
                 "TrailNotFoundException" => {
-                    return UpdateTrailError::TrailNotFound(String::from(error_message))
+                    return UpdateTrailError::TrailNotFound(String::from(error_message));
                 }
                 "TrailNotProvidedException" => {
-                    return UpdateTrailError::TrailNotProvided(String::from(error_message))
+                    return UpdateTrailError::TrailNotProvided(String::from(error_message));
                 }
                 "UnsupportedOperationException" => {
-                    return UpdateTrailError::UnsupportedOperation(String::from(error_message))
+                    return UpdateTrailError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
-                    return UpdateTrailError::Validation(error_message.to_string())
+                    return UpdateTrailError::Validation(error_message.to_string());
                 }
                 _ => {}
             }
