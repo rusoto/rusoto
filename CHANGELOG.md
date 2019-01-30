@@ -1,6 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
+- Upgrade hyper-rustls library
 - Fix duplicated Content-Type header in SageMaker Runtime
 - Switch from `try!` to `?` operator
 - Remove unneeded muts in Glacier codegen
