@@ -109,10 +109,19 @@ pub fn generate_uri_formatter(
         let uri_strings = generate_shape_member_uri_strings(input_shape);
 
         if !uri_strings.is_empty() {
+            // massage for Route53.
+            // See https://github.com/rusoto/rusoto/issues/997 .
+            let replace_em = match service.name().to_ascii_lowercase().as_ref() {
+                "route 53" => {
+                    ".replace(\"/hostedzone/hostedzone/\", \"/hostedzone/\").replace(\"/change/change/\", \"/change/\")"
+                }
+                _ => ""
+            };
             return Some(format!(
-                "let request_uri = format!(\"{request_uri}\", {uri_strings});",
+                "let request_uri = format!(\"{request_uri}\", {uri_strings}){replace_if_needed};",
                 request_uri = generate_snake_case_uri(request_uri),
-                uri_strings = uri_strings.join(", ")
+                uri_strings = uri_strings.join(", "),
+                replace_if_needed = replace_em
             ));
         }
     }
