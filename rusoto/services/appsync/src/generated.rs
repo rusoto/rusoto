@@ -5389,5 +5389,220 @@ impl AppSync for AppSyncClient {
     }
 }
 
+impl<T: ?Sized + AppSync> AppSync for ::std::rc::Rc<T> {
+    /// <p>Creates a unique key that you can distribute to clients who are executing your API.</p>
+    fn create_api_key(
+        &self,
+        input: CreateApiKeyRequest,
+    ) -> RusotoFuture<CreateApiKeyResponse, CreateApiKeyError> {
+        AppSync::create_api_key(&(**self), input)
+    }
+
+    /// <p>Creates a <code>DataSource</code> object.</p>
+    fn create_data_source(
+        &self,
+        input: CreateDataSourceRequest,
+    ) -> RusotoFuture<CreateDataSourceResponse, CreateDataSourceError> {
+        AppSync::create_data_source(&(**self), input)
+    }
+
+    /// <p>Creates a <code>GraphqlApi</code> object.</p>
+    fn create_graphql_api(
+        &self,
+        input: CreateGraphqlApiRequest,
+    ) -> RusotoFuture<CreateGraphqlApiResponse, CreateGraphqlApiError> {
+        AppSync::create_graphql_api(&(**self), input)
+    }
+
+    /// <p>Creates a <code>Resolver</code> object.</p> <p>A resolver converts incoming requests into a format that a data source can understand and converts the data source's responses into GraphQL.</p>
+    fn create_resolver(
+        &self,
+        input: CreateResolverRequest,
+    ) -> RusotoFuture<CreateResolverResponse, CreateResolverError> {
+        AppSync::create_resolver(&(**self), input)
+    }
+
+    /// <p>Creates a <code>Type</code> object.</p>
+    fn create_type(
+        &self,
+        input: CreateTypeRequest,
+    ) -> RusotoFuture<CreateTypeResponse, CreateTypeError> {
+        AppSync::create_type(&(**self), input)
+    }
+
+    /// <p>Deletes an API key.</p>
+    fn delete_api_key(
+        &self,
+        input: DeleteApiKeyRequest,
+    ) -> RusotoFuture<DeleteApiKeyResponse, DeleteApiKeyError> {
+        AppSync::delete_api_key(&(**self), input)
+    }
+
+    /// <p>Deletes a <code>DataSource</code> object.</p>
+    fn delete_data_source(
+        &self,
+        input: DeleteDataSourceRequest,
+    ) -> RusotoFuture<DeleteDataSourceResponse, DeleteDataSourceError> {
+        AppSync::delete_data_source(&(**self), input)
+    }
+
+    /// <p>Deletes a <code>GraphqlApi</code> object.</p>
+    fn delete_graphql_api(
+        &self,
+        input: DeleteGraphqlApiRequest,
+    ) -> RusotoFuture<DeleteGraphqlApiResponse, DeleteGraphqlApiError> {
+        AppSync::delete_graphql_api(&(**self), input)
+    }
+
+    /// <p>Deletes a <code>Resolver</code> object.</p>
+    fn delete_resolver(
+        &self,
+        input: DeleteResolverRequest,
+    ) -> RusotoFuture<DeleteResolverResponse, DeleteResolverError> {
+        AppSync::delete_resolver(&(**self), input)
+    }
+
+    /// <p>Deletes a <code>Type</code> object.</p>
+    fn delete_type(
+        &self,
+        input: DeleteTypeRequest,
+    ) -> RusotoFuture<DeleteTypeResponse, DeleteTypeError> {
+        AppSync::delete_type(&(**self), input)
+    }
+
+    /// <p>Retrieves a <code>DataSource</code> object.</p>
+    fn get_data_source(
+        &self,
+        input: GetDataSourceRequest,
+    ) -> RusotoFuture<GetDataSourceResponse, GetDataSourceError> {
+        AppSync::get_data_source(&(**self), input)
+    }
+
+    /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
+    fn get_graphql_api(
+        &self,
+        input: GetGraphqlApiRequest,
+    ) -> RusotoFuture<GetGraphqlApiResponse, GetGraphqlApiError> {
+        AppSync::get_graphql_api(&(**self), input)
+    }
+
+    /// <p>Retrieves the introspection schema for a GraphQL API.</p>
+    fn get_introspection_schema(
+        &self,
+        input: GetIntrospectionSchemaRequest,
+    ) -> RusotoFuture<GetIntrospectionSchemaResponse, GetIntrospectionSchemaError> {
+        AppSync::get_introspection_schema(&(**self), input)
+    }
+
+    /// <p>Retrieves a <code>Resolver</code> object.</p>
+    fn get_resolver(
+        &self,
+        input: GetResolverRequest,
+    ) -> RusotoFuture<GetResolverResponse, GetResolverError> {
+        AppSync::get_resolver(&(**self), input)
+    }
+
+    /// <p>Retrieves the current status of a schema creation operation.</p>
+    fn get_schema_creation_status(
+        &self,
+        input: GetSchemaCreationStatusRequest,
+    ) -> RusotoFuture<GetSchemaCreationStatusResponse, GetSchemaCreationStatusError> {
+        AppSync::get_schema_creation_status(&(**self), input)
+    }
+
+    /// <p>Retrieves a <code>Type</code> object.</p>
+    fn get_type(&self, input: GetTypeRequest) -> RusotoFuture<GetTypeResponse, GetTypeError> {
+        AppSync::get_type(&(**self), input)
+    }
+
+    /// <p><p>Lists the API keys for a given API.</p> <note> <p>API keys are deleted automatically sometime after they expire. However, they may still be included in the response until they have actually been deleted. You can safely call <code>DeleteApiKey</code> to manually delete a key before it&#39;s automatically deleted.</p> </note></p>
+    fn list_api_keys(
+        &self,
+        input: ListApiKeysRequest,
+    ) -> RusotoFuture<ListApiKeysResponse, ListApiKeysError> {
+        AppSync::list_api_keys(&(**self), input)
+    }
+
+    /// <p>Lists the data sources for a given API.</p>
+    fn list_data_sources(
+        &self,
+        input: ListDataSourcesRequest,
+    ) -> RusotoFuture<ListDataSourcesResponse, ListDataSourcesError> {
+        AppSync::list_data_sources(&(**self), input)
+    }
+
+    /// <p>Lists your GraphQL APIs.</p>
+    fn list_graphql_apis(
+        &self,
+        input: ListGraphqlApisRequest,
+    ) -> RusotoFuture<ListGraphqlApisResponse, ListGraphqlApisError> {
+        AppSync::list_graphql_apis(&(**self), input)
+    }
+
+    /// <p>Lists the resolvers for a given API and type.</p>
+    fn list_resolvers(
+        &self,
+        input: ListResolversRequest,
+    ) -> RusotoFuture<ListResolversResponse, ListResolversError> {
+        AppSync::list_resolvers(&(**self), input)
+    }
+
+    /// <p>Lists the types for a given API.</p>
+    fn list_types(
+        &self,
+        input: ListTypesRequest,
+    ) -> RusotoFuture<ListTypesResponse, ListTypesError> {
+        AppSync::list_types(&(**self), input)
+    }
+
+    /// <p>Adds a new schema to your GraphQL API.</p> <p>This operation is asynchronous. Use to determine when it has completed.</p>
+    fn start_schema_creation(
+        &self,
+        input: StartSchemaCreationRequest,
+    ) -> RusotoFuture<StartSchemaCreationResponse, StartSchemaCreationError> {
+        AppSync::start_schema_creation(&(**self), input)
+    }
+
+    /// <p>Updates an API key.</p>
+    fn update_api_key(
+        &self,
+        input: UpdateApiKeyRequest,
+    ) -> RusotoFuture<UpdateApiKeyResponse, UpdateApiKeyError> {
+        AppSync::update_api_key(&(**self), input)
+    }
+
+    /// <p>Updates a <code>DataSource</code> object.</p>
+    fn update_data_source(
+        &self,
+        input: UpdateDataSourceRequest,
+    ) -> RusotoFuture<UpdateDataSourceResponse, UpdateDataSourceError> {
+        AppSync::update_data_source(&(**self), input)
+    }
+
+    /// <p>Updates a <code>GraphqlApi</code> object.</p>
+    fn update_graphql_api(
+        &self,
+        input: UpdateGraphqlApiRequest,
+    ) -> RusotoFuture<UpdateGraphqlApiResponse, UpdateGraphqlApiError> {
+        AppSync::update_graphql_api(&(**self), input)
+    }
+
+    /// <p>Updates a <code>Resolver</code> object.</p>
+    fn update_resolver(
+        &self,
+        input: UpdateResolverRequest,
+    ) -> RusotoFuture<UpdateResolverResponse, UpdateResolverError> {
+        AppSync::update_resolver(&(**self), input)
+    }
+
+    /// <p>Updates a <code>Type</code> object.</p>
+    fn update_type(
+        &self,
+        input: UpdateTypeRequest,
+    ) -> RusotoFuture<UpdateTypeResponse, UpdateTypeError> {
+        AppSync::update_type(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

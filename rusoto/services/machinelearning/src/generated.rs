@@ -5456,5 +5456,225 @@ impl MachineLearning for MachineLearningClient {
     }
 }
 
+impl<T: ?Sized + MachineLearning> MachineLearning for ::std::rc::Rc<T> {
+    /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
+    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+        MachineLearning::add_tags(&(**self), input)
+    }
+
+    /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
+    fn create_batch_prediction(
+        &self,
+        input: CreateBatchPredictionInput,
+    ) -> RusotoFuture<CreateBatchPredictionOutput, CreateBatchPredictionError> {
+        MachineLearning::create_batch_prediction(&(**self), input)
+    }
+
+    /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
+    fn create_data_source_from_rds(
+        &self,
+        input: CreateDataSourceFromRDSInput,
+    ) -> RusotoFuture<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError> {
+        MachineLearning::create_data_source_from_rds(&(**self), input)
+    }
+
+    /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
+    fn create_data_source_from_redshift(
+        &self,
+        input: CreateDataSourceFromRedshiftInput,
+    ) -> RusotoFuture<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError> {
+        MachineLearning::create_data_source_from_redshift(&(**self), input)
+    }
+
+    /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
+    fn create_data_source_from_s3(
+        &self,
+        input: CreateDataSourceFromS3Input,
+    ) -> RusotoFuture<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error> {
+        MachineLearning::create_data_source_from_s3(&(**self), input)
+    }
+
+    /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
+    fn create_evaluation(
+        &self,
+        input: CreateEvaluationInput,
+    ) -> RusotoFuture<CreateEvaluationOutput, CreateEvaluationError> {
+        MachineLearning::create_evaluation(&(**self), input)
+    }
+
+    /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
+    fn create_ml_model(
+        &self,
+        input: CreateMLModelInput,
+    ) -> RusotoFuture<CreateMLModelOutput, CreateMLModelError> {
+        MachineLearning::create_ml_model(&(**self), input)
+    }
+
+    /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
+    fn create_realtime_endpoint(
+        &self,
+        input: CreateRealtimeEndpointInput,
+    ) -> RusotoFuture<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError> {
+        MachineLearning::create_realtime_endpoint(&(**self), input)
+    }
+
+    /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
+    fn delete_batch_prediction(
+        &self,
+        input: DeleteBatchPredictionInput,
+    ) -> RusotoFuture<DeleteBatchPredictionOutput, DeleteBatchPredictionError> {
+        MachineLearning::delete_batch_prediction(&(**self), input)
+    }
+
+    /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
+    fn delete_data_source(
+        &self,
+        input: DeleteDataSourceInput,
+    ) -> RusotoFuture<DeleteDataSourceOutput, DeleteDataSourceError> {
+        MachineLearning::delete_data_source(&(**self), input)
+    }
+
+    /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
+    fn delete_evaluation(
+        &self,
+        input: DeleteEvaluationInput,
+    ) -> RusotoFuture<DeleteEvaluationOutput, DeleteEvaluationError> {
+        MachineLearning::delete_evaluation(&(**self), input)
+    }
+
+    /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
+    fn delete_ml_model(
+        &self,
+        input: DeleteMLModelInput,
+    ) -> RusotoFuture<DeleteMLModelOutput, DeleteMLModelError> {
+        MachineLearning::delete_ml_model(&(**self), input)
+    }
+
+    /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
+    fn delete_realtime_endpoint(
+        &self,
+        input: DeleteRealtimeEndpointInput,
+    ) -> RusotoFuture<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError> {
+        MachineLearning::delete_realtime_endpoint(&(**self), input)
+    }
+
+    /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
+    fn delete_tags(
+        &self,
+        input: DeleteTagsInput,
+    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
+        MachineLearning::delete_tags(&(**self), input)
+    }
+
+    /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
+    fn describe_batch_predictions(
+        &self,
+        input: DescribeBatchPredictionsInput,
+    ) -> RusotoFuture<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError> {
+        MachineLearning::describe_batch_predictions(&(**self), input)
+    }
+
+    /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
+    fn describe_data_sources(
+        &self,
+        input: DescribeDataSourcesInput,
+    ) -> RusotoFuture<DescribeDataSourcesOutput, DescribeDataSourcesError> {
+        MachineLearning::describe_data_sources(&(**self), input)
+    }
+
+    /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
+    fn describe_evaluations(
+        &self,
+        input: DescribeEvaluationsInput,
+    ) -> RusotoFuture<DescribeEvaluationsOutput, DescribeEvaluationsError> {
+        MachineLearning::describe_evaluations(&(**self), input)
+    }
+
+    /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
+    fn describe_ml_models(
+        &self,
+        input: DescribeMLModelsInput,
+    ) -> RusotoFuture<DescribeMLModelsOutput, DescribeMLModelsError> {
+        MachineLearning::describe_ml_models(&(**self), input)
+    }
+
+    /// <p>Describes one or more of the tags for your Amazon ML object.</p>
+    fn describe_tags(
+        &self,
+        input: DescribeTagsInput,
+    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
+        MachineLearning::describe_tags(&(**self), input)
+    }
+
+    /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
+    fn get_batch_prediction(
+        &self,
+        input: GetBatchPredictionInput,
+    ) -> RusotoFuture<GetBatchPredictionOutput, GetBatchPredictionError> {
+        MachineLearning::get_batch_prediction(&(**self), input)
+    }
+
+    /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
+    fn get_data_source(
+        &self,
+        input: GetDataSourceInput,
+    ) -> RusotoFuture<GetDataSourceOutput, GetDataSourceError> {
+        MachineLearning::get_data_source(&(**self), input)
+    }
+
+    /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
+    fn get_evaluation(
+        &self,
+        input: GetEvaluationInput,
+    ) -> RusotoFuture<GetEvaluationOutput, GetEvaluationError> {
+        MachineLearning::get_evaluation(&(**self), input)
+    }
+
+    /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
+    fn get_ml_model(
+        &self,
+        input: GetMLModelInput,
+    ) -> RusotoFuture<GetMLModelOutput, GetMLModelError> {
+        MachineLearning::get_ml_model(&(**self), input)
+    }
+
+    /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
+    fn predict(&self, input: PredictInput) -> RusotoFuture<PredictOutput, PredictError> {
+        MachineLearning::predict(&(**self), input)
+    }
+
+    /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
+    fn update_batch_prediction(
+        &self,
+        input: UpdateBatchPredictionInput,
+    ) -> RusotoFuture<UpdateBatchPredictionOutput, UpdateBatchPredictionError> {
+        MachineLearning::update_batch_prediction(&(**self), input)
+    }
+
+    /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
+    fn update_data_source(
+        &self,
+        input: UpdateDataSourceInput,
+    ) -> RusotoFuture<UpdateDataSourceOutput, UpdateDataSourceError> {
+        MachineLearning::update_data_source(&(**self), input)
+    }
+
+    /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
+    fn update_evaluation(
+        &self,
+        input: UpdateEvaluationInput,
+    ) -> RusotoFuture<UpdateEvaluationOutput, UpdateEvaluationError> {
+        MachineLearning::update_evaluation(&(**self), input)
+    }
+
+    /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
+    fn update_ml_model(
+        &self,
+        input: UpdateMLModelInput,
+    ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError> {
+        MachineLearning::update_ml_model(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

@@ -3473,5 +3473,160 @@ impl StepFunctions for StepFunctionsClient {
     }
 }
 
+impl<T: ?Sized + StepFunctions> StepFunctions for ::std::rc::Rc<T> {
+    /// <p>Creates an activity. An activity is a task which you write in any programming language and host on any machine which has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
+    fn create_activity(
+        &self,
+        input: CreateActivityInput,
+    ) -> RusotoFuture<CreateActivityOutput, CreateActivityError> {
+        StepFunctions::create_activity(&(**self), input)
+    }
+
+    /// <p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p>
+    fn create_state_machine(
+        &self,
+        input: CreateStateMachineInput,
+    ) -> RusotoFuture<CreateStateMachineOutput, CreateStateMachineError> {
+        StepFunctions::create_state_machine(&(**self), input)
+    }
+
+    /// <p>Deletes an activity.</p>
+    fn delete_activity(
+        &self,
+        input: DeleteActivityInput,
+    ) -> RusotoFuture<DeleteActivityOutput, DeleteActivityError> {
+        StepFunctions::delete_activity(&(**self), input)
+    }
+
+    /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
+    fn delete_state_machine(
+        &self,
+        input: DeleteStateMachineInput,
+    ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError> {
+        StepFunctions::delete_state_machine(&(**self), input)
+    }
+
+    /// <p>Describes an activity.</p>
+    fn describe_activity(
+        &self,
+        input: DescribeActivityInput,
+    ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError> {
+        StepFunctions::describe_activity(&(**self), input)
+    }
+
+    /// <p>Describes an execution.</p>
+    fn describe_execution(
+        &self,
+        input: DescribeExecutionInput,
+    ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError> {
+        StepFunctions::describe_execution(&(**self), input)
+    }
+
+    /// <p>Describes a state machine.</p>
+    fn describe_state_machine(
+        &self,
+        input: DescribeStateMachineInput,
+    ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError> {
+        StepFunctions::describe_state_machine(&(**self), input)
+    }
+
+    /// <p>Describes the state machine associated with a specific execution.</p>
+    fn describe_state_machine_for_execution(
+        &self,
+        input: DescribeStateMachineForExecutionInput,
+    ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>
+    {
+        StepFunctions::describe_state_machine_for_execution(&(**self), input)
+    }
+
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
+    fn get_activity_task(
+        &self,
+        input: GetActivityTaskInput,
+    ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError> {
+        StepFunctions::get_activity_task(&(**self), input)
+    }
+
+    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    fn get_execution_history(
+        &self,
+        input: GetExecutionHistoryInput,
+    ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError> {
+        StepFunctions::get_execution_history(&(**self), input)
+    }
+
+    /// <p>Lists the existing activities.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    fn list_activities(
+        &self,
+        input: ListActivitiesInput,
+    ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError> {
+        StepFunctions::list_activities(&(**self), input)
+    }
+
+    /// <p>Lists the executions of a state machine that meet the filtering criteria.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    fn list_executions(
+        &self,
+        input: ListExecutionsInput,
+    ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError> {
+        StepFunctions::list_executions(&(**self), input)
+    }
+
+    /// <p>Lists the existing state machines.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    fn list_state_machines(
+        &self,
+        input: ListStateMachinesInput,
+    ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError> {
+        StepFunctions::list_state_machines(&(**self), input)
+    }
+
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
+    fn send_task_failure(
+        &self,
+        input: SendTaskFailureInput,
+    ) -> RusotoFuture<SendTaskFailureOutput, SendTaskFailureError> {
+        StepFunctions::send_task_failure(&(**self), input)
+    }
+
+    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
+    fn send_task_heartbeat(
+        &self,
+        input: SendTaskHeartbeatInput,
+    ) -> RusotoFuture<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
+        StepFunctions::send_task_heartbeat(&(**self), input)
+    }
+
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
+    fn send_task_success(
+        &self,
+        input: SendTaskSuccessInput,
+    ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError> {
+        StepFunctions::send_task_success(&(**self), input)
+    }
+
+    /// <p>Starts a state machine execution.</p>
+    fn start_execution(
+        &self,
+        input: StartExecutionInput,
+    ) -> RusotoFuture<StartExecutionOutput, StartExecutionError> {
+        StepFunctions::start_execution(&(**self), input)
+    }
+
+    /// <p>Stops an execution.</p>
+    fn stop_execution(
+        &self,
+        input: StopExecutionInput,
+    ) -> RusotoFuture<StopExecutionOutput, StopExecutionError> {
+        StepFunctions::stop_execution(&(**self), input)
+    }
+
+    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> </note></p>
+    fn update_state_machine(
+        &self,
+        input: UpdateStateMachineInput,
+    ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError> {
+        StepFunctions::update_state_machine(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

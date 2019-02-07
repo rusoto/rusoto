@@ -833,5 +833,36 @@ impl IotData for IotDataClient {
     }
 }
 
+impl<T: ?Sized + IotData> IotData for ::std::rc::Rc<T> {
+    /// <p>Deletes the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_DeleteThingShadow.html">DeleteThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    fn delete_thing_shadow(
+        &self,
+        input: DeleteThingShadowRequest,
+    ) -> RusotoFuture<DeleteThingShadowResponse, DeleteThingShadowError> {
+        IotData::delete_thing_shadow(&(**self), input)
+    }
+
+    /// <p>Gets the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_GetThingShadow.html">GetThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    fn get_thing_shadow(
+        &self,
+        input: GetThingShadowRequest,
+    ) -> RusotoFuture<GetThingShadowResponse, GetThingShadowError> {
+        IotData::get_thing_shadow(&(**self), input)
+    }
+
+    /// <p>Publishes state information.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/protocols.html#http">HTTP Protocol</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    fn publish(&self, input: PublishRequest) -> RusotoFuture<(), PublishError> {
+        IotData::publish(&(**self), input)
+    }
+
+    /// <p>Updates the thing shadow for the specified thing.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/API_UpdateThingShadow.html">UpdateThingShadow</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    fn update_thing_shadow(
+        &self,
+        input: UpdateThingShadowRequest,
+    ) -> RusotoFuture<UpdateThingShadowResponse, UpdateThingShadowError> {
+        IotData::update_thing_shadow(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

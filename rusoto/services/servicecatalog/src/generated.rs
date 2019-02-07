@@ -10886,5 +10886,496 @@ impl ServiceCatalog for ServiceCatalogClient {
     }
 }
 
+impl<T: ?Sized + ServiceCatalog> ServiceCatalog for ::std::rc::Rc<T> {
+    /// <p>Accepts an offer to share the specified portfolio.</p>
+    fn accept_portfolio_share(
+        &self,
+        input: AcceptPortfolioShareInput,
+    ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
+        ServiceCatalog::accept_portfolio_share(&(**self), input)
+    }
+
+    /// <p>Associates the specified principal ARN with the specified portfolio.</p>
+    fn associate_principal_with_portfolio(
+        &self,
+        input: AssociatePrincipalWithPortfolioInput,
+    ) -> RusotoFuture<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>
+    {
+        ServiceCatalog::associate_principal_with_portfolio(&(**self), input)
+    }
+
+    /// <p>Associates the specified product with the specified portfolio.</p>
+    fn associate_product_with_portfolio(
+        &self,
+        input: AssociateProductWithPortfolioInput,
+    ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
+        ServiceCatalog::associate_product_with_portfolio(&(**self), input)
+    }
+
+    /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
+    fn associate_tag_option_with_resource(
+        &self,
+        input: AssociateTagOptionWithResourceInput,
+    ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>
+    {
+        ServiceCatalog::associate_tag_option_with_resource(&(**self), input)
+    }
+
+    /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
+    fn copy_product(
+        &self,
+        input: CopyProductInput,
+    ) -> RusotoFuture<CopyProductOutput, CopyProductError> {
+        ServiceCatalog::copy_product(&(**self), input)
+    }
+
+    /// <p>Creates a constraint.</p>
+    fn create_constraint(
+        &self,
+        input: CreateConstraintInput,
+    ) -> RusotoFuture<CreateConstraintOutput, CreateConstraintError> {
+        ServiceCatalog::create_constraint(&(**self), input)
+    }
+
+    /// <p>Creates a portfolio.</p>
+    fn create_portfolio(
+        &self,
+        input: CreatePortfolioInput,
+    ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError> {
+        ServiceCatalog::create_portfolio(&(**self), input)
+    }
+
+    /// <p>Shares the specified portfolio with the specified account.</p>
+    fn create_portfolio_share(
+        &self,
+        input: CreatePortfolioShareInput,
+    ) -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError> {
+        ServiceCatalog::create_portfolio_share(&(**self), input)
+    }
+
+    /// <p>Creates a product.</p>
+    fn create_product(
+        &self,
+        input: CreateProductInput,
+    ) -> RusotoFuture<CreateProductOutput, CreateProductError> {
+        ServiceCatalog::create_product(&(**self), input)
+    }
+
+    /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
+    fn create_provisioned_product_plan(
+        &self,
+        input: CreateProvisionedProductPlanInput,
+    ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError> {
+        ServiceCatalog::create_provisioned_product_plan(&(**self), input)
+    }
+
+    /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
+    fn create_provisioning_artifact(
+        &self,
+        input: CreateProvisioningArtifactInput,
+    ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
+        ServiceCatalog::create_provisioning_artifact(&(**self), input)
+    }
+
+    /// <p>Creates a TagOption.</p>
+    fn create_tag_option(
+        &self,
+        input: CreateTagOptionInput,
+    ) -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError> {
+        ServiceCatalog::create_tag_option(&(**self), input)
+    }
+
+    /// <p>Deletes the specified constraint.</p>
+    fn delete_constraint(
+        &self,
+        input: DeleteConstraintInput,
+    ) -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError> {
+        ServiceCatalog::delete_constraint(&(**self), input)
+    }
+
+    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
+    fn delete_portfolio(
+        &self,
+        input: DeletePortfolioInput,
+    ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError> {
+        ServiceCatalog::delete_portfolio(&(**self), input)
+    }
+
+    /// <p>Stops sharing the specified portfolio with the specified account.</p>
+    fn delete_portfolio_share(
+        &self,
+        input: DeletePortfolioShareInput,
+    ) -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError> {
+        ServiceCatalog::delete_portfolio_share(&(**self), input)
+    }
+
+    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
+    fn delete_product(
+        &self,
+        input: DeleteProductInput,
+    ) -> RusotoFuture<DeleteProductOutput, DeleteProductError> {
+        ServiceCatalog::delete_product(&(**self), input)
+    }
+
+    /// <p>Deletes the specified plan.</p>
+    fn delete_provisioned_product_plan(
+        &self,
+        input: DeleteProvisionedProductPlanInput,
+    ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError> {
+        ServiceCatalog::delete_provisioned_product_plan(&(**self), input)
+    }
+
+    /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
+    fn delete_provisioning_artifact(
+        &self,
+        input: DeleteProvisioningArtifactInput,
+    ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
+        ServiceCatalog::delete_provisioning_artifact(&(**self), input)
+    }
+
+    /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
+    fn delete_tag_option(
+        &self,
+        input: DeleteTagOptionInput,
+    ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError> {
+        ServiceCatalog::delete_tag_option(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified constraint.</p>
+    fn describe_constraint(
+        &self,
+        input: DescribeConstraintInput,
+    ) -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError> {
+        ServiceCatalog::describe_constraint(&(**self), input)
+    }
+
+    /// <p>Gets the status of the specified copy product operation.</p>
+    fn describe_copy_product_status(
+        &self,
+        input: DescribeCopyProductStatusInput,
+    ) -> RusotoFuture<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError> {
+        ServiceCatalog::describe_copy_product_status(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified portfolio.</p>
+    fn describe_portfolio(
+        &self,
+        input: DescribePortfolioInput,
+    ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError> {
+        ServiceCatalog::describe_portfolio(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified product.</p>
+    fn describe_product(
+        &self,
+        input: DescribeProductInput,
+    ) -> RusotoFuture<DescribeProductOutput, DescribeProductError> {
+        ServiceCatalog::describe_product(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
+    fn describe_product_as_admin(
+        &self,
+        input: DescribeProductAsAdminInput,
+    ) -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
+        ServiceCatalog::describe_product_as_admin(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified product.</p>
+    fn describe_product_view(
+        &self,
+        input: DescribeProductViewInput,
+    ) -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError> {
+        ServiceCatalog::describe_product_view(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified provisioned product.</p>
+    fn describe_provisioned_product(
+        &self,
+        input: DescribeProvisionedProductInput,
+    ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
+        ServiceCatalog::describe_provisioned_product(&(**self), input)
+    }
+
+    /// <p>Gets information about the resource changes for the specified plan.</p>
+    fn describe_provisioned_product_plan(
+        &self,
+        input: DescribeProvisionedProductPlanInput,
+    ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>
+    {
+        ServiceCatalog::describe_provisioned_product_plan(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
+    fn describe_provisioning_artifact(
+        &self,
+        input: DescribeProvisioningArtifactInput,
+    ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
+        ServiceCatalog::describe_provisioning_artifact(&(**self), input)
+    }
+
+    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
+    fn describe_provisioning_parameters(
+        &self,
+        input: DescribeProvisioningParametersInput,
+    ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>
+    {
+        ServiceCatalog::describe_provisioning_parameters(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
+    fn describe_record(
+        &self,
+        input: DescribeRecordInput,
+    ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError> {
+        ServiceCatalog::describe_record(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified TagOption.</p>
+    fn describe_tag_option(
+        &self,
+        input: DescribeTagOptionInput,
+    ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError> {
+        ServiceCatalog::describe_tag_option(&(**self), input)
+    }
+
+    /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
+    fn disassociate_principal_from_portfolio(
+        &self,
+        input: DisassociatePrincipalFromPortfolioInput,
+    ) -> RusotoFuture<
+        DisassociatePrincipalFromPortfolioOutput,
+        DisassociatePrincipalFromPortfolioError,
+    > {
+        ServiceCatalog::disassociate_principal_from_portfolio(&(**self), input)
+    }
+
+    /// <p>Disassociates the specified product from the specified portfolio. </p>
+    fn disassociate_product_from_portfolio(
+        &self,
+        input: DisassociateProductFromPortfolioInput,
+    ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>
+    {
+        ServiceCatalog::disassociate_product_from_portfolio(&(**self), input)
+    }
+
+    /// <p>Disassociates the specified TagOption from the specified resource.</p>
+    fn disassociate_tag_option_from_resource(
+        &self,
+        input: DisassociateTagOptionFromResourceInput,
+    ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>
+    {
+        ServiceCatalog::disassociate_tag_option_from_resource(&(**self), input)
+    }
+
+    /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
+    fn execute_provisioned_product_plan(
+        &self,
+        input: ExecuteProvisionedProductPlanInput,
+    ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError> {
+        ServiceCatalog::execute_provisioned_product_plan(&(**self), input)
+    }
+
+    /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
+    fn list_accepted_portfolio_shares(
+        &self,
+        input: ListAcceptedPortfolioSharesInput,
+    ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
+        ServiceCatalog::list_accepted_portfolio_shares(&(**self), input)
+    }
+
+    /// <p>Lists the constraints for the specified portfolio and product.</p>
+    fn list_constraints_for_portfolio(
+        &self,
+        input: ListConstraintsForPortfolioInput,
+    ) -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
+        ServiceCatalog::list_constraints_for_portfolio(&(**self), input)
+    }
+
+    /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
+    fn list_launch_paths(
+        &self,
+        input: ListLaunchPathsInput,
+    ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError> {
+        ServiceCatalog::list_launch_paths(&(**self), input)
+    }
+
+    /// <p>Lists the account IDs that have access to the specified portfolio.</p>
+    fn list_portfolio_access(
+        &self,
+        input: ListPortfolioAccessInput,
+    ) -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError> {
+        ServiceCatalog::list_portfolio_access(&(**self), input)
+    }
+
+    /// <p>Lists all portfolios in the catalog.</p>
+    fn list_portfolios(
+        &self,
+        input: ListPortfoliosInput,
+    ) -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError> {
+        ServiceCatalog::list_portfolios(&(**self), input)
+    }
+
+    /// <p>Lists all portfolios that the specified product is associated with.</p>
+    fn list_portfolios_for_product(
+        &self,
+        input: ListPortfoliosForProductInput,
+    ) -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
+        ServiceCatalog::list_portfolios_for_product(&(**self), input)
+    }
+
+    /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
+    fn list_principals_for_portfolio(
+        &self,
+        input: ListPrincipalsForPortfolioInput,
+    ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
+        ServiceCatalog::list_principals_for_portfolio(&(**self), input)
+    }
+
+    /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
+    fn list_provisioned_product_plans(
+        &self,
+        input: ListProvisionedProductPlansInput,
+    ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError> {
+        ServiceCatalog::list_provisioned_product_plans(&(**self), input)
+    }
+
+    /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
+    fn list_provisioning_artifacts(
+        &self,
+        input: ListProvisioningArtifactsInput,
+    ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
+        ServiceCatalog::list_provisioning_artifacts(&(**self), input)
+    }
+
+    /// <p>Lists the specified requests or all performed requests.</p>
+    fn list_record_history(
+        &self,
+        input: ListRecordHistoryInput,
+    ) -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError> {
+        ServiceCatalog::list_record_history(&(**self), input)
+    }
+
+    /// <p>Lists the resources associated with the specified TagOption.</p>
+    fn list_resources_for_tag_option(
+        &self,
+        input: ListResourcesForTagOptionInput,
+    ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
+        ServiceCatalog::list_resources_for_tag_option(&(**self), input)
+    }
+
+    /// <p>Lists the specified TagOptions or all TagOptions.</p>
+    fn list_tag_options(
+        &self,
+        input: ListTagOptionsInput,
+    ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError> {
+        ServiceCatalog::list_tag_options(&(**self), input)
+    }
+
+    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
+    fn provision_product(
+        &self,
+        input: ProvisionProductInput,
+    ) -> RusotoFuture<ProvisionProductOutput, ProvisionProductError> {
+        ServiceCatalog::provision_product(&(**self), input)
+    }
+
+    /// <p>Rejects an offer to share the specified portfolio.</p>
+    fn reject_portfolio_share(
+        &self,
+        input: RejectPortfolioShareInput,
+    ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError> {
+        ServiceCatalog::reject_portfolio_share(&(**self), input)
+    }
+
+    /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
+    fn scan_provisioned_products(
+        &self,
+        input: ScanProvisionedProductsInput,
+    ) -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
+        ServiceCatalog::scan_provisioned_products(&(**self), input)
+    }
+
+    /// <p>Gets information about the products to which the caller has access.</p>
+    fn search_products(
+        &self,
+        input: SearchProductsInput,
+    ) -> RusotoFuture<SearchProductsOutput, SearchProductsError> {
+        ServiceCatalog::search_products(&(**self), input)
+    }
+
+    /// <p>Gets information about the products for the specified portfolio or all products.</p>
+    fn search_products_as_admin(
+        &self,
+        input: SearchProductsAsAdminInput,
+    ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
+        ServiceCatalog::search_products_as_admin(&(**self), input)
+    }
+
+    /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
+    fn search_provisioned_products(
+        &self,
+        input: SearchProvisionedProductsInput,
+    ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError> {
+        ServiceCatalog::search_provisioned_products(&(**self), input)
+    }
+
+    /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
+    fn terminate_provisioned_product(
+        &self,
+        input: TerminateProvisionedProductInput,
+    ) -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
+        ServiceCatalog::terminate_provisioned_product(&(**self), input)
+    }
+
+    /// <p>Updates the specified constraint.</p>
+    fn update_constraint(
+        &self,
+        input: UpdateConstraintInput,
+    ) -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError> {
+        ServiceCatalog::update_constraint(&(**self), input)
+    }
+
+    /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
+    fn update_portfolio(
+        &self,
+        input: UpdatePortfolioInput,
+    ) -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError> {
+        ServiceCatalog::update_portfolio(&(**self), input)
+    }
+
+    /// <p>Updates the specified product.</p>
+    fn update_product(
+        &self,
+        input: UpdateProductInput,
+    ) -> RusotoFuture<UpdateProductOutput, UpdateProductError> {
+        ServiceCatalog::update_product(&(**self), input)
+    }
+
+    /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
+    fn update_provisioned_product(
+        &self,
+        input: UpdateProvisionedProductInput,
+    ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
+        ServiceCatalog::update_provisioned_product(&(**self), input)
+    }
+
+    /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
+    fn update_provisioning_artifact(
+        &self,
+        input: UpdateProvisioningArtifactInput,
+    ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
+        ServiceCatalog::update_provisioning_artifact(&(**self), input)
+    }
+
+    /// <p>Updates the specified TagOption.</p>
+    fn update_tag_option(
+        &self,
+        input: UpdateTagOptionInput,
+    ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError> {
+        ServiceCatalog::update_tag_option(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

@@ -4037,5 +4037,194 @@ impl Workspaces for WorkspacesClient {
     }
 }
 
+impl<T: ?Sized + Workspaces> Workspaces for ::std::rc::Rc<T> {
+    /// <p>Associates the specified IP access control group with the specified directory.</p>
+    fn associate_ip_groups(
+        &self,
+        input: AssociateIpGroupsRequest,
+    ) -> RusotoFuture<AssociateIpGroupsResult, AssociateIpGroupsError> {
+        Workspaces::associate_ip_groups(&(**self), input)
+    }
+
+    /// <p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>
+    fn authorize_ip_rules(
+        &self,
+        input: AuthorizeIpRulesRequest,
+    ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError> {
+        Workspaces::authorize_ip_rules(&(**self), input)
+    }
+
+    /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
+    fn create_ip_group(
+        &self,
+        input: CreateIpGroupRequest,
+    ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError> {
+        Workspaces::create_ip_group(&(**self), input)
+    }
+
+    /// <p>Creates the specified tags for the specified WorkSpace.</p>
+    fn create_tags(
+        &self,
+        input: CreateTagsRequest,
+    ) -> RusotoFuture<CreateTagsResult, CreateTagsError> {
+        Workspaces::create_tags(&(**self), input)
+    }
+
+    /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
+    fn create_workspaces(
+        &self,
+        input: CreateWorkspacesRequest,
+    ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError> {
+        Workspaces::create_workspaces(&(**self), input)
+    }
+
+    /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
+    fn delete_ip_group(
+        &self,
+        input: DeleteIpGroupRequest,
+    ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError> {
+        Workspaces::delete_ip_group(&(**self), input)
+    }
+
+    /// <p>Deletes the specified tags from the specified WorkSpace.</p>
+    fn delete_tags(
+        &self,
+        input: DeleteTagsRequest,
+    ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError> {
+        Workspaces::delete_tags(&(**self), input)
+    }
+
+    /// <p>Describes one or more of your IP access control groups.</p>
+    fn describe_ip_groups(
+        &self,
+        input: DescribeIpGroupsRequest,
+    ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError> {
+        Workspaces::describe_ip_groups(&(**self), input)
+    }
+
+    /// <p>Describes the specified tags for the specified WorkSpace.</p>
+    fn describe_tags(
+        &self,
+        input: DescribeTagsRequest,
+    ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError> {
+        Workspaces::describe_tags(&(**self), input)
+    }
+
+    /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
+    fn describe_workspace_bundles(
+        &self,
+        input: DescribeWorkspaceBundlesRequest,
+    ) -> RusotoFuture<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
+        Workspaces::describe_workspace_bundles(&(**self), input)
+    }
+
+    /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
+    fn describe_workspace_directories(
+        &self,
+        input: DescribeWorkspaceDirectoriesRequest,
+    ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
+        Workspaces::describe_workspace_directories(&(**self), input)
+    }
+
+    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
+    fn describe_workspaces(
+        &self,
+        input: DescribeWorkspacesRequest,
+    ) -> RusotoFuture<DescribeWorkspacesResult, DescribeWorkspacesError> {
+        Workspaces::describe_workspaces(&(**self), input)
+    }
+
+    /// <p>Describes the connection status of the specified WorkSpaces.</p>
+    fn describe_workspaces_connection_status(
+        &self,
+        input: DescribeWorkspacesConnectionStatusRequest,
+    ) -> RusotoFuture<
+        DescribeWorkspacesConnectionStatusResult,
+        DescribeWorkspacesConnectionStatusError,
+    > {
+        Workspaces::describe_workspaces_connection_status(&(**self), input)
+    }
+
+    /// <p>Disassociates the specified IP access control group from the specified directory.</p>
+    fn disassociate_ip_groups(
+        &self,
+        input: DisassociateIpGroupsRequest,
+    ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError> {
+        Workspaces::disassociate_ip_groups(&(**self), input)
+    }
+
+    /// <p>Modifies the specified WorkSpace properties.</p>
+    fn modify_workspace_properties(
+        &self,
+        input: ModifyWorkspacePropertiesRequest,
+    ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
+        Workspaces::modify_workspace_properties(&(**self), input)
+    }
+
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    fn modify_workspace_state(
+        &self,
+        input: ModifyWorkspaceStateRequest,
+    ) -> RusotoFuture<ModifyWorkspaceStateResult, ModifyWorkspaceStateError> {
+        Workspaces::modify_workspace_state(&(**self), input)
+    }
+
+    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
+    fn reboot_workspaces(
+        &self,
+        input: RebootWorkspacesRequest,
+    ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError> {
+        Workspaces::reboot_workspaces(&(**self), input)
+    }
+
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    fn rebuild_workspaces(
+        &self,
+        input: RebuildWorkspacesRequest,
+    ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError> {
+        Workspaces::rebuild_workspaces(&(**self), input)
+    }
+
+    /// <p>Removes one or more rules from the specified IP access control group.</p>
+    fn revoke_ip_rules(
+        &self,
+        input: RevokeIpRulesRequest,
+    ) -> RusotoFuture<RevokeIpRulesResult, RevokeIpRulesError> {
+        Workspaces::revoke_ip_rules(&(**self), input)
+    }
+
+    /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
+    fn start_workspaces(
+        &self,
+        input: StartWorkspacesRequest,
+    ) -> RusotoFuture<StartWorkspacesResult, StartWorkspacesError> {
+        Workspaces::start_workspaces(&(**self), input)
+    }
+
+    /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
+    fn stop_workspaces(
+        &self,
+        input: StopWorkspacesRequest,
+    ) -> RusotoFuture<StopWorkspacesResult, StopWorkspacesError> {
+        Workspaces::stop_workspaces(&(**self), input)
+    }
+
+    /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
+    fn terminate_workspaces(
+        &self,
+        input: TerminateWorkspacesRequest,
+    ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError> {
+        Workspaces::terminate_workspaces(&(**self), input)
+    }
+
+    /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
+    fn update_rules_of_ip_group(
+        &self,
+        input: UpdateRulesOfIpGroupRequest,
+    ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError> {
+        Workspaces::update_rules_of_ip_group(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

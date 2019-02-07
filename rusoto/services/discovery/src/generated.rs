@@ -3659,5 +3659,164 @@ impl Discovery for DiscoveryClient {
     }
 }
 
+impl<T: ?Sized + Discovery> Discovery for ::std::rc::Rc<T> {
+    /// <p>Associates one or more configuration items with an application.</p>
+    fn associate_configuration_items_to_application(
+        &self,
+        input: AssociateConfigurationItemsToApplicationRequest,
+    ) -> RusotoFuture<
+        AssociateConfigurationItemsToApplicationResponse,
+        AssociateConfigurationItemsToApplicationError,
+    > {
+        Discovery::associate_configuration_items_to_application(&(**self), input)
+    }
+
+    /// <p>Creates an application with the given name and description.</p>
+    fn create_application(
+        &self,
+        input: CreateApplicationRequest,
+    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
+        Discovery::create_application(&(**self), input)
+    }
+
+    /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
+    fn create_tags(
+        &self,
+        input: CreateTagsRequest,
+    ) -> RusotoFuture<CreateTagsResponse, CreateTagsError> {
+        Discovery::create_tags(&(**self), input)
+    }
+
+    /// <p>Deletes a list of applications and their associations with configuration items.</p>
+    fn delete_applications(
+        &self,
+        input: DeleteApplicationsRequest,
+    ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError> {
+        Discovery::delete_applications(&(**self), input)
+    }
+
+    /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
+    fn delete_tags(
+        &self,
+        input: DeleteTagsRequest,
+    ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError> {
+        Discovery::delete_tags(&(**self), input)
+    }
+
+    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
+    fn describe_agents(
+        &self,
+        input: DescribeAgentsRequest,
+    ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError> {
+        Discovery::describe_agents(&(**self), input)
+    }
+
+    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
+    fn describe_configurations(
+        &self,
+        input: DescribeConfigurationsRequest,
+    ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError> {
+        Discovery::describe_configurations(&(**self), input)
+    }
+
+    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
+    fn describe_export_configurations(
+        &self,
+        input: DescribeExportConfigurationsRequest,
+    ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
+        Discovery::describe_export_configurations(&(**self), input)
+    }
+
+    /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
+    fn describe_export_tasks(
+        &self,
+        input: DescribeExportTasksRequest,
+    ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
+        Discovery::describe_export_tasks(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
+    fn describe_tags(
+        &self,
+        input: DescribeTagsRequest,
+    ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
+        Discovery::describe_tags(&(**self), input)
+    }
+
+    /// <p>Disassociates one or more configuration items from an application.</p>
+    fn disassociate_configuration_items_from_application(
+        &self,
+        input: DisassociateConfigurationItemsFromApplicationRequest,
+    ) -> RusotoFuture<
+        DisassociateConfigurationItemsFromApplicationResponse,
+        DisassociateConfigurationItemsFromApplicationError,
+    > {
+        Discovery::disassociate_configuration_items_from_application(&(**self), input)
+    }
+
+    /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
+    fn export_configurations(
+        &self,
+    ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError> {
+        Discovery::export_configurations(&(**self))
+    }
+
+    /// <p>Retrieves a short summary of discovered assets.</p>
+    fn get_discovery_summary(
+        &self,
+    ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
+        Discovery::get_discovery_summary(&(**self))
+    }
+
+    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
+    fn list_configurations(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+        Discovery::list_configurations(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
+    fn list_server_neighbors(
+        &self,
+        input: ListServerNeighborsRequest,
+    ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError> {
+        Discovery::list_server_neighbors(&(**self), input)
+    }
+
+    /// <p>Instructs the specified agents or connectors to start collecting data.</p>
+    fn start_data_collection_by_agent_ids(
+        &self,
+        input: StartDataCollectionByAgentIdsRequest,
+    ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>
+    {
+        Discovery::start_data_collection_by_agent_ids(&(**self), input)
+    }
+
+    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
+    fn start_export_task(
+        &self,
+        input: StartExportTaskRequest,
+    ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError> {
+        Discovery::start_export_task(&(**self), input)
+    }
+
+    /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
+    fn stop_data_collection_by_agent_ids(
+        &self,
+        input: StopDataCollectionByAgentIdsRequest,
+    ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
+        Discovery::stop_data_collection_by_agent_ids(&(**self), input)
+    }
+
+    /// <p>Updates metadata about an application.</p>
+    fn update_application(
+        &self,
+        input: UpdateApplicationRequest,
+    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
+        Discovery::update_application(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

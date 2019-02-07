@@ -6684,5 +6684,258 @@ impl IotAnalytics for IotAnalyticsClient {
     }
 }
 
+impl<T: ?Sized + IotAnalytics> IotAnalytics for ::std::rc::Rc<T> {
+    /// <p>Sends messages to a channel.</p>
+    fn batch_put_message(
+        &self,
+        input: BatchPutMessageRequest,
+    ) -> RusotoFuture<BatchPutMessageResponse, BatchPutMessageError> {
+        IotAnalytics::batch_put_message(&(**self), input)
+    }
+
+    /// <p>Cancels the reprocessing of data through the pipeline.</p>
+    fn cancel_pipeline_reprocessing(
+        &self,
+        input: CancelPipelineReprocessingRequest,
+    ) -> RusotoFuture<CancelPipelineReprocessingResponse, CancelPipelineReprocessingError> {
+        IotAnalytics::cancel_pipeline_reprocessing(&(**self), input)
+    }
+
+    /// <p>Creates a channel. A channel collects data from an MQTT topic and archives the raw, unprocessed messages before publishing the data to a pipeline.</p>
+    fn create_channel(
+        &self,
+        input: CreateChannelRequest,
+    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError> {
+        IotAnalytics::create_channel(&(**self), input)
+    }
+
+    /// <p><p>Creates a data set. A data set stores data retrieved from a data store by applying an SQL action.</p> <note> <p>This operation creates the skeleton of a data set. To populate the data set, call &quot;CreateDatasetContent&quot;.</p> </note></p>
+    fn create_dataset(
+        &self,
+        input: CreateDatasetRequest,
+    ) -> RusotoFuture<CreateDatasetResponse, CreateDatasetError> {
+        IotAnalytics::create_dataset(&(**self), input)
+    }
+
+    /// <p>Creates the content of a data set by applying an SQL action.</p>
+    fn create_dataset_content(
+        &self,
+        input: CreateDatasetContentRequest,
+    ) -> RusotoFuture<(), CreateDatasetContentError> {
+        IotAnalytics::create_dataset_content(&(**self), input)
+    }
+
+    /// <p>Creates a data store, which is a repository for messages.</p>
+    fn create_datastore(
+        &self,
+        input: CreateDatastoreRequest,
+    ) -> RusotoFuture<CreateDatastoreResponse, CreateDatastoreError> {
+        IotAnalytics::create_datastore(&(**self), input)
+    }
+
+    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store.</p>
+    fn create_pipeline(
+        &self,
+        input: CreatePipelineRequest,
+    ) -> RusotoFuture<CreatePipelineResponse, CreatePipelineError> {
+        IotAnalytics::create_pipeline(&(**self), input)
+    }
+
+    /// <p>Deletes the specified channel.</p>
+    fn delete_channel(&self, input: DeleteChannelRequest) -> RusotoFuture<(), DeleteChannelError> {
+        IotAnalytics::delete_channel(&(**self), input)
+    }
+
+    /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
+    fn delete_dataset(&self, input: DeleteDatasetRequest) -> RusotoFuture<(), DeleteDatasetError> {
+        IotAnalytics::delete_dataset(&(**self), input)
+    }
+
+    /// <p>Deletes the content of the specified data set.</p>
+    fn delete_dataset_content(
+        &self,
+        input: DeleteDatasetContentRequest,
+    ) -> RusotoFuture<(), DeleteDatasetContentError> {
+        IotAnalytics::delete_dataset_content(&(**self), input)
+    }
+
+    /// <p>Deletes the specified data store.</p>
+    fn delete_datastore(
+        &self,
+        input: DeleteDatastoreRequest,
+    ) -> RusotoFuture<(), DeleteDatastoreError> {
+        IotAnalytics::delete_datastore(&(**self), input)
+    }
+
+    /// <p>Deletes the specified pipeline.</p>
+    fn delete_pipeline(
+        &self,
+        input: DeletePipelineRequest,
+    ) -> RusotoFuture<(), DeletePipelineError> {
+        IotAnalytics::delete_pipeline(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a channel.</p>
+    fn describe_channel(
+        &self,
+        input: DescribeChannelRequest,
+    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError> {
+        IotAnalytics::describe_channel(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a data set.</p>
+    fn describe_dataset(
+        &self,
+        input: DescribeDatasetRequest,
+    ) -> RusotoFuture<DescribeDatasetResponse, DescribeDatasetError> {
+        IotAnalytics::describe_dataset(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a data store.</p>
+    fn describe_datastore(
+        &self,
+        input: DescribeDatastoreRequest,
+    ) -> RusotoFuture<DescribeDatastoreResponse, DescribeDatastoreError> {
+        IotAnalytics::describe_datastore(&(**self), input)
+    }
+
+    /// <p>Retrieves the current settings of the AWS IoT Analytics logging options.</p>
+    fn describe_logging_options(
+        &self,
+    ) -> RusotoFuture<DescribeLoggingOptionsResponse, DescribeLoggingOptionsError> {
+        IotAnalytics::describe_logging_options(&(**self))
+    }
+
+    /// <p>Retrieves information about a pipeline.</p>
+    fn describe_pipeline(
+        &self,
+        input: DescribePipelineRequest,
+    ) -> RusotoFuture<DescribePipelineResponse, DescribePipelineError> {
+        IotAnalytics::describe_pipeline(&(**self), input)
+    }
+
+    /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
+    fn get_dataset_content(
+        &self,
+        input: GetDatasetContentRequest,
+    ) -> RusotoFuture<GetDatasetContentResponse, GetDatasetContentError> {
+        IotAnalytics::get_dataset_content(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of channels.</p>
+    fn list_channels(
+        &self,
+        input: ListChannelsRequest,
+    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError> {
+        IotAnalytics::list_channels(&(**self), input)
+    }
+
+    /// <p>Retrieves information about data sets.</p>
+    fn list_datasets(
+        &self,
+        input: ListDatasetsRequest,
+    ) -> RusotoFuture<ListDatasetsResponse, ListDatasetsError> {
+        IotAnalytics::list_datasets(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of data stores.</p>
+    fn list_datastores(
+        &self,
+        input: ListDatastoresRequest,
+    ) -> RusotoFuture<ListDatastoresResponse, ListDatastoresError> {
+        IotAnalytics::list_datastores(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of pipelines.</p>
+    fn list_pipelines(
+        &self,
+        input: ListPipelinesRequest,
+    ) -> RusotoFuture<ListPipelinesResponse, ListPipelinesError> {
+        IotAnalytics::list_pipelines(&(**self), input)
+    }
+
+    /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        IotAnalytics::list_tags_for_resource(&(**self), input)
+    }
+
+    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
+    fn put_logging_options(
+        &self,
+        input: PutLoggingOptionsRequest,
+    ) -> RusotoFuture<(), PutLoggingOptionsError> {
+        IotAnalytics::put_logging_options(&(**self), input)
+    }
+
+    /// <p>Simulates the results of running a pipeline activity on a message payload.</p>
+    fn run_pipeline_activity(
+        &self,
+        input: RunPipelineActivityRequest,
+    ) -> RusotoFuture<RunPipelineActivityResponse, RunPipelineActivityError> {
+        IotAnalytics::run_pipeline_activity(&(**self), input)
+    }
+
+    /// <p>Retrieves a sample of messages from the specified channel ingested during the specified timeframe. Up to 10 messages can be retrieved.</p>
+    fn sample_channel_data(
+        &self,
+        input: SampleChannelDataRequest,
+    ) -> RusotoFuture<SampleChannelDataResponse, SampleChannelDataError> {
+        IotAnalytics::sample_channel_data(&(**self), input)
+    }
+
+    /// <p>Starts the reprocessing of raw message data through the pipeline.</p>
+    fn start_pipeline_reprocessing(
+        &self,
+        input: StartPipelineReprocessingRequest,
+    ) -> RusotoFuture<StartPipelineReprocessingResponse, StartPipelineReprocessingError> {
+        IotAnalytics::start_pipeline_reprocessing(&(**self), input)
+    }
+
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        IotAnalytics::tag_resource(&(**self), input)
+    }
+
+    /// <p>Removes the given tags (metadata) from the resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        IotAnalytics::untag_resource(&(**self), input)
+    }
+
+    /// <p>Updates the settings of a channel.</p>
+    fn update_channel(&self, input: UpdateChannelRequest) -> RusotoFuture<(), UpdateChannelError> {
+        IotAnalytics::update_channel(&(**self), input)
+    }
+
+    /// <p>Updates the settings of a data set.</p>
+    fn update_dataset(&self, input: UpdateDatasetRequest) -> RusotoFuture<(), UpdateDatasetError> {
+        IotAnalytics::update_dataset(&(**self), input)
+    }
+
+    /// <p>Updates the settings of a data store.</p>
+    fn update_datastore(
+        &self,
+        input: UpdateDatastoreRequest,
+    ) -> RusotoFuture<(), UpdateDatastoreError> {
+        IotAnalytics::update_datastore(&(**self), input)
+    }
+
+    /// <p>Updates the settings of a pipeline.</p>
+    fn update_pipeline(
+        &self,
+        input: UpdatePipelineRequest,
+    ) -> RusotoFuture<(), UpdatePipelineError> {
+        IotAnalytics::update_pipeline(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

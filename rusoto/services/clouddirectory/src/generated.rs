@@ -15012,5 +15012,524 @@ impl CloudDirectory for CloudDirectoryClient {
     }
 }
 
+impl<T: ?Sized + CloudDirectory> CloudDirectory for ::std::rc::Rc<T> {
+    /// <p>Adds a new <a>Facet</a> to an object. An object can have more than one facet applied on it.</p>
+    fn add_facet_to_object(
+        &self,
+        input: AddFacetToObjectRequest,
+    ) -> RusotoFuture<AddFacetToObjectResponse, AddFacetToObjectError> {
+        CloudDirectory::add_facet_to_object(&(**self), input)
+    }
+
+    /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
+    fn apply_schema(
+        &self,
+        input: ApplySchemaRequest,
+    ) -> RusotoFuture<ApplySchemaResponse, ApplySchemaError> {
+        CloudDirectory::apply_schema(&(**self), input)
+    }
+
+    /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
+    fn attach_object(
+        &self,
+        input: AttachObjectRequest,
+    ) -> RusotoFuture<AttachObjectResponse, AttachObjectError> {
+        CloudDirectory::attach_object(&(**self), input)
+    }
+
+    /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
+    fn attach_policy(
+        &self,
+        input: AttachPolicyRequest,
+    ) -> RusotoFuture<AttachPolicyResponse, AttachPolicyError> {
+        CloudDirectory::attach_policy(&(**self), input)
+    }
+
+    /// <p>Attaches the specified object to the specified index.</p>
+    fn attach_to_index(
+        &self,
+        input: AttachToIndexRequest,
+    ) -> RusotoFuture<AttachToIndexResponse, AttachToIndexError> {
+        CloudDirectory::attach_to_index(&(**self), input)
+    }
+
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn attach_typed_link(
+        &self,
+        input: AttachTypedLinkRequest,
+    ) -> RusotoFuture<AttachTypedLinkResponse, AttachTypedLinkError> {
+        CloudDirectory::attach_typed_link(&(**self), input)
+    }
+
+    /// <p>Performs all the read operations in a batch. </p>
+    fn batch_read(
+        &self,
+        input: BatchReadRequest,
+    ) -> RusotoFuture<BatchReadResponse, BatchReadError> {
+        CloudDirectory::batch_read(&(**self), input)
+    }
+
+    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
+    fn batch_write(
+        &self,
+        input: BatchWriteRequest,
+    ) -> RusotoFuture<BatchWriteResponse, BatchWriteError> {
+        CloudDirectory::batch_write(&(**self), input)
+    }
+
+    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
+    fn create_directory(
+        &self,
+        input: CreateDirectoryRequest,
+    ) -> RusotoFuture<CreateDirectoryResponse, CreateDirectoryError> {
+        CloudDirectory::create_directory(&(**self), input)
+    }
+
+    /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
+    fn create_facet(
+        &self,
+        input: CreateFacetRequest,
+    ) -> RusotoFuture<CreateFacetResponse, CreateFacetError> {
+        CloudDirectory::create_facet(&(**self), input)
+    }
+
+    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
+    fn create_index(
+        &self,
+        input: CreateIndexRequest,
+    ) -> RusotoFuture<CreateIndexResponse, CreateIndexError> {
+        CloudDirectory::create_index(&(**self), input)
+    }
+
+    /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
+    fn create_object(
+        &self,
+        input: CreateObjectRequest,
+    ) -> RusotoFuture<CreateObjectResponse, CreateObjectError> {
+        CloudDirectory::create_object(&(**self), input)
+    }
+
+    /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
+    fn create_schema(
+        &self,
+        input: CreateSchemaRequest,
+    ) -> RusotoFuture<CreateSchemaResponse, CreateSchemaError> {
+        CloudDirectory::create_schema(&(**self), input)
+    }
+
+    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn create_typed_link_facet(
+        &self,
+        input: CreateTypedLinkFacetRequest,
+    ) -> RusotoFuture<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError> {
+        CloudDirectory::create_typed_link_facet(&(**self), input)
+    }
+
+    /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
+    fn delete_directory(
+        &self,
+        input: DeleteDirectoryRequest,
+    ) -> RusotoFuture<DeleteDirectoryResponse, DeleteDirectoryError> {
+        CloudDirectory::delete_directory(&(**self), input)
+    }
+
+    /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
+    fn delete_facet(
+        &self,
+        input: DeleteFacetRequest,
+    ) -> RusotoFuture<DeleteFacetResponse, DeleteFacetError> {
+        CloudDirectory::delete_facet(&(**self), input)
+    }
+
+    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
+    fn delete_object(
+        &self,
+        input: DeleteObjectRequest,
+    ) -> RusotoFuture<DeleteObjectResponse, DeleteObjectError> {
+        CloudDirectory::delete_object(&(**self), input)
+    }
+
+    /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
+    fn delete_schema(
+        &self,
+        input: DeleteSchemaRequest,
+    ) -> RusotoFuture<DeleteSchemaResponse, DeleteSchemaError> {
+        CloudDirectory::delete_schema(&(**self), input)
+    }
+
+    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn delete_typed_link_facet(
+        &self,
+        input: DeleteTypedLinkFacetRequest,
+    ) -> RusotoFuture<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError> {
+        CloudDirectory::delete_typed_link_facet(&(**self), input)
+    }
+
+    /// <p>Detaches the specified object from the specified index.</p>
+    fn detach_from_index(
+        &self,
+        input: DetachFromIndexRequest,
+    ) -> RusotoFuture<DetachFromIndexResponse, DetachFromIndexError> {
+        CloudDirectory::detach_from_index(&(**self), input)
+    }
+
+    /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
+    fn detach_object(
+        &self,
+        input: DetachObjectRequest,
+    ) -> RusotoFuture<DetachObjectResponse, DetachObjectError> {
+        CloudDirectory::detach_object(&(**self), input)
+    }
+
+    /// <p>Detaches a policy from an object.</p>
+    fn detach_policy(
+        &self,
+        input: DetachPolicyRequest,
+    ) -> RusotoFuture<DetachPolicyResponse, DetachPolicyError> {
+        CloudDirectory::detach_policy(&(**self), input)
+    }
+
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn detach_typed_link(
+        &self,
+        input: DetachTypedLinkRequest,
+    ) -> RusotoFuture<(), DetachTypedLinkError> {
+        CloudDirectory::detach_typed_link(&(**self), input)
+    }
+
+    /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
+    fn disable_directory(
+        &self,
+        input: DisableDirectoryRequest,
+    ) -> RusotoFuture<DisableDirectoryResponse, DisableDirectoryError> {
+        CloudDirectory::disable_directory(&(**self), input)
+    }
+
+    /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
+    fn enable_directory(
+        &self,
+        input: EnableDirectoryRequest,
+    ) -> RusotoFuture<EnableDirectoryResponse, EnableDirectoryError> {
+        CloudDirectory::enable_directory(&(**self), input)
+    }
+
+    /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
+    fn get_applied_schema_version(
+        &self,
+        input: GetAppliedSchemaVersionRequest,
+    ) -> RusotoFuture<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError> {
+        CloudDirectory::get_applied_schema_version(&(**self), input)
+    }
+
+    /// <p>Retrieves metadata about a directory.</p>
+    fn get_directory(
+        &self,
+        input: GetDirectoryRequest,
+    ) -> RusotoFuture<GetDirectoryResponse, GetDirectoryError> {
+        CloudDirectory::get_directory(&(**self), input)
+    }
+
+    /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
+    fn get_facet(&self, input: GetFacetRequest) -> RusotoFuture<GetFacetResponse, GetFacetError> {
+        CloudDirectory::get_facet(&(**self), input)
+    }
+
+    /// <p>Retrieves attributes that are associated with a typed link.</p>
+    fn get_link_attributes(
+        &self,
+        input: GetLinkAttributesRequest,
+    ) -> RusotoFuture<GetLinkAttributesResponse, GetLinkAttributesError> {
+        CloudDirectory::get_link_attributes(&(**self), input)
+    }
+
+    /// <p>Retrieves attributes within a facet that are associated with an object.</p>
+    fn get_object_attributes(
+        &self,
+        input: GetObjectAttributesRequest,
+    ) -> RusotoFuture<GetObjectAttributesResponse, GetObjectAttributesError> {
+        CloudDirectory::get_object_attributes(&(**self), input)
+    }
+
+    /// <p>Retrieves metadata about an object.</p>
+    fn get_object_information(
+        &self,
+        input: GetObjectInformationRequest,
+    ) -> RusotoFuture<GetObjectInformationResponse, GetObjectInformationError> {
+        CloudDirectory::get_object_information(&(**self), input)
+    }
+
+    /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
+    fn get_schema_as_json(
+        &self,
+        input: GetSchemaAsJsonRequest,
+    ) -> RusotoFuture<GetSchemaAsJsonResponse, GetSchemaAsJsonError> {
+        CloudDirectory::get_schema_as_json(&(**self), input)
+    }
+
+    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn get_typed_link_facet_information(
+        &self,
+        input: GetTypedLinkFacetInformationRequest,
+    ) -> RusotoFuture<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError> {
+        CloudDirectory::get_typed_link_facet_information(&(**self), input)
+    }
+
+    /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
+    fn list_applied_schema_arns(
+        &self,
+        input: ListAppliedSchemaArnsRequest,
+    ) -> RusotoFuture<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError> {
+        CloudDirectory::list_applied_schema_arns(&(**self), input)
+    }
+
+    /// <p>Lists indices attached to the specified object.</p>
+    fn list_attached_indices(
+        &self,
+        input: ListAttachedIndicesRequest,
+    ) -> RusotoFuture<ListAttachedIndicesResponse, ListAttachedIndicesError> {
+        CloudDirectory::list_attached_indices(&(**self), input)
+    }
+
+    /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
+    fn list_development_schema_arns(
+        &self,
+        input: ListDevelopmentSchemaArnsRequest,
+    ) -> RusotoFuture<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError> {
+        CloudDirectory::list_development_schema_arns(&(**self), input)
+    }
+
+    /// <p>Lists directories created within an account.</p>
+    fn list_directories(
+        &self,
+        input: ListDirectoriesRequest,
+    ) -> RusotoFuture<ListDirectoriesResponse, ListDirectoriesError> {
+        CloudDirectory::list_directories(&(**self), input)
+    }
+
+    /// <p>Retrieves attributes attached to the facet.</p>
+    fn list_facet_attributes(
+        &self,
+        input: ListFacetAttributesRequest,
+    ) -> RusotoFuture<ListFacetAttributesResponse, ListFacetAttributesError> {
+        CloudDirectory::list_facet_attributes(&(**self), input)
+    }
+
+    /// <p>Retrieves the names of facets that exist in a schema.</p>
+    fn list_facet_names(
+        &self,
+        input: ListFacetNamesRequest,
+    ) -> RusotoFuture<ListFacetNamesResponse, ListFacetNamesError> {
+        CloudDirectory::list_facet_names(&(**self), input)
+    }
+
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn list_incoming_typed_links(
+        &self,
+        input: ListIncomingTypedLinksRequest,
+    ) -> RusotoFuture<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError> {
+        CloudDirectory::list_incoming_typed_links(&(**self), input)
+    }
+
+    /// <p>Lists objects attached to the specified index.</p>
+    fn list_index(
+        &self,
+        input: ListIndexRequest,
+    ) -> RusotoFuture<ListIndexResponse, ListIndexError> {
+        CloudDirectory::list_index(&(**self), input)
+    }
+
+    /// <p>Lists all attributes that are associated with an object. </p>
+    fn list_object_attributes(
+        &self,
+        input: ListObjectAttributesRequest,
+    ) -> RusotoFuture<ListObjectAttributesResponse, ListObjectAttributesError> {
+        CloudDirectory::list_object_attributes(&(**self), input)
+    }
+
+    /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
+    fn list_object_children(
+        &self,
+        input: ListObjectChildrenRequest,
+    ) -> RusotoFuture<ListObjectChildrenResponse, ListObjectChildrenError> {
+        CloudDirectory::list_object_children(&(**self), input)
+    }
+
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
+    fn list_object_parent_paths(
+        &self,
+        input: ListObjectParentPathsRequest,
+    ) -> RusotoFuture<ListObjectParentPathsResponse, ListObjectParentPathsError> {
+        CloudDirectory::list_object_parent_paths(&(**self), input)
+    }
+
+    /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
+    fn list_object_parents(
+        &self,
+        input: ListObjectParentsRequest,
+    ) -> RusotoFuture<ListObjectParentsResponse, ListObjectParentsError> {
+        CloudDirectory::list_object_parents(&(**self), input)
+    }
+
+    /// <p>Returns policies attached to an object in pagination fashion.</p>
+    fn list_object_policies(
+        &self,
+        input: ListObjectPoliciesRequest,
+    ) -> RusotoFuture<ListObjectPoliciesResponse, ListObjectPoliciesError> {
+        CloudDirectory::list_object_policies(&(**self), input)
+    }
+
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn list_outgoing_typed_links(
+        &self,
+        input: ListOutgoingTypedLinksRequest,
+    ) -> RusotoFuture<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError> {
+        CloudDirectory::list_outgoing_typed_links(&(**self), input)
+    }
+
+    /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
+    fn list_policy_attachments(
+        &self,
+        input: ListPolicyAttachmentsRequest,
+    ) -> RusotoFuture<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError> {
+        CloudDirectory::list_policy_attachments(&(**self), input)
+    }
+
+    /// <p>Lists the major version families of each published schema. If a major version ARN is provided as <code>SchemaArn</code>, the minor version revisions in that family are listed instead.</p>
+    fn list_published_schema_arns(
+        &self,
+        input: ListPublishedSchemaArnsRequest,
+    ) -> RusotoFuture<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError> {
+        CloudDirectory::list_published_schema_arns(&(**self), input)
+    }
+
+    /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        CloudDirectory::list_tags_for_resource(&(**self), input)
+    }
+
+    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn list_typed_link_facet_attributes(
+        &self,
+        input: ListTypedLinkFacetAttributesRequest,
+    ) -> RusotoFuture<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError> {
+        CloudDirectory::list_typed_link_facet_attributes(&(**self), input)
+    }
+
+    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn list_typed_link_facet_names(
+        &self,
+        input: ListTypedLinkFacetNamesRequest,
+    ) -> RusotoFuture<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError> {
+        CloudDirectory::list_typed_link_facet_names(&(**self), input)
+    }
+
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
+    fn lookup_policy(
+        &self,
+        input: LookupPolicyRequest,
+    ) -> RusotoFuture<LookupPolicyResponse, LookupPolicyError> {
+        CloudDirectory::lookup_policy(&(**self), input)
+    }
+
+    /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
+    fn publish_schema(
+        &self,
+        input: PublishSchemaRequest,
+    ) -> RusotoFuture<PublishSchemaResponse, PublishSchemaError> {
+        CloudDirectory::publish_schema(&(**self), input)
+    }
+
+    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
+    fn put_schema_from_json(
+        &self,
+        input: PutSchemaFromJsonRequest,
+    ) -> RusotoFuture<PutSchemaFromJsonResponse, PutSchemaFromJsonError> {
+        CloudDirectory::put_schema_from_json(&(**self), input)
+    }
+
+    /// <p>Removes the specified facet from the specified object.</p>
+    fn remove_facet_from_object(
+        &self,
+        input: RemoveFacetFromObjectRequest,
+    ) -> RusotoFuture<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError> {
+        CloudDirectory::remove_facet_from_object(&(**self), input)
+    }
+
+    /// <p>An API operation for adding tags to a resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        CloudDirectory::tag_resource(&(**self), input)
+    }
+
+    /// <p>An API operation for removing tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        CloudDirectory::untag_resource(&(**self), input)
+    }
+
+    /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
+    fn update_facet(
+        &self,
+        input: UpdateFacetRequest,
+    ) -> RusotoFuture<UpdateFacetResponse, UpdateFacetError> {
+        CloudDirectory::update_facet(&(**self), input)
+    }
+
+    /// <p>Updates a given typed link’s attributes. Attributes to be updated must not contribute to the typed link’s identity, as defined by its <code>IdentityAttributeOrder</code>.</p>
+    fn update_link_attributes(
+        &self,
+        input: UpdateLinkAttributesRequest,
+    ) -> RusotoFuture<UpdateLinkAttributesResponse, UpdateLinkAttributesError> {
+        CloudDirectory::update_link_attributes(&(**self), input)
+    }
+
+    /// <p>Updates a given object's attributes.</p>
+    fn update_object_attributes(
+        &self,
+        input: UpdateObjectAttributesRequest,
+    ) -> RusotoFuture<UpdateObjectAttributesResponse, UpdateObjectAttributesError> {
+        CloudDirectory::update_object_attributes(&(**self), input)
+    }
+
+    /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
+    fn update_schema(
+        &self,
+        input: UpdateSchemaRequest,
+    ) -> RusotoFuture<UpdateSchemaResponse, UpdateSchemaError> {
+        CloudDirectory::update_schema(&(**self), input)
+    }
+
+    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
+    fn update_typed_link_facet(
+        &self,
+        input: UpdateTypedLinkFacetRequest,
+    ) -> RusotoFuture<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError> {
+        CloudDirectory::update_typed_link_facet(&(**self), input)
+    }
+
+    /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
+    fn upgrade_applied_schema(
+        &self,
+        input: UpgradeAppliedSchemaRequest,
+    ) -> RusotoFuture<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError> {
+        CloudDirectory::upgrade_applied_schema(&(**self), input)
+    }
+
+    /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
+    fn upgrade_published_schema(
+        &self,
+        input: UpgradePublishedSchemaRequest,
+    ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError> {
+        CloudDirectory::upgrade_published_schema(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

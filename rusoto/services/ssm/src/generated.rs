@@ -21290,5 +21290,881 @@ impl Ssm for SsmClient {
     }
 }
 
+impl<T: ?Sized + Ssm> Ssm for ::std::rc::Rc<T> {
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    fn add_tags_to_resource(
+        &self,
+        input: AddTagsToResourceRequest,
+    ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
+        Ssm::add_tags_to_resource(&(**self), input)
+    }
+
+    /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
+    fn cancel_command(
+        &self,
+        input: CancelCommandRequest,
+    ) -> RusotoFuture<CancelCommandResult, CancelCommandError> {
+        Ssm::cancel_command(&(**self), input)
+    }
+
+    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
+    fn create_activation(
+        &self,
+        input: CreateActivationRequest,
+    ) -> RusotoFuture<CreateActivationResult, CreateActivationError> {
+        Ssm::create_activation(&(**self), input)
+    }
+
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
+    fn create_association(
+        &self,
+        input: CreateAssociationRequest,
+    ) -> RusotoFuture<CreateAssociationResult, CreateAssociationError> {
+        Ssm::create_association(&(**self), input)
+    }
+
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
+    fn create_association_batch(
+        &self,
+        input: CreateAssociationBatchRequest,
+    ) -> RusotoFuture<CreateAssociationBatchResult, CreateAssociationBatchError> {
+        Ssm::create_association_batch(&(**self), input)
+    }
+
+    /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
+    fn create_document(
+        &self,
+        input: CreateDocumentRequest,
+    ) -> RusotoFuture<CreateDocumentResult, CreateDocumentError> {
+        Ssm::create_document(&(**self), input)
+    }
+
+    /// <p>Creates a new Maintenance Window.</p>
+    fn create_maintenance_window(
+        &self,
+        input: CreateMaintenanceWindowRequest,
+    ) -> RusotoFuture<CreateMaintenanceWindowResult, CreateMaintenanceWindowError> {
+        Ssm::create_maintenance_window(&(**self), input)
+    }
+
+    /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
+    fn create_patch_baseline(
+        &self,
+        input: CreatePatchBaselineRequest,
+    ) -> RusotoFuture<CreatePatchBaselineResult, CreatePatchBaselineError> {
+        Ssm::create_patch_baseline(&(**self), input)
+    }
+
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync-create.html">Create a Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    fn create_resource_data_sync(
+        &self,
+        input: CreateResourceDataSyncRequest,
+    ) -> RusotoFuture<CreateResourceDataSyncResult, CreateResourceDataSyncError> {
+        Ssm::create_resource_data_sync(&(**self), input)
+    }
+
+    /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
+    fn delete_activation(
+        &self,
+        input: DeleteActivationRequest,
+    ) -> RusotoFuture<DeleteActivationResult, DeleteActivationError> {
+        Ssm::delete_activation(&(**self), input)
+    }
+
+    /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
+    fn delete_association(
+        &self,
+        input: DeleteAssociationRequest,
+    ) -> RusotoFuture<DeleteAssociationResult, DeleteAssociationError> {
+        Ssm::delete_association(&(**self), input)
+    }
+
+    /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
+    fn delete_document(
+        &self,
+        input: DeleteDocumentRequest,
+    ) -> RusotoFuture<DeleteDocumentResult, DeleteDocumentError> {
+        Ssm::delete_document(&(**self), input)
+    }
+
+    /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
+    fn delete_inventory(
+        &self,
+        input: DeleteInventoryRequest,
+    ) -> RusotoFuture<DeleteInventoryResult, DeleteInventoryError> {
+        Ssm::delete_inventory(&(**self), input)
+    }
+
+    /// <p>Deletes a Maintenance Window.</p>
+    fn delete_maintenance_window(
+        &self,
+        input: DeleteMaintenanceWindowRequest,
+    ) -> RusotoFuture<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError> {
+        Ssm::delete_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Delete a parameter from the system.</p>
+    fn delete_parameter(
+        &self,
+        input: DeleteParameterRequest,
+    ) -> RusotoFuture<DeleteParameterResult, DeleteParameterError> {
+        Ssm::delete_parameter(&(**self), input)
+    }
+
+    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
+    fn delete_parameters(
+        &self,
+        input: DeleteParametersRequest,
+    ) -> RusotoFuture<DeleteParametersResult, DeleteParametersError> {
+        Ssm::delete_parameters(&(**self), input)
+    }
+
+    /// <p>Deletes a patch baseline.</p>
+    fn delete_patch_baseline(
+        &self,
+        input: DeletePatchBaselineRequest,
+    ) -> RusotoFuture<DeletePatchBaselineResult, DeletePatchBaselineError> {
+        Ssm::delete_patch_baseline(&(**self), input)
+    }
+
+    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
+    fn delete_resource_data_sync(
+        &self,
+        input: DeleteResourceDataSyncRequest,
+    ) -> RusotoFuture<DeleteResourceDataSyncResult, DeleteResourceDataSyncError> {
+        Ssm::delete_resource_data_sync(&(**self), input)
+    }
+
+    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling SSM Agent first.</p>
+    fn deregister_managed_instance(
+        &self,
+        input: DeregisterManagedInstanceRequest,
+    ) -> RusotoFuture<DeregisterManagedInstanceResult, DeregisterManagedInstanceError> {
+        Ssm::deregister_managed_instance(&(**self), input)
+    }
+
+    /// <p>Removes a patch group from a patch baseline.</p>
+    fn deregister_patch_baseline_for_patch_group(
+        &self,
+        input: DeregisterPatchBaselineForPatchGroupRequest,
+    ) -> RusotoFuture<
+        DeregisterPatchBaselineForPatchGroupResult,
+        DeregisterPatchBaselineForPatchGroupError,
+    > {
+        Ssm::deregister_patch_baseline_for_patch_group(&(**self), input)
+    }
+
+    /// <p>Removes a target from a Maintenance Window.</p>
+    fn deregister_target_from_maintenance_window(
+        &self,
+        input: DeregisterTargetFromMaintenanceWindowRequest,
+    ) -> RusotoFuture<
+        DeregisterTargetFromMaintenanceWindowResult,
+        DeregisterTargetFromMaintenanceWindowError,
+    > {
+        Ssm::deregister_target_from_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Removes a task from a Maintenance Window.</p>
+    fn deregister_task_from_maintenance_window(
+        &self,
+        input: DeregisterTaskFromMaintenanceWindowRequest,
+    ) -> RusotoFuture<
+        DeregisterTaskFromMaintenanceWindowResult,
+        DeregisterTaskFromMaintenanceWindowError,
+    > {
+        Ssm::deregister_task_from_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
+    fn describe_activations(
+        &self,
+        input: DescribeActivationsRequest,
+    ) -> RusotoFuture<DescribeActivationsResult, DescribeActivationsError> {
+        Ssm::describe_activations(&(**self), input)
+    }
+
+    /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
+    fn describe_association(
+        &self,
+        input: DescribeAssociationRequest,
+    ) -> RusotoFuture<DescribeAssociationResult, DescribeAssociationError> {
+        Ssm::describe_association(&(**self), input)
+    }
+
+    /// <p>Use this API action to view information about a specific execution of a specific association.</p>
+    fn describe_association_execution_targets(
+        &self,
+        input: DescribeAssociationExecutionTargetsRequest,
+    ) -> RusotoFuture<
+        DescribeAssociationExecutionTargetsResult,
+        DescribeAssociationExecutionTargetsError,
+    > {
+        Ssm::describe_association_execution_targets(&(**self), input)
+    }
+
+    /// <p>Use this API action to view all executions for a specific association ID. </p>
+    fn describe_association_executions(
+        &self,
+        input: DescribeAssociationExecutionsRequest,
+    ) -> RusotoFuture<DescribeAssociationExecutionsResult, DescribeAssociationExecutionsError> {
+        Ssm::describe_association_executions(&(**self), input)
+    }
+
+    /// <p>Provides details about all active and terminated Automation executions.</p>
+    fn describe_automation_executions(
+        &self,
+        input: DescribeAutomationExecutionsRequest,
+    ) -> RusotoFuture<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError> {
+        Ssm::describe_automation_executions(&(**self), input)
+    }
+
+    /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
+    fn describe_automation_step_executions(
+        &self,
+        input: DescribeAutomationStepExecutionsRequest,
+    ) -> RusotoFuture<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError>
+    {
+        Ssm::describe_automation_step_executions(&(**self), input)
+    }
+
+    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
+    fn describe_available_patches(
+        &self,
+        input: DescribeAvailablePatchesRequest,
+    ) -> RusotoFuture<DescribeAvailablePatchesResult, DescribeAvailablePatchesError> {
+        Ssm::describe_available_patches(&(**self), input)
+    }
+
+    /// <p>Describes the specified Systems Manager document.</p>
+    fn describe_document(
+        &self,
+        input: DescribeDocumentRequest,
+    ) -> RusotoFuture<DescribeDocumentResult, DescribeDocumentError> {
+        Ssm::describe_document(&(**self), input)
+    }
+
+    /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
+    fn describe_document_permission(
+        &self,
+        input: DescribeDocumentPermissionRequest,
+    ) -> RusotoFuture<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError> {
+        Ssm::describe_document_permission(&(**self), input)
+    }
+
+    /// <p>All associations for the instance(s).</p>
+    fn describe_effective_instance_associations(
+        &self,
+        input: DescribeEffectiveInstanceAssociationsRequest,
+    ) -> RusotoFuture<
+        DescribeEffectiveInstanceAssociationsResult,
+        DescribeEffectiveInstanceAssociationsError,
+    > {
+        Ssm::describe_effective_instance_associations(&(**self), input)
+    }
+
+    /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
+    fn describe_effective_patches_for_patch_baseline(
+        &self,
+        input: DescribeEffectivePatchesForPatchBaselineRequest,
+    ) -> RusotoFuture<
+        DescribeEffectivePatchesForPatchBaselineResult,
+        DescribeEffectivePatchesForPatchBaselineError,
+    > {
+        Ssm::describe_effective_patches_for_patch_baseline(&(**self), input)
+    }
+
+    /// <p>The status of the associations for the instance(s).</p>
+    fn describe_instance_associations_status(
+        &self,
+        input: DescribeInstanceAssociationsStatusRequest,
+    ) -> RusotoFuture<
+        DescribeInstanceAssociationsStatusResult,
+        DescribeInstanceAssociationsStatusError,
+    > {
+        Ssm::describe_instance_associations_status(&(**self), input)
+    }
+
+    /// <p><p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p> <note> <p>The IamRole field for this API action is the Amazon Identity and Access Management (IAM) role assigned to on-premises instances. This call does not return the IAM role for Amazon EC2 instances.</p> </note></p>
+    fn describe_instance_information(
+        &self,
+        input: DescribeInstanceInformationRequest,
+    ) -> RusotoFuture<DescribeInstanceInformationResult, DescribeInstanceInformationError> {
+        Ssm::describe_instance_information(&(**self), input)
+    }
+
+    /// <p>Retrieves the high-level patch state of one or more instances.</p>
+    fn describe_instance_patch_states(
+        &self,
+        input: DescribeInstancePatchStatesRequest,
+    ) -> RusotoFuture<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError> {
+        Ssm::describe_instance_patch_states(&(**self), input)
+    }
+
+    /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
+    fn describe_instance_patch_states_for_patch_group(
+        &self,
+        input: DescribeInstancePatchStatesForPatchGroupRequest,
+    ) -> RusotoFuture<
+        DescribeInstancePatchStatesForPatchGroupResult,
+        DescribeInstancePatchStatesForPatchGroupError,
+    > {
+        Ssm::describe_instance_patch_states_for_patch_group(&(**self), input)
+    }
+
+    /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
+    fn describe_instance_patches(
+        &self,
+        input: DescribeInstancePatchesRequest,
+    ) -> RusotoFuture<DescribeInstancePatchesResult, DescribeInstancePatchesError> {
+        Ssm::describe_instance_patches(&(**self), input)
+    }
+
+    /// <p>Describes a specific delete inventory operation.</p>
+    fn describe_inventory_deletions(
+        &self,
+        input: DescribeInventoryDeletionsRequest,
+    ) -> RusotoFuture<DescribeInventoryDeletionsResult, DescribeInventoryDeletionsError> {
+        Ssm::describe_inventory_deletions(&(**self), input)
+    }
+
+    /// <p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>
+    fn describe_maintenance_window_execution_task_invocations(
+        &self,
+        input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
+    ) -> RusotoFuture<
+        DescribeMaintenanceWindowExecutionTaskInvocationsResult,
+        DescribeMaintenanceWindowExecutionTaskInvocationsError,
+    > {
+        Ssm::describe_maintenance_window_execution_task_invocations(&(**self), input)
+    }
+
+    /// <p>For a given Maintenance Window execution, lists the tasks that were executed.</p>
+    fn describe_maintenance_window_execution_tasks(
+        &self,
+        input: DescribeMaintenanceWindowExecutionTasksRequest,
+    ) -> RusotoFuture<
+        DescribeMaintenanceWindowExecutionTasksResult,
+        DescribeMaintenanceWindowExecutionTasksError,
+    > {
+        Ssm::describe_maintenance_window_execution_tasks(&(**self), input)
+    }
+
+    /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
+    fn describe_maintenance_window_executions(
+        &self,
+        input: DescribeMaintenanceWindowExecutionsRequest,
+    ) -> RusotoFuture<
+        DescribeMaintenanceWindowExecutionsResult,
+        DescribeMaintenanceWindowExecutionsError,
+    > {
+        Ssm::describe_maintenance_window_executions(&(**self), input)
+    }
+
+    /// <p>Lists the targets registered with the Maintenance Window.</p>
+    fn describe_maintenance_window_targets(
+        &self,
+        input: DescribeMaintenanceWindowTargetsRequest,
+    ) -> RusotoFuture<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>
+    {
+        Ssm::describe_maintenance_window_targets(&(**self), input)
+    }
+
+    /// <p>Lists the tasks in a Maintenance Window.</p>
+    fn describe_maintenance_window_tasks(
+        &self,
+        input: DescribeMaintenanceWindowTasksRequest,
+    ) -> RusotoFuture<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>
+    {
+        Ssm::describe_maintenance_window_tasks(&(**self), input)
+    }
+
+    /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
+    fn describe_maintenance_windows(
+        &self,
+        input: DescribeMaintenanceWindowsRequest,
+    ) -> RusotoFuture<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError> {
+        Ssm::describe_maintenance_windows(&(**self), input)
+    }
+
+    /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
+    fn describe_parameters(
+        &self,
+        input: DescribeParametersRequest,
+    ) -> RusotoFuture<DescribeParametersResult, DescribeParametersError> {
+        Ssm::describe_parameters(&(**self), input)
+    }
+
+    /// <p>Lists the patch baselines in your AWS account.</p>
+    fn describe_patch_baselines(
+        &self,
+        input: DescribePatchBaselinesRequest,
+    ) -> RusotoFuture<DescribePatchBaselinesResult, DescribePatchBaselinesError> {
+        Ssm::describe_patch_baselines(&(**self), input)
+    }
+
+    /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
+    fn describe_patch_group_state(
+        &self,
+        input: DescribePatchGroupStateRequest,
+    ) -> RusotoFuture<DescribePatchGroupStateResult, DescribePatchGroupStateError> {
+        Ssm::describe_patch_group_state(&(**self), input)
+    }
+
+    /// <p>Lists all patch groups that have been registered with patch baselines.</p>
+    fn describe_patch_groups(
+        &self,
+        input: DescribePatchGroupsRequest,
+    ) -> RusotoFuture<DescribePatchGroupsResult, DescribePatchGroupsError> {
+        Ssm::describe_patch_groups(&(**self), input)
+    }
+
+    /// <p>Get detailed information about a particular Automation execution.</p>
+    fn get_automation_execution(
+        &self,
+        input: GetAutomationExecutionRequest,
+    ) -> RusotoFuture<GetAutomationExecutionResult, GetAutomationExecutionError> {
+        Ssm::get_automation_execution(&(**self), input)
+    }
+
+    /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
+    fn get_command_invocation(
+        &self,
+        input: GetCommandInvocationRequest,
+    ) -> RusotoFuture<GetCommandInvocationResult, GetCommandInvocationError> {
+        Ssm::get_command_invocation(&(**self), input)
+    }
+
+    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
+    fn get_default_patch_baseline(
+        &self,
+        input: GetDefaultPatchBaselineRequest,
+    ) -> RusotoFuture<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
+        Ssm::get_default_patch_baseline(&(**self), input)
+    }
+
+    /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
+    fn get_deployable_patch_snapshot_for_instance(
+        &self,
+        input: GetDeployablePatchSnapshotForInstanceRequest,
+    ) -> RusotoFuture<
+        GetDeployablePatchSnapshotForInstanceResult,
+        GetDeployablePatchSnapshotForInstanceError,
+    > {
+        Ssm::get_deployable_patch_snapshot_for_instance(&(**self), input)
+    }
+
+    /// <p>Gets the contents of the specified Systems Manager document.</p>
+    fn get_document(
+        &self,
+        input: GetDocumentRequest,
+    ) -> RusotoFuture<GetDocumentResult, GetDocumentError> {
+        Ssm::get_document(&(**self), input)
+    }
+
+    /// <p>Query inventory information.</p>
+    fn get_inventory(
+        &self,
+        input: GetInventoryRequest,
+    ) -> RusotoFuture<GetInventoryResult, GetInventoryError> {
+        Ssm::get_inventory(&(**self), input)
+    }
+
+    /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
+    fn get_inventory_schema(
+        &self,
+        input: GetInventorySchemaRequest,
+    ) -> RusotoFuture<GetInventorySchemaResult, GetInventorySchemaError> {
+        Ssm::get_inventory_schema(&(**self), input)
+    }
+
+    /// <p>Retrieves a Maintenance Window.</p>
+    fn get_maintenance_window(
+        &self,
+        input: GetMaintenanceWindowRequest,
+    ) -> RusotoFuture<GetMaintenanceWindowResult, GetMaintenanceWindowError> {
+        Ssm::get_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>
+    fn get_maintenance_window_execution(
+        &self,
+        input: GetMaintenanceWindowExecutionRequest,
+    ) -> RusotoFuture<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError> {
+        Ssm::get_maintenance_window_execution(&(**self), input)
+    }
+
+    /// <p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>
+    fn get_maintenance_window_execution_task(
+        &self,
+        input: GetMaintenanceWindowExecutionTaskRequest,
+    ) -> RusotoFuture<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>
+    {
+        Ssm::get_maintenance_window_execution_task(&(**self), input)
+    }
+
+    /// <p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>
+    fn get_maintenance_window_execution_task_invocation(
+        &self,
+        input: GetMaintenanceWindowExecutionTaskInvocationRequest,
+    ) -> RusotoFuture<
+        GetMaintenanceWindowExecutionTaskInvocationResult,
+        GetMaintenanceWindowExecutionTaskInvocationError,
+    > {
+        Ssm::get_maintenance_window_execution_task_invocation(&(**self), input)
+    }
+
+    /// <p>Lists the tasks in a Maintenance Window.</p>
+    fn get_maintenance_window_task(
+        &self,
+        input: GetMaintenanceWindowTaskRequest,
+    ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError> {
+        Ssm::get_maintenance_window_task(&(**self), input)
+    }
+
+    /// <p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>
+    fn get_parameter(
+        &self,
+        input: GetParameterRequest,
+    ) -> RusotoFuture<GetParameterResult, GetParameterError> {
+        Ssm::get_parameter(&(**self), input)
+    }
+
+    /// <p>Query a list of all parameters used by the AWS account.</p>
+    fn get_parameter_history(
+        &self,
+        input: GetParameterHistoryRequest,
+    ) -> RusotoFuture<GetParameterHistoryResult, GetParameterHistoryError> {
+        Ssm::get_parameter_history(&(**self), input)
+    }
+
+    /// <p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>
+    fn get_parameters(
+        &self,
+        input: GetParametersRequest,
+    ) -> RusotoFuture<GetParametersResult, GetParametersError> {
+        Ssm::get_parameters(&(**self), input)
+    }
+
+    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
+    fn get_parameters_by_path(
+        &self,
+        input: GetParametersByPathRequest,
+    ) -> RusotoFuture<GetParametersByPathResult, GetParametersByPathError> {
+        Ssm::get_parameters_by_path(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a patch baseline.</p>
+    fn get_patch_baseline(
+        &self,
+        input: GetPatchBaselineRequest,
+    ) -> RusotoFuture<GetPatchBaselineResult, GetPatchBaselineError> {
+        Ssm::get_patch_baseline(&(**self), input)
+    }
+
+    /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
+    fn get_patch_baseline_for_patch_group(
+        &self,
+        input: GetPatchBaselineForPatchGroupRequest,
+    ) -> RusotoFuture<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError> {
+        Ssm::get_patch_baseline_for_patch_group(&(**self), input)
+    }
+
+    fn label_parameter_version(
+        &self,
+        input: LabelParameterVersionRequest,
+    ) -> RusotoFuture<LabelParameterVersionResult, LabelParameterVersionError> {
+        Ssm::label_parameter_version(&(**self), input)
+    }
+
+    /// <p>Retrieves all versions of an association for a specific association ID.</p>
+    fn list_association_versions(
+        &self,
+        input: ListAssociationVersionsRequest,
+    ) -> RusotoFuture<ListAssociationVersionsResult, ListAssociationVersionsError> {
+        Ssm::list_association_versions(&(**self), input)
+    }
+
+    /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
+    fn list_associations(
+        &self,
+        input: ListAssociationsRequest,
+    ) -> RusotoFuture<ListAssociationsResult, ListAssociationsError> {
+        Ssm::list_associations(&(**self), input)
+    }
+
+    /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
+    fn list_command_invocations(
+        &self,
+        input: ListCommandInvocationsRequest,
+    ) -> RusotoFuture<ListCommandInvocationsResult, ListCommandInvocationsError> {
+        Ssm::list_command_invocations(&(**self), input)
+    }
+
+    /// <p>Lists the commands requested by users of the AWS account.</p>
+    fn list_commands(
+        &self,
+        input: ListCommandsRequest,
+    ) -> RusotoFuture<ListCommandsResult, ListCommandsError> {
+        Ssm::list_commands(&(**self), input)
+    }
+
+    /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
+    fn list_compliance_items(
+        &self,
+        input: ListComplianceItemsRequest,
+    ) -> RusotoFuture<ListComplianceItemsResult, ListComplianceItemsError> {
+        Ssm::list_compliance_items(&(**self), input)
+    }
+
+    /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
+    fn list_compliance_summaries(
+        &self,
+        input: ListComplianceSummariesRequest,
+    ) -> RusotoFuture<ListComplianceSummariesResult, ListComplianceSummariesError> {
+        Ssm::list_compliance_summaries(&(**self), input)
+    }
+
+    /// <p>List all versions for a document.</p>
+    fn list_document_versions(
+        &self,
+        input: ListDocumentVersionsRequest,
+    ) -> RusotoFuture<ListDocumentVersionsResult, ListDocumentVersionsError> {
+        Ssm::list_document_versions(&(**self), input)
+    }
+
+    /// <p>Describes one or more of your Systems Manager documents.</p>
+    fn list_documents(
+        &self,
+        input: ListDocumentsRequest,
+    ) -> RusotoFuture<ListDocumentsResult, ListDocumentsError> {
+        Ssm::list_documents(&(**self), input)
+    }
+
+    /// <p>A list of inventory items returned by the request.</p>
+    fn list_inventory_entries(
+        &self,
+        input: ListInventoryEntriesRequest,
+    ) -> RusotoFuture<ListInventoryEntriesResult, ListInventoryEntriesError> {
+        Ssm::list_inventory_entries(&(**self), input)
+    }
+
+    /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
+    fn list_resource_compliance_summaries(
+        &self,
+        input: ListResourceComplianceSummariesRequest,
+    ) -> RusotoFuture<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>
+    {
+        Ssm::list_resource_compliance_summaries(&(**self), input)
+    }
+
+    /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
+    fn list_resource_data_sync(
+        &self,
+        input: ListResourceDataSyncRequest,
+    ) -> RusotoFuture<ListResourceDataSyncResult, ListResourceDataSyncError> {
+        Ssm::list_resource_data_sync(&(**self), input)
+    }
+
+    /// <p>Returns a list of the tags assigned to the specified resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
+        Ssm::list_tags_for_resource(&(**self), input)
+    }
+
+    /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
+    fn modify_document_permission(
+        &self,
+        input: ModifyDocumentPermissionRequest,
+    ) -> RusotoFuture<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError> {
+        Ssm::modify_document_permission(&(**self), input)
+    }
+
+    /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
+    fn put_compliance_items(
+        &self,
+        input: PutComplianceItemsRequest,
+    ) -> RusotoFuture<PutComplianceItemsResult, PutComplianceItemsError> {
+        Ssm::put_compliance_items(&(**self), input)
+    }
+
+    /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
+    fn put_inventory(
+        &self,
+        input: PutInventoryRequest,
+    ) -> RusotoFuture<PutInventoryResult, PutInventoryError> {
+        Ssm::put_inventory(&(**self), input)
+    }
+
+    /// <p>Add a parameter to the system.</p>
+    fn put_parameter(
+        &self,
+        input: PutParameterRequest,
+    ) -> RusotoFuture<PutParameterResult, PutParameterError> {
+        Ssm::put_parameter(&(**self), input)
+    }
+
+    /// <p>Defines the default patch baseline.</p>
+    fn register_default_patch_baseline(
+        &self,
+        input: RegisterDefaultPatchBaselineRequest,
+    ) -> RusotoFuture<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError> {
+        Ssm::register_default_patch_baseline(&(**self), input)
+    }
+
+    /// <p>Registers a patch baseline for a patch group.</p>
+    fn register_patch_baseline_for_patch_group(
+        &self,
+        input: RegisterPatchBaselineForPatchGroupRequest,
+    ) -> RusotoFuture<
+        RegisterPatchBaselineForPatchGroupResult,
+        RegisterPatchBaselineForPatchGroupError,
+    > {
+        Ssm::register_patch_baseline_for_patch_group(&(**self), input)
+    }
+
+    /// <p>Registers a target with a Maintenance Window.</p>
+    fn register_target_with_maintenance_window(
+        &self,
+        input: RegisterTargetWithMaintenanceWindowRequest,
+    ) -> RusotoFuture<
+        RegisterTargetWithMaintenanceWindowResult,
+        RegisterTargetWithMaintenanceWindowError,
+    > {
+        Ssm::register_target_with_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Adds a new task to a Maintenance Window.</p>
+    fn register_task_with_maintenance_window(
+        &self,
+        input: RegisterTaskWithMaintenanceWindowRequest,
+    ) -> RusotoFuture<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>
+    {
+        Ssm::register_task_with_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Removes all tags from the specified resource.</p>
+    fn remove_tags_from_resource(
+        &self,
+        input: RemoveTagsFromResourceRequest,
+    ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
+        Ssm::remove_tags_from_resource(&(**self), input)
+    }
+
+    /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
+    fn send_automation_signal(
+        &self,
+        input: SendAutomationSignalRequest,
+    ) -> RusotoFuture<SendAutomationSignalResult, SendAutomationSignalError> {
+        Ssm::send_automation_signal(&(**self), input)
+    }
+
+    /// <p>Executes commands on one or more managed instances.</p>
+    fn send_command(
+        &self,
+        input: SendCommandRequest,
+    ) -> RusotoFuture<SendCommandResult, SendCommandError> {
+        Ssm::send_command(&(**self), input)
+    }
+
+    /// <p>Use this API action to execute an association immediately and only one time. This action can be helpful when troubleshooting associations.</p>
+    fn start_associations_once(
+        &self,
+        input: StartAssociationsOnceRequest,
+    ) -> RusotoFuture<StartAssociationsOnceResult, StartAssociationsOnceError> {
+        Ssm::start_associations_once(&(**self), input)
+    }
+
+    /// <p>Initiates execution of an Automation document.</p>
+    fn start_automation_execution(
+        &self,
+        input: StartAutomationExecutionRequest,
+    ) -> RusotoFuture<StartAutomationExecutionResult, StartAutomationExecutionError> {
+        Ssm::start_automation_execution(&(**self), input)
+    }
+
+    /// <p>Stop an Automation that is currently executing.</p>
+    fn stop_automation_execution(
+        &self,
+        input: StopAutomationExecutionRequest,
+    ) -> RusotoFuture<StopAutomationExecutionResult, StopAutomationExecutionError> {
+        Ssm::stop_automation_execution(&(**self), input)
+    }
+
+    /// <p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>
+    fn update_association(
+        &self,
+        input: UpdateAssociationRequest,
+    ) -> RusotoFuture<UpdateAssociationResult, UpdateAssociationError> {
+        Ssm::update_association(&(**self), input)
+    }
+
+    /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
+    fn update_association_status(
+        &self,
+        input: UpdateAssociationStatusRequest,
+    ) -> RusotoFuture<UpdateAssociationStatusResult, UpdateAssociationStatusError> {
+        Ssm::update_association_status(&(**self), input)
+    }
+
+    /// <p>The document you want to update.</p>
+    fn update_document(
+        &self,
+        input: UpdateDocumentRequest,
+    ) -> RusotoFuture<UpdateDocumentResult, UpdateDocumentError> {
+        Ssm::update_document(&(**self), input)
+    }
+
+    /// <p>Set the default version of a document. </p>
+    fn update_document_default_version(
+        &self,
+        input: UpdateDocumentDefaultVersionRequest,
+    ) -> RusotoFuture<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError> {
+        Ssm::update_document_default_version(&(**self), input)
+    }
+
+    /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
+    fn update_maintenance_window(
+        &self,
+        input: UpdateMaintenanceWindowRequest,
+    ) -> RusotoFuture<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError> {
+        Ssm::update_maintenance_window(&(**self), input)
+    }
+
+    /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
+    fn update_maintenance_window_target(
+        &self,
+        input: UpdateMaintenanceWindowTargetRequest,
+    ) -> RusotoFuture<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError> {
+        Ssm::update_maintenance_window_target(&(**self), input)
+    }
+
+    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
+    fn update_maintenance_window_task(
+        &self,
+        input: UpdateMaintenanceWindowTaskRequest,
+    ) -> RusotoFuture<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError> {
+        Ssm::update_maintenance_window_task(&(**self), input)
+    }
+
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
+    fn update_managed_instance_role(
+        &self,
+        input: UpdateManagedInstanceRoleRequest,
+    ) -> RusotoFuture<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError> {
+        Ssm::update_managed_instance_role(&(**self), input)
+    }
+
+    /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
+    fn update_patch_baseline(
+        &self,
+        input: UpdatePatchBaselineRequest,
+    ) -> RusotoFuture<UpdatePatchBaselineResult, UpdatePatchBaselineError> {
+        Ssm::update_patch_baseline(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

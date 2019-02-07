@@ -1569,5 +1569,71 @@ impl Transcribe for TranscribeClient {
     }
 }
 
+impl<T: ?Sized + Transcribe> Transcribe for ::std::rc::Rc<T> {
+    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file.</p>
+    fn create_vocabulary(
+        &self,
+        input: CreateVocabularyRequest,
+    ) -> RusotoFuture<CreateVocabularyResponse, CreateVocabularyError> {
+        Transcribe::create_vocabulary(&(**self), input)
+    }
+
+    /// <p>Deletes a vocabulary from Amazon Transcribe. </p>
+    fn delete_vocabulary(
+        &self,
+        input: DeleteVocabularyRequest,
+    ) -> RusotoFuture<(), DeleteVocabularyError> {
+        Transcribe::delete_vocabulary(&(**self), input)
+    }
+
+    /// <p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptionFileUri</code> field.</p>
+    fn get_transcription_job(
+        &self,
+        input: GetTranscriptionJobRequest,
+    ) -> RusotoFuture<GetTranscriptionJobResponse, GetTranscriptionJobError> {
+        Transcribe::get_transcription_job(&(**self), input)
+    }
+
+    /// <p>Gets information about a vocabulary.</p>
+    fn get_vocabulary(
+        &self,
+        input: GetVocabularyRequest,
+    ) -> RusotoFuture<GetVocabularyResponse, GetVocabularyError> {
+        Transcribe::get_vocabulary(&(**self), input)
+    }
+
+    /// <p>Lists transcription jobs with the specified status.</p>
+    fn list_transcription_jobs(
+        &self,
+        input: ListTranscriptionJobsRequest,
+    ) -> RusotoFuture<ListTranscriptionJobsResponse, ListTranscriptionJobsError> {
+        Transcribe::list_transcription_jobs(&(**self), input)
+    }
+
+    /// <p>Returns a list of vocabularies that match the specified criteria. If no criteria are specified, returns the entire list of vocabularies.</p>
+    fn list_vocabularies(
+        &self,
+        input: ListVocabulariesRequest,
+    ) -> RusotoFuture<ListVocabulariesResponse, ListVocabulariesError> {
+        Transcribe::list_vocabularies(&(**self), input)
+    }
+
+    /// <p>Starts an asynchronous job to transcribe speech to text.</p>
+    fn start_transcription_job(
+        &self,
+        input: StartTranscriptionJobRequest,
+    ) -> RusotoFuture<StartTranscriptionJobResponse, StartTranscriptionJobError> {
+        Transcribe::start_transcription_job(&(**self), input)
+    }
+
+    /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
+    fn update_vocabulary(
+        &self,
+        input: UpdateVocabularyRequest,
+    ) -> RusotoFuture<UpdateVocabularyResponse, UpdateVocabularyError> {
+        Transcribe::update_vocabulary(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

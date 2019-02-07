@@ -14583,5 +14583,619 @@ impl Glue for GlueClient {
     }
 }
 
+impl<T: ?Sized + Glue> Glue for ::std::rc::Rc<T> {
+    /// <p>Creates one or more partitions in a batch operation.</p>
+    fn batch_create_partition(
+        &self,
+        input: BatchCreatePartitionRequest,
+    ) -> RusotoFuture<BatchCreatePartitionResponse, BatchCreatePartitionError> {
+        Glue::batch_create_partition(&(**self), input)
+    }
+
+    /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
+    fn batch_delete_connection(
+        &self,
+        input: BatchDeleteConnectionRequest,
+    ) -> RusotoFuture<BatchDeleteConnectionResponse, BatchDeleteConnectionError> {
+        Glue::batch_delete_connection(&(**self), input)
+    }
+
+    /// <p>Deletes one or more partitions in a batch operation.</p>
+    fn batch_delete_partition(
+        &self,
+        input: BatchDeletePartitionRequest,
+    ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError> {
+        Glue::batch_delete_partition(&(**self), input)
+    }
+
+    /// <p>Deletes multiple tables at once.</p>
+    fn batch_delete_table(
+        &self,
+        input: BatchDeleteTableRequest,
+    ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError> {
+        Glue::batch_delete_table(&(**self), input)
+    }
+
+    /// <p>Deletes a specified batch of versions of a table.</p>
+    fn batch_delete_table_version(
+        &self,
+        input: BatchDeleteTableVersionRequest,
+    ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError> {
+        Glue::batch_delete_table_version(&(**self), input)
+    }
+
+    /// <p>Retrieves partitions in a batch request.</p>
+    fn batch_get_partition(
+        &self,
+        input: BatchGetPartitionRequest,
+    ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError> {
+        Glue::batch_get_partition(&(**self), input)
+    }
+
+    /// <p>Stops one or more job runs for a specified job definition.</p>
+    fn batch_stop_job_run(
+        &self,
+        input: BatchStopJobRunRequest,
+    ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError> {
+        Glue::batch_stop_job_run(&(**self), input)
+    }
+
+    /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
+    fn create_classifier(
+        &self,
+        input: CreateClassifierRequest,
+    ) -> RusotoFuture<CreateClassifierResponse, CreateClassifierError> {
+        Glue::create_classifier(&(**self), input)
+    }
+
+    /// <p>Creates a connection definition in the Data Catalog.</p>
+    fn create_connection(
+        &self,
+        input: CreateConnectionRequest,
+    ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError> {
+        Glue::create_connection(&(**self), input)
+    }
+
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <i>s3Targets</i> field, the <i>jdbcTargets</i> field, or the <i>DynamoDBTargets</i> field.</p>
+    fn create_crawler(
+        &self,
+        input: CreateCrawlerRequest,
+    ) -> RusotoFuture<CreateCrawlerResponse, CreateCrawlerError> {
+        Glue::create_crawler(&(**self), input)
+    }
+
+    /// <p>Creates a new database in a Data Catalog.</p>
+    fn create_database(
+        &self,
+        input: CreateDatabaseRequest,
+    ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError> {
+        Glue::create_database(&(**self), input)
+    }
+
+    /// <p>Creates a new DevEndpoint.</p>
+    fn create_dev_endpoint(
+        &self,
+        input: CreateDevEndpointRequest,
+    ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError> {
+        Glue::create_dev_endpoint(&(**self), input)
+    }
+
+    /// <p>Creates a new job definition.</p>
+    fn create_job(
+        &self,
+        input: CreateJobRequest,
+    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
+        Glue::create_job(&(**self), input)
+    }
+
+    /// <p>Creates a new partition.</p>
+    fn create_partition(
+        &self,
+        input: CreatePartitionRequest,
+    ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError> {
+        Glue::create_partition(&(**self), input)
+    }
+
+    /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
+    fn create_script(
+        &self,
+        input: CreateScriptRequest,
+    ) -> RusotoFuture<CreateScriptResponse, CreateScriptError> {
+        Glue::create_script(&(**self), input)
+    }
+
+    /// <p>Creates a new table definition in the Data Catalog.</p>
+    fn create_table(
+        &self,
+        input: CreateTableRequest,
+    ) -> RusotoFuture<CreateTableResponse, CreateTableError> {
+        Glue::create_table(&(**self), input)
+    }
+
+    /// <p>Creates a new trigger.</p>
+    fn create_trigger(
+        &self,
+        input: CreateTriggerRequest,
+    ) -> RusotoFuture<CreateTriggerResponse, CreateTriggerError> {
+        Glue::create_trigger(&(**self), input)
+    }
+
+    /// <p>Creates a new function definition in the Data Catalog.</p>
+    fn create_user_defined_function(
+        &self,
+        input: CreateUserDefinedFunctionRequest,
+    ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError> {
+        Glue::create_user_defined_function(&(**self), input)
+    }
+
+    /// <p>Removes a classifier from the Data Catalog.</p>
+    fn delete_classifier(
+        &self,
+        input: DeleteClassifierRequest,
+    ) -> RusotoFuture<DeleteClassifierResponse, DeleteClassifierError> {
+        Glue::delete_classifier(&(**self), input)
+    }
+
+    /// <p>Deletes a connection from the Data Catalog.</p>
+    fn delete_connection(
+        &self,
+        input: DeleteConnectionRequest,
+    ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
+        Glue::delete_connection(&(**self), input)
+    }
+
+    /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
+    fn delete_crawler(
+        &self,
+        input: DeleteCrawlerRequest,
+    ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError> {
+        Glue::delete_crawler(&(**self), input)
+    }
+
+    /// <p>Removes a specified Database from a Data Catalog.</p>
+    fn delete_database(
+        &self,
+        input: DeleteDatabaseRequest,
+    ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError> {
+        Glue::delete_database(&(**self), input)
+    }
+
+    /// <p>Deletes a specified DevEndpoint.</p>
+    fn delete_dev_endpoint(
+        &self,
+        input: DeleteDevEndpointRequest,
+    ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError> {
+        Glue::delete_dev_endpoint(&(**self), input)
+    }
+
+    /// <p>Deletes a specified job definition. If the job definition is not found, no exception is thrown.</p>
+    fn delete_job(
+        &self,
+        input: DeleteJobRequest,
+    ) -> RusotoFuture<DeleteJobResponse, DeleteJobError> {
+        Glue::delete_job(&(**self), input)
+    }
+
+    /// <p>Deletes a specified partition.</p>
+    fn delete_partition(
+        &self,
+        input: DeletePartitionRequest,
+    ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError> {
+        Glue::delete_partition(&(**self), input)
+    }
+
+    /// <p>Removes a table definition from the Data Catalog.</p>
+    fn delete_table(
+        &self,
+        input: DeleteTableRequest,
+    ) -> RusotoFuture<DeleteTableResponse, DeleteTableError> {
+        Glue::delete_table(&(**self), input)
+    }
+
+    /// <p>Deletes a specified version of a table.</p>
+    fn delete_table_version(
+        &self,
+        input: DeleteTableVersionRequest,
+    ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError> {
+        Glue::delete_table_version(&(**self), input)
+    }
+
+    /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
+    fn delete_trigger(
+        &self,
+        input: DeleteTriggerRequest,
+    ) -> RusotoFuture<DeleteTriggerResponse, DeleteTriggerError> {
+        Glue::delete_trigger(&(**self), input)
+    }
+
+    /// <p>Deletes an existing function definition from the Data Catalog.</p>
+    fn delete_user_defined_function(
+        &self,
+        input: DeleteUserDefinedFunctionRequest,
+    ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError> {
+        Glue::delete_user_defined_function(&(**self), input)
+    }
+
+    /// <p>Retrieves the status of a migration operation.</p>
+    fn get_catalog_import_status(
+        &self,
+        input: GetCatalogImportStatusRequest,
+    ) -> RusotoFuture<GetCatalogImportStatusResponse, GetCatalogImportStatusError> {
+        Glue::get_catalog_import_status(&(**self), input)
+    }
+
+    /// <p>Retrieve a classifier by name.</p>
+    fn get_classifier(
+        &self,
+        input: GetClassifierRequest,
+    ) -> RusotoFuture<GetClassifierResponse, GetClassifierError> {
+        Glue::get_classifier(&(**self), input)
+    }
+
+    /// <p>Lists all classifier objects in the Data Catalog.</p>
+    fn get_classifiers(
+        &self,
+        input: GetClassifiersRequest,
+    ) -> RusotoFuture<GetClassifiersResponse, GetClassifiersError> {
+        Glue::get_classifiers(&(**self), input)
+    }
+
+    /// <p>Retrieves a connection definition from the Data Catalog.</p>
+    fn get_connection(
+        &self,
+        input: GetConnectionRequest,
+    ) -> RusotoFuture<GetConnectionResponse, GetConnectionError> {
+        Glue::get_connection(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
+    fn get_connections(
+        &self,
+        input: GetConnectionsRequest,
+    ) -> RusotoFuture<GetConnectionsResponse, GetConnectionsError> {
+        Glue::get_connections(&(**self), input)
+    }
+
+    /// <p>Retrieves metadata for a specified crawler.</p>
+    fn get_crawler(
+        &self,
+        input: GetCrawlerRequest,
+    ) -> RusotoFuture<GetCrawlerResponse, GetCrawlerError> {
+        Glue::get_crawler(&(**self), input)
+    }
+
+    /// <p>Retrieves metrics about specified crawlers.</p>
+    fn get_crawler_metrics(
+        &self,
+        input: GetCrawlerMetricsRequest,
+    ) -> RusotoFuture<GetCrawlerMetricsResponse, GetCrawlerMetricsError> {
+        Glue::get_crawler_metrics(&(**self), input)
+    }
+
+    /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
+    fn get_crawlers(
+        &self,
+        input: GetCrawlersRequest,
+    ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError> {
+        Glue::get_crawlers(&(**self), input)
+    }
+
+    /// <p>Retrieves the definition of a specified database.</p>
+    fn get_database(
+        &self,
+        input: GetDatabaseRequest,
+    ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError> {
+        Glue::get_database(&(**self), input)
+    }
+
+    /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
+    fn get_databases(
+        &self,
+        input: GetDatabasesRequest,
+    ) -> RusotoFuture<GetDatabasesResponse, GetDatabasesError> {
+        Glue::get_databases(&(**self), input)
+    }
+
+    /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
+    fn get_dataflow_graph(
+        &self,
+        input: GetDataflowGraphRequest,
+    ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError> {
+        Glue::get_dataflow_graph(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a specified DevEndpoint.</p>
+    fn get_dev_endpoint(
+        &self,
+        input: GetDevEndpointRequest,
+    ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError> {
+        Glue::get_dev_endpoint(&(**self), input)
+    }
+
+    /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
+    fn get_dev_endpoints(
+        &self,
+        input: GetDevEndpointsRequest,
+    ) -> RusotoFuture<GetDevEndpointsResponse, GetDevEndpointsError> {
+        Glue::get_dev_endpoints(&(**self), input)
+    }
+
+    /// <p>Retrieves an existing job definition.</p>
+    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError> {
+        Glue::get_job(&(**self), input)
+    }
+
+    /// <p>Retrieves the metadata for a given job run.</p>
+    fn get_job_run(
+        &self,
+        input: GetJobRunRequest,
+    ) -> RusotoFuture<GetJobRunResponse, GetJobRunError> {
+        Glue::get_job_run(&(**self), input)
+    }
+
+    /// <p>Retrieves metadata for all runs of a given job definition.</p>
+    fn get_job_runs(
+        &self,
+        input: GetJobRunsRequest,
+    ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError> {
+        Glue::get_job_runs(&(**self), input)
+    }
+
+    /// <p>Retrieves all current job definitions.</p>
+    fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError> {
+        Glue::get_jobs(&(**self), input)
+    }
+
+    /// <p>Creates mappings.</p>
+    fn get_mapping(
+        &self,
+        input: GetMappingRequest,
+    ) -> RusotoFuture<GetMappingResponse, GetMappingError> {
+        Glue::get_mapping(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a specified partition.</p>
+    fn get_partition(
+        &self,
+        input: GetPartitionRequest,
+    ) -> RusotoFuture<GetPartitionResponse, GetPartitionError> {
+        Glue::get_partition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about the partitions in a table.</p>
+    fn get_partitions(
+        &self,
+        input: GetPartitionsRequest,
+    ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError> {
+        Glue::get_partitions(&(**self), input)
+    }
+
+    /// <p>Gets code to perform a specified mapping.</p>
+    fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError> {
+        Glue::get_plan(&(**self), input)
+    }
+
+    /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
+    fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError> {
+        Glue::get_table(&(**self), input)
+    }
+
+    /// <p>Retrieves a specified version of a table.</p>
+    fn get_table_version(
+        &self,
+        input: GetTableVersionRequest,
+    ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError> {
+        Glue::get_table_version(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
+    fn get_table_versions(
+        &self,
+        input: GetTableVersionsRequest,
+    ) -> RusotoFuture<GetTableVersionsResponse, GetTableVersionsError> {
+        Glue::get_table_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
+    fn get_tables(
+        &self,
+        input: GetTablesRequest,
+    ) -> RusotoFuture<GetTablesResponse, GetTablesError> {
+        Glue::get_tables(&(**self), input)
+    }
+
+    /// <p>Retrieves the definition of a trigger.</p>
+    fn get_trigger(
+        &self,
+        input: GetTriggerRequest,
+    ) -> RusotoFuture<GetTriggerResponse, GetTriggerError> {
+        Glue::get_trigger(&(**self), input)
+    }
+
+    /// <p>Gets all the triggers associated with a job.</p>
+    fn get_triggers(
+        &self,
+        input: GetTriggersRequest,
+    ) -> RusotoFuture<GetTriggersResponse, GetTriggersError> {
+        Glue::get_triggers(&(**self), input)
+    }
+
+    /// <p>Retrieves a specified function definition from the Data Catalog.</p>
+    fn get_user_defined_function(
+        &self,
+        input: GetUserDefinedFunctionRequest,
+    ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError> {
+        Glue::get_user_defined_function(&(**self), input)
+    }
+
+    /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
+    fn get_user_defined_functions(
+        &self,
+        input: GetUserDefinedFunctionsRequest,
+    ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError> {
+        Glue::get_user_defined_functions(&(**self), input)
+    }
+
+    /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
+    fn import_catalog_to_glue(
+        &self,
+        input: ImportCatalogToGlueRequest,
+    ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError> {
+        Glue::import_catalog_to_glue(&(**self), input)
+    }
+
+    /// <p>Resets a bookmark entry.</p>
+    fn reset_job_bookmark(
+        &self,
+        input: ResetJobBookmarkRequest,
+    ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError> {
+        Glue::reset_job_bookmark(&(**self), input)
+    }
+
+    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, returns a <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-exceptions.html#aws-glue-api-exceptions-CrawlerRunningException">CrawlerRunningException</a>.</p>
+    fn start_crawler(
+        &self,
+        input: StartCrawlerRequest,
+    ) -> RusotoFuture<StartCrawlerResponse, StartCrawlerError> {
+        Glue::start_crawler(&(**self), input)
+    }
+
+    /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
+    fn start_crawler_schedule(
+        &self,
+        input: StartCrawlerScheduleRequest,
+    ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError> {
+        Glue::start_crawler_schedule(&(**self), input)
+    }
+
+    /// <p>Starts a job run using a job definition.</p>
+    fn start_job_run(
+        &self,
+        input: StartJobRunRequest,
+    ) -> RusotoFuture<StartJobRunResponse, StartJobRunError> {
+        Glue::start_job_run(&(**self), input)
+    }
+
+    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
+    fn start_trigger(
+        &self,
+        input: StartTriggerRequest,
+    ) -> RusotoFuture<StartTriggerResponse, StartTriggerError> {
+        Glue::start_trigger(&(**self), input)
+    }
+
+    /// <p>If the specified crawler is running, stops the crawl.</p>
+    fn stop_crawler(
+        &self,
+        input: StopCrawlerRequest,
+    ) -> RusotoFuture<StopCrawlerResponse, StopCrawlerError> {
+        Glue::stop_crawler(&(**self), input)
+    }
+
+    /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
+    fn stop_crawler_schedule(
+        &self,
+        input: StopCrawlerScheduleRequest,
+    ) -> RusotoFuture<StopCrawlerScheduleResponse, StopCrawlerScheduleError> {
+        Glue::stop_crawler_schedule(&(**self), input)
+    }
+
+    /// <p>Stops a specified trigger.</p>
+    fn stop_trigger(
+        &self,
+        input: StopTriggerRequest,
+    ) -> RusotoFuture<StopTriggerResponse, StopTriggerError> {
+        Glue::stop_trigger(&(**self), input)
+    }
+
+    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
+    fn update_classifier(
+        &self,
+        input: UpdateClassifierRequest,
+    ) -> RusotoFuture<UpdateClassifierResponse, UpdateClassifierError> {
+        Glue::update_classifier(&(**self), input)
+    }
+
+    /// <p>Updates a connection definition in the Data Catalog.</p>
+    fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> RusotoFuture<UpdateConnectionResponse, UpdateConnectionError> {
+        Glue::update_connection(&(**self), input)
+    }
+
+    /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
+    fn update_crawler(
+        &self,
+        input: UpdateCrawlerRequest,
+    ) -> RusotoFuture<UpdateCrawlerResponse, UpdateCrawlerError> {
+        Glue::update_crawler(&(**self), input)
+    }
+
+    /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
+    fn update_crawler_schedule(
+        &self,
+        input: UpdateCrawlerScheduleRequest,
+    ) -> RusotoFuture<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError> {
+        Glue::update_crawler_schedule(&(**self), input)
+    }
+
+    /// <p>Updates an existing database definition in a Data Catalog.</p>
+    fn update_database(
+        &self,
+        input: UpdateDatabaseRequest,
+    ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError> {
+        Glue::update_database(&(**self), input)
+    }
+
+    /// <p>Updates a specified DevEndpoint.</p>
+    fn update_dev_endpoint(
+        &self,
+        input: UpdateDevEndpointRequest,
+    ) -> RusotoFuture<UpdateDevEndpointResponse, UpdateDevEndpointError> {
+        Glue::update_dev_endpoint(&(**self), input)
+    }
+
+    /// <p>Updates an existing job definition.</p>
+    fn update_job(
+        &self,
+        input: UpdateJobRequest,
+    ) -> RusotoFuture<UpdateJobResponse, UpdateJobError> {
+        Glue::update_job(&(**self), input)
+    }
+
+    /// <p>Updates a partition.</p>
+    fn update_partition(
+        &self,
+        input: UpdatePartitionRequest,
+    ) -> RusotoFuture<UpdatePartitionResponse, UpdatePartitionError> {
+        Glue::update_partition(&(**self), input)
+    }
+
+    /// <p>Updates a metadata table in the Data Catalog.</p>
+    fn update_table(
+        &self,
+        input: UpdateTableRequest,
+    ) -> RusotoFuture<UpdateTableResponse, UpdateTableError> {
+        Glue::update_table(&(**self), input)
+    }
+
+    /// <p>Updates a trigger definition.</p>
+    fn update_trigger(
+        &self,
+        input: UpdateTriggerRequest,
+    ) -> RusotoFuture<UpdateTriggerResponse, UpdateTriggerError> {
+        Glue::update_trigger(&(**self), input)
+    }
+
+    /// <p>Updates an existing function definition in the Data Catalog.</p>
+    fn update_user_defined_function(
+        &self,
+        input: UpdateUserDefinedFunctionRequest,
+    ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError> {
+        Glue::update_user_defined_function(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

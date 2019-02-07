@@ -2126,5 +2126,91 @@ impl CloudHsmv2 for CloudHsmv2Client {
     }
 }
 
+impl<T: ?Sized + CloudHsmv2> CloudHsmv2 for ::std::rc::Rc<T> {
+    fn copy_backup_to_region(
+        &self,
+        input: CopyBackupToRegionRequest,
+    ) -> RusotoFuture<CopyBackupToRegionResponse, CopyBackupToRegionError> {
+        CloudHsmv2::copy_backup_to_region(&(**self), input)
+    }
+
+    /// <p>Creates a new AWS CloudHSM cluster.</p>
+    fn create_cluster(
+        &self,
+        input: CreateClusterRequest,
+    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
+        CloudHsmv2::create_cluster(&(**self), input)
+    }
+
+    /// <p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>
+    fn create_hsm(
+        &self,
+        input: CreateHsmRequest,
+    ) -> RusotoFuture<CreateHsmResponse, CreateHsmError> {
+        CloudHsmv2::create_hsm(&(**self), input)
+    }
+
+    /// <p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>
+    fn delete_cluster(
+        &self,
+        input: DeleteClusterRequest,
+    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
+        CloudHsmv2::delete_cluster(&(**self), input)
+    }
+
+    /// <p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>
+    fn delete_hsm(
+        &self,
+        input: DeleteHsmRequest,
+    ) -> RusotoFuture<DeleteHsmResponse, DeleteHsmError> {
+        CloudHsmv2::delete_hsm(&(**self), input)
+    }
+
+    /// <p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>
+    fn describe_backups(
+        &self,
+        input: DescribeBackupsRequest,
+    ) -> RusotoFuture<DescribeBackupsResponse, DescribeBackupsError> {
+        CloudHsmv2::describe_backups(&(**self), input)
+    }
+
+    /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
+    fn describe_clusters(
+        &self,
+        input: DescribeClustersRequest,
+    ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
+        CloudHsmv2::describe_clusters(&(**self), input)
+    }
+
+    /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
+    fn initialize_cluster(
+        &self,
+        input: InitializeClusterRequest,
+    ) -> RusotoFuture<InitializeClusterResponse, InitializeClusterError> {
+        CloudHsmv2::initialize_cluster(&(**self), input)
+    }
+
+    /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+        CloudHsmv2::list_tags(&(**self), input)
+    }
+
+    /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        CloudHsmv2::tag_resource(&(**self), input)
+    }
+
+    /// <p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        CloudHsmv2::untag_resource(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

@@ -8532,5 +8532,330 @@ impl CodeDeploy for CodeDeployClient {
     }
 }
 
+impl<T: ?Sized + CodeDeploy> CodeDeploy for ::std::rc::Rc<T> {
+    /// <p>Adds tags to on-premises instances.</p>
+    fn add_tags_to_on_premises_instances(
+        &self,
+        input: AddTagsToOnPremisesInstancesInput,
+    ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError> {
+        CodeDeploy::add_tags_to_on_premises_instances(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more application revisions.</p>
+    fn batch_get_application_revisions(
+        &self,
+        input: BatchGetApplicationRevisionsInput,
+    ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
+        CodeDeploy::batch_get_application_revisions(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more applications.</p>
+    fn batch_get_applications(
+        &self,
+        input: BatchGetApplicationsInput,
+    ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError> {
+        CodeDeploy::batch_get_applications(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more deployment groups.</p>
+    fn batch_get_deployment_groups(
+        &self,
+        input: BatchGetDeploymentGroupsInput,
+    ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
+        CodeDeploy::batch_get_deployment_groups(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more instance that are part of a deployment group.</p>
+    fn batch_get_deployment_instances(
+        &self,
+        input: BatchGetDeploymentInstancesInput,
+    ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
+        CodeDeploy::batch_get_deployment_instances(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more deployments.</p>
+    fn batch_get_deployments(
+        &self,
+        input: BatchGetDeploymentsInput,
+    ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
+        CodeDeploy::batch_get_deployments(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more on-premises instances.</p>
+    fn batch_get_on_premises_instances(
+        &self,
+        input: BatchGetOnPremisesInstancesInput,
+    ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
+        CodeDeploy::batch_get_on_premises_instances(&(**self), input)
+    }
+
+    /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
+    fn continue_deployment(
+        &self,
+        input: ContinueDeploymentInput,
+    ) -> RusotoFuture<(), ContinueDeploymentError> {
+        CodeDeploy::continue_deployment(&(**self), input)
+    }
+
+    /// <p>Creates an application.</p>
+    fn create_application(
+        &self,
+        input: CreateApplicationInput,
+    ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError> {
+        CodeDeploy::create_application(&(**self), input)
+    }
+
+    /// <p>Deploys an application revision through the specified deployment group.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentInput,
+    ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError> {
+        CodeDeploy::create_deployment(&(**self), input)
+    }
+
+    /// <p>Creates a deployment configuration.</p>
+    fn create_deployment_config(
+        &self,
+        input: CreateDeploymentConfigInput,
+    ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
+        CodeDeploy::create_deployment_config(&(**self), input)
+    }
+
+    /// <p>Creates a deployment group to which application revisions will be deployed.</p>
+    fn create_deployment_group(
+        &self,
+        input: CreateDeploymentGroupInput,
+    ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
+        CodeDeploy::create_deployment_group(&(**self), input)
+    }
+
+    /// <p>Deletes an application.</p>
+    fn delete_application(
+        &self,
+        input: DeleteApplicationInput,
+    ) -> RusotoFuture<(), DeleteApplicationError> {
+        CodeDeploy::delete_application(&(**self), input)
+    }
+
+    /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
+    fn delete_deployment_config(
+        &self,
+        input: DeleteDeploymentConfigInput,
+    ) -> RusotoFuture<(), DeleteDeploymentConfigError> {
+        CodeDeploy::delete_deployment_config(&(**self), input)
+    }
+
+    /// <p>Deletes a deployment group.</p>
+    fn delete_deployment_group(
+        &self,
+        input: DeleteDeploymentGroupInput,
+    ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
+        CodeDeploy::delete_deployment_group(&(**self), input)
+    }
+
+    /// <p>Deletes a GitHub account connection.</p>
+    fn delete_git_hub_account_token(
+        &self,
+        input: DeleteGitHubAccountTokenInput,
+    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError> {
+        CodeDeploy::delete_git_hub_account_token(&(**self), input)
+    }
+
+    /// <p>Deregisters an on-premises instance.</p>
+    fn deregister_on_premises_instance(
+        &self,
+        input: DeregisterOnPremisesInstanceInput,
+    ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError> {
+        CodeDeploy::deregister_on_premises_instance(&(**self), input)
+    }
+
+    /// <p>Gets information about an application.</p>
+    fn get_application(
+        &self,
+        input: GetApplicationInput,
+    ) -> RusotoFuture<GetApplicationOutput, GetApplicationError> {
+        CodeDeploy::get_application(&(**self), input)
+    }
+
+    /// <p>Gets information about an application revision.</p>
+    fn get_application_revision(
+        &self,
+        input: GetApplicationRevisionInput,
+    ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError> {
+        CodeDeploy::get_application_revision(&(**self), input)
+    }
+
+    /// <p>Gets information about a deployment.</p>
+    fn get_deployment(
+        &self,
+        input: GetDeploymentInput,
+    ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError> {
+        CodeDeploy::get_deployment(&(**self), input)
+    }
+
+    /// <p>Gets information about a deployment configuration.</p>
+    fn get_deployment_config(
+        &self,
+        input: GetDeploymentConfigInput,
+    ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError> {
+        CodeDeploy::get_deployment_config(&(**self), input)
+    }
+
+    /// <p>Gets information about a deployment group.</p>
+    fn get_deployment_group(
+        &self,
+        input: GetDeploymentGroupInput,
+    ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError> {
+        CodeDeploy::get_deployment_group(&(**self), input)
+    }
+
+    /// <p>Gets information about an instance as part of a deployment.</p>
+    fn get_deployment_instance(
+        &self,
+        input: GetDeploymentInstanceInput,
+    ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
+        CodeDeploy::get_deployment_instance(&(**self), input)
+    }
+
+    /// <p>Gets information about an on-premises instance.</p>
+    fn get_on_premises_instance(
+        &self,
+        input: GetOnPremisesInstanceInput,
+    ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
+        CodeDeploy::get_on_premises_instance(&(**self), input)
+    }
+
+    /// <p>Lists information about revisions for an application.</p>
+    fn list_application_revisions(
+        &self,
+        input: ListApplicationRevisionsInput,
+    ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
+        CodeDeploy::list_application_revisions(&(**self), input)
+    }
+
+    /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
+    fn list_applications(
+        &self,
+        input: ListApplicationsInput,
+    ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError> {
+        CodeDeploy::list_applications(&(**self), input)
+    }
+
+    /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
+    fn list_deployment_configs(
+        &self,
+        input: ListDeploymentConfigsInput,
+    ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
+        CodeDeploy::list_deployment_configs(&(**self), input)
+    }
+
+    /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
+    fn list_deployment_groups(
+        &self,
+        input: ListDeploymentGroupsInput,
+    ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
+        CodeDeploy::list_deployment_groups(&(**self), input)
+    }
+
+    /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
+    fn list_deployment_instances(
+        &self,
+        input: ListDeploymentInstancesInput,
+    ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
+        CodeDeploy::list_deployment_instances(&(**self), input)
+    }
+
+    /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
+    fn list_deployments(
+        &self,
+        input: ListDeploymentsInput,
+    ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError> {
+        CodeDeploy::list_deployments(&(**self), input)
+    }
+
+    /// <p>Lists the names of stored connections to GitHub accounts.</p>
+    fn list_git_hub_account_token_names(
+        &self,
+        input: ListGitHubAccountTokenNamesInput,
+    ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
+        CodeDeploy::list_git_hub_account_token_names(&(**self), input)
+    }
+
+    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
+    fn list_on_premises_instances(
+        &self,
+        input: ListOnPremisesInstancesInput,
+    ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
+        CodeDeploy::list_on_premises_instances(&(**self), input)
+    }
+
+    /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
+    fn put_lifecycle_event_hook_execution_status(
+        &self,
+        input: PutLifecycleEventHookExecutionStatusInput,
+    ) -> RusotoFuture<
+        PutLifecycleEventHookExecutionStatusOutput,
+        PutLifecycleEventHookExecutionStatusError,
+    > {
+        CodeDeploy::put_lifecycle_event_hook_execution_status(&(**self), input)
+    }
+
+    /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
+    fn register_application_revision(
+        &self,
+        input: RegisterApplicationRevisionInput,
+    ) -> RusotoFuture<(), RegisterApplicationRevisionError> {
+        CodeDeploy::register_application_revision(&(**self), input)
+    }
+
+    /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
+    fn register_on_premises_instance(
+        &self,
+        input: RegisterOnPremisesInstanceInput,
+    ) -> RusotoFuture<(), RegisterOnPremisesInstanceError> {
+        CodeDeploy::register_on_premises_instance(&(**self), input)
+    }
+
+    /// <p>Removes one or more tags from one or more on-premises instances.</p>
+    fn remove_tags_from_on_premises_instances(
+        &self,
+        input: RemoveTagsFromOnPremisesInstancesInput,
+    ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError> {
+        CodeDeploy::remove_tags_from_on_premises_instances(&(**self), input)
+    }
+
+    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
+    fn skip_wait_time_for_instance_termination(
+        &self,
+        input: SkipWaitTimeForInstanceTerminationInput,
+    ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError> {
+        CodeDeploy::skip_wait_time_for_instance_termination(&(**self), input)
+    }
+
+    /// <p>Attempts to stop an ongoing deployment.</p>
+    fn stop_deployment(
+        &self,
+        input: StopDeploymentInput,
+    ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError> {
+        CodeDeploy::stop_deployment(&(**self), input)
+    }
+
+    /// <p>Changes the name of an application.</p>
+    fn update_application(
+        &self,
+        input: UpdateApplicationInput,
+    ) -> RusotoFuture<(), UpdateApplicationError> {
+        CodeDeploy::update_application(&(**self), input)
+    }
+
+    /// <p>Changes information about a deployment group.</p>
+    fn update_deployment_group(
+        &self,
+        input: UpdateDeploymentGroupInput,
+    ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
+        CodeDeploy::update_deployment_group(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

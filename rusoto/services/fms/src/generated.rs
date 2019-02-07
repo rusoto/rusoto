@@ -1981,5 +1981,90 @@ impl Fms for FmsClient {
     }
 }
 
+impl<T: ?Sized + Fms> Fms for ::std::rc::Rc<T> {
+    /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with a master account in AWS Organizations or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall manager administrator account. </p>
+    fn associate_admin_account(
+        &self,
+        input: AssociateAdminAccountRequest,
+    ) -> RusotoFuture<(), AssociateAdminAccountError> {
+        Fms::associate_admin_account(&(**self), input)
+    }
+
+    /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
+    fn delete_notification_channel(&self) -> RusotoFuture<(), DeleteNotificationChannelError> {
+        Fms::delete_notification_channel(&(**self))
+    }
+
+    /// <p>Permanently deletes an AWS Firewall Manager policy. </p>
+    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
+        Fms::delete_policy(&(**self), input)
+    }
+
+    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. You will need to submit an <code>AssociateAdminAccount</code> request to set a new account as the AWS Firewall administrator.</p>
+    fn disassociate_admin_account(&self) -> RusotoFuture<(), DisassociateAdminAccountError> {
+        Fms::disassociate_admin_account(&(**self))
+    }
+
+    /// <p>Returns the AWS Organizations master account that is associated with AWS Firewall Manager as the AWS Firewall Manager administrator.</p>
+    fn get_admin_account(&self) -> RusotoFuture<GetAdminAccountResponse, GetAdminAccountError> {
+        Fms::get_admin_account(&(**self))
+    }
+
+    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered non-compliant if the specified policy has not been applied to them.</p>
+    fn get_compliance_detail(
+        &self,
+        input: GetComplianceDetailRequest,
+    ) -> RusotoFuture<GetComplianceDetailResponse, GetComplianceDetailError> {
+        Fms::get_compliance_detail(&(**self), input)
+    }
+
+    /// <p>Returns information about the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
+    fn get_notification_channel(
+        &self,
+    ) -> RusotoFuture<GetNotificationChannelResponse, GetNotificationChannelError> {
+        Fms::get_notification_channel(&(**self))
+    }
+
+    /// <p>Returns information about the specified AWS Firewall Manager policy.</p>
+    fn get_policy(
+        &self,
+        input: GetPolicyRequest,
+    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
+        Fms::get_policy(&(**self), input)
+    }
+
+    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
+    fn list_compliance_status(
+        &self,
+        input: ListComplianceStatusRequest,
+    ) -> RusotoFuture<ListComplianceStatusResponse, ListComplianceStatusError> {
+        Fms::list_compliance_status(&(**self), input)
+    }
+
+    /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
+    fn list_policies(
+        &self,
+        input: ListPoliciesRequest,
+    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
+        Fms::list_policies(&(**self), input)
+    }
+
+    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
+    fn put_notification_channel(
+        &self,
+        input: PutNotificationChannelRequest,
+    ) -> RusotoFuture<(), PutNotificationChannelError> {
+        Fms::put_notification_channel(&(**self), input)
+    }
+
+    /// <p>Creates an AWS Firewall Manager policy.</p>
+    fn put_policy(
+        &self,
+        input: PutPolicyRequest,
+    ) -> RusotoFuture<PutPolicyResponse, PutPolicyError> {
+        Fms::put_policy(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

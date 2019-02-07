@@ -2371,5 +2371,91 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 }
 
+impl<T: ?Sized + ResourceGroups> ResourceGroups for ::std::rc::Rc<T> {
+    /// <p>Creates a group with a specified name, description, and resource query.</p>
+    fn create_group(
+        &self,
+        input: CreateGroupInput,
+    ) -> RusotoFuture<CreateGroupOutput, CreateGroupError> {
+        ResourceGroups::create_group(&(**self), input)
+    }
+
+    /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
+    fn delete_group(
+        &self,
+        input: DeleteGroupInput,
+    ) -> RusotoFuture<DeleteGroupOutput, DeleteGroupError> {
+        ResourceGroups::delete_group(&(**self), input)
+    }
+
+    /// <p>Returns information about a specified resource group.</p>
+    fn get_group(&self, input: GetGroupInput) -> RusotoFuture<GetGroupOutput, GetGroupError> {
+        ResourceGroups::get_group(&(**self), input)
+    }
+
+    /// <p>Returns the resource query associated with the specified resource group.</p>
+    fn get_group_query(
+        &self,
+        input: GetGroupQueryInput,
+    ) -> RusotoFuture<GetGroupQueryOutput, GetGroupQueryError> {
+        ResourceGroups::get_group_query(&(**self), input)
+    }
+
+    /// <p>Returns a list of tags that are associated with a resource, specified by an ARN.</p>
+    fn get_tags(&self, input: GetTagsInput) -> RusotoFuture<GetTagsOutput, GetTagsError> {
+        ResourceGroups::get_tags(&(**self), input)
+    }
+
+    /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
+    fn list_group_resources(
+        &self,
+        input: ListGroupResourcesInput,
+    ) -> RusotoFuture<ListGroupResourcesOutput, ListGroupResourcesError> {
+        ResourceGroups::list_group_resources(&(**self), input)
+    }
+
+    /// <p>Returns a list of existing resource groups in your account.</p>
+    fn list_groups(
+        &self,
+        input: ListGroupsInput,
+    ) -> RusotoFuture<ListGroupsOutput, ListGroupsError> {
+        ResourceGroups::list_groups(&(**self), input)
+    }
+
+    /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
+    fn search_resources(
+        &self,
+        input: SearchResourcesInput,
+    ) -> RusotoFuture<SearchResourcesOutput, SearchResourcesError> {
+        ResourceGroups::search_resources(&(**self), input)
+    }
+
+    /// <p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>
+    fn tag(&self, input: TagInput) -> RusotoFuture<TagOutput, TagError> {
+        ResourceGroups::tag(&(**self), input)
+    }
+
+    /// <p>Deletes specified tags from a specified resource.</p>
+    fn untag(&self, input: UntagInput) -> RusotoFuture<UntagOutput, UntagError> {
+        ResourceGroups::untag(&(**self), input)
+    }
+
+    /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
+    fn update_group(
+        &self,
+        input: UpdateGroupInput,
+    ) -> RusotoFuture<UpdateGroupOutput, UpdateGroupError> {
+        ResourceGroups::update_group(&(**self), input)
+    }
+
+    /// <p>Updates the resource query of a group.</p>
+    fn update_group_query(
+        &self,
+        input: UpdateGroupQueryInput,
+    ) -> RusotoFuture<UpdateGroupQueryOutput, UpdateGroupQueryError> {
+        ResourceGroups::update_group_query(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

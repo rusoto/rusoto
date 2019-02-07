@@ -1971,5 +1971,79 @@ impl Mobile for MobileClient {
     }
 }
 
+impl<T: ?Sized + Mobile> Mobile for ::std::rc::Rc<T> {
+    /// <p> Creates an AWS Mobile Hub project. </p>
+    fn create_project(
+        &self,
+        input: CreateProjectRequest,
+    ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
+        Mobile::create_project(&(**self), input)
+    }
+
+    /// <p> Delets a project in AWS Mobile Hub. </p>
+    fn delete_project(
+        &self,
+        input: DeleteProjectRequest,
+    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
+        Mobile::delete_project(&(**self), input)
+    }
+
+    /// <p> Get the bundle details for the requested bundle id. </p>
+    fn describe_bundle(
+        &self,
+        input: DescribeBundleRequest,
+    ) -> RusotoFuture<DescribeBundleResult, DescribeBundleError> {
+        Mobile::describe_bundle(&(**self), input)
+    }
+
+    /// <p> Gets details about a project in AWS Mobile Hub. </p>
+    fn describe_project(
+        &self,
+        input: DescribeProjectRequest,
+    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError> {
+        Mobile::describe_project(&(**self), input)
+    }
+
+    /// <p> Generates customized software development kit (SDK) and or tool packages used to integrate mobile web or mobile app clients with backend AWS resources. </p>
+    fn export_bundle(
+        &self,
+        input: ExportBundleRequest,
+    ) -> RusotoFuture<ExportBundleResult, ExportBundleError> {
+        Mobile::export_bundle(&(**self), input)
+    }
+
+    /// <p> Exports project configuration to a snapshot which can be downloaded and shared. Note that mobile app push credentials are encrypted in exported projects, so they can only be shared successfully within the same AWS account. </p>
+    fn export_project(
+        &self,
+        input: ExportProjectRequest,
+    ) -> RusotoFuture<ExportProjectResult, ExportProjectError> {
+        Mobile::export_project(&(**self), input)
+    }
+
+    /// <p> List all available bundles. </p>
+    fn list_bundles(
+        &self,
+        input: ListBundlesRequest,
+    ) -> RusotoFuture<ListBundlesResult, ListBundlesError> {
+        Mobile::list_bundles(&(**self), input)
+    }
+
+    /// <p> Lists projects in AWS Mobile Hub. </p>
+    fn list_projects(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
+        Mobile::list_projects(&(**self), input)
+    }
+
+    /// <p> Update an existing project. </p>
+    fn update_project(
+        &self,
+        input: UpdateProjectRequest,
+    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
+        Mobile::update_project(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

@@ -883,5 +883,39 @@ impl Eks for EksClient {
     }
 }
 
+impl<T: ?Sized + Eks> Eks for ::std::rc::Rc<T> {
+    /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, like <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint.</p> <p>Amazon EKS worker nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch worker nodes into your cluster. For more information, see <a href="http://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="http://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS Worker Nodes</a>in the <i>Amazon EKS User Guide</i>.</p>
+    fn create_cluster(
+        &self,
+        input: CreateClusterRequest,
+    ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
+        Eks::create_cluster(&(**self), input)
+    }
+
+    /// <p><p>Deletes the Amazon EKS cluster control plane. </p> <note> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="http://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> </note></p>
+    fn delete_cluster(
+        &self,
+        input: DeleteClusterRequest,
+    ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
+        Eks::delete_cluster(&(**self), input)
+    }
+
+    /// <p><p>Returns descriptive information about an Amazon EKS cluster.</p> <p>The API server endpoint and certificate authority data returned by this operation are required for <code>kubelet</code> and <code>kubectl</code> to communicate with your Kubernetes API server. For more information, see <a href="http://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html">Create a kubeconfig for Amazon EKS</a>.</p> <note> <p>The API server endpoint and certificate authority data are not available until the cluster reaches the <code>ACTIVE</code> state.</p> </note></p>
+    fn describe_cluster(
+        &self,
+        input: DescribeClusterRequest,
+    ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError> {
+        Eks::describe_cluster(&(**self), input)
+    }
+
+    /// <p>Lists the Amazon EKS clusters in your AWS account in the specified region.</p>
+    fn list_clusters(
+        &self,
+        input: ListClustersRequest,
+    ) -> RusotoFuture<ListClustersResponse, ListClustersError> {
+        Eks::list_clusters(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

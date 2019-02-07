@@ -284,5 +284,15 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
     }
 }
 
+impl<T: ?Sized + MarketplaceEntitlement> MarketplaceEntitlement for ::std::rc::Rc<T> {
+    /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
+    fn get_entitlements(
+        &self,
+        input: GetEntitlementsRequest,
+    ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError> {
+        MarketplaceEntitlement::get_entitlements(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

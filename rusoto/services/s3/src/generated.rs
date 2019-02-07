@@ -27332,6 +27332,615 @@ impl S3 for S3Client {
     }
 }
 
+impl<T: ?Sized + S3> S3 for ::std::rc::Rc<T> {
+    /// <p>Aborts a multipart upload.</p> <p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
+    fn abort_multipart_upload(
+        &self,
+        input: AbortMultipartUploadRequest,
+    ) -> RusotoFuture<AbortMultipartUploadOutput, AbortMultipartUploadError> {
+        S3::abort_multipart_upload(&(**self), input)
+    }
+
+    /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
+    fn complete_multipart_upload(
+        &self,
+        input: CompleteMultipartUploadRequest,
+    ) -> RusotoFuture<CompleteMultipartUploadOutput, CompleteMultipartUploadError> {
+        S3::complete_multipart_upload(&(**self), input)
+    }
+
+    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
+    fn copy_object(
+        &self,
+        input: CopyObjectRequest,
+    ) -> RusotoFuture<CopyObjectOutput, CopyObjectError> {
+        S3::copy_object(&(**self), input)
+    }
+
+    /// <p>Creates a new bucket.</p>
+    fn create_bucket(
+        &self,
+        input: CreateBucketRequest,
+    ) -> RusotoFuture<CreateBucketOutput, CreateBucketError> {
+        S3::create_bucket(&(**self), input)
+    }
+
+    /// <p>Initiates a multipart upload and returns an upload ID.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    fn create_multipart_upload(
+        &self,
+        input: CreateMultipartUploadRequest,
+    ) -> RusotoFuture<CreateMultipartUploadOutput, CreateMultipartUploadError> {
+        S3::create_multipart_upload(&(**self), input)
+    }
+
+    /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
+    fn delete_bucket(&self, input: DeleteBucketRequest) -> RusotoFuture<(), DeleteBucketError> {
+        S3::delete_bucket(&(**self), input)
+    }
+
+    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    fn delete_bucket_analytics_configuration(
+        &self,
+        input: DeleteBucketAnalyticsConfigurationRequest,
+    ) -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError> {
+        S3::delete_bucket_analytics_configuration(&(**self), input)
+    }
+
+    /// <p>Deletes the cors configuration information set for the bucket.</p>
+    fn delete_bucket_cors(
+        &self,
+        input: DeleteBucketCorsRequest,
+    ) -> RusotoFuture<(), DeleteBucketCorsError> {
+        S3::delete_bucket_cors(&(**self), input)
+    }
+
+    /// <p>Deletes the server-side encryption configuration from the bucket.</p>
+    fn delete_bucket_encryption(
+        &self,
+        input: DeleteBucketEncryptionRequest,
+    ) -> RusotoFuture<(), DeleteBucketEncryptionError> {
+        S3::delete_bucket_encryption(&(**self), input)
+    }
+
+    /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
+    fn delete_bucket_inventory_configuration(
+        &self,
+        input: DeleteBucketInventoryConfigurationRequest,
+    ) -> RusotoFuture<(), DeleteBucketInventoryConfigurationError> {
+        S3::delete_bucket_inventory_configuration(&(**self), input)
+    }
+
+    /// <p>Deletes the lifecycle configuration from the bucket.</p>
+    fn delete_bucket_lifecycle(
+        &self,
+        input: DeleteBucketLifecycleRequest,
+    ) -> RusotoFuture<(), DeleteBucketLifecycleError> {
+        S3::delete_bucket_lifecycle(&(**self), input)
+    }
+
+    /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+    fn delete_bucket_metrics_configuration(
+        &self,
+        input: DeleteBucketMetricsConfigurationRequest,
+    ) -> RusotoFuture<(), DeleteBucketMetricsConfigurationError> {
+        S3::delete_bucket_metrics_configuration(&(**self), input)
+    }
+
+    /// <p>Deletes the policy from the bucket.</p>
+    fn delete_bucket_policy(
+        &self,
+        input: DeleteBucketPolicyRequest,
+    ) -> RusotoFuture<(), DeleteBucketPolicyError> {
+        S3::delete_bucket_policy(&(**self), input)
+    }
+
+    /// <p>Deletes the replication configuration from the bucket.</p>
+    fn delete_bucket_replication(
+        &self,
+        input: DeleteBucketReplicationRequest,
+    ) -> RusotoFuture<(), DeleteBucketReplicationError> {
+        S3::delete_bucket_replication(&(**self), input)
+    }
+
+    /// <p>Deletes the tags from the bucket.</p>
+    fn delete_bucket_tagging(
+        &self,
+        input: DeleteBucketTaggingRequest,
+    ) -> RusotoFuture<(), DeleteBucketTaggingError> {
+        S3::delete_bucket_tagging(&(**self), input)
+    }
+
+    /// <p>This operation removes the website configuration from the bucket.</p>
+    fn delete_bucket_website(
+        &self,
+        input: DeleteBucketWebsiteRequest,
+    ) -> RusotoFuture<(), DeleteBucketWebsiteError> {
+        S3::delete_bucket_website(&(**self), input)
+    }
+
+    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects.</p>
+    fn delete_object(
+        &self,
+        input: DeleteObjectRequest,
+    ) -> RusotoFuture<DeleteObjectOutput, DeleteObjectError> {
+        S3::delete_object(&(**self), input)
+    }
+
+    /// <p>Removes the tag-set from an existing object.</p>
+    fn delete_object_tagging(
+        &self,
+        input: DeleteObjectTaggingRequest,
+    ) -> RusotoFuture<DeleteObjectTaggingOutput, DeleteObjectTaggingError> {
+        S3::delete_object_tagging(&(**self), input)
+    }
+
+    /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
+    fn delete_objects(
+        &self,
+        input: DeleteObjectsRequest,
+    ) -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError> {
+        S3::delete_objects(&(**self), input)
+    }
+
+    /// <p>Returns the accelerate configuration of a bucket.</p>
+    fn get_bucket_accelerate_configuration(
+        &self,
+        input: GetBucketAccelerateConfigurationRequest,
+    ) -> RusotoFuture<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>
+    {
+        S3::get_bucket_accelerate_configuration(&(**self), input)
+    }
+
+    /// <p>Gets the access control policy for the bucket.</p>
+    fn get_bucket_acl(
+        &self,
+        input: GetBucketAclRequest,
+    ) -> RusotoFuture<GetBucketAclOutput, GetBucketAclError> {
+        S3::get_bucket_acl(&(**self), input)
+    }
+
+    /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    fn get_bucket_analytics_configuration(
+        &self,
+        input: GetBucketAnalyticsConfigurationRequest,
+    ) -> RusotoFuture<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>
+    {
+        S3::get_bucket_analytics_configuration(&(**self), input)
+    }
+
+    /// <p>Returns the cors configuration for the bucket.</p>
+    fn get_bucket_cors(
+        &self,
+        input: GetBucketCorsRequest,
+    ) -> RusotoFuture<GetBucketCorsOutput, GetBucketCorsError> {
+        S3::get_bucket_cors(&(**self), input)
+    }
+
+    /// <p>Returns the server-side encryption configuration of a bucket.</p>
+    fn get_bucket_encryption(
+        &self,
+        input: GetBucketEncryptionRequest,
+    ) -> RusotoFuture<GetBucketEncryptionOutput, GetBucketEncryptionError> {
+        S3::get_bucket_encryption(&(**self), input)
+    }
+
+    /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
+    fn get_bucket_inventory_configuration(
+        &self,
+        input: GetBucketInventoryConfigurationRequest,
+    ) -> RusotoFuture<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>
+    {
+        S3::get_bucket_inventory_configuration(&(**self), input)
+    }
+
+    /// <p>Deprecated, see the GetBucketLifecycleConfiguration operation.</p>
+    fn get_bucket_lifecycle(
+        &self,
+        input: GetBucketLifecycleRequest,
+    ) -> RusotoFuture<GetBucketLifecycleOutput, GetBucketLifecycleError> {
+        S3::get_bucket_lifecycle(&(**self), input)
+    }
+
+    /// <p>Returns the lifecycle configuration information set on the bucket.</p>
+    fn get_bucket_lifecycle_configuration(
+        &self,
+        input: GetBucketLifecycleConfigurationRequest,
+    ) -> RusotoFuture<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>
+    {
+        S3::get_bucket_lifecycle_configuration(&(**self), input)
+    }
+
+    /// <p>Returns the region the bucket resides in.</p>
+    fn get_bucket_location(
+        &self,
+        input: GetBucketLocationRequest,
+    ) -> RusotoFuture<GetBucketLocationOutput, GetBucketLocationError> {
+        S3::get_bucket_location(&(**self), input)
+    }
+
+    /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
+    fn get_bucket_logging(
+        &self,
+        input: GetBucketLoggingRequest,
+    ) -> RusotoFuture<GetBucketLoggingOutput, GetBucketLoggingError> {
+        S3::get_bucket_logging(&(**self), input)
+    }
+
+    /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+    fn get_bucket_metrics_configuration(
+        &self,
+        input: GetBucketMetricsConfigurationRequest,
+    ) -> RusotoFuture<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError> {
+        S3::get_bucket_metrics_configuration(&(**self), input)
+    }
+
+    /// <p>Deprecated, see the GetBucketNotificationConfiguration operation.</p>
+    fn get_bucket_notification(
+        &self,
+        input: GetBucketNotificationConfigurationRequest,
+    ) -> RusotoFuture<NotificationConfigurationDeprecated, GetBucketNotificationError> {
+        S3::get_bucket_notification(&(**self), input)
+    }
+
+    /// <p>Returns the notification configuration of a bucket.</p>
+    fn get_bucket_notification_configuration(
+        &self,
+        input: GetBucketNotificationConfigurationRequest,
+    ) -> RusotoFuture<NotificationConfiguration, GetBucketNotificationConfigurationError> {
+        S3::get_bucket_notification_configuration(&(**self), input)
+    }
+
+    /// <p>Returns the policy of a specified bucket.</p>
+    fn get_bucket_policy(
+        &self,
+        input: GetBucketPolicyRequest,
+    ) -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError> {
+        S3::get_bucket_policy(&(**self), input)
+    }
+
+    /// <p>Returns the replication configuration of a bucket.</p>
+    fn get_bucket_replication(
+        &self,
+        input: GetBucketReplicationRequest,
+    ) -> RusotoFuture<GetBucketReplicationOutput, GetBucketReplicationError> {
+        S3::get_bucket_replication(&(**self), input)
+    }
+
+    /// <p>Returns the request payment configuration of a bucket.</p>
+    fn get_bucket_request_payment(
+        &self,
+        input: GetBucketRequestPaymentRequest,
+    ) -> RusotoFuture<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError> {
+        S3::get_bucket_request_payment(&(**self), input)
+    }
+
+    /// <p>Returns the tag set associated with the bucket.</p>
+    fn get_bucket_tagging(
+        &self,
+        input: GetBucketTaggingRequest,
+    ) -> RusotoFuture<GetBucketTaggingOutput, GetBucketTaggingError> {
+        S3::get_bucket_tagging(&(**self), input)
+    }
+
+    /// <p>Returns the versioning state of a bucket.</p>
+    fn get_bucket_versioning(
+        &self,
+        input: GetBucketVersioningRequest,
+    ) -> RusotoFuture<GetBucketVersioningOutput, GetBucketVersioningError> {
+        S3::get_bucket_versioning(&(**self), input)
+    }
+
+    /// <p>Returns the website configuration for a bucket.</p>
+    fn get_bucket_website(
+        &self,
+        input: GetBucketWebsiteRequest,
+    ) -> RusotoFuture<GetBucketWebsiteOutput, GetBucketWebsiteError> {
+        S3::get_bucket_website(&(**self), input)
+    }
+
+    /// <p>Retrieves objects from Amazon S3.</p>
+    fn get_object(&self, input: GetObjectRequest) -> RusotoFuture<GetObjectOutput, GetObjectError> {
+        S3::get_object(&(**self), input)
+    }
+
+    /// <p>Returns the access control list (ACL) of an object.</p>
+    fn get_object_acl(
+        &self,
+        input: GetObjectAclRequest,
+    ) -> RusotoFuture<GetObjectAclOutput, GetObjectAclError> {
+        S3::get_object_acl(&(**self), input)
+    }
+
+    /// <p>Returns the tag-set of an object.</p>
+    fn get_object_tagging(
+        &self,
+        input: GetObjectTaggingRequest,
+    ) -> RusotoFuture<GetObjectTaggingOutput, GetObjectTaggingError> {
+        S3::get_object_tagging(&(**self), input)
+    }
+
+    /// <p>Return torrent files from a bucket.</p>
+    fn get_object_torrent(
+        &self,
+        input: GetObjectTorrentRequest,
+    ) -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError> {
+        S3::get_object_torrent(&(**self), input)
+    }
+
+    /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
+    fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError> {
+        S3::head_bucket(&(**self), input)
+    }
+
+    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.</p>
+    fn head_object(
+        &self,
+        input: HeadObjectRequest,
+    ) -> RusotoFuture<HeadObjectOutput, HeadObjectError> {
+        S3::head_object(&(**self), input)
+    }
+
+    /// <p>Lists the analytics configurations for the bucket.</p>
+    fn list_bucket_analytics_configurations(
+        &self,
+        input: ListBucketAnalyticsConfigurationsRequest,
+    ) -> RusotoFuture<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>
+    {
+        S3::list_bucket_analytics_configurations(&(**self), input)
+    }
+
+    /// <p>Returns a list of inventory configurations for the bucket.</p>
+    fn list_bucket_inventory_configurations(
+        &self,
+        input: ListBucketInventoryConfigurationsRequest,
+    ) -> RusotoFuture<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>
+    {
+        S3::list_bucket_inventory_configurations(&(**self), input)
+    }
+
+    /// <p>Lists the metrics configurations for the bucket.</p>
+    fn list_bucket_metrics_configurations(
+        &self,
+        input: ListBucketMetricsConfigurationsRequest,
+    ) -> RusotoFuture<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>
+    {
+        S3::list_bucket_metrics_configurations(&(**self), input)
+    }
+
+    /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
+    fn list_buckets(&self) -> RusotoFuture<ListBucketsOutput, ListBucketsError> {
+        S3::list_buckets(&(**self))
+    }
+
+    /// <p>This operation lists in-progress multipart uploads.</p>
+    fn list_multipart_uploads(
+        &self,
+        input: ListMultipartUploadsRequest,
+    ) -> RusotoFuture<ListMultipartUploadsOutput, ListMultipartUploadsError> {
+        S3::list_multipart_uploads(&(**self), input)
+    }
+
+    /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
+    fn list_object_versions(
+        &self,
+        input: ListObjectVersionsRequest,
+    ) -> RusotoFuture<ListObjectVersionsOutput, ListObjectVersionsError> {
+        S3::list_object_versions(&(**self), input)
+    }
+
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
+    fn list_objects(
+        &self,
+        input: ListObjectsRequest,
+    ) -> RusotoFuture<ListObjectsOutput, ListObjectsError> {
+        S3::list_objects(&(**self), input)
+    }
+
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
+    fn list_objects_v2(
+        &self,
+        input: ListObjectsV2Request,
+    ) -> RusotoFuture<ListObjectsV2Output, ListObjectsV2Error> {
+        S3::list_objects_v2(&(**self), input)
+    }
+
+    /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
+    fn list_parts(&self, input: ListPartsRequest) -> RusotoFuture<ListPartsOutput, ListPartsError> {
+        S3::list_parts(&(**self), input)
+    }
+
+    /// <p>Sets the accelerate configuration of an existing bucket.</p>
+    fn put_bucket_accelerate_configuration(
+        &self,
+        input: PutBucketAccelerateConfigurationRequest,
+    ) -> RusotoFuture<(), PutBucketAccelerateConfigurationError> {
+        S3::put_bucket_accelerate_configuration(&(**self), input)
+    }
+
+    /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
+    fn put_bucket_acl(&self, input: PutBucketAclRequest) -> RusotoFuture<(), PutBucketAclError> {
+        S3::put_bucket_acl(&(**self), input)
+    }
+
+    /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    fn put_bucket_analytics_configuration(
+        &self,
+        input: PutBucketAnalyticsConfigurationRequest,
+    ) -> RusotoFuture<(), PutBucketAnalyticsConfigurationError> {
+        S3::put_bucket_analytics_configuration(&(**self), input)
+    }
+
+    /// <p>Sets the cors configuration for a bucket.</p>
+    fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError> {
+        S3::put_bucket_cors(&(**self), input)
+    }
+
+    /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
+    fn put_bucket_encryption(
+        &self,
+        input: PutBucketEncryptionRequest,
+    ) -> RusotoFuture<(), PutBucketEncryptionError> {
+        S3::put_bucket_encryption(&(**self), input)
+    }
+
+    /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
+    fn put_bucket_inventory_configuration(
+        &self,
+        input: PutBucketInventoryConfigurationRequest,
+    ) -> RusotoFuture<(), PutBucketInventoryConfigurationError> {
+        S3::put_bucket_inventory_configuration(&(**self), input)
+    }
+
+    /// <p>Deprecated, see the PutBucketLifecycleConfiguration operation.</p>
+    fn put_bucket_lifecycle(
+        &self,
+        input: PutBucketLifecycleRequest,
+    ) -> RusotoFuture<(), PutBucketLifecycleError> {
+        S3::put_bucket_lifecycle(&(**self), input)
+    }
+
+    /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
+    fn put_bucket_lifecycle_configuration(
+        &self,
+        input: PutBucketLifecycleConfigurationRequest,
+    ) -> RusotoFuture<(), PutBucketLifecycleConfigurationError> {
+        S3::put_bucket_lifecycle_configuration(&(**self), input)
+    }
+
+    /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
+    fn put_bucket_logging(
+        &self,
+        input: PutBucketLoggingRequest,
+    ) -> RusotoFuture<(), PutBucketLoggingError> {
+        S3::put_bucket_logging(&(**self), input)
+    }
+
+    /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
+    fn put_bucket_metrics_configuration(
+        &self,
+        input: PutBucketMetricsConfigurationRequest,
+    ) -> RusotoFuture<(), PutBucketMetricsConfigurationError> {
+        S3::put_bucket_metrics_configuration(&(**self), input)
+    }
+
+    /// <p>Deprecated, see the PutBucketNotificationConfiguraiton operation.</p>
+    fn put_bucket_notification(
+        &self,
+        input: PutBucketNotificationRequest,
+    ) -> RusotoFuture<(), PutBucketNotificationError> {
+        S3::put_bucket_notification(&(**self), input)
+    }
+
+    /// <p>Enables notifications of specified events for a bucket.</p>
+    fn put_bucket_notification_configuration(
+        &self,
+        input: PutBucketNotificationConfigurationRequest,
+    ) -> RusotoFuture<(), PutBucketNotificationConfigurationError> {
+        S3::put_bucket_notification_configuration(&(**self), input)
+    }
+
+    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
+    fn put_bucket_policy(
+        &self,
+        input: PutBucketPolicyRequest,
+    ) -> RusotoFuture<(), PutBucketPolicyError> {
+        S3::put_bucket_policy(&(**self), input)
+    }
+
+    /// <p>Creates a new replication configuration (or replaces an existing one, if present).</p>
+    fn put_bucket_replication(
+        &self,
+        input: PutBucketReplicationRequest,
+    ) -> RusotoFuture<(), PutBucketReplicationError> {
+        S3::put_bucket_replication(&(**self), input)
+    }
+
+    /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
+    fn put_bucket_request_payment(
+        &self,
+        input: PutBucketRequestPaymentRequest,
+    ) -> RusotoFuture<(), PutBucketRequestPaymentError> {
+        S3::put_bucket_request_payment(&(**self), input)
+    }
+
+    /// <p>Sets the tags for a bucket.</p>
+    fn put_bucket_tagging(
+        &self,
+        input: PutBucketTaggingRequest,
+    ) -> RusotoFuture<(), PutBucketTaggingError> {
+        S3::put_bucket_tagging(&(**self), input)
+    }
+
+    /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
+    fn put_bucket_versioning(
+        &self,
+        input: PutBucketVersioningRequest,
+    ) -> RusotoFuture<(), PutBucketVersioningError> {
+        S3::put_bucket_versioning(&(**self), input)
+    }
+
+    /// <p>Set the website configuration for a bucket.</p>
+    fn put_bucket_website(
+        &self,
+        input: PutBucketWebsiteRequest,
+    ) -> RusotoFuture<(), PutBucketWebsiteError> {
+        S3::put_bucket_website(&(**self), input)
+    }
+
+    /// <p>Adds an object to a bucket.</p>
+    fn put_object(&self, input: PutObjectRequest) -> RusotoFuture<PutObjectOutput, PutObjectError> {
+        S3::put_object(&(**self), input)
+    }
+
+    /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
+    fn put_object_acl(
+        &self,
+        input: PutObjectAclRequest,
+    ) -> RusotoFuture<PutObjectAclOutput, PutObjectAclError> {
+        S3::put_object_acl(&(**self), input)
+    }
+
+    /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
+    fn put_object_tagging(
+        &self,
+        input: PutObjectTaggingRequest,
+    ) -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError> {
+        S3::put_object_tagging(&(**self), input)
+    }
+
+    /// <p>Restores an archived copy of an object back into Amazon S3</p>
+    fn restore_object(
+        &self,
+        input: RestoreObjectRequest,
+    ) -> RusotoFuture<RestoreObjectOutput, RestoreObjectError> {
+        S3::restore_object(&(**self), input)
+    }
+
+    /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
+    fn select_object_content(
+        &self,
+        input: SelectObjectContentRequest,
+    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError> {
+        S3::select_object_content(&(**self), input)
+    }
+
+    /// <p>Uploads a part in a multipart upload.</p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    fn upload_part(
+        &self,
+        input: UploadPartRequest,
+    ) -> RusotoFuture<UploadPartOutput, UploadPartError> {
+        S3::upload_part(&(**self), input)
+    }
+
+    /// <p>Uploads a part by copying data from an existing object as data source.</p>
+    fn upload_part_copy(
+        &self,
+        input: UploadPartCopyRequest,
+    ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError> {
+        S3::upload_part_copy(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {
 

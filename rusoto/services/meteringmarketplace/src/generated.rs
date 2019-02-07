@@ -631,5 +631,31 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
     }
 }
 
+impl<T: ?Sized + MarketplaceMetering> MarketplaceMetering for ::std::rc::Rc<T> {
+    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
+    fn batch_meter_usage(
+        &self,
+        input: BatchMeterUsageRequest,
+    ) -> RusotoFuture<BatchMeterUsageResult, BatchMeterUsageError> {
+        MarketplaceMetering::batch_meter_usage(&(**self), input)
+    }
+
+    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>
+    fn meter_usage(
+        &self,
+        input: MeterUsageRequest,
+    ) -> RusotoFuture<MeterUsageResult, MeterUsageError> {
+        MarketplaceMetering::meter_usage(&(**self), input)
+    }
+
+    /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
+    fn resolve_customer(
+        &self,
+        input: ResolveCustomerRequest,
+    ) -> RusotoFuture<ResolveCustomerResult, ResolveCustomerError> {
+        MarketplaceMetering::resolve_customer(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

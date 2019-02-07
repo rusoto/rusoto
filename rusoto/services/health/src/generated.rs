@@ -1261,5 +1261,55 @@ impl AWSHealth for AWSHealthClient {
     }
 }
 
+impl<T: ?Sized + AWSHealth> AWSHealth for ::std::rc::Rc<T> {
+    /// <p>Returns a list of entities that have been affected by the specified events, based on the specified filter criteria. Entities can refer to individual customer resources, groups of customer resources, or any other construct, depending on the AWS service. Events that have impact beyond that of the affected entities, or where the extent of impact is unknown, include at least one entity indicating this.</p> <p>At least one event ARN is required. Results are sorted by the <code>lastUpdatedTime</code> of the entity, starting with the most recent.</p>
+    fn describe_affected_entities(
+        &self,
+        input: DescribeAffectedEntitiesRequest,
+    ) -> RusotoFuture<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
+        AWSHealth::describe_affected_entities(&(**self), input)
+    }
+
+    /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
+    fn describe_entity_aggregates(
+        &self,
+        input: DescribeEntityAggregatesRequest,
+    ) -> RusotoFuture<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
+        AWSHealth::describe_entity_aggregates(&(**self), input)
+    }
+
+    /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
+    fn describe_event_aggregates(
+        &self,
+        input: DescribeEventAggregatesRequest,
+    ) -> RusotoFuture<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
+        AWSHealth::describe_event_aggregates(&(**self), input)
+    }
+
+    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
+    fn describe_event_details(
+        &self,
+        input: DescribeEventDetailsRequest,
+    ) -> RusotoFuture<DescribeEventDetailsResponse, DescribeEventDetailsError> {
+        AWSHealth::describe_event_details(&(**self), input)
+    }
+
+    /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
+    fn describe_event_types(
+        &self,
+        input: DescribeEventTypesRequest,
+    ) -> RusotoFuture<DescribeEventTypesResponse, DescribeEventTypesError> {
+        AWSHealth::describe_event_types(&(**self), input)
+    }
+
+    /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
+    fn describe_events(
+        &self,
+        input: DescribeEventsRequest,
+    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
+        AWSHealth::describe_events(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

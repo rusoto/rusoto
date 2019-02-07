@@ -7724,5 +7724,398 @@ impl AlexaForBusiness for AlexaForBusinessClient {
     }
 }
 
+impl<T: ?Sized + AlexaForBusiness> AlexaForBusiness for ::std::rc::Rc<T> {
+    /// <p>Associates a contact with a given address book.</p>
+    fn associate_contact_with_address_book(
+        &self,
+        input: AssociateContactWithAddressBookRequest,
+    ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>
+    {
+        AlexaForBusiness::associate_contact_with_address_book(&(**self), input)
+    }
+
+    /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
+    fn associate_device_with_room(
+        &self,
+        input: AssociateDeviceWithRoomRequest,
+    ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError> {
+        AlexaForBusiness::associate_device_with_room(&(**self), input)
+    }
+
+    /// <p>Associates a skill group with a given room. This enables all skills in the associated skill group on all devices in the room.</p>
+    fn associate_skill_group_with_room(
+        &self,
+        input: AssociateSkillGroupWithRoomRequest,
+    ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError> {
+        AlexaForBusiness::associate_skill_group_with_room(&(**self), input)
+    }
+
+    /// <p>Creates an address book with the specified details.</p>
+    fn create_address_book(
+        &self,
+        input: CreateAddressBookRequest,
+    ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError> {
+        AlexaForBusiness::create_address_book(&(**self), input)
+    }
+
+    /// <p>Creates a contact with the specified details.</p>
+    fn create_contact(
+        &self,
+        input: CreateContactRequest,
+    ) -> RusotoFuture<CreateContactResponse, CreateContactError> {
+        AlexaForBusiness::create_contact(&(**self), input)
+    }
+
+    /// <p>Creates a new room profile with the specified details.</p>
+    fn create_profile(
+        &self,
+        input: CreateProfileRequest,
+    ) -> RusotoFuture<CreateProfileResponse, CreateProfileError> {
+        AlexaForBusiness::create_profile(&(**self), input)
+    }
+
+    /// <p>Creates a room with the specified details.</p>
+    fn create_room(
+        &self,
+        input: CreateRoomRequest,
+    ) -> RusotoFuture<CreateRoomResponse, CreateRoomError> {
+        AlexaForBusiness::create_room(&(**self), input)
+    }
+
+    /// <p>Creates a skill group with a specified name and description.</p>
+    fn create_skill_group(
+        &self,
+        input: CreateSkillGroupRequest,
+    ) -> RusotoFuture<CreateSkillGroupResponse, CreateSkillGroupError> {
+        AlexaForBusiness::create_skill_group(&(**self), input)
+    }
+
+    /// <p>Creates a user.</p>
+    fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+        AlexaForBusiness::create_user(&(**self), input)
+    }
+
+    /// <p>Deletes an address book by the address book ARN.</p>
+    fn delete_address_book(
+        &self,
+        input: DeleteAddressBookRequest,
+    ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError> {
+        AlexaForBusiness::delete_address_book(&(**self), input)
+    }
+
+    /// <p>Deletes a contact by the contact ARN.</p>
+    fn delete_contact(
+        &self,
+        input: DeleteContactRequest,
+    ) -> RusotoFuture<DeleteContactResponse, DeleteContactError> {
+        AlexaForBusiness::delete_contact(&(**self), input)
+    }
+
+    /// <p>Deletes a room profile by the profile ARN.</p>
+    fn delete_profile(
+        &self,
+        input: DeleteProfileRequest,
+    ) -> RusotoFuture<DeleteProfileResponse, DeleteProfileError> {
+        AlexaForBusiness::delete_profile(&(**self), input)
+    }
+
+    /// <p>Deletes a room by the room ARN.</p>
+    fn delete_room(
+        &self,
+        input: DeleteRoomRequest,
+    ) -> RusotoFuture<DeleteRoomResponse, DeleteRoomError> {
+        AlexaForBusiness::delete_room(&(**self), input)
+    }
+
+    /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
+    fn delete_room_skill_parameter(
+        &self,
+        input: DeleteRoomSkillParameterRequest,
+    ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError> {
+        AlexaForBusiness::delete_room_skill_parameter(&(**self), input)
+    }
+
+    /// <p>Deletes a skill group by skill group ARN.</p>
+    fn delete_skill_group(
+        &self,
+        input: DeleteSkillGroupRequest,
+    ) -> RusotoFuture<DeleteSkillGroupResponse, DeleteSkillGroupError> {
+        AlexaForBusiness::delete_skill_group(&(**self), input)
+    }
+
+    /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
+    fn delete_user(
+        &self,
+        input: DeleteUserRequest,
+    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
+        AlexaForBusiness::delete_user(&(**self), input)
+    }
+
+    /// <p>Disassociates a contact from a given address book.</p>
+    fn disassociate_contact_from_address_book(
+        &self,
+        input: DisassociateContactFromAddressBookRequest,
+    ) -> RusotoFuture<
+        DisassociateContactFromAddressBookResponse,
+        DisassociateContactFromAddressBookError,
+    > {
+        AlexaForBusiness::disassociate_contact_from_address_book(&(**self), input)
+    }
+
+    /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
+    fn disassociate_device_from_room(
+        &self,
+        input: DisassociateDeviceFromRoomRequest,
+    ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError> {
+        AlexaForBusiness::disassociate_device_from_room(&(**self), input)
+    }
+
+    /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
+    fn disassociate_skill_group_from_room(
+        &self,
+        input: DisassociateSkillGroupFromRoomRequest,
+    ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>
+    {
+        AlexaForBusiness::disassociate_skill_group_from_room(&(**self), input)
+    }
+
+    /// <p>Gets address the book details by the address book ARN.</p>
+    fn get_address_book(
+        &self,
+        input: GetAddressBookRequest,
+    ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError> {
+        AlexaForBusiness::get_address_book(&(**self), input)
+    }
+
+    /// <p>Gets the contact details by the contact ARN.</p>
+    fn get_contact(
+        &self,
+        input: GetContactRequest,
+    ) -> RusotoFuture<GetContactResponse, GetContactError> {
+        AlexaForBusiness::get_contact(&(**self), input)
+    }
+
+    /// <p>Gets the details of a device by device ARN.</p>
+    fn get_device(
+        &self,
+        input: GetDeviceRequest,
+    ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
+        AlexaForBusiness::get_device(&(**self), input)
+    }
+
+    /// <p>Gets the details of a room profile by profile ARN.</p>
+    fn get_profile(
+        &self,
+        input: GetProfileRequest,
+    ) -> RusotoFuture<GetProfileResponse, GetProfileError> {
+        AlexaForBusiness::get_profile(&(**self), input)
+    }
+
+    /// <p>Gets room details by room ARN.</p>
+    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError> {
+        AlexaForBusiness::get_room(&(**self), input)
+    }
+
+    /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
+    fn get_room_skill_parameter(
+        &self,
+        input: GetRoomSkillParameterRequest,
+    ) -> RusotoFuture<GetRoomSkillParameterResponse, GetRoomSkillParameterError> {
+        AlexaForBusiness::get_room_skill_parameter(&(**self), input)
+    }
+
+    /// <p>Gets skill group details by skill group ARN.</p>
+    fn get_skill_group(
+        &self,
+        input: GetSkillGroupRequest,
+    ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError> {
+        AlexaForBusiness::get_skill_group(&(**self), input)
+    }
+
+    /// <p>Lists the Device Event history for up to 30 days. If EventType isn't specified in the request, this returns a list of all device events in reverse chronological order. If EventType is specified, this returns a list of device events for that EventType in reverse chronological order. </p>
+    fn list_device_events(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError> {
+        AlexaForBusiness::list_device_events(&(**self), input)
+    }
+
+    /// <p>Lists all enabled skills in a specific skill group.</p>
+    fn list_skills(
+        &self,
+        input: ListSkillsRequest,
+    ) -> RusotoFuture<ListSkillsResponse, ListSkillsError> {
+        AlexaForBusiness::list_skills(&(**self), input)
+    }
+
+    /// <p>Lists all tags for a specific resource.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+        AlexaForBusiness::list_tags(&(**self), input)
+    }
+
+    /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
+    fn put_room_skill_parameter(
+        &self,
+        input: PutRoomSkillParameterRequest,
+    ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError> {
+        AlexaForBusiness::put_room_skill_parameter(&(**self), input)
+    }
+
+    /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
+    fn resolve_room(
+        &self,
+        input: ResolveRoomRequest,
+    ) -> RusotoFuture<ResolveRoomResponse, ResolveRoomError> {
+        AlexaForBusiness::resolve_room(&(**self), input)
+    }
+
+    /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
+    fn revoke_invitation(
+        &self,
+        input: RevokeInvitationRequest,
+    ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError> {
+        AlexaForBusiness::revoke_invitation(&(**self), input)
+    }
+
+    /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_address_books(
+        &self,
+        input: SearchAddressBooksRequest,
+    ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError> {
+        AlexaForBusiness::search_address_books(&(**self), input)
+    }
+
+    /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_contacts(
+        &self,
+        input: SearchContactsRequest,
+    ) -> RusotoFuture<SearchContactsResponse, SearchContactsError> {
+        AlexaForBusiness::search_contacts(&(**self), input)
+    }
+
+    /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
+    fn search_devices(
+        &self,
+        input: SearchDevicesRequest,
+    ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError> {
+        AlexaForBusiness::search_devices(&(**self), input)
+    }
+
+    /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
+    fn search_profiles(
+        &self,
+        input: SearchProfilesRequest,
+    ) -> RusotoFuture<SearchProfilesResponse, SearchProfilesError> {
+        AlexaForBusiness::search_profiles(&(**self), input)
+    }
+
+    /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_rooms(
+        &self,
+        input: SearchRoomsRequest,
+    ) -> RusotoFuture<SearchRoomsResponse, SearchRoomsError> {
+        AlexaForBusiness::search_rooms(&(**self), input)
+    }
+
+    /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_skill_groups(
+        &self,
+        input: SearchSkillGroupsRequest,
+    ) -> RusotoFuture<SearchSkillGroupsResponse, SearchSkillGroupsError> {
+        AlexaForBusiness::search_skill_groups(&(**self), input)
+    }
+
+    /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_users(
+        &self,
+        input: SearchUsersRequest,
+    ) -> RusotoFuture<SearchUsersResponse, SearchUsersError> {
+        AlexaForBusiness::search_users(&(**self), input)
+    }
+
+    /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
+    fn send_invitation(
+        &self,
+        input: SendInvitationRequest,
+    ) -> RusotoFuture<SendInvitationResponse, SendInvitationError> {
+        AlexaForBusiness::send_invitation(&(**self), input)
+    }
+
+    /// <p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>
+    fn start_device_sync(
+        &self,
+        input: StartDeviceSyncRequest,
+    ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError> {
+        AlexaForBusiness::start_device_sync(&(**self), input)
+    }
+
+    /// <p>Adds metadata tags to a specified resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        AlexaForBusiness::tag_resource(&(**self), input)
+    }
+
+    /// <p>Removes metadata tags from a specified resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        AlexaForBusiness::untag_resource(&(**self), input)
+    }
+
+    /// <p>Updates address book details by the address book ARN.</p>
+    fn update_address_book(
+        &self,
+        input: UpdateAddressBookRequest,
+    ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError> {
+        AlexaForBusiness::update_address_book(&(**self), input)
+    }
+
+    /// <p>Updates the contact details by the contact ARN.</p>
+    fn update_contact(
+        &self,
+        input: UpdateContactRequest,
+    ) -> RusotoFuture<UpdateContactResponse, UpdateContactError> {
+        AlexaForBusiness::update_contact(&(**self), input)
+    }
+
+    /// <p>Updates the device name by device ARN.</p>
+    fn update_device(
+        &self,
+        input: UpdateDeviceRequest,
+    ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError> {
+        AlexaForBusiness::update_device(&(**self), input)
+    }
+
+    /// <p>Updates an existing room profile by room profile ARN.</p>
+    fn update_profile(
+        &self,
+        input: UpdateProfileRequest,
+    ) -> RusotoFuture<UpdateProfileResponse, UpdateProfileError> {
+        AlexaForBusiness::update_profile(&(**self), input)
+    }
+
+    /// <p>Updates room details by room ARN.</p>
+    fn update_room(
+        &self,
+        input: UpdateRoomRequest,
+    ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError> {
+        AlexaForBusiness::update_room(&(**self), input)
+    }
+
+    /// <p>Updates skill group details by skill group ARN.</p>
+    fn update_skill_group(
+        &self,
+        input: UpdateSkillGroupRequest,
+    ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError> {
+        AlexaForBusiness::update_skill_group(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

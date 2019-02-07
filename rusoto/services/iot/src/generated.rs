@@ -31565,5 +31565,1201 @@ impl Iot for IotClient {
     }
 }
 
+impl<T: ?Sized + Iot> Iot for ::std::rc::Rc<T> {
+    /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
+    fn accept_certificate_transfer(
+        &self,
+        input: AcceptCertificateTransferRequest,
+    ) -> RusotoFuture<(), AcceptCertificateTransferError> {
+        Iot::accept_certificate_transfer(&(**self), input)
+    }
+
+    /// <p>Adds a thing to a thing group.</p>
+    fn add_thing_to_thing_group(
+        &self,
+        input: AddThingToThingGroupRequest,
+    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError> {
+        Iot::add_thing_to_thing_group(&(**self), input)
+    }
+
+    /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
+    fn associate_targets_with_job(
+        &self,
+        input: AssociateTargetsWithJobRequest,
+    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
+        Iot::associate_targets_with_job(&(**self), input)
+    }
+
+    /// <p>Attaches a policy to the specified target.</p>
+    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError> {
+        Iot::attach_policy(&(**self), input)
+    }
+
+    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
+    fn attach_principal_policy(
+        &self,
+        input: AttachPrincipalPolicyRequest,
+    ) -> RusotoFuture<(), AttachPrincipalPolicyError> {
+        Iot::attach_principal_policy(&(**self), input)
+    }
+
+    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    fn attach_security_profile(
+        &self,
+        input: AttachSecurityProfileRequest,
+    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError> {
+        Iot::attach_security_profile(&(**self), input)
+    }
+
+    /// <p>Attaches the specified principal to the specified thing.</p>
+    fn attach_thing_principal(
+        &self,
+        input: AttachThingPrincipalRequest,
+    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError> {
+        Iot::attach_thing_principal(&(**self), input)
+    }
+
+    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
+    fn cancel_audit_task(
+        &self,
+        input: CancelAuditTaskRequest,
+    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError> {
+        Iot::cancel_audit_task(&(**self), input)
+    }
+
+    /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
+    fn cancel_certificate_transfer(
+        &self,
+        input: CancelCertificateTransferRequest,
+    ) -> RusotoFuture<(), CancelCertificateTransferError> {
+        Iot::cancel_certificate_transfer(&(**self), input)
+    }
+
+    /// <p>Cancels a job.</p>
+    fn cancel_job(
+        &self,
+        input: CancelJobRequest,
+    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
+        Iot::cancel_job(&(**self), input)
+    }
+
+    /// <p>Cancels the execution of a job for a given thing.</p>
+    fn cancel_job_execution(
+        &self,
+        input: CancelJobExecutionRequest,
+    ) -> RusotoFuture<(), CancelJobExecutionError> {
+        Iot::cancel_job_execution(&(**self), input)
+    }
+
+    /// <p>Clears the default authorizer.</p>
+    fn clear_default_authorizer(
+        &self,
+    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError> {
+        Iot::clear_default_authorizer(&(**self))
+    }
+
+    /// <p>Creates an authorizer.</p>
+    fn create_authorizer(
+        &self,
+        input: CreateAuthorizerRequest,
+    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError> {
+        Iot::create_authorizer(&(**self), input)
+    }
+
+    /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
+    fn create_certificate_from_csr(
+        &self,
+        input: CreateCertificateFromCsrRequest,
+    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
+        Iot::create_certificate_from_csr(&(**self), input)
+    }
+
+    /// <p>Creates a job.</p>
+    fn create_job(
+        &self,
+        input: CreateJobRequest,
+    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
+        Iot::create_job(&(**self), input)
+    }
+
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
+    fn create_keys_and_certificate(
+        &self,
+        input: CreateKeysAndCertificateRequest,
+    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
+        Iot::create_keys_and_certificate(&(**self), input)
+    }
+
+    /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
+    fn create_ota_update(
+        &self,
+        input: CreateOTAUpdateRequest,
+    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError> {
+        Iot::create_ota_update(&(**self), input)
+    }
+
+    /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
+    fn create_policy(
+        &self,
+        input: CreatePolicyRequest,
+    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError> {
+        Iot::create_policy(&(**self), input)
+    }
+
+    /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
+    fn create_policy_version(
+        &self,
+        input: CreatePolicyVersionRequest,
+    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+        Iot::create_policy_version(&(**self), input)
+    }
+
+    /// <p>Creates a role alias.</p>
+    fn create_role_alias(
+        &self,
+        input: CreateRoleAliasRequest,
+    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError> {
+        Iot::create_role_alias(&(**self), input)
+    }
+
+    /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
+    fn create_scheduled_audit(
+        &self,
+        input: CreateScheduledAuditRequest,
+    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError> {
+        Iot::create_scheduled_audit(&(**self), input)
+    }
+
+    /// <p>Creates a Device Defender security profile.</p>
+    fn create_security_profile(
+        &self,
+        input: CreateSecurityProfileRequest,
+    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError> {
+        Iot::create_security_profile(&(**self), input)
+    }
+
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    fn create_stream(
+        &self,
+        input: CreateStreamRequest,
+    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError> {
+        Iot::create_stream(&(**self), input)
+    }
+
+    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    fn create_thing(
+        &self,
+        input: CreateThingRequest,
+    ) -> RusotoFuture<CreateThingResponse, CreateThingError> {
+        Iot::create_thing(&(**self), input)
+    }
+
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    fn create_thing_group(
+        &self,
+        input: CreateThingGroupRequest,
+    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError> {
+        Iot::create_thing_group(&(**self), input)
+    }
+
+    /// <p>Creates a new thing type.</p>
+    fn create_thing_type(
+        &self,
+        input: CreateThingTypeRequest,
+    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError> {
+        Iot::create_thing_type(&(**self), input)
+    }
+
+    /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
+    fn create_topic_rule(
+        &self,
+        input: CreateTopicRuleRequest,
+    ) -> RusotoFuture<(), CreateTopicRuleError> {
+        Iot::create_topic_rule(&(**self), input)
+    }
+
+    /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
+    fn delete_account_audit_configuration(
+        &self,
+        input: DeleteAccountAuditConfigurationRequest,
+    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>
+    {
+        Iot::delete_account_audit_configuration(&(**self), input)
+    }
+
+    /// <p>Deletes an authorizer.</p>
+    fn delete_authorizer(
+        &self,
+        input: DeleteAuthorizerRequest,
+    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError> {
+        Iot::delete_authorizer(&(**self), input)
+    }
+
+    /// <p>Deletes a registered CA certificate.</p>
+    fn delete_ca_certificate(
+        &self,
+        input: DeleteCACertificateRequest,
+    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError> {
+        Iot::delete_ca_certificate(&(**self), input)
+    }
+
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
+    fn delete_certificate(
+        &self,
+        input: DeleteCertificateRequest,
+    ) -> RusotoFuture<(), DeleteCertificateError> {
+        Iot::delete_certificate(&(**self), input)
+    }
+
+    /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
+    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError> {
+        Iot::delete_job(&(**self), input)
+    }
+
+    /// <p>Deletes a job execution.</p>
+    fn delete_job_execution(
+        &self,
+        input: DeleteJobExecutionRequest,
+    ) -> RusotoFuture<(), DeleteJobExecutionError> {
+        Iot::delete_job_execution(&(**self), input)
+    }
+
+    /// <p>Delete an OTA update.</p>
+    fn delete_ota_update(
+        &self,
+        input: DeleteOTAUpdateRequest,
+    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
+        Iot::delete_ota_update(&(**self), input)
+    }
+
+    /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
+    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
+        Iot::delete_policy(&(**self), input)
+    }
+
+    /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
+    fn delete_policy_version(
+        &self,
+        input: DeletePolicyVersionRequest,
+    ) -> RusotoFuture<(), DeletePolicyVersionError> {
+        Iot::delete_policy_version(&(**self), input)
+    }
+
+    /// <p>Deletes a CA certificate registration code.</p>
+    fn delete_registration_code(
+        &self,
+    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
+        Iot::delete_registration_code(&(**self))
+    }
+
+    /// <p>Deletes a role alias</p>
+    fn delete_role_alias(
+        &self,
+        input: DeleteRoleAliasRequest,
+    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError> {
+        Iot::delete_role_alias(&(**self), input)
+    }
+
+    /// <p>Deletes a scheduled audit.</p>
+    fn delete_scheduled_audit(
+        &self,
+        input: DeleteScheduledAuditRequest,
+    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError> {
+        Iot::delete_scheduled_audit(&(**self), input)
+    }
+
+    /// <p>Deletes a Device Defender security profile.</p>
+    fn delete_security_profile(
+        &self,
+        input: DeleteSecurityProfileRequest,
+    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError> {
+        Iot::delete_security_profile(&(**self), input)
+    }
+
+    /// <p>Deletes a stream.</p>
+    fn delete_stream(
+        &self,
+        input: DeleteStreamRequest,
+    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError> {
+        Iot::delete_stream(&(**self), input)
+    }
+
+    /// <p>Deletes the specified thing.</p>
+    fn delete_thing(
+        &self,
+        input: DeleteThingRequest,
+    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError> {
+        Iot::delete_thing(&(**self), input)
+    }
+
+    /// <p>Deletes a thing group.</p>
+    fn delete_thing_group(
+        &self,
+        input: DeleteThingGroupRequest,
+    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError> {
+        Iot::delete_thing_group(&(**self), input)
+    }
+
+    /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
+    fn delete_thing_type(
+        &self,
+        input: DeleteThingTypeRequest,
+    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError> {
+        Iot::delete_thing_type(&(**self), input)
+    }
+
+    /// <p>Deletes the rule.</p>
+    fn delete_topic_rule(
+        &self,
+        input: DeleteTopicRuleRequest,
+    ) -> RusotoFuture<(), DeleteTopicRuleError> {
+        Iot::delete_topic_rule(&(**self), input)
+    }
+
+    /// <p>Deletes a logging level.</p>
+    fn delete_v2_logging_level(
+        &self,
+        input: DeleteV2LoggingLevelRequest,
+    ) -> RusotoFuture<(), DeleteV2LoggingLevelError> {
+        Iot::delete_v2_logging_level(&(**self), input)
+    }
+
+    /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
+    fn deprecate_thing_type(
+        &self,
+        input: DeprecateThingTypeRequest,
+    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError> {
+        Iot::deprecate_thing_type(&(**self), input)
+    }
+
+    /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn describe_account_audit_configuration(
+        &self,
+    ) -> RusotoFuture<
+        DescribeAccountAuditConfigurationResponse,
+        DescribeAccountAuditConfigurationError,
+    > {
+        Iot::describe_account_audit_configuration(&(**self))
+    }
+
+    /// <p>Gets information about a Device Defender audit.</p>
+    fn describe_audit_task(
+        &self,
+        input: DescribeAuditTaskRequest,
+    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError> {
+        Iot::describe_audit_task(&(**self), input)
+    }
+
+    /// <p>Describes an authorizer.</p>
+    fn describe_authorizer(
+        &self,
+        input: DescribeAuthorizerRequest,
+    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError> {
+        Iot::describe_authorizer(&(**self), input)
+    }
+
+    /// <p>Describes a registered CA certificate.</p>
+    fn describe_ca_certificate(
+        &self,
+        input: DescribeCACertificateRequest,
+    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError> {
+        Iot::describe_ca_certificate(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified certificate.</p>
+    fn describe_certificate(
+        &self,
+        input: DescribeCertificateRequest,
+    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError> {
+        Iot::describe_certificate(&(**self), input)
+    }
+
+    /// <p>Describes the default authorizer.</p>
+    fn describe_default_authorizer(
+        &self,
+    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError> {
+        Iot::describe_default_authorizer(&(**self))
+    }
+
+    /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
+    fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError> {
+        Iot::describe_endpoint(&(**self), input)
+    }
+
+    /// <p>Describes event configurations.</p>
+    fn describe_event_configurations(
+        &self,
+    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError> {
+        Iot::describe_event_configurations(&(**self))
+    }
+
+    /// <p>Describes a search index.</p>
+    fn describe_index(
+        &self,
+        input: DescribeIndexRequest,
+    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError> {
+        Iot::describe_index(&(**self), input)
+    }
+
+    /// <p>Describes a job.</p>
+    fn describe_job(
+        &self,
+        input: DescribeJobRequest,
+    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError> {
+        Iot::describe_job(&(**self), input)
+    }
+
+    /// <p>Describes a job execution.</p>
+    fn describe_job_execution(
+        &self,
+        input: DescribeJobExecutionRequest,
+    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+        Iot::describe_job_execution(&(**self), input)
+    }
+
+    /// <p>Describes a role alias.</p>
+    fn describe_role_alias(
+        &self,
+        input: DescribeRoleAliasRequest,
+    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError> {
+        Iot::describe_role_alias(&(**self), input)
+    }
+
+    /// <p>Gets information about a scheduled audit.</p>
+    fn describe_scheduled_audit(
+        &self,
+        input: DescribeScheduledAuditRequest,
+    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError> {
+        Iot::describe_scheduled_audit(&(**self), input)
+    }
+
+    /// <p>Gets information about a Device Defender security profile.</p>
+    fn describe_security_profile(
+        &self,
+        input: DescribeSecurityProfileRequest,
+    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError> {
+        Iot::describe_security_profile(&(**self), input)
+    }
+
+    /// <p>Gets information about a stream.</p>
+    fn describe_stream(
+        &self,
+        input: DescribeStreamRequest,
+    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError> {
+        Iot::describe_stream(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified thing.</p>
+    fn describe_thing(
+        &self,
+        input: DescribeThingRequest,
+    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError> {
+        Iot::describe_thing(&(**self), input)
+    }
+
+    /// <p>Describe a thing group.</p>
+    fn describe_thing_group(
+        &self,
+        input: DescribeThingGroupRequest,
+    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError> {
+        Iot::describe_thing_group(&(**self), input)
+    }
+
+    /// <p>Describes a bulk thing provisioning task.</p>
+    fn describe_thing_registration_task(
+        &self,
+        input: DescribeThingRegistrationTaskRequest,
+    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>
+    {
+        Iot::describe_thing_registration_task(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified thing type.</p>
+    fn describe_thing_type(
+        &self,
+        input: DescribeThingTypeRequest,
+    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError> {
+        Iot::describe_thing_type(&(**self), input)
+    }
+
+    /// <p>Detaches a policy from the specified target.</p>
+    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError> {
+        Iot::detach_policy(&(**self), input)
+    }
+
+    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
+    fn detach_principal_policy(
+        &self,
+        input: DetachPrincipalPolicyRequest,
+    ) -> RusotoFuture<(), DetachPrincipalPolicyError> {
+        Iot::detach_principal_policy(&(**self), input)
+    }
+
+    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
+    fn detach_security_profile(
+        &self,
+        input: DetachSecurityProfileRequest,
+    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError> {
+        Iot::detach_security_profile(&(**self), input)
+    }
+
+    /// <p>Detaches the specified principal from the specified thing.</p>
+    fn detach_thing_principal(
+        &self,
+        input: DetachThingPrincipalRequest,
+    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError> {
+        Iot::detach_thing_principal(&(**self), input)
+    }
+
+    /// <p>Disables the rule.</p>
+    fn disable_topic_rule(
+        &self,
+        input: DisableTopicRuleRequest,
+    ) -> RusotoFuture<(), DisableTopicRuleError> {
+        Iot::disable_topic_rule(&(**self), input)
+    }
+
+    /// <p>Enables the rule.</p>
+    fn enable_topic_rule(
+        &self,
+        input: EnableTopicRuleRequest,
+    ) -> RusotoFuture<(), EnableTopicRuleError> {
+        Iot::enable_topic_rule(&(**self), input)
+    }
+
+    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
+    fn get_effective_policies(
+        &self,
+        input: GetEffectivePoliciesRequest,
+    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
+        Iot::get_effective_policies(&(**self), input)
+    }
+
+    /// <p>Gets the search configuration.</p>
+    fn get_indexing_configuration(
+        &self,
+    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
+        Iot::get_indexing_configuration(&(**self))
+    }
+
+    /// <p>Gets a job document.</p>
+    fn get_job_document(
+        &self,
+        input: GetJobDocumentRequest,
+    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError> {
+        Iot::get_job_document(&(**self), input)
+    }
+
+    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
+    fn get_logging_options(
+        &self,
+    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError> {
+        Iot::get_logging_options(&(**self))
+    }
+
+    /// <p>Gets an OTA update.</p>
+    fn get_ota_update(
+        &self,
+        input: GetOTAUpdateRequest,
+    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError> {
+        Iot::get_ota_update(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
+    fn get_policy(
+        &self,
+        input: GetPolicyRequest,
+    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
+        Iot::get_policy(&(**self), input)
+    }
+
+    /// <p>Gets information about the specified policy version.</p>
+    fn get_policy_version(
+        &self,
+        input: GetPolicyVersionRequest,
+    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError> {
+        Iot::get_policy_version(&(**self), input)
+    }
+
+    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
+    fn get_registration_code(
+        &self,
+    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError> {
+        Iot::get_registration_code(&(**self))
+    }
+
+    /// <p>Gets information about the rule.</p>
+    fn get_topic_rule(
+        &self,
+        input: GetTopicRuleRequest,
+    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError> {
+        Iot::get_topic_rule(&(**self), input)
+    }
+
+    /// <p>Gets the fine grained logging options.</p>
+    fn get_v2_logging_options(
+        &self,
+    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError> {
+        Iot::get_v2_logging_options(&(**self))
+    }
+
+    /// <p>Lists the active violations for a given Device Defender security profile.</p>
+    fn list_active_violations(
+        &self,
+        input: ListActiveViolationsRequest,
+    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError> {
+        Iot::list_active_violations(&(**self), input)
+    }
+
+    /// <p>Lists the policies attached to the specified thing group.</p>
+    fn list_attached_policies(
+        &self,
+        input: ListAttachedPoliciesRequest,
+    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
+        Iot::list_attached_policies(&(**self), input)
+    }
+
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    fn list_audit_findings(
+        &self,
+        input: ListAuditFindingsRequest,
+    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError> {
+        Iot::list_audit_findings(&(**self), input)
+    }
+
+    /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
+    fn list_audit_tasks(
+        &self,
+        input: ListAuditTasksRequest,
+    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError> {
+        Iot::list_audit_tasks(&(**self), input)
+    }
+
+    /// <p>Lists the authorizers registered in your account.</p>
+    fn list_authorizers(
+        &self,
+        input: ListAuthorizersRequest,
+    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError> {
+        Iot::list_authorizers(&(**self), input)
+    }
+
+    /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
+    fn list_ca_certificates(
+        &self,
+        input: ListCACertificatesRequest,
+    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError> {
+        Iot::list_ca_certificates(&(**self), input)
+    }
+
+    /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
+    fn list_certificates(
+        &self,
+        input: ListCertificatesRequest,
+    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError> {
+        Iot::list_certificates(&(**self), input)
+    }
+
+    /// <p>List the device certificates signed by the specified CA certificate.</p>
+    fn list_certificates_by_ca(
+        &self,
+        input: ListCertificatesByCARequest,
+    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError> {
+        Iot::list_certificates_by_ca(&(**self), input)
+    }
+
+    /// <p>Lists the search indices.</p>
+    fn list_indices(
+        &self,
+        input: ListIndicesRequest,
+    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError> {
+        Iot::list_indices(&(**self), input)
+    }
+
+    /// <p>Lists the job executions for a job.</p>
+    fn list_job_executions_for_job(
+        &self,
+        input: ListJobExecutionsForJobRequest,
+    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
+        Iot::list_job_executions_for_job(&(**self), input)
+    }
+
+    /// <p>Lists the job executions for the specified thing.</p>
+    fn list_job_executions_for_thing(
+        &self,
+        input: ListJobExecutionsForThingRequest,
+    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
+        Iot::list_job_executions_for_thing(&(**self), input)
+    }
+
+    /// <p>Lists jobs.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+        Iot::list_jobs(&(**self), input)
+    }
+
+    /// <p>Lists OTA updates.</p>
+    fn list_ota_updates(
+        &self,
+        input: ListOTAUpdatesRequest,
+    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError> {
+        Iot::list_ota_updates(&(**self), input)
+    }
+
+    /// <p>Lists certificates that are being transferred but not yet accepted.</p>
+    fn list_outgoing_certificates(
+        &self,
+        input: ListOutgoingCertificatesRequest,
+    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
+        Iot::list_outgoing_certificates(&(**self), input)
+    }
+
+    /// <p>Lists your policies.</p>
+    fn list_policies(
+        &self,
+        input: ListPoliciesRequest,
+    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
+        Iot::list_policies(&(**self), input)
+    }
+
+    /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
+    fn list_policy_principals(
+        &self,
+        input: ListPolicyPrincipalsRequest,
+    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
+        Iot::list_policy_principals(&(**self), input)
+    }
+
+    /// <p>Lists the versions of the specified policy and identifies the default version.</p>
+    fn list_policy_versions(
+        &self,
+        input: ListPolicyVersionsRequest,
+    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+        Iot::list_policy_versions(&(**self), input)
+    }
+
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
+    fn list_principal_policies(
+        &self,
+        input: ListPrincipalPoliciesRequest,
+    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
+        Iot::list_principal_policies(&(**self), input)
+    }
+
+    /// <p>Lists the things associated with the specified principal.</p>
+    fn list_principal_things(
+        &self,
+        input: ListPrincipalThingsRequest,
+    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError> {
+        Iot::list_principal_things(&(**self), input)
+    }
+
+    /// <p>Lists the role aliases registered in your account.</p>
+    fn list_role_aliases(
+        &self,
+        input: ListRoleAliasesRequest,
+    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError> {
+        Iot::list_role_aliases(&(**self), input)
+    }
+
+    /// <p>Lists all of your scheduled audits.</p>
+    fn list_scheduled_audits(
+        &self,
+        input: ListScheduledAuditsRequest,
+    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError> {
+        Iot::list_scheduled_audits(&(**self), input)
+    }
+
+    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
+    fn list_security_profiles(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError> {
+        Iot::list_security_profiles(&(**self), input)
+    }
+
+    /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
+    fn list_security_profiles_for_target(
+        &self,
+        input: ListSecurityProfilesForTargetRequest,
+    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>
+    {
+        Iot::list_security_profiles_for_target(&(**self), input)
+    }
+
+    /// <p>Lists all of the streams in your AWS account.</p>
+    fn list_streams(
+        &self,
+        input: ListStreamsRequest,
+    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError> {
+        Iot::list_streams(&(**self), input)
+    }
+
+    /// <p>List targets for the specified policy.</p>
+    fn list_targets_for_policy(
+        &self,
+        input: ListTargetsForPolicyRequest,
+    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
+        Iot::list_targets_for_policy(&(**self), input)
+    }
+
+    /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
+    fn list_targets_for_security_profile(
+        &self,
+        input: ListTargetsForSecurityProfileRequest,
+    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>
+    {
+        Iot::list_targets_for_security_profile(&(**self), input)
+    }
+
+    /// <p>List the thing groups in your account.</p>
+    fn list_thing_groups(
+        &self,
+        input: ListThingGroupsRequest,
+    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError> {
+        Iot::list_thing_groups(&(**self), input)
+    }
+
+    /// <p>List the thing groups to which the specified thing belongs.</p>
+    fn list_thing_groups_for_thing(
+        &self,
+        input: ListThingGroupsForThingRequest,
+    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
+        Iot::list_thing_groups_for_thing(&(**self), input)
+    }
+
+    /// <p>Lists the principals associated with the specified thing.</p>
+    fn list_thing_principals(
+        &self,
+        input: ListThingPrincipalsRequest,
+    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError> {
+        Iot::list_thing_principals(&(**self), input)
+    }
+
+    /// <p>Information about the thing registration tasks.</p>
+    fn list_thing_registration_task_reports(
+        &self,
+        input: ListThingRegistrationTaskReportsRequest,
+    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
+    {
+        Iot::list_thing_registration_task_reports(&(**self), input)
+    }
+
+    /// <p>List bulk thing provisioning tasks.</p>
+    fn list_thing_registration_tasks(
+        &self,
+        input: ListThingRegistrationTasksRequest,
+    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
+        Iot::list_thing_registration_tasks(&(**self), input)
+    }
+
+    /// <p>Lists the existing thing types.</p>
+    fn list_thing_types(
+        &self,
+        input: ListThingTypesRequest,
+    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError> {
+        Iot::list_thing_types(&(**self), input)
+    }
+
+    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
+    fn list_things(
+        &self,
+        input: ListThingsRequest,
+    ) -> RusotoFuture<ListThingsResponse, ListThingsError> {
+        Iot::list_things(&(**self), input)
+    }
+
+    /// <p>Lists the things in the specified group.</p>
+    fn list_things_in_thing_group(
+        &self,
+        input: ListThingsInThingGroupRequest,
+    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
+        Iot::list_things_in_thing_group(&(**self), input)
+    }
+
+    /// <p>Lists the rules for the specific topic.</p>
+    fn list_topic_rules(
+        &self,
+        input: ListTopicRulesRequest,
+    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError> {
+        Iot::list_topic_rules(&(**self), input)
+    }
+
+    /// <p>Lists logging levels.</p>
+    fn list_v2_logging_levels(
+        &self,
+        input: ListV2LoggingLevelsRequest,
+    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
+        Iot::list_v2_logging_levels(&(**self), input)
+    }
+
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    fn list_violation_events(
+        &self,
+        input: ListViolationEventsRequest,
+    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError> {
+        Iot::list_violation_events(&(**self), input)
+    }
+
+    /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
+    fn register_ca_certificate(
+        &self,
+        input: RegisterCACertificateRequest,
+    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError> {
+        Iot::register_ca_certificate(&(**self), input)
+    }
+
+    /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
+    fn register_certificate(
+        &self,
+        input: RegisterCertificateRequest,
+    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError> {
+        Iot::register_certificate(&(**self), input)
+    }
+
+    /// <p>Provisions a thing.</p>
+    fn register_thing(
+        &self,
+        input: RegisterThingRequest,
+    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError> {
+        Iot::register_thing(&(**self), input)
+    }
+
+    /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
+    fn reject_certificate_transfer(
+        &self,
+        input: RejectCertificateTransferRequest,
+    ) -> RusotoFuture<(), RejectCertificateTransferError> {
+        Iot::reject_certificate_transfer(&(**self), input)
+    }
+
+    /// <p>Remove the specified thing from the specified group.</p>
+    fn remove_thing_from_thing_group(
+        &self,
+        input: RemoveThingFromThingGroupRequest,
+    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
+        Iot::remove_thing_from_thing_group(&(**self), input)
+    }
+
+    /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
+    fn replace_topic_rule(
+        &self,
+        input: ReplaceTopicRuleRequest,
+    ) -> RusotoFuture<(), ReplaceTopicRuleError> {
+        Iot::replace_topic_rule(&(**self), input)
+    }
+
+    /// <p>The query search index.</p>
+    fn search_index(
+        &self,
+        input: SearchIndexRequest,
+    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError> {
+        Iot::search_index(&(**self), input)
+    }
+
+    /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
+    fn set_default_authorizer(
+        &self,
+        input: SetDefaultAuthorizerRequest,
+    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
+        Iot::set_default_authorizer(&(**self), input)
+    }
+
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
+    fn set_default_policy_version(
+        &self,
+        input: SetDefaultPolicyVersionRequest,
+    ) -> RusotoFuture<(), SetDefaultPolicyVersionError> {
+        Iot::set_default_policy_version(&(**self), input)
+    }
+
+    /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
+    fn set_logging_options(
+        &self,
+        input: SetLoggingOptionsRequest,
+    ) -> RusotoFuture<(), SetLoggingOptionsError> {
+        Iot::set_logging_options(&(**self), input)
+    }
+
+    /// <p>Sets the logging level.</p>
+    fn set_v2_logging_level(
+        &self,
+        input: SetV2LoggingLevelRequest,
+    ) -> RusotoFuture<(), SetV2LoggingLevelError> {
+        Iot::set_v2_logging_level(&(**self), input)
+    }
+
+    /// <p>Sets the logging options for the V2 logging service.</p>
+    fn set_v2_logging_options(
+        &self,
+        input: SetV2LoggingOptionsRequest,
+    ) -> RusotoFuture<(), SetV2LoggingOptionsError> {
+        Iot::set_v2_logging_options(&(**self), input)
+    }
+
+    /// <p>Starts an on-demand Device Defender audit.</p>
+    fn start_on_demand_audit_task(
+        &self,
+        input: StartOnDemandAuditTaskRequest,
+    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError> {
+        Iot::start_on_demand_audit_task(&(**self), input)
+    }
+
+    /// <p>Creates a bulk thing provisioning task.</p>
+    fn start_thing_registration_task(
+        &self,
+        input: StartThingRegistrationTaskRequest,
+    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
+        Iot::start_thing_registration_task(&(**self), input)
+    }
+
+    /// <p>Cancels a bulk thing provisioning task.</p>
+    fn stop_thing_registration_task(
+        &self,
+        input: StopThingRegistrationTaskRequest,
+    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
+        Iot::stop_thing_registration_task(&(**self), input)
+    }
+
+    /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
+    fn test_authorization(
+        &self,
+        input: TestAuthorizationRequest,
+    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError> {
+        Iot::test_authorization(&(**self), input)
+    }
+
+    /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
+    fn test_invoke_authorizer(
+        &self,
+        input: TestInvokeAuthorizerRequest,
+    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+        Iot::test_invoke_authorizer(&(**self), input)
+    }
+
+    /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
+    fn transfer_certificate(
+        &self,
+        input: TransferCertificateRequest,
+    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError> {
+        Iot::transfer_certificate(&(**self), input)
+    }
+
+    /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn update_account_audit_configuration(
+        &self,
+        input: UpdateAccountAuditConfigurationRequest,
+    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>
+    {
+        Iot::update_account_audit_configuration(&(**self), input)
+    }
+
+    /// <p>Updates an authorizer.</p>
+    fn update_authorizer(
+        &self,
+        input: UpdateAuthorizerRequest,
+    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError> {
+        Iot::update_authorizer(&(**self), input)
+    }
+
+    /// <p>Updates a registered CA certificate.</p>
+    fn update_ca_certificate(
+        &self,
+        input: UpdateCACertificateRequest,
+    ) -> RusotoFuture<(), UpdateCACertificateError> {
+        Iot::update_ca_certificate(&(**self), input)
+    }
+
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
+    fn update_certificate(
+        &self,
+        input: UpdateCertificateRequest,
+    ) -> RusotoFuture<(), UpdateCertificateError> {
+        Iot::update_certificate(&(**self), input)
+    }
+
+    /// <p>Updates the event configurations.</p>
+    fn update_event_configurations(
+        &self,
+        input: UpdateEventConfigurationsRequest,
+    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
+        Iot::update_event_configurations(&(**self), input)
+    }
+
+    /// <p>Updates the search configuration.</p>
+    fn update_indexing_configuration(
+        &self,
+        input: UpdateIndexingConfigurationRequest,
+    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
+        Iot::update_indexing_configuration(&(**self), input)
+    }
+
+    /// <p>Updates a role alias.</p>
+    fn update_role_alias(
+        &self,
+        input: UpdateRoleAliasRequest,
+    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError> {
+        Iot::update_role_alias(&(**self), input)
+    }
+
+    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    fn update_scheduled_audit(
+        &self,
+        input: UpdateScheduledAuditRequest,
+    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError> {
+        Iot::update_scheduled_audit(&(**self), input)
+    }
+
+    /// <p>Updates a Device Defender security profile.</p>
+    fn update_security_profile(
+        &self,
+        input: UpdateSecurityProfileRequest,
+    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError> {
+        Iot::update_security_profile(&(**self), input)
+    }
+
+    /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
+    fn update_stream(
+        &self,
+        input: UpdateStreamRequest,
+    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError> {
+        Iot::update_stream(&(**self), input)
+    }
+
+    /// <p>Updates the data for a thing.</p>
+    fn update_thing(
+        &self,
+        input: UpdateThingRequest,
+    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError> {
+        Iot::update_thing(&(**self), input)
+    }
+
+    /// <p>Update a thing group.</p>
+    fn update_thing_group(
+        &self,
+        input: UpdateThingGroupRequest,
+    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError> {
+        Iot::update_thing_group(&(**self), input)
+    }
+
+    /// <p>Updates the groups to which the thing belongs.</p>
+    fn update_thing_groups_for_thing(
+        &self,
+        input: UpdateThingGroupsForThingRequest,
+    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
+        Iot::update_thing_groups_for_thing(&(**self), input)
+    }
+
+    /// <p>Validates a Device Defender security profile behaviors specification.</p>
+    fn validate_security_profile_behaviors(
+        &self,
+        input: ValidateSecurityProfileBehaviorsRequest,
+    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>
+    {
+        Iot::validate_security_profile_behaviors(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

@@ -3090,5 +3090,131 @@ impl CodeBuild for CodeBuildClient {
     }
 }
 
+impl<T: ?Sized + CodeBuild> CodeBuild for ::std::rc::Rc<T> {
+    /// <p>Deletes one or more builds.</p>
+    fn batch_delete_builds(
+        &self,
+        input: BatchDeleteBuildsInput,
+    ) -> RusotoFuture<BatchDeleteBuildsOutput, BatchDeleteBuildsError> {
+        CodeBuild::batch_delete_builds(&(**self), input)
+    }
+
+    /// <p>Gets information about builds.</p>
+    fn batch_get_builds(
+        &self,
+        input: BatchGetBuildsInput,
+    ) -> RusotoFuture<BatchGetBuildsOutput, BatchGetBuildsError> {
+        CodeBuild::batch_get_builds(&(**self), input)
+    }
+
+    /// <p>Gets information about build projects.</p>
+    fn batch_get_projects(
+        &self,
+        input: BatchGetProjectsInput,
+    ) -> RusotoFuture<BatchGetProjectsOutput, BatchGetProjectsError> {
+        CodeBuild::batch_get_projects(&(**self), input)
+    }
+
+    /// <p>Creates a build project.</p>
+    fn create_project(
+        &self,
+        input: CreateProjectInput,
+    ) -> RusotoFuture<CreateProjectOutput, CreateProjectError> {
+        CodeBuild::create_project(&(**self), input)
+    }
+
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 5 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
+    fn create_webhook(
+        &self,
+        input: CreateWebhookInput,
+    ) -> RusotoFuture<CreateWebhookOutput, CreateWebhookError> {
+        CodeBuild::create_webhook(&(**self), input)
+    }
+
+    /// <p>Deletes a build project.</p>
+    fn delete_project(
+        &self,
+        input: DeleteProjectInput,
+    ) -> RusotoFuture<DeleteProjectOutput, DeleteProjectError> {
+        CodeBuild::delete_project(&(**self), input)
+    }
+
+    /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, stops AWS CodeBuild from automatically rebuilding the source code every time a code change is pushed to the repository.</p>
+    fn delete_webhook(
+        &self,
+        input: DeleteWebhookInput,
+    ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
+        CodeBuild::delete_webhook(&(**self), input)
+    }
+
+    /// <p>Resets the cache for a project.</p>
+    fn invalidate_project_cache(
+        &self,
+        input: InvalidateProjectCacheInput,
+    ) -> RusotoFuture<InvalidateProjectCacheOutput, InvalidateProjectCacheError> {
+        CodeBuild::invalidate_project_cache(&(**self), input)
+    }
+
+    /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
+    fn list_builds(
+        &self,
+        input: ListBuildsInput,
+    ) -> RusotoFuture<ListBuildsOutput, ListBuildsError> {
+        CodeBuild::list_builds(&(**self), input)
+    }
+
+    /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
+    fn list_builds_for_project(
+        &self,
+        input: ListBuildsForProjectInput,
+    ) -> RusotoFuture<ListBuildsForProjectOutput, ListBuildsForProjectError> {
+        CodeBuild::list_builds_for_project(&(**self), input)
+    }
+
+    /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
+    fn list_curated_environment_images(
+        &self,
+    ) -> RusotoFuture<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError> {
+        CodeBuild::list_curated_environment_images(&(**self))
+    }
+
+    /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
+    fn list_projects(
+        &self,
+        input: ListProjectsInput,
+    ) -> RusotoFuture<ListProjectsOutput, ListProjectsError> {
+        CodeBuild::list_projects(&(**self), input)
+    }
+
+    /// <p>Starts running a build.</p>
+    fn start_build(
+        &self,
+        input: StartBuildInput,
+    ) -> RusotoFuture<StartBuildOutput, StartBuildError> {
+        CodeBuild::start_build(&(**self), input)
+    }
+
+    /// <p>Attempts to stop running a build.</p>
+    fn stop_build(&self, input: StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError> {
+        CodeBuild::stop_build(&(**self), input)
+    }
+
+    /// <p>Changes the settings of a build project.</p>
+    fn update_project(
+        &self,
+        input: UpdateProjectInput,
+    ) -> RusotoFuture<UpdateProjectOutput, UpdateProjectError> {
+        CodeBuild::update_project(&(**self), input)
+    }
+
+    /// <p> Updates the webhook associated with an AWS CodeBuild build project. </p>
+    fn update_webhook(
+        &self,
+        input: UpdateWebhookInput,
+    ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError> {
+        CodeBuild::update_webhook(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

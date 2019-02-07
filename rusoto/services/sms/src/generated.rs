@@ -2103,5 +2103,93 @@ impl ServerMigrationService for ServerMigrationServiceClient {
     }
 }
 
+impl<T: ?Sized + ServerMigrationService> ServerMigrationService for ::std::rc::Rc<T> {
+    /// <p>The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI.</p>
+    fn create_replication_job(
+        &self,
+        input: CreateReplicationJobRequest,
+    ) -> RusotoFuture<CreateReplicationJobResponse, CreateReplicationJobError> {
+        ServerMigrationService::create_replication_job(&(**self), input)
+    }
+
+    /// <p>The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service.</p>
+    fn delete_replication_job(
+        &self,
+        input: DeleteReplicationJobRequest,
+    ) -> RusotoFuture<DeleteReplicationJobResponse, DeleteReplicationJobError> {
+        ServerMigrationService::delete_replication_job(&(**self), input)
+    }
+
+    /// <p>The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service.</p>
+    fn delete_server_catalog(
+        &self,
+    ) -> RusotoFuture<DeleteServerCatalogResponse, DeleteServerCatalogError> {
+        ServerMigrationService::delete_server_catalog(&(**self))
+    }
+
+    /// <p>The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs.</p>
+    fn disassociate_connector(
+        &self,
+        input: DisassociateConnectorRequest,
+    ) -> RusotoFuture<DisassociateConnectorResponse, DisassociateConnectorError> {
+        ServerMigrationService::disassociate_connector(&(**self), input)
+    }
+
+    /// <p>The GetConnectors API returns a list of connectors that are registered with the Server Migration Service.</p>
+    fn get_connectors(
+        &self,
+        input: GetConnectorsRequest,
+    ) -> RusotoFuture<GetConnectorsResponse, GetConnectorsError> {
+        ServerMigrationService::get_connectors(&(**self), input)
+    }
+
+    /// <p>The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs.</p>
+    fn get_replication_jobs(
+        &self,
+        input: GetReplicationJobsRequest,
+    ) -> RusotoFuture<GetReplicationJobsResponse, GetReplicationJobsError> {
+        ServerMigrationService::get_replication_jobs(&(**self), input)
+    }
+
+    /// <p>The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob.</p>
+    fn get_replication_runs(
+        &self,
+        input: GetReplicationRunsRequest,
+    ) -> RusotoFuture<GetReplicationRunsResponse, GetReplicationRunsError> {
+        ServerMigrationService::get_replication_runs(&(**self), input)
+    }
+
+    /// <p>The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog.</p>
+    fn get_servers(
+        &self,
+        input: GetServersRequest,
+    ) -> RusotoFuture<GetServersResponse, GetServersError> {
+        ServerMigrationService::get_servers(&(**self), input)
+    }
+
+    /// <p>The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers.</p>
+    fn import_server_catalog(
+        &self,
+    ) -> RusotoFuture<ImportServerCatalogResponse, ImportServerCatalogError> {
+        ServerMigrationService::import_server_catalog(&(**self))
+    }
+
+    /// <p>The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period.</p>
+    fn start_on_demand_replication_run(
+        &self,
+        input: StartOnDemandReplicationRunRequest,
+    ) -> RusotoFuture<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
+        ServerMigrationService::start_on_demand_replication_run(&(**self), input)
+    }
+
+    /// <p>The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun.</p>
+    fn update_replication_job(
+        &self,
+        input: UpdateReplicationJobRequest,
+    ) -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError> {
+        ServerMigrationService::update_replication_job(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

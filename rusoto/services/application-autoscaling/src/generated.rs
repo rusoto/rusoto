@@ -2104,5 +2104,87 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
     }
 }
 
+impl<T: ?Sized + ApplicationAutoScaling> ApplicationAutoScaling for ::std::rc::Rc<T> {
+    /// <p>Deletes the specified Application Auto Scaling scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the CloudWatch alarm associated with the scaling policy, even if it no longer has an associated action.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
+    fn delete_scaling_policy(
+        &self,
+        input: DeleteScalingPolicyRequest,
+    ) -> RusotoFuture<DeleteScalingPolicyResponse, DeleteScalingPolicyError> {
+        ApplicationAutoScaling::delete_scaling_policy(&(**self), input)
+    }
+
+    /// <p>Deletes the specified Application Auto Scaling scheduled action.</p>
+    fn delete_scheduled_action(
+        &self,
+        input: DeleteScheduledActionRequest,
+    ) -> RusotoFuture<DeleteScheduledActionResponse, DeleteScheduledActionError> {
+        ApplicationAutoScaling::delete_scheduled_action(&(**self), input)
+    }
+
+    /// <p>Deregisters a scalable target.</p> <p>Deregistering a scalable target deletes the scaling policies that are associated with it.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>.</p>
+    fn deregister_scalable_target(
+        &self,
+        input: DeregisterScalableTargetRequest,
+    ) -> RusotoFuture<DeregisterScalableTargetResponse, DeregisterScalableTargetError> {
+        ApplicationAutoScaling::deregister_scalable_target(&(**self), input)
+    }
+
+    /// <p>Gets information about the scalable targets in the specified namespace.</p> <p>You can filter the results using the <code>ResourceIds</code> and <code>ScalableDimension</code> parameters.</p> <p>To create a scalable target or update an existing one, see <a>RegisterScalableTarget</a>. If you are no longer using a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>
+    fn describe_scalable_targets(
+        &self,
+        input: DescribeScalableTargetsRequest,
+    ) -> RusotoFuture<DescribeScalableTargetsResponse, DescribeScalableTargetsError> {
+        ApplicationAutoScaling::describe_scalable_targets(&(**self), input)
+    }
+
+    /// <p>Provides descriptive information about the scaling activities in the specified namespace from the previous six weeks.</p> <p>You can filter the results using the <code>ResourceId</code> and <code>ScalableDimension</code> parameters.</p> <p>Scaling activities are triggered by CloudWatch alarms that are associated with scaling policies. To view the scaling policies for a service namespace, see <a>DescribeScalingPolicies</a>. To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>.</p>
+    fn describe_scaling_activities(
+        &self,
+        input: DescribeScalingActivitiesRequest,
+    ) -> RusotoFuture<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError> {
+        ApplicationAutoScaling::describe_scaling_activities(&(**self), input)
+    }
+
+    /// <p>Describes the scaling policies for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>PolicyNames</code> parameters.</p> <p>To create a scaling policy or update an existing one, see <a>PutScalingPolicy</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>
+    fn describe_scaling_policies(
+        &self,
+        input: DescribeScalingPoliciesRequest,
+    ) -> RusotoFuture<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError> {
+        ApplicationAutoScaling::describe_scaling_policies(&(**self), input)
+    }
+
+    /// <p>Describes the scheduled actions for the specified service namespace.</p> <p>You can filter the results using the <code>ResourceId</code>, <code>ScalableDimension</code>, and <code>ScheduledActionNames</code> parameters.</p> <p>To create a scheduled action or update an existing one, see <a>PutScheduledAction</a>. If you are no longer using a scheduled action, you can delete it using <a>DeleteScheduledAction</a>.</p>
+    fn describe_scheduled_actions(
+        &self,
+        input: DescribeScheduledActionsRequest,
+    ) -> RusotoFuture<DescribeScheduledActionsResponse, DescribeScheduledActionsError> {
+        ApplicationAutoScaling::describe_scheduled_actions(&(**self), input)
+    }
+
+    /// <p>Creates or updates a policy for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scaling policy applies to the scalable target identified by those three attributes. You cannot create a scaling policy until you register the scalable target using <a>RegisterScalableTarget</a>.</p> <p>To update a policy, specify its policy name and the parameters that you want to change. Any parameters that you don't specify are not changed by this update request.</p> <p>You can view the scaling policies for a service namespace using <a>DescribeScalingPolicies</a>. If you are no longer using a scaling policy, you can delete it using <a>DeleteScalingPolicy</a>.</p>
+    fn put_scaling_policy(
+        &self,
+        input: PutScalingPolicyRequest,
+    ) -> RusotoFuture<PutScalingPolicyResponse, PutScalingPolicyError> {
+        ApplicationAutoScaling::put_scaling_policy(&(**self), input)
+    }
+
+    /// <p>Creates or updates a scheduled action for an Application Auto Scaling scalable target.</p> <p>Each scalable target is identified by a service namespace, resource ID, and scalable dimension. A scheduled action applies to the scalable target identified by those three attributes. You cannot create a scheduled action until you register the scalable target using <a>RegisterScalableTarget</a>.</p> <p>To update an action, specify its name and the parameters that you want to change. If you don't specify start and end times, the old values are deleted. Any other parameters that you don't specify are not changed by this update request.</p> <p>You can view the scheduled actions using <a>DescribeScheduledActions</a>. If you are no longer using a scheduled action, you can delete it using <a>DeleteScheduledAction</a>.</p>
+    fn put_scheduled_action(
+        &self,
+        input: PutScheduledActionRequest,
+    ) -> RusotoFuture<PutScheduledActionResponse, PutScheduledActionError> {
+        ApplicationAutoScaling::put_scheduled_action(&(**self), input)
+    }
+
+    /// <p>Registers or updates a scalable target. A scalable target is a resource that Application Auto Scaling can scale out or scale in. After you have registered a scalable target, you can use this operation to update the minimum and maximum values for its scalable dimension.</p> <p>After you register a scalable target, you can create and apply scaling policies using <a>PutScalingPolicy</a>. You can view the scaling policies for a service namespace using <a>DescribeScalableTargets</a>. If you no longer need a scalable target, you can deregister it using <a>DeregisterScalableTarget</a>.</p>
+    fn register_scalable_target(
+        &self,
+        input: RegisterScalableTargetRequest,
+    ) -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError> {
+        ApplicationAutoScaling::register_scalable_target(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

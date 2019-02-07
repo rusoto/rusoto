@@ -2492,5 +2492,112 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     }
 }
 
+impl<T: ?Sized + Iot1ClickProjects> Iot1ClickProjects for ::std::rc::Rc<T> {
+    /// <p>Associates a physical device with a placement.</p>
+    fn associate_device_with_placement(
+        &self,
+        input: AssociateDeviceWithPlacementRequest,
+    ) -> RusotoFuture<AssociateDeviceWithPlacementResponse, AssociateDeviceWithPlacementError> {
+        Iot1ClickProjects::associate_device_with_placement(&(**self), input)
+    }
+
+    /// <p>Creates an empty placement.</p>
+    fn create_placement(
+        &self,
+        input: CreatePlacementRequest,
+    ) -> RusotoFuture<CreatePlacementResponse, CreatePlacementError> {
+        Iot1ClickProjects::create_placement(&(**self), input)
+    }
+
+    /// <p>Creates an empty project with a placement template. A project contains zero or more placements that adhere to the placement template defined in the project.</p>
+    fn create_project(
+        &self,
+        input: CreateProjectRequest,
+    ) -> RusotoFuture<CreateProjectResponse, CreateProjectError> {
+        Iot1ClickProjects::create_project(&(**self), input)
+    }
+
+    /// <p><p>Deletes a placement. To delete a placement, it must not have any devices associated with it.</p> <note> <p>When you delete a placement, all associated data becomes irretrievable.</p> </note></p>
+    fn delete_placement(
+        &self,
+        input: DeletePlacementRequest,
+    ) -> RusotoFuture<DeletePlacementResponse, DeletePlacementError> {
+        Iot1ClickProjects::delete_placement(&(**self), input)
+    }
+
+    /// <p><p>Deletes a project. To delete a project, it must not have any placements associated with it.</p> <note> <p>When you delete a project, all associated data becomes irretrievable.</p> </note></p>
+    fn delete_project(
+        &self,
+        input: DeleteProjectRequest,
+    ) -> RusotoFuture<DeleteProjectResponse, DeleteProjectError> {
+        Iot1ClickProjects::delete_project(&(**self), input)
+    }
+
+    /// <p>Describes a placement in a project.</p>
+    fn describe_placement(
+        &self,
+        input: DescribePlacementRequest,
+    ) -> RusotoFuture<DescribePlacementResponse, DescribePlacementError> {
+        Iot1ClickProjects::describe_placement(&(**self), input)
+    }
+
+    /// <p>Returns an object describing a project.</p>
+    fn describe_project(
+        &self,
+        input: DescribeProjectRequest,
+    ) -> RusotoFuture<DescribeProjectResponse, DescribeProjectError> {
+        Iot1ClickProjects::describe_project(&(**self), input)
+    }
+
+    /// <p>Removes a physical device from a placement.</p>
+    fn disassociate_device_from_placement(
+        &self,
+        input: DisassociateDeviceFromPlacementRequest,
+    ) -> RusotoFuture<DisassociateDeviceFromPlacementResponse, DisassociateDeviceFromPlacementError>
+    {
+        Iot1ClickProjects::disassociate_device_from_placement(&(**self), input)
+    }
+
+    /// <p>Returns an object enumerating the devices in a placement.</p>
+    fn get_devices_in_placement(
+        &self,
+        input: GetDevicesInPlacementRequest,
+    ) -> RusotoFuture<GetDevicesInPlacementResponse, GetDevicesInPlacementError> {
+        Iot1ClickProjects::get_devices_in_placement(&(**self), input)
+    }
+
+    /// <p>Lists the placement(s) of a project.</p>
+    fn list_placements(
+        &self,
+        input: ListPlacementsRequest,
+    ) -> RusotoFuture<ListPlacementsResponse, ListPlacementsError> {
+        Iot1ClickProjects::list_placements(&(**self), input)
+    }
+
+    /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
+    fn list_projects(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoFuture<ListProjectsResponse, ListProjectsError> {
+        Iot1ClickProjects::list_projects(&(**self), input)
+    }
+
+    /// <p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., "").</p>
+    fn update_placement(
+        &self,
+        input: UpdatePlacementRequest,
+    ) -> RusotoFuture<UpdatePlacementResponse, UpdatePlacementError> {
+        Iot1ClickProjects::update_placement(&(**self), input)
+    }
+
+    /// <p>Updates a project associated with your AWS account and region. With the exception of device template names, you can pass just the values that need to be updated because the update request will change only the values that are provided. To clear a value, pass the empty string (i.e., <code>""</code>).</p>
+    fn update_project(
+        &self,
+        input: UpdateProjectRequest,
+    ) -> RusotoFuture<UpdateProjectResponse, UpdateProjectError> {
+        Iot1ClickProjects::update_project(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

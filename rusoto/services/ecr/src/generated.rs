@@ -4214,5 +4214,180 @@ impl Ecr for EcrClient {
     }
 }
 
+impl<T: ?Sized + Ecr> Ecr for ::std::rc::Rc<T> {
+    /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    fn batch_check_layer_availability(
+        &self,
+        input: BatchCheckLayerAvailabilityRequest,
+    ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
+        Ecr::batch_check_layer_availability(&(**self), input)
+    }
+
+    /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
+    fn batch_delete_image(
+        &self,
+        input: BatchDeleteImageRequest,
+    ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError> {
+        Ecr::batch_delete_image(&(**self), input)
+    }
+
+    /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
+    fn batch_get_image(
+        &self,
+        input: BatchGetImageRequest,
+    ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError> {
+        Ecr::batch_get_image(&(**self), input)
+    }
+
+    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    fn complete_layer_upload(
+        &self,
+        input: CompleteLayerUploadRequest,
+    ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError> {
+        Ecr::complete_layer_upload(&(**self), input)
+    }
+
+    /// <p>Creates an image repository.</p>
+    fn create_repository(
+        &self,
+        input: CreateRepositoryRequest,
+    ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError> {
+        Ecr::create_repository(&(**self), input)
+    }
+
+    /// <p>Deletes the specified lifecycle policy.</p>
+    fn delete_lifecycle_policy(
+        &self,
+        input: DeleteLifecyclePolicyRequest,
+    ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
+        Ecr::delete_lifecycle_policy(&(**self), input)
+    }
+
+    /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
+    fn delete_repository(
+        &self,
+        input: DeleteRepositoryRequest,
+    ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError> {
+        Ecr::delete_repository(&(**self), input)
+    }
+
+    /// <p>Deletes the repository policy from a specified repository.</p>
+    fn delete_repository_policy(
+        &self,
+        input: DeleteRepositoryPolicyRequest,
+    ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
+        Ecr::delete_repository_policy(&(**self), input)
+    }
+
+    /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
+    fn describe_images(
+        &self,
+        input: DescribeImagesRequest,
+    ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError> {
+        Ecr::describe_images(&(**self), input)
+    }
+
+    /// <p>Describes image repositories in a registry.</p>
+    fn describe_repositories(
+        &self,
+        input: DescribeRepositoriesRequest,
+    ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError> {
+        Ecr::describe_repositories(&(**self), input)
+    }
+
+    /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
+    fn get_authorization_token(
+        &self,
+        input: GetAuthorizationTokenRequest,
+    ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
+        Ecr::get_authorization_token(&(**self), input)
+    }
+
+    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    fn get_download_url_for_layer(
+        &self,
+        input: GetDownloadUrlForLayerRequest,
+    ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
+        Ecr::get_download_url_for_layer(&(**self), input)
+    }
+
+    /// <p>Retrieves the specified lifecycle policy.</p>
+    fn get_lifecycle_policy(
+        &self,
+        input: GetLifecyclePolicyRequest,
+    ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
+        Ecr::get_lifecycle_policy(&(**self), input)
+    }
+
+    /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
+    fn get_lifecycle_policy_preview(
+        &self,
+        input: GetLifecyclePolicyPreviewRequest,
+    ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
+        Ecr::get_lifecycle_policy_preview(&(**self), input)
+    }
+
+    /// <p>Retrieves the repository policy for a specified repository.</p>
+    fn get_repository_policy(
+        &self,
+        input: GetRepositoryPolicyRequest,
+    ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
+        Ecr::get_repository_policy(&(**self), input)
+    }
+
+    /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    fn initiate_layer_upload(
+        &self,
+        input: InitiateLayerUploadRequest,
+    ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError> {
+        Ecr::initiate_layer_upload(&(**self), input)
+    }
+
+    /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
+    fn list_images(
+        &self,
+        input: ListImagesRequest,
+    ) -> RusotoFuture<ListImagesResponse, ListImagesError> {
+        Ecr::list_images(&(**self), input)
+    }
+
+    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
+        Ecr::put_image(&(**self), input)
+    }
+
+    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
+    fn put_lifecycle_policy(
+        &self,
+        input: PutLifecyclePolicyRequest,
+    ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
+        Ecr::put_lifecycle_policy(&(**self), input)
+    }
+
+    /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
+    fn set_repository_policy(
+        &self,
+        input: SetRepositoryPolicyRequest,
+    ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
+        Ecr::set_repository_policy(&(**self), input)
+    }
+
+    /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
+    fn start_lifecycle_policy_preview(
+        &self,
+        input: StartLifecyclePolicyPreviewRequest,
+    ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
+        Ecr::start_lifecycle_policy_preview(&(**self), input)
+    }
+
+    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    fn upload_layer_part(
+        &self,
+        input: UploadLayerPartRequest,
+    ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError> {
+        Ecr::upload_layer_part(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

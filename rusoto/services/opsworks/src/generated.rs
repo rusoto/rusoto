@@ -11914,5 +11914,549 @@ impl OpsWorks for OpsWorksClient {
     }
 }
 
+impl<T: ?Sized + OpsWorks> OpsWorks for ::std::rc::Rc<T> {
+    /// <p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn assign_instance(
+        &self,
+        input: AssignInstanceRequest,
+    ) -> RusotoFuture<(), AssignInstanceError> {
+        OpsWorks::assign_instance(&(**self), input)
+    }
+
+    /// <p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn assign_volume(&self, input: AssignVolumeRequest) -> RusotoFuture<(), AssignVolumeError> {
+        OpsWorks::assign_volume(&(**self), input)
+    }
+
+    /// <p>Associates one of the stack's registered Elastic IP addresses with a specified instance. The address must first be registered with the stack by calling <a>RegisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn associate_elastic_ip(
+        &self,
+        input: AssociateElasticIpRequest,
+    ) -> RusotoFuture<(), AssociateElasticIpError> {
+        OpsWorks::associate_elastic_ip(&(**self), input)
+    }
+
+    /// <p>Attaches an Elastic Load Balancing load balancer to a specified layer. AWS OpsWorks Stacks does not support Application Load Balancer. You can only use Classic Load Balancer with AWS OpsWorks Stacks. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/layers-elb.html">Elastic Load Balancing</a>.</p> <note> <p>You must create the Elastic Load Balancing instance separately, by using the Elastic Load Balancing console, API, or CLI. For more information, see <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/Welcome.html"> Elastic Load Balancing Developer Guide</a>.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn attach_elastic_load_balancer(
+        &self,
+        input: AttachElasticLoadBalancerRequest,
+    ) -> RusotoFuture<(), AttachElasticLoadBalancerError> {
+        OpsWorks::attach_elastic_load_balancer(&(**self), input)
+    }
+
+    /// <p>Creates a clone of a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn clone_stack(
+        &self,
+        input: CloneStackRequest,
+    ) -> RusotoFuture<CloneStackResult, CloneStackError> {
+        OpsWorks::clone_stack(&(**self), input)
+    }
+
+    /// <p>Creates an app for a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError> {
+        OpsWorks::create_app(&(**self), input)
+    }
+
+    /// <p>Runs deployment or stack commands. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-deploying.html">Deploying Apps</a> and <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-commands.html">Run Stack Commands</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError> {
+        OpsWorks::create_deployment(&(**self), input)
+    }
+
+    /// <p>Creates an instance in a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html">Adding an Instance to a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_instance(
+        &self,
+        input: CreateInstanceRequest,
+    ) -> RusotoFuture<CreateInstanceResult, CreateInstanceError> {
+        OpsWorks::create_instance(&(**self), input)
+    }
+
+    /// <p>Creates a layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-create.html">How to Create a Layer</a>.</p> <note> <p>You should use <b>CreateLayer</b> for noncustom layer types such as PHP App Server only if the stack does not have an existing layer of that type. A stack can have at most one instance of each noncustom layer; if you attempt to create a second instance, <b>CreateLayer</b> fails. A stack can have an arbitrary number of custom layers, so you can call <b>CreateLayer</b> as many times as you like for that layer type.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_layer(
+        &self,
+        input: CreateLayerRequest,
+    ) -> RusotoFuture<CreateLayerResult, CreateLayerError> {
+        OpsWorks::create_layer(&(**self), input)
+    }
+
+    /// <p>Creates a new stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-edit.html">Create a New Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_stack(
+        &self,
+        input: CreateStackRequest,
+    ) -> RusotoFuture<CreateStackResult, CreateStackError> {
+        OpsWorks::create_stack(&(**self), input)
+    }
+
+    /// <p>Creates a new user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_user_profile(
+        &self,
+        input: CreateUserProfileRequest,
+    ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
+        OpsWorks::create_user_profile(&(**self), input)
+    }
+
+    /// <p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<(), DeleteAppError> {
+        OpsWorks::delete_app(&(**self), input)
+    }
+
+    /// <p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_instance(
+        &self,
+        input: DeleteInstanceRequest,
+    ) -> RusotoFuture<(), DeleteInstanceError> {
+        OpsWorks::delete_instance(&(**self), input)
+    }
+
+    /// <p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_layer(&self, input: DeleteLayerRequest) -> RusotoFuture<(), DeleteLayerError> {
+        OpsWorks::delete_layer(&(**self), input)
+    }
+
+    /// <p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_stack(&self, input: DeleteStackRequest) -> RusotoFuture<(), DeleteStackError> {
+        OpsWorks::delete_stack(&(**self), input)
+    }
+
+    /// <p>Deletes a user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_user_profile(
+        &self,
+        input: DeleteUserProfileRequest,
+    ) -> RusotoFuture<(), DeleteUserProfileError> {
+        OpsWorks::delete_user_profile(&(**self), input)
+    }
+
+    /// <p>Deregisters a specified Amazon ECS cluster from a stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html#workinglayers-ecscluster-delete"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html</a>.</p>
+    fn deregister_ecs_cluster(
+        &self,
+        input: DeregisterEcsClusterRequest,
+    ) -> RusotoFuture<(), DeregisterEcsClusterError> {
+        OpsWorks::deregister_ecs_cluster(&(**self), input)
+    }
+
+    /// <p>Deregisters a specified Elastic IP address. The address can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_elastic_ip(
+        &self,
+        input: DeregisterElasticIpRequest,
+    ) -> RusotoFuture<(), DeregisterElasticIpError> {
+        OpsWorks::deregister_elastic_ip(&(**self), input)
+    }
+
+    /// <p>Deregister a registered Amazon EC2 or on-premises instance. This action removes the instance from the stack and returns it to your control. This action cannot be used with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_instance(
+        &self,
+        input: DeregisterInstanceRequest,
+    ) -> RusotoFuture<(), DeregisterInstanceError> {
+        OpsWorks::deregister_instance(&(**self), input)
+    }
+
+    /// <p>Deregisters an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_rds_db_instance(
+        &self,
+        input: DeregisterRdsDbInstanceRequest,
+    ) -> RusotoFuture<(), DeregisterRdsDbInstanceError> {
+        OpsWorks::deregister_rds_db_instance(&(**self), input)
+    }
+
+    /// <p>Deregisters an Amazon EBS volume. The volume can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_volume(
+        &self,
+        input: DeregisterVolumeRequest,
+    ) -> RusotoFuture<(), DeregisterVolumeError> {
+        OpsWorks::deregister_volume(&(**self), input)
+    }
+
+    /// <p>Describes the available AWS OpsWorks Stacks agent versions. You must specify a stack ID or a configuration manager. <code>DescribeAgentVersions</code> returns a list of available agent versions for the specified stack or configuration manager.</p>
+    fn describe_agent_versions(
+        &self,
+        input: DescribeAgentVersionsRequest,
+    ) -> RusotoFuture<DescribeAgentVersionsResult, DescribeAgentVersionsError> {
+        OpsWorks::describe_agent_versions(&(**self), input)
+    }
+
+    /// <p>Requests a description of a specified set of apps.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_apps(
+        &self,
+        input: DescribeAppsRequest,
+    ) -> RusotoFuture<DescribeAppsResult, DescribeAppsError> {
+        OpsWorks::describe_apps(&(**self), input)
+    }
+
+    /// <p>Describes the results of specified commands.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_commands(
+        &self,
+        input: DescribeCommandsRequest,
+    ) -> RusotoFuture<DescribeCommandsResult, DescribeCommandsError> {
+        OpsWorks::describe_commands(&(**self), input)
+    }
+
+    /// <p>Requests a description of a specified set of deployments.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_deployments(
+        &self,
+        input: DescribeDeploymentsRequest,
+    ) -> RusotoFuture<DescribeDeploymentsResult, DescribeDeploymentsError> {
+        OpsWorks::describe_deployments(&(**self), input)
+    }
+
+    /// <p>Describes Amazon ECS clusters that are registered with a stack. If you specify only a stack ID, you can use the <code>MaxResults</code> and <code>NextToken</code> parameters to paginate the response. However, AWS OpsWorks Stacks currently supports only one cluster per layer, so the result set has a maximum of one element.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permission. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
+    fn describe_ecs_clusters(
+        &self,
+        input: DescribeEcsClustersRequest,
+    ) -> RusotoFuture<DescribeEcsClustersResult, DescribeEcsClustersError> {
+        OpsWorks::describe_ecs_clusters(&(**self), input)
+    }
+
+    /// <p>Describes <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_elastic_ips(
+        &self,
+        input: DescribeElasticIpsRequest,
+    ) -> RusotoFuture<DescribeElasticIpsResult, DescribeElasticIpsError> {
+        OpsWorks::describe_elastic_ips(&(**self), input)
+    }
+
+    /// <p>Describes a stack's Elastic Load Balancing instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_elastic_load_balancers(
+        &self,
+        input: DescribeElasticLoadBalancersRequest,
+    ) -> RusotoFuture<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError> {
+        OpsWorks::describe_elastic_load_balancers(&(**self), input)
+    }
+
+    /// <p>Requests a description of a set of instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_instances(
+        &self,
+        input: DescribeInstancesRequest,
+    ) -> RusotoFuture<DescribeInstancesResult, DescribeInstancesError> {
+        OpsWorks::describe_instances(&(**self), input)
+    }
+
+    /// <p>Requests a description of one or more layers in a specified stack.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_layers(
+        &self,
+        input: DescribeLayersRequest,
+    ) -> RusotoFuture<DescribeLayersResult, DescribeLayersError> {
+        OpsWorks::describe_layers(&(**self), input)
+    }
+
+    /// <p>Describes load-based auto scaling configurations for specified layers.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_load_based_auto_scaling(
+        &self,
+        input: DescribeLoadBasedAutoScalingRequest,
+    ) -> RusotoFuture<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError> {
+        OpsWorks::describe_load_based_auto_scaling(&(**self), input)
+    }
+
+    /// <p>Describes a user's SSH information.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_my_user_profile(
+        &self,
+    ) -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError> {
+        OpsWorks::describe_my_user_profile(&(**self))
+    }
+
+    /// <p>Describes the operating systems that are supported by AWS OpsWorks Stacks.</p>
+    fn describe_operating_systems(
+        &self,
+    ) -> RusotoFuture<DescribeOperatingSystemsResponse, DescribeOperatingSystemsError> {
+        OpsWorks::describe_operating_systems(&(**self))
+    }
+
+    /// <p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_permissions(
+        &self,
+        input: DescribePermissionsRequest,
+    ) -> RusotoFuture<DescribePermissionsResult, DescribePermissionsError> {
+        OpsWorks::describe_permissions(&(**self), input)
+    }
+
+    /// <p>Describe an instance's RAID arrays.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_raid_arrays(
+        &self,
+        input: DescribeRaidArraysRequest,
+    ) -> RusotoFuture<DescribeRaidArraysResult, DescribeRaidArraysError> {
+        OpsWorks::describe_raid_arrays(&(**self), input)
+    }
+
+    /// <p>Describes Amazon RDS instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
+    fn describe_rds_db_instances(
+        &self,
+        input: DescribeRdsDbInstancesRequest,
+    ) -> RusotoFuture<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError> {
+        OpsWorks::describe_rds_db_instances(&(**self), input)
+    }
+
+    /// <p>Describes AWS OpsWorks Stacks service errors.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
+    fn describe_service_errors(
+        &self,
+        input: DescribeServiceErrorsRequest,
+    ) -> RusotoFuture<DescribeServiceErrorsResult, DescribeServiceErrorsError> {
+        OpsWorks::describe_service_errors(&(**self), input)
+    }
+
+    /// <p>Requests a description of a stack's provisioning parameters.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_stack_provisioning_parameters(
+        &self,
+        input: DescribeStackProvisioningParametersRequest,
+    ) -> RusotoFuture<
+        DescribeStackProvisioningParametersResult,
+        DescribeStackProvisioningParametersError,
+    > {
+        OpsWorks::describe_stack_provisioning_parameters(&(**self), input)
+    }
+
+    /// <p>Describes the number of layers and apps in a specified stack, and the number of instances in each state, such as <code>running_setup</code> or <code>online</code>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_stack_summary(
+        &self,
+        input: DescribeStackSummaryRequest,
+    ) -> RusotoFuture<DescribeStackSummaryResult, DescribeStackSummaryError> {
+        OpsWorks::describe_stack_summary(&(**self), input)
+    }
+
+    /// <p>Requests a description of one or more stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_stacks(
+        &self,
+        input: DescribeStacksRequest,
+    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
+        OpsWorks::describe_stacks(&(**self), input)
+    }
+
+    /// <p>Describes time-based auto scaling configurations for specified instances.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_time_based_auto_scaling(
+        &self,
+        input: DescribeTimeBasedAutoScalingRequest,
+    ) -> RusotoFuture<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError> {
+        OpsWorks::describe_time_based_auto_scaling(&(**self), input)
+    }
+
+    /// <p>Describe specified users.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_user_profiles(
+        &self,
+        input: DescribeUserProfilesRequest,
+    ) -> RusotoFuture<DescribeUserProfilesResult, DescribeUserProfilesError> {
+        OpsWorks::describe_user_profiles(&(**self), input)
+    }
+
+    /// <p>Describes an instance's Amazon EBS volumes.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_volumes(
+        &self,
+        input: DescribeVolumesRequest,
+    ) -> RusotoFuture<DescribeVolumesResult, DescribeVolumesError> {
+        OpsWorks::describe_volumes(&(**self), input)
+    }
+
+    /// <p>Detaches a specified Elastic Load Balancing instance from its layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn detach_elastic_load_balancer(
+        &self,
+        input: DetachElasticLoadBalancerRequest,
+    ) -> RusotoFuture<(), DetachElasticLoadBalancerError> {
+        OpsWorks::detach_elastic_load_balancer(&(**self), input)
+    }
+
+    /// <p>Disassociates an Elastic IP address from its instance. The address remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn disassociate_elastic_ip(
+        &self,
+        input: DisassociateElasticIpRequest,
+    ) -> RusotoFuture<(), DisassociateElasticIpError> {
+        OpsWorks::disassociate_elastic_ip(&(**self), input)
+    }
+
+    /// <p>Gets a generated host name for the specified layer, based on the current host name theme.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn get_hostname_suggestion(
+        &self,
+        input: GetHostnameSuggestionRequest,
+    ) -> RusotoFuture<GetHostnameSuggestionResult, GetHostnameSuggestionError> {
+        OpsWorks::get_hostname_suggestion(&(**self), input)
+    }
+
+    /// <p><note> <p>This action can be used only with Windows stacks.</p> </note> <p>Grants RDP access to a Windows instance for a specified time period.</p></p>
+    fn grant_access(
+        &self,
+        input: GrantAccessRequest,
+    ) -> RusotoFuture<GrantAccessResult, GrantAccessError> {
+        OpsWorks::grant_access(&(**self), input)
+    }
+
+    /// <p>Returns a list of tags that are applied to the specified stack or layer.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResult, ListTagsError> {
+        OpsWorks::list_tags(&(**self), input)
+    }
+
+    /// <p>Reboots a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn reboot_instance(
+        &self,
+        input: RebootInstanceRequest,
+    ) -> RusotoFuture<(), RebootInstanceError> {
+        OpsWorks::reboot_instance(&(**self), input)
+    }
+
+    /// <p>Registers a specified Amazon ECS cluster with a stack. You can register only one cluster with a stack. A cluster can be registered with only one stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html"> Managing User Permissions</a>.</p>
+    fn register_ecs_cluster(
+        &self,
+        input: RegisterEcsClusterRequest,
+    ) -> RusotoFuture<RegisterEcsClusterResult, RegisterEcsClusterError> {
+        OpsWorks::register_ecs_cluster(&(**self), input)
+    }
+
+    /// <p>Registers an Elastic IP address with a specified stack. An address can be registered with only one stack at a time. If the address is already registered, you must first deregister it by calling <a>DeregisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_elastic_ip(
+        &self,
+        input: RegisterElasticIpRequest,
+    ) -> RusotoFuture<RegisterElasticIpResult, RegisterElasticIpError> {
+        OpsWorks::register_elastic_ip(&(**self), input)
+    }
+
+    /// <p>Registers instances that were created outside of AWS OpsWorks Stacks with a specified stack.</p> <note> <p>We do not recommend using this action to register instances. The complete registration operation includes two tasks: installing the AWS OpsWorks Stacks agent on the instance, and registering the instance with the stack. <code>RegisterInstance</code> handles only the second step. You should instead use the AWS CLI <code>register</code> command, which performs the entire registration operation. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register.html"> Registering an Instance with an AWS OpsWorks Stacks Stack</a>.</p> </note> <p>Registered instances have the same requirements as instances that are created by using the <a>CreateInstance</a> API. For example, registered instances must be running a supported Linux-based operating system, and they must have a supported instance type. For more information about requirements for instances that you want to register, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register-registering-preparer.html"> Preparing the Instance</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_instance(
+        &self,
+        input: RegisterInstanceRequest,
+    ) -> RusotoFuture<RegisterInstanceResult, RegisterInstanceError> {
+        OpsWorks::register_instance(&(**self), input)
+    }
+
+    /// <p>Registers an Amazon RDS instance with a stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_rds_db_instance(
+        &self,
+        input: RegisterRdsDbInstanceRequest,
+    ) -> RusotoFuture<(), RegisterRdsDbInstanceError> {
+        OpsWorks::register_rds_db_instance(&(**self), input)
+    }
+
+    /// <p>Registers an Amazon EBS volume with a specified stack. A volume can be registered with only one stack at a time. If the volume is already registered, you must first deregister it by calling <a>DeregisterVolume</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_volume(
+        &self,
+        input: RegisterVolumeRequest,
+    ) -> RusotoFuture<RegisterVolumeResult, RegisterVolumeError> {
+        OpsWorks::register_volume(&(**self), input)
+    }
+
+    /// <p>Specify the load-based auto scaling configuration for a specified layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <note> <p>To use load-based auto scaling, you must create a set of load-based auto scaling instances. Load-based auto scaling operates only on the instances from that set, so you must ensure that you have created enough instances to handle the maximum anticipated load.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn set_load_based_auto_scaling(
+        &self,
+        input: SetLoadBasedAutoScalingRequest,
+    ) -> RusotoFuture<(), SetLoadBasedAutoScalingError> {
+        OpsWorks::set_load_based_auto_scaling(&(**self), input)
+    }
+
+    /// <p>Specifies a user's permissions. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn set_permission(&self, input: SetPermissionRequest) -> RusotoFuture<(), SetPermissionError> {
+        OpsWorks::set_permission(&(**self), input)
+    }
+
+    /// <p>Specify the time-based auto scaling configuration for a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn set_time_based_auto_scaling(
+        &self,
+        input: SetTimeBasedAutoScalingRequest,
+    ) -> RusotoFuture<(), SetTimeBasedAutoScalingError> {
+        OpsWorks::set_time_based_auto_scaling(&(**self), input)
+    }
+
+    /// <p>Starts a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn start_instance(&self, input: StartInstanceRequest) -> RusotoFuture<(), StartInstanceError> {
+        OpsWorks::start_instance(&(**self), input)
+    }
+
+    /// <p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn start_stack(&self, input: StartStackRequest) -> RusotoFuture<(), StartStackError> {
+        OpsWorks::start_stack(&(**self), input)
+    }
+
+    /// <p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn stop_instance(&self, input: StopInstanceRequest) -> RusotoFuture<(), StopInstanceError> {
+        OpsWorks::stop_instance(&(**self), input)
+    }
+
+    /// <p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn stop_stack(&self, input: StopStackRequest) -> RusotoFuture<(), StopStackError> {
+        OpsWorks::stop_stack(&(**self), input)
+    }
+
+    /// <p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html">Tags</a> in the AWS OpsWorks User Guide.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+        OpsWorks::tag_resource(&(**self), input)
+    }
+
+    /// <p>Unassigns a registered instance from all layers that are using the instance. The instance remains in the stack as an unassigned instance, and can be assigned to another layer as needed. You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn unassign_instance(
+        &self,
+        input: UnassignInstanceRequest,
+    ) -> RusotoFuture<(), UnassignInstanceError> {
+        OpsWorks::unassign_instance(&(**self), input)
+    }
+
+    /// <p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn unassign_volume(
+        &self,
+        input: UnassignVolumeRequest,
+    ) -> RusotoFuture<(), UnassignVolumeError> {
+        OpsWorks::unassign_volume(&(**self), input)
+    }
+
+    /// <p>Removes tags from a specified stack or layer.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        OpsWorks::untag_resource(&(**self), input)
+    }
+
+    /// <p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<(), UpdateAppError> {
+        OpsWorks::update_app(&(**self), input)
+    }
+
+    /// <p>Updates a registered Elastic IP address's name. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_elastic_ip(
+        &self,
+        input: UpdateElasticIpRequest,
+    ) -> RusotoFuture<(), UpdateElasticIpError> {
+        OpsWorks::update_elastic_ip(&(**self), input)
+    }
+
+    /// <p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_instance(
+        &self,
+        input: UpdateInstanceRequest,
+    ) -> RusotoFuture<(), UpdateInstanceError> {
+        OpsWorks::update_instance(&(**self), input)
+    }
+
+    /// <p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_layer(&self, input: UpdateLayerRequest) -> RusotoFuture<(), UpdateLayerError> {
+        OpsWorks::update_layer(&(**self), input)
+    }
+
+    /// <p>Updates a user's SSH public key.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_my_user_profile(
+        &self,
+        input: UpdateMyUserProfileRequest,
+    ) -> RusotoFuture<(), UpdateMyUserProfileError> {
+        OpsWorks::update_my_user_profile(&(**self), input)
+    }
+
+    /// <p>Updates an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_rds_db_instance(
+        &self,
+        input: UpdateRdsDbInstanceRequest,
+    ) -> RusotoFuture<(), UpdateRdsDbInstanceError> {
+        OpsWorks::update_rds_db_instance(&(**self), input)
+    }
+
+    /// <p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_stack(&self, input: UpdateStackRequest) -> RusotoFuture<(), UpdateStackError> {
+        OpsWorks::update_stack(&(**self), input)
+    }
+
+    /// <p>Updates a specified user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_user_profile(
+        &self,
+        input: UpdateUserProfileRequest,
+    ) -> RusotoFuture<(), UpdateUserProfileError> {
+        OpsWorks::update_user_profile(&(**self), input)
+    }
+
+    /// <p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_volume(&self, input: UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError> {
+        OpsWorks::update_volume(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

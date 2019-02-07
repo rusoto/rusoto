@@ -8860,5 +8860,280 @@ impl CodeCommit for CodeCommitClient {
     }
 }
 
+impl<T: ?Sized + CodeCommit> CodeCommit for ::std::rc::Rc<T> {
+    /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
+    fn batch_get_repositories(
+        &self,
+        input: BatchGetRepositoriesInput,
+    ) -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
+        CodeCommit::batch_get_repositories(&(**self), input)
+    }
+
+    /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
+    fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError> {
+        CodeCommit::create_branch(&(**self), input)
+    }
+
+    /// <p>Creates a pull request in the specified repository.</p>
+    fn create_pull_request(
+        &self,
+        input: CreatePullRequestInput,
+    ) -> RusotoFuture<CreatePullRequestOutput, CreatePullRequestError> {
+        CodeCommit::create_pull_request(&(**self), input)
+    }
+
+    /// <p>Creates a new, empty repository.</p>
+    fn create_repository(
+        &self,
+        input: CreateRepositoryInput,
+    ) -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError> {
+        CodeCommit::create_repository(&(**self), input)
+    }
+
+    /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
+    fn delete_branch(
+        &self,
+        input: DeleteBranchInput,
+    ) -> RusotoFuture<DeleteBranchOutput, DeleteBranchError> {
+        CodeCommit::delete_branch(&(**self), input)
+    }
+
+    /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
+    fn delete_comment_content(
+        &self,
+        input: DeleteCommentContentInput,
+    ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError> {
+        CodeCommit::delete_comment_content(&(**self), input)
+    }
+
+    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
+    fn delete_repository(
+        &self,
+        input: DeleteRepositoryInput,
+    ) -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError> {
+        CodeCommit::delete_repository(&(**self), input)
+    }
+
+    /// <p>Returns information about one or more pull request events.</p>
+    fn describe_pull_request_events(
+        &self,
+        input: DescribePullRequestEventsInput,
+    ) -> RusotoFuture<DescribePullRequestEventsOutput, DescribePullRequestEventsError> {
+        CodeCommit::describe_pull_request_events(&(**self), input)
+    }
+
+    /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
+    fn get_blob(&self, input: GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError> {
+        CodeCommit::get_blob(&(**self), input)
+    }
+
+    /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
+    fn get_branch(&self, input: GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError> {
+        CodeCommit::get_branch(&(**self), input)
+    }
+
+    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    fn get_comment(
+        &self,
+        input: GetCommentInput,
+    ) -> RusotoFuture<GetCommentOutput, GetCommentError> {
+        CodeCommit::get_comment(&(**self), input)
+    }
+
+    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    fn get_comments_for_compared_commit(
+        &self,
+        input: GetCommentsForComparedCommitInput,
+    ) -> RusotoFuture<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError> {
+        CodeCommit::get_comments_for_compared_commit(&(**self), input)
+    }
+
+    /// <p>Returns comments made on a pull request.</p>
+    fn get_comments_for_pull_request(
+        &self,
+        input: GetCommentsForPullRequestInput,
+    ) -> RusotoFuture<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError> {
+        CodeCommit::get_comments_for_pull_request(&(**self), input)
+    }
+
+    /// <p>Returns information about a commit, including commit message and committer information.</p>
+    fn get_commit(&self, input: GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError> {
+        CodeCommit::get_commit(&(**self), input)
+    }
+
+    /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
+    fn get_differences(
+        &self,
+        input: GetDifferencesInput,
+    ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError> {
+        CodeCommit::get_differences(&(**self), input)
+    }
+
+    /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
+    fn get_merge_conflicts(
+        &self,
+        input: GetMergeConflictsInput,
+    ) -> RusotoFuture<GetMergeConflictsOutput, GetMergeConflictsError> {
+        CodeCommit::get_merge_conflicts(&(**self), input)
+    }
+
+    /// <p>Gets information about a pull request in a specified repository.</p>
+    fn get_pull_request(
+        &self,
+        input: GetPullRequestInput,
+    ) -> RusotoFuture<GetPullRequestOutput, GetPullRequestError> {
+        CodeCommit::get_pull_request(&(**self), input)
+    }
+
+    /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
+    fn get_repository(
+        &self,
+        input: GetRepositoryInput,
+    ) -> RusotoFuture<GetRepositoryOutput, GetRepositoryError> {
+        CodeCommit::get_repository(&(**self), input)
+    }
+
+    /// <p>Gets information about triggers configured for a repository.</p>
+    fn get_repository_triggers(
+        &self,
+        input: GetRepositoryTriggersInput,
+    ) -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
+        CodeCommit::get_repository_triggers(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more branches in a repository.</p>
+    fn list_branches(
+        &self,
+        input: ListBranchesInput,
+    ) -> RusotoFuture<ListBranchesOutput, ListBranchesError> {
+        CodeCommit::list_branches(&(**self), input)
+    }
+
+    /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
+    fn list_pull_requests(
+        &self,
+        input: ListPullRequestsInput,
+    ) -> RusotoFuture<ListPullRequestsOutput, ListPullRequestsError> {
+        CodeCommit::list_pull_requests(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more repositories.</p>
+    fn list_repositories(
+        &self,
+        input: ListRepositoriesInput,
+    ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError> {
+        CodeCommit::list_repositories(&(**self), input)
+    }
+
+    /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
+    fn merge_pull_request_by_fast_forward(
+        &self,
+        input: MergePullRequestByFastForwardInput,
+    ) -> RusotoFuture<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError> {
+        CodeCommit::merge_pull_request_by_fast_forward(&(**self), input)
+    }
+
+    /// <p>Posts a comment on the comparison between two commits.</p>
+    fn post_comment_for_compared_commit(
+        &self,
+        input: PostCommentForComparedCommitInput,
+    ) -> RusotoFuture<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError> {
+        CodeCommit::post_comment_for_compared_commit(&(**self), input)
+    }
+
+    /// <p>Posts a comment on a pull request.</p>
+    fn post_comment_for_pull_request(
+        &self,
+        input: PostCommentForPullRequestInput,
+    ) -> RusotoFuture<PostCommentForPullRequestOutput, PostCommentForPullRequestError> {
+        CodeCommit::post_comment_for_pull_request(&(**self), input)
+    }
+
+    /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
+    fn post_comment_reply(
+        &self,
+        input: PostCommentReplyInput,
+    ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError> {
+        CodeCommit::post_comment_reply(&(**self), input)
+    }
+
+    /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
+    fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
+        CodeCommit::put_file(&(**self), input)
+    }
+
+    /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
+    fn put_repository_triggers(
+        &self,
+        input: PutRepositoryTriggersInput,
+    ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
+        CodeCommit::put_repository_triggers(&(**self), input)
+    }
+
+    /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
+    fn test_repository_triggers(
+        &self,
+        input: TestRepositoryTriggersInput,
+    ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
+        CodeCommit::test_repository_triggers(&(**self), input)
+    }
+
+    /// <p>Replaces the contents of a comment.</p>
+    fn update_comment(
+        &self,
+        input: UpdateCommentInput,
+    ) -> RusotoFuture<UpdateCommentOutput, UpdateCommentError> {
+        CodeCommit::update_comment(&(**self), input)
+    }
+
+    /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
+    fn update_default_branch(
+        &self,
+        input: UpdateDefaultBranchInput,
+    ) -> RusotoFuture<(), UpdateDefaultBranchError> {
+        CodeCommit::update_default_branch(&(**self), input)
+    }
+
+    /// <p>Replaces the contents of the description of a pull request.</p>
+    fn update_pull_request_description(
+        &self,
+        input: UpdatePullRequestDescriptionInput,
+    ) -> RusotoFuture<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError> {
+        CodeCommit::update_pull_request_description(&(**self), input)
+    }
+
+    /// <p>Updates the status of a pull request. </p>
+    fn update_pull_request_status(
+        &self,
+        input: UpdatePullRequestStatusInput,
+    ) -> RusotoFuture<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError> {
+        CodeCommit::update_pull_request_status(&(**self), input)
+    }
+
+    /// <p>Replaces the title of a pull request.</p>
+    fn update_pull_request_title(
+        &self,
+        input: UpdatePullRequestTitleInput,
+    ) -> RusotoFuture<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError> {
+        CodeCommit::update_pull_request_title(&(**self), input)
+    }
+
+    /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
+    fn update_repository_description(
+        &self,
+        input: UpdateRepositoryDescriptionInput,
+    ) -> RusotoFuture<(), UpdateRepositoryDescriptionError> {
+        CodeCommit::update_repository_description(&(**self), input)
+    }
+
+    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
+    fn update_repository_name(
+        &self,
+        input: UpdateRepositoryNameInput,
+    ) -> RusotoFuture<(), UpdateRepositoryNameError> {
+        CodeCommit::update_repository_name(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

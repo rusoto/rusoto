@@ -7997,5 +7997,340 @@ impl GuardDuty for GuardDutyClient {
     }
 }
 
+impl<T: ?Sized + GuardDuty> GuardDuty for ::std::rc::Rc<T> {
+    /// <p>Accepts the invitation to be monitored by a master GuardDuty account.</p>
+    fn accept_invitation(
+        &self,
+        input: AcceptInvitationRequest,
+    ) -> RusotoFuture<AcceptInvitationResponse, AcceptInvitationError> {
+        GuardDuty::accept_invitation(&(**self), input)
+    }
+
+    /// <p>Archives Amazon GuardDuty findings specified by the list of finding IDs.</p>
+    fn archive_findings(
+        &self,
+        input: ArchiveFindingsRequest,
+    ) -> RusotoFuture<ArchiveFindingsResponse, ArchiveFindingsError> {
+        GuardDuty::archive_findings(&(**self), input)
+    }
+
+    /// <p>Creates a single Amazon GuardDuty detector. A detector is an object that represents the GuardDuty service. A detector must be created in order for GuardDuty to become operational.</p>
+    fn create_detector(
+        &self,
+        input: CreateDetectorRequest,
+    ) -> RusotoFuture<CreateDetectorResponse, CreateDetectorError> {
+        GuardDuty::create_detector(&(**self), input)
+    }
+
+    /// <p>Creates a filter using the specified finding criteria.</p>
+    fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> RusotoFuture<CreateFilterResponse, CreateFilterError> {
+        GuardDuty::create_filter(&(**self), input)
+    }
+
+    /// <p>Creates a new IPSet - a list of trusted IP addresses that have been whitelisted for secure communication with AWS infrastructure and applications.</p>
+    fn create_ip_set(
+        &self,
+        input: CreateIPSetRequest,
+    ) -> RusotoFuture<CreateIPSetResponse, CreateIPSetError> {
+        GuardDuty::create_ip_set(&(**self), input)
+    }
+
+    /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
+    fn create_members(
+        &self,
+        input: CreateMembersRequest,
+    ) -> RusotoFuture<CreateMembersResponse, CreateMembersError> {
+        GuardDuty::create_members(&(**self), input)
+    }
+
+    /// <p>Generates example findings of types specified by the list of finding types. If &#39;NULL&#39; is specified for findingTypes, the API generates example findings of all supported finding types.</p>
+    fn create_sample_findings(
+        &self,
+        input: CreateSampleFindingsRequest,
+    ) -> RusotoFuture<CreateSampleFindingsResponse, CreateSampleFindingsError> {
+        GuardDuty::create_sample_findings(&(**self), input)
+    }
+
+    /// <p>Create a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets.</p>
+    fn create_threat_intel_set(
+        &self,
+        input: CreateThreatIntelSetRequest,
+    ) -> RusotoFuture<CreateThreatIntelSetResponse, CreateThreatIntelSetError> {
+        GuardDuty::create_threat_intel_set(&(**self), input)
+    }
+
+    /// <p>Declines invitations sent to the current member account by AWS account specified by their account IDs.</p>
+    fn decline_invitations(
+        &self,
+        input: DeclineInvitationsRequest,
+    ) -> RusotoFuture<DeclineInvitationsResponse, DeclineInvitationsError> {
+        GuardDuty::decline_invitations(&(**self), input)
+    }
+
+    /// <p>Deletes a Amazon GuardDuty detector specified by the detector ID.</p>
+    fn delete_detector(
+        &self,
+        input: DeleteDetectorRequest,
+    ) -> RusotoFuture<DeleteDetectorResponse, DeleteDetectorError> {
+        GuardDuty::delete_detector(&(**self), input)
+    }
+
+    /// <p>Deletes the filter specified by the filter name.</p>
+    fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> RusotoFuture<DeleteFilterResponse, DeleteFilterError> {
+        GuardDuty::delete_filter(&(**self), input)
+    }
+
+    /// <p>Deletes the IPSet specified by the IPSet ID.</p>
+    fn delete_ip_set(
+        &self,
+        input: DeleteIPSetRequest,
+    ) -> RusotoFuture<DeleteIPSetResponse, DeleteIPSetError> {
+        GuardDuty::delete_ip_set(&(**self), input)
+    }
+
+    /// <p>Deletes invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
+    fn delete_invitations(
+        &self,
+        input: DeleteInvitationsRequest,
+    ) -> RusotoFuture<DeleteInvitationsResponse, DeleteInvitationsError> {
+        GuardDuty::delete_invitations(&(**self), input)
+    }
+
+    /// <p>Deletes GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    fn delete_members(
+        &self,
+        input: DeleteMembersRequest,
+    ) -> RusotoFuture<DeleteMembersResponse, DeleteMembersError> {
+        GuardDuty::delete_members(&(**self), input)
+    }
+
+    /// <p>Deletes ThreatIntelSet specified by the ThreatIntelSet ID.</p>
+    fn delete_threat_intel_set(
+        &self,
+        input: DeleteThreatIntelSetRequest,
+    ) -> RusotoFuture<DeleteThreatIntelSetResponse, DeleteThreatIntelSetError> {
+        GuardDuty::delete_threat_intel_set(&(**self), input)
+    }
+
+    /// <p>Disassociates the current GuardDuty member account from its master account.</p>
+    fn disassociate_from_master_account(
+        &self,
+        input: DisassociateFromMasterAccountRequest,
+    ) -> RusotoFuture<DisassociateFromMasterAccountResponse, DisassociateFromMasterAccountError>
+    {
+        GuardDuty::disassociate_from_master_account(&(**self), input)
+    }
+
+    /// <p>Disassociates GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    fn disassociate_members(
+        &self,
+        input: DisassociateMembersRequest,
+    ) -> RusotoFuture<DisassociateMembersResponse, DisassociateMembersError> {
+        GuardDuty::disassociate_members(&(**self), input)
+    }
+
+    /// <p>Retrieves an Amazon GuardDuty detector specified by the detectorId.</p>
+    fn get_detector(
+        &self,
+        input: GetDetectorRequest,
+    ) -> RusotoFuture<GetDetectorResponse, GetDetectorError> {
+        GuardDuty::get_detector(&(**self), input)
+    }
+
+    /// <p>Returns the details of the filter specified by the filter name.</p>
+    fn get_filter(
+        &self,
+        input: GetFilterRequest,
+    ) -> RusotoFuture<GetFilterResponse, GetFilterError> {
+        GuardDuty::get_filter(&(**self), input)
+    }
+
+    /// <p>Describes Amazon GuardDuty findings specified by finding IDs.</p>
+    fn get_findings(
+        &self,
+        input: GetFindingsRequest,
+    ) -> RusotoFuture<GetFindingsResponse, GetFindingsError> {
+        GuardDuty::get_findings(&(**self), input)
+    }
+
+    /// <p>Lists Amazon GuardDuty findings&#39; statistics for the specified detector ID.</p>
+    fn get_findings_statistics(
+        &self,
+        input: GetFindingsStatisticsRequest,
+    ) -> RusotoFuture<GetFindingsStatisticsResponse, GetFindingsStatisticsError> {
+        GuardDuty::get_findings_statistics(&(**self), input)
+    }
+
+    /// <p>Retrieves the IPSet specified by the IPSet ID.</p>
+    fn get_ip_set(&self, input: GetIPSetRequest) -> RusotoFuture<GetIPSetResponse, GetIPSetError> {
+        GuardDuty::get_ip_set(&(**self), input)
+    }
+
+    /// <p>Returns the count of all GuardDuty membership invitations that were sent to the current member account except the currently accepted invitation.</p>
+    fn get_invitations_count(
+        &self,
+    ) -> RusotoFuture<GetInvitationsCountResponse, GetInvitationsCountError> {
+        GuardDuty::get_invitations_count(&(**self))
+    }
+
+    /// <p>Provides the details for the GuardDuty master account to the current GuardDuty member account.</p>
+    fn get_master_account(
+        &self,
+        input: GetMasterAccountRequest,
+    ) -> RusotoFuture<GetMasterAccountResponse, GetMasterAccountError> {
+        GuardDuty::get_master_account(&(**self), input)
+    }
+
+    /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    fn get_members(
+        &self,
+        input: GetMembersRequest,
+    ) -> RusotoFuture<GetMembersResponse, GetMembersError> {
+        GuardDuty::get_members(&(**self), input)
+    }
+
+    /// <p>Retrieves the ThreatIntelSet that is specified by the ThreatIntelSet ID.</p>
+    fn get_threat_intel_set(
+        &self,
+        input: GetThreatIntelSetRequest,
+    ) -> RusotoFuture<GetThreatIntelSetResponse, GetThreatIntelSetError> {
+        GuardDuty::get_threat_intel_set(&(**self), input)
+    }
+
+    /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty and allow the current AWS account to view and manage these accounts&#39; GuardDuty findings on their behalf as the master account.</p>
+    fn invite_members(
+        &self,
+        input: InviteMembersRequest,
+    ) -> RusotoFuture<InviteMembersResponse, InviteMembersError> {
+        GuardDuty::invite_members(&(**self), input)
+    }
+
+    /// <p>Lists detectorIds of all the existing Amazon GuardDuty detector resources.</p>
+    fn list_detectors(
+        &self,
+        input: ListDetectorsRequest,
+    ) -> RusotoFuture<ListDetectorsResponse, ListDetectorsError> {
+        GuardDuty::list_detectors(&(**self), input)
+    }
+
+    /// <p>Returns a paginated list of the current filters.</p>
+    fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> RusotoFuture<ListFiltersResponse, ListFiltersError> {
+        GuardDuty::list_filters(&(**self), input)
+    }
+
+    /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
+    fn list_findings(
+        &self,
+        input: ListFindingsRequest,
+    ) -> RusotoFuture<ListFindingsResponse, ListFindingsError> {
+        GuardDuty::list_findings(&(**self), input)
+    }
+
+    /// <p>Lists the IPSets of the GuardDuty service specified by the detector ID.</p>
+    fn list_ip_sets(
+        &self,
+        input: ListIPSetsRequest,
+    ) -> RusotoFuture<ListIPSetsResponse, ListIPSetsError> {
+        GuardDuty::list_ip_sets(&(**self), input)
+    }
+
+    /// <p>Lists all GuardDuty membership invitations that were sent to the current AWS account.</p>
+    fn list_invitations(
+        &self,
+        input: ListInvitationsRequest,
+    ) -> RusotoFuture<ListInvitationsResponse, ListInvitationsError> {
+        GuardDuty::list_invitations(&(**self), input)
+    }
+
+    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
+    fn list_members(
+        &self,
+        input: ListMembersRequest,
+    ) -> RusotoFuture<ListMembersResponse, ListMembersError> {
+        GuardDuty::list_members(&(**self), input)
+    }
+
+    /// <p>Lists the ThreatIntelSets of the GuardDuty service specified by the detector ID.</p>
+    fn list_threat_intel_sets(
+        &self,
+        input: ListThreatIntelSetsRequest,
+    ) -> RusotoFuture<ListThreatIntelSetsResponse, ListThreatIntelSetsError> {
+        GuardDuty::list_threat_intel_sets(&(**self), input)
+    }
+
+    /// <p>Re-enables GuardDuty to monitor findings of the member accounts specified by the account IDs. A master GuardDuty account can run this command after disabling GuardDuty from monitoring these members&#39; findings by running StopMonitoringMembers.</p>
+    fn start_monitoring_members(
+        &self,
+        input: StartMonitoringMembersRequest,
+    ) -> RusotoFuture<StartMonitoringMembersResponse, StartMonitoringMembersError> {
+        GuardDuty::start_monitoring_members(&(**self), input)
+    }
+
+    /// <p>Disables GuardDuty from monitoring findings of the member accounts specified by the account IDs. After running this command, a master GuardDuty account can run StartMonitoringMembers to re-enable GuardDuty to monitor these members’ findings.</p>
+    fn stop_monitoring_members(
+        &self,
+        input: StopMonitoringMembersRequest,
+    ) -> RusotoFuture<StopMonitoringMembersResponse, StopMonitoringMembersError> {
+        GuardDuty::stop_monitoring_members(&(**self), input)
+    }
+
+    /// <p>Unarchives Amazon GuardDuty findings specified by the list of finding IDs.</p>
+    fn unarchive_findings(
+        &self,
+        input: UnarchiveFindingsRequest,
+    ) -> RusotoFuture<UnarchiveFindingsResponse, UnarchiveFindingsError> {
+        GuardDuty::unarchive_findings(&(**self), input)
+    }
+
+    /// <p>Updates an Amazon GuardDuty detector specified by the detectorId.</p>
+    fn update_detector(
+        &self,
+        input: UpdateDetectorRequest,
+    ) -> RusotoFuture<UpdateDetectorResponse, UpdateDetectorError> {
+        GuardDuty::update_detector(&(**self), input)
+    }
+
+    /// <p>Updates the filter specified by the filter name.</p>
+    fn update_filter(
+        &self,
+        input: UpdateFilterRequest,
+    ) -> RusotoFuture<UpdateFilterResponse, UpdateFilterError> {
+        GuardDuty::update_filter(&(**self), input)
+    }
+
+    /// <p>Marks specified Amazon GuardDuty findings as useful or not useful.</p>
+    fn update_findings_feedback(
+        &self,
+        input: UpdateFindingsFeedbackRequest,
+    ) -> RusotoFuture<UpdateFindingsFeedbackResponse, UpdateFindingsFeedbackError> {
+        GuardDuty::update_findings_feedback(&(**self), input)
+    }
+
+    /// <p>Updates the IPSet specified by the IPSet ID.</p>
+    fn update_ip_set(
+        &self,
+        input: UpdateIPSetRequest,
+    ) -> RusotoFuture<UpdateIPSetResponse, UpdateIPSetError> {
+        GuardDuty::update_ip_set(&(**self), input)
+    }
+
+    /// <p>Updates the ThreatIntelSet specified by ThreatIntelSet ID.</p>
+    fn update_threat_intel_set(
+        &self,
+        input: UpdateThreatIntelSetRequest,
+    ) -> RusotoFuture<UpdateThreatIntelSetResponse, UpdateThreatIntelSetError> {
+        GuardDuty::update_threat_intel_set(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

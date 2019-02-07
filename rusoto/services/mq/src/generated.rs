@@ -3964,5 +3964,144 @@ impl MQ for MQClient {
     }
 }
 
+impl<T: ?Sized + MQ> MQ for ::std::rc::Rc<T> {
+    /// <p>Creates a broker. Note: This API is asynchronous.</p>
+    fn create_broker(
+        &self,
+        input: CreateBrokerRequest,
+    ) -> RusotoFuture<CreateBrokerResponse, CreateBrokerError> {
+        MQ::create_broker(&(**self), input)
+    }
+
+    /// <p>Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).</p>
+    fn create_configuration(
+        &self,
+        input: CreateConfigurationRequest,
+    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError> {
+        MQ::create_configuration(&(**self), input)
+    }
+
+    /// <p>Creates an ActiveMQ user.</p>
+    fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+        MQ::create_user(&(**self), input)
+    }
+
+    /// <p>Deletes a broker. Note: This API is asynchronous.</p>
+    fn delete_broker(
+        &self,
+        input: DeleteBrokerRequest,
+    ) -> RusotoFuture<DeleteBrokerResponse, DeleteBrokerError> {
+        MQ::delete_broker(&(**self), input)
+    }
+
+    /// <p>Deletes an ActiveMQ user.</p>
+    fn delete_user(
+        &self,
+        input: DeleteUserRequest,
+    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
+        MQ::delete_user(&(**self), input)
+    }
+
+    /// <p>Returns information about the specified broker.</p>
+    fn describe_broker(
+        &self,
+        input: DescribeBrokerRequest,
+    ) -> RusotoFuture<DescribeBrokerResponse, DescribeBrokerError> {
+        MQ::describe_broker(&(**self), input)
+    }
+
+    /// <p>Returns information about the specified configuration.</p>
+    fn describe_configuration(
+        &self,
+        input: DescribeConfigurationRequest,
+    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError> {
+        MQ::describe_configuration(&(**self), input)
+    }
+
+    /// <p>Returns the specified configuration revision for the specified configuration.</p>
+    fn describe_configuration_revision(
+        &self,
+        input: DescribeConfigurationRevisionRequest,
+    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>
+    {
+        MQ::describe_configuration_revision(&(**self), input)
+    }
+
+    /// <p>Returns information about an ActiveMQ user.</p>
+    fn describe_user(
+        &self,
+        input: DescribeUserRequest,
+    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+        MQ::describe_user(&(**self), input)
+    }
+
+    /// <p>Returns a list of all brokers.</p>
+    fn list_brokers(
+        &self,
+        input: ListBrokersRequest,
+    ) -> RusotoFuture<ListBrokersResponse, ListBrokersError> {
+        MQ::list_brokers(&(**self), input)
+    }
+
+    /// <p>Returns a list of all revisions for the specified configuration.</p>
+    fn list_configuration_revisions(
+        &self,
+        input: ListConfigurationRevisionsRequest,
+    ) -> RusotoFuture<ListConfigurationRevisionsResponse, ListConfigurationRevisionsError> {
+        MQ::list_configuration_revisions(&(**self), input)
+    }
+
+    /// <p>Returns a list of all configurations.</p>
+    fn list_configurations(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+        MQ::list_configurations(&(**self), input)
+    }
+
+    /// <p>Returns a list of all ActiveMQ users.</p>
+    fn list_users(
+        &self,
+        input: ListUsersRequest,
+    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+        MQ::list_users(&(**self), input)
+    }
+
+    /// <p>Reboots a broker. Note: This API is asynchronous.</p>
+    fn reboot_broker(
+        &self,
+        input: RebootBrokerRequest,
+    ) -> RusotoFuture<RebootBrokerResponse, RebootBrokerError> {
+        MQ::reboot_broker(&(**self), input)
+    }
+
+    /// <p>Adds a pending configuration change to a broker.</p>
+    fn update_broker(
+        &self,
+        input: UpdateBrokerRequest,
+    ) -> RusotoFuture<UpdateBrokerResponse, UpdateBrokerError> {
+        MQ::update_broker(&(**self), input)
+    }
+
+    /// <p>Updates the specified configuration.</p>
+    fn update_configuration(
+        &self,
+        input: UpdateConfigurationRequest,
+    ) -> RusotoFuture<UpdateConfigurationResponse, UpdateConfigurationError> {
+        MQ::update_configuration(&(**self), input)
+    }
+
+    /// <p>Updates the information for an ActiveMQ user.</p>
+    fn update_user(
+        &self,
+        input: UpdateUserRequest,
+    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
+        MQ::update_user(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

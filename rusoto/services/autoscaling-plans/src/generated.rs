@@ -1101,5 +1101,47 @@ impl AutoscalingPlans for AutoscalingPlansClient {
     }
 }
 
+impl<T: ?Sized + AutoscalingPlans> AutoscalingPlans for ::std::rc::Rc<T> {
+    /// <p>Creates a scaling plan.</p> <p>A scaling plan contains a set of instructions used to configure dynamic scaling for the scalable resources in your application. AWS Auto Scaling creates target tracking scaling policies based on the scaling instructions in your scaling plan.</p>
+    fn create_scaling_plan(
+        &self,
+        input: CreateScalingPlanRequest,
+    ) -> RusotoFuture<CreateScalingPlanResponse, CreateScalingPlanError> {
+        AutoscalingPlans::create_scaling_plan(&(**self), input)
+    }
+
+    /// <p>Deletes the specified scaling plan.</p>
+    fn delete_scaling_plan(
+        &self,
+        input: DeleteScalingPlanRequest,
+    ) -> RusotoFuture<DeleteScalingPlanResponse, DeleteScalingPlanError> {
+        AutoscalingPlans::delete_scaling_plan(&(**self), input)
+    }
+
+    /// <p>Describes the scalable resources in the specified scaling plan.</p>
+    fn describe_scaling_plan_resources(
+        &self,
+        input: DescribeScalingPlanResourcesRequest,
+    ) -> RusotoFuture<DescribeScalingPlanResourcesResponse, DescribeScalingPlanResourcesError> {
+        AutoscalingPlans::describe_scaling_plan_resources(&(**self), input)
+    }
+
+    /// <p>Describes the specified scaling plans or all of your scaling plans.</p>
+    fn describe_scaling_plans(
+        &self,
+        input: DescribeScalingPlansRequest,
+    ) -> RusotoFuture<DescribeScalingPlansResponse, DescribeScalingPlansError> {
+        AutoscalingPlans::describe_scaling_plans(&(**self), input)
+    }
+
+    /// <p>Updates the scaling plan for the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
+    fn update_scaling_plan(
+        &self,
+        input: UpdateScalingPlanRequest,
+    ) -> RusotoFuture<UpdateScalingPlanResponse, UpdateScalingPlanError> {
+        AutoscalingPlans::update_scaling_plan(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

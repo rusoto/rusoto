@@ -802,5 +802,39 @@ impl MediaTailor for MediaTailorClient {
     }
 }
 
+impl<T: ?Sized + MediaTailor> MediaTailor for ::std::rc::Rc<T> {
+    /// <p>Deletes the configuration for the specified name. </p>
+    fn delete_playback_configuration(
+        &self,
+        input: DeletePlaybackConfigurationRequest,
+    ) -> RusotoFuture<DeletePlaybackConfigurationResponse, DeletePlaybackConfigurationError> {
+        MediaTailor::delete_playback_configuration(&(**self), input)
+    }
+
+    /// <p>Returns the configuration for the specified name. </p>
+    fn get_playback_configuration(
+        &self,
+        input: GetPlaybackConfigurationRequest,
+    ) -> RusotoFuture<GetPlaybackConfigurationResponse, GetPlaybackConfigurationError> {
+        MediaTailor::get_playback_configuration(&(**self), input)
+    }
+
+    /// <p>Returns a list of the configurations defined in AWS Elemental MediaTailor. You can specify a max number of configurations to return at a time. The default max is 50. Results are returned in pagefuls. If AWS Elemental MediaTailor has more configurations than the specified max, it provides parameters in the response that you can use to retrieve the next pageful. </p>
+    fn list_playback_configurations(
+        &self,
+        input: ListPlaybackConfigurationsRequest,
+    ) -> RusotoFuture<ListPlaybackConfigurationsResponse, ListPlaybackConfigurationsError> {
+        MediaTailor::list_playback_configurations(&(**self), input)
+    }
+
+    /// <p>Adds a new configuration to AWS Elemental MediaTailor.</p>
+    fn put_playback_configuration(
+        &self,
+        input: PutPlaybackConfigurationRequest,
+    ) -> RusotoFuture<PutPlaybackConfigurationResponse, PutPlaybackConfigurationError> {
+        MediaTailor::put_playback_configuration(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

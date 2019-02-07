@@ -11518,5 +11518,469 @@ impl DeviceFarm for DeviceFarmClient {
     }
 }
 
+impl<T: ?Sized + DeviceFarm> DeviceFarm for ::std::rc::Rc<T> {
+    /// <p>Creates a device pool.</p>
+    fn create_device_pool(
+        &self,
+        input: CreateDevicePoolRequest,
+    ) -> RusotoFuture<CreateDevicePoolResult, CreateDevicePoolError> {
+        DeviceFarm::create_device_pool(&(**self), input)
+    }
+
+    /// <p>Creates a profile that can be applied to one or more private fleet device instances.</p>
+    fn create_instance_profile(
+        &self,
+        input: CreateInstanceProfileRequest,
+    ) -> RusotoFuture<CreateInstanceProfileResult, CreateInstanceProfileError> {
+        DeviceFarm::create_instance_profile(&(**self), input)
+    }
+
+    /// <p>Creates a network profile.</p>
+    fn create_network_profile(
+        &self,
+        input: CreateNetworkProfileRequest,
+    ) -> RusotoFuture<CreateNetworkProfileResult, CreateNetworkProfileError> {
+        DeviceFarm::create_network_profile(&(**self), input)
+    }
+
+    /// <p>Creates a new project.</p>
+    fn create_project(
+        &self,
+        input: CreateProjectRequest,
+    ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
+        DeviceFarm::create_project(&(**self), input)
+    }
+
+    /// <p>Specifies and starts a remote access session.</p>
+    fn create_remote_access_session(
+        &self,
+        input: CreateRemoteAccessSessionRequest,
+    ) -> RusotoFuture<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError> {
+        DeviceFarm::create_remote_access_session(&(**self), input)
+    }
+
+    /// <p>Uploads an app or test scripts.</p>
+    fn create_upload(
+        &self,
+        input: CreateUploadRequest,
+    ) -> RusotoFuture<CreateUploadResult, CreateUploadError> {
+        DeviceFarm::create_upload(&(**self), input)
+    }
+
+    /// <p>Creates a configuration record in Device Farm for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn create_vpce_configuration(
+        &self,
+        input: CreateVPCEConfigurationRequest,
+    ) -> RusotoFuture<CreateVPCEConfigurationResult, CreateVPCEConfigurationError> {
+        DeviceFarm::create_vpce_configuration(&(**self), input)
+    }
+
+    /// <p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>
+    fn delete_device_pool(
+        &self,
+        input: DeleteDevicePoolRequest,
+    ) -> RusotoFuture<DeleteDevicePoolResult, DeleteDevicePoolError> {
+        DeviceFarm::delete_device_pool(&(**self), input)
+    }
+
+    /// <p>Deletes a profile that can be applied to one or more private device instances.</p>
+    fn delete_instance_profile(
+        &self,
+        input: DeleteInstanceProfileRequest,
+    ) -> RusotoFuture<DeleteInstanceProfileResult, DeleteInstanceProfileError> {
+        DeviceFarm::delete_instance_profile(&(**self), input)
+    }
+
+    /// <p>Deletes a network profile.</p>
+    fn delete_network_profile(
+        &self,
+        input: DeleteNetworkProfileRequest,
+    ) -> RusotoFuture<DeleteNetworkProfileResult, DeleteNetworkProfileError> {
+        DeviceFarm::delete_network_profile(&(**self), input)
+    }
+
+    /// <p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>
+    fn delete_project(
+        &self,
+        input: DeleteProjectRequest,
+    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
+        DeviceFarm::delete_project(&(**self), input)
+    }
+
+    /// <p>Deletes a completed remote access session and its results.</p>
+    fn delete_remote_access_session(
+        &self,
+        input: DeleteRemoteAccessSessionRequest,
+    ) -> RusotoFuture<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError> {
+        DeviceFarm::delete_remote_access_session(&(**self), input)
+    }
+
+    /// <p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>
+    fn delete_run(&self, input: DeleteRunRequest) -> RusotoFuture<DeleteRunResult, DeleteRunError> {
+        DeviceFarm::delete_run(&(**self), input)
+    }
+
+    /// <p>Deletes an upload given the upload ARN.</p>
+    fn delete_upload(
+        &self,
+        input: DeleteUploadRequest,
+    ) -> RusotoFuture<DeleteUploadResult, DeleteUploadError> {
+        DeviceFarm::delete_upload(&(**self), input)
+    }
+
+    /// <p>Deletes a configuration for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn delete_vpce_configuration(
+        &self,
+        input: DeleteVPCEConfigurationRequest,
+    ) -> RusotoFuture<DeleteVPCEConfigurationResult, DeleteVPCEConfigurationError> {
+        DeviceFarm::delete_vpce_configuration(&(**self), input)
+    }
+
+    /// <p>Returns the number of unmetered iOS and/or unmetered Android devices that have been purchased by the account.</p>
+    fn get_account_settings(
+        &self,
+    ) -> RusotoFuture<GetAccountSettingsResult, GetAccountSettingsError> {
+        DeviceFarm::get_account_settings(&(**self))
+    }
+
+    /// <p>Gets information about a unique device type.</p>
+    fn get_device(&self, input: GetDeviceRequest) -> RusotoFuture<GetDeviceResult, GetDeviceError> {
+        DeviceFarm::get_device(&(**self), input)
+    }
+
+    /// <p>Returns information about a device instance belonging to a private device fleet.</p>
+    fn get_device_instance(
+        &self,
+        input: GetDeviceInstanceRequest,
+    ) -> RusotoFuture<GetDeviceInstanceResult, GetDeviceInstanceError> {
+        DeviceFarm::get_device_instance(&(**self), input)
+    }
+
+    /// <p>Gets information about a device pool.</p>
+    fn get_device_pool(
+        &self,
+        input: GetDevicePoolRequest,
+    ) -> RusotoFuture<GetDevicePoolResult, GetDevicePoolError> {
+        DeviceFarm::get_device_pool(&(**self), input)
+    }
+
+    /// <p>Gets information about compatibility with a device pool.</p>
+    fn get_device_pool_compatibility(
+        &self,
+        input: GetDevicePoolCompatibilityRequest,
+    ) -> RusotoFuture<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError> {
+        DeviceFarm::get_device_pool_compatibility(&(**self), input)
+    }
+
+    /// <p>Returns information about the specified instance profile.</p>
+    fn get_instance_profile(
+        &self,
+        input: GetInstanceProfileRequest,
+    ) -> RusotoFuture<GetInstanceProfileResult, GetInstanceProfileError> {
+        DeviceFarm::get_instance_profile(&(**self), input)
+    }
+
+    /// <p>Gets information about a job.</p>
+    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResult, GetJobError> {
+        DeviceFarm::get_job(&(**self), input)
+    }
+
+    /// <p>Returns information about a network profile.</p>
+    fn get_network_profile(
+        &self,
+        input: GetNetworkProfileRequest,
+    ) -> RusotoFuture<GetNetworkProfileResult, GetNetworkProfileError> {
+        DeviceFarm::get_network_profile(&(**self), input)
+    }
+
+    /// <p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
+    fn get_offering_status(
+        &self,
+        input: GetOfferingStatusRequest,
+    ) -> RusotoFuture<GetOfferingStatusResult, GetOfferingStatusError> {
+        DeviceFarm::get_offering_status(&(**self), input)
+    }
+
+    /// <p>Gets information about a project.</p>
+    fn get_project(
+        &self,
+        input: GetProjectRequest,
+    ) -> RusotoFuture<GetProjectResult, GetProjectError> {
+        DeviceFarm::get_project(&(**self), input)
+    }
+
+    /// <p>Returns a link to a currently running remote access session.</p>
+    fn get_remote_access_session(
+        &self,
+        input: GetRemoteAccessSessionRequest,
+    ) -> RusotoFuture<GetRemoteAccessSessionResult, GetRemoteAccessSessionError> {
+        DeviceFarm::get_remote_access_session(&(**self), input)
+    }
+
+    /// <p>Gets information about a run.</p>
+    fn get_run(&self, input: GetRunRequest) -> RusotoFuture<GetRunResult, GetRunError> {
+        DeviceFarm::get_run(&(**self), input)
+    }
+
+    /// <p>Gets information about a suite.</p>
+    fn get_suite(&self, input: GetSuiteRequest) -> RusotoFuture<GetSuiteResult, GetSuiteError> {
+        DeviceFarm::get_suite(&(**self), input)
+    }
+
+    /// <p>Gets information about a test.</p>
+    fn get_test(&self, input: GetTestRequest) -> RusotoFuture<GetTestResult, GetTestError> {
+        DeviceFarm::get_test(&(**self), input)
+    }
+
+    /// <p>Gets information about an upload.</p>
+    fn get_upload(&self, input: GetUploadRequest) -> RusotoFuture<GetUploadResult, GetUploadError> {
+        DeviceFarm::get_upload(&(**self), input)
+    }
+
+    /// <p>Returns information about the configuration settings for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
+    fn get_vpce_configuration(
+        &self,
+        input: GetVPCEConfigurationRequest,
+    ) -> RusotoFuture<GetVPCEConfigurationResult, GetVPCEConfigurationError> {
+        DeviceFarm::get_vpce_configuration(&(**self), input)
+    }
+
+    /// <p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>
+    fn install_to_remote_access_session(
+        &self,
+        input: InstallToRemoteAccessSessionRequest,
+    ) -> RusotoFuture<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError> {
+        DeviceFarm::install_to_remote_access_session(&(**self), input)
+    }
+
+    /// <p>Gets information about artifacts.</p>
+    fn list_artifacts(
+        &self,
+        input: ListArtifactsRequest,
+    ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError> {
+        DeviceFarm::list_artifacts(&(**self), input)
+    }
+
+    /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
+    fn list_device_instances(
+        &self,
+        input: ListDeviceInstancesRequest,
+    ) -> RusotoFuture<ListDeviceInstancesResult, ListDeviceInstancesError> {
+        DeviceFarm::list_device_instances(&(**self), input)
+    }
+
+    /// <p>Gets information about device pools.</p>
+    fn list_device_pools(
+        &self,
+        input: ListDevicePoolsRequest,
+    ) -> RusotoFuture<ListDevicePoolsResult, ListDevicePoolsError> {
+        DeviceFarm::list_device_pools(&(**self), input)
+    }
+
+    /// <p>Gets information about unique device types.</p>
+    fn list_devices(
+        &self,
+        input: ListDevicesRequest,
+    ) -> RusotoFuture<ListDevicesResult, ListDevicesError> {
+        DeviceFarm::list_devices(&(**self), input)
+    }
+
+    /// <p>Returns information about all the instance profiles in an AWS account.</p>
+    fn list_instance_profiles(
+        &self,
+        input: ListInstanceProfilesRequest,
+    ) -> RusotoFuture<ListInstanceProfilesResult, ListInstanceProfilesError> {
+        DeviceFarm::list_instance_profiles(&(**self), input)
+    }
+
+    /// <p>Gets information about jobs for a given test run.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError> {
+        DeviceFarm::list_jobs(&(**self), input)
+    }
+
+    /// <p>Returns the list of available network profiles.</p>
+    fn list_network_profiles(
+        &self,
+        input: ListNetworkProfilesRequest,
+    ) -> RusotoFuture<ListNetworkProfilesResult, ListNetworkProfilesError> {
+        DeviceFarm::list_network_profiles(&(**self), input)
+    }
+
+    /// <p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
+    fn list_offering_promotions(
+        &self,
+        input: ListOfferingPromotionsRequest,
+    ) -> RusotoFuture<ListOfferingPromotionsResult, ListOfferingPromotionsError> {
+        DeviceFarm::list_offering_promotions(&(**self), input)
+    }
+
+    /// <p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
+    fn list_offering_transactions(
+        &self,
+        input: ListOfferingTransactionsRequest,
+    ) -> RusotoFuture<ListOfferingTransactionsResult, ListOfferingTransactionsError> {
+        DeviceFarm::list_offering_transactions(&(**self), input)
+    }
+
+    /// <p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
+    fn list_offerings(
+        &self,
+        input: ListOfferingsRequest,
+    ) -> RusotoFuture<ListOfferingsResult, ListOfferingsError> {
+        DeviceFarm::list_offerings(&(**self), input)
+    }
+
+    /// <p>Gets information about projects.</p>
+    fn list_projects(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
+        DeviceFarm::list_projects(&(**self), input)
+    }
+
+    /// <p>Returns a list of all currently running remote access sessions.</p>
+    fn list_remote_access_sessions(
+        &self,
+        input: ListRemoteAccessSessionsRequest,
+    ) -> RusotoFuture<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError> {
+        DeviceFarm::list_remote_access_sessions(&(**self), input)
+    }
+
+    /// <p>Gets information about runs, given an AWS Device Farm project ARN.</p>
+    fn list_runs(&self, input: ListRunsRequest) -> RusotoFuture<ListRunsResult, ListRunsError> {
+        DeviceFarm::list_runs(&(**self), input)
+    }
+
+    /// <p>Gets information about samples, given an AWS Device Farm project ARN</p>
+    fn list_samples(
+        &self,
+        input: ListSamplesRequest,
+    ) -> RusotoFuture<ListSamplesResult, ListSamplesError> {
+        DeviceFarm::list_samples(&(**self), input)
+    }
+
+    /// <p>Gets information about test suites for a given job.</p>
+    fn list_suites(
+        &self,
+        input: ListSuitesRequest,
+    ) -> RusotoFuture<ListSuitesResult, ListSuitesError> {
+        DeviceFarm::list_suites(&(**self), input)
+    }
+
+    /// <p>Gets information about tests in a given test suite.</p>
+    fn list_tests(&self, input: ListTestsRequest) -> RusotoFuture<ListTestsResult, ListTestsError> {
+        DeviceFarm::list_tests(&(**self), input)
+    }
+
+    /// <p>Gets information about unique problems.</p>
+    fn list_unique_problems(
+        &self,
+        input: ListUniqueProblemsRequest,
+    ) -> RusotoFuture<ListUniqueProblemsResult, ListUniqueProblemsError> {
+        DeviceFarm::list_unique_problems(&(**self), input)
+    }
+
+    /// <p>Gets information about uploads, given an AWS Device Farm project ARN.</p>
+    fn list_uploads(
+        &self,
+        input: ListUploadsRequest,
+    ) -> RusotoFuture<ListUploadsResult, ListUploadsError> {
+        DeviceFarm::list_uploads(&(**self), input)
+    }
+
+    /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
+    fn list_vpce_configurations(
+        &self,
+        input: ListVPCEConfigurationsRequest,
+    ) -> RusotoFuture<ListVPCEConfigurationsResult, ListVPCEConfigurationsError> {
+        DeviceFarm::list_vpce_configurations(&(**self), input)
+    }
+
+    /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
+    fn purchase_offering(
+        &self,
+        input: PurchaseOfferingRequest,
+    ) -> RusotoFuture<PurchaseOfferingResult, PurchaseOfferingError> {
+        DeviceFarm::purchase_offering(&(**self), input)
+    }
+
+    /// <p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. Please contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you believe that you should be able to invoke this operation.</p>
+    fn renew_offering(
+        &self,
+        input: RenewOfferingRequest,
+    ) -> RusotoFuture<RenewOfferingResult, RenewOfferingError> {
+        DeviceFarm::renew_offering(&(**self), input)
+    }
+
+    /// <p>Schedules a run.</p>
+    fn schedule_run(
+        &self,
+        input: ScheduleRunRequest,
+    ) -> RusotoFuture<ScheduleRunResult, ScheduleRunError> {
+        DeviceFarm::schedule_run(&(**self), input)
+    }
+
+    /// <p>Ends a specified remote access session.</p>
+    fn stop_remote_access_session(
+        &self,
+        input: StopRemoteAccessSessionRequest,
+    ) -> RusotoFuture<StopRemoteAccessSessionResult, StopRemoteAccessSessionError> {
+        DeviceFarm::stop_remote_access_session(&(**self), input)
+    }
+
+    /// <p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
+    fn stop_run(&self, input: StopRunRequest) -> RusotoFuture<StopRunResult, StopRunError> {
+        DeviceFarm::stop_run(&(**self), input)
+    }
+
+    /// <p>Updates information about an existing private device instance.</p>
+    fn update_device_instance(
+        &self,
+        input: UpdateDeviceInstanceRequest,
+    ) -> RusotoFuture<UpdateDeviceInstanceResult, UpdateDeviceInstanceError> {
+        DeviceFarm::update_device_instance(&(**self), input)
+    }
+
+    /// <p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>
+    fn update_device_pool(
+        &self,
+        input: UpdateDevicePoolRequest,
+    ) -> RusotoFuture<UpdateDevicePoolResult, UpdateDevicePoolError> {
+        DeviceFarm::update_device_pool(&(**self), input)
+    }
+
+    /// <p>Updates information about an existing private device instance profile.</p>
+    fn update_instance_profile(
+        &self,
+        input: UpdateInstanceProfileRequest,
+    ) -> RusotoFuture<UpdateInstanceProfileResult, UpdateInstanceProfileError> {
+        DeviceFarm::update_instance_profile(&(**self), input)
+    }
+
+    /// <p>Updates the network profile with specific settings.</p>
+    fn update_network_profile(
+        &self,
+        input: UpdateNetworkProfileRequest,
+    ) -> RusotoFuture<UpdateNetworkProfileResult, UpdateNetworkProfileError> {
+        DeviceFarm::update_network_profile(&(**self), input)
+    }
+
+    /// <p>Modifies the specified project name, given the project ARN and a new name.</p>
+    fn update_project(
+        &self,
+        input: UpdateProjectRequest,
+    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
+        DeviceFarm::update_project(&(**self), input)
+    }
+
+    /// <p>Updates information about an existing Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
+    fn update_vpce_configuration(
+        &self,
+        input: UpdateVPCEConfigurationRequest,
+    ) -> RusotoFuture<UpdateVPCEConfigurationResult, UpdateVPCEConfigurationError> {
+        DeviceFarm::update_vpce_configuration(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

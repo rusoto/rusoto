@@ -3042,5 +3042,151 @@ impl CodeStar for CodeStarClient {
     }
 }
 
+impl<T: ?Sized + CodeStar> CodeStar for ::std::rc::Rc<T> {
+    /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
+    fn associate_team_member(
+        &self,
+        input: AssociateTeamMemberRequest,
+    ) -> RusotoFuture<AssociateTeamMemberResult, AssociateTeamMemberError> {
+        CodeStar::associate_team_member(&(**self), input)
+    }
+
+    /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
+    fn create_project(
+        &self,
+        input: CreateProjectRequest,
+    ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
+        CodeStar::create_project(&(**self), input)
+    }
+
+    /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
+    fn create_user_profile(
+        &self,
+        input: CreateUserProfileRequest,
+    ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
+        CodeStar::create_user_profile(&(**self), input)
+    }
+
+    /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
+    fn delete_project(
+        &self,
+        input: DeleteProjectRequest,
+    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
+        CodeStar::delete_project(&(**self), input)
+    }
+
+    /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
+    fn delete_user_profile(
+        &self,
+        input: DeleteUserProfileRequest,
+    ) -> RusotoFuture<DeleteUserProfileResult, DeleteUserProfileError> {
+        CodeStar::delete_user_profile(&(**self), input)
+    }
+
+    /// <p>Describes a project and its resources.</p>
+    fn describe_project(
+        &self,
+        input: DescribeProjectRequest,
+    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError> {
+        CodeStar::describe_project(&(**self), input)
+    }
+
+    /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
+    fn describe_user_profile(
+        &self,
+        input: DescribeUserProfileRequest,
+    ) -> RusotoFuture<DescribeUserProfileResult, DescribeUserProfileError> {
+        CodeStar::describe_user_profile(&(**self), input)
+    }
+
+    /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
+    fn disassociate_team_member(
+        &self,
+        input: DisassociateTeamMemberRequest,
+    ) -> RusotoFuture<DisassociateTeamMemberResult, DisassociateTeamMemberError> {
+        CodeStar::disassociate_team_member(&(**self), input)
+    }
+
+    /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
+    fn list_projects(
+        &self,
+        input: ListProjectsRequest,
+    ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
+        CodeStar::list_projects(&(**self), input)
+    }
+
+    /// <p>Lists resources associated with a project in AWS CodeStar.</p>
+    fn list_resources(
+        &self,
+        input: ListResourcesRequest,
+    ) -> RusotoFuture<ListResourcesResult, ListResourcesError> {
+        CodeStar::list_resources(&(**self), input)
+    }
+
+    /// <p>Gets the tags for a project.</p>
+    fn list_tags_for_project(
+        &self,
+        input: ListTagsForProjectRequest,
+    ) -> RusotoFuture<ListTagsForProjectResult, ListTagsForProjectError> {
+        CodeStar::list_tags_for_project(&(**self), input)
+    }
+
+    /// <p>Lists all team members associated with a project.</p>
+    fn list_team_members(
+        &self,
+        input: ListTeamMembersRequest,
+    ) -> RusotoFuture<ListTeamMembersResult, ListTeamMembersError> {
+        CodeStar::list_team_members(&(**self), input)
+    }
+
+    /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
+    fn list_user_profiles(
+        &self,
+        input: ListUserProfilesRequest,
+    ) -> RusotoFuture<ListUserProfilesResult, ListUserProfilesError> {
+        CodeStar::list_user_profiles(&(**self), input)
+    }
+
+    /// <p>Adds tags to a project.</p>
+    fn tag_project(
+        &self,
+        input: TagProjectRequest,
+    ) -> RusotoFuture<TagProjectResult, TagProjectError> {
+        CodeStar::tag_project(&(**self), input)
+    }
+
+    /// <p>Removes tags from a project.</p>
+    fn untag_project(
+        &self,
+        input: UntagProjectRequest,
+    ) -> RusotoFuture<UntagProjectResult, UntagProjectError> {
+        CodeStar::untag_project(&(**self), input)
+    }
+
+    /// <p>Updates a project in AWS CodeStar.</p>
+    fn update_project(
+        &self,
+        input: UpdateProjectRequest,
+    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
+        CodeStar::update_project(&(**self), input)
+    }
+
+    /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
+    fn update_team_member(
+        &self,
+        input: UpdateTeamMemberRequest,
+    ) -> RusotoFuture<UpdateTeamMemberResult, UpdateTeamMemberError> {
+        CodeStar::update_team_member(&(**self), input)
+    }
+
+    /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
+    fn update_user_profile(
+        &self,
+        input: UpdateUserProfileRequest,
+    ) -> RusotoFuture<UpdateUserProfileResult, UpdateUserProfileError> {
+        CodeStar::update_user_profile(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

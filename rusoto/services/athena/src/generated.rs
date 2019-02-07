@@ -1976,5 +1976,95 @@ impl Athena for AthenaClient {
     }
 }
 
+impl<T: ?Sized + Athena> Athena for ::std::rc::Rc<T> {
+    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
+    fn batch_get_named_query(
+        &self,
+        input: BatchGetNamedQueryInput,
+    ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
+        Athena::batch_get_named_query(&(**self), input)
+    }
+
+    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
+    fn batch_get_query_execution(
+        &self,
+        input: BatchGetQueryExecutionInput,
+    ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
+        Athena::batch_get_query_execution(&(**self), input)
+    }
+
+    /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn create_named_query(
+        &self,
+        input: CreateNamedQueryInput,
+    ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError> {
+        Athena::create_named_query(&(**self), input)
+    }
+
+    /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn delete_named_query(
+        &self,
+        input: DeleteNamedQueryInput,
+    ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError> {
+        Athena::delete_named_query(&(**self), input)
+    }
+
+    /// <p>Returns information about a single query.</p>
+    fn get_named_query(
+        &self,
+        input: GetNamedQueryInput,
+    ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError> {
+        Athena::get_named_query(&(**self), input)
+    }
+
+    /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
+    fn get_query_execution(
+        &self,
+        input: GetQueryExecutionInput,
+    ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError> {
+        Athena::get_query_execution(&(**self), input)
+    }
+
+    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
+    fn get_query_results(
+        &self,
+        input: GetQueryResultsInput,
+    ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError> {
+        Athena::get_query_results(&(**self), input)
+    }
+
+    /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn list_named_queries(
+        &self,
+        input: ListNamedQueriesInput,
+    ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError> {
+        Athena::list_named_queries(&(**self), input)
+    }
+
+    /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn list_query_executions(
+        &self,
+        input: ListQueryExecutionsInput,
+    ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError> {
+        Athena::list_query_executions(&(**self), input)
+    }
+
+    /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn start_query_execution(
+        &self,
+        input: StartQueryExecutionInput,
+    ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError> {
+        Athena::start_query_execution(&(**self), input)
+    }
+
+    /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    fn stop_query_execution(
+        &self,
+        input: StopQueryExecutionInput,
+    ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError> {
+        Athena::stop_query_execution(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

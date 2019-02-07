@@ -2408,5 +2408,115 @@ impl Budgets for BudgetsClient {
     }
 }
 
+impl<T: ?Sized + Budgets> Budgets for ::std::rc::Rc<T> {
+    /// <p>Creates a budget and, if included, notifications and subscribers. </p>
+    fn create_budget(
+        &self,
+        input: CreateBudgetRequest,
+    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError> {
+        Budgets::create_budget(&(**self), input)
+    }
+
+    /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
+    fn create_notification(
+        &self,
+        input: CreateNotificationRequest,
+    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError> {
+        Budgets::create_notification(&(**self), input)
+    }
+
+    /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
+    fn create_subscriber(
+        &self,
+        input: CreateSubscriberRequest,
+    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError> {
+        Budgets::create_subscriber(&(**self), input)
+    }
+
+    /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
+    fn delete_budget(
+        &self,
+        input: DeleteBudgetRequest,
+    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError> {
+        Budgets::delete_budget(&(**self), input)
+    }
+
+    /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
+    fn delete_notification(
+        &self,
+        input: DeleteNotificationRequest,
+    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError> {
+        Budgets::delete_notification(&(**self), input)
+    }
+
+    /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
+    fn delete_subscriber(
+        &self,
+        input: DeleteSubscriberRequest,
+    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError> {
+        Budgets::delete_subscriber(&(**self), input)
+    }
+
+    /// <p>Describes a budget.</p>
+    fn describe_budget(
+        &self,
+        input: DescribeBudgetRequest,
+    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError> {
+        Budgets::describe_budget(&(**self), input)
+    }
+
+    /// <p>Lists the budgets associated with an account.</p>
+    fn describe_budgets(
+        &self,
+        input: DescribeBudgetsRequest,
+    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError> {
+        Budgets::describe_budgets(&(**self), input)
+    }
+
+    /// <p>Lists the notifications associated with a budget.</p>
+    fn describe_notifications_for_budget(
+        &self,
+        input: DescribeNotificationsForBudgetRequest,
+    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>
+    {
+        Budgets::describe_notifications_for_budget(&(**self), input)
+    }
+
+    /// <p>Lists the subscribers associated with a notification.</p>
+    fn describe_subscribers_for_notification(
+        &self,
+        input: DescribeSubscribersForNotificationRequest,
+    ) -> RusotoFuture<
+        DescribeSubscribersForNotificationResponse,
+        DescribeSubscribersForNotificationError,
+    > {
+        Budgets::describe_subscribers_for_notification(&(**self), input)
+    }
+
+    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
+    fn update_budget(
+        &self,
+        input: UpdateBudgetRequest,
+    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError> {
+        Budgets::update_budget(&(**self), input)
+    }
+
+    /// <p>Updates a notification.</p>
+    fn update_notification(
+        &self,
+        input: UpdateNotificationRequest,
+    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError> {
+        Budgets::update_notification(&(**self), input)
+    }
+
+    /// <p>Updates a subscriber.</p>
+    fn update_subscriber(
+        &self,
+        input: UpdateSubscriberRequest,
+    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError> {
+        Budgets::update_subscriber(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

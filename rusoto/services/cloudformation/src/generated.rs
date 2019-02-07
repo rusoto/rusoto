@@ -14942,6 +14942,330 @@ impl CloudFormation for CloudFormationClient {
     }
 }
 
+impl<T: ?Sized + CloudFormation> CloudFormation for ::std::rc::Rc<T> {
+    /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
+    fn cancel_update_stack(
+        &self,
+        input: CancelUpdateStackInput,
+    ) -> RusotoFuture<(), CancelUpdateStackError> {
+        CloudFormation::cancel_update_stack(&(**self), input)
+    }
+
+    /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
+    fn continue_update_rollback(
+        &self,
+        input: ContinueUpdateRollbackInput,
+    ) -> RusotoFuture<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError> {
+        CloudFormation::continue_update_rollback(&(**self), input)
+    }
+
+    /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
+    fn create_change_set(
+        &self,
+        input: CreateChangeSetInput,
+    ) -> RusotoFuture<CreateChangeSetOutput, CreateChangeSetError> {
+        CloudFormation::create_change_set(&(**self), input)
+    }
+
+    /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
+    fn create_stack(
+        &self,
+        input: CreateStackInput,
+    ) -> RusotoFuture<CreateStackOutput, CreateStackError> {
+        CloudFormation::create_stack(&(**self), input)
+    }
+
+    /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
+    fn create_stack_instances(
+        &self,
+        input: CreateStackInstancesInput,
+    ) -> RusotoFuture<CreateStackInstancesOutput, CreateStackInstancesError> {
+        CloudFormation::create_stack_instances(&(**self), input)
+    }
+
+    /// <p>Creates a stack set.</p>
+    fn create_stack_set(
+        &self,
+        input: CreateStackSetInput,
+    ) -> RusotoFuture<CreateStackSetOutput, CreateStackSetError> {
+        CloudFormation::create_stack_set(&(**self), input)
+    }
+
+    /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
+    fn delete_change_set(
+        &self,
+        input: DeleteChangeSetInput,
+    ) -> RusotoFuture<DeleteChangeSetOutput, DeleteChangeSetError> {
+        CloudFormation::delete_change_set(&(**self), input)
+    }
+
+    /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
+    fn delete_stack(&self, input: DeleteStackInput) -> RusotoFuture<(), DeleteStackError> {
+        CloudFormation::delete_stack(&(**self), input)
+    }
+
+    /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
+    fn delete_stack_instances(
+        &self,
+        input: DeleteStackInstancesInput,
+    ) -> RusotoFuture<DeleteStackInstancesOutput, DeleteStackInstancesError> {
+        CloudFormation::delete_stack_instances(&(**self), input)
+    }
+
+    /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
+    fn delete_stack_set(
+        &self,
+        input: DeleteStackSetInput,
+    ) -> RusotoFuture<DeleteStackSetOutput, DeleteStackSetError> {
+        CloudFormation::delete_stack_set(&(**self), input)
+    }
+
+    /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>
+    fn describe_account_limits(
+        &self,
+        input: DescribeAccountLimitsInput,
+    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
+        CloudFormation::describe_account_limits(&(**self), input)
+    }
+
+    /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
+    fn describe_change_set(
+        &self,
+        input: DescribeChangeSetInput,
+    ) -> RusotoFuture<DescribeChangeSetOutput, DescribeChangeSetError> {
+        CloudFormation::describe_change_set(&(**self), input)
+    }
+
+    /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
+    fn describe_stack_events(
+        &self,
+        input: DescribeStackEventsInput,
+    ) -> RusotoFuture<DescribeStackEventsOutput, DescribeStackEventsError> {
+        CloudFormation::describe_stack_events(&(**self), input)
+    }
+
+    /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
+    fn describe_stack_instance(
+        &self,
+        input: DescribeStackInstanceInput,
+    ) -> RusotoFuture<DescribeStackInstanceOutput, DescribeStackInstanceError> {
+        CloudFormation::describe_stack_instance(&(**self), input)
+    }
+
+    /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
+    fn describe_stack_resource(
+        &self,
+        input: DescribeStackResourceInput,
+    ) -> RusotoFuture<DescribeStackResourceOutput, DescribeStackResourceError> {
+        CloudFormation::describe_stack_resource(&(**self), input)
+    }
+
+    /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
+    fn describe_stack_resources(
+        &self,
+        input: DescribeStackResourcesInput,
+    ) -> RusotoFuture<DescribeStackResourcesOutput, DescribeStackResourcesError> {
+        CloudFormation::describe_stack_resources(&(**self), input)
+    }
+
+    /// <p>Returns the description of the specified stack set. </p>
+    fn describe_stack_set(
+        &self,
+        input: DescribeStackSetInput,
+    ) -> RusotoFuture<DescribeStackSetOutput, DescribeStackSetError> {
+        CloudFormation::describe_stack_set(&(**self), input)
+    }
+
+    /// <p>Returns the description of the specified stack set operation. </p>
+    fn describe_stack_set_operation(
+        &self,
+        input: DescribeStackSetOperationInput,
+    ) -> RusotoFuture<DescribeStackSetOperationOutput, DescribeStackSetOperationError> {
+        CloudFormation::describe_stack_set_operation(&(**self), input)
+    }
+
+    /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
+    fn describe_stacks(
+        &self,
+        input: DescribeStacksInput,
+    ) -> RusotoFuture<DescribeStacksOutput, DescribeStacksError> {
+        CloudFormation::describe_stacks(&(**self), input)
+    }
+
+    /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
+    fn estimate_template_cost(
+        &self,
+        input: EstimateTemplateCostInput,
+    ) -> RusotoFuture<EstimateTemplateCostOutput, EstimateTemplateCostError> {
+        CloudFormation::estimate_template_cost(&(**self), input)
+    }
+
+    /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
+    fn execute_change_set(
+        &self,
+        input: ExecuteChangeSetInput,
+    ) -> RusotoFuture<ExecuteChangeSetOutput, ExecuteChangeSetError> {
+        CloudFormation::execute_change_set(&(**self), input)
+    }
+
+    /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
+    fn get_stack_policy(
+        &self,
+        input: GetStackPolicyInput,
+    ) -> RusotoFuture<GetStackPolicyOutput, GetStackPolicyError> {
+        CloudFormation::get_stack_policy(&(**self), input)
+    }
+
+    /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
+    fn get_template(
+        &self,
+        input: GetTemplateInput,
+    ) -> RusotoFuture<GetTemplateOutput, GetTemplateError> {
+        CloudFormation::get_template(&(**self), input)
+    }
+
+    /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
+    fn get_template_summary(
+        &self,
+        input: GetTemplateSummaryInput,
+    ) -> RusotoFuture<GetTemplateSummaryOutput, GetTemplateSummaryError> {
+        CloudFormation::get_template_summary(&(**self), input)
+    }
+
+    /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
+    fn list_change_sets(
+        &self,
+        input: ListChangeSetsInput,
+    ) -> RusotoFuture<ListChangeSetsOutput, ListChangeSetsError> {
+        CloudFormation::list_change_sets(&(**self), input)
+    }
+
+    /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
+    fn list_exports(
+        &self,
+        input: ListExportsInput,
+    ) -> RusotoFuture<ListExportsOutput, ListExportsError> {
+        CloudFormation::list_exports(&(**self), input)
+    }
+
+    /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
+    fn list_imports(
+        &self,
+        input: ListImportsInput,
+    ) -> RusotoFuture<ListImportsOutput, ListImportsError> {
+        CloudFormation::list_imports(&(**self), input)
+    }
+
+    /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
+    fn list_stack_instances(
+        &self,
+        input: ListStackInstancesInput,
+    ) -> RusotoFuture<ListStackInstancesOutput, ListStackInstancesError> {
+        CloudFormation::list_stack_instances(&(**self), input)
+    }
+
+    /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
+    fn list_stack_resources(
+        &self,
+        input: ListStackResourcesInput,
+    ) -> RusotoFuture<ListStackResourcesOutput, ListStackResourcesError> {
+        CloudFormation::list_stack_resources(&(**self), input)
+    }
+
+    /// <p>Returns summary information about the results of a stack set operation. </p>
+    fn list_stack_set_operation_results(
+        &self,
+        input: ListStackSetOperationResultsInput,
+    ) -> RusotoFuture<ListStackSetOperationResultsOutput, ListStackSetOperationResultsError> {
+        CloudFormation::list_stack_set_operation_results(&(**self), input)
+    }
+
+    /// <p>Returns summary information about operations performed on a stack set. </p>
+    fn list_stack_set_operations(
+        &self,
+        input: ListStackSetOperationsInput,
+    ) -> RusotoFuture<ListStackSetOperationsOutput, ListStackSetOperationsError> {
+        CloudFormation::list_stack_set_operations(&(**self), input)
+    }
+
+    /// <p>Returns summary information about stack sets that are associated with the user.</p>
+    fn list_stack_sets(
+        &self,
+        input: ListStackSetsInput,
+    ) -> RusotoFuture<ListStackSetsOutput, ListStackSetsError> {
+        CloudFormation::list_stack_sets(&(**self), input)
+    }
+
+    /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
+    fn list_stacks(
+        &self,
+        input: ListStacksInput,
+    ) -> RusotoFuture<ListStacksOutput, ListStacksError> {
+        CloudFormation::list_stacks(&(**self), input)
+    }
+
+    /// <p>Sets a stack policy for a specified stack.</p>
+    fn set_stack_policy(
+        &self,
+        input: SetStackPolicyInput,
+    ) -> RusotoFuture<(), SetStackPolicyError> {
+        CloudFormation::set_stack_policy(&(**self), input)
+    }
+
+    /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
+    fn signal_resource(&self, input: SignalResourceInput) -> RusotoFuture<(), SignalResourceError> {
+        CloudFormation::signal_resource(&(**self), input)
+    }
+
+    /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
+    fn stop_stack_set_operation(
+        &self,
+        input: StopStackSetOperationInput,
+    ) -> RusotoFuture<StopStackSetOperationOutput, StopStackSetOperationError> {
+        CloudFormation::stop_stack_set_operation(&(**self), input)
+    }
+
+    /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
+    fn update_stack(
+        &self,
+        input: UpdateStackInput,
+    ) -> RusotoFuture<UpdateStackOutput, UpdateStackError> {
+        CloudFormation::update_stack(&(**self), input)
+    }
+
+    /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
+    fn update_stack_instances(
+        &self,
+        input: UpdateStackInstancesInput,
+    ) -> RusotoFuture<UpdateStackInstancesOutput, UpdateStackInstancesError> {
+        CloudFormation::update_stack_instances(&(**self), input)
+    }
+
+    /// <p>Updates the stack set, and associated stack instances in the specified accounts and regions.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
+    fn update_stack_set(
+        &self,
+        input: UpdateStackSetInput,
+    ) -> RusotoFuture<UpdateStackSetOutput, UpdateStackSetError> {
+        CloudFormation::update_stack_set(&(**self), input)
+    }
+
+    /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
+    fn update_termination_protection(
+        &self,
+        input: UpdateTerminationProtectionInput,
+    ) -> RusotoFuture<UpdateTerminationProtectionOutput, UpdateTerminationProtectionError> {
+        CloudFormation::update_termination_protection(&(**self), input)
+    }
+
+    /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
+    fn validate_template(
+        &self,
+        input: ValidateTemplateInput,
+    ) -> RusotoFuture<ValidateTemplateOutput, ValidateTemplateError> {
+        CloudFormation::validate_template(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {
 

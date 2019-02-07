@@ -7385,5 +7385,362 @@ impl SageMaker for SageMakerClient {
     }
 }
 
+impl<T: ?Sized + SageMaker> SageMaker for ::std::rc::Rc<T> {
+    /// <p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, models, endpoint configurations, and endpoints. </p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html#allocation-what">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
+    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+        SageMaker::add_tags(&(**self), input)
+    }
+
+    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS i an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
+    fn create_endpoint(
+        &self,
+        input: CreateEndpointInput,
+    ) -> RusotoFuture<CreateEndpointOutput, CreateEndpointError> {
+        SageMaker::create_endpoint(&(**self), input)
+    }
+
+    /// <p>Creates an endpoint configuration that Amazon SageMaker hosting services uses to deploy models. In the configuration, you identify one or more models, created using the <code>CreateModel</code> API, to deploy and the resources that you want Amazon SageMaker to provision. Then you call the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API.</p> <note> <p> Use this API only if you want to use Amazon SageMaker hosting services to deploy models into production. </p> </note> <p>In the request, you define one or more <code>ProductionVariant</code>s, each of which identifies a model. Each <code>ProductionVariant</code> parameter also describes the resources that you want Amazon SageMaker to provision. This includes the number and type of ML compute instances to deploy. </p> <p>If you are hosting multiple models, you also assign a <code>VariantWeight</code> to specify how much traffic you want to allocate to each model. For example, suppose that you want to host two models, A and B, and you assign traffic weight 2 for model A and 1 for model B. Amazon SageMaker distributes two-thirds of the traffic to Model A, and one-third to model B. </p>
+    fn create_endpoint_config(
+        &self,
+        input: CreateEndpointConfigInput,
+    ) -> RusotoFuture<CreateEndpointConfigOutput, CreateEndpointConfigError> {
+        SageMaker::create_endpoint_config(&(**self), input)
+    }
+
+    /// <p>Starts a hyperparameter tuning job.</p>
+    fn create_hyper_parameter_tuning_job(
+        &self,
+        input: CreateHyperParameterTuningJobRequest,
+    ) -> RusotoFuture<CreateHyperParameterTuningJobResponse, CreateHyperParameterTuningJobError>
+    {
+        SageMaker::create_hyper_parameter_tuning_job(&(**self), input)
+    }
+
+    /// <p>Creates a model in Amazon SageMaker. In the request, you name the model and describe one or more containers. For each container, you specify the docker image containing inference code, artifacts (from prior training), and custom environment map that the inference code uses when you deploy the model into production. </p> <p>Use this API to create a model only if you want to use Amazon SageMaker hosting services. To host your model, you create an endpoint configuration with the <code>CreateEndpointConfig</code> API, and then create an endpoint with the <code>CreateEndpoint</code> API. </p> <p>Amazon SageMaker then deploys all of the containers that you defined for the model in the hosting environment. </p> <p>In the <code>CreateModel</code> request, you must define a container with the <code>PrimaryContainer</code> parameter. </p> <p>In the request, you also provide an IAM role that Amazon SageMaker can assume to access model artifacts and docker image for deployment on ML compute hosting instances. In addition, you also use the IAM role to manage permissions the inference code needs. For example, if the inference code access any other AWS resources, you grant necessary permissions via this role.</p>
+    fn create_model(
+        &self,
+        input: CreateModelInput,
+    ) -> RusotoFuture<CreateModelOutput, CreateModelError> {
+        SageMaker::create_model(&(**self), input)
+    }
+
+    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN).</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    fn create_notebook_instance(
+        &self,
+        input: CreateNotebookInstanceInput,
+    ) -> RusotoFuture<CreateNotebookInstanceOutput, CreateNotebookInstanceError> {
+        SageMaker::create_notebook_instance(&(**self), input)
+    }
+
+    /// <p>Creates a lifecycle configuration that you can associate with a notebook instance. A <i>lifecycle configuration</i> is a collection of shell scripts that run when you create or start a notebook instance.</p> <p>Each lifecycle configuration script has a limit of 16384 characters.</p> <p>The value of the <code>$PATH</code> environment variable that is available to both scripts is <code>/sbin:bin:/usr/sbin:/usr/bin</code>.</p> <p>View CloudWatch Logs for notebook instance lifecycle configurations in log group <code>/aws/sagemaker/NotebookInstances</code> in log stream <code>[notebook-instance-name]/[LifecycleConfigHook]</code>.</p> <p>Lifecycle configuration scripts cannot run for longer than 5 minutes. If a script runs for longer than 5 minutes, it fails and the notebook instance is not created or started.</p> <p>For information about notebook instance lifestyle configurations, see <a>notebook-lifecycle-config</a>.</p>
+    fn create_notebook_instance_lifecycle_config(
+        &self,
+        input: CreateNotebookInstanceLifecycleConfigInput,
+    ) -> RusotoFuture<
+        CreateNotebookInstanceLifecycleConfigOutput,
+        CreateNotebookInstanceLifecycleConfigError,
+    > {
+        SageMaker::create_notebook_instance_lifecycle_config(&(**self), input)
+    }
+
+    /// <p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page. </p>
+    fn create_presigned_notebook_instance_url(
+        &self,
+        input: CreatePresignedNotebookInstanceUrlInput,
+    ) -> RusotoFuture<
+        CreatePresignedNotebookInstanceUrlOutput,
+        CreatePresignedNotebookInstanceUrlError,
+    > {
+        SageMaker::create_presigned_notebook_instance_url(&(**self), input)
+    }
+
+    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a deep learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to influence the quality of the final model. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - Sets a duration for training. Use this parameter to cap model training costs. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    fn create_training_job(
+        &self,
+        input: CreateTrainingJobRequest,
+    ) -> RusotoFuture<CreateTrainingJobResponse, CreateTrainingJobError> {
+        SageMaker::create_training_job(&(**self), input)
+    }
+
+    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model within an AWS Region in an AWS account.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p> For more information about how batch transformation works Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>. </p>
+    fn create_transform_job(
+        &self,
+        input: CreateTransformJobRequest,
+    ) -> RusotoFuture<CreateTransformJobResponse, CreateTransformJobError> {
+        SageMaker::create_transform_job(&(**self), input)
+    }
+
+    /// <p>Deletes an endpoint. Amazon SageMaker frees up all of the resources that were deployed when the endpoint was created. </p> <p>Amazon SageMaker retires any custom KMS key grants associated with the endpoint, meaning you don't need to use the <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_RevokeGrant.html">RevokeGrant</a> API call.</p>
+    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError> {
+        SageMaker::delete_endpoint(&(**self), input)
+    }
+
+    /// <p>Deletes an endpoint configuration. The <code>DeleteEndpointConfig</code> API deletes only the specified configuration. It does not delete endpoints created using the configuration. </p>
+    fn delete_endpoint_config(
+        &self,
+        input: DeleteEndpointConfigInput,
+    ) -> RusotoFuture<(), DeleteEndpointConfigError> {
+        SageMaker::delete_endpoint_config(&(**self), input)
+    }
+
+    /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
+    fn delete_model(&self, input: DeleteModelInput) -> RusotoFuture<(), DeleteModelError> {
+        SageMaker::delete_model(&(**self), input)
+    }
+
+    /// <p><p> Deletes an Amazon SageMaker notebook instance. Before you can delete a notebook instance, you must call the <code>StopNotebookInstance</code> API. </p> <important> <p>When you delete a notebook instance, you lose all of your data. Amazon SageMaker removes the ML compute instance, and deletes the ML storage volume and the network interface associated with the notebook instance. </p> </important></p>
+    fn delete_notebook_instance(
+        &self,
+        input: DeleteNotebookInstanceInput,
+    ) -> RusotoFuture<(), DeleteNotebookInstanceError> {
+        SageMaker::delete_notebook_instance(&(**self), input)
+    }
+
+    /// <p>Deletes a notebook instance lifecycle configuration.</p>
+    fn delete_notebook_instance_lifecycle_config(
+        &self,
+        input: DeleteNotebookInstanceLifecycleConfigInput,
+    ) -> RusotoFuture<(), DeleteNotebookInstanceLifecycleConfigError> {
+        SageMaker::delete_notebook_instance_lifecycle_config(&(**self), input)
+    }
+
+    /// <p>Deletes the specified tags from an Amazon SageMaker resource.</p> <p>To list a resource's tags, use the <code>ListTags</code> API. </p>
+    fn delete_tags(
+        &self,
+        input: DeleteTagsInput,
+    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
+        SageMaker::delete_tags(&(**self), input)
+    }
+
+    /// <p>Returns the description of an endpoint.</p>
+    fn describe_endpoint(
+        &self,
+        input: DescribeEndpointInput,
+    ) -> RusotoFuture<DescribeEndpointOutput, DescribeEndpointError> {
+        SageMaker::describe_endpoint(&(**self), input)
+    }
+
+    /// <p>Returns the description of an endpoint configuration created using the <code>CreateEndpointConfig</code> API.</p>
+    fn describe_endpoint_config(
+        &self,
+        input: DescribeEndpointConfigInput,
+    ) -> RusotoFuture<DescribeEndpointConfigOutput, DescribeEndpointConfigError> {
+        SageMaker::describe_endpoint_config(&(**self), input)
+    }
+
+    /// <p>Gets a description of a hyperparameter tuning job.</p>
+    fn describe_hyper_parameter_tuning_job(
+        &self,
+        input: DescribeHyperParameterTuningJobRequest,
+    ) -> RusotoFuture<DescribeHyperParameterTuningJobResponse, DescribeHyperParameterTuningJobError>
+    {
+        SageMaker::describe_hyper_parameter_tuning_job(&(**self), input)
+    }
+
+    /// <p>Describes a model that you created using the <code>CreateModel</code> API.</p>
+    fn describe_model(
+        &self,
+        input: DescribeModelInput,
+    ) -> RusotoFuture<DescribeModelOutput, DescribeModelError> {
+        SageMaker::describe_model(&(**self), input)
+    }
+
+    /// <p>Returns information about a notebook instance.</p>
+    fn describe_notebook_instance(
+        &self,
+        input: DescribeNotebookInstanceInput,
+    ) -> RusotoFuture<DescribeNotebookInstanceOutput, DescribeNotebookInstanceError> {
+        SageMaker::describe_notebook_instance(&(**self), input)
+    }
+
+    /// <p>Returns a description of a notebook instance lifecycle configuration.</p> <p>For information about notebook instance lifestyle configurations, see <a>notebook-lifecycle-config</a>.</p>
+    fn describe_notebook_instance_lifecycle_config(
+        &self,
+        input: DescribeNotebookInstanceLifecycleConfigInput,
+    ) -> RusotoFuture<
+        DescribeNotebookInstanceLifecycleConfigOutput,
+        DescribeNotebookInstanceLifecycleConfigError,
+    > {
+        SageMaker::describe_notebook_instance_lifecycle_config(&(**self), input)
+    }
+
+    /// <p>Returns information about a training job.</p>
+    fn describe_training_job(
+        &self,
+        input: DescribeTrainingJobRequest,
+    ) -> RusotoFuture<DescribeTrainingJobResponse, DescribeTrainingJobError> {
+        SageMaker::describe_training_job(&(**self), input)
+    }
+
+    /// <p>Returns information about a transform job.</p>
+    fn describe_transform_job(
+        &self,
+        input: DescribeTransformJobRequest,
+    ) -> RusotoFuture<DescribeTransformJobResponse, DescribeTransformJobError> {
+        SageMaker::describe_transform_job(&(**self), input)
+    }
+
+    /// <p>Lists endpoint configurations.</p>
+    fn list_endpoint_configs(
+        &self,
+        input: ListEndpointConfigsInput,
+    ) -> RusotoFuture<ListEndpointConfigsOutput, ListEndpointConfigsError> {
+        SageMaker::list_endpoint_configs(&(**self), input)
+    }
+
+    /// <p>Lists endpoints.</p>
+    fn list_endpoints(
+        &self,
+        input: ListEndpointsInput,
+    ) -> RusotoFuture<ListEndpointsOutput, ListEndpointsError> {
+        SageMaker::list_endpoints(&(**self), input)
+    }
+
+    /// <p>Gets a list of <a>HyperParameterTuningJobSummary</a> objects that describe the hyperparameter tuning jobs launched in your account.</p>
+    fn list_hyper_parameter_tuning_jobs(
+        &self,
+        input: ListHyperParameterTuningJobsRequest,
+    ) -> RusotoFuture<ListHyperParameterTuningJobsResponse, ListHyperParameterTuningJobsError> {
+        SageMaker::list_hyper_parameter_tuning_jobs(&(**self), input)
+    }
+
+    /// <p>Lists models created with the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API.</p>
+    fn list_models(
+        &self,
+        input: ListModelsInput,
+    ) -> RusotoFuture<ListModelsOutput, ListModelsError> {
+        SageMaker::list_models(&(**self), input)
+    }
+
+    /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
+    fn list_notebook_instance_lifecycle_configs(
+        &self,
+        input: ListNotebookInstanceLifecycleConfigsInput,
+    ) -> RusotoFuture<
+        ListNotebookInstanceLifecycleConfigsOutput,
+        ListNotebookInstanceLifecycleConfigsError,
+    > {
+        SageMaker::list_notebook_instance_lifecycle_configs(&(**self), input)
+    }
+
+    /// <p>Returns a list of the Amazon SageMaker notebook instances in the requester's account in an AWS Region. </p>
+    fn list_notebook_instances(
+        &self,
+        input: ListNotebookInstancesInput,
+    ) -> RusotoFuture<ListNotebookInstancesOutput, ListNotebookInstancesError> {
+        SageMaker::list_notebook_instances(&(**self), input)
+    }
+
+    /// <p>Returns the tags for the specified Amazon SageMaker resource.</p>
+    fn list_tags(&self, input: ListTagsInput) -> RusotoFuture<ListTagsOutput, ListTagsError> {
+        SageMaker::list_tags(&(**self), input)
+    }
+
+    /// <p>Lists training jobs.</p>
+    fn list_training_jobs(
+        &self,
+        input: ListTrainingJobsRequest,
+    ) -> RusotoFuture<ListTrainingJobsResponse, ListTrainingJobsError> {
+        SageMaker::list_training_jobs(&(**self), input)
+    }
+
+    /// <p>Gets a list of <a>TrainingJobSummary</a> objects that describe the training jobs that a hyperparameter tuning job launched.</p>
+    fn list_training_jobs_for_hyper_parameter_tuning_job(
+        &self,
+        input: ListTrainingJobsForHyperParameterTuningJobRequest,
+    ) -> RusotoFuture<
+        ListTrainingJobsForHyperParameterTuningJobResponse,
+        ListTrainingJobsForHyperParameterTuningJobError,
+    > {
+        SageMaker::list_training_jobs_for_hyper_parameter_tuning_job(&(**self), input)
+    }
+
+    /// <p>Lists transform jobs.</p>
+    fn list_transform_jobs(
+        &self,
+        input: ListTransformJobsRequest,
+    ) -> RusotoFuture<ListTransformJobsResponse, ListTransformJobsError> {
+        SageMaker::list_transform_jobs(&(**self), input)
+    }
+
+    /// <p>Launches an ML compute instance with the latest version of the libraries and attaches your ML storage volume. After configuring the notebook instance, Amazon SageMaker sets the notebook instance status to <code>InService</code>. A notebook instance's status must be <code>InService</code> before you can connect to your Jupyter notebook. </p>
+    fn start_notebook_instance(
+        &self,
+        input: StartNotebookInstanceInput,
+    ) -> RusotoFuture<(), StartNotebookInstanceError> {
+        SageMaker::start_notebook_instance(&(**self), input)
+    }
+
+    /// <p>Stops a running hyperparameter tuning job and all running training jobs that the tuning job launched.</p> <p>All model artifacts output from the training jobs are stored in Amazon Simple Storage Service (Amazon S3). All data that the training jobs write to Amazon CloudWatch Logs are still available in CloudWatch. After the tuning job moves to the <code>Stopped</code> state, it releases all reserved resources for the tuning job.</p>
+    fn stop_hyper_parameter_tuning_job(
+        &self,
+        input: StopHyperParameterTuningJobRequest,
+    ) -> RusotoFuture<(), StopHyperParameterTuningJobError> {
+        SageMaker::stop_hyper_parameter_tuning_job(&(**self), input)
+    }
+
+    /// <p>Terminates the ML compute instance. Before terminating the instance, Amazon SageMaker disconnects the ML storage volume from it. Amazon SageMaker preserves the ML storage volume. </p> <p>To access data on the ML storage volume for a notebook instance that has been terminated, call the <code>StartNotebookInstance</code> API. <code>StartNotebookInstance</code> launches another ML compute instance, configures it, and attaches the preserved ML storage volume so you can continue your work. </p>
+    fn stop_notebook_instance(
+        &self,
+        input: StopNotebookInstanceInput,
+    ) -> RusotoFuture<(), StopNotebookInstanceError> {
+        SageMaker::stop_notebook_instance(&(**self), input)
+    }
+
+    /// <p>Stops a training job. To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of the training is not lost. </p> <p>Training algorithms provided by Amazon SageMaker save the intermediate results of a model training job. This intermediate data is a valid model artifact. You can use the model artifacts that are saved when Amazon SageMaker stops a training job to create a model. </p> <p>When it receives a <code>StopTrainingJob</code> request, Amazon SageMaker changes the status of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the status to <code>Stopped</code>.</p>
+    fn stop_training_job(
+        &self,
+        input: StopTrainingJobRequest,
+    ) -> RusotoFuture<(), StopTrainingJobError> {
+        SageMaker::stop_training_job(&(**self), input)
+    }
+
+    /// <p>Stops a transform job.</p> <p>When Amazon SageMaker receives a <code>StopTransformJob</code> request, the status of the job changes to <code>Stopping</code>. After Amazon SageMaker stops the job, the status is set to <code>Stopped</code>. When you stop a transform job before it is completed, Amazon SageMaker doesn't store the job's output in Amazon S3.</p>
+    fn stop_transform_job(
+        &self,
+        input: StopTransformJobRequest,
+    ) -> RusotoFuture<(), StopTransformJobError> {
+        SageMaker::stop_transform_job(&(**self), input)
+    }
+
+    /// <p><p> Deploys the new <code>EndpointConfig</code> specified in the request, switches to using newly created endpoint, and then deletes resources provisioned for the endpoint using the previous <code>EndpointConfig</code> (there is no availability loss). </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p> <note> <p>You cannot update an endpoint with the current <code>EndpointConfig</code>. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note></p>
+    fn update_endpoint(
+        &self,
+        input: UpdateEndpointInput,
+    ) -> RusotoFuture<UpdateEndpointOutput, UpdateEndpointError> {
+        SageMaker::update_endpoint(&(**self), input)
+    }
+
+    /// <p>Updates variant weight of one or more variants associated with an existing endpoint, or capacity of one variant associated with an existing endpoint. When it receives the request, Amazon SageMaker sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p>
+    fn update_endpoint_weights_and_capacities(
+        &self,
+        input: UpdateEndpointWeightsAndCapacitiesInput,
+    ) -> RusotoFuture<
+        UpdateEndpointWeightsAndCapacitiesOutput,
+        UpdateEndpointWeightsAndCapacitiesError,
+    > {
+        SageMaker::update_endpoint_weights_and_capacities(&(**self), input)
+    }
+
+    /// <p>Updates a notebook instance. NotebookInstance updates include upgrading or downgrading the ML compute instance used for your notebook instance to accommodate changes in your workload requirements. You can also update the VPC security groups.</p>
+    fn update_notebook_instance(
+        &self,
+        input: UpdateNotebookInstanceInput,
+    ) -> RusotoFuture<UpdateNotebookInstanceOutput, UpdateNotebookInstanceError> {
+        SageMaker::update_notebook_instance(&(**self), input)
+    }
+
+    /// <p>Updates a notebook instance lifecycle configuration created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
+    fn update_notebook_instance_lifecycle_config(
+        &self,
+        input: UpdateNotebookInstanceLifecycleConfigInput,
+    ) -> RusotoFuture<
+        UpdateNotebookInstanceLifecycleConfigOutput,
+        UpdateNotebookInstanceLifecycleConfigError,
+    > {
+        SageMaker::update_notebook_instance_lifecycle_config(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

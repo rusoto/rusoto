@@ -1980,5 +1980,103 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 }
 
+impl<T: ?Sized + Iot1ClickDevices> Iot1ClickDevices for ::std::rc::Rc<T> {
+    /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if
+    /// you received a claim code with the device(s).</p>
+    fn claim_devices_by_claim_code(
+        &self,
+        input: ClaimDevicesByClaimCodeRequest,
+    ) -> RusotoFuture<ClaimDevicesByClaimCodeResponse, ClaimDevicesByClaimCodeError> {
+        Iot1ClickDevices::claim_devices_by_claim_code(&(**self), input)
+    }
+
+    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing
+    /// the details of the device.</p>
+    fn describe_device(
+        &self,
+        input: DescribeDeviceRequest,
+    ) -> RusotoFuture<DescribeDeviceResponse, DescribeDeviceError> {
+        Iot1ClickDevices::describe_device(&(**self), input)
+    }
+
+    /// <p>Given a device ID, finalizes the claim request for the associated device.</p><note>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device
+    /// event, and finalizing the claim. For a device of type button, a
+    /// device event can be published by simply clicking the device.</p>
+    ///
+    /// <p></note></p>
+    fn finalize_device_claim(
+        &self,
+        input: FinalizeDeviceClaimRequest,
+    ) -> RusotoFuture<FinalizeDeviceClaimResponse, FinalizeDeviceClaimError> {
+        Iot1ClickDevices::finalize_device_claim(&(**self), input)
+    }
+
+    /// <p>Given a device ID, returns the invokable methods associated with the
+    /// device.</p>
+    fn get_device_methods(
+        &self,
+        input: GetDeviceMethodsRequest,
+    ) -> RusotoFuture<GetDeviceMethodsResponse, GetDeviceMethodsError> {
+        Iot1ClickDevices::get_device_methods(&(**self), input)
+    }
+
+    /// <p>Given a device ID, initiates a claim request for the associated device.</p><note>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device
+    /// event, and finalizing the claim. For a device of type button, a
+    /// device event can be published by simply clicking the device.</p>
+    ///
+    /// <p></note></p>
+    fn initiate_device_claim(
+        &self,
+        input: InitiateDeviceClaimRequest,
+    ) -> RusotoFuture<InitiateDeviceClaimResponse, InitiateDeviceClaimError> {
+        Iot1ClickDevices::initiate_device_claim(&(**self), input)
+    }
+
+    /// <p>Given a device ID, issues a request to invoke a named device method (with possible
+    /// parameters). See the "Example POST" code snippet below.</p>
+    fn invoke_device_method(
+        &self,
+        input: InvokeDeviceMethodRequest,
+    ) -> RusotoFuture<InvokeDeviceMethodResponse, InvokeDeviceMethodError> {
+        Iot1ClickDevices::invoke_device_method(&(**self), input)
+    }
+
+    /// <p>Using a device ID, returns a DeviceEventsResponse object containing
+    /// an array of events for the device.</p>
+    fn list_device_events(
+        &self,
+        input: ListDeviceEventsRequest,
+    ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError> {
+        Iot1ClickDevices::list_device_events(&(**self), input)
+    }
+
+    /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
+    fn list_devices(
+        &self,
+        input: ListDevicesRequest,
+    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
+        Iot1ClickDevices::list_devices(&(**self), input)
+    }
+
+    /// <p>Disassociates a device from your AWS account using its device ID.</p>
+    fn unclaim_device(
+        &self,
+        input: UnclaimDeviceRequest,
+    ) -> RusotoFuture<UnclaimDeviceResponse, UnclaimDeviceError> {
+        Iot1ClickDevices::unclaim_device(&(**self), input)
+    }
+
+    /// <p>Using a Boolean value (true or false), this operation
+    /// enables or disables the device given a device ID.</p>
+    fn update_device_state(
+        &self,
+        input: UpdateDeviceStateRequest,
+    ) -> RusotoFuture<UpdateDeviceStateResponse, UpdateDeviceStateError> {
+        Iot1ClickDevices::update_device_state(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

@@ -6545,5 +6545,293 @@ impl AppStream for AppStreamClient {
     }
 }
 
+impl<T: ?Sized + AppStream> AppStream for ::std::rc::Rc<T> {
+    /// <p>Associates the specified fleet with the specified stack.</p>
+    fn associate_fleet(
+        &self,
+        input: AssociateFleetRequest,
+    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError> {
+        AppStream::associate_fleet(&(**self), input)
+    }
+
+    /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
+    fn copy_image(
+        &self,
+        input: CopyImageRequest,
+    ) -> RusotoFuture<CopyImageResponse, CopyImageError> {
+        AppStream::copy_image(&(**self), input)
+    }
+
+    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    fn create_directory_config(
+        &self,
+        input: CreateDirectoryConfigRequest,
+    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
+        AppStream::create_directory_config(&(**self), input)
+    }
+
+    /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
+    fn create_fleet(
+        &self,
+        input: CreateFleetRequest,
+    ) -> RusotoFuture<CreateFleetResult, CreateFleetError> {
+        AppStream::create_fleet(&(**self), input)
+    }
+
+    /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
+    fn create_image_builder(
+        &self,
+        input: CreateImageBuilderRequest,
+    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError> {
+        AppStream::create_image_builder(&(**self), input)
+    }
+
+    /// <p>Creates a URL to start an image builder streaming session.</p>
+    fn create_image_builder_streaming_url(
+        &self,
+        input: CreateImageBuilderStreamingURLRequest,
+    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>
+    {
+        AppStream::create_image_builder_streaming_url(&(**self), input)
+    }
+
+    /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
+    fn create_stack(
+        &self,
+        input: CreateStackRequest,
+    ) -> RusotoFuture<CreateStackResult, CreateStackError> {
+        AppStream::create_stack(&(**self), input)
+    }
+
+    /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
+    fn create_streaming_url(
+        &self,
+        input: CreateStreamingURLRequest,
+    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError> {
+        AppStream::create_streaming_url(&(**self), input)
+    }
+
+    /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    fn delete_directory_config(
+        &self,
+        input: DeleteDirectoryConfigRequest,
+    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
+        AppStream::delete_directory_config(&(**self), input)
+    }
+
+    /// <p>Deletes the specified fleet.</p>
+    fn delete_fleet(
+        &self,
+        input: DeleteFleetRequest,
+    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError> {
+        AppStream::delete_fleet(&(**self), input)
+    }
+
+    /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
+    fn delete_image(
+        &self,
+        input: DeleteImageRequest,
+    ) -> RusotoFuture<DeleteImageResult, DeleteImageError> {
+        AppStream::delete_image(&(**self), input)
+    }
+
+    /// <p>Deletes the specified image builder and releases the capacity.</p>
+    fn delete_image_builder(
+        &self,
+        input: DeleteImageBuilderRequest,
+    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError> {
+        AppStream::delete_image_builder(&(**self), input)
+    }
+
+    /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
+    fn delete_image_permissions(
+        &self,
+        input: DeleteImagePermissionsRequest,
+    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError> {
+        AppStream::delete_image_permissions(&(**self), input)
+    }
+
+    /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
+    fn delete_stack(
+        &self,
+        input: DeleteStackRequest,
+    ) -> RusotoFuture<DeleteStackResult, DeleteStackError> {
+        AppStream::delete_stack(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the information required to join streaming instances to an Active Directory domain. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
+    fn describe_directory_configs(
+        &self,
+        input: DescribeDirectoryConfigsRequest,
+    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
+        AppStream::describe_directory_configs(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
+    fn describe_fleets(
+        &self,
+        input: DescribeFleetsRequest,
+    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError> {
+        AppStream::describe_fleets(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
+    fn describe_image_builders(
+        &self,
+        input: DescribeImageBuildersRequest,
+    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError> {
+        AppStream::describe_image_builders(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes the permissions for a private image that you own. </p>
+    fn describe_image_permissions(
+        &self,
+        input: DescribeImagePermissionsRequest,
+    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError> {
+        AppStream::describe_image_permissions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes one or more specified images, if the image names are provided. Otherwise, all images in the account are described.</p>
+    fn describe_images(
+        &self,
+        input: DescribeImagesRequest,
+    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError> {
+        AppStream::describe_images(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a user ID is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
+    fn describe_sessions(
+        &self,
+        input: DescribeSessionsRequest,
+    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError> {
+        AppStream::describe_sessions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
+    fn describe_stacks(
+        &self,
+        input: DescribeStacksRequest,
+    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
+        AppStream::describe_stacks(&(**self), input)
+    }
+
+    /// <p>Disassociates the specified fleet from the specified stack.</p>
+    fn disassociate_fleet(
+        &self,
+        input: DisassociateFleetRequest,
+    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError> {
+        AppStream::disassociate_fleet(&(**self), input)
+    }
+
+    /// <p>Immediately stops the specified streaming session.</p>
+    fn expire_session(
+        &self,
+        input: ExpireSessionRequest,
+    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError> {
+        AppStream::expire_session(&(**self), input)
+    }
+
+    /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
+    fn list_associated_fleets(
+        &self,
+        input: ListAssociatedFleetsRequest,
+    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
+        AppStream::list_associated_fleets(&(**self), input)
+    }
+
+    /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
+    fn list_associated_stacks(
+        &self,
+        input: ListAssociatedStacksRequest,
+    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError> {
+        AppStream::list_associated_stacks(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        AppStream::list_tags_for_resource(&(**self), input)
+    }
+
+    /// <p>Starts the specified fleet.</p>
+    fn start_fleet(
+        &self,
+        input: StartFleetRequest,
+    ) -> RusotoFuture<StartFleetResult, StartFleetError> {
+        AppStream::start_fleet(&(**self), input)
+    }
+
+    /// <p>Starts the specified image builder.</p>
+    fn start_image_builder(
+        &self,
+        input: StartImageBuilderRequest,
+    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError> {
+        AppStream::start_image_builder(&(**self), input)
+    }
+
+    /// <p>Stops the specified fleet.</p>
+    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError> {
+        AppStream::stop_fleet(&(**self), input)
+    }
+
+    /// <p>Stops the specified image builder.</p>
+    fn stop_image_builder(
+        &self,
+        input: StopImageBuilderRequest,
+    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError> {
+        AppStream::stop_image_builder(&(**self), input)
+    }
+
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        AppStream::tag_resource(&(**self), input)
+    }
+
+    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        AppStream::untag_resource(&(**self), input)
+    }
+
+    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    fn update_directory_config(
+        &self,
+        input: UpdateDirectoryConfigRequest,
+    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
+        AppStream::update_directory_config(&(**self), input)
+    }
+
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
+    fn update_fleet(
+        &self,
+        input: UpdateFleetRequest,
+    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError> {
+        AppStream::update_fleet(&(**self), input)
+    }
+
+    /// <p>Adds or updates permissions for the specified private image. </p>
+    fn update_image_permissions(
+        &self,
+        input: UpdateImagePermissionsRequest,
+    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError> {
+        AppStream::update_image_permissions(&(**self), input)
+    }
+
+    /// <p>Updates the specified fields for the specified stack.</p>
+    fn update_stack(
+        &self,
+        input: UpdateStackRequest,
+    ) -> RusotoFuture<UpdateStackResult, UpdateStackError> {
+        AppStream::update_stack(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

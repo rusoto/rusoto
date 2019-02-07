@@ -5863,5 +5863,256 @@ impl Workmail for WorkmailClient {
     }
 }
 
+impl<T: ?Sized + Workmail> Workmail for ::std::rc::Rc<T> {
+    /// <p>Adds a member to the resource's set of delegates.</p>
+    fn associate_delegate_to_resource(
+        &self,
+        input: AssociateDelegateToResourceRequest,
+    ) -> RusotoFuture<AssociateDelegateToResourceResponse, AssociateDelegateToResourceError> {
+        Workmail::associate_delegate_to_resource(&(**self), input)
+    }
+
+    /// <p>Adds a member to the group's set.</p>
+    fn associate_member_to_group(
+        &self,
+        input: AssociateMemberToGroupRequest,
+    ) -> RusotoFuture<AssociateMemberToGroupResponse, AssociateMemberToGroupError> {
+        Workmail::associate_member_to_group(&(**self), input)
+    }
+
+    /// <p>Adds an alias to the set of a given member of Amazon WorkMail.</p>
+    fn create_alias(
+        &self,
+        input: CreateAliasRequest,
+    ) -> RusotoFuture<CreateAliasResponse, CreateAliasError> {
+        Workmail::create_alias(&(**self), input)
+    }
+
+    /// <p>Creates a group that can be used in Amazon WorkMail by calling the RegisterToWorkMail operation.</p>
+    fn create_group(
+        &self,
+        input: CreateGroupRequest,
+    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
+        Workmail::create_group(&(**self), input)
+    }
+
+    /// <p>Creates a new Amazon WorkMail resource. The available types are equipment and room.</p>
+    fn create_resource(
+        &self,
+        input: CreateResourceRequest,
+    ) -> RusotoFuture<CreateResourceResponse, CreateResourceError> {
+        Workmail::create_resource(&(**self), input)
+    }
+
+    /// <p>Creates a user who can be used in Amazon WorkMail by calling the RegisterToWorkMail operation.</p>
+    fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+        Workmail::create_user(&(**self), input)
+    }
+
+    /// <p>Remove the alias from a set of aliases for a given user.</p>
+    fn delete_alias(
+        &self,
+        input: DeleteAliasRequest,
+    ) -> RusotoFuture<DeleteAliasResponse, DeleteAliasError> {
+        Workmail::delete_alias(&(**self), input)
+    }
+
+    /// <p>Deletes a group from Amazon WorkMail.</p>
+    fn delete_group(
+        &self,
+        input: DeleteGroupRequest,
+    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
+        Workmail::delete_group(&(**self), input)
+    }
+
+    /// <p>Deletes permissions granted to a user or group.</p>
+    fn delete_mailbox_permissions(
+        &self,
+        input: DeleteMailboxPermissionsRequest,
+    ) -> RusotoFuture<DeleteMailboxPermissionsResponse, DeleteMailboxPermissionsError> {
+        Workmail::delete_mailbox_permissions(&(**self), input)
+    }
+
+    /// <p>Deletes the specified resource. </p>
+    fn delete_resource(
+        &self,
+        input: DeleteResourceRequest,
+    ) -> RusotoFuture<DeleteResourceResponse, DeleteResourceError> {
+        Workmail::delete_resource(&(**self), input)
+    }
+
+    /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. The action can't be undone. The mailbox is kept as-is for a minimum of 30 days, without any means to restore it. </p>
+    fn delete_user(
+        &self,
+        input: DeleteUserRequest,
+    ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
+        Workmail::delete_user(&(**self), input)
+    }
+
+    /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. Amazon WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
+    fn deregister_from_work_mail(
+        &self,
+        input: DeregisterFromWorkMailRequest,
+    ) -> RusotoFuture<DeregisterFromWorkMailResponse, DeregisterFromWorkMailError> {
+        Workmail::deregister_from_work_mail(&(**self), input)
+    }
+
+    /// <p>Returns the data available for the group.</p>
+    fn describe_group(
+        &self,
+        input: DescribeGroupRequest,
+    ) -> RusotoFuture<DescribeGroupResponse, DescribeGroupError> {
+        Workmail::describe_group(&(**self), input)
+    }
+
+    /// <p>Provides more information regarding a given organization based on its identifier.</p>
+    fn describe_organization(
+        &self,
+        input: DescribeOrganizationRequest,
+    ) -> RusotoFuture<DescribeOrganizationResponse, DescribeOrganizationError> {
+        Workmail::describe_organization(&(**self), input)
+    }
+
+    /// <p>Returns the data available for the resource.</p>
+    fn describe_resource(
+        &self,
+        input: DescribeResourceRequest,
+    ) -> RusotoFuture<DescribeResourceResponse, DescribeResourceError> {
+        Workmail::describe_resource(&(**self), input)
+    }
+
+    /// <p>Provides information regarding the user.</p>
+    fn describe_user(
+        &self,
+        input: DescribeUserRequest,
+    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+        Workmail::describe_user(&(**self), input)
+    }
+
+    /// <p>Removes a member from the resource's set of delegates.</p>
+    fn disassociate_delegate_from_resource(
+        &self,
+        input: DisassociateDelegateFromResourceRequest,
+    ) -> RusotoFuture<DisassociateDelegateFromResourceResponse, DisassociateDelegateFromResourceError>
+    {
+        Workmail::disassociate_delegate_from_resource(&(**self), input)
+    }
+
+    /// <p>Removes a member from a group.</p>
+    fn disassociate_member_from_group(
+        &self,
+        input: DisassociateMemberFromGroupRequest,
+    ) -> RusotoFuture<DisassociateMemberFromGroupResponse, DisassociateMemberFromGroupError> {
+        Workmail::disassociate_member_from_group(&(**self), input)
+    }
+
+    /// <p>Creates a paginated call to list the aliases associated with a given entity.</p>
+    fn list_aliases(
+        &self,
+        input: ListAliasesRequest,
+    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
+        Workmail::list_aliases(&(**self), input)
+    }
+
+    /// <p>Returns an overview of the members of a group.</p>
+    fn list_group_members(
+        &self,
+        input: ListGroupMembersRequest,
+    ) -> RusotoFuture<ListGroupMembersResponse, ListGroupMembersError> {
+        Workmail::list_group_members(&(**self), input)
+    }
+
+    /// <p>Returns summaries of the organization's groups.</p>
+    fn list_groups(
+        &self,
+        input: ListGroupsRequest,
+    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
+        Workmail::list_groups(&(**self), input)
+    }
+
+    /// <p>Lists the mailbox permissions associated with a mailbox.</p>
+    fn list_mailbox_permissions(
+        &self,
+        input: ListMailboxPermissionsRequest,
+    ) -> RusotoFuture<ListMailboxPermissionsResponse, ListMailboxPermissionsError> {
+        Workmail::list_mailbox_permissions(&(**self), input)
+    }
+
+    /// <p>Returns summaries of the customer's non-deleted organizations.</p>
+    fn list_organizations(
+        &self,
+        input: ListOrganizationsRequest,
+    ) -> RusotoFuture<ListOrganizationsResponse, ListOrganizationsError> {
+        Workmail::list_organizations(&(**self), input)
+    }
+
+    /// <p>Lists the delegates associated with a resource. Users and groups can be resource delegates and answer requests on behalf of the resource.</p>
+    fn list_resource_delegates(
+        &self,
+        input: ListResourceDelegatesRequest,
+    ) -> RusotoFuture<ListResourceDelegatesResponse, ListResourceDelegatesError> {
+        Workmail::list_resource_delegates(&(**self), input)
+    }
+
+    /// <p>Returns summaries of the organization's resources.</p>
+    fn list_resources(
+        &self,
+        input: ListResourcesRequest,
+    ) -> RusotoFuture<ListResourcesResponse, ListResourcesError> {
+        Workmail::list_resources(&(**self), input)
+    }
+
+    /// <p>Returns summaries of the organization's users.</p>
+    fn list_users(
+        &self,
+        input: ListUsersRequest,
+    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+        Workmail::list_users(&(**self), input)
+    }
+
+    /// <p>Sets permissions for a user or group. This replaces any pre-existing permissions set for the entity.</p>
+    fn put_mailbox_permissions(
+        &self,
+        input: PutMailboxPermissionsRequest,
+    ) -> RusotoFuture<PutMailboxPermissionsResponse, PutMailboxPermissionsError> {
+        Workmail::put_mailbox_permissions(&(**self), input)
+    }
+
+    /// <p>Registers an existing and disabled user, group, or resource/entity for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the entity is enabled and fails if the entity is deleted. This operation results in the accumulation of costs. For more information, see <a href="http://aws.amazon.com/workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. Users can either be created by calling the CreateUser API or they can be synchronized from your directory. For more information, see DeregisterFromWorkMail.</p>
+    fn register_to_work_mail(
+        &self,
+        input: RegisterToWorkMailRequest,
+    ) -> RusotoFuture<RegisterToWorkMailResponse, RegisterToWorkMailError> {
+        Workmail::register_to_work_mail(&(**self), input)
+    }
+
+    /// <p>Allows the administrator to reset the password for a user.</p>
+    fn reset_password(
+        &self,
+        input: ResetPasswordRequest,
+    ) -> RusotoFuture<ResetPasswordResponse, ResetPasswordError> {
+        Workmail::reset_password(&(**self), input)
+    }
+
+    /// <p>Updates the primary email for an entity. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email) and the email provided in the input is promoted as the primary.</p>
+    fn update_primary_email_address(
+        &self,
+        input: UpdatePrimaryEmailAddressRequest,
+    ) -> RusotoFuture<UpdatePrimaryEmailAddressResponse, UpdatePrimaryEmailAddressError> {
+        Workmail::update_primary_email_address(&(**self), input)
+    }
+
+    /// <p>Updates data for the resource. It must be preceded by a describe call in order to have the latest information. The dataset in the request should be the one expected when performing another describe call.</p>
+    fn update_resource(
+        &self,
+        input: UpdateResourceRequest,
+    ) -> RusotoFuture<UpdateResourceResponse, UpdateResourceError> {
+        Workmail::update_resource(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

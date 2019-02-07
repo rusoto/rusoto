@@ -19954,5 +19954,751 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
     }
 }
 
+impl<T: ?Sized + CognitoIdentityProvider> CognitoIdentityProvider for ::std::rc::Rc<T> {
+    /// <p>Adds additional user attributes to the user pool schema.</p>
+    fn add_custom_attributes(
+        &self,
+        input: AddCustomAttributesRequest,
+    ) -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError> {
+        CognitoIdentityProvider::add_custom_attributes(&(**self), input)
+    }
+
+    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
+    fn admin_add_user_to_group(
+        &self,
+        input: AdminAddUserToGroupRequest,
+    ) -> RusotoFuture<(), AdminAddUserToGroupError> {
+        CognitoIdentityProvider::admin_add_user_to_group(&(**self), input)
+    }
+
+    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_confirm_sign_up(
+        &self,
+        input: AdminConfirmSignUpRequest,
+    ) -> RusotoFuture<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
+        CognitoIdentityProvider::admin_confirm_sign_up(&(**self), input)
+    }
+
+    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
+    fn admin_create_user(
+        &self,
+        input: AdminCreateUserRequest,
+    ) -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError> {
+        CognitoIdentityProvider::admin_create_user(&(**self), input)
+    }
+
+    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_delete_user(
+        &self,
+        input: AdminDeleteUserRequest,
+    ) -> RusotoFuture<(), AdminDeleteUserError> {
+        CognitoIdentityProvider::admin_delete_user(&(**self), input)
+    }
+
+    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_delete_user_attributes(
+        &self,
+        input: AdminDeleteUserAttributesRequest,
+    ) -> RusotoFuture<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
+        CognitoIdentityProvider::admin_delete_user_attributes(&(**self), input)
+    }
+
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    fn admin_disable_provider_for_user(
+        &self,
+        input: AdminDisableProviderForUserRequest,
+    ) -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
+        CognitoIdentityProvider::admin_disable_provider_for_user(&(**self), input)
+    }
+
+    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_disable_user(
+        &self,
+        input: AdminDisableUserRequest,
+    ) -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError> {
+        CognitoIdentityProvider::admin_disable_user(&(**self), input)
+    }
+
+    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_enable_user(
+        &self,
+        input: AdminEnableUserRequest,
+    ) -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError> {
+        CognitoIdentityProvider::admin_enable_user(&(**self), input)
+    }
+
+    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_forget_device(
+        &self,
+        input: AdminForgetDeviceRequest,
+    ) -> RusotoFuture<(), AdminForgetDeviceError> {
+        CognitoIdentityProvider::admin_forget_device(&(**self), input)
+    }
+
+    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_get_device(
+        &self,
+        input: AdminGetDeviceRequest,
+    ) -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError> {
+        CognitoIdentityProvider::admin_get_device(&(**self), input)
+    }
+
+    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_get_user(
+        &self,
+        input: AdminGetUserRequest,
+    ) -> RusotoFuture<AdminGetUserResponse, AdminGetUserError> {
+        CognitoIdentityProvider::admin_get_user(&(**self), input)
+    }
+
+    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_initiate_auth(
+        &self,
+        input: AdminInitiateAuthRequest,
+    ) -> RusotoFuture<AdminInitiateAuthResponse, AdminInitiateAuthError> {
+        CognitoIdentityProvider::admin_initiate_auth(&(**self), input)
+    }
+
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
+    fn admin_link_provider_for_user(
+        &self,
+        input: AdminLinkProviderForUserRequest,
+    ) -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
+        CognitoIdentityProvider::admin_link_provider_for_user(&(**self), input)
+    }
+
+    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_list_devices(
+        &self,
+        input: AdminListDevicesRequest,
+    ) -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError> {
+        CognitoIdentityProvider::admin_list_devices(&(**self), input)
+    }
+
+    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
+    fn admin_list_groups_for_user(
+        &self,
+        input: AdminListGroupsForUserRequest,
+    ) -> RusotoFuture<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
+        CognitoIdentityProvider::admin_list_groups_for_user(&(**self), input)
+    }
+
+    /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
+    fn admin_list_user_auth_events(
+        &self,
+        input: AdminListUserAuthEventsRequest,
+    ) -> RusotoFuture<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError> {
+        CognitoIdentityProvider::admin_list_user_auth_events(&(**self), input)
+    }
+
+    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
+    fn admin_remove_user_from_group(
+        &self,
+        input: AdminRemoveUserFromGroupRequest,
+    ) -> RusotoFuture<(), AdminRemoveUserFromGroupError> {
+        CognitoIdentityProvider::admin_remove_user_from_group(&(**self), input)
+    }
+
+    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
+    fn admin_reset_user_password(
+        &self,
+        input: AdminResetUserPasswordRequest,
+    ) -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
+        CognitoIdentityProvider::admin_reset_user_password(&(**self), input)
+    }
+
+    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_respond_to_auth_challenge(
+        &self,
+        input: AdminRespondToAuthChallengeRequest,
+    ) -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
+        CognitoIdentityProvider::admin_respond_to_auth_challenge(&(**self), input)
+    }
+
+    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
+    fn admin_set_user_mfa_preference(
+        &self,
+        input: AdminSetUserMFAPreferenceRequest,
+    ) -> RusotoFuture<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError> {
+        CognitoIdentityProvider::admin_set_user_mfa_preference(&(**self), input)
+    }
+
+    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_set_user_settings(
+        &self,
+        input: AdminSetUserSettingsRequest,
+    ) -> RusotoFuture<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
+        CognitoIdentityProvider::admin_set_user_settings(&(**self), input)
+    }
+
+    /// <p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn admin_update_auth_event_feedback(
+        &self,
+        input: AdminUpdateAuthEventFeedbackRequest,
+    ) -> RusotoFuture<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError> {
+        CognitoIdentityProvider::admin_update_auth_event_feedback(&(**self), input)
+    }
+
+    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_update_device_status(
+        &self,
+        input: AdminUpdateDeviceStatusRequest,
+    ) -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
+        CognitoIdentityProvider::admin_update_device_status(&(**self), input)
+    }
+
+    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
+    fn admin_update_user_attributes(
+        &self,
+        input: AdminUpdateUserAttributesRequest,
+    ) -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
+        CognitoIdentityProvider::admin_update_user_attributes(&(**self), input)
+    }
+
+    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_user_global_sign_out(
+        &self,
+        input: AdminUserGlobalSignOutRequest,
+    ) -> RusotoFuture<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
+        CognitoIdentityProvider::admin_user_global_sign_out(&(**self), input)
+    }
+
+    /// <p>Returns a unique generated shared secret key code for the user account. The request takes an access token or a session string, but not both.</p>
+    fn associate_software_token(
+        &self,
+        input: AssociateSoftwareTokenRequest,
+    ) -> RusotoFuture<AssociateSoftwareTokenResponse, AssociateSoftwareTokenError> {
+        CognitoIdentityProvider::associate_software_token(&(**self), input)
+    }
+
+    /// <p>Changes the password for a specified user in a user pool.</p>
+    fn change_password(
+        &self,
+        input: ChangePasswordRequest,
+    ) -> RusotoFuture<ChangePasswordResponse, ChangePasswordError> {
+        CognitoIdentityProvider::change_password(&(**self), input)
+    }
+
+    /// <p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>
+    fn confirm_device(
+        &self,
+        input: ConfirmDeviceRequest,
+    ) -> RusotoFuture<ConfirmDeviceResponse, ConfirmDeviceError> {
+        CognitoIdentityProvider::confirm_device(&(**self), input)
+    }
+
+    /// <p>Allows a user to enter a confirmation code to reset a forgotten password.</p>
+    fn confirm_forgot_password(
+        &self,
+        input: ConfirmForgotPasswordRequest,
+    ) -> RusotoFuture<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
+        CognitoIdentityProvider::confirm_forgot_password(&(**self), input)
+    }
+
+    /// <p>Confirms registration of a user and handles the existing alias from a previous user.</p>
+    fn confirm_sign_up(
+        &self,
+        input: ConfirmSignUpRequest,
+    ) -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError> {
+        CognitoIdentityProvider::confirm_sign_up(&(**self), input)
+    }
+
+    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
+    fn create_group(
+        &self,
+        input: CreateGroupRequest,
+    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
+        CognitoIdentityProvider::create_group(&(**self), input)
+    }
+
+    /// <p>Creates an identity provider for a user pool.</p>
+    fn create_identity_provider(
+        &self,
+        input: CreateIdentityProviderRequest,
+    ) -> RusotoFuture<CreateIdentityProviderResponse, CreateIdentityProviderError> {
+        CognitoIdentityProvider::create_identity_provider(&(**self), input)
+    }
+
+    /// <p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>
+    fn create_resource_server(
+        &self,
+        input: CreateResourceServerRequest,
+    ) -> RusotoFuture<CreateResourceServerResponse, CreateResourceServerError> {
+        CognitoIdentityProvider::create_resource_server(&(**self), input)
+    }
+
+    /// <p>Creates the user import job.</p>
+    fn create_user_import_job(
+        &self,
+        input: CreateUserImportJobRequest,
+    ) -> RusotoFuture<CreateUserImportJobResponse, CreateUserImportJobError> {
+        CognitoIdentityProvider::create_user_import_job(&(**self), input)
+    }
+
+    /// <p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>
+    fn create_user_pool(
+        &self,
+        input: CreateUserPoolRequest,
+    ) -> RusotoFuture<CreateUserPoolResponse, CreateUserPoolError> {
+        CognitoIdentityProvider::create_user_pool(&(**self), input)
+    }
+
+    /// <p>Creates the user pool client.</p>
+    fn create_user_pool_client(
+        &self,
+        input: CreateUserPoolClientRequest,
+    ) -> RusotoFuture<CreateUserPoolClientResponse, CreateUserPoolClientError> {
+        CognitoIdentityProvider::create_user_pool_client(&(**self), input)
+    }
+
+    /// <p>Creates a new domain for a user pool.</p>
+    fn create_user_pool_domain(
+        &self,
+        input: CreateUserPoolDomainRequest,
+    ) -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
+        CognitoIdentityProvider::create_user_pool_domain(&(**self), input)
+    }
+
+    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
+    fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError> {
+        CognitoIdentityProvider::delete_group(&(**self), input)
+    }
+
+    /// <p>Deletes an identity provider for a user pool.</p>
+    fn delete_identity_provider(
+        &self,
+        input: DeleteIdentityProviderRequest,
+    ) -> RusotoFuture<(), DeleteIdentityProviderError> {
+        CognitoIdentityProvider::delete_identity_provider(&(**self), input)
+    }
+
+    /// <p>Deletes a resource server.</p>
+    fn delete_resource_server(
+        &self,
+        input: DeleteResourceServerRequest,
+    ) -> RusotoFuture<(), DeleteResourceServerError> {
+        CognitoIdentityProvider::delete_resource_server(&(**self), input)
+    }
+
+    /// <p>Allows a user to delete himself or herself.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
+        CognitoIdentityProvider::delete_user(&(**self), input)
+    }
+
+    /// <p>Deletes the attributes for a user.</p>
+    fn delete_user_attributes(
+        &self,
+        input: DeleteUserAttributesRequest,
+    ) -> RusotoFuture<DeleteUserAttributesResponse, DeleteUserAttributesError> {
+        CognitoIdentityProvider::delete_user_attributes(&(**self), input)
+    }
+
+    /// <p>Deletes the specified Amazon Cognito user pool.</p>
+    fn delete_user_pool(
+        &self,
+        input: DeleteUserPoolRequest,
+    ) -> RusotoFuture<(), DeleteUserPoolError> {
+        CognitoIdentityProvider::delete_user_pool(&(**self), input)
+    }
+
+    /// <p>Allows the developer to delete the user pool client.</p>
+    fn delete_user_pool_client(
+        &self,
+        input: DeleteUserPoolClientRequest,
+    ) -> RusotoFuture<(), DeleteUserPoolClientError> {
+        CognitoIdentityProvider::delete_user_pool_client(&(**self), input)
+    }
+
+    /// <p>Deletes a domain for a user pool.</p>
+    fn delete_user_pool_domain(
+        &self,
+        input: DeleteUserPoolDomainRequest,
+    ) -> RusotoFuture<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
+        CognitoIdentityProvider::delete_user_pool_domain(&(**self), input)
+    }
+
+    /// <p>Gets information about a specific identity provider.</p>
+    fn describe_identity_provider(
+        &self,
+        input: DescribeIdentityProviderRequest,
+    ) -> RusotoFuture<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
+        CognitoIdentityProvider::describe_identity_provider(&(**self), input)
+    }
+
+    /// <p>Describes a resource server.</p>
+    fn describe_resource_server(
+        &self,
+        input: DescribeResourceServerRequest,
+    ) -> RusotoFuture<DescribeResourceServerResponse, DescribeResourceServerError> {
+        CognitoIdentityProvider::describe_resource_server(&(**self), input)
+    }
+
+    /// <p>Describes the risk configuration.</p>
+    fn describe_risk_configuration(
+        &self,
+        input: DescribeRiskConfigurationRequest,
+    ) -> RusotoFuture<DescribeRiskConfigurationResponse, DescribeRiskConfigurationError> {
+        CognitoIdentityProvider::describe_risk_configuration(&(**self), input)
+    }
+
+    /// <p>Describes the user import job.</p>
+    fn describe_user_import_job(
+        &self,
+        input: DescribeUserImportJobRequest,
+    ) -> RusotoFuture<DescribeUserImportJobResponse, DescribeUserImportJobError> {
+        CognitoIdentityProvider::describe_user_import_job(&(**self), input)
+    }
+
+    /// <p>Returns the configuration information and metadata of the specified user pool.</p>
+    fn describe_user_pool(
+        &self,
+        input: DescribeUserPoolRequest,
+    ) -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError> {
+        CognitoIdentityProvider::describe_user_pool(&(**self), input)
+    }
+
+    /// <p>Client method for returning the configuration information and metadata of the specified user pool client.</p>
+    fn describe_user_pool_client(
+        &self,
+        input: DescribeUserPoolClientRequest,
+    ) -> RusotoFuture<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
+        CognitoIdentityProvider::describe_user_pool_client(&(**self), input)
+    }
+
+    /// <p>Gets information about a domain.</p>
+    fn describe_user_pool_domain(
+        &self,
+        input: DescribeUserPoolDomainRequest,
+    ) -> RusotoFuture<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
+        CognitoIdentityProvider::describe_user_pool_domain(&(**self), input)
+    }
+
+    /// <p>Forgets the specified device.</p>
+    fn forget_device(&self, input: ForgetDeviceRequest) -> RusotoFuture<(), ForgetDeviceError> {
+        CognitoIdentityProvider::forget_device(&(**self), input)
+    }
+
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
+    fn forgot_password(
+        &self,
+        input: ForgotPasswordRequest,
+    ) -> RusotoFuture<ForgotPasswordResponse, ForgotPasswordError> {
+        CognitoIdentityProvider::forgot_password(&(**self), input)
+    }
+
+    /// <p>Gets the header information for the .csv file to be used as input for the user import job.</p>
+    fn get_csv_header(
+        &self,
+        input: GetCSVHeaderRequest,
+    ) -> RusotoFuture<GetCSVHeaderResponse, GetCSVHeaderError> {
+        CognitoIdentityProvider::get_csv_header(&(**self), input)
+    }
+
+    /// <p>Gets the device.</p>
+    fn get_device(
+        &self,
+        input: GetDeviceRequest,
+    ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
+        CognitoIdentityProvider::get_device(&(**self), input)
+    }
+
+    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
+    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
+        CognitoIdentityProvider::get_group(&(**self), input)
+    }
+
+    /// <p>Gets the specified identity provider.</p>
+    fn get_identity_provider_by_identifier(
+        &self,
+        input: GetIdentityProviderByIdentifierRequest,
+    ) -> RusotoFuture<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>
+    {
+        CognitoIdentityProvider::get_identity_provider_by_identifier(&(**self), input)
+    }
+
+    /// <p>This method takes a user pool ID, and returns the signing certificate.</p>
+    fn get_signing_certificate(
+        &self,
+        input: GetSigningCertificateRequest,
+    ) -> RusotoFuture<GetSigningCertificateResponse, GetSigningCertificateError> {
+        CognitoIdentityProvider::get_signing_certificate(&(**self), input)
+    }
+
+    /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
+    fn get_ui_customization(
+        &self,
+        input: GetUICustomizationRequest,
+    ) -> RusotoFuture<GetUICustomizationResponse, GetUICustomizationError> {
+        CognitoIdentityProvider::get_ui_customization(&(**self), input)
+    }
+
+    /// <p>Gets the user attributes and metadata for a user.</p>
+    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError> {
+        CognitoIdentityProvider::get_user(&(**self), input)
+    }
+
+    /// <p>Gets the user attribute verification code for the specified attribute name.</p>
+    fn get_user_attribute_verification_code(
+        &self,
+        input: GetUserAttributeVerificationCodeRequest,
+    ) -> RusotoFuture<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>
+    {
+        CognitoIdentityProvider::get_user_attribute_verification_code(&(**self), input)
+    }
+
+    /// <p>Gets the user pool multi-factor authentication (MFA) configuration.</p>
+    fn get_user_pool_mfa_config(
+        &self,
+        input: GetUserPoolMfaConfigRequest,
+    ) -> RusotoFuture<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError> {
+        CognitoIdentityProvider::get_user_pool_mfa_config(&(**self), input)
+    }
+
+    /// <p>Signs out users from all devices.</p>
+    fn global_sign_out(
+        &self,
+        input: GlobalSignOutRequest,
+    ) -> RusotoFuture<GlobalSignOutResponse, GlobalSignOutError> {
+        CognitoIdentityProvider::global_sign_out(&(**self), input)
+    }
+
+    /// <p>Initiates the authentication flow.</p>
+    fn initiate_auth(
+        &self,
+        input: InitiateAuthRequest,
+    ) -> RusotoFuture<InitiateAuthResponse, InitiateAuthError> {
+        CognitoIdentityProvider::initiate_auth(&(**self), input)
+    }
+
+    /// <p>Lists the devices.</p>
+    fn list_devices(
+        &self,
+        input: ListDevicesRequest,
+    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
+        CognitoIdentityProvider::list_devices(&(**self), input)
+    }
+
+    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
+    fn list_groups(
+        &self,
+        input: ListGroupsRequest,
+    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
+        CognitoIdentityProvider::list_groups(&(**self), input)
+    }
+
+    /// <p>Lists information about all identity providers for a user pool.</p>
+    fn list_identity_providers(
+        &self,
+        input: ListIdentityProvidersRequest,
+    ) -> RusotoFuture<ListIdentityProvidersResponse, ListIdentityProvidersError> {
+        CognitoIdentityProvider::list_identity_providers(&(**self), input)
+    }
+
+    /// <p>Lists the resource servers for a user pool.</p>
+    fn list_resource_servers(
+        &self,
+        input: ListResourceServersRequest,
+    ) -> RusotoFuture<ListResourceServersResponse, ListResourceServersError> {
+        CognitoIdentityProvider::list_resource_servers(&(**self), input)
+    }
+
+    /// <p>Lists the user import jobs.</p>
+    fn list_user_import_jobs(
+        &self,
+        input: ListUserImportJobsRequest,
+    ) -> RusotoFuture<ListUserImportJobsResponse, ListUserImportJobsError> {
+        CognitoIdentityProvider::list_user_import_jobs(&(**self), input)
+    }
+
+    /// <p>Lists the clients that have been created for the specified user pool.</p>
+    fn list_user_pool_clients(
+        &self,
+        input: ListUserPoolClientsRequest,
+    ) -> RusotoFuture<ListUserPoolClientsResponse, ListUserPoolClientsError> {
+        CognitoIdentityProvider::list_user_pool_clients(&(**self), input)
+    }
+
+    /// <p>Lists the user pools associated with an AWS account.</p>
+    fn list_user_pools(
+        &self,
+        input: ListUserPoolsRequest,
+    ) -> RusotoFuture<ListUserPoolsResponse, ListUserPoolsError> {
+        CognitoIdentityProvider::list_user_pools(&(**self), input)
+    }
+
+    /// <p>Lists the users in the Amazon Cognito user pool.</p>
+    fn list_users(
+        &self,
+        input: ListUsersRequest,
+    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+        CognitoIdentityProvider::list_users(&(**self), input)
+    }
+
+    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
+    fn list_users_in_group(
+        &self,
+        input: ListUsersInGroupRequest,
+    ) -> RusotoFuture<ListUsersInGroupResponse, ListUsersInGroupError> {
+        CognitoIdentityProvider::list_users_in_group(&(**self), input)
+    }
+
+    /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
+    fn resend_confirmation_code(
+        &self,
+        input: ResendConfirmationCodeRequest,
+    ) -> RusotoFuture<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
+        CognitoIdentityProvider::resend_confirmation_code(&(**self), input)
+    }
+
+    /// <p>Responds to the authentication challenge.</p>
+    fn respond_to_auth_challenge(
+        &self,
+        input: RespondToAuthChallengeRequest,
+    ) -> RusotoFuture<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
+        CognitoIdentityProvider::respond_to_auth_challenge(&(**self), input)
+    }
+
+    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
+    fn set_risk_configuration(
+        &self,
+        input: SetRiskConfigurationRequest,
+    ) -> RusotoFuture<SetRiskConfigurationResponse, SetRiskConfigurationError> {
+        CognitoIdentityProvider::set_risk_configuration(&(**self), input)
+    }
+
+    /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
+    fn set_ui_customization(
+        &self,
+        input: SetUICustomizationRequest,
+    ) -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError> {
+        CognitoIdentityProvider::set_ui_customization(&(**self), input)
+    }
+
+    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
+    fn set_user_mfa_preference(
+        &self,
+        input: SetUserMFAPreferenceRequest,
+    ) -> RusotoFuture<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError> {
+        CognitoIdentityProvider::set_user_mfa_preference(&(**self), input)
+    }
+
+    /// <p>Set the user pool MFA configuration.</p>
+    fn set_user_pool_mfa_config(
+        &self,
+        input: SetUserPoolMfaConfigRequest,
+    ) -> RusotoFuture<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError> {
+        CognitoIdentityProvider::set_user_pool_mfa_config(&(**self), input)
+    }
+
+    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
+    fn set_user_settings(
+        &self,
+        input: SetUserSettingsRequest,
+    ) -> RusotoFuture<SetUserSettingsResponse, SetUserSettingsError> {
+        CognitoIdentityProvider::set_user_settings(&(**self), input)
+    }
+
+    /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
+    fn sign_up(&self, input: SignUpRequest) -> RusotoFuture<SignUpResponse, SignUpError> {
+        CognitoIdentityProvider::sign_up(&(**self), input)
+    }
+
+    /// <p>Starts the user import.</p>
+    fn start_user_import_job(
+        &self,
+        input: StartUserImportJobRequest,
+    ) -> RusotoFuture<StartUserImportJobResponse, StartUserImportJobError> {
+        CognitoIdentityProvider::start_user_import_job(&(**self), input)
+    }
+
+    /// <p>Stops the user import job.</p>
+    fn stop_user_import_job(
+        &self,
+        input: StopUserImportJobRequest,
+    ) -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError> {
+        CognitoIdentityProvider::stop_user_import_job(&(**self), input)
+    }
+
+    /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn update_auth_event_feedback(
+        &self,
+        input: UpdateAuthEventFeedbackRequest,
+    ) -> RusotoFuture<UpdateAuthEventFeedbackResponse, UpdateAuthEventFeedbackError> {
+        CognitoIdentityProvider::update_auth_event_feedback(&(**self), input)
+    }
+
+    /// <p>Updates the device status.</p>
+    fn update_device_status(
+        &self,
+        input: UpdateDeviceStatusRequest,
+    ) -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
+        CognitoIdentityProvider::update_device_status(&(**self), input)
+    }
+
+    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
+    fn update_group(
+        &self,
+        input: UpdateGroupRequest,
+    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
+        CognitoIdentityProvider::update_group(&(**self), input)
+    }
+
+    /// <p>Updates identity provider information for a user pool.</p>
+    fn update_identity_provider(
+        &self,
+        input: UpdateIdentityProviderRequest,
+    ) -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
+        CognitoIdentityProvider::update_identity_provider(&(**self), input)
+    }
+
+    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
+    fn update_resource_server(
+        &self,
+        input: UpdateResourceServerRequest,
+    ) -> RusotoFuture<UpdateResourceServerResponse, UpdateResourceServerError> {
+        CognitoIdentityProvider::update_resource_server(&(**self), input)
+    }
+
+    /// <p>Allows a user to update a specific attribute (one at a time).</p>
+    fn update_user_attributes(
+        &self,
+        input: UpdateUserAttributesRequest,
+    ) -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError> {
+        CognitoIdentityProvider::update_user_attributes(&(**self), input)
+    }
+
+    /// <p>Updates the specified user pool with the specified attributes.</p>
+    fn update_user_pool(
+        &self,
+        input: UpdateUserPoolRequest,
+    ) -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError> {
+        CognitoIdentityProvider::update_user_pool(&(**self), input)
+    }
+
+    /// <p>Allows the developer to update the specified user pool client and password policy.</p>
+    fn update_user_pool_client(
+        &self,
+        input: UpdateUserPoolClientRequest,
+    ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
+        CognitoIdentityProvider::update_user_pool_client(&(**self), input)
+    }
+
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
+    fn verify_software_token(
+        &self,
+        input: VerifySoftwareTokenRequest,
+    ) -> RusotoFuture<VerifySoftwareTokenResponse, VerifySoftwareTokenError> {
+        CognitoIdentityProvider::verify_software_token(&(**self), input)
+    }
+
+    /// <p>Verifies the specified user attributes in the user pool.</p>
+    fn verify_user_attribute(
+        &self,
+        input: VerifyUserAttributeRequest,
+    ) -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError> {
+        CognitoIdentityProvider::verify_user_attribute(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

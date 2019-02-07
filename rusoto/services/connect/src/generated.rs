@@ -3572,5 +3572,141 @@ impl Connect for ConnectClient {
     }
 }
 
+impl<T: ?Sized + Connect> Connect for ::std::rc::Rc<T> {
+    /// <p>Creates a new user account in your Amazon Connect instance.</p>
+    fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+        Connect::create_user(&(**self), input)
+    }
+
+    /// <p>Deletes a user account from Amazon Connect.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
+        Connect::delete_user(&(**self), input)
+    }
+
+    /// <p>Returns a <code>User</code> object that contains information about the user account specified by the <code>UserId</code>.</p>
+    fn describe_user(
+        &self,
+        input: DescribeUserRequest,
+    ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
+        Connect::describe_user(&(**self), input)
+    }
+
+    /// <p>Returns a <code>HierarchyGroup</code> object that includes information about a hierarchy group in your instance.</p>
+    fn describe_user_hierarchy_group(
+        &self,
+        input: DescribeUserHierarchyGroupRequest,
+    ) -> RusotoFuture<DescribeUserHierarchyGroupResponse, DescribeUserHierarchyGroupError> {
+        Connect::describe_user_hierarchy_group(&(**self), input)
+    }
+
+    /// <p>Returns a <code>HiearchyGroupStructure</code> object, which contains data about the levels in the agent hierarchy.</p>
+    fn describe_user_hierarchy_structure(
+        &self,
+        input: DescribeUserHierarchyStructureRequest,
+    ) -> RusotoFuture<DescribeUserHierarchyStructureResponse, DescribeUserHierarchyStructureError>
+    {
+        Connect::describe_user_hierarchy_structure(&(**self), input)
+    }
+
+    /// <p>Retrieves a token for federation.</p>
+    fn get_federation_token(
+        &self,
+        input: GetFederationTokenRequest,
+    ) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError> {
+        Connect::get_federation_token(&(**self), input)
+    }
+
+    /// <p>Returns an array of <code>RoutingProfileSummary</code> objects that includes information about the routing profiles in your instance.</p>
+    fn list_routing_profiles(
+        &self,
+        input: ListRoutingProfilesRequest,
+    ) -> RusotoFuture<ListRoutingProfilesResponse, ListRoutingProfilesError> {
+        Connect::list_routing_profiles(&(**self), input)
+    }
+
+    /// <p>Returns an array of SecurityProfileSummary objects that contain information about the security profiles in your instance, including the ARN, Id, and Name of the security profile.</p>
+    fn list_security_profiles(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError> {
+        Connect::list_security_profiles(&(**self), input)
+    }
+
+    /// <p>Returns a <code>UserHierarchyGroupSummaryList</code>, which is an array of <code>HierarchyGroupSummary</code> objects that contain information about the hierarchy groups in your instance.</p>
+    fn list_user_hierarchy_groups(
+        &self,
+        input: ListUserHierarchyGroupsRequest,
+    ) -> RusotoFuture<ListUserHierarchyGroupsResponse, ListUserHierarchyGroupsError> {
+        Connect::list_user_hierarchy_groups(&(**self), input)
+    }
+
+    /// <p>Returns a <code>UserSummaryList</code>, which is an array of <code>UserSummary</code> objects.</p>
+    fn list_users(
+        &self,
+        input: ListUsersRequest,
+    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
+        Connect::list_users(&(**self), input)
+    }
+
+    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>There is a throttling limit placed on usage of the API that includes a RateLimit of 2 per second, and a BurstLimit of 5 per second.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p>
+    fn start_outbound_voice_contact(
+        &self,
+        input: StartOutboundVoiceContactRequest,
+    ) -> RusotoFuture<StartOutboundVoiceContactResponse, StartOutboundVoiceContactError> {
+        Connect::start_outbound_voice_contact(&(**self), input)
+    }
+
+    /// <p>Ends the contact initiated by the <code>StartOutboundVoiceContact</code> operation.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StopContact</code> action.</p>
+    fn stop_contact(
+        &self,
+        input: StopContactRequest,
+    ) -> RusotoFuture<StopContactResponse, StopContactError> {
+        Connect::stop_contact(&(**self), input)
+    }
+
+    /// <p>Assigns the specified hierarchy group to the user.</p>
+    fn update_user_hierarchy(
+        &self,
+        input: UpdateUserHierarchyRequest,
+    ) -> RusotoFuture<(), UpdateUserHierarchyError> {
+        Connect::update_user_hierarchy(&(**self), input)
+    }
+
+    /// <p>Updates the identity information for the specified user in a <code>UserIdentityInfo</code> object, including email, first name, and last name.</p>
+    fn update_user_identity_info(
+        &self,
+        input: UpdateUserIdentityInfoRequest,
+    ) -> RusotoFuture<(), UpdateUserIdentityInfoError> {
+        Connect::update_user_identity_info(&(**self), input)
+    }
+
+    /// <p>Updates the phone configuration settings in the <code>UserPhoneConfig</code> object for the specified user.</p>
+    fn update_user_phone_config(
+        &self,
+        input: UpdateUserPhoneConfigRequest,
+    ) -> RusotoFuture<(), UpdateUserPhoneConfigError> {
+        Connect::update_user_phone_config(&(**self), input)
+    }
+
+    /// <p>Assigns the specified routing profile to a user.</p>
+    fn update_user_routing_profile(
+        &self,
+        input: UpdateUserRoutingProfileRequest,
+    ) -> RusotoFuture<(), UpdateUserRoutingProfileError> {
+        Connect::update_user_routing_profile(&(**self), input)
+    }
+
+    /// <p>Update the security profiles assigned to the user.</p>
+    fn update_user_security_profiles(
+        &self,
+        input: UpdateUserSecurityProfilesRequest,
+    ) -> RusotoFuture<(), UpdateUserSecurityProfilesError> {
+        Connect::update_user_security_profiles(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

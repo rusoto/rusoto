@@ -2546,5 +2546,90 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 }
 
+impl<T: ?Sized + ServerlessRepo> ServerlessRepo for ::std::rc::Rc<T> {
+    /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
+    fn create_application(
+        &self,
+        input: CreateApplicationRequest,
+    ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
+        ServerlessRepo::create_application(&(**self), input)
+    }
+
+    /// <p>Creates an application version.</p>
+    fn create_application_version(
+        &self,
+        input: CreateApplicationVersionRequest,
+    ) -> RusotoFuture<CreateApplicationVersionResponse, CreateApplicationVersionError> {
+        ServerlessRepo::create_application_version(&(**self), input)
+    }
+
+    /// <p>Creates an AWS CloudFormation change set for the given application.</p>
+    fn create_cloud_formation_change_set(
+        &self,
+        input: CreateCloudFormationChangeSetRequest,
+    ) -> RusotoFuture<CreateCloudFormationChangeSetResponse, CreateCloudFormationChangeSetError>
+    {
+        ServerlessRepo::create_cloud_formation_change_set(&(**self), input)
+    }
+
+    /// <p>Deletes the specified application.</p>
+    fn delete_application(
+        &self,
+        input: DeleteApplicationRequest,
+    ) -> RusotoFuture<(), DeleteApplicationError> {
+        ServerlessRepo::delete_application(&(**self), input)
+    }
+
+    /// <p>Gets the specified application.</p>
+    fn get_application(
+        &self,
+        input: GetApplicationRequest,
+    ) -> RusotoFuture<GetApplicationResponse, GetApplicationError> {
+        ServerlessRepo::get_application(&(**self), input)
+    }
+
+    /// <p>Retrieves the policy for the application.</p>
+    fn get_application_policy(
+        &self,
+        input: GetApplicationPolicyRequest,
+    ) -> RusotoFuture<GetApplicationPolicyResponse, GetApplicationPolicyError> {
+        ServerlessRepo::get_application_policy(&(**self), input)
+    }
+
+    /// <p>Lists versions for the specified application.</p>
+    fn list_application_versions(
+        &self,
+        input: ListApplicationVersionsRequest,
+    ) -> RusotoFuture<ListApplicationVersionsResponse, ListApplicationVersionsError> {
+        ServerlessRepo::list_application_versions(&(**self), input)
+    }
+
+    /// <p>Lists applications owned by the requester.</p>
+    fn list_applications(
+        &self,
+        input: ListApplicationsRequest,
+    ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError> {
+        ServerlessRepo::list_applications(&(**self), input)
+    }
+
+    /// <p>Sets the permission policy for an application. See
+    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a>
+    /// for the list of supported actions that can be used with this operation.</p>
+    fn put_application_policy(
+        &self,
+        input: PutApplicationPolicyRequest,
+    ) -> RusotoFuture<PutApplicationPolicyResponse, PutApplicationPolicyError> {
+        ServerlessRepo::put_application_policy(&(**self), input)
+    }
+
+    /// <p>Updates the specified application.</p>
+    fn update_application(
+        &self,
+        input: UpdateApplicationRequest,
+    ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
+        ServerlessRepo::update_application(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

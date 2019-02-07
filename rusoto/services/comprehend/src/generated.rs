@@ -5603,5 +5603,251 @@ impl Comprehend for ComprehendClient {
     }
 }
 
+impl<T: ?Sized + Comprehend> Comprehend for ::std::rc::Rc<T> {
+    /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    fn batch_detect_dominant_language(
+        &self,
+        input: BatchDetectDominantLanguageRequest,
+    ) -> RusotoFuture<BatchDetectDominantLanguageResponse, BatchDetectDominantLanguageError> {
+        Comprehend::batch_detect_dominant_language(&(**self), input)
+    }
+
+    /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
+    fn batch_detect_entities(
+        &self,
+        input: BatchDetectEntitiesRequest,
+    ) -> RusotoFuture<BatchDetectEntitiesResponse, BatchDetectEntitiesError> {
+        Comprehend::batch_detect_entities(&(**self), input)
+    }
+
+    /// <p>Detects the key noun phrases found in a batch of documents.</p>
+    fn batch_detect_key_phrases(
+        &self,
+        input: BatchDetectKeyPhrasesRequest,
+    ) -> RusotoFuture<BatchDetectKeyPhrasesResponse, BatchDetectKeyPhrasesError> {
+        Comprehend::batch_detect_key_phrases(&(**self), input)
+    }
+
+    /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
+    fn batch_detect_sentiment(
+        &self,
+        input: BatchDetectSentimentRequest,
+    ) -> RusotoFuture<BatchDetectSentimentResponse, BatchDetectSentimentError> {
+        Comprehend::batch_detect_sentiment(&(**self), input)
+    }
+
+    /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
+    fn batch_detect_syntax(
+        &self,
+        input: BatchDetectSyntaxRequest,
+    ) -> RusotoFuture<BatchDetectSyntaxResponse, BatchDetectSyntaxError> {
+        Comprehend::batch_detect_syntax(&(**self), input)
+    }
+
+    /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_dominant_language_detection_job(
+        &self,
+        input: DescribeDominantLanguageDetectionJobRequest,
+    ) -> RusotoFuture<
+        DescribeDominantLanguageDetectionJobResponse,
+        DescribeDominantLanguageDetectionJobError,
+    > {
+        Comprehend::describe_dominant_language_detection_job(&(**self), input)
+    }
+
+    /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_entities_detection_job(
+        &self,
+        input: DescribeEntitiesDetectionJobRequest,
+    ) -> RusotoFuture<DescribeEntitiesDetectionJobResponse, DescribeEntitiesDetectionJobError> {
+        Comprehend::describe_entities_detection_job(&(**self), input)
+    }
+
+    /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_key_phrases_detection_job(
+        &self,
+        input: DescribeKeyPhrasesDetectionJobRequest,
+    ) -> RusotoFuture<DescribeKeyPhrasesDetectionJobResponse, DescribeKeyPhrasesDetectionJobError>
+    {
+        Comprehend::describe_key_phrases_detection_job(&(**self), input)
+    }
+
+    /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_sentiment_detection_job(
+        &self,
+        input: DescribeSentimentDetectionJobRequest,
+    ) -> RusotoFuture<DescribeSentimentDetectionJobResponse, DescribeSentimentDetectionJobError>
+    {
+        Comprehend::describe_sentiment_detection_job(&(**self), input)
+    }
+
+    /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_topics_detection_job(
+        &self,
+        input: DescribeTopicsDetectionJobRequest,
+    ) -> RusotoFuture<DescribeTopicsDetectionJobResponse, DescribeTopicsDetectionJobError> {
+        Comprehend::describe_topics_detection_job(&(**self), input)
+    }
+
+    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    fn detect_dominant_language(
+        &self,
+        input: DetectDominantLanguageRequest,
+    ) -> RusotoFuture<DetectDominantLanguageResponse, DetectDominantLanguageError> {
+        Comprehend::detect_dominant_language(&(**self), input)
+    }
+
+    /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
+    fn detect_entities(
+        &self,
+        input: DetectEntitiesRequest,
+    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
+        Comprehend::detect_entities(&(**self), input)
+    }
+
+    /// <p>Detects the key noun phrases found in the text. </p>
+    fn detect_key_phrases(
+        &self,
+        input: DetectKeyPhrasesRequest,
+    ) -> RusotoFuture<DetectKeyPhrasesResponse, DetectKeyPhrasesError> {
+        Comprehend::detect_key_phrases(&(**self), input)
+    }
+
+    /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
+    fn detect_sentiment(
+        &self,
+        input: DetectSentimentRequest,
+    ) -> RusotoFuture<DetectSentimentResponse, DetectSentimentError> {
+        Comprehend::detect_sentiment(&(**self), input)
+    }
+
+    /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
+    fn detect_syntax(
+        &self,
+        input: DetectSyntaxRequest,
+    ) -> RusotoFuture<DetectSyntaxResponse, DetectSyntaxError> {
+        Comprehend::detect_syntax(&(**self), input)
+    }
+
+    /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
+    fn list_dominant_language_detection_jobs(
+        &self,
+        input: ListDominantLanguageDetectionJobsRequest,
+    ) -> RusotoFuture<
+        ListDominantLanguageDetectionJobsResponse,
+        ListDominantLanguageDetectionJobsError,
+    > {
+        Comprehend::list_dominant_language_detection_jobs(&(**self), input)
+    }
+
+    /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
+    fn list_entities_detection_jobs(
+        &self,
+        input: ListEntitiesDetectionJobsRequest,
+    ) -> RusotoFuture<ListEntitiesDetectionJobsResponse, ListEntitiesDetectionJobsError> {
+        Comprehend::list_entities_detection_jobs(&(**self), input)
+    }
+
+    /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
+    fn list_key_phrases_detection_jobs(
+        &self,
+        input: ListKeyPhrasesDetectionJobsRequest,
+    ) -> RusotoFuture<ListKeyPhrasesDetectionJobsResponse, ListKeyPhrasesDetectionJobsError> {
+        Comprehend::list_key_phrases_detection_jobs(&(**self), input)
+    }
+
+    /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
+    fn list_sentiment_detection_jobs(
+        &self,
+        input: ListSentimentDetectionJobsRequest,
+    ) -> RusotoFuture<ListSentimentDetectionJobsResponse, ListSentimentDetectionJobsError> {
+        Comprehend::list_sentiment_detection_jobs(&(**self), input)
+    }
+
+    /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
+    fn list_topics_detection_jobs(
+        &self,
+        input: ListTopicsDetectionJobsRequest,
+    ) -> RusotoFuture<ListTopicsDetectionJobsResponse, ListTopicsDetectionJobsError> {
+        Comprehend::list_topics_detection_jobs(&(**self), input)
+    }
+
+    /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    fn start_dominant_language_detection_job(
+        &self,
+        input: StartDominantLanguageDetectionJobRequest,
+    ) -> RusotoFuture<
+        StartDominantLanguageDetectionJobResponse,
+        StartDominantLanguageDetectionJobError,
+    > {
+        Comprehend::start_dominant_language_detection_job(&(**self), input)
+    }
+
+    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    fn start_entities_detection_job(
+        &self,
+        input: StartEntitiesDetectionJobRequest,
+    ) -> RusotoFuture<StartEntitiesDetectionJobResponse, StartEntitiesDetectionJobError> {
+        Comprehend::start_entities_detection_job(&(**self), input)
+    }
+
+    /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    fn start_key_phrases_detection_job(
+        &self,
+        input: StartKeyPhrasesDetectionJobRequest,
+    ) -> RusotoFuture<StartKeyPhrasesDetectionJobResponse, StartKeyPhrasesDetectionJobError> {
+        Comprehend::start_key_phrases_detection_job(&(**self), input)
+    }
+
+    /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
+    fn start_sentiment_detection_job(
+        &self,
+        input: StartSentimentDetectionJobRequest,
+    ) -> RusotoFuture<StartSentimentDetectionJobResponse, StartSentimentDetectionJobError> {
+        Comprehend::start_sentiment_detection_job(&(**self), input)
+    }
+
+    /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
+    fn start_topics_detection_job(
+        &self,
+        input: StartTopicsDetectionJobRequest,
+    ) -> RusotoFuture<StartTopicsDetectionJobResponse, StartTopicsDetectionJobError> {
+        Comprehend::start_topics_detection_job(&(**self), input)
+    }
+
+    /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_dominant_language_detection_job(
+        &self,
+        input: StopDominantLanguageDetectionJobRequest,
+    ) -> RusotoFuture<StopDominantLanguageDetectionJobResponse, StopDominantLanguageDetectionJobError>
+    {
+        Comprehend::stop_dominant_language_detection_job(&(**self), input)
+    }
+
+    /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_entities_detection_job(
+        &self,
+        input: StopEntitiesDetectionJobRequest,
+    ) -> RusotoFuture<StopEntitiesDetectionJobResponse, StopEntitiesDetectionJobError> {
+        Comprehend::stop_entities_detection_job(&(**self), input)
+    }
+
+    /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_key_phrases_detection_job(
+        &self,
+        input: StopKeyPhrasesDetectionJobRequest,
+    ) -> RusotoFuture<StopKeyPhrasesDetectionJobResponse, StopKeyPhrasesDetectionJobError> {
+        Comprehend::stop_key_phrases_detection_job(&(**self), input)
+    }
+
+    /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_sentiment_detection_job(
+        &self,
+        input: StopSentimentDetectionJobRequest,
+    ) -> RusotoFuture<StopSentimentDetectionJobResponse, StopSentimentDetectionJobError> {
+        Comprehend::stop_sentiment_detection_job(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

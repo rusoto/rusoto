@@ -538,5 +538,31 @@ impl CostAndUsageReport for CostAndUsageReportClient {
     }
 }
 
+impl<T: ?Sized + CostAndUsageReport> CostAndUsageReport for ::std::rc::Rc<T> {
+    /// <p>Delete a specified report definition</p>
+    fn delete_report_definition(
+        &self,
+        input: DeleteReportDefinitionRequest,
+    ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
+        CostAndUsageReport::delete_report_definition(&(**self), input)
+    }
+
+    /// <p>Describe a list of report definitions owned by the account</p>
+    fn describe_report_definitions(
+        &self,
+        input: DescribeReportDefinitionsRequest,
+    ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
+        CostAndUsageReport::describe_report_definitions(&(**self), input)
+    }
+
+    /// <p>Create a new report definition</p>
+    fn put_report_definition(
+        &self,
+        input: PutReportDefinitionRequest,
+    ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError> {
+        CostAndUsageReport::put_report_definition(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

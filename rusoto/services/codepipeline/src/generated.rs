@@ -5780,5 +5780,261 @@ impl CodePipeline for CodePipelineClient {
     }
 }
 
+impl<T: ?Sized + CodePipeline> CodePipeline for ::std::rc::Rc<T> {
+    /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
+    fn acknowledge_job(
+        &self,
+        input: AcknowledgeJobInput,
+    ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError> {
+        CodePipeline::acknowledge_job(&(**self), input)
+    }
+
+    /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
+    fn acknowledge_third_party_job(
+        &self,
+        input: AcknowledgeThirdPartyJobInput,
+    ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
+        CodePipeline::acknowledge_third_party_job(&(**self), input)
+    }
+
+    /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
+    fn create_custom_action_type(
+        &self,
+        input: CreateCustomActionTypeInput,
+    ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
+        CodePipeline::create_custom_action_type(&(**self), input)
+    }
+
+    /// <p>Creates a pipeline.</p>
+    fn create_pipeline(
+        &self,
+        input: CreatePipelineInput,
+    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
+        CodePipeline::create_pipeline(&(**self), input)
+    }
+
+    /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
+    fn delete_custom_action_type(
+        &self,
+        input: DeleteCustomActionTypeInput,
+    ) -> RusotoFuture<(), DeleteCustomActionTypeError> {
+        CodePipeline::delete_custom_action_type(&(**self), input)
+    }
+
+    /// <p>Deletes the specified pipeline.</p>
+    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
+        CodePipeline::delete_pipeline(&(**self), input)
+    }
+
+    /// <p>Deletes a previously created webhook by name. Deleting the webhook stops AWS CodePipeline from starting a pipeline every time an external event occurs. The API will return successfully when trying to delete a webhook that is already deleted. If a deleted webhook is re-created by calling PutWebhook with the same name, it will have a different URL.</p>
+    fn delete_webhook(
+        &self,
+        input: DeleteWebhookInput,
+    ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
+        CodePipeline::delete_webhook(&(**self), input)
+    }
+
+    /// <p>Removes the connection between the webhook that was created by CodePipeline and the external tool with events to be detected. Currently only supported for webhooks that target an action type of GitHub.</p>
+    fn deregister_webhook_with_third_party(
+        &self,
+        input: DeregisterWebhookWithThirdPartyInput,
+    ) -> RusotoFuture<DeregisterWebhookWithThirdPartyOutput, DeregisterWebhookWithThirdPartyError>
+    {
+        CodePipeline::deregister_webhook_with_third_party(&(**self), input)
+    }
+
+    /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
+    fn disable_stage_transition(
+        &self,
+        input: DisableStageTransitionInput,
+    ) -> RusotoFuture<(), DisableStageTransitionError> {
+        CodePipeline::disable_stage_transition(&(**self), input)
+    }
+
+    /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
+    fn enable_stage_transition(
+        &self,
+        input: EnableStageTransitionInput,
+    ) -> RusotoFuture<(), EnableStageTransitionError> {
+        CodePipeline::enable_stage_transition(&(**self), input)
+    }
+
+    /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    fn get_job_details(
+        &self,
+        input: GetJobDetailsInput,
+    ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError> {
+        CodePipeline::get_job_details(&(**self), input)
+    }
+
+    /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
+    fn get_pipeline(
+        &self,
+        input: GetPipelineInput,
+    ) -> RusotoFuture<GetPipelineOutput, GetPipelineError> {
+        CodePipeline::get_pipeline(&(**self), input)
+    }
+
+    /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
+    fn get_pipeline_execution(
+        &self,
+        input: GetPipelineExecutionInput,
+    ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError> {
+        CodePipeline::get_pipeline_execution(&(**self), input)
+    }
+
+    /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
+    fn get_pipeline_state(
+        &self,
+        input: GetPipelineStateInput,
+    ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError> {
+        CodePipeline::get_pipeline_state(&(**self), input)
+    }
+
+    /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    fn get_third_party_job_details(
+        &self,
+        input: GetThirdPartyJobDetailsInput,
+    ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
+        CodePipeline::get_third_party_job_details(&(**self), input)
+    }
+
+    /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
+    fn list_action_types(
+        &self,
+        input: ListActionTypesInput,
+    ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError> {
+        CodePipeline::list_action_types(&(**self), input)
+    }
+
+    /// <p>Gets a summary of the most recent executions for a pipeline.</p>
+    fn list_pipeline_executions(
+        &self,
+        input: ListPipelineExecutionsInput,
+    ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
+        CodePipeline::list_pipeline_executions(&(**self), input)
+    }
+
+    /// <p>Gets a summary of all of the pipelines associated with your account.</p>
+    fn list_pipelines(
+        &self,
+        input: ListPipelinesInput,
+    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
+        CodePipeline::list_pipelines(&(**self), input)
+    }
+
+    /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
+    fn list_webhooks(
+        &self,
+        input: ListWebhooksInput,
+    ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError> {
+        CodePipeline::list_webhooks(&(**self), input)
+    }
+
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. PollForJobs is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the PollForJobs action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    fn poll_for_jobs(
+        &self,
+        input: PollForJobsInput,
+    ) -> RusotoFuture<PollForJobsOutput, PollForJobsError> {
+        CodePipeline::poll_for_jobs(&(**self), input)
+    }
+
+    /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
+    fn poll_for_third_party_jobs(
+        &self,
+        input: PollForThirdPartyJobsInput,
+    ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
+        CodePipeline::poll_for_third_party_jobs(&(**self), input)
+    }
+
+    /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
+    fn put_action_revision(
+        &self,
+        input: PutActionRevisionInput,
+    ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError> {
+        CodePipeline::put_action_revision(&(**self), input)
+    }
+
+    /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
+    fn put_approval_result(
+        &self,
+        input: PutApprovalResultInput,
+    ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError> {
+        CodePipeline::put_approval_result(&(**self), input)
+    }
+
+    /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    fn put_job_failure_result(
+        &self,
+        input: PutJobFailureResultInput,
+    ) -> RusotoFuture<(), PutJobFailureResultError> {
+        CodePipeline::put_job_failure_result(&(**self), input)
+    }
+
+    /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
+    fn put_job_success_result(
+        &self,
+        input: PutJobSuccessResultInput,
+    ) -> RusotoFuture<(), PutJobSuccessResultError> {
+        CodePipeline::put_job_success_result(&(**self), input)
+    }
+
+    /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    fn put_third_party_job_failure_result(
+        &self,
+        input: PutThirdPartyJobFailureResultInput,
+    ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError> {
+        CodePipeline::put_third_party_job_failure_result(&(**self), input)
+    }
+
+    /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
+    fn put_third_party_job_success_result(
+        &self,
+        input: PutThirdPartyJobSuccessResultInput,
+    ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError> {
+        CodePipeline::put_third_party_job_success_result(&(**self), input)
+    }
+
+    /// <p>Defines a webhook and returns a unique webhook URL generated by CodePipeline. This URL can be supplied to third party source hosting providers to call every time there's a code change. When CodePipeline receives a POST request on this URL, the pipeline defined in the webhook is started as long as the POST request satisfied the authentication and filtering requirements supplied when defining the webhook. RegisterWebhookWithThirdParty and DeregisterWebhookWithThirdParty APIs can be used to automatically configure supported third parties to call the generated webhook URL.</p>
+    fn put_webhook(
+        &self,
+        input: PutWebhookInput,
+    ) -> RusotoFuture<PutWebhookOutput, PutWebhookError> {
+        CodePipeline::put_webhook(&(**self), input)
+    }
+
+    /// <p>Configures a connection between the webhook that was created and the external tool with events to be detected.</p>
+    fn register_webhook_with_third_party(
+        &self,
+        input: RegisterWebhookWithThirdPartyInput,
+    ) -> RusotoFuture<RegisterWebhookWithThirdPartyOutput, RegisterWebhookWithThirdPartyError> {
+        CodePipeline::register_webhook_with_third_party(&(**self), input)
+    }
+
+    /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
+    fn retry_stage_execution(
+        &self,
+        input: RetryStageExecutionInput,
+    ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError> {
+        CodePipeline::retry_stage_execution(&(**self), input)
+    }
+
+    /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
+    fn start_pipeline_execution(
+        &self,
+        input: StartPipelineExecutionInput,
+    ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError> {
+        CodePipeline::start_pipeline_execution(&(**self), input)
+    }
+
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
+    fn update_pipeline(
+        &self,
+        input: UpdatePipelineInput,
+    ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError> {
+        CodePipeline::update_pipeline(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

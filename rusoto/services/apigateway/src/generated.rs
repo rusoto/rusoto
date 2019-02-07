@@ -22536,5 +22536,849 @@ impl ApiGateway for ApiGatewayClient {
     }
 }
 
+impl<T: ?Sized + ApiGateway> ApiGateway for ::std::rc::Rc<T> {
+    /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
+    fn create_api_key(
+        &self,
+        input: CreateApiKeyRequest,
+    ) -> RusotoFuture<ApiKey, CreateApiKeyError> {
+        ApiGateway::create_api_key(&(**self), input)
+    }
+
+    /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
+    fn create_authorizer(
+        &self,
+        input: CreateAuthorizerRequest,
+    ) -> RusotoFuture<Authorizer, CreateAuthorizerError> {
+        ApiGateway::create_authorizer(&(**self), input)
+    }
+
+    /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
+    fn create_base_path_mapping(
+        &self,
+        input: CreateBasePathMappingRequest,
+    ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError> {
+        ApiGateway::create_base_path_mapping(&(**self), input)
+    }
+
+    /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> RusotoFuture<Deployment, CreateDeploymentError> {
+        ApiGateway::create_deployment(&(**self), input)
+    }
+
+    fn create_documentation_part(
+        &self,
+        input: CreateDocumentationPartRequest,
+    ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError> {
+        ApiGateway::create_documentation_part(&(**self), input)
+    }
+
+    fn create_documentation_version(
+        &self,
+        input: CreateDocumentationVersionRequest,
+    ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError> {
+        ApiGateway::create_documentation_version(&(**self), input)
+    }
+
+    /// <p>Creates a new domain name.</p>
+    fn create_domain_name(
+        &self,
+        input: CreateDomainNameRequest,
+    ) -> RusotoFuture<DomainName, CreateDomainNameError> {
+        ApiGateway::create_domain_name(&(**self), input)
+    }
+
+    /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
+    fn create_model(&self, input: CreateModelRequest) -> RusotoFuture<Model, CreateModelError> {
+        ApiGateway::create_model(&(**self), input)
+    }
+
+    /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
+    fn create_request_validator(
+        &self,
+        input: CreateRequestValidatorRequest,
+    ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError> {
+        ApiGateway::create_request_validator(&(**self), input)
+    }
+
+    /// <p>Creates a <a>Resource</a> resource.</p>
+    fn create_resource(
+        &self,
+        input: CreateResourceRequest,
+    ) -> RusotoFuture<Resource, CreateResourceError> {
+        ApiGateway::create_resource(&(**self), input)
+    }
+
+    /// <p>Creates a new <a>RestApi</a> resource.</p>
+    fn create_rest_api(
+        &self,
+        input: CreateRestApiRequest,
+    ) -> RusotoFuture<RestApi, CreateRestApiError> {
+        ApiGateway::create_rest_api(&(**self), input)
+    }
+
+    /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
+    fn create_stage(&self, input: CreateStageRequest) -> RusotoFuture<Stage, CreateStageError> {
+        ApiGateway::create_stage(&(**self), input)
+    }
+
+    /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
+    fn create_usage_plan(
+        &self,
+        input: CreateUsagePlanRequest,
+    ) -> RusotoFuture<UsagePlan, CreateUsagePlanError> {
+        ApiGateway::create_usage_plan(&(**self), input)
+    }
+
+    /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
+    fn create_usage_plan_key(
+        &self,
+        input: CreateUsagePlanKeyRequest,
+    ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError> {
+        ApiGateway::create_usage_plan_key(&(**self), input)
+    }
+
+    /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+    fn create_vpc_link(
+        &self,
+        input: CreateVpcLinkRequest,
+    ) -> RusotoFuture<VpcLink, CreateVpcLinkError> {
+        ApiGateway::create_vpc_link(&(**self), input)
+    }
+
+    /// <p>Deletes the <a>ApiKey</a> resource.</p>
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError> {
+        ApiGateway::delete_api_key(&(**self), input)
+    }
+
+    /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
+    fn delete_authorizer(
+        &self,
+        input: DeleteAuthorizerRequest,
+    ) -> RusotoFuture<(), DeleteAuthorizerError> {
+        ApiGateway::delete_authorizer(&(**self), input)
+    }
+
+    /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
+    fn delete_base_path_mapping(
+        &self,
+        input: DeleteBasePathMappingRequest,
+    ) -> RusotoFuture<(), DeleteBasePathMappingError> {
+        ApiGateway::delete_base_path_mapping(&(**self), input)
+    }
+
+    /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
+    fn delete_client_certificate(
+        &self,
+        input: DeleteClientCertificateRequest,
+    ) -> RusotoFuture<(), DeleteClientCertificateError> {
+        ApiGateway::delete_client_certificate(&(**self), input)
+    }
+
+    /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
+    fn delete_deployment(
+        &self,
+        input: DeleteDeploymentRequest,
+    ) -> RusotoFuture<(), DeleteDeploymentError> {
+        ApiGateway::delete_deployment(&(**self), input)
+    }
+
+    fn delete_documentation_part(
+        &self,
+        input: DeleteDocumentationPartRequest,
+    ) -> RusotoFuture<(), DeleteDocumentationPartError> {
+        ApiGateway::delete_documentation_part(&(**self), input)
+    }
+
+    fn delete_documentation_version(
+        &self,
+        input: DeleteDocumentationVersionRequest,
+    ) -> RusotoFuture<(), DeleteDocumentationVersionError> {
+        ApiGateway::delete_documentation_version(&(**self), input)
+    }
+
+    /// <p>Deletes the <a>DomainName</a> resource.</p>
+    fn delete_domain_name(
+        &self,
+        input: DeleteDomainNameRequest,
+    ) -> RusotoFuture<(), DeleteDomainNameError> {
+        ApiGateway::delete_domain_name(&(**self), input)
+    }
+
+    /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
+    fn delete_gateway_response(
+        &self,
+        input: DeleteGatewayResponseRequest,
+    ) -> RusotoFuture<(), DeleteGatewayResponseError> {
+        ApiGateway::delete_gateway_response(&(**self), input)
+    }
+
+    /// <p>Represents a delete integration.</p>
+    fn delete_integration(
+        &self,
+        input: DeleteIntegrationRequest,
+    ) -> RusotoFuture<(), DeleteIntegrationError> {
+        ApiGateway::delete_integration(&(**self), input)
+    }
+
+    /// <p>Represents a delete integration response.</p>
+    fn delete_integration_response(
+        &self,
+        input: DeleteIntegrationResponseRequest,
+    ) -> RusotoFuture<(), DeleteIntegrationResponseError> {
+        ApiGateway::delete_integration_response(&(**self), input)
+    }
+
+    /// <p>Deletes an existing <a>Method</a> resource.</p>
+    fn delete_method(&self, input: DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError> {
+        ApiGateway::delete_method(&(**self), input)
+    }
+
+    /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
+    fn delete_method_response(
+        &self,
+        input: DeleteMethodResponseRequest,
+    ) -> RusotoFuture<(), DeleteMethodResponseError> {
+        ApiGateway::delete_method_response(&(**self), input)
+    }
+
+    /// <p>Deletes a model.</p>
+    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError> {
+        ApiGateway::delete_model(&(**self), input)
+    }
+
+    /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    fn delete_request_validator(
+        &self,
+        input: DeleteRequestValidatorRequest,
+    ) -> RusotoFuture<(), DeleteRequestValidatorError> {
+        ApiGateway::delete_request_validator(&(**self), input)
+    }
+
+    /// <p>Deletes a <a>Resource</a> resource.</p>
+    fn delete_resource(
+        &self,
+        input: DeleteResourceRequest,
+    ) -> RusotoFuture<(), DeleteResourceError> {
+        ApiGateway::delete_resource(&(**self), input)
+    }
+
+    /// <p>Deletes the specified API.</p>
+    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> RusotoFuture<(), DeleteRestApiError> {
+        ApiGateway::delete_rest_api(&(**self), input)
+    }
+
+    /// <p>Deletes a <a>Stage</a> resource.</p>
+    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError> {
+        ApiGateway::delete_stage(&(**self), input)
+    }
+
+    /// <p>Deletes a usage plan of a given plan Id.</p>
+    fn delete_usage_plan(
+        &self,
+        input: DeleteUsagePlanRequest,
+    ) -> RusotoFuture<(), DeleteUsagePlanError> {
+        ApiGateway::delete_usage_plan(&(**self), input)
+    }
+
+    /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
+    fn delete_usage_plan_key(
+        &self,
+        input: DeleteUsagePlanKeyRequest,
+    ) -> RusotoFuture<(), DeleteUsagePlanKeyError> {
+        ApiGateway::delete_usage_plan_key(&(**self), input)
+    }
+
+    /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> RusotoFuture<(), DeleteVpcLinkError> {
+        ApiGateway::delete_vpc_link(&(**self), input)
+    }
+
+    /// <p>Flushes all authorizer cache entries on a stage.</p>
+    fn flush_stage_authorizers_cache(
+        &self,
+        input: FlushStageAuthorizersCacheRequest,
+    ) -> RusotoFuture<(), FlushStageAuthorizersCacheError> {
+        ApiGateway::flush_stage_authorizers_cache(&(**self), input)
+    }
+
+    /// <p>Flushes a stage's cache.</p>
+    fn flush_stage_cache(
+        &self,
+        input: FlushStageCacheRequest,
+    ) -> RusotoFuture<(), FlushStageCacheError> {
+        ApiGateway::flush_stage_cache(&(**self), input)
+    }
+
+    /// <p>Generates a <a>ClientCertificate</a> resource.</p>
+    fn generate_client_certificate(
+        &self,
+        input: GenerateClientCertificateRequest,
+    ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError> {
+        ApiGateway::generate_client_certificate(&(**self), input)
+    }
+
+    /// <p>Gets information about the current <a>Account</a> resource.</p>
+    fn get_account(&self) -> RusotoFuture<Account, GetAccountError> {
+        ApiGateway::get_account(&(**self))
+    }
+
+    /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
+    fn get_api_key(&self, input: GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError> {
+        ApiGateway::get_api_key(&(**self), input)
+    }
+
+    /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
+    fn get_api_keys(&self, input: GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError> {
+        ApiGateway::get_api_keys(&(**self), input)
+    }
+
+    /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
+    fn get_authorizer(
+        &self,
+        input: GetAuthorizerRequest,
+    ) -> RusotoFuture<Authorizer, GetAuthorizerError> {
+        ApiGateway::get_authorizer(&(**self), input)
+    }
+
+    /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
+    fn get_authorizers(
+        &self,
+        input: GetAuthorizersRequest,
+    ) -> RusotoFuture<Authorizers, GetAuthorizersError> {
+        ApiGateway::get_authorizers(&(**self), input)
+    }
+
+    /// <p>Describe a <a>BasePathMapping</a> resource.</p>
+    fn get_base_path_mapping(
+        &self,
+        input: GetBasePathMappingRequest,
+    ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError> {
+        ApiGateway::get_base_path_mapping(&(**self), input)
+    }
+
+    /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
+    fn get_base_path_mappings(
+        &self,
+        input: GetBasePathMappingsRequest,
+    ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError> {
+        ApiGateway::get_base_path_mappings(&(**self), input)
+    }
+
+    /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
+    fn get_client_certificate(
+        &self,
+        input: GetClientCertificateRequest,
+    ) -> RusotoFuture<ClientCertificate, GetClientCertificateError> {
+        ApiGateway::get_client_certificate(&(**self), input)
+    }
+
+    /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
+    fn get_client_certificates(
+        &self,
+        input: GetClientCertificatesRequest,
+    ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError> {
+        ApiGateway::get_client_certificates(&(**self), input)
+    }
+
+    /// <p>Gets information about a <a>Deployment</a> resource.</p>
+    fn get_deployment(
+        &self,
+        input: GetDeploymentRequest,
+    ) -> RusotoFuture<Deployment, GetDeploymentError> {
+        ApiGateway::get_deployment(&(**self), input)
+    }
+
+    /// <p>Gets information about a <a>Deployments</a> collection.</p>
+    fn get_deployments(
+        &self,
+        input: GetDeploymentsRequest,
+    ) -> RusotoFuture<Deployments, GetDeploymentsError> {
+        ApiGateway::get_deployments(&(**self), input)
+    }
+
+    fn get_documentation_part(
+        &self,
+        input: GetDocumentationPartRequest,
+    ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError> {
+        ApiGateway::get_documentation_part(&(**self), input)
+    }
+
+    fn get_documentation_parts(
+        &self,
+        input: GetDocumentationPartsRequest,
+    ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError> {
+        ApiGateway::get_documentation_parts(&(**self), input)
+    }
+
+    fn get_documentation_version(
+        &self,
+        input: GetDocumentationVersionRequest,
+    ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError> {
+        ApiGateway::get_documentation_version(&(**self), input)
+    }
+
+    fn get_documentation_versions(
+        &self,
+        input: GetDocumentationVersionsRequest,
+    ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError> {
+        ApiGateway::get_documentation_versions(&(**self), input)
+    }
+
+    /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
+    fn get_domain_name(
+        &self,
+        input: GetDomainNameRequest,
+    ) -> RusotoFuture<DomainName, GetDomainNameError> {
+        ApiGateway::get_domain_name(&(**self), input)
+    }
+
+    /// <p>Represents a collection of <a>DomainName</a> resources.</p>
+    fn get_domain_names(
+        &self,
+        input: GetDomainNamesRequest,
+    ) -> RusotoFuture<DomainNames, GetDomainNamesError> {
+        ApiGateway::get_domain_names(&(**self), input)
+    }
+
+    /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
+    fn get_export(&self, input: GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError> {
+        ApiGateway::get_export(&(**self), input)
+    }
+
+    /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    fn get_gateway_response(
+        &self,
+        input: GetGatewayResponseRequest,
+    ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError> {
+        ApiGateway::get_gateway_response(&(**self), input)
+    }
+
+    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+    fn get_gateway_responses(
+        &self,
+        input: GetGatewayResponsesRequest,
+    ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError> {
+        ApiGateway::get_gateway_responses(&(**self), input)
+    }
+
+    /// <p>Get the integration settings.</p>
+    fn get_integration(
+        &self,
+        input: GetIntegrationRequest,
+    ) -> RusotoFuture<Integration, GetIntegrationError> {
+        ApiGateway::get_integration(&(**self), input)
+    }
+
+    /// <p>Represents a get integration response.</p>
+    fn get_integration_response(
+        &self,
+        input: GetIntegrationResponseRequest,
+    ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError> {
+        ApiGateway::get_integration_response(&(**self), input)
+    }
+
+    /// <p>Describe an existing <a>Method</a> resource.</p>
+    fn get_method(&self, input: GetMethodRequest) -> RusotoFuture<Method, GetMethodError> {
+        ApiGateway::get_method(&(**self), input)
+    }
+
+    /// <p>Describes a <a>MethodResponse</a> resource.</p>
+    fn get_method_response(
+        &self,
+        input: GetMethodResponseRequest,
+    ) -> RusotoFuture<MethodResponse, GetMethodResponseError> {
+        ApiGateway::get_method_response(&(**self), input)
+    }
+
+    /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
+    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<Model, GetModelError> {
+        ApiGateway::get_model(&(**self), input)
+    }
+
+    /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
+    fn get_model_template(
+        &self,
+        input: GetModelTemplateRequest,
+    ) -> RusotoFuture<Template, GetModelTemplateError> {
+        ApiGateway::get_model_template(&(**self), input)
+    }
+
+    /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
+    fn get_models(&self, input: GetModelsRequest) -> RusotoFuture<Models, GetModelsError> {
+        ApiGateway::get_models(&(**self), input)
+    }
+
+    /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    fn get_request_validator(
+        &self,
+        input: GetRequestValidatorRequest,
+    ) -> RusotoFuture<RequestValidator, GetRequestValidatorError> {
+        ApiGateway::get_request_validator(&(**self), input)
+    }
+
+    /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
+    fn get_request_validators(
+        &self,
+        input: GetRequestValidatorsRequest,
+    ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError> {
+        ApiGateway::get_request_validators(&(**self), input)
+    }
+
+    /// <p>Lists information about a resource.</p>
+    fn get_resource(&self, input: GetResourceRequest) -> RusotoFuture<Resource, GetResourceError> {
+        ApiGateway::get_resource(&(**self), input)
+    }
+
+    /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
+    fn get_resources(
+        &self,
+        input: GetResourcesRequest,
+    ) -> RusotoFuture<Resources, GetResourcesError> {
+        ApiGateway::get_resources(&(**self), input)
+    }
+
+    /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
+    fn get_rest_api(&self, input: GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError> {
+        ApiGateway::get_rest_api(&(**self), input)
+    }
+
+    /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
+    fn get_rest_apis(&self, input: GetRestApisRequest) -> RusotoFuture<RestApis, GetRestApisError> {
+        ApiGateway::get_rest_apis(&(**self), input)
+    }
+
+    /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
+    fn get_sdk(&self, input: GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError> {
+        ApiGateway::get_sdk(&(**self), input)
+    }
+
+    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError> {
+        ApiGateway::get_sdk_type(&(**self), input)
+    }
+
+    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> RusotoFuture<SdkTypes, GetSdkTypesError> {
+        ApiGateway::get_sdk_types(&(**self), input)
+    }
+
+    /// <p>Gets information about a <a>Stage</a> resource.</p>
+    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<Stage, GetStageError> {
+        ApiGateway::get_stage(&(**self), input)
+    }
+
+    /// <p>Gets information about one or more <a>Stage</a> resources.</p>
+    fn get_stages(&self, input: GetStagesRequest) -> RusotoFuture<Stages, GetStagesError> {
+        ApiGateway::get_stages(&(**self), input)
+    }
+
+    /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<Tags, GetTagsError> {
+        ApiGateway::get_tags(&(**self), input)
+    }
+
+    /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
+    fn get_usage(&self, input: GetUsageRequest) -> RusotoFuture<Usage, GetUsageError> {
+        ApiGateway::get_usage(&(**self), input)
+    }
+
+    /// <p>Gets a usage plan of a given plan identifier.</p>
+    fn get_usage_plan(
+        &self,
+        input: GetUsagePlanRequest,
+    ) -> RusotoFuture<UsagePlan, GetUsagePlanError> {
+        ApiGateway::get_usage_plan(&(**self), input)
+    }
+
+    /// <p>Gets a usage plan key of a given key identifier.</p>
+    fn get_usage_plan_key(
+        &self,
+        input: GetUsagePlanKeyRequest,
+    ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError> {
+        ApiGateway::get_usage_plan_key(&(**self), input)
+    }
+
+    /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
+    fn get_usage_plan_keys(
+        &self,
+        input: GetUsagePlanKeysRequest,
+    ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError> {
+        ApiGateway::get_usage_plan_keys(&(**self), input)
+    }
+
+    /// <p>Gets all the usage plans of the caller's account.</p>
+    fn get_usage_plans(
+        &self,
+        input: GetUsagePlansRequest,
+    ) -> RusotoFuture<UsagePlans, GetUsagePlansError> {
+        ApiGateway::get_usage_plans(&(**self), input)
+    }
+
+    /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError> {
+        ApiGateway::get_vpc_link(&(**self), input)
+    }
+
+    /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> RusotoFuture<VpcLinks, GetVpcLinksError> {
+        ApiGateway::get_vpc_links(&(**self), input)
+    }
+
+    /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
+    fn import_api_keys(
+        &self,
+        input: ImportApiKeysRequest,
+    ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError> {
+        ApiGateway::import_api_keys(&(**self), input)
+    }
+
+    fn import_documentation_parts(
+        &self,
+        input: ImportDocumentationPartsRequest,
+    ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError> {
+        ApiGateway::import_documentation_parts(&(**self), input)
+    }
+
+    /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
+    fn import_rest_api(
+        &self,
+        input: ImportRestApiRequest,
+    ) -> RusotoFuture<RestApi, ImportRestApiError> {
+        ApiGateway::import_rest_api(&(**self), input)
+    }
+
+    /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
+    fn put_gateway_response(
+        &self,
+        input: PutGatewayResponseRequest,
+    ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError> {
+        ApiGateway::put_gateway_response(&(**self), input)
+    }
+
+    /// <p>Sets up a method's integration.</p>
+    fn put_integration(
+        &self,
+        input: PutIntegrationRequest,
+    ) -> RusotoFuture<Integration, PutIntegrationError> {
+        ApiGateway::put_integration(&(**self), input)
+    }
+
+    /// <p>Represents a put integration.</p>
+    fn put_integration_response(
+        &self,
+        input: PutIntegrationResponseRequest,
+    ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError> {
+        ApiGateway::put_integration_response(&(**self), input)
+    }
+
+    /// <p>Add a method to an existing <a>Resource</a> resource.</p>
+    fn put_method(&self, input: PutMethodRequest) -> RusotoFuture<Method, PutMethodError> {
+        ApiGateway::put_method(&(**self), input)
+    }
+
+    /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
+    fn put_method_response(
+        &self,
+        input: PutMethodResponseRequest,
+    ) -> RusotoFuture<MethodResponse, PutMethodResponseError> {
+        ApiGateway::put_method_response(&(**self), input)
+    }
+
+    /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
+    fn put_rest_api(&self, input: PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError> {
+        ApiGateway::put_rest_api(&(**self), input)
+    }
+
+    /// <p>Adds or updates a tag on a given resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+        ApiGateway::tag_resource(&(**self), input)
+    }
+
+    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
+    fn test_invoke_authorizer(
+        &self,
+        input: TestInvokeAuthorizerRequest,
+    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+        ApiGateway::test_invoke_authorizer(&(**self), input)
+    }
+
+    /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
+    fn test_invoke_method(
+        &self,
+        input: TestInvokeMethodRequest,
+    ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError> {
+        ApiGateway::test_invoke_method(&(**self), input)
+    }
+
+    /// <p>Removes a tag from a given resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        ApiGateway::untag_resource(&(**self), input)
+    }
+
+    /// <p>Changes information about the current <a>Account</a> resource.</p>
+    fn update_account(
+        &self,
+        input: UpdateAccountRequest,
+    ) -> RusotoFuture<Account, UpdateAccountError> {
+        ApiGateway::update_account(&(**self), input)
+    }
+
+    /// <p>Changes information about an <a>ApiKey</a> resource.</p>
+    fn update_api_key(
+        &self,
+        input: UpdateApiKeyRequest,
+    ) -> RusotoFuture<ApiKey, UpdateApiKeyError> {
+        ApiGateway::update_api_key(&(**self), input)
+    }
+
+    /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
+    fn update_authorizer(
+        &self,
+        input: UpdateAuthorizerRequest,
+    ) -> RusotoFuture<Authorizer, UpdateAuthorizerError> {
+        ApiGateway::update_authorizer(&(**self), input)
+    }
+
+    /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
+    fn update_base_path_mapping(
+        &self,
+        input: UpdateBasePathMappingRequest,
+    ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError> {
+        ApiGateway::update_base_path_mapping(&(**self), input)
+    }
+
+    /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
+    fn update_client_certificate(
+        &self,
+        input: UpdateClientCertificateRequest,
+    ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError> {
+        ApiGateway::update_client_certificate(&(**self), input)
+    }
+
+    /// <p>Changes information about a <a>Deployment</a> resource.</p>
+    fn update_deployment(
+        &self,
+        input: UpdateDeploymentRequest,
+    ) -> RusotoFuture<Deployment, UpdateDeploymentError> {
+        ApiGateway::update_deployment(&(**self), input)
+    }
+
+    fn update_documentation_part(
+        &self,
+        input: UpdateDocumentationPartRequest,
+    ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError> {
+        ApiGateway::update_documentation_part(&(**self), input)
+    }
+
+    fn update_documentation_version(
+        &self,
+        input: UpdateDocumentationVersionRequest,
+    ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError> {
+        ApiGateway::update_documentation_version(&(**self), input)
+    }
+
+    /// <p>Changes information about the <a>DomainName</a> resource.</p>
+    fn update_domain_name(
+        &self,
+        input: UpdateDomainNameRequest,
+    ) -> RusotoFuture<DomainName, UpdateDomainNameError> {
+        ApiGateway::update_domain_name(&(**self), input)
+    }
+
+    /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    fn update_gateway_response(
+        &self,
+        input: UpdateGatewayResponseRequest,
+    ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError> {
+        ApiGateway::update_gateway_response(&(**self), input)
+    }
+
+    /// <p>Represents an update integration.</p>
+    fn update_integration(
+        &self,
+        input: UpdateIntegrationRequest,
+    ) -> RusotoFuture<Integration, UpdateIntegrationError> {
+        ApiGateway::update_integration(&(**self), input)
+    }
+
+    /// <p>Represents an update integration response.</p>
+    fn update_integration_response(
+        &self,
+        input: UpdateIntegrationResponseRequest,
+    ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError> {
+        ApiGateway::update_integration_response(&(**self), input)
+    }
+
+    /// <p>Updates an existing <a>Method</a> resource.</p>
+    fn update_method(&self, input: UpdateMethodRequest) -> RusotoFuture<Method, UpdateMethodError> {
+        ApiGateway::update_method(&(**self), input)
+    }
+
+    /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
+    fn update_method_response(
+        &self,
+        input: UpdateMethodResponseRequest,
+    ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError> {
+        ApiGateway::update_method_response(&(**self), input)
+    }
+
+    /// <p>Changes information about a model.</p>
+    fn update_model(&self, input: UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError> {
+        ApiGateway::update_model(&(**self), input)
+    }
+
+    /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    fn update_request_validator(
+        &self,
+        input: UpdateRequestValidatorRequest,
+    ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError> {
+        ApiGateway::update_request_validator(&(**self), input)
+    }
+
+    /// <p>Changes information about a <a>Resource</a> resource.</p>
+    fn update_resource(
+        &self,
+        input: UpdateResourceRequest,
+    ) -> RusotoFuture<Resource, UpdateResourceError> {
+        ApiGateway::update_resource(&(**self), input)
+    }
+
+    /// <p>Changes information about the specified API.</p>
+    fn update_rest_api(
+        &self,
+        input: UpdateRestApiRequest,
+    ) -> RusotoFuture<RestApi, UpdateRestApiError> {
+        ApiGateway::update_rest_api(&(**self), input)
+    }
+
+    /// <p>Changes information about a <a>Stage</a> resource.</p>
+    fn update_stage(&self, input: UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError> {
+        ApiGateway::update_stage(&(**self), input)
+    }
+
+    /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
+    fn update_usage(&self, input: UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError> {
+        ApiGateway::update_usage(&(**self), input)
+    }
+
+    /// <p>Updates a usage plan of a given plan Id.</p>
+    fn update_usage_plan(
+        &self,
+        input: UpdateUsagePlanRequest,
+    ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError> {
+        ApiGateway::update_usage_plan(&(**self), input)
+    }
+
+    /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn update_vpc_link(
+        &self,
+        input: UpdateVpcLinkRequest,
+    ) -> RusotoFuture<VpcLink, UpdateVpcLinkError> {
+        ApiGateway::update_vpc_link(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

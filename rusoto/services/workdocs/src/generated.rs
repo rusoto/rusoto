@@ -8907,5 +8907,320 @@ impl Workdocs for WorkdocsClient {
     }
 }
 
+impl<T: ?Sized + Workdocs> Workdocs for ::std::rc::Rc<T> {
+    /// <p>Aborts the upload of the specified document version that was previously initiated by <a>InitiateDocumentVersionUpload</a>. The client should make this call only when it no longer intends to upload the document version, or fails to do so.</p>
+    fn abort_document_version_upload(
+        &self,
+        input: AbortDocumentVersionUploadRequest,
+    ) -> RusotoFuture<(), AbortDocumentVersionUploadError> {
+        Workdocs::abort_document_version_upload(&(**self), input)
+    }
+
+    /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
+    fn activate_user(
+        &self,
+        input: ActivateUserRequest,
+    ) -> RusotoFuture<ActivateUserResponse, ActivateUserError> {
+        Workdocs::activate_user(&(**self), input)
+    }
+
+    /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
+    fn add_resource_permissions(
+        &self,
+        input: AddResourcePermissionsRequest,
+    ) -> RusotoFuture<AddResourcePermissionsResponse, AddResourcePermissionsError> {
+        Workdocs::add_resource_permissions(&(**self), input)
+    }
+
+    /// <p>Adds a new comment to the specified document version.</p>
+    fn create_comment(
+        &self,
+        input: CreateCommentRequest,
+    ) -> RusotoFuture<CreateCommentResponse, CreateCommentError> {
+        Workdocs::create_comment(&(**self), input)
+    }
+
+    /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
+    fn create_custom_metadata(
+        &self,
+        input: CreateCustomMetadataRequest,
+    ) -> RusotoFuture<CreateCustomMetadataResponse, CreateCustomMetadataError> {
+        Workdocs::create_custom_metadata(&(**self), input)
+    }
+
+    /// <p>Creates a folder with the specified name and parent folder.</p>
+    fn create_folder(
+        &self,
+        input: CreateFolderRequest,
+    ) -> RusotoFuture<CreateFolderResponse, CreateFolderError> {
+        Workdocs::create_folder(&(**self), input)
+    }
+
+    /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
+    fn create_labels(
+        &self,
+        input: CreateLabelsRequest,
+    ) -> RusotoFuture<CreateLabelsResponse, CreateLabelsError> {
+        Workdocs::create_labels(&(**self), input)
+    }
+
+    /// <p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
+    fn create_notification_subscription(
+        &self,
+        input: CreateNotificationSubscriptionRequest,
+    ) -> RusotoFuture<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>
+    {
+        Workdocs::create_notification_subscription(&(**self), input)
+    }
+
+    /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
+    fn create_user(
+        &self,
+        input: CreateUserRequest,
+    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+        Workdocs::create_user(&(**self), input)
+    }
+
+    /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
+    fn deactivate_user(
+        &self,
+        input: DeactivateUserRequest,
+    ) -> RusotoFuture<(), DeactivateUserError> {
+        Workdocs::deactivate_user(&(**self), input)
+    }
+
+    /// <p>Deletes the specified comment from the document version.</p>
+    fn delete_comment(&self, input: DeleteCommentRequest) -> RusotoFuture<(), DeleteCommentError> {
+        Workdocs::delete_comment(&(**self), input)
+    }
+
+    /// <p>Deletes custom metadata from the specified resource.</p>
+    fn delete_custom_metadata(
+        &self,
+        input: DeleteCustomMetadataRequest,
+    ) -> RusotoFuture<DeleteCustomMetadataResponse, DeleteCustomMetadataError> {
+        Workdocs::delete_custom_metadata(&(**self), input)
+    }
+
+    /// <p>Permanently deletes the specified document and its associated metadata.</p>
+    fn delete_document(
+        &self,
+        input: DeleteDocumentRequest,
+    ) -> RusotoFuture<(), DeleteDocumentError> {
+        Workdocs::delete_document(&(**self), input)
+    }
+
+    /// <p>Permanently deletes the specified folder and its contents.</p>
+    fn delete_folder(&self, input: DeleteFolderRequest) -> RusotoFuture<(), DeleteFolderError> {
+        Workdocs::delete_folder(&(**self), input)
+    }
+
+    /// <p>Deletes the contents of the specified folder.</p>
+    fn delete_folder_contents(
+        &self,
+        input: DeleteFolderContentsRequest,
+    ) -> RusotoFuture<(), DeleteFolderContentsError> {
+        Workdocs::delete_folder_contents(&(**self), input)
+    }
+
+    /// <p>Deletes the specified list of labels from a resource.</p>
+    fn delete_labels(
+        &self,
+        input: DeleteLabelsRequest,
+    ) -> RusotoFuture<DeleteLabelsResponse, DeleteLabelsError> {
+        Workdocs::delete_labels(&(**self), input)
+    }
+
+    /// <p>Deletes the specified subscription from the specified organization.</p>
+    fn delete_notification_subscription(
+        &self,
+        input: DeleteNotificationSubscriptionRequest,
+    ) -> RusotoFuture<(), DeleteNotificationSubscriptionError> {
+        Workdocs::delete_notification_subscription(&(**self), input)
+    }
+
+    /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
+        Workdocs::delete_user(&(**self), input)
+    }
+
+    /// <p>Describes the user activities in a specified time period.</p>
+    fn describe_activities(
+        &self,
+        input: DescribeActivitiesRequest,
+    ) -> RusotoFuture<DescribeActivitiesResponse, DescribeActivitiesError> {
+        Workdocs::describe_activities(&(**self), input)
+    }
+
+    /// <p>List all the comments for the specified document version.</p>
+    fn describe_comments(
+        &self,
+        input: DescribeCommentsRequest,
+    ) -> RusotoFuture<DescribeCommentsResponse, DescribeCommentsError> {
+        Workdocs::describe_comments(&(**self), input)
+    }
+
+    /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
+    fn describe_document_versions(
+        &self,
+        input: DescribeDocumentVersionsRequest,
+    ) -> RusotoFuture<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError> {
+        Workdocs::describe_document_versions(&(**self), input)
+    }
+
+    /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
+    fn describe_folder_contents(
+        &self,
+        input: DescribeFolderContentsRequest,
+    ) -> RusotoFuture<DescribeFolderContentsResponse, DescribeFolderContentsError> {
+        Workdocs::describe_folder_contents(&(**self), input)
+    }
+
+    /// <p>Describes the groups specified by query.</p>
+    fn describe_groups(
+        &self,
+        input: DescribeGroupsRequest,
+    ) -> RusotoFuture<DescribeGroupsResponse, DescribeGroupsError> {
+        Workdocs::describe_groups(&(**self), input)
+    }
+
+    /// <p>Lists the specified notification subscriptions.</p>
+    fn describe_notification_subscriptions(
+        &self,
+        input: DescribeNotificationSubscriptionsRequest,
+    ) -> RusotoFuture<
+        DescribeNotificationSubscriptionsResponse,
+        DescribeNotificationSubscriptionsError,
+    > {
+        Workdocs::describe_notification_subscriptions(&(**self), input)
+    }
+
+    /// <p>Describes the permissions of a specified resource.</p>
+    fn describe_resource_permissions(
+        &self,
+        input: DescribeResourcePermissionsRequest,
+    ) -> RusotoFuture<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError> {
+        Workdocs::describe_resource_permissions(&(**self), input)
+    }
+
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
+    fn describe_root_folders(
+        &self,
+        input: DescribeRootFoldersRequest,
+    ) -> RusotoFuture<DescribeRootFoldersResponse, DescribeRootFoldersError> {
+        Workdocs::describe_root_folders(&(**self), input)
+    }
+
+    /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
+    fn describe_users(
+        &self,
+        input: DescribeUsersRequest,
+    ) -> RusotoFuture<DescribeUsersResponse, DescribeUsersError> {
+        Workdocs::describe_users(&(**self), input)
+    }
+
+    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
+    fn get_current_user(
+        &self,
+        input: GetCurrentUserRequest,
+    ) -> RusotoFuture<GetCurrentUserResponse, GetCurrentUserError> {
+        Workdocs::get_current_user(&(**self), input)
+    }
+
+    /// <p>Retrieves details of a document.</p>
+    fn get_document(
+        &self,
+        input: GetDocumentRequest,
+    ) -> RusotoFuture<GetDocumentResponse, GetDocumentError> {
+        Workdocs::get_document(&(**self), input)
+    }
+
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
+    fn get_document_path(
+        &self,
+        input: GetDocumentPathRequest,
+    ) -> RusotoFuture<GetDocumentPathResponse, GetDocumentPathError> {
+        Workdocs::get_document_path(&(**self), input)
+    }
+
+    /// <p>Retrieves version metadata for the specified document.</p>
+    fn get_document_version(
+        &self,
+        input: GetDocumentVersionRequest,
+    ) -> RusotoFuture<GetDocumentVersionResponse, GetDocumentVersionError> {
+        Workdocs::get_document_version(&(**self), input)
+    }
+
+    /// <p>Retrieves the metadata of the specified folder.</p>
+    fn get_folder(
+        &self,
+        input: GetFolderRequest,
+    ) -> RusotoFuture<GetFolderResponse, GetFolderError> {
+        Workdocs::get_folder(&(**self), input)
+    }
+
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
+    fn get_folder_path(
+        &self,
+        input: GetFolderPathRequest,
+    ) -> RusotoFuture<GetFolderPathResponse, GetFolderPathError> {
+        Workdocs::get_folder_path(&(**self), input)
+    }
+
+    /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
+    fn initiate_document_version_upload(
+        &self,
+        input: InitiateDocumentVersionUploadRequest,
+    ) -> RusotoFuture<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>
+    {
+        Workdocs::initiate_document_version_upload(&(**self), input)
+    }
+
+    /// <p>Removes all the permissions from the specified resource.</p>
+    fn remove_all_resource_permissions(
+        &self,
+        input: RemoveAllResourcePermissionsRequest,
+    ) -> RusotoFuture<(), RemoveAllResourcePermissionsError> {
+        Workdocs::remove_all_resource_permissions(&(**self), input)
+    }
+
+    /// <p>Removes the permission for the specified principal from the specified resource.</p>
+    fn remove_resource_permission(
+        &self,
+        input: RemoveResourcePermissionRequest,
+    ) -> RusotoFuture<(), RemoveResourcePermissionError> {
+        Workdocs::remove_resource_permission(&(**self), input)
+    }
+
+    /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
+    fn update_document(
+        &self,
+        input: UpdateDocumentRequest,
+    ) -> RusotoFuture<(), UpdateDocumentError> {
+        Workdocs::update_document(&(**self), input)
+    }
+
+    /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
+    fn update_document_version(
+        &self,
+        input: UpdateDocumentVersionRequest,
+    ) -> RusotoFuture<(), UpdateDocumentVersionError> {
+        Workdocs::update_document_version(&(**self), input)
+    }
+
+    /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
+    fn update_folder(&self, input: UpdateFolderRequest) -> RusotoFuture<(), UpdateFolderError> {
+        Workdocs::update_folder(&(**self), input)
+    }
+
+    /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
+    fn update_user(
+        &self,
+        input: UpdateUserRequest,
+    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
+        Workdocs::update_user(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

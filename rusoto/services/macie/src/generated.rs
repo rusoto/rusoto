@@ -1210,5 +1210,63 @@ impl Macie for MacieClient {
     }
 }
 
+impl<T: ?Sized + Macie> Macie for ::std::rc::Rc<T> {
+    /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
+    fn associate_member_account(
+        &self,
+        input: AssociateMemberAccountRequest,
+    ) -> RusotoFuture<(), AssociateMemberAccountError> {
+        Macie::associate_member_account(&(**self), input)
+    }
+
+    /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
+    fn associate_s3_resources(
+        &self,
+        input: AssociateS3ResourcesRequest,
+    ) -> RusotoFuture<AssociateS3ResourcesResult, AssociateS3ResourcesError> {
+        Macie::associate_s3_resources(&(**self), input)
+    }
+
+    /// <p>Removes the specified member account from Amazon Macie.</p>
+    fn disassociate_member_account(
+        &self,
+        input: DisassociateMemberAccountRequest,
+    ) -> RusotoFuture<(), DisassociateMemberAccountError> {
+        Macie::disassociate_member_account(&(**self), input)
+    }
+
+    /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
+    fn disassociate_s3_resources(
+        &self,
+        input: DisassociateS3ResourcesRequest,
+    ) -> RusotoFuture<DisassociateS3ResourcesResult, DisassociateS3ResourcesError> {
+        Macie::disassociate_s3_resources(&(**self), input)
+    }
+
+    /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
+    fn list_member_accounts(
+        &self,
+        input: ListMemberAccountsRequest,
+    ) -> RusotoFuture<ListMemberAccountsResult, ListMemberAccountsError> {
+        Macie::list_member_accounts(&(**self), input)
+    }
+
+    /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
+    fn list_s3_resources(
+        &self,
+        input: ListS3ResourcesRequest,
+    ) -> RusotoFuture<ListS3ResourcesResult, ListS3ResourcesError> {
+        Macie::list_s3_resources(&(**self), input)
+    }
+
+    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
+    fn update_s3_resources(
+        &self,
+        input: UpdateS3ResourcesRequest,
+    ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError> {
+        Macie::update_s3_resources(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

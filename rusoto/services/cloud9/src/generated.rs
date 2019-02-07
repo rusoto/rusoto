@@ -2014,5 +2014,88 @@ impl Cloud9 for Cloud9Client {
     }
 }
 
+impl<T: ?Sized + Cloud9> Cloud9 for ::std::rc::Rc<T> {
+    /// <p>Creates an AWS Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
+    fn create_environment_ec2(
+        &self,
+        input: CreateEnvironmentEC2Request,
+    ) -> RusotoFuture<CreateEnvironmentEC2Result, CreateEnvironmentEC2Error> {
+        Cloud9::create_environment_ec2(&(**self), input)
+    }
+
+    /// <p>Adds an environment member to an AWS Cloud9 development environment.</p>
+    fn create_environment_membership(
+        &self,
+        input: CreateEnvironmentMembershipRequest,
+    ) -> RusotoFuture<CreateEnvironmentMembershipResult, CreateEnvironmentMembershipError> {
+        Cloud9::create_environment_membership(&(**self), input)
+    }
+
+    /// <p>Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
+    fn delete_environment(
+        &self,
+        input: DeleteEnvironmentRequest,
+    ) -> RusotoFuture<DeleteEnvironmentResult, DeleteEnvironmentError> {
+        Cloud9::delete_environment(&(**self), input)
+    }
+
+    /// <p>Deletes an environment member from an AWS Cloud9 development environment.</p>
+    fn delete_environment_membership(
+        &self,
+        input: DeleteEnvironmentMembershipRequest,
+    ) -> RusotoFuture<DeleteEnvironmentMembershipResult, DeleteEnvironmentMembershipError> {
+        Cloud9::delete_environment_membership(&(**self), input)
+    }
+
+    /// <p>Gets information about environment members for an AWS Cloud9 development environment.</p>
+    fn describe_environment_memberships(
+        &self,
+        input: DescribeEnvironmentMembershipsRequest,
+    ) -> RusotoFuture<DescribeEnvironmentMembershipsResult, DescribeEnvironmentMembershipsError>
+    {
+        Cloud9::describe_environment_memberships(&(**self), input)
+    }
+
+    /// <p>Gets status information for an AWS Cloud9 development environment.</p>
+    fn describe_environment_status(
+        &self,
+        input: DescribeEnvironmentStatusRequest,
+    ) -> RusotoFuture<DescribeEnvironmentStatusResult, DescribeEnvironmentStatusError> {
+        Cloud9::describe_environment_status(&(**self), input)
+    }
+
+    /// <p>Gets information about AWS Cloud9 development environments.</p>
+    fn describe_environments(
+        &self,
+        input: DescribeEnvironmentsRequest,
+    ) -> RusotoFuture<DescribeEnvironmentsResult, DescribeEnvironmentsError> {
+        Cloud9::describe_environments(&(**self), input)
+    }
+
+    /// <p>Gets a list of AWS Cloud9 development environment identifiers.</p>
+    fn list_environments(
+        &self,
+        input: ListEnvironmentsRequest,
+    ) -> RusotoFuture<ListEnvironmentsResult, ListEnvironmentsError> {
+        Cloud9::list_environments(&(**self), input)
+    }
+
+    /// <p>Changes the settings of an existing AWS Cloud9 development environment.</p>
+    fn update_environment(
+        &self,
+        input: UpdateEnvironmentRequest,
+    ) -> RusotoFuture<UpdateEnvironmentResult, UpdateEnvironmentError> {
+        Cloud9::update_environment(&(**self), input)
+    }
+
+    /// <p>Changes the settings of an existing environment member for an AWS Cloud9 development environment.</p>
+    fn update_environment_membership(
+        &self,
+        input: UpdateEnvironmentMembershipRequest,
+    ) -> RusotoFuture<UpdateEnvironmentMembershipResult, UpdateEnvironmentMembershipError> {
+        Cloud9::update_environment_membership(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

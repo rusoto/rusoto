@@ -989,5 +989,39 @@ impl IotJobsData for IotJobsDataClient {
     }
 }
 
+impl<T: ?Sized + IotJobsData> IotJobsData for ::std::rc::Rc<T> {
+    /// <p>Gets details of a job execution.</p>
+    fn describe_job_execution(
+        &self,
+        input: DescribeJobExecutionRequest,
+    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+        IotJobsData::describe_job_execution(&(**self), input)
+    }
+
+    /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
+    fn get_pending_job_executions(
+        &self,
+        input: GetPendingJobExecutionsRequest,
+    ) -> RusotoFuture<GetPendingJobExecutionsResponse, GetPendingJobExecutionsError> {
+        IotJobsData::get_pending_job_executions(&(**self), input)
+    }
+
+    /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
+    fn start_next_pending_job_execution(
+        &self,
+        input: StartNextPendingJobExecutionRequest,
+    ) -> RusotoFuture<StartNextPendingJobExecutionResponse, StartNextPendingJobExecutionError> {
+        IotJobsData::start_next_pending_job_execution(&(**self), input)
+    }
+
+    /// <p>Updates the status of a job execution.</p>
+    fn update_job_execution(
+        &self,
+        input: UpdateJobExecutionRequest,
+    ) -> RusotoFuture<UpdateJobExecutionResponse, UpdateJobExecutionError> {
+        IotJobsData::update_job_execution(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

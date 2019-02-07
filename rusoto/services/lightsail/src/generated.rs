@@ -13999,5 +13999,561 @@ impl Lightsail for LightsailClient {
     }
 }
 
+impl<T: ?Sized + Lightsail> Lightsail for ::std::rc::Rc<T> {
+    /// <p>Allocates a static IP address.</p>
+    fn allocate_static_ip(
+        &self,
+        input: AllocateStaticIpRequest,
+    ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError> {
+        Lightsail::allocate_static_ip(&(**self), input)
+    }
+
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
+    fn attach_disk(
+        &self,
+        input: AttachDiskRequest,
+    ) -> RusotoFuture<AttachDiskResult, AttachDiskError> {
+        Lightsail::attach_disk(&(**self), input)
+    }
+
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
+    fn attach_instances_to_load_balancer(
+        &self,
+        input: AttachInstancesToLoadBalancerRequest,
+    ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError> {
+        Lightsail::attach_instances_to_load_balancer(&(**self), input)
+    }
+
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
+    fn attach_load_balancer_tls_certificate(
+        &self,
+        input: AttachLoadBalancerTlsCertificateRequest,
+    ) -> RusotoFuture<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>
+    {
+        Lightsail::attach_load_balancer_tls_certificate(&(**self), input)
+    }
+
+    /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
+    fn attach_static_ip(
+        &self,
+        input: AttachStaticIpRequest,
+    ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError> {
+        Lightsail::attach_static_ip(&(**self), input)
+    }
+
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
+    fn close_instance_public_ports(
+        &self,
+        input: CloseInstancePublicPortsRequest,
+    ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError> {
+        Lightsail::close_instance_public_ports(&(**self), input)
+    }
+
+    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    fn create_disk(
+        &self,
+        input: CreateDiskRequest,
+    ) -> RusotoFuture<CreateDiskResult, CreateDiskError> {
+        Lightsail::create_disk(&(**self), input)
+    }
+
+    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    fn create_disk_from_snapshot(
+        &self,
+        input: CreateDiskFromSnapshotRequest,
+    ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError> {
+        Lightsail::create_disk_from_snapshot(&(**self), input)
+    }
+
+    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
+    fn create_disk_snapshot(
+        &self,
+        input: CreateDiskSnapshotRequest,
+    ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError> {
+        Lightsail::create_disk_snapshot(&(**self), input)
+    }
+
+    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
+    fn create_domain(
+        &self,
+        input: CreateDomainRequest,
+    ) -> RusotoFuture<CreateDomainResult, CreateDomainError> {
+        Lightsail::create_domain(&(**self), input)
+    }
+
+    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
+    fn create_domain_entry(
+        &self,
+        input: CreateDomainEntryRequest,
+    ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError> {
+        Lightsail::create_domain_entry(&(**self), input)
+    }
+
+    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
+    fn create_instance_snapshot(
+        &self,
+        input: CreateInstanceSnapshotRequest,
+    ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError> {
+        Lightsail::create_instance_snapshot(&(**self), input)
+    }
+
+    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
+    fn create_instances(
+        &self,
+        input: CreateInstancesRequest,
+    ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError> {
+        Lightsail::create_instances(&(**self), input)
+    }
+
+    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
+    fn create_instances_from_snapshot(
+        &self,
+        input: CreateInstancesFromSnapshotRequest,
+    ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError> {
+        Lightsail::create_instances_from_snapshot(&(**self), input)
+    }
+
+    /// <p>Creates sn SSH key pair.</p>
+    fn create_key_pair(
+        &self,
+        input: CreateKeyPairRequest,
+    ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError> {
+        Lightsail::create_key_pair(&(**self), input)
+    }
+
+    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
+    fn create_load_balancer(
+        &self,
+        input: CreateLoadBalancerRequest,
+    ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError> {
+        Lightsail::create_load_balancer(&(**self), input)
+    }
+
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn create_load_balancer_tls_certificate(
+        &self,
+        input: CreateLoadBalancerTlsCertificateRequest,
+    ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>
+    {
+        Lightsail::create_load_balancer_tls_certificate(&(**self), input)
+    }
+
+    /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
+    fn delete_disk(
+        &self,
+        input: DeleteDiskRequest,
+    ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError> {
+        Lightsail::delete_disk(&(**self), input)
+    }
+
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
+    fn delete_disk_snapshot(
+        &self,
+        input: DeleteDiskSnapshotRequest,
+    ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError> {
+        Lightsail::delete_disk_snapshot(&(**self), input)
+    }
+
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p>
+    fn delete_domain(
+        &self,
+        input: DeleteDomainRequest,
+    ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError> {
+        Lightsail::delete_domain(&(**self), input)
+    }
+
+    /// <p>Deletes a specific domain entry.</p>
+    fn delete_domain_entry(
+        &self,
+        input: DeleteDomainEntryRequest,
+    ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError> {
+        Lightsail::delete_domain_entry(&(**self), input)
+    }
+
+    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
+    fn delete_instance(
+        &self,
+        input: DeleteInstanceRequest,
+    ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError> {
+        Lightsail::delete_instance(&(**self), input)
+    }
+
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
+    fn delete_instance_snapshot(
+        &self,
+        input: DeleteInstanceSnapshotRequest,
+    ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError> {
+        Lightsail::delete_instance_snapshot(&(**self), input)
+    }
+
+    /// <p>Deletes a specific SSH key pair.</p>
+    fn delete_key_pair(
+        &self,
+        input: DeleteKeyPairRequest,
+    ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError> {
+        Lightsail::delete_key_pair(&(**self), input)
+    }
+
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
+    fn delete_load_balancer(
+        &self,
+        input: DeleteLoadBalancerRequest,
+    ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError> {
+        Lightsail::delete_load_balancer(&(**self), input)
+    }
+
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
+    fn delete_load_balancer_tls_certificate(
+        &self,
+        input: DeleteLoadBalancerTlsCertificateRequest,
+    ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>
+    {
+        Lightsail::delete_load_balancer_tls_certificate(&(**self), input)
+    }
+
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
+    fn detach_disk(
+        &self,
+        input: DetachDiskRequest,
+    ) -> RusotoFuture<DetachDiskResult, DetachDiskError> {
+        Lightsail::detach_disk(&(**self), input)
+    }
+
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
+    fn detach_instances_from_load_balancer(
+        &self,
+        input: DetachInstancesFromLoadBalancerRequest,
+    ) -> RusotoFuture<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>
+    {
+        Lightsail::detach_instances_from_load_balancer(&(**self), input)
+    }
+
+    /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
+    fn detach_static_ip(
+        &self,
+        input: DetachStaticIpRequest,
+    ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError> {
+        Lightsail::detach_static_ip(&(**self), input)
+    }
+
+    /// <p>Downloads the default SSH key pair from the user's account.</p>
+    fn download_default_key_pair(
+        &self,
+    ) -> RusotoFuture<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError> {
+        Lightsail::download_default_key_pair(&(**self))
+    }
+
+    /// <p>Returns the names of all active (not deleted) resources.</p>
+    fn get_active_names(
+        &self,
+        input: GetActiveNamesRequest,
+    ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError> {
+        Lightsail::get_active_names(&(**self), input)
+    }
+
+    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
+    fn get_blueprints(
+        &self,
+        input: GetBlueprintsRequest,
+    ) -> RusotoFuture<GetBlueprintsResult, GetBlueprintsError> {
+        Lightsail::get_blueprints(&(**self), input)
+    }
+
+    /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
+    fn get_bundles(
+        &self,
+        input: GetBundlesRequest,
+    ) -> RusotoFuture<GetBundlesResult, GetBundlesError> {
+        Lightsail::get_bundles(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific block storage disk.</p>
+    fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError> {
+        Lightsail::get_disk(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific block storage disk snapshot.</p>
+    fn get_disk_snapshot(
+        &self,
+        input: GetDiskSnapshotRequest,
+    ) -> RusotoFuture<GetDiskSnapshotResult, GetDiskSnapshotError> {
+        Lightsail::get_disk_snapshot(&(**self), input)
+    }
+
+    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disk_snapshots(
+        &self,
+        input: GetDiskSnapshotsRequest,
+    ) -> RusotoFuture<GetDiskSnapshotsResult, GetDiskSnapshotsError> {
+        Lightsail::get_disk_snapshots(&(**self), input)
+    }
+
+    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disks(&self, input: GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError> {
+        Lightsail::get_disks(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific domain recordset.</p>
+    fn get_domain(&self, input: GetDomainRequest) -> RusotoFuture<GetDomainResult, GetDomainError> {
+        Lightsail::get_domain(&(**self), input)
+    }
+
+    /// <p>Returns a list of all domains in the user's account.</p>
+    fn get_domains(
+        &self,
+        input: GetDomainsRequest,
+    ) -> RusotoFuture<GetDomainsResult, GetDomainsError> {
+        Lightsail::get_domains(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
+    fn get_instance(
+        &self,
+        input: GetInstanceRequest,
+    ) -> RusotoFuture<GetInstanceResult, GetInstanceError> {
+        Lightsail::get_instance(&(**self), input)
+    }
+
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
+    fn get_instance_access_details(
+        &self,
+        input: GetInstanceAccessDetailsRequest,
+    ) -> RusotoFuture<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError> {
+        Lightsail::get_instance_access_details(&(**self), input)
+    }
+
+    /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
+    fn get_instance_metric_data(
+        &self,
+        input: GetInstanceMetricDataRequest,
+    ) -> RusotoFuture<GetInstanceMetricDataResult, GetInstanceMetricDataError> {
+        Lightsail::get_instance_metric_data(&(**self), input)
+    }
+
+    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
+    fn get_instance_port_states(
+        &self,
+        input: GetInstancePortStatesRequest,
+    ) -> RusotoFuture<GetInstancePortStatesResult, GetInstancePortStatesError> {
+        Lightsail::get_instance_port_states(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific instance snapshot.</p>
+    fn get_instance_snapshot(
+        &self,
+        input: GetInstanceSnapshotRequest,
+    ) -> RusotoFuture<GetInstanceSnapshotResult, GetInstanceSnapshotError> {
+        Lightsail::get_instance_snapshot(&(**self), input)
+    }
+
+    /// <p>Returns all instance snapshots for the user's account.</p>
+    fn get_instance_snapshots(
+        &self,
+        input: GetInstanceSnapshotsRequest,
+    ) -> RusotoFuture<GetInstanceSnapshotsResult, GetInstanceSnapshotsError> {
+        Lightsail::get_instance_snapshots(&(**self), input)
+    }
+
+    /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
+    fn get_instance_state(
+        &self,
+        input: GetInstanceStateRequest,
+    ) -> RusotoFuture<GetInstanceStateResult, GetInstanceStateError> {
+        Lightsail::get_instance_state(&(**self), input)
+    }
+
+    /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
+    fn get_instances(
+        &self,
+        input: GetInstancesRequest,
+    ) -> RusotoFuture<GetInstancesResult, GetInstancesError> {
+        Lightsail::get_instances(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific key pair.</p>
+    fn get_key_pair(
+        &self,
+        input: GetKeyPairRequest,
+    ) -> RusotoFuture<GetKeyPairResult, GetKeyPairError> {
+        Lightsail::get_key_pair(&(**self), input)
+    }
+
+    /// <p>Returns information about all key pairs in the user's account.</p>
+    fn get_key_pairs(
+        &self,
+        input: GetKeyPairsRequest,
+    ) -> RusotoFuture<GetKeyPairsResult, GetKeyPairsError> {
+        Lightsail::get_key_pairs(&(**self), input)
+    }
+
+    /// <p>Returns information about the specified Lightsail load balancer.</p>
+    fn get_load_balancer(
+        &self,
+        input: GetLoadBalancerRequest,
+    ) -> RusotoFuture<GetLoadBalancerResult, GetLoadBalancerError> {
+        Lightsail::get_load_balancer(&(**self), input)
+    }
+
+    /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
+    fn get_load_balancer_metric_data(
+        &self,
+        input: GetLoadBalancerMetricDataRequest,
+    ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError> {
+        Lightsail::get_load_balancer_metric_data(&(**self), input)
+    }
+
+    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
+    fn get_load_balancer_tls_certificates(
+        &self,
+        input: GetLoadBalancerTlsCertificatesRequest,
+    ) -> RusotoFuture<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>
+    {
+        Lightsail::get_load_balancer_tls_certificates(&(**self), input)
+    }
+
+    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_load_balancers(
+        &self,
+        input: GetLoadBalancersRequest,
+    ) -> RusotoFuture<GetLoadBalancersResult, GetLoadBalancersError> {
+        Lightsail::get_load_balancers(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
+    fn get_operation(
+        &self,
+        input: GetOperationRequest,
+    ) -> RusotoFuture<GetOperationResult, GetOperationError> {
+        Lightsail::get_operation(&(**self), input)
+    }
+
+    /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
+    fn get_operations(
+        &self,
+        input: GetOperationsRequest,
+    ) -> RusotoFuture<GetOperationsResult, GetOperationsError> {
+        Lightsail::get_operations(&(**self), input)
+    }
+
+    /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
+    fn get_operations_for_resource(
+        &self,
+        input: GetOperationsForResourceRequest,
+    ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError> {
+        Lightsail::get_operations_for_resource(&(**self), input)
+    }
+
+    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
+    fn get_regions(
+        &self,
+        input: GetRegionsRequest,
+    ) -> RusotoFuture<GetRegionsResult, GetRegionsError> {
+        Lightsail::get_regions(&(**self), input)
+    }
+
+    /// <p>Returns information about a specific static IP.</p>
+    fn get_static_ip(
+        &self,
+        input: GetStaticIpRequest,
+    ) -> RusotoFuture<GetStaticIpResult, GetStaticIpError> {
+        Lightsail::get_static_ip(&(**self), input)
+    }
+
+    /// <p>Returns information about all static IPs in the user's account.</p>
+    fn get_static_ips(
+        &self,
+        input: GetStaticIpsRequest,
+    ) -> RusotoFuture<GetStaticIpsResult, GetStaticIpsError> {
+        Lightsail::get_static_ips(&(**self), input)
+    }
+
+    /// <p>Imports a public SSH key from a specific key pair.</p>
+    fn import_key_pair(
+        &self,
+        input: ImportKeyPairRequest,
+    ) -> RusotoFuture<ImportKeyPairResult, ImportKeyPairError> {
+        Lightsail::import_key_pair(&(**self), input)
+    }
+
+    /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
+    fn is_vpc_peered(&self) -> RusotoFuture<IsVpcPeeredResult, IsVpcPeeredError> {
+        Lightsail::is_vpc_peered(&(**self))
+    }
+
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p>
+    fn open_instance_public_ports(
+        &self,
+        input: OpenInstancePublicPortsRequest,
+    ) -> RusotoFuture<OpenInstancePublicPortsResult, OpenInstancePublicPortsError> {
+        Lightsail::open_instance_public_ports(&(**self), input)
+    }
+
+    /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
+    fn peer_vpc(&self) -> RusotoFuture<PeerVpcResult, PeerVpcError> {
+        Lightsail::peer_vpc(&(**self))
+    }
+
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
+    fn put_instance_public_ports(
+        &self,
+        input: PutInstancePublicPortsRequest,
+    ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError> {
+        Lightsail::put_instance_public_ports(&(**self), input)
+    }
+
+    /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
+    fn reboot_instance(
+        &self,
+        input: RebootInstanceRequest,
+    ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError> {
+        Lightsail::reboot_instance(&(**self), input)
+    }
+
+    /// <p>Deletes a specific static IP from your account.</p>
+    fn release_static_ip(
+        &self,
+        input: ReleaseStaticIpRequest,
+    ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError> {
+        Lightsail::release_static_ip(&(**self), input)
+    }
+
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
+    fn start_instance(
+        &self,
+        input: StartInstanceRequest,
+    ) -> RusotoFuture<StartInstanceResult, StartInstanceError> {
+        Lightsail::start_instance(&(**self), input)
+    }
+
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
+    fn stop_instance(
+        &self,
+        input: StopInstanceRequest,
+    ) -> RusotoFuture<StopInstanceResult, StopInstanceError> {
+        Lightsail::stop_instance(&(**self), input)
+    }
+
+    /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
+    fn unpeer_vpc(&self) -> RusotoFuture<UnpeerVpcResult, UnpeerVpcError> {
+        Lightsail::unpeer_vpc(&(**self))
+    }
+
+    /// <p>Updates a domain recordset after it is created.</p>
+    fn update_domain_entry(
+        &self,
+        input: UpdateDomainEntryRequest,
+    ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError> {
+        Lightsail::update_domain_entry(&(**self), input)
+    }
+
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
+    fn update_load_balancer_attribute(
+        &self,
+        input: UpdateLoadBalancerAttributeRequest,
+    ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError> {
+        Lightsail::update_load_balancer_attribute(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

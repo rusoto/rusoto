@@ -258,5 +258,15 @@ impl Translate for TranslateClient {
     }
 }
 
+impl<T: ?Sized + Translate> Translate for ::std::rc::Rc<T> {
+    /// <p>Translates input text from the source language to the target language. You can translate between English (en) and one of the following languages, or between one of the following languages and English.</p> <ul> <li> <p>Arabic (ar)</p> </li> <li> <p>Chinese (Simplified) (zh)</p> </li> <li> <p>French (fr)</p> </li> <li> <p>German (de)</p> </li> <li> <p>Portuguese (pt)</p> </li> <li> <p>Spanish (es)</p> </li> </ul> <p>To have Amazon Translate determine the source language of your text, you can specify <code>auto</code> in the <code>SourceLanguageCode</code> field. If you specify <code>auto</code>, Amazon Translate will call Amazon Comprehend to determine the source language.</p>
+    fn translate_text(
+        &self,
+        input: TranslateTextRequest,
+    ) -> RusotoFuture<TranslateTextResponse, TranslateTextError> {
+        Translate::translate_text(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

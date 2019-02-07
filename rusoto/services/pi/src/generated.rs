@@ -571,5 +571,23 @@ impl PerformanceInsights for PerformanceInsightsClient {
     }
 }
 
+impl<T: ?Sized + PerformanceInsights> PerformanceInsights for ::std::rc::Rc<T> {
+    /// <p>For a specific time period, retrieve the top <code>N</code> dimension keys for a metric.</p>
+    fn describe_dimension_keys(
+        &self,
+        input: DescribeDimensionKeysRequest,
+    ) -> RusotoFuture<DescribeDimensionKeysResponse, DescribeDimensionKeysError> {
+        PerformanceInsights::describe_dimension_keys(&(**self), input)
+    }
+
+    /// <p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p>
+    fn get_resource_metrics(
+        &self,
+        input: GetResourceMetricsRequest,
+    ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError> {
+        PerformanceInsights::get_resource_metrics(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

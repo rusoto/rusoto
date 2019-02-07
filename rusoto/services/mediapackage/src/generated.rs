@@ -2970,5 +2970,95 @@ impl MediaPackage for MediaPackageClient {
     }
 }
 
+impl<T: ?Sized + MediaPackage> MediaPackage for ::std::rc::Rc<T> {
+    /// <p>Creates a new Channel.</p>
+    fn create_channel(
+        &self,
+        input: CreateChannelRequest,
+    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError> {
+        MediaPackage::create_channel(&(**self), input)
+    }
+
+    /// <p>Creates a new OriginEndpoint record.</p>
+    fn create_origin_endpoint(
+        &self,
+        input: CreateOriginEndpointRequest,
+    ) -> RusotoFuture<CreateOriginEndpointResponse, CreateOriginEndpointError> {
+        MediaPackage::create_origin_endpoint(&(**self), input)
+    }
+
+    /// <p>Deletes an existing Channel.</p>
+    fn delete_channel(
+        &self,
+        input: DeleteChannelRequest,
+    ) -> RusotoFuture<DeleteChannelResponse, DeleteChannelError> {
+        MediaPackage::delete_channel(&(**self), input)
+    }
+
+    /// <p>Deletes an existing OriginEndpoint.</p>
+    fn delete_origin_endpoint(
+        &self,
+        input: DeleteOriginEndpointRequest,
+    ) -> RusotoFuture<DeleteOriginEndpointResponse, DeleteOriginEndpointError> {
+        MediaPackage::delete_origin_endpoint(&(**self), input)
+    }
+
+    /// <p>Gets details about a Channel.</p>
+    fn describe_channel(
+        &self,
+        input: DescribeChannelRequest,
+    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError> {
+        MediaPackage::describe_channel(&(**self), input)
+    }
+
+    /// <p>Gets details about an existing OriginEndpoint.</p>
+    fn describe_origin_endpoint(
+        &self,
+        input: DescribeOriginEndpointRequest,
+    ) -> RusotoFuture<DescribeOriginEndpointResponse, DescribeOriginEndpointError> {
+        MediaPackage::describe_origin_endpoint(&(**self), input)
+    }
+
+    /// <p>Returns a collection of Channels.</p>
+    fn list_channels(
+        &self,
+        input: ListChannelsRequest,
+    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError> {
+        MediaPackage::list_channels(&(**self), input)
+    }
+
+    /// <p>Returns a collection of OriginEndpoint records.</p>
+    fn list_origin_endpoints(
+        &self,
+        input: ListOriginEndpointsRequest,
+    ) -> RusotoFuture<ListOriginEndpointsResponse, ListOriginEndpointsError> {
+        MediaPackage::list_origin_endpoints(&(**self), input)
+    }
+
+    /// <p>Changes the Channel ingest username and password.</p>
+    fn rotate_channel_credentials(
+        &self,
+        input: RotateChannelCredentialsRequest,
+    ) -> RusotoFuture<RotateChannelCredentialsResponse, RotateChannelCredentialsError> {
+        MediaPackage::rotate_channel_credentials(&(**self), input)
+    }
+
+    /// <p>Updates an existing Channel.</p>
+    fn update_channel(
+        &self,
+        input: UpdateChannelRequest,
+    ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError> {
+        MediaPackage::update_channel(&(**self), input)
+    }
+
+    /// <p>Updates an existing OriginEndpoint.</p>
+    fn update_origin_endpoint(
+        &self,
+        input: UpdateOriginEndpointRequest,
+    ) -> RusotoFuture<UpdateOriginEndpointResponse, UpdateOriginEndpointError> {
+        MediaPackage::update_origin_endpoint(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

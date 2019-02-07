@@ -8128,5 +8128,191 @@ impl MediaLive for MediaLiveClient {
     }
 }
 
+impl<T: ?Sized + MediaLive> MediaLive for ::std::rc::Rc<T> {
+    /// <p>Creates a new channel</p>
+    fn create_channel(
+        &self,
+        input: CreateChannelRequest,
+    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError> {
+        MediaLive::create_channel(&(**self), input)
+    }
+
+    /// <p>Create an input</p>
+    fn create_input(
+        &self,
+        input: CreateInputRequest,
+    ) -> RusotoFuture<CreateInputResponse, CreateInputError> {
+        MediaLive::create_input(&(**self), input)
+    }
+
+    /// <p>Creates a Input Security Group</p>
+    fn create_input_security_group(
+        &self,
+        input: CreateInputSecurityGroupRequest,
+    ) -> RusotoFuture<CreateInputSecurityGroupResponse, CreateInputSecurityGroupError> {
+        MediaLive::create_input_security_group(&(**self), input)
+    }
+
+    /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
+    fn delete_channel(
+        &self,
+        input: DeleteChannelRequest,
+    ) -> RusotoFuture<DeleteChannelResponse, DeleteChannelError> {
+        MediaLive::delete_channel(&(**self), input)
+    }
+
+    /// <p>Deletes the input end point</p>
+    fn delete_input(
+        &self,
+        input: DeleteInputRequest,
+    ) -> RusotoFuture<DeleteInputResponse, DeleteInputError> {
+        MediaLive::delete_input(&(**self), input)
+    }
+
+    /// <p>Deletes an Input Security Group</p>
+    fn delete_input_security_group(
+        &self,
+        input: DeleteInputSecurityGroupRequest,
+    ) -> RusotoFuture<DeleteInputSecurityGroupResponse, DeleteInputSecurityGroupError> {
+        MediaLive::delete_input_security_group(&(**self), input)
+    }
+
+    /// <p>Delete an expired reservation.</p>
+    fn delete_reservation(
+        &self,
+        input: DeleteReservationRequest,
+    ) -> RusotoFuture<DeleteReservationResponse, DeleteReservationError> {
+        MediaLive::delete_reservation(&(**self), input)
+    }
+
+    /// <p>Gets details about a channel</p>
+    fn describe_channel(
+        &self,
+        input: DescribeChannelRequest,
+    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError> {
+        MediaLive::describe_channel(&(**self), input)
+    }
+
+    /// <p>Produces details about an input</p>
+    fn describe_input(
+        &self,
+        input: DescribeInputRequest,
+    ) -> RusotoFuture<DescribeInputResponse, DescribeInputError> {
+        MediaLive::describe_input(&(**self), input)
+    }
+
+    /// <p>Produces a summary of an Input Security Group</p>
+    fn describe_input_security_group(
+        &self,
+        input: DescribeInputSecurityGroupRequest,
+    ) -> RusotoFuture<DescribeInputSecurityGroupResponse, DescribeInputSecurityGroupError> {
+        MediaLive::describe_input_security_group(&(**self), input)
+    }
+
+    /// <p>Get details for an offering.</p>
+    fn describe_offering(
+        &self,
+        input: DescribeOfferingRequest,
+    ) -> RusotoFuture<DescribeOfferingResponse, DescribeOfferingError> {
+        MediaLive::describe_offering(&(**self), input)
+    }
+
+    /// <p>Get details for a reservation.</p>
+    fn describe_reservation(
+        &self,
+        input: DescribeReservationRequest,
+    ) -> RusotoFuture<DescribeReservationResponse, DescribeReservationError> {
+        MediaLive::describe_reservation(&(**self), input)
+    }
+
+    /// <p>Produces list of channels that have been created</p>
+    fn list_channels(
+        &self,
+        input: ListChannelsRequest,
+    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError> {
+        MediaLive::list_channels(&(**self), input)
+    }
+
+    /// <p>Produces a list of Input Security Groups for an account</p>
+    fn list_input_security_groups(
+        &self,
+        input: ListInputSecurityGroupsRequest,
+    ) -> RusotoFuture<ListInputSecurityGroupsResponse, ListInputSecurityGroupsError> {
+        MediaLive::list_input_security_groups(&(**self), input)
+    }
+
+    /// <p>Produces list of inputs that have been created</p>
+    fn list_inputs(
+        &self,
+        input: ListInputsRequest,
+    ) -> RusotoFuture<ListInputsResponse, ListInputsError> {
+        MediaLive::list_inputs(&(**self), input)
+    }
+
+    /// <p>List offerings available for purchase.</p>
+    fn list_offerings(
+        &self,
+        input: ListOfferingsRequest,
+    ) -> RusotoFuture<ListOfferingsResponse, ListOfferingsError> {
+        MediaLive::list_offerings(&(**self), input)
+    }
+
+    /// <p>List purchased reservations.</p>
+    fn list_reservations(
+        &self,
+        input: ListReservationsRequest,
+    ) -> RusotoFuture<ListReservationsResponse, ListReservationsError> {
+        MediaLive::list_reservations(&(**self), input)
+    }
+
+    /// <p>Purchase an offering and create a reservation.</p>
+    fn purchase_offering(
+        &self,
+        input: PurchaseOfferingRequest,
+    ) -> RusotoFuture<PurchaseOfferingResponse, PurchaseOfferingError> {
+        MediaLive::purchase_offering(&(**self), input)
+    }
+
+    /// <p>Starts an existing channel</p>
+    fn start_channel(
+        &self,
+        input: StartChannelRequest,
+    ) -> RusotoFuture<StartChannelResponse, StartChannelError> {
+        MediaLive::start_channel(&(**self), input)
+    }
+
+    /// <p>Stops a running channel</p>
+    fn stop_channel(
+        &self,
+        input: StopChannelRequest,
+    ) -> RusotoFuture<StopChannelResponse, StopChannelError> {
+        MediaLive::stop_channel(&(**self), input)
+    }
+
+    /// <p>Updates a channel.</p>
+    fn update_channel(
+        &self,
+        input: UpdateChannelRequest,
+    ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError> {
+        MediaLive::update_channel(&(**self), input)
+    }
+
+    /// <p>Updates an input.</p>
+    fn update_input(
+        &self,
+        input: UpdateInputRequest,
+    ) -> RusotoFuture<UpdateInputResponse, UpdateInputError> {
+        MediaLive::update_input(&(**self), input)
+    }
+
+    /// <p>Update an Input Security Group&#39;s Whilelists.</p>
+    fn update_input_security_group(
+        &self,
+        input: UpdateInputSecurityGroupRequest,
+    ) -> RusotoFuture<UpdateInputSecurityGroupResponse, UpdateInputSecurityGroupError> {
+        MediaLive::update_input_security_group(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

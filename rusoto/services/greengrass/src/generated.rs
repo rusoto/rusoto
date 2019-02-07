@@ -13507,5 +13507,617 @@ impl GreenGrass for GreenGrassClient {
     }
 }
 
+impl<T: ?Sized + GreenGrass> GreenGrass for ::std::rc::Rc<T> {
+    /// <p>Associates a role with a group. Your AWS Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
+    fn associate_role_to_group(
+        &self,
+        input: AssociateRoleToGroupRequest,
+    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
+        GreenGrass::associate_role_to_group(&(**self), input)
+    }
+
+    /// <p>Associates a role with your account. AWS Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
+    fn associate_service_role_to_account(
+        &self,
+        input: AssociateServiceRoleToAccountRequest,
+    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>
+    {
+        GreenGrass::associate_service_role_to_account(&(**self), input)
+    }
+
+    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
+    fn create_core_definition(
+        &self,
+        input: CreateCoreDefinitionRequest,
+    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
+        GreenGrass::create_core_definition(&(**self), input)
+    }
+
+    /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
+    fn create_core_definition_version(
+        &self,
+        input: CreateCoreDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
+        GreenGrass::create_core_definition_version(&(**self), input)
+    }
+
+    /// <p>Creates a deployment.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError> {
+        GreenGrass::create_deployment(&(**self), input)
+    }
+
+    /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_device_definition(
+        &self,
+        input: CreateDeviceDefinitionRequest,
+    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
+        GreenGrass::create_device_definition(&(**self), input)
+    }
+
+    /// <p>Creates a version of a device definition that has already been defined.</p>
+    fn create_device_definition_version(
+        &self,
+        input: CreateDeviceDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>
+    {
+        GreenGrass::create_device_definition_version(&(**self), input)
+    }
+
+    /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
+    fn create_function_definition(
+        &self,
+        input: CreateFunctionDefinitionRequest,
+    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
+        GreenGrass::create_function_definition(&(**self), input)
+    }
+
+    /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
+    fn create_function_definition_version(
+        &self,
+        input: CreateFunctionDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>
+    {
+        GreenGrass::create_function_definition_version(&(**self), input)
+    }
+
+    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
+    fn create_group(
+        &self,
+        input: CreateGroupRequest,
+    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
+        GreenGrass::create_group(&(**self), input)
+    }
+
+    /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
+    fn create_group_certificate_authority(
+        &self,
+        input: CreateGroupCertificateAuthorityRequest,
+    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>
+    {
+        GreenGrass::create_group_certificate_authority(&(**self), input)
+    }
+
+    /// <p>Creates a version of a group which has already been defined.</p>
+    fn create_group_version(
+        &self,
+        input: CreateGroupVersionRequest,
+    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError> {
+        GreenGrass::create_group_version(&(**self), input)
+    }
+
+    /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_logger_definition(
+        &self,
+        input: CreateLoggerDefinitionRequest,
+    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
+        GreenGrass::create_logger_definition(&(**self), input)
+    }
+
+    /// <p>Creates a version of a logger definition that has already been defined.</p>
+    fn create_logger_definition_version(
+        &self,
+        input: CreateLoggerDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>
+    {
+        GreenGrass::create_logger_definition_version(&(**self), input)
+    }
+
+    /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
+    fn create_resource_definition(
+        &self,
+        input: CreateResourceDefinitionRequest,
+    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError> {
+        GreenGrass::create_resource_definition(&(**self), input)
+    }
+
+    /// <p>Creates a version of a resource definition that has already been defined.</p>
+    fn create_resource_definition_version(
+        &self,
+        input: CreateResourceDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>
+    {
+        GreenGrass::create_resource_definition_version(&(**self), input)
+    }
+
+    /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
+    fn create_software_update_job(
+        &self,
+        input: CreateSoftwareUpdateJobRequest,
+    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError> {
+        GreenGrass::create_software_update_job(&(**self), input)
+    }
+
+    /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_subscription_definition(
+        &self,
+        input: CreateSubscriptionDefinitionRequest,
+    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
+        GreenGrass::create_subscription_definition(&(**self), input)
+    }
+
+    /// <p>Creates a version of a subscription definition which has already been defined.</p>
+    fn create_subscription_definition_version(
+        &self,
+        input: CreateSubscriptionDefinitionVersionRequest,
+    ) -> RusotoFuture<
+        CreateSubscriptionDefinitionVersionResponse,
+        CreateSubscriptionDefinitionVersionError,
+    > {
+        GreenGrass::create_subscription_definition_version(&(**self), input)
+    }
+
+    /// <p>Deletes a core definition.</p>
+    fn delete_core_definition(
+        &self,
+        input: DeleteCoreDefinitionRequest,
+    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
+        GreenGrass::delete_core_definition(&(**self), input)
+    }
+
+    /// <p>Deletes a device definition.</p>
+    fn delete_device_definition(
+        &self,
+        input: DeleteDeviceDefinitionRequest,
+    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
+        GreenGrass::delete_device_definition(&(**self), input)
+    }
+
+    /// <p>Deletes a Lambda function definition.</p>
+    fn delete_function_definition(
+        &self,
+        input: DeleteFunctionDefinitionRequest,
+    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
+        GreenGrass::delete_function_definition(&(**self), input)
+    }
+
+    /// <p>Deletes a group.</p>
+    fn delete_group(
+        &self,
+        input: DeleteGroupRequest,
+    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
+        GreenGrass::delete_group(&(**self), input)
+    }
+
+    /// <p>Deletes a logger definition.</p>
+    fn delete_logger_definition(
+        &self,
+        input: DeleteLoggerDefinitionRequest,
+    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
+        GreenGrass::delete_logger_definition(&(**self), input)
+    }
+
+    /// <p>Deletes a resource definition.</p>
+    fn delete_resource_definition(
+        &self,
+        input: DeleteResourceDefinitionRequest,
+    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError> {
+        GreenGrass::delete_resource_definition(&(**self), input)
+    }
+
+    /// <p>Deletes a subscription definition.</p>
+    fn delete_subscription_definition(
+        &self,
+        input: DeleteSubscriptionDefinitionRequest,
+    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
+        GreenGrass::delete_subscription_definition(&(**self), input)
+    }
+
+    /// <p>Disassociates the role from a group.</p>
+    fn disassociate_role_from_group(
+        &self,
+        input: DisassociateRoleFromGroupRequest,
+    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
+        GreenGrass::disassociate_role_from_group(&(**self), input)
+    }
+
+    /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
+    fn disassociate_service_role_from_account(
+        &self,
+    ) -> RusotoFuture<
+        DisassociateServiceRoleFromAccountResponse,
+        DisassociateServiceRoleFromAccountError,
+    > {
+        GreenGrass::disassociate_service_role_from_account(&(**self))
+    }
+
+    /// <p>Retrieves the role associated with a particular group.</p>
+    fn get_associated_role(
+        &self,
+        input: GetAssociatedRoleRequest,
+    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError> {
+        GreenGrass::get_associated_role(&(**self), input)
+    }
+
+    /// <p>Retrieves the connectivity information for a core.</p>
+    fn get_connectivity_info(
+        &self,
+        input: GetConnectivityInfoRequest,
+    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError> {
+        GreenGrass::get_connectivity_info(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a core definition version.</p>
+    fn get_core_definition(
+        &self,
+        input: GetCoreDefinitionRequest,
+    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError> {
+        GreenGrass::get_core_definition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a core definition version.</p>
+    fn get_core_definition_version(
+        &self,
+        input: GetCoreDefinitionVersionRequest,
+    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
+        GreenGrass::get_core_definition_version(&(**self), input)
+    }
+
+    /// <p>Returns the status of a deployment.</p>
+    fn get_deployment_status(
+        &self,
+        input: GetDeploymentStatusRequest,
+    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError> {
+        GreenGrass::get_deployment_status(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a device definition.</p>
+    fn get_device_definition(
+        &self,
+        input: GetDeviceDefinitionRequest,
+    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
+        GreenGrass::get_device_definition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a device definition version.</p>
+    fn get_device_definition_version(
+        &self,
+        input: GetDeviceDefinitionVersionRequest,
+    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
+        GreenGrass::get_device_definition_version(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
+    fn get_function_definition(
+        &self,
+        input: GetFunctionDefinitionRequest,
+    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
+        GreenGrass::get_function_definition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
+    fn get_function_definition_version(
+        &self,
+        input: GetFunctionDefinitionVersionRequest,
+    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
+        GreenGrass::get_function_definition_version(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a group.</p>
+    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
+        GreenGrass::get_group(&(**self), input)
+    }
+
+    /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
+    fn get_group_certificate_authority(
+        &self,
+        input: GetGroupCertificateAuthorityRequest,
+    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
+        GreenGrass::get_group_certificate_authority(&(**self), input)
+    }
+
+    /// <p>Retrieves the current configuration for the CA used by the group.</p>
+    fn get_group_certificate_configuration(
+        &self,
+        input: GetGroupCertificateConfigurationRequest,
+    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
+    {
+        GreenGrass::get_group_certificate_configuration(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a group version.</p>
+    fn get_group_version(
+        &self,
+        input: GetGroupVersionRequest,
+    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError> {
+        GreenGrass::get_group_version(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a logger definition.</p>
+    fn get_logger_definition(
+        &self,
+        input: GetLoggerDefinitionRequest,
+    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
+        GreenGrass::get_logger_definition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a logger definition version.</p>
+    fn get_logger_definition_version(
+        &self,
+        input: GetLoggerDefinitionVersionRequest,
+    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
+        GreenGrass::get_logger_definition_version(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
+    fn get_resource_definition(
+        &self,
+        input: GetResourceDefinitionRequest,
+    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError> {
+        GreenGrass::get_resource_definition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
+    fn get_resource_definition_version(
+        &self,
+        input: GetResourceDefinitionVersionRequest,
+    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError> {
+        GreenGrass::get_resource_definition_version(&(**self), input)
+    }
+
+    /// <p>Retrieves the service role that is attached to your account.</p>
+    fn get_service_role_for_account(
+        &self,
+    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
+        GreenGrass::get_service_role_for_account(&(**self))
+    }
+
+    /// <p>Retrieves information about a subscription definition.</p>
+    fn get_subscription_definition(
+        &self,
+        input: GetSubscriptionDefinitionRequest,
+    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
+        GreenGrass::get_subscription_definition(&(**self), input)
+    }
+
+    /// <p>Retrieves information about a subscription definition version.</p>
+    fn get_subscription_definition_version(
+        &self,
+        input: GetSubscriptionDefinitionVersionRequest,
+    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
+    {
+        GreenGrass::get_subscription_definition_version(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a core definition.</p>
+    fn list_core_definition_versions(
+        &self,
+        input: ListCoreDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
+        GreenGrass::list_core_definition_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of core definitions.</p>
+    fn list_core_definitions(
+        &self,
+        input: ListCoreDefinitionsRequest,
+    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
+        GreenGrass::list_core_definitions(&(**self), input)
+    }
+
+    /// <p>Returns a history of deployments for the group.</p>
+    fn list_deployments(
+        &self,
+        input: ListDeploymentsRequest,
+    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError> {
+        GreenGrass::list_deployments(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a device definition.</p>
+    fn list_device_definition_versions(
+        &self,
+        input: ListDeviceDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
+        GreenGrass::list_device_definition_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of device definitions.</p>
+    fn list_device_definitions(
+        &self,
+        input: ListDeviceDefinitionsRequest,
+    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
+        GreenGrass::list_device_definitions(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a Lambda function definition.</p>
+    fn list_function_definition_versions(
+        &self,
+        input: ListFunctionDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>
+    {
+        GreenGrass::list_function_definition_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of Lambda function definitions.</p>
+    fn list_function_definitions(
+        &self,
+        input: ListFunctionDefinitionsRequest,
+    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
+        GreenGrass::list_function_definitions(&(**self), input)
+    }
+
+    /// <p>Retrieves the current CAs for a group.</p>
+    fn list_group_certificate_authorities(
+        &self,
+        input: ListGroupCertificateAuthoritiesRequest,
+    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>
+    {
+        GreenGrass::list_group_certificate_authorities(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a group.</p>
+    fn list_group_versions(
+        &self,
+        input: ListGroupVersionsRequest,
+    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError> {
+        GreenGrass::list_group_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of groups.</p>
+    fn list_groups(
+        &self,
+        input: ListGroupsRequest,
+    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
+        GreenGrass::list_groups(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a logger definition.</p>
+    fn list_logger_definition_versions(
+        &self,
+        input: ListLoggerDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
+        GreenGrass::list_logger_definition_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of logger definitions.</p>
+    fn list_logger_definitions(
+        &self,
+        input: ListLoggerDefinitionsRequest,
+    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
+        GreenGrass::list_logger_definitions(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a resource definition.</p>
+    fn list_resource_definition_versions(
+        &self,
+        input: ListResourceDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>
+    {
+        GreenGrass::list_resource_definition_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of resource definitions.</p>
+    fn list_resource_definitions(
+        &self,
+        input: ListResourceDefinitionsRequest,
+    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError> {
+        GreenGrass::list_resource_definitions(&(**self), input)
+    }
+
+    /// <p>Lists the versions of a subscription definition.</p>
+    fn list_subscription_definition_versions(
+        &self,
+        input: ListSubscriptionDefinitionVersionsRequest,
+    ) -> RusotoFuture<
+        ListSubscriptionDefinitionVersionsResponse,
+        ListSubscriptionDefinitionVersionsError,
+    > {
+        GreenGrass::list_subscription_definition_versions(&(**self), input)
+    }
+
+    /// <p>Retrieves a list of subscription definitions.</p>
+    fn list_subscription_definitions(
+        &self,
+        input: ListSubscriptionDefinitionsRequest,
+    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
+        GreenGrass::list_subscription_definitions(&(**self), input)
+    }
+
+    /// <p>Resets a group&#39;s deployments.</p>
+    fn reset_deployments(
+        &self,
+        input: ResetDeploymentsRequest,
+    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError> {
+        GreenGrass::reset_deployments(&(**self), input)
+    }
+
+    /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
+    fn update_connectivity_info(
+        &self,
+        input: UpdateConnectivityInfoRequest,
+    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
+        GreenGrass::update_connectivity_info(&(**self), input)
+    }
+
+    /// <p>Updates a core definition.</p>
+    fn update_core_definition(
+        &self,
+        input: UpdateCoreDefinitionRequest,
+    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
+        GreenGrass::update_core_definition(&(**self), input)
+    }
+
+    /// <p>Updates a device definition.</p>
+    fn update_device_definition(
+        &self,
+        input: UpdateDeviceDefinitionRequest,
+    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
+        GreenGrass::update_device_definition(&(**self), input)
+    }
+
+    /// <p>Updates a Lambda function definition.</p>
+    fn update_function_definition(
+        &self,
+        input: UpdateFunctionDefinitionRequest,
+    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
+        GreenGrass::update_function_definition(&(**self), input)
+    }
+
+    /// <p>Updates a group.</p>
+    fn update_group(
+        &self,
+        input: UpdateGroupRequest,
+    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
+        GreenGrass::update_group(&(**self), input)
+    }
+
+    /// <p>Updates the Certificate expiry time for a group.</p>
+    fn update_group_certificate_configuration(
+        &self,
+        input: UpdateGroupCertificateConfigurationRequest,
+    ) -> RusotoFuture<
+        UpdateGroupCertificateConfigurationResponse,
+        UpdateGroupCertificateConfigurationError,
+    > {
+        GreenGrass::update_group_certificate_configuration(&(**self), input)
+    }
+
+    /// <p>Updates a logger definition.</p>
+    fn update_logger_definition(
+        &self,
+        input: UpdateLoggerDefinitionRequest,
+    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
+        GreenGrass::update_logger_definition(&(**self), input)
+    }
+
+    /// <p>Updates a resource definition.</p>
+    fn update_resource_definition(
+        &self,
+        input: UpdateResourceDefinitionRequest,
+    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError> {
+        GreenGrass::update_resource_definition(&(**self), input)
+    }
+
+    /// <p>Updates a subscription definition.</p>
+    fn update_subscription_definition(
+        &self,
+        input: UpdateSubscriptionDefinitionRequest,
+    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
+        GreenGrass::update_subscription_definition(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

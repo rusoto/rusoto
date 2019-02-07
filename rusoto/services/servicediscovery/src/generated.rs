@@ -3272,5 +3272,150 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
     }
 }
 
+impl<T: ?Sized + ServiceDiscovery> ServiceDiscovery for ::std::rc::Rc<T> {
+    /// <p>Creates a private namespace based on DNS, which will be visible only inside a specified Amazon VPC. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html#limits-api-entities-autonaming">Limits on Auto Naming</a> in the <i>Route 53 Developer Guide</i>.</p>
+    fn create_private_dns_namespace(
+        &self,
+        input: CreatePrivateDnsNamespaceRequest,
+    ) -> RusotoFuture<CreatePrivateDnsNamespaceResponse, CreatePrivateDnsNamespaceError> {
+        ServiceDiscovery::create_private_dns_namespace(&(**self), input)
+    }
+
+    /// <p>Creates a public namespace based on DNS, which will be visible on the internet. The namespace defines your service naming scheme. For example, if you name your namespace <code>example.com</code> and name your service <code>backend</code>, the resulting DNS name for the service will be <code>backend.example.com</code>. For the current limit on the number of namespaces that you can create using the same AWS account, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html#limits-api-entities-autonaming">Limits on Auto Naming</a> in the <i>Route 53 Developer Guide</i>.</p>
+    fn create_public_dns_namespace(
+        &self,
+        input: CreatePublicDnsNamespaceRequest,
+    ) -> RusotoFuture<CreatePublicDnsNamespaceResponse, CreatePublicDnsNamespaceError> {
+        ServiceDiscovery::create_public_dns_namespace(&(**self), input)
+    }
+
+    /// <p>Creates a service, which defines the configuration for the following entities:</p> <ul> <li> <p>Up to three records (A, AAAA, and SRV) or one CNAME record</p> </li> <li> <p>Optionally, a health check</p> </li> </ul> <p>After you create the service, you can submit a <a>RegisterInstance</a> request, and Amazon Route 53 uses the values in the configuration to create the specified entities.</p> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html#limits-api-entities-autonaming">Limits on Auto Naming</a> in the <i>Route 53 Developer Guide</i>.</p>
+    fn create_service(
+        &self,
+        input: CreateServiceRequest,
+    ) -> RusotoFuture<CreateServiceResponse, CreateServiceError> {
+        ServiceDiscovery::create_service(&(**self), input)
+    }
+
+    /// <p>Deletes a namespace from the current account. If the namespace still contains one or more services, the request fails.</p>
+    fn delete_namespace(
+        &self,
+        input: DeleteNamespaceRequest,
+    ) -> RusotoFuture<DeleteNamespaceResponse, DeleteNamespaceError> {
+        ServiceDiscovery::delete_namespace(&(**self), input)
+    }
+
+    /// <p>Deletes a specified service. If the service still contains one or more registered instances, the request fails.</p>
+    fn delete_service(
+        &self,
+        input: DeleteServiceRequest,
+    ) -> RusotoFuture<DeleteServiceResponse, DeleteServiceError> {
+        ServiceDiscovery::delete_service(&(**self), input)
+    }
+
+    /// <p>Deletes the records and the health check, if any, that Amazon Route 53 created for the specified instance.</p>
+    fn deregister_instance(
+        &self,
+        input: DeregisterInstanceRequest,
+    ) -> RusotoFuture<DeregisterInstanceResponse, DeregisterInstanceError> {
+        ServiceDiscovery::deregister_instance(&(**self), input)
+    }
+
+    /// <p>Gets information about a specified instance.</p>
+    fn get_instance(
+        &self,
+        input: GetInstanceRequest,
+    ) -> RusotoFuture<GetInstanceResponse, GetInstanceError> {
+        ServiceDiscovery::get_instance(&(**self), input)
+    }
+
+    /// <p><p>Gets the current health status (<code>Healthy</code>, <code>Unhealthy</code>, or <code>Unknown</code>) of one or more instances that are associated with a specified service.</p> <note> <p>There is a brief delay between when you register an instance and when the health status for the instance is available. </p> </note></p>
+    fn get_instances_health_status(
+        &self,
+        input: GetInstancesHealthStatusRequest,
+    ) -> RusotoFuture<GetInstancesHealthStatusResponse, GetInstancesHealthStatusError> {
+        ServiceDiscovery::get_instances_health_status(&(**self), input)
+    }
+
+    /// <p>Gets information about a namespace.</p>
+    fn get_namespace(
+        &self,
+        input: GetNamespaceRequest,
+    ) -> RusotoFuture<GetNamespaceResponse, GetNamespaceError> {
+        ServiceDiscovery::get_namespace(&(**self), input)
+    }
+
+    /// <p><p>Gets information about any operation that returns an operation ID in the response, such as a <code>CreateService</code> request.</p> <note> <p>To get a list of operations that match specified criteria, see <a>ListOperations</a>.</p> </note></p>
+    fn get_operation(
+        &self,
+        input: GetOperationRequest,
+    ) -> RusotoFuture<GetOperationResponse, GetOperationError> {
+        ServiceDiscovery::get_operation(&(**self), input)
+    }
+
+    /// <p>Gets the settings for a specified service.</p>
+    fn get_service(
+        &self,
+        input: GetServiceRequest,
+    ) -> RusotoFuture<GetServiceResponse, GetServiceError> {
+        ServiceDiscovery::get_service(&(**self), input)
+    }
+
+    /// <p>Lists summary information about the instances that you registered by using a specified service.</p>
+    fn list_instances(
+        &self,
+        input: ListInstancesRequest,
+    ) -> RusotoFuture<ListInstancesResponse, ListInstancesError> {
+        ServiceDiscovery::list_instances(&(**self), input)
+    }
+
+    /// <p>Lists summary information about the namespaces that were created by the current AWS account.</p>
+    fn list_namespaces(
+        &self,
+        input: ListNamespacesRequest,
+    ) -> RusotoFuture<ListNamespacesResponse, ListNamespacesError> {
+        ServiceDiscovery::list_namespaces(&(**self), input)
+    }
+
+    /// <p>Lists operations that match the criteria that you specify.</p>
+    fn list_operations(
+        &self,
+        input: ListOperationsRequest,
+    ) -> RusotoFuture<ListOperationsResponse, ListOperationsError> {
+        ServiceDiscovery::list_operations(&(**self), input)
+    }
+
+    /// <p>Lists summary information for all the services that are associated with one or more specified namespaces.</p>
+    fn list_services(
+        &self,
+        input: ListServicesRequest,
+    ) -> RusotoFuture<ListServicesResponse, ListServicesError> {
+        ServiceDiscovery::list_services(&(**self), input)
+    }
+
+    /// <p>Creates or updates one or more records and optionally a health check based on the settings in a specified service. When you submit a <code>RegisterInstance</code> request, Amazon Route 53 does the following:</p> <ul> <li> <p>For each DNS record that you define in the service specified by <code>ServiceId</code>, creates or updates a record in the hosted zone that is associated with the corresponding namespace</p> </li> <li> <p>If the service includes <code>HealthCheckConfig</code>, creates or updates a health check based on the settings in the health check configuration</p> </li> <li> <p>Associates the health check, if any, with each of the records</p> </li> </ul> <important> <p>One <code>RegisterInstance</code> request must complete before you can submit another request and specify the same service ID and instance ID.</p> </important> <p>For more information, see <a>CreateService</a>.</p> <p>When Route 53 receives a DNS query for the specified DNS name, it returns the applicable value:</p> <ul> <li> <p> <b>If the health check is healthy</b>: returns all the records</p> </li> <li> <p> <b>If the health check is unhealthy</b>: returns the applicable value for the last healthy instance</p> </li> <li> <p> <b>If you didn't specify a health check configuration</b>: returns all the records</p> </li> </ul> <p>For the current limit on the number of instances that you can register using the same namespace and using the same service, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html#limits-api-entities-autonaming">Limits on Auto Naming</a> in the <i>Route 53 Developer Guide</i>.</p>
+    fn register_instance(
+        &self,
+        input: RegisterInstanceRequest,
+    ) -> RusotoFuture<RegisterInstanceResponse, RegisterInstanceError> {
+        ServiceDiscovery::register_instance(&(**self), input)
+    }
+
+    fn update_instance_custom_health_status(
+        &self,
+        input: UpdateInstanceCustomHealthStatusRequest,
+    ) -> RusotoFuture<(), UpdateInstanceCustomHealthStatusError> {
+        ServiceDiscovery::update_instance_custom_health_status(&(**self), input)
+    }
+
+    /// <p>Submits a request to perform the following operations:</p> <ul> <li> <p>Add or delete <code>DnsRecords</code> configurations</p> </li> <li> <p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p> </li> <li> <p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p> </li> </ul> <p>You must specify all <code>DnsRecords</code> configurations (and, optionally, <code>HealthCheckConfig</code>) that you want to appear in the updated service. Any current configurations that don't appear in an <code>UpdateService</code> request are deleted.</p> <p>When you update the TTL setting for a service, Amazon Route 53 also updates the corresponding settings in all the records and health checks that were created by using the specified service.</p>
+    fn update_service(
+        &self,
+        input: UpdateServiceRequest,
+    ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError> {
+        ServiceDiscovery::update_service(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

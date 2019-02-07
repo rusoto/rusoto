@@ -7120,5 +7120,182 @@ impl MediaConvert for MediaConvertClient {
     }
 }
 
+impl<T: ?Sized + MediaConvert> MediaConvert for ::std::rc::Rc<T> {
+    /// <p>Permanently remove a job from a queue. Once you have canceled a job, you can&#39;t start it again. You can&#39;t delete a running job.</p>
+    fn cancel_job(
+        &self,
+        input: CancelJobRequest,
+    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
+        MediaConvert::cancel_job(&(**self), input)
+    }
+
+    /// <p>Create a new transcoding job. For information about jobs and job settings, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    fn create_job(
+        &self,
+        input: CreateJobRequest,
+    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
+        MediaConvert::create_job(&(**self), input)
+    }
+
+    /// <p>Create a new job template. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    fn create_job_template(
+        &self,
+        input: CreateJobTemplateRequest,
+    ) -> RusotoFuture<CreateJobTemplateResponse, CreateJobTemplateError> {
+        MediaConvert::create_job_template(&(**self), input)
+    }
+
+    /// <p>Create a new preset. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    fn create_preset(
+        &self,
+        input: CreatePresetRequest,
+    ) -> RusotoFuture<CreatePresetResponse, CreatePresetError> {
+        MediaConvert::create_preset(&(**self), input)
+    }
+
+    /// <p>Create a new transcoding queue. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    fn create_queue(
+        &self,
+        input: CreateQueueRequest,
+    ) -> RusotoFuture<CreateQueueResponse, CreateQueueError> {
+        MediaConvert::create_queue(&(**self), input)
+    }
+
+    /// <p>Permanently delete a job template you have created.</p>
+    fn delete_job_template(
+        &self,
+        input: DeleteJobTemplateRequest,
+    ) -> RusotoFuture<DeleteJobTemplateResponse, DeleteJobTemplateError> {
+        MediaConvert::delete_job_template(&(**self), input)
+    }
+
+    /// <p>Permanently delete a preset you have created.</p>
+    fn delete_preset(
+        &self,
+        input: DeletePresetRequest,
+    ) -> RusotoFuture<DeletePresetResponse, DeletePresetError> {
+        MediaConvert::delete_preset(&(**self), input)
+    }
+
+    /// <p>Permanently delete a queue you have created.</p>
+    fn delete_queue(
+        &self,
+        input: DeleteQueueRequest,
+    ) -> RusotoFuture<DeleteQueueResponse, DeleteQueueError> {
+        MediaConvert::delete_queue(&(**self), input)
+    }
+
+    /// <p>Send an request with an empty body to the regional API endpoint to get your account API endpoint.</p>
+    fn describe_endpoints(
+        &self,
+        input: DescribeEndpointsRequest,
+    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
+        MediaConvert::describe_endpoints(&(**self), input)
+    }
+
+    /// <p>Retrieve the JSON for a specific completed transcoding job.</p>
+    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError> {
+        MediaConvert::get_job(&(**self), input)
+    }
+
+    /// <p>Retrieve the JSON for a specific job template.</p>
+    fn get_job_template(
+        &self,
+        input: GetJobTemplateRequest,
+    ) -> RusotoFuture<GetJobTemplateResponse, GetJobTemplateError> {
+        MediaConvert::get_job_template(&(**self), input)
+    }
+
+    /// <p>Retrieve the JSON for a specific preset.</p>
+    fn get_preset(
+        &self,
+        input: GetPresetRequest,
+    ) -> RusotoFuture<GetPresetResponse, GetPresetError> {
+        MediaConvert::get_preset(&(**self), input)
+    }
+
+    /// <p>Retrieve the JSON for a specific queue.</p>
+    fn get_queue(&self, input: GetQueueRequest) -> RusotoFuture<GetQueueResponse, GetQueueError> {
+        MediaConvert::get_queue(&(**self), input)
+    }
+
+    /// <p>Retrieve a JSON array of up to twenty of your job templates. This will return the templates themselves, not just a list of them. To retrieve the next twenty templates, use the nextToken string returned with the array</p>
+    fn list_job_templates(
+        &self,
+        input: ListJobTemplatesRequest,
+    ) -> RusotoFuture<ListJobTemplatesResponse, ListJobTemplatesError> {
+        MediaConvert::list_job_templates(&(**self), input)
+    }
+
+    /// <p>Retrieve a JSON array of up to twenty of your most recently created jobs. This array includes in-process, completed, and errored jobs. This will return the jobs themselves, not just a list of the jobs. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+        MediaConvert::list_jobs(&(**self), input)
+    }
+
+    /// <p>Retrieve a JSON array of up to twenty of your presets. This will return the presets themselves, not just a list of them. To retrieve the next twenty presets, use the nextToken string returned with the array.</p>
+    fn list_presets(
+        &self,
+        input: ListPresetsRequest,
+    ) -> RusotoFuture<ListPresetsResponse, ListPresetsError> {
+        MediaConvert::list_presets(&(**self), input)
+    }
+
+    /// <p>Retrieve a JSON array of up to twenty of your queues. This will return the queues themselves, not just a list of them. To retrieve the next twenty queues, use the nextToken string returned with the array.</p>
+    fn list_queues(
+        &self,
+        input: ListQueuesRequest,
+    ) -> RusotoFuture<ListQueuesResponse, ListQueuesError> {
+        MediaConvert::list_queues(&(**self), input)
+    }
+
+    /// <p>Retrieve the tags for a MediaConvert resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        MediaConvert::list_tags_for_resource(&(**self), input)
+    }
+
+    /// <p>Tag a MediaConvert queue, preset, or job template. For information about these resource types, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        MediaConvert::tag_resource(&(**self), input)
+    }
+
+    /// <p>Untag a MediaConvert queue, preset, or job template. For information about these resource types, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        MediaConvert::untag_resource(&(**self), input)
+    }
+
+    /// <p>Modify one of your existing job templates.</p>
+    fn update_job_template(
+        &self,
+        input: UpdateJobTemplateRequest,
+    ) -> RusotoFuture<UpdateJobTemplateResponse, UpdateJobTemplateError> {
+        MediaConvert::update_job_template(&(**self), input)
+    }
+
+    /// <p>Modify one of your existing presets.</p>
+    fn update_preset(
+        &self,
+        input: UpdatePresetRequest,
+    ) -> RusotoFuture<UpdatePresetResponse, UpdatePresetError> {
+        MediaConvert::update_preset(&(**self), input)
+    }
+
+    /// <p>Modify one of your existing queues.</p>
+    fn update_queue(
+        &self,
+        input: UpdateQueueRequest,
+    ) -> RusotoFuture<UpdateQueueResponse, UpdateQueueError> {
+        MediaConvert::update_queue(&(**self), input)
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}
