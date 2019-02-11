@@ -12976,6 +12976,7 @@ pub trait ElastiCache {
     ) -> RusotoFuture<TestFailoverResult, TestFailoverError>;
 }
 /// A client for the Amazon ElastiCache API.
+#[derive(Clone)]
 pub struct ElastiCacheClient {
     client: Client,
     region: region::Region,

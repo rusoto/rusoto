@@ -201,6 +201,7 @@ pub trait KinesisVideoMedia {
     fn get_media(&self, input: GetMediaInput) -> RusotoFuture<GetMediaOutput, GetMediaError>;
 }
 /// A client for the Kinesis Video Media API.
+#[derive(Clone)]
 pub struct KinesisVideoMediaClient {
     client: Client,
     region: region::Region,

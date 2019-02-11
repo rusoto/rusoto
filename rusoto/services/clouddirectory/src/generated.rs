@@ -12375,6 +12375,7 @@ pub trait CloudDirectory {
     ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError>;
 }
 /// A client for the Amazon CloudDirectory API.
+#[derive(Clone)]
 pub struct CloudDirectoryClient {
     client: Client,
     region: region::Region,

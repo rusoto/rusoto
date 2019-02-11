@@ -609,6 +609,7 @@ pub trait MediaTailor {
     ) -> RusotoFuture<PutPlaybackConfigurationResponse, PutPlaybackConfigurationError>;
 }
 /// A client for the MediaTailor API.
+#[derive(Clone)]
 pub struct MediaTailorClient {
     client: Client,
     region: region::Region,

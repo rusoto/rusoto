@@ -4420,6 +4420,7 @@ pub trait CloudWatchLogs {
     fn untag_log_group(&self, input: UntagLogGroupRequest) -> RusotoFuture<(), UntagLogGroupError>;
 }
 /// A client for the Amazon CloudWatch Logs API.
+#[derive(Clone)]
 pub struct CloudWatchLogsClient {
     client: Client,
     region: region::Region,

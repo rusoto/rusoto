@@ -9906,6 +9906,7 @@ pub trait Waf {
     ) -> RusotoFuture<UpdateXssMatchSetResponse, UpdateXssMatchSetError>;
 }
 /// A client for the WAF API.
+#[derive(Clone)]
 pub struct WafClient {
     client: Client,
     region: region::Region,

@@ -7130,6 +7130,7 @@ pub trait CodeDeploy {
     ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
 }
 /// A client for the CodeDeploy API.
+#[derive(Clone)]
 pub struct CodeDeployClient {
     client: Client,
     region: region::Region,

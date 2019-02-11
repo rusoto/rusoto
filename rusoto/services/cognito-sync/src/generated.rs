@@ -2880,6 +2880,7 @@ pub trait CognitoSync {
     ) -> RusotoFuture<UpdateRecordsResponse, UpdateRecordsError>;
 }
 /// A client for the Amazon Cognito Sync API.
+#[derive(Clone)]
 pub struct CognitoSyncClient {
     client: Client,
     region: region::Region,

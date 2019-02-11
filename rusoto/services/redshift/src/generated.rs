@@ -19694,6 +19694,7 @@ pub trait Redshift {
     ) -> RusotoFuture<RotateEncryptionKeyResult, RotateEncryptionKeyError>;
 }
 /// A client for the Amazon Redshift API.
+#[derive(Clone)]
 pub struct RedshiftClient {
     client: Client,
     region: region::Region,

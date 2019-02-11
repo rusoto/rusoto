@@ -8718,6 +8718,7 @@ pub trait Elb {
     ) -> RusotoFuture<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>;
 }
 /// A client for the Elastic Load Balancing API.
+#[derive(Clone)]
 pub struct ElbClient {
     client: Client,
     region: region::Region,

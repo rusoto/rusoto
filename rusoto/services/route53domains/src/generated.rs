@@ -3346,6 +3346,7 @@ pub trait Route53Domains {
     ) -> RusotoFuture<ViewBillingResponse, ViewBillingError>;
 }
 /// A client for the Amazon Route 53 Domains API.
+#[derive(Clone)]
 pub struct Route53DomainsClient {
     client: Client,
     region: region::Region,

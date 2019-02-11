@@ -5979,6 +5979,7 @@ pub trait Sns {
     fn unsubscribe(&self, input: UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError>;
 }
 /// A client for the Amazon SNS API.
+#[derive(Clone)]
 pub struct SnsClient {
     client: Client,
     region: region::Region,

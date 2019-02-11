@@ -10324,6 +10324,7 @@ pub trait GameLift {
     ) -> RusotoFuture<ValidateMatchmakingRuleSetOutput, ValidateMatchmakingRuleSetError>;
 }
 /// A client for the Amazon GameLift API.
+#[derive(Clone)]
 pub struct GameLiftClient {
     client: Client,
     region: region::Region,

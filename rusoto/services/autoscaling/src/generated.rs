@@ -13591,6 +13591,7 @@ pub trait Autoscaling {
     ) -> RusotoFuture<(), UpdateAutoScalingGroupError>;
 }
 /// A client for the Auto Scaling API.
+#[derive(Clone)]
 pub struct AutoscalingClient {
     client: Client,
     region: region::Region,

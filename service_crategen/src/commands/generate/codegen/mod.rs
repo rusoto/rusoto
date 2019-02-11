@@ -174,6 +174,7 @@ where
 
     writeln!(writer,
         "/// A client for the {service_name} API.
+        #[derive(Clone)]
         pub struct {type_name} {{
             client: Client,
             region: region::Region,

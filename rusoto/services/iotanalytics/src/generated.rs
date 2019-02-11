@@ -5382,6 +5382,7 @@ pub trait IotAnalytics {
     ) -> RusotoFuture<(), UpdatePipelineError>;
 }
 /// A client for the AWS IoT Analytics API.
+#[derive(Clone)]
 pub struct IotAnalyticsClient {
     client: Client,
     region: region::Region,

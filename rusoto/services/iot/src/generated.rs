@@ -25161,6 +25161,7 @@ pub trait Iot {
     ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>;
 }
 /// A client for the AWS IoT API.
+#[derive(Clone)]
 pub struct IotClient {
     client: Client,
     region: region::Region,

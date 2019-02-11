@@ -771,6 +771,7 @@ pub trait DynamoDbStreams {
     ) -> RusotoFuture<ListStreamsOutput, ListStreamsError>;
 }
 /// A client for the Amazon DynamoDB Streams API.
+#[derive(Clone)]
 pub struct DynamoDbStreamsClient {
     client: Client,
     region: region::Region,

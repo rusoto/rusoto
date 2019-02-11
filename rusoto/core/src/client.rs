@@ -14,6 +14,7 @@ lazy_static! {
 }
 
 /// Re-usable logic for all clients.
+#[derive(Clone)]
 pub struct Client {
     inner: Arc<SignAndDispatch + Send + Sync>,
 }

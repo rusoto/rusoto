@@ -779,6 +779,7 @@ pub trait IotJobsData {
     ) -> RusotoFuture<UpdateJobExecutionResponse, UpdateJobExecutionError>;
 }
 /// A client for the AWS IoT Jobs Data Plane API.
+#[derive(Clone)]
 pub struct IotJobsDataClient {
     client: Client,
     region: region::Region,

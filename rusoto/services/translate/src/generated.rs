@@ -182,6 +182,7 @@ pub trait Translate {
     ) -> RusotoFuture<TranslateTextResponse, TranslateTextError>;
 }
 /// A client for the Amazon Translate API.
+#[derive(Clone)]
 pub struct TranslateClient {
     client: Client,
     region: region::Region,

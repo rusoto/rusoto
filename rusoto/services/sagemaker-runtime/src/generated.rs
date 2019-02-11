@@ -180,6 +180,7 @@ pub trait SageMakerRuntime {
     ) -> RusotoFuture<InvokeEndpointOutput, InvokeEndpointError>;
 }
 /// A client for the Amazon SageMaker Runtime API.
+#[derive(Clone)]
 pub struct SageMakerRuntimeClient {
     client: Client,
     region: region::Region,

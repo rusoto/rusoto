@@ -1573,6 +1573,7 @@ pub trait CostExplorer {
     fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
 }
 /// A client for the AWS Cost Explorer API.
+#[derive(Clone)]
 pub struct CostExplorerClient {
     client: Client,
     region: region::Region,

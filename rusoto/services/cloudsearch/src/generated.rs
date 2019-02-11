@@ -7856,6 +7856,7 @@ pub trait CloudSearch {
     ) -> RusotoFuture<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
 }
 /// A client for the Amazon CloudSearch API.
+#[derive(Clone)]
 pub struct CloudSearchClient {
     client: Client,
     region: region::Region,

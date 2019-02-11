@@ -15273,6 +15273,7 @@ pub trait Ses {
     ) -> RusotoFuture<VerifyEmailIdentityResponse, VerifyEmailIdentityError>;
 }
 /// A client for the Amazon SES API.
+#[derive(Clone)]
 pub struct SesClient {
     client: Client,
     region: region::Region,

@@ -22678,6 +22678,7 @@ pub trait S3 {
     ) -> RusotoFuture<UploadPartCopyOutput, UploadPartCopyError>;
 }
 /// A client for the Amazon S3 API.
+#[derive(Clone)]
 pub struct S3Client {
     client: Client,
     region: region::Region,

@@ -11402,6 +11402,7 @@ pub trait CloudFront {
     ) -> RusotoFuture<UpdateStreamingDistributionResult, UpdateStreamingDistributionError>;
 }
 /// A client for the CloudFront API.
+#[derive(Clone)]
 pub struct CloudFrontClient {
     client: Client,
     region: region::Region,

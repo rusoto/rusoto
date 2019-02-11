@@ -7559,6 +7559,7 @@ pub trait CodeCommit {
     ) -> RusotoFuture<(), UpdateRepositoryNameError>;
 }
 /// A client for the CodeCommit API.
+#[derive(Clone)]
 pub struct CodeCommitClient {
     client: Client,
     region: region::Region,

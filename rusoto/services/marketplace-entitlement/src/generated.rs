@@ -211,6 +211,7 @@ pub trait MarketplaceEntitlement {
     ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError>;
 }
 /// A client for the AWS Marketplace Entitlement Service API.
+#[derive(Clone)]
 pub struct MarketplaceEntitlementClient {
     client: Client,
     region: region::Region,

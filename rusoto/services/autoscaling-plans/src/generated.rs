@@ -869,6 +869,7 @@ pub trait AutoscalingPlans {
     ) -> RusotoFuture<UpdateScalingPlanResponse, UpdateScalingPlanError>;
 }
 /// A client for the AWS Auto Scaling Plans API.
+#[derive(Clone)]
 pub struct AutoscalingPlansClient {
     client: Client,
     region: region::Region,

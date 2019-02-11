@@ -1561,6 +1561,7 @@ pub trait KinesisVideo {
     ) -> RusotoFuture<UpdateStreamOutput, UpdateStreamError>;
 }
 /// A client for the Kinesis Video API.
+#[derive(Clone)]
 pub struct KinesisVideoClient {
     client: Client,
     region: region::Region,

@@ -503,6 +503,7 @@ pub trait LexRuntime {
     fn post_text(&self, input: PostTextRequest) -> RusotoFuture<PostTextResponse, PostTextError>;
 }
 /// A client for the Amazon Lex Runtime Service API.
+#[derive(Clone)]
 pub struct LexRuntimeClient {
     client: Client,
     region: region::Region,

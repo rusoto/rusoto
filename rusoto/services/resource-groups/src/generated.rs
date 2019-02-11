@@ -1874,6 +1874,7 @@ pub trait ResourceGroups {
     ) -> RusotoFuture<UpdateGroupQueryOutput, UpdateGroupQueryError>;
 }
 /// A client for the Resource Groups API.
+#[derive(Clone)]
 pub struct ResourceGroupsClient {
     client: Client,
     region: region::Region,

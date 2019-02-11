@@ -5477,6 +5477,7 @@ pub trait Inspector {
     ) -> RusotoFuture<(), UpdateAssessmentTargetError>;
 }
 /// A client for the Amazon Inspector API.
+#[derive(Clone)]
 pub struct InspectorClient {
     client: Client,
     region: region::Region,

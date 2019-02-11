@@ -2555,6 +2555,7 @@ pub trait CloudHsm {
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 }
 /// A client for the CloudHSM API.
+#[derive(Clone)]
 pub struct CloudHsmClient {
     client: Client,
     region: region::Region,

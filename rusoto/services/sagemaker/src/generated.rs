@@ -5868,6 +5868,7 @@ pub trait SageMaker {
     >;
 }
 /// A client for the SageMaker API.
+#[derive(Clone)]
 pub struct SageMakerClient {
     client: Client,
     region: region::Region,

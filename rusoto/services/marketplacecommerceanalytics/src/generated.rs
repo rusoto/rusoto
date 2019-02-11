@@ -285,6 +285,7 @@ pub trait MarketplaceCommerceAnalytics {
     ) -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError>;
 }
 /// A client for the AWS Marketplace Commerce Analytics API.
+#[derive(Clone)]
 pub struct MarketplaceCommerceAnalyticsClient {
     client: Client,
     region: region::Region,

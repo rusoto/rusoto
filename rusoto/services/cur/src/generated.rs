@@ -387,6 +387,7 @@ pub trait CostAndUsageReport {
     ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError>;
 }
 /// A client for the AWS Cost and Usage Report Service API.
+#[derive(Clone)]
 pub struct CostAndUsageReportClient {
     client: Client,
     region: region::Region,

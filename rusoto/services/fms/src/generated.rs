@@ -1584,6 +1584,7 @@ pub trait Fms {
     ) -> RusotoFuture<PutPolicyResponse, PutPolicyError>;
 }
 /// A client for the FMS API.
+#[derive(Clone)]
 pub struct FmsClient {
     client: Client,
     region: region::Region,

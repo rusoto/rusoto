@@ -2878,6 +2878,7 @@ pub trait Connect {
     ) -> RusotoFuture<(), UpdateUserSecurityProfilesError>;
 }
 /// A client for the Amazon Connect API.
+#[derive(Clone)]
 pub struct ConnectClient {
     client: Client,
     region: region::Region,

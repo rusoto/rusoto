@@ -5026,6 +5026,7 @@ pub trait CloudWatch {
     fn set_alarm_state(&self, input: SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError>;
 }
 /// A client for the CloudWatch API.
+#[derive(Clone)]
 pub struct CloudWatchClient {
     client: Client,
     region: region::Region,

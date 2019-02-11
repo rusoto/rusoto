@@ -1007,6 +1007,7 @@ pub trait AWSHealth {
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
 }
 /// A client for the AWSHealth API.
+#[derive(Clone)]
 pub struct AWSHealthClient {
     client: Client,
     region: region::Region,

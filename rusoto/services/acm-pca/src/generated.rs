@@ -2473,6 +2473,7 @@ pub trait AcmPca {
     ) -> RusotoFuture<(), UpdateCertificateAuthorityError>;
 }
 /// A client for the ACM-PCA API.
+#[derive(Clone)]
 pub struct AcmPcaClient {
     client: Client,
     region: region::Region,

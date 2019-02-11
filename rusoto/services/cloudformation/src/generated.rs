@@ -12860,6 +12860,7 @@ pub trait CloudFormation {
     ) -> RusotoFuture<ValidateTemplateOutput, ValidateTemplateError>;
 }
 /// A client for the AWS CloudFormation API.
+#[derive(Clone)]
 pub struct CloudFormationClient {
     client: Client,
     region: region::Region,

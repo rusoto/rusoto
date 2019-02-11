@@ -1640,6 +1640,7 @@ pub trait ServerMigrationService {
     ) -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError>;
 }
 /// A client for the SMS API.
+#[derive(Clone)]
 pub struct ServerMigrationServiceClient {
     client: Client,
     region: region::Region,

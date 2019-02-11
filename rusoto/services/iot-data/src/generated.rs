@@ -663,6 +663,7 @@ pub trait IotData {
     ) -> RusotoFuture<UpdateThingShadowResponse, UpdateThingShadowError>;
 }
 /// A client for the AWS IoT Data Plane API.
+#[derive(Clone)]
 pub struct IotDataClient {
     client: Client,
     region: region::Region,

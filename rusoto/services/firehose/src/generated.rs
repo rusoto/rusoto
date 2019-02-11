@@ -2356,6 +2356,7 @@ pub trait KinesisFirehose {
     ) -> RusotoFuture<UpdateDestinationOutput, UpdateDestinationError>;
 }
 /// A client for the Firehose API.
+#[derive(Clone)]
 pub struct KinesisFirehoseClient {
     client: Client,
     region: region::Region,

@@ -6111,6 +6111,7 @@ pub trait Rekognition {
     ) -> RusotoFuture<StopStreamProcessorResponse, StopStreamProcessorError>;
 }
 /// A client for the Amazon Rekognition API.
+#[derive(Clone)]
 pub struct RekognitionClient {
     client: Client,
     region: region::Region,

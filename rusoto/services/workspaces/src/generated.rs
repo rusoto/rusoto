@@ -3152,6 +3152,7 @@ pub trait Workspaces {
     ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError>;
 }
 /// A client for the Amazon WorkSpaces API.
+#[derive(Clone)]
 pub struct WorkspacesClient {
     client: Client,
     region: region::Region,

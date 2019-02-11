@@ -1226,6 +1226,7 @@ pub trait MediaStore {
     ) -> RusotoFuture<PutCorsPolicyOutput, PutCorsPolicyError>;
 }
 /// A client for the MediaStore API.
+#[derive(Clone)]
 pub struct MediaStoreClient {
     client: Client,
     region: region::Region,

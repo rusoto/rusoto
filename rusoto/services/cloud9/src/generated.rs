@@ -1594,6 +1594,7 @@ pub trait Cloud9 {
     ) -> RusotoFuture<UpdateEnvironmentMembershipResult, UpdateEnvironmentMembershipError>;
 }
 /// A client for the AWS Cloud9 API.
+#[derive(Clone)]
 pub struct Cloud9Client {
     client: Client,
     region: region::Region,

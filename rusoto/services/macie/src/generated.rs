@@ -945,6 +945,7 @@ pub trait Macie {
     ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError>;
 }
 /// A client for the Amazon Macie API.
+#[derive(Clone)]
 pub struct MacieClient {
     client: Client,
     region: region::Region,

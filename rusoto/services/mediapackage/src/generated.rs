@@ -2507,6 +2507,7 @@ pub trait MediaPackage {
     ) -> RusotoFuture<UpdateOriginEndpointResponse, UpdateOriginEndpointError>;
 }
 /// A client for the MediaPackage API.
+#[derive(Clone)]
 pub struct MediaPackageClient {
     client: Client,
     region: region::Region,

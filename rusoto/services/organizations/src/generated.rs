@@ -6607,6 +6607,7 @@ pub trait Organizations {
     ) -> RusotoFuture<UpdatePolicyResponse, UpdatePolicyError>;
 }
 /// A client for the Organizations API.
+#[derive(Clone)]
 pub struct OrganizationsClient {
     client: Client,
     region: region::Region,

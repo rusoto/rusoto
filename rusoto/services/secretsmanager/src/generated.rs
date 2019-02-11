@@ -2687,6 +2687,7 @@ pub trait SecretsManager {
     ) -> RusotoFuture<UpdateSecretVersionStageResponse, UpdateSecretVersionStageError>;
 }
 /// A client for the AWS Secrets Manager API.
+#[derive(Clone)]
 pub struct SecretsManagerClient {
     client: Client,
     region: region::Region,

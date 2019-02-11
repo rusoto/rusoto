@@ -11358,6 +11358,7 @@ pub trait Lightsail {
     ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError>;
 }
 /// A client for the Amazon Lightsail API.
+#[derive(Clone)]
 pub struct LightsailClient {
     client: Client,
     region: region::Region,

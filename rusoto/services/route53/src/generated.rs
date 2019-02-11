@@ -15896,6 +15896,7 @@ pub trait Route53 {
     ) -> RusotoFuture<UpdateTrafficPolicyInstanceResponse, UpdateTrafficPolicyInstanceError>;
 }
 /// A client for the Route 53 API.
+#[derive(Clone)]
 pub struct Route53Client {
     client: Client,
     region: region::Region,

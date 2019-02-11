@@ -484,6 +484,7 @@ pub trait MarketplaceMetering {
     ) -> RusotoFuture<ResolveCustomerResult, ResolveCustomerError>;
 }
 /// A client for the AWSMarketplace Metering API.
+#[derive(Clone)]
 pub struct MarketplaceMeteringClient {
     client: Client,
     region: region::Region,

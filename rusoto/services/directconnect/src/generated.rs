@@ -5568,6 +5568,7 @@ pub trait DirectConnect {
     fn update_lag(&self, input: UpdateLagRequest) -> RusotoFuture<Lag, UpdateLagError>;
 }
 /// A client for the AWS Direct Connect API.
+#[derive(Clone)]
 pub struct DirectConnectClient {
     client: Client,
     region: region::Region,

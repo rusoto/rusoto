@@ -691,6 +691,7 @@ pub trait Eks {
     ) -> RusotoFuture<ListClustersResponse, ListClustersError>;
 }
 /// A client for the Amazon EKS API.
+#[derive(Clone)]
 pub struct EksClient {
     client: Client,
     region: region::Region,

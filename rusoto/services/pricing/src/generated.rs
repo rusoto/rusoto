@@ -510,6 +510,7 @@ pub trait Pricing {
     ) -> RusotoFuture<GetProductsResponse, GetProductsError>;
 }
 /// A client for the AWS Pricing API.
+#[derive(Clone)]
 pub struct PricingClient {
     client: Client,
     region: region::Region,

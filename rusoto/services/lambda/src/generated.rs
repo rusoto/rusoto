@@ -4869,6 +4869,7 @@ pub trait Lambda {
     ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError>;
 }
 /// A client for the AWS Lambda API.
+#[derive(Clone)]
 pub struct LambdaClient {
     client: Client,
     region: region::Region,

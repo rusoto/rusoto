@@ -4830,6 +4830,7 @@ pub trait Emr {
     ) -> RusotoFuture<(), TerminateJobFlowsError>;
 }
 /// A client for the Amazon EMR API.
+#[derive(Clone)]
 pub struct EmrClient {
     client: Client,
     region: region::Region,

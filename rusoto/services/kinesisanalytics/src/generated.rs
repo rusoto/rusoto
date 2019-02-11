@@ -3053,6 +3053,7 @@ pub trait KinesisAnalytics {
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
 }
 /// A client for the Kinesis Analytics API.
+#[derive(Clone)]
 pub struct KinesisAnalyticsClient {
     client: Client,
     region: region::Region,

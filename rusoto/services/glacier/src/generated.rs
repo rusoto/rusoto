@@ -5333,6 +5333,7 @@ pub trait Glacier {
     ) -> RusotoFuture<UploadMultipartPartOutput, UploadMultipartPartError>;
 }
 /// A client for the Amazon Glacier API.
+#[derive(Clone)]
 pub struct GlacierClient {
     client: Client,
     region: region::Region,

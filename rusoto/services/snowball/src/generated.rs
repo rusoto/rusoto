@@ -2604,6 +2604,7 @@ pub trait Snowball {
     fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<UpdateJobResult, UpdateJobError>;
 }
 /// A client for the Amazon Snowball API.
+#[derive(Clone)]
 pub struct SnowballClient {
     client: Client,
     region: region::Region,

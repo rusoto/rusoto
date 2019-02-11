@@ -16343,6 +16343,7 @@ pub trait CognitoIdentityProvider {
     ) -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError>;
 }
 /// A client for the Amazon Cognito Identity Provider API.
+#[derive(Clone)]
 pub struct CognitoIdentityProviderClient {
     client: Client,
     region: region::Region,

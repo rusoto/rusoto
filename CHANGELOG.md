@@ -1,6 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
+- Implement Clone on the various Client types.
 - Upgrade hyper-rustls library
 - Fix duplicated Content-Type header in SageMaker Runtime
 - Switch from `try!` to `?` operator
