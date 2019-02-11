@@ -2762,6 +2762,7 @@ pub trait CognitoIdentity {
     ) -> RusotoFuture<IdentityPool, UpdateIdentityPoolError>;
 }
 /// A client for the Amazon Cognito Identity API.
+#[derive(Clone)]
 pub struct CognitoIdentityClient {
     client: Client,
     region: region::Region,

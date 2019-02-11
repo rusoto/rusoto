@@ -3463,6 +3463,7 @@ pub trait Ets {
     ) -> RusotoFuture<UpdatePipelineStatusResponse, UpdatePipelineStatusError>;
 }
 /// A client for the Amazon Elastic Transcoder API.
+#[derive(Clone)]
 pub struct EtsClient {
     client: Client,
     region: region::Region,

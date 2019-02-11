@@ -2088,6 +2088,7 @@ pub trait AWSSupport {
     ) -> RusotoFuture<ResolveCaseResponse, ResolveCaseError>;
 }
 /// A client for the AWS Support API.
+#[derive(Clone)]
 pub struct AWSSupportClient {
     client: Client,
     region: region::Region,

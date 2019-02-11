@@ -17646,6 +17646,7 @@ pub trait Neptune {
     ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError>;
 }
 /// A client for the Amazon Neptune API.
+#[derive(Clone)]
 pub struct NeptuneClient {
     client: Client,
     region: region::Region,

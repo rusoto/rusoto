@@ -1692,6 +1692,7 @@ pub trait ApplicationAutoScaling {
     ) -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError>;
 }
 /// A client for the Application Auto Scaling API.
+#[derive(Clone)]
 pub struct ApplicationAutoScalingClient {
     client: Client,
     region: region::Region,

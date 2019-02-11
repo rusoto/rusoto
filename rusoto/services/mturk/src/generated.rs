@@ -5205,6 +5205,7 @@ pub trait MechanicalTurk {
     ) -> RusotoFuture<UpdateQualificationTypeResponse, UpdateQualificationTypeError>;
 }
 /// A client for the Amazon MTurk API.
+#[derive(Clone)]
 pub struct MechanicalTurkClient {
     client: Client,
     region: region::Region,

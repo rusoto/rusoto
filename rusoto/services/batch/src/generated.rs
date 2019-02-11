@@ -2775,6 +2775,7 @@ pub trait Batch {
     ) -> RusotoFuture<UpdateJobQueueResponse, UpdateJobQueueError>;
 }
 /// A client for the AWS Batch API.
+#[derive(Clone)]
 pub struct BatchClient {
     client: Client,
     region: region::Region,

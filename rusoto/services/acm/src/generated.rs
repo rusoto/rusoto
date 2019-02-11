@@ -1721,6 +1721,7 @@ pub trait Acm {
     ) -> RusotoFuture<(), UpdateCertificateOptionsError>;
 }
 /// A client for the ACM API.
+#[derive(Clone)]
 pub struct AcmClient {
     client: Client,
     region: region::Region,

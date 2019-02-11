@@ -5591,6 +5591,7 @@ pub trait DynamoDb {
     ) -> RusotoFuture<UpdateTimeToLiveOutput, UpdateTimeToLiveError>;
 }
 /// A client for the DynamoDB API.
+#[derive(Clone)]
 pub struct DynamoDbClient {
     client: Client,
     region: region::Region,

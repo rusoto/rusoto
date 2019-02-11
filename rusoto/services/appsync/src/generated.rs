@@ -4252,6 +4252,7 @@ pub trait AppSync {
     ) -> RusotoFuture<UpdateTypeResponse, UpdateTypeError>;
 }
 /// A client for the AWSAppSync API.
+#[derive(Clone)]
 pub struct AppSyncClient {
     client: Client,
     region: region::Region,

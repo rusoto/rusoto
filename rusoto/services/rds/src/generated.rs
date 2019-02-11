@@ -29124,6 +29124,7 @@ pub trait Rds {
     ) -> RusotoFuture<StopDBInstanceResult, StopDBInstanceError>;
 }
 /// A client for the Amazon RDS API.
+#[derive(Clone)]
 pub struct RdsClient {
     client: Client,
     region: region::Region,

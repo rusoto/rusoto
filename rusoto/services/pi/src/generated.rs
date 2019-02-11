@@ -456,6 +456,7 @@ pub trait PerformanceInsights {
     ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError>;
 }
 /// A client for the AWS PI API.
+#[derive(Clone)]
 pub struct PerformanceInsightsClient {
     client: Client,
     region: region::Region,

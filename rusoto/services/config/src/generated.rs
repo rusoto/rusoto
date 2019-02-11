@@ -6249,6 +6249,7 @@ pub trait ConfigService {
     ) -> RusotoFuture<(), StopConfigurationRecorderError>;
 }
 /// A client for the Config Service API.
+#[derive(Clone)]
 pub struct ConfigServiceClient {
     client: Client,
     region: region::Region,

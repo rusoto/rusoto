@@ -1522,6 +1522,7 @@ pub trait Mobile {
     ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError>;
 }
 /// A client for the AWS Mobile API.
+#[derive(Clone)]
 pub struct MobileClient {
     client: Client,
     region: region::Region,

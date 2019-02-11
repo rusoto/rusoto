@@ -1536,6 +1536,7 @@ pub trait Athena {
     ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError>;
 }
 /// A client for the Amazon Athena API.
+#[derive(Clone)]
 pub struct AthenaClient {
     client: Client,
     region: region::Region,

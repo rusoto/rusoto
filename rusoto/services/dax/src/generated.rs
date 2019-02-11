@@ -3293,6 +3293,7 @@ pub trait DynamodbAccelerator {
     ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError>;
 }
 /// A client for the Amazon DAX API.
+#[derive(Clone)]
 pub struct DynamodbAcceleratorClient {
     client: Client,
     region: region::Region,

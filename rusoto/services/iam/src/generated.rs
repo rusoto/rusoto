@@ -26466,6 +26466,7 @@ pub trait Iam {
     ) -> RusotoFuture<UploadSigningCertificateResponse, UploadSigningCertificateError>;
 }
 /// A client for the IAM API.
+#[derive(Clone)]
 pub struct IamClient {
     client: Client,
     region: region::Region,

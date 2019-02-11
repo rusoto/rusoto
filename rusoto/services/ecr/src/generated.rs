@@ -3319,6 +3319,7 @@ pub trait Ecr {
     ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError>;
 }
 /// A client for the Amazon ECR API.
+#[derive(Clone)]
 pub struct EcrClient {
     client: Client,
     region: region::Region,

@@ -1560,6 +1560,7 @@ pub trait XRay {
     ) -> RusotoFuture<PutTraceSegmentsResult, PutTraceSegmentsError>;
 }
 /// A client for the AWS X-Ray API.
+#[derive(Clone)]
 pub struct XRayClient {
     client: Client,
     region: region::Region,

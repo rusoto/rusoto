@@ -2055,6 +2055,7 @@ pub trait ImportExport {
     fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
 }
 /// A client for the AWS Import/Export API.
+#[derive(Clone)]
 pub struct ImportExportClient {
     client: Client,
     region: region::Region,

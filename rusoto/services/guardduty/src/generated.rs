@@ -6209,6 +6209,7 @@ pub trait GuardDuty {
     ) -> RusotoFuture<UpdateThreatIntelSetResponse, UpdateThreatIntelSetError>;
 }
 /// A client for the Amazon GuardDuty API.
+#[derive(Clone)]
 pub struct GuardDutyClient {
     client: Client,
     region: region::Region,

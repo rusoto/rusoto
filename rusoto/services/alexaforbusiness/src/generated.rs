@@ -5880,6 +5880,7 @@ pub trait AlexaForBusiness {
     ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError>;
 }
 /// A client for the Alexa For Business API.
+#[derive(Clone)]
 pub struct AlexaForBusinessClient {
     client: Client,
     region: region::Region,

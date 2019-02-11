@@ -1997,6 +1997,7 @@ pub trait CloudWatchEvents {
     ) -> RusotoFuture<TestEventPatternResponse, TestEventPatternError>;
 }
 /// A client for the Amazon CloudWatch Events API.
+#[derive(Clone)]
 pub struct CloudWatchEventsClient {
     client: Client,
     region: region::Region,

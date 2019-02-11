@@ -1916,6 +1916,7 @@ pub trait Efs {
     ) -> RusotoFuture<FileSystemDescription, UpdateFileSystemError>;
 }
 /// A client for the EFS API.
+#[derive(Clone)]
 pub struct EfsClient {
     client: Client,
     region: region::Region,

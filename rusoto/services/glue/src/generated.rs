@@ -11698,6 +11698,7 @@ pub trait Glue {
     ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError>;
 }
 /// A client for the AWS Glue API.
+#[derive(Clone)]
 pub struct GlueClient {
     client: Client,
     region: region::Region,

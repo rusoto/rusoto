@@ -1515,6 +1515,7 @@ pub trait Iot1ClickDevices {
     ) -> RusotoFuture<UpdateDeviceStateResponse, UpdateDeviceStateError>;
 }
 /// A client for the AWS IoT 1-Click Devices Service API.
+#[derive(Clone)]
 pub struct Iot1ClickDevicesClient {
     client: Client,
     region: region::Region,

@@ -9636,6 +9636,7 @@ pub trait OpsWorks {
     fn update_volume(&self, input: UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError>;
 }
 /// A client for the AWS OpsWorks API.
+#[derive(Clone)]
 pub struct OpsWorksClient {
     client: Client,
     region: region::Region,

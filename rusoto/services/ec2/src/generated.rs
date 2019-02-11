@@ -78980,6 +78980,7 @@ pub trait Ec2 {
     >;
 }
 /// A client for the Amazon EC2 API.
+#[derive(Clone)]
 pub struct Ec2Client {
     client: Client,
     region: region::Region,

@@ -6064,6 +6064,7 @@ pub trait DirectoryService {
     ) -> RusotoFuture<VerifyTrustResult, VerifyTrustError>;
 }
 /// A client for the Directory Service API.
+#[derive(Clone)]
 pub struct DirectoryServiceClient {
     client: Client,
     region: region::Region,

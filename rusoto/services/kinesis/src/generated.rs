@@ -3184,6 +3184,7 @@ pub trait Kinesis {
     ) -> RusotoFuture<UpdateShardCountOutput, UpdateShardCountError>;
 }
 /// A client for the Kinesis API.
+#[derive(Clone)]
 pub struct KinesisClient {
     client: Client,
     region: region::Region,

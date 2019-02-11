@@ -5478,6 +5478,7 @@ pub trait Ecs {
     ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError>;
 }
 /// A client for the Amazon ECS API.
+#[derive(Clone)]
 pub struct EcsClient {
     client: Client,
     region: region::Region,

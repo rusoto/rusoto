@@ -4478,6 +4478,7 @@ pub trait Comprehend {
     ) -> RusotoFuture<StopSentimentDetectionJobResponse, StopSentimentDetectionJobError>;
 }
 /// A client for the Amazon Comprehend API.
+#[derive(Clone)]
 pub struct ComprehendClient {
     client: Client,
     region: region::Region,

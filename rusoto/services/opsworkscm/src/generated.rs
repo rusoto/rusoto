@@ -2045,6 +2045,7 @@ pub trait OpsWorksCM {
     ) -> RusotoFuture<UpdateServerEngineAttributesResponse, UpdateServerEngineAttributesError>;
 }
 /// A client for the OpsWorksCM API.
+#[derive(Clone)]
 pub struct OpsWorksCMClient {
     client: Client,
     region: region::Region,

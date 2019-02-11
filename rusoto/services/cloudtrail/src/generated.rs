@@ -2445,6 +2445,7 @@ pub trait CloudTrail {
     ) -> RusotoFuture<UpdateTrailResponse, UpdateTrailError>;
 }
 /// A client for the CloudTrail API.
+#[derive(Clone)]
 pub struct CloudTrailClient {
     client: Client,
     region: region::Region,

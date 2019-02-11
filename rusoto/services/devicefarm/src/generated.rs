@@ -9237,6 +9237,7 @@ pub trait DeviceFarm {
     ) -> RusotoFuture<UpdateVPCEConfigurationResult, UpdateVPCEConfigurationError>;
 }
 /// A client for the AWS Device Farm API.
+#[derive(Clone)]
 pub struct DeviceFarmClient {
     client: Client,
     region: region::Region,

@@ -8549,6 +8549,7 @@ pub trait ServiceCatalog {
     ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError>;
 }
 /// A client for the AWS Service Catalog API.
+#[derive(Clone)]
 pub struct ServiceCatalogClient {
     client: Client,
     region: region::Region,

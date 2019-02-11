@@ -2677,6 +2677,7 @@ pub trait DataPipeline {
     ) -> RusotoFuture<ValidatePipelineDefinitionOutput, ValidatePipelineDefinitionError>;
 }
 /// A client for the AWS Data Pipeline API.
+#[derive(Clone)]
 pub struct DataPipelineClient {
     client: Client,
     region: region::Region,

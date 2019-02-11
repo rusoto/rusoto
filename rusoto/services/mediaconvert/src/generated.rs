@@ -6162,6 +6162,7 @@ pub trait MediaConvert {
     ) -> RusotoFuture<UpdateQueueResponse, UpdateQueueError>;
 }
 /// A client for the MediaConvert API.
+#[derive(Clone)]
 pub struct MediaConvertClient {
     client: Client,
     region: region::Region,

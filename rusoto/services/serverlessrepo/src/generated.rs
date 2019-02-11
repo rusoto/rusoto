@@ -2093,6 +2093,7 @@ pub trait ServerlessRepo {
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
 }
 /// A client for the AWSServerlessApplicationRepository API.
+#[derive(Clone)]
 pub struct ServerlessRepoClient {
     client: Client,
     region: region::Region,

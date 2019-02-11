@@ -1891,6 +1891,7 @@ pub trait Iot1ClickProjects {
     ) -> RusotoFuture<UpdateProjectResponse, UpdateProjectError>;
 }
 /// A client for the AWS IoT 1-Click Projects API.
+#[derive(Clone)]
 pub struct Iot1ClickProjectsClient {
     client: Client,
     region: region::Region,

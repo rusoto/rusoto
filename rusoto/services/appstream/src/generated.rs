@@ -5161,6 +5161,7 @@ pub trait AppStream {
     ) -> RusotoFuture<UpdateStackResult, UpdateStackError>;
 }
 /// A client for the Amazon AppStream API.
+#[derive(Clone)]
 pub struct AppStreamClient {
     client: Client,
     region: region::Region,

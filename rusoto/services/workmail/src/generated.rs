@@ -4689,6 +4689,7 @@ pub trait Workmail {
     ) -> RusotoFuture<UpdateResourceResponse, UpdateResourceError>;
 }
 /// A client for the Amazon WorkMail API.
+#[derive(Clone)]
 pub struct WorkmailClient {
     client: Client,
     region: region::Region,

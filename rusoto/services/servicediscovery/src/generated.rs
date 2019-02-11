@@ -2571,6 +2571,7 @@ pub trait ServiceDiscovery {
     ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError>;
 }
 /// A client for the ServiceDiscovery API.
+#[derive(Clone)]
 pub struct ServiceDiscoveryClient {
     client: Client,
     region: region::Region,

@@ -5027,6 +5027,7 @@ pub trait Kms {
     ) -> RusotoFuture<(), UpdateKeyDescriptionError>;
 }
 /// A client for the KMS API.
+#[derive(Clone)]
 pub struct KmsClient {
     client: Client,
     region: region::Region,

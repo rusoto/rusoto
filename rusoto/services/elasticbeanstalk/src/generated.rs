@@ -14354,6 +14354,7 @@ pub trait ElasticBeanstalk {
     ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
 }
 /// A client for the Elastic Beanstalk API.
+#[derive(Clone)]
 pub struct ElasticBeanstalkClient {
     client: Client,
     region: region::Region,

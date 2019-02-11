@@ -1687,6 +1687,7 @@ pub trait CloudHsmv2 {
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 }
 /// A client for the CloudHSM V2 API.
+#[derive(Clone)]
 pub struct CloudHsmv2Client {
     client: Client,
     region: region::Region,

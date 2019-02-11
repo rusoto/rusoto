@@ -600,6 +600,7 @@ pub trait KinesisVideoArchivedMedia {
     ) -> RusotoFuture<ListFragmentsOutput, ListFragmentsError>;
 }
 /// A client for the Kinesis Video Archived Media API.
+#[derive(Clone)]
 pub struct KinesisVideoArchivedMediaClient {
     client: Client,
     region: region::Region,

@@ -6708,6 +6708,7 @@ pub trait DatabaseMigrationService {
     ) -> RusotoFuture<TestConnectionResponse, TestConnectionError>;
 }
 /// A client for the AWS Database Migration Service API.
+#[derive(Clone)]
 pub struct DatabaseMigrationServiceClient {
     client: Client,
     region: region::Region,

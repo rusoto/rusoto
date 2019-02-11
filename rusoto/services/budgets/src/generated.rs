@@ -1885,6 +1885,7 @@ pub trait Budgets {
     ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError>;
 }
 /// A client for the AWSBudgets API.
+#[derive(Clone)]
 pub struct BudgetsClient {
     client: Client,
     region: region::Region,

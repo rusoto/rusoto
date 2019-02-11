@@ -4404,6 +4404,7 @@ pub trait MachineLearning {
     ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError>;
 }
 /// A client for the Amazon Machine Learning API.
+#[derive(Clone)]
 pub struct MachineLearningClient {
     client: Client,
     region: region::Region,

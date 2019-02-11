@@ -716,6 +716,7 @@ pub trait ResourceGroupsTaggingApi {
     ) -> RusotoFuture<UntagResourcesOutput, UntagResourcesError>;
 }
 /// A client for the AWS Resource Groups Tagging API API.
+#[derive(Clone)]
 pub struct ResourceGroupsTaggingApiClient {
     client: Client,
     region: region::Region,

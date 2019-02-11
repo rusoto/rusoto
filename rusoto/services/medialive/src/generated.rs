@@ -7134,6 +7134,7 @@ pub trait MediaLive {
     ) -> RusotoFuture<UpdateInputSecurityGroupResponse, UpdateInputSecurityGroupError>;
 }
 /// A client for the MediaLive API.
+#[derive(Clone)]
 pub struct MediaLiveClient {
     client: Client,
     region: region::Region,

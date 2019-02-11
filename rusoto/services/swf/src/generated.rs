@@ -5934,6 +5934,7 @@ pub trait Swf {
     ) -> RusotoFuture<(), TerminateWorkflowExecutionError>;
 }
 /// A client for the Amazon SWF API.
+#[derive(Clone)]
 pub struct SwfClient {
     client: Client,
     region: region::Region,

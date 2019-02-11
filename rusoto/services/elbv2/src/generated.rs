@@ -11366,6 +11366,7 @@ pub trait Elb {
     ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError>;
 }
 /// A client for the Elastic Load Balancing v2 API.
+#[derive(Clone)]
 pub struct ElbClient {
     client: Client,
     region: region::Region,

@@ -7084,6 +7084,7 @@ pub trait Workdocs {
     ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
 }
 /// A client for the Amazon WorkDocs API.
+#[derive(Clone)]
 pub struct WorkdocsClient {
     client: Client,
     region: region::Region,

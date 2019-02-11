@@ -6200,6 +6200,7 @@ pub trait LexModels {
     ) -> RusotoFuture<StartImportResponse, StartImportError>;
 }
 /// A client for the Amazon Lex Model Building Service API.
+#[derive(Clone)]
 pub struct LexModelsClient {
     client: Client,
     region: region::Region,

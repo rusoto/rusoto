@@ -17795,6 +17795,7 @@ pub trait ApiGateway {
     ) -> RusotoFuture<VpcLink, UpdateVpcLinkError>;
 }
 /// A client for the Amazon API Gateway API.
+#[derive(Clone)]
 pub struct ApiGatewayClient {
     client: Client,
     region: region::Region,

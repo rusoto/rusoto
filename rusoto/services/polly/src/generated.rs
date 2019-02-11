@@ -1498,6 +1498,7 @@ pub trait Polly {
     ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError>;
 }
 /// A client for the Amazon Polly API.
+#[derive(Clone)]
 pub struct PollyClient {
     client: Client,
     region: region::Region,

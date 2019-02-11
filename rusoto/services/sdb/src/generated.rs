@@ -2159,6 +2159,7 @@ pub trait SimpleDb {
     fn select(&self, input: SelectRequest) -> RusotoFuture<SelectResult, SelectError>;
 }
 /// A client for the Amazon SimpleDB API.
+#[derive(Clone)]
 pub struct SimpleDbClient {
     client: Client,
     region: region::Region,

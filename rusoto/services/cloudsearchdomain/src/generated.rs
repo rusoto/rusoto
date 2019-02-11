@@ -647,6 +647,7 @@ pub trait CloudSearchDomain {
     ) -> RusotoFuture<UploadDocumentsResponse, UploadDocumentsError>;
 }
 /// A client for the Amazon CloudSearch Domain API.
+#[derive(Clone)]
 pub struct CloudSearchDomainClient {
     client: Client,
     region: region::Region,

@@ -3230,6 +3230,7 @@ pub trait MQ {
     ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
 }
 /// A client for the AmazonMQ API.
+#[derive(Clone)]
 pub struct MQClient {
     client: Client,
     region: region::Region,

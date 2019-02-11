@@ -1251,6 +1251,7 @@ pub trait Transcribe {
     ) -> RusotoFuture<UpdateVocabularyResponse, UpdateVocabularyError>;
 }
 /// A client for the Amazon Transcribe Service API.
+#[derive(Clone)]
 pub struct TranscribeClient {
     client: Client,
     region: region::Region,

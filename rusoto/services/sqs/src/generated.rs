@@ -4222,6 +4222,7 @@ pub trait Sqs {
     fn untag_queue(&self, input: UntagQueueRequest) -> RusotoFuture<(), UntagQueueError>;
 }
 /// A client for the Amazon SQS API.
+#[derive(Clone)]
 pub struct SqsClient {
     client: Client,
     region: region::Region,

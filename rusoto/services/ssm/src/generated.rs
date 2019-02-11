@@ -17481,6 +17481,7 @@ pub trait Ssm {
     ) -> RusotoFuture<UpdatePatchBaselineResult, UpdatePatchBaselineError>;
 }
 /// A client for the Amazon SSM API.
+#[derive(Clone)]
 pub struct SsmClient {
     client: Client,
     region: region::Region,

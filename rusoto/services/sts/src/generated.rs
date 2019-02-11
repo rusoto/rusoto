@@ -1902,6 +1902,7 @@ pub trait Sts {
     ) -> RusotoFuture<GetSessionTokenResponse, GetSessionTokenError>;
 }
 /// A client for the AWS STS API.
+#[derive(Clone)]
 pub struct StsClient {
     client: Client,
     region: region::Region,

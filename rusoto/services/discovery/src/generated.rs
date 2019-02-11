@@ -2886,6 +2886,7 @@ pub trait Discovery {
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
 }
 /// A client for the AWS Application Discovery Service API.
+#[derive(Clone)]
 pub struct DiscoveryClient {
     client: Client,
     region: region::Region,

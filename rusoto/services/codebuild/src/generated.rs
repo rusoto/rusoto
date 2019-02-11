@@ -2469,6 +2469,7 @@ pub trait CodeBuild {
     ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError>;
 }
 /// A client for the AWS CodeBuild API.
+#[derive(Clone)]
 pub struct CodeBuildClient {
     client: Client,
     region: region::Region,

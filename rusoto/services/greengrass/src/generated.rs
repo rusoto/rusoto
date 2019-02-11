@@ -10382,6 +10382,7 @@ pub trait GreenGrass {
     ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
 }
 /// A client for the AWS Greengrass API.
+#[derive(Clone)]
 pub struct GreenGrassClient {
     client: Client,
     region: region::Region,

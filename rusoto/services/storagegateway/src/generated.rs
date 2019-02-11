@@ -9083,6 +9083,7 @@ pub trait StorageGateway {
     ) -> RusotoFuture<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError>;
 }
 /// A client for the AWS Storage Gateway API.
+#[derive(Clone)]
 pub struct StorageGatewayClient {
     client: Client,
     region: region::Region,

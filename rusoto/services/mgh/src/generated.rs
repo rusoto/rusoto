@@ -2559,6 +2559,7 @@ pub trait MigrationHub {
     ) -> RusotoFuture<PutResourceAttributesResult, PutResourceAttributesError>;
 }
 /// A client for the AWS Migration Hub API.
+#[derive(Clone)]
 pub struct MigrationHubClient {
     client: Client,
     region: region::Region,

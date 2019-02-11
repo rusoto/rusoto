@@ -2343,6 +2343,7 @@ pub trait CodeStar {
     ) -> RusotoFuture<UpdateUserProfileResult, UpdateUserProfileError>;
 }
 /// A client for the CodeStar API.
+#[derive(Clone)]
 pub struct CodeStarClient {
     client: Client,
     region: region::Region,

@@ -4638,6 +4638,7 @@ pub trait CodePipeline {
     ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError>;
 }
 /// A client for the CodePipeline API.
+#[derive(Clone)]
 pub struct CodePipelineClient {
     client: Client,
     region: region::Region,

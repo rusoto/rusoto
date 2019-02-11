@@ -2733,6 +2733,7 @@ pub trait StepFunctions {
     ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError>;
 }
 /// A client for the AWS SFN API.
+#[derive(Clone)]
 pub struct StepFunctionsClient {
     client: Client,
     region: region::Region,

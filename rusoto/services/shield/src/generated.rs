@@ -2430,6 +2430,7 @@ pub trait Shield {
     ) -> RusotoFuture<UpdateSubscriptionResponse, UpdateSubscriptionError>;
 }
 /// A client for the AWS Shield API.
+#[derive(Clone)]
 pub struct ShieldClient {
     client: Client,
     region: region::Region,
