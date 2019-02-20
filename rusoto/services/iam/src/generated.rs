@@ -21,6 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
+#[allow(unused_imports)]
+use rusoto_core::signature::decode_uri;
+
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 use rusoto_core::request::HttpDispatchError;
 
@@ -8615,7 +8618,7 @@ impl PolicyDocumentTypeDeserializer {
         stack: &mut T,
     ) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
+        let obj = decode_uri(&characters(stack)?);
         end_element(tag_name, stack)?;
 
         Ok(obj)

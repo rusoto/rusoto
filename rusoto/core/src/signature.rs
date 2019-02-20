@@ -686,7 +686,8 @@ fn encode_uri_strict(uri: &str) -> String {
 }
 
 #[inline]
-fn decode_uri(uri: &str) -> String {
+#[doc(hidden)]
+pub fn decode_uri(uri: &str) -> String {
     let decoder = percent_decode(uri.as_bytes());
     if let Ok(decoded) = decoder.decode_utf8() {
         decoded.to_string()

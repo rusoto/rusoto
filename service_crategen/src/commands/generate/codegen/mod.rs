@@ -137,6 +137,9 @@ where
         use rusoto_core::region;
         use rusoto_core::{{Client, RusotoFuture}};
 
+        #[allow(unused_imports)]
+        use rusoto_core::signature::decode_uri;
+
         use rusoto_core::request::HttpDispatchError;
         use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
     "
